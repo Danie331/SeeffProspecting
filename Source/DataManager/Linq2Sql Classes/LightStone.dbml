@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ls_base" Class="LightStoneDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost;Initial Catalog=ls_base;Integrated Security=True" SettingsObjectName="DataManager.Properties.Settings" SettingsPropertyName="ls_baseConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.agency" Member="agencies">
+    <Type Name="agency">
+      <Column Name="agency_name" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="agency_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Association Name="agency_agencies_user_suburb" Member="agencies_user_suburbs" ThisKey="agency_id" OtherKey="agency_id" Type="agencies_user_suburb" />
+    </Type>
+  </Table>
+  <Table Name="dbo.agencies_user_suburbs" Member="agencies_user_suburbs">
+    <Type Name="agencies_user_suburb">
+      <Column Name="agencies_user_suburbs_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="suburb_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="agency_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="updated_by" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="updated_date" Type="System.Data.Linq.Binary" DbType="rowversion NOT NULL" CanBeNull="false" IsVersion="true" />
+      <Association Name="agency_agencies_user_suburb" Member="agency" ThisKey="agency_id" OtherKey="agency_id" Type="agency" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.area_fating" Member="area_fatings">
+    <Type Name="area_fating">
+      <Column Name="area_fating_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="area_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="fated" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="unfated" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.area_layer" Member="area_layers">
+    <Type Name="area_layer">
+      <Column Name="area_layer_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="area_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="area_type" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="province_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="formatted_poly_coords" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.area_parent_lookup" Member="area_parent_lookups">
+    <Type Name="area_parent_lookup">
+      <Column Name="area_parent_lookup_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="area_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="area_type" Type="System.String" DbType="VarChar(8) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.base_data" Member="base_datas">
+    <Type Name="base_data">
+      <Column Name="ls_area_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="seeff_lic_area" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="property_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="iregdate" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
+      <Column Name="ipurchdate" Type="System.Decimal" DbType="Decimal(11,0)" CanBeNull="true" />
+      <Column Name="title_deed_no" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="non_gar_props_on_title" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Column Name="purch_price" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Column Name="erf_key" Type="System.String" DbType="VarChar(60)" CanBeNull="true" />
+      <Column Name="ea_code" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="suburb" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Column Name="munic_name" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Column Name="province" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Column Name="property_type" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="ss_fh" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
+      <Column Name="property_currently_in_pvt_hands" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="private_registration" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="bonded_transfer" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="suburb_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="erf_size" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Column Name="buyer_name" Type="System.String" DbType="VarChar(70)" CanBeNull="true" />
+      <Column Name="seller_name" Type="System.String" DbType="VarChar(70)" CanBeNull="true" />
+      <Column Name="property_address" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="ls_resflg" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="estate_name" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="buyer_name_2" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="multibuyer" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="seeff_suburb" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="seeff_suburb_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="seeff_suburb_type" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="seeff_lic_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="x" Type="System.Decimal" DbType="Decimal(13,8)" CanBeNull="true" />
+      <Column Name="y" Type="System.Decimal" DbType="Decimal(13,8)" CanBeNull="true" />
+      <Column Name="seeff_area_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="unique_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="seeff_deal" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="fated" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="market_share_type" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="base_data_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="agency_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="street_or_unit_no" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="erf_no" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="portion_no" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="parent_property_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="sale_includes_others_flag" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.point_inside_poly" Method="point_inside_poly" IsComposable="true">
+    <Parameter Name="point_lat" Type="System.Decimal" DbType="Decimal(13,8)" />
+    <Parameter Name="point_lng" Type="System.Decimal" DbType="Decimal(13,8)" />
+    <Parameter Name="polygon_coords" Type="System.String" DbType="VarChar(MAX)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.find_area_id" Method="find_area_id">
+    <Parameter Name="lat" Type="System.Decimal" DbType="Decimal(13,8)" />
+    <Parameter Name="lng" Type="System.Decimal" DbType="Decimal(13,8)" />
+    <Parameter Name="area_type" Type="System.String" DbType="VarChar(1)" />
+    <Parameter Name="province_id" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.ufn_get_area_parent_lookup_json" Method="ufn_get_area_parent_lookup_json" IsComposable="true">
+    <Return Type="System.String" />
+  </Function>
+  <Function Name="dbo.validate_polygon_coords" Method="validate_polygon_coords">
+    <Parameter Name="poly_coords" Type="System.String" DbType="VarChar(MAX)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.sp_generate_area_parent_lookup_table" Method="sp_generate_area_parent_lookup_table">
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

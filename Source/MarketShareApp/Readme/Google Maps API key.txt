@@ -1,0 +1,14 @@
+﻿
+*** The following pertains to the API registration with Google Maps ***
+
+* Email used for registration:
+Email address: seeff.maps@gmail.com
+Email password: seeffmarketshare
+
+* Google maps API:
+Key for browser apps (with referers)
+API key:	AIzaSyDWHlk3fmGm0oDsqVaoBM3_YocW5xPKtwA
+Referers:	Any referer allowed
+Activated on:	Mar 12, 2014 3:33 AM
+Activated by:	 seeff.maps@gmail.com – you
+

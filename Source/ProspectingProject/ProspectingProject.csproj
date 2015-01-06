@@ -1,0 +1,937 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{361553D3-8CD3-4BB0-87EA-B11013C1FB8E}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProspectingProject</RootNamespace>
+    <AssemblyName>ProspectingProject</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.2\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.2\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WindowsAzure.Storage.4.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SeeffGlobal, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SeeffGlobal\bin\Debug\SeeffGlobal.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Linq">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Spatial, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Spatial.5.6.2\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\SharedAssets\autocompleteloader.gif">
+      <Link>Assets\autocompleteloader.gif</Link>
+    </Content>
+    <Content Include="..\SharedAssets\double-arrow-left.png">
+      <Link>Assets\double-arrow-left.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\double-arrow-right.png">
+      <Link>Assets\double-arrow-right.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\loading.gif">
+      <Link>Assets\loading.gif</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2007.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2007.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2008.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2008.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2009.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2009.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2010.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2010.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2011.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2011.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2012.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2012.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2013.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2013.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2014.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2014.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2015.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2015.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2016.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2016.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2017.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2017.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2018.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2018.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2019.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2019.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\2020.png">
+      <Link>Assets\marker_icons\competitor\agricultural\2020.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2007.png">
+      <Link>Assets\marker_icons\competitor\commercial\2007.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2008.png">
+      <Link>Assets\marker_icons\competitor\commercial\2008.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2009.png">
+      <Link>Assets\marker_icons\competitor\commercial\2009.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2010.png">
+      <Link>Assets\marker_icons\competitor\commercial\2010.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2011.png">
+      <Link>Assets\marker_icons\competitor\commercial\2011.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2012.png">
+      <Link>Assets\marker_icons\competitor\commercial\2012.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2013.png">
+      <Link>Assets\marker_icons\competitor\commercial\2013.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2014.png">
+      <Link>Assets\marker_icons\competitor\commercial\2014.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2015.png">
+      <Link>Assets\marker_icons\competitor\commercial\2015.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2016.png">
+      <Link>Assets\marker_icons\competitor\commercial\2016.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2017.png">
+      <Link>Assets\marker_icons\competitor\commercial\2017.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2018.png">
+      <Link>Assets\marker_icons\competitor\commercial\2018.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2019.png">
+      <Link>Assets\marker_icons\competitor\commercial\2019.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\2020.png">
+      <Link>Assets\marker_icons\competitor\commercial\2020.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2007.png">
+      <Link>Assets\marker_icons\competitor\development\2007.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2008.png">
+      <Link>Assets\marker_icons\competitor\development\2008.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2009.png">
+      <Link>Assets\marker_icons\competitor\development\2009.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2010.png">
+      <Link>Assets\marker_icons\competitor\development\2010.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2011.png">
+      <Link>Assets\marker_icons\competitor\development\2011.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2012.png">
+      <Link>Assets\marker_icons\competitor\development\2012.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2013.png">
+      <Link>Assets\marker_icons\competitor\development\2013.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2014.png">
+      <Link>Assets\marker_icons\competitor\development\2014.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2015.png">
+      <Link>Assets\marker_icons\competitor\development\2015.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2016.png">
+      <Link>Assets\marker_icons\competitor\development\2016.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2017.png">
+      <Link>Assets\marker_icons\competitor\development\2017.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2018.png">
+      <Link>Assets\marker_icons\competitor\development\2018.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2019.png">
+      <Link>Assets\marker_icons\competitor\development\2019.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\development\2020.png">
+      <Link>Assets\marker_icons\competitor\development\2020.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2007.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2007.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2008.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2008.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2009.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2009.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2010.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2010.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2011.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2011.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2012.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2012.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2013.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2013.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2014.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2014.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2015.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2015.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2016.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2016.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2017.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2017.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2018.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2018.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2019.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2019.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2020.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2020.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2021.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2021.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2022.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2022.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2023.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2023.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\2024.png">
+      <Link>Assets\marker_icons\competitor\house or apartment\2024.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\ss.PNG">
+      <Link>Assets\marker_icons\competitor\house or apartment\ss.PNG</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2007.png">
+      <Link>Assets\marker_icons\competitor\other\2007.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2008.png">
+      <Link>Assets\marker_icons\competitor\other\2008.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2009.png">
+      <Link>Assets\marker_icons\competitor\other\2009.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2010.png">
+      <Link>Assets\marker_icons\competitor\other\2010.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2011.png">
+      <Link>Assets\marker_icons\competitor\other\2011.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2012.png">
+      <Link>Assets\marker_icons\competitor\other\2012.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2013.png">
+      <Link>Assets\marker_icons\competitor\other\2013.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2014.png">
+      <Link>Assets\marker_icons\competitor\other\2014.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2015.png">
+      <Link>Assets\marker_icons\competitor\other\2015.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2016.png">
+      <Link>Assets\marker_icons\competitor\other\2016.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2017.png">
+      <Link>Assets\marker_icons\competitor\other\2017.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2018.png">
+      <Link>Assets\marker_icons\competitor\other\2018.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2019.png">
+      <Link>Assets\marker_icons\competitor\other\2019.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\2020.png">
+      <Link>Assets\marker_icons\competitor\other\2020.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\pending.png">
+      <Link>Assets\marker_icons\pending.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2007.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2007.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2008.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2008.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2009.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2009.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2010.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2010.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2011.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2011.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2012.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2012.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2013.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2013.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2014.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2014.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2015.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2015.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2016.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2016.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2017.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2017.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2018.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2018.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2019.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2019.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\2020.png">
+      <Link>Assets\marker_icons\seeff\agricultural\2020.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\current_buy.png">
+      <Link>Assets\marker_icons\seeff\agricultural\current_buy.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\current_rent.png">
+      <Link>Assets\marker_icons\seeff\agricultural\current_rent.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2007.png">
+      <Link>Assets\marker_icons\seeff\commercial\2007.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2008.png">
+      <Link>Assets\marker_icons\seeff\commercial\2008.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2009.png">
+      <Link>Assets\marker_icons\seeff\commercial\2009.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2010.png">
+      <Link>Assets\marker_icons\seeff\commercial\2010.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2011.png">
+      <Link>Assets\marker_icons\seeff\commercial\2011.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2012.png">
+      <Link>Assets\marker_icons\seeff\commercial\2012.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2013.png">
+      <Link>Assets\marker_icons\seeff\commercial\2013.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2014.png">
+      <Link>Assets\marker_icons\seeff\commercial\2014.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2015.png">
+      <Link>Assets\marker_icons\seeff\commercial\2015.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2016.png">
+      <Link>Assets\marker_icons\seeff\commercial\2016.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2017.png">
+      <Link>Assets\marker_icons\seeff\commercial\2017.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2018.png">
+      <Link>Assets\marker_icons\seeff\commercial\2018.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2019.png">
+      <Link>Assets\marker_icons\seeff\commercial\2019.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\2020.png">
+      <Link>Assets\marker_icons\seeff\commercial\2020.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\current_buy.png">
+      <Link>Assets\marker_icons\seeff\commercial\current_buy.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\current_rent.png">
+      <Link>Assets\marker_icons\seeff\commercial\current_rent.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2007.png">
+      <Link>Assets\marker_icons\seeff\development\2007.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2008.png">
+      <Link>Assets\marker_icons\seeff\development\2008.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2009.png">
+      <Link>Assets\marker_icons\seeff\development\2009.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2010.png">
+      <Link>Assets\marker_icons\seeff\development\2010.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2011.png">
+      <Link>Assets\marker_icons\seeff\development\2011.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2012.png">
+      <Link>Assets\marker_icons\seeff\development\2012.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2013.png">
+      <Link>Assets\marker_icons\seeff\development\2013.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2014.png">
+      <Link>Assets\marker_icons\seeff\development\2014.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2015.png">
+      <Link>Assets\marker_icons\seeff\development\2015.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2016.png">
+      <Link>Assets\marker_icons\seeff\development\2016.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2017.png">
+      <Link>Assets\marker_icons\seeff\development\2017.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2018.png">
+      <Link>Assets\marker_icons\seeff\development\2018.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2019.png">
+      <Link>Assets\marker_icons\seeff\development\2019.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2020.png">
+      <Link>Assets\marker_icons\seeff\development\2020.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2007.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2007.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2008.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2008.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2009.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2009.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2010.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2010.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2011.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2011.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2012.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2012.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2013.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2013.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2014.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2014.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2015.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2015.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2016.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2016.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2017.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2017.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2018.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2018.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2019.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2019.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2020.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2020.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2021.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2021.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2022.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2022.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2023.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2023.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\2024.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\2024.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\current_buy.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\current_buy.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\current_rent.png">
+      <Link>Assets\marker_icons\seeff\house or apartment\current_rent.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\ss.PNG">
+      <Link>Assets\marker_icons\seeff\house or apartment\ss.PNG</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2007.png">
+      <Link>Assets\marker_icons\seeff\other\2007.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2008.png">
+      <Link>Assets\marker_icons\seeff\other\2008.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2009.png">
+      <Link>Assets\marker_icons\seeff\other\2009.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2010.png">
+      <Link>Assets\marker_icons\seeff\other\2010.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2011.png">
+      <Link>Assets\marker_icons\seeff\other\2011.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2012.png">
+      <Link>Assets\marker_icons\seeff\other\2012.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2013.png">
+      <Link>Assets\marker_icons\seeff\other\2013.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2014.png">
+      <Link>Assets\marker_icons\seeff\other\2014.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2015.png">
+      <Link>Assets\marker_icons\seeff\other\2015.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2016.png">
+      <Link>Assets\marker_icons\seeff\other\2016.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2017.png">
+      <Link>Assets\marker_icons\seeff\other\2017.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2018.png">
+      <Link>Assets\marker_icons\seeff\other\2018.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2019.png">
+      <Link>Assets\marker_icons\seeff\other\2019.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\2020.png">
+      <Link>Assets\marker_icons\seeff\other\2020.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\ss_buy.png">
+      <Link>Assets\marker_icons\seeff\ss_buy.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\ss_rent.png">
+      <Link>Assets\marker_icons\seeff\ss_rent.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\ss_rentandbuy.png">
+      <Link>Assets\marker_icons\seeff\ss_rentandbuy.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\ss.png">
+      <Link>Assets\marker_icons\ss.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\unfated house or apartment\house_unfated.png">
+      <Link>Assets\marker_icons\unfated house or apartment\house_unfated.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\unfated house or apartment\ss_unfated.PNG">
+      <Link>Assets\marker_icons\unfated house or apartment\ss_unfated.PNG</Link>
+    </Content>
+    <Content Include="..\SharedAssets\remove_poly.png">
+      <Link>Assets\remove_poly.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\save_changes.png">
+      <Link>Assets\save_changes.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\seeff_logo.png">
+      <Link>Assets\seeff_logo.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\snap.png">
+      <Link>Assets\snap.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\system_search.png">
+      <Link>Assets\system_search.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\tick.png">
+      <Link>Assets\tick.png</Link>
+    </Content>
+    <Content Include="..\SharedAssets\unknown.png">
+      <Link>Assets\unknown.png</Link>
+    </Content>
+    <Content Include="..\SharedScripts\3rdParty\jquery.blockUI.js">
+      <Link>Scripts\3rdParty\jquery.blockUI.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\3rdParty\jquery.contextMenu.js">
+      <Link>Scripts\3rdParty\jquery.contextMenu.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\3rdParty\jquery.ui.position.js">
+      <Link>Scripts\3rdParty\jquery.ui.position.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\3rdParty\MarkerClustererPlus.js">
+      <Link>Scripts\3rdParty\MarkerClustererPlus.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\3rdParty\OverlappingMarkerSpiderfier.js">
+      <Link>Scripts\3rdParty\OverlappingMarkerSpiderfier.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\3rdParty\Purl.js">
+      <Link>Scripts\3rdParty\Purl.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\Core\ContactDetailsEditorWidget.js">
+      <Link>Scripts\Core\ContactDetailsEditorWidget.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\Core\ContentExpanderWidget.js">
+      <Link>Scripts\Core\ContentExpanderWidget.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\Core\Default.js">
+      <Link>Scripts\Core\Default.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\Core\Filtering.js">
+      <Link>Scripts\Core\Filtering.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\Core\MenuBuilder.js">
+      <Link>Scripts\Core\MenuBuilder.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\Core\MultiSelectWidget.js">
+      <Link>Scripts\Core\MultiSelectWidget.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\Core\ObjectBuilder.js">
+      <Link>Scripts\Core\ObjectBuilder.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\Core\Search.js">
+      <Link>Scripts\Core\Search.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\Core\StatisticsGenerator.js">
+      <Link>Scripts\Core\StatisticsGenerator.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\Core\Utils.js">
+      <Link>Scripts\Core\Utils.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\StyleSheets\ContactDetailsEditorWidgetStyles.css">
+      <Link>Scripts\StyleSheets\ContactDetailsEditorWidgetStyles.css</Link>
+    </Content>
+    <Content Include="..\SharedScripts\StyleSheets\ContentExpanderWidgetStyles.css">
+      <Link>Scripts\StyleSheets\ContentExpanderWidgetStyles.css</Link>
+    </Content>
+    <Content Include="..\SharedScripts\StyleSheets\Default.css">
+      <Link>Scripts\StyleSheets\Default.css</Link>
+    </Content>
+    <Content Include="..\SharedScripts\StyleSheets\jquery.contextMenu.css">
+      <Link>Scripts\StyleSheets\jquery.contextMenu.css</Link>
+    </Content>
+    <Content Include="..\SharedScripts\StyleSheets\MultiSelectWidget.css">
+      <Link>Scripts\StyleSheets\MultiSelectWidget.css</Link>
+    </Content>
+    <Content Include="Assets\bin.png" />
+    <Content Include="Assets\capture_address.png" />
+    <Content Include="Assets\contact.png" />
+    <Content Include="Assets\email_icon.png" />
+    <Content Include="Assets\fh_edit.png" />
+    <Content Include="Assets\google.png" />
+    <Content Include="Assets\lightstone.png" />
+    <Content Include="Assets\make_primary_contact.png" />
+    <Content Include="Assets\marker_icons\prospecting\prospected.png" />
+    <Content Include="Assets\marker_icons\prospecting\unprospected.png" />
+    <Content Include="Assets\marker_icons\prospecting\ss_prospected.png" />
+    <Content Include="Assets\marker_icons\prospecting\ss_unprospected.png" />
+    <Content Include="Assets\notes.png" />
+    <Content Include="Assets\person.png" />
+    <Content Include="Assets\phone_icon.png" />
+    <Content Include="Assets\primary_contact.png" />
+    <Content Include="Assets\ss_edit.png" />
+    <Content Include="Assets\tps_info.png" />
+    <Content Include="Database scripts\boss.sql" />
+    <Content Include="Database scripts\seeff_prospecting.sql" />
+    <Content Include="Database scripts\seeff_prospecting_data_takeon.sql" />
+    <Content Include="Default.aspx" />
+    <Content Include="Scripts\3rdParty\OpenTip.css" />
+    <Content Include="Scripts\3rdParty\OpenTip.js" />
+    <Content Include="Scripts\3rdParty\tooltip.css" />
+    <Content Include="Scripts\3rdParty\tooltip.js" />
+    <Content Include="Scripts\Core\ContextMenu.js" />
+    <Content Include="Scripts\Core\ProspectingContactMenuBuilder.js" />
+    <Content Include="Scripts\Core\ProspectingDefault.js" />
+    <Content Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="Scripts\Core\ProspectingMenuBuilder.js" />
+    <Content Include="Scripts\Core\ProspectingObjectBuilder.js" />
+    <Content Include="Scripts\StyleSheets\Panel.css" />
+    <Content Include="Scripts\StyleSheets\ProspectingDefault.css" />
+    <Content Include="Service References\ProspectingUserAuthService\ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Prospecting.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Prospecting.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Properties\PublishProfiles\Seeff Server.pubxml" />
+    <None Include="Properties\PublishProfiles\seeffprospecting - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\seeffprospecting - Web Deploy.pubxml" />
+    <None Include="Service References\ProspectingUserAuthService\configuration91.svcinfo" />
+    <None Include="Service References\ProspectingUserAuthService\configuration.svcinfo" />
+    <None Include="Service References\ProspectingUserAuthService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService1.disco" />
+    <None Include="Web References\lightstoneSeeffService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\lightstoneSeeffService\seeff.disco" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Prospecting.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Prospecting.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="RequestHandler.ashx.cs">
+      <DependentUpon>RequestHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ProspectingUserAuthService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Types\IProspectingContactEntity.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\BaseDataRequestPacket.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\CompanyContactDataPacket.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\ContactDataPacket.cs" />
+    <Compile Include="Types\GeoLocation.cs" />
+    <Compile Include="Types\IListing.cs" />
+    <Compile Include="Types\ILocation.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\ContactRow.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\ProspectingPropertyInputData.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\DefaultProspectingDataResponsePacket.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\ContactDetails.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\PropertyCommentsNotes.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\SearchInputPacket.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\UserDataResponsePacket.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\UserSuburb.cs" />
+    <Compile Include="Types\JsonNetPropertyNameResolverForSerialization.cs" />
+    <Compile Include="Types\LightstonePropertyMatch.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\PropertySearchResults.cs" />
+    <Compile Include="Types\NewProspectingLocation.cs" />
+    <Compile Include="Types\ProspectingContactCompany.cs" />
+    <Compile Include="Types\ProspectingContactDetail.cs" />
+    <Compile Include="Types\ProspectingDomain.cs" />
+    <Compile Include="Types\ProspectingProperty.cs" />
+    <Compile Include="Types\ProspectingContactPerson.cs" />
+    <Compile Include="Types\ProspectingPropertyId.cs" />
+    <Compile Include="Types\ProspectingStaticData.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\ProspectingSuburb.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\SuburbDataRequestPacket.cs" />
+    <Compile Include="Types\SectionalTitle.cs" />
+    <Compile Include="Web References\lightstoneSeeffService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\SharedAssets\marker_icons\competitor\agricultural\agricultural.psd">
+      <Link>Assets\marker_icons\competitor\agricultural\agricultural.psd</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\commercial\commercial.psd">
+      <Link>Assets\marker_icons\competitor\commercial\commercial.psd</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\house.psd">
+      <Link>Assets\marker_icons\competitor\house or apartment\house.psd</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\house or apartment\ss.PSD">
+      <Link>Assets\marker_icons\competitor\house or apartment\ss.PSD</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\competitor\other\Other.psd">
+      <Link>Assets\marker_icons\competitor\other\Other.psd</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\agricultural\agricultural.psd">
+      <Link>Assets\marker_icons\seeff\agricultural\agricultural.psd</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\commercial\commercial.psd">
+      <Link>Assets\marker_icons\seeff\commercial\commercial.psd</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\development\2007.psd">
+      <Link>Assets\marker_icons\seeff\development\2007.psd</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\house.psd">
+      <Link>Assets\marker_icons\seeff\house or apartment\house.psd</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\house or apartment\ss.PSD">
+      <Link>Assets\marker_icons\seeff\house or apartment\ss.PSD</Link>
+    </Content>
+    <Content Include="..\SharedAssets\marker_icons\seeff\other\Other.psd">
+      <Link>Assets\marker_icons\seeff\other\Other.psd</Link>
+    </Content>
+    <Content Include="RequestHandler.ashx" />
+    <None Include="Web References\lightstoneSeeffService\seeff.wsdl" />
+    <Content Include="packages.config" />
+    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService1.wsdl" />
+    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService31.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService32.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://www.lightstone.co.za/avm/webservices/seeff.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\lightstoneSeeffService\</RelPath>
+      <UpdateFromURL>http://www.lightstone.co.za/avm/webservices/seeff.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ProspectingProject_lightstoneSeeffService_Seeff</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ProspectingUserAuthService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Prospecting.dbml.layout">
+      <DependentUpon>Prospecting.dbml</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="CopyLinkedFiles" BeforeTargets="Build" Inputs="@(LinkedItem)" Outputs="@(LinkedItem->'%(Filename)%(Extension)')">
+    <Copy SourceFiles="@(LinkedItem)" DestinationFolder="$(MSBuildProjectDirectory)" />
+  </Target>
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>64573</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:64573/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- This is a custom build task to occur prior to building.
+	    The ProspectingProject re-uses many files in the MarketShareProject, which are added as 'links' to this project.
+		This build step ensures that files are copied across to output directories prior to build. -->
+  <Target Name="CopyLinkedContentFiles" BeforeTargets="Build">
+    <Copy SourceFiles="%(Content.Identity)" DestinationFiles="%(Content.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(Content.Link)' != ''" />
+  </Target>
+</Project>

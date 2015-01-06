@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="returnAreaPropType_batches">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="user_id" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="returnAreaPropType_batchesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="returnAreaPropType_batchesResult">
+              <s:complexType>
+                <s:annotation>
+                  <s:appinfo>
+                    <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+                  </s:appinfo>
+                </s:annotation>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="returnAreaPropType">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Year" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Month" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="user_id" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="returnAreaPropTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="returnAreaPropTypeResult">
+              <s:complexType>
+                <s:annotation>
+                  <s:appinfo>
+                    <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+                  </s:appinfo>
+                </s:annotation>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReturnProperties">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="User_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Province" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Municipality" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DeedTown" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Erf" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Portion" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Sectional_Title" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Unit" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Suburb" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StreetNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Owner_Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ID_CK" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Estate_Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FARM_NAME" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="MaxRowsToReturn" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Area_Type" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="x" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="y" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReturnPropertiesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ReturnPropertiesResult">
+              <s:complexType>
+                <s:annotation>
+                  <s:appinfo>
+                    <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+                  </s:appinfo>
+                </s:annotation>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReturnProperties_Seef">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="User_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Province" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Municipality" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DeedTown" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Erf" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Portion" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Sectional_Title" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Unit" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Suburb" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StreetNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street_Type" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Registrar" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SecondName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Surname" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Owner_Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ID_CK" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Estate_Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FARM_NAME" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Prop_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="MaxRowsToReturn" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Area_Type" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="x" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="y" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReturnProperties_SeefResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ReturnProperties_SeefResult">
+              <s:complexType>
+                <s:annotation>
+                  <s:appinfo>
+                    <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+                  </s:appinfo>
+                </s:annotation>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DataSet" nillable="true">
+        <s:complexType>
+          <s:annotation>
+            <s:appinfo>
+              <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+            </s:appinfo>
+          </s:annotation>
+          <s:sequence>
+            <s:element ref="s:schema" />
+            <s:any />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="returnAreaPropType_batchesSoapIn">
+    <wsdl:part name="parameters" element="tns:returnAreaPropType_batches" />
+  </wsdl:message>
+  <wsdl:message name="returnAreaPropType_batchesSoapOut">
+    <wsdl:part name="parameters" element="tns:returnAreaPropType_batchesResponse" />
+  </wsdl:message>
+  <wsdl:message name="returnAreaPropTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:returnAreaPropType" />
+  </wsdl:message>
+  <wsdl:message name="returnAreaPropTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:returnAreaPropTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ReturnPropertiesSoapIn">
+    <wsdl:part name="parameters" element="tns:ReturnProperties" />
+  </wsdl:message>
+  <wsdl:message name="ReturnPropertiesSoapOut">
+    <wsdl:part name="parameters" element="tns:ReturnPropertiesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ReturnProperties_SeefSoapIn">
+    <wsdl:part name="parameters" element="tns:ReturnProperties_Seef" />
+  </wsdl:message>
+  <wsdl:message name="ReturnProperties_SeefSoapOut">
+    <wsdl:part name="parameters" element="tns:ReturnProperties_SeefResponse" />
+  </wsdl:message>
+  <wsdl:message name="returnAreaPropType_batchesHttpGetIn">
+    <wsdl:part name="user_id" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="returnAreaPropType_batchesHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:message name="returnAreaPropTypeHttpGetIn">
+    <wsdl:part name="Year" type="s:string" />
+    <wsdl:part name="Month" type="s:string" />
+    <wsdl:part name="user_id" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="returnAreaPropTypeHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:message name="ReturnPropertiesHttpGetIn">
+    <wsdl:part name="User_ID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="Municipality" type="s:string" />
+    <wsdl:part name="DeedTown" type="s:string" />
+    <wsdl:part name="Erf" type="s:string" />
+    <wsdl:part name="Portion" type="s:string" />
+    <wsdl:part name="Sectional_Title" type="s:string" />
+    <wsdl:part name="Unit" type="s:string" />
+    <wsdl:part name="Suburb" type="s:string" />
+    <wsdl:part name="Street" type="s:string" />
+    <wsdl:part name="StreetNumber" type="s:string" />
+    <wsdl:part name="Owner_Name" type="s:string" />
+    <wsdl:part name="ID_CK" type="s:string" />
+    <wsdl:part name="Estate_Name" type="s:string" />
+    <wsdl:part name="FARM_NAME" type="s:string" />
+    <wsdl:part name="MaxRowsToReturn" type="s:string" />
+    <wsdl:part name="TrackingNumber" type="s:string" />
+    <wsdl:part name="Area_Type" type="s:string" />
+    <wsdl:part name="x" type="s:string" />
+    <wsdl:part name="y" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ReturnPropertiesHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:message name="ReturnProperties_SeefHttpGetIn">
+    <wsdl:part name="User_ID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="Municipality" type="s:string" />
+    <wsdl:part name="DeedTown" type="s:string" />
+    <wsdl:part name="Erf" type="s:string" />
+    <wsdl:part name="Portion" type="s:string" />
+    <wsdl:part name="Sectional_Title" type="s:string" />
+    <wsdl:part name="Unit" type="s:string" />
+    <wsdl:part name="Suburb" type="s:string" />
+    <wsdl:part name="Street" type="s:string" />
+    <wsdl:part name="StreetNumber" type="s:string" />
+    <wsdl:part name="Street_Type" type="s:string" />
+    <wsdl:part name="Registrar" type="s:string" />
+    <wsdl:part name="FirstName" type="s:string" />
+    <wsdl:part name="SecondName" type="s:string" />
+    <wsdl:part name="Surname" type="s:string" />
+    <wsdl:part name="Owner_Name" type="s:string" />
+    <wsdl:part name="ID_CK" type="s:string" />
+    <wsdl:part name="Estate_Name" type="s:string" />
+    <wsdl:part name="FARM_NAME" type="s:string" />
+    <wsdl:part name="Prop_ID" type="s:string" />
+    <wsdl:part name="MaxRowsToReturn" type="s:string" />
+    <wsdl:part name="TrackingNumber" type="s:string" />
+    <wsdl:part name="Area_Type" type="s:string" />
+    <wsdl:part name="x" type="s:string" />
+    <wsdl:part name="y" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ReturnProperties_SeefHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:message name="returnAreaPropType_batchesHttpPostIn">
+    <wsdl:part name="user_id" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="returnAreaPropType_batchesHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:message name="returnAreaPropTypeHttpPostIn">
+    <wsdl:part name="Year" type="s:string" />
+    <wsdl:part name="Month" type="s:string" />
+    <wsdl:part name="user_id" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="returnAreaPropTypeHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:message name="ReturnPropertiesHttpPostIn">
+    <wsdl:part name="User_ID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="Municipality" type="s:string" />
+    <wsdl:part name="DeedTown" type="s:string" />
+    <wsdl:part name="Erf" type="s:string" />
+    <wsdl:part name="Portion" type="s:string" />
+    <wsdl:part name="Sectional_Title" type="s:string" />
+    <wsdl:part name="Unit" type="s:string" />
+    <wsdl:part name="Suburb" type="s:string" />
+    <wsdl:part name="Street" type="s:string" />
+    <wsdl:part name="StreetNumber" type="s:string" />
+    <wsdl:part name="Owner_Name" type="s:string" />
+    <wsdl:part name="ID_CK" type="s:string" />
+    <wsdl:part name="Estate_Name" type="s:string" />
+    <wsdl:part name="FARM_NAME" type="s:string" />
+    <wsdl:part name="MaxRowsToReturn" type="s:string" />
+    <wsdl:part name="TrackingNumber" type="s:string" />
+    <wsdl:part name="Area_Type" type="s:string" />
+    <wsdl:part name="x" type="s:string" />
+    <wsdl:part name="y" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ReturnPropertiesHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:message name="ReturnProperties_SeefHttpPostIn">
+    <wsdl:part name="User_ID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="Municipality" type="s:string" />
+    <wsdl:part name="DeedTown" type="s:string" />
+    <wsdl:part name="Erf" type="s:string" />
+    <wsdl:part name="Portion" type="s:string" />
+    <wsdl:part name="Sectional_Title" type="s:string" />
+    <wsdl:part name="Unit" type="s:string" />
+    <wsdl:part name="Suburb" type="s:string" />
+    <wsdl:part name="Street" type="s:string" />
+    <wsdl:part name="StreetNumber" type="s:string" />
+    <wsdl:part name="Street_Type" type="s:string" />
+    <wsdl:part name="Registrar" type="s:string" />
+    <wsdl:part name="FirstName" type="s:string" />
+    <wsdl:part name="SecondName" type="s:string" />
+    <wsdl:part name="Surname" type="s:string" />
+    <wsdl:part name="Owner_Name" type="s:string" />
+    <wsdl:part name="ID_CK" type="s:string" />
+    <wsdl:part name="Estate_Name" type="s:string" />
+    <wsdl:part name="FARM_NAME" type="s:string" />
+    <wsdl:part name="Prop_ID" type="s:string" />
+    <wsdl:part name="MaxRowsToReturn" type="s:string" />
+    <wsdl:part name="TrackingNumber" type="s:string" />
+    <wsdl:part name="Area_Type" type="s:string" />
+    <wsdl:part name="x" type="s:string" />
+    <wsdl:part name="y" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ReturnProperties_SeefHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:portType name="SeeffSoap">
+    <wsdl:operation name="returnAreaPropType_batches">
+      <wsdl:input message="tns:returnAreaPropType_batchesSoapIn" />
+      <wsdl:output message="tns:returnAreaPropType_batchesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="returnAreaPropType">
+      <wsdl:input message="tns:returnAreaPropTypeSoapIn" />
+      <wsdl:output message="tns:returnAreaPropTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties">
+      <wsdl:input message="tns:ReturnPropertiesSoapIn" />
+      <wsdl:output message="tns:ReturnPropertiesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties_Seef">
+      <wsdl:input message="tns:ReturnProperties_SeefSoapIn" />
+      <wsdl:output message="tns:ReturnProperties_SeefSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SeeffHttpGet">
+    <wsdl:operation name="returnAreaPropType_batches">
+      <wsdl:input message="tns:returnAreaPropType_batchesHttpGetIn" />
+      <wsdl:output message="tns:returnAreaPropType_batchesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="returnAreaPropType">
+      <wsdl:input message="tns:returnAreaPropTypeHttpGetIn" />
+      <wsdl:output message="tns:returnAreaPropTypeHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties">
+      <wsdl:input message="tns:ReturnPropertiesHttpGetIn" />
+      <wsdl:output message="tns:ReturnPropertiesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties_Seef">
+      <wsdl:input message="tns:ReturnProperties_SeefHttpGetIn" />
+      <wsdl:output message="tns:ReturnProperties_SeefHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SeeffHttpPost">
+    <wsdl:operation name="returnAreaPropType_batches">
+      <wsdl:input message="tns:returnAreaPropType_batchesHttpPostIn" />
+      <wsdl:output message="tns:returnAreaPropType_batchesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="returnAreaPropType">
+      <wsdl:input message="tns:returnAreaPropTypeHttpPostIn" />
+      <wsdl:output message="tns:returnAreaPropTypeHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties">
+      <wsdl:input message="tns:ReturnPropertiesHttpPostIn" />
+      <wsdl:output message="tns:ReturnPropertiesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties_Seef">
+      <wsdl:input message="tns:ReturnProperties_SeefHttpPostIn" />
+      <wsdl:output message="tns:ReturnProperties_SeefHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SeeffSoap" type="tns:SeeffSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="returnAreaPropType_batches">
+      <soap:operation soapAction="http://tempuri.org/returnAreaPropType_batches" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="returnAreaPropType">
+      <soap:operation soapAction="http://tempuri.org/returnAreaPropType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties">
+      <soap:operation soapAction="http://tempuri.org/ReturnProperties" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties_Seef">
+      <soap:operation soapAction="http://tempuri.org/ReturnProperties_Seef" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SeeffSoap12" type="tns:SeeffSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="returnAreaPropType_batches">
+      <soap12:operation soapAction="http://tempuri.org/returnAreaPropType_batches" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="returnAreaPropType">
+      <soap12:operation soapAction="http://tempuri.org/returnAreaPropType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties">
+      <soap12:operation soapAction="http://tempuri.org/ReturnProperties" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties_Seef">
+      <soap12:operation soapAction="http://tempuri.org/ReturnProperties_Seef" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SeeffHttpGet" type="tns:SeeffHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="returnAreaPropType_batches">
+      <http:operation location="/returnAreaPropType_batches" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="returnAreaPropType">
+      <http:operation location="/returnAreaPropType" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties">
+      <http:operation location="/ReturnProperties" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties_Seef">
+      <http:operation location="/ReturnProperties_Seef" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SeeffHttpPost" type="tns:SeeffHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="returnAreaPropType_batches">
+      <http:operation location="/returnAreaPropType_batches" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="returnAreaPropType">
+      <http:operation location="/returnAreaPropType" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties">
+      <http:operation location="/ReturnProperties" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReturnProperties_Seef">
+      <http:operation location="/ReturnProperties_Seef" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Seeff">
+    <wsdl:port name="SeeffSoap" binding="tns:SeeffSoap">
+      <soap:address location="http://www.lightstone.co.za/avm/webservices/seeff.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SeeffSoap12" binding="tns:SeeffSoap12">
+      <soap12:address location="http://www.lightstone.co.za/avm/webservices/seeff.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SeeffHttpGet" binding="tns:SeeffHttpGet">
+      <http:address location="http://www.lightstone.co.za/avm/webservices/seeff.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SeeffHttpPost" binding="tns:SeeffHttpPost">
+      <http:address location="http://www.lightstone.co.za/avm/webservices/seeff.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

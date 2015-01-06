@@ -1,0 +1,41 @@
+﻿<%@ WebHandler Language="C#" Class="SuburbDataManager" %>
+
+using System;
+using System.Web;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Script.Serialization;
+using System.Globalization;
+
+public class SuburbDataManager : IHttpHandler {
+
+    public void ProcessRequest(HttpContext context)
+    {
+        int suburbId = int.Parse(context.Request.Form[0]);
+
+        ILocation suburb = new GenericArea();
+        suburb.LocationID = suburbId;
+        
+        suburb.PolyCoords = Domain.LoadPolyCoords(suburbId);
+        List<LightstoneListing> lightstoneListings = Domain.LoadLightstoneListingsForSuburb(suburbId);
+        List<SeeffListing> currentSeeffListings = Domain.LoadCurrentSeeffListings(suburbId);
+
+        // The Listings property expects only a List<IListing> so we need to upcast both lists here
+        suburb.Listings = lightstoneListings.Cast<IListing>().Union(currentSeeffListings.Cast<IListing>()).ToList<IListing>();
+        suburb.Listings.AddRange(currentSeeffListings);
+        suburb.LocationName = Domain.GetAreaName(suburbId);
+        
+        var serializer = new JavaScriptSerializer();
+        serializer.MaxJsonLength = Int32.MaxValue;
+        string json = serializer.Serialize(suburb);
+
+        context.Response.Write(json);
+    }
+ 
+    public bool IsReusable {
+        get {
+            return false;
+        }
+    }
+
+}

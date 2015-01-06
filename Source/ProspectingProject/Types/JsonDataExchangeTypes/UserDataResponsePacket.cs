@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace ProspectingProject
+{
+    public class UserDataResponsePacket
+    {
+        public Guid UserGuid { get; set; }
+        public string AvailableSuburbs { get; set; }
+        public string StaticProspectingData { get; set; }
+        public int AvailableCredit { get; set; }
+    }
+}

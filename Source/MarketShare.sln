@@ -1,0 +1,381 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketShareAppReleaseOptimiser", "MarketShareProjectReleaseBuilder\MarketShareAppReleaseOptimiser.csproj", "{4871E3F5-911A-45EC-9471-B123DA3E617D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProspectingProject", "ProspectingProject\ProspectingProject.csproj", "{361553D3-8CD3-4BB0-87EA-B11013C1FB8E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{083AD503-D7B6-4507-A117-193B1E13F185} = {083AD503-D7B6-4507-A117-193B1E13F185}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManager", "DataManager\DataManager.csproj", "{AD155303-5AA8-4899-80C9-223E10665C7B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedAssets", "SharedAssets", "{AAF4EE1E-89E7-4FAF-9F3D-71EE26BCAC80}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\autocompleteloader.gif = SharedAssets\autocompleteloader.gif
+		SharedAssets\double-arrow-left.png = SharedAssets\double-arrow-left.png
+		SharedAssets\double-arrow-right.png = SharedAssets\double-arrow-right.png
+		SharedAssets\img_not_found.png = SharedAssets\img_not_found.png
+		SharedAssets\loading.gif = SharedAssets\loading.gif
+		SharedAssets\remove_poly.png = SharedAssets\remove_poly.png
+		SharedAssets\save_changes.png = SharedAssets\save_changes.png
+		SharedAssets\seeff_logo.png = SharedAssets\seeff_logo.png
+		SharedAssets\snap.png = SharedAssets\snap.png
+		SharedAssets\system_search.png = SharedAssets\system_search.png
+		SharedAssets\tick.png = SharedAssets\tick.png
+		SharedAssets\unknown.png = SharedAssets\unknown.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedScripts", "SharedScripts", "{F2E7C5E6-E64B-4B83-AA41-6B9DD89F0B9B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "marker_icons", "marker_icons", "{5C3A83BA-1E54-466D-A124-245D876ADDAA}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\pending.png = SharedAssets\marker_icons\pending.png
+		SharedAssets\marker_icons\ss.png = SharedAssets\marker_icons\ss.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "competitor", "competitor", "{BD98ABD0-F702-4511-8A91-1BA6EA18A647}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "seeff", "seeff", "{0BDB9FD2-4774-4A94-990A-3A178A519F3A}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\seeff\ss_buy.png = SharedAssets\marker_icons\seeff\ss_buy.png
+		SharedAssets\marker_icons\seeff\ss_rent.png = SharedAssets\marker_icons\seeff\ss_rent.png
+		SharedAssets\marker_icons\seeff\ss_rentandbuy.png = SharedAssets\marker_icons\seeff\ss_rentandbuy.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unfated house or apartment", "unfated house or apartment", "{3266745C-5EB3-4D20-B403-B5C56E789762}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\unfated house or apartment\house_unfated.png = SharedAssets\marker_icons\unfated house or apartment\house_unfated.png
+		SharedAssets\marker_icons\unfated house or apartment\ss_unfated.PNG = SharedAssets\marker_icons\unfated house or apartment\ss_unfated.PNG
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "agricultural", "agricultural", "{78207218-974E-4152-9FCC-7FCECB181B01}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\seeff\agricultural\2007.png = SharedAssets\marker_icons\seeff\agricultural\2007.png
+		SharedAssets\marker_icons\seeff\agricultural\2008.png = SharedAssets\marker_icons\seeff\agricultural\2008.png
+		SharedAssets\marker_icons\seeff\agricultural\2009.png = SharedAssets\marker_icons\seeff\agricultural\2009.png
+		SharedAssets\marker_icons\seeff\agricultural\2010.png = SharedAssets\marker_icons\seeff\agricultural\2010.png
+		SharedAssets\marker_icons\seeff\agricultural\2011.png = SharedAssets\marker_icons\seeff\agricultural\2011.png
+		SharedAssets\marker_icons\seeff\agricultural\2012.png = SharedAssets\marker_icons\seeff\agricultural\2012.png
+		SharedAssets\marker_icons\seeff\agricultural\2013.png = SharedAssets\marker_icons\seeff\agricultural\2013.png
+		SharedAssets\marker_icons\seeff\agricultural\2014.png = SharedAssets\marker_icons\seeff\agricultural\2014.png
+		SharedAssets\marker_icons\seeff\agricultural\2015.png = SharedAssets\marker_icons\seeff\agricultural\2015.png
+		SharedAssets\marker_icons\seeff\agricultural\2016.png = SharedAssets\marker_icons\seeff\agricultural\2016.png
+		SharedAssets\marker_icons\seeff\agricultural\2017.png = SharedAssets\marker_icons\seeff\agricultural\2017.png
+		SharedAssets\marker_icons\seeff\agricultural\2018.png = SharedAssets\marker_icons\seeff\agricultural\2018.png
+		SharedAssets\marker_icons\seeff\agricultural\2019.png = SharedAssets\marker_icons\seeff\agricultural\2019.png
+		SharedAssets\marker_icons\seeff\agricultural\2020.png = SharedAssets\marker_icons\seeff\agricultural\2020.png
+		SharedAssets\marker_icons\seeff\agricultural\agricultural.psd = SharedAssets\marker_icons\seeff\agricultural\agricultural.psd
+		SharedAssets\marker_icons\seeff\agricultural\current_buy.png = SharedAssets\marker_icons\seeff\agricultural\current_buy.png
+		SharedAssets\marker_icons\seeff\agricultural\current_rent.png = SharedAssets\marker_icons\seeff\agricultural\current_rent.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "commercial", "commercial", "{D0C189ED-172E-423F-8F9F-D782A8794F0A}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\seeff\commercial\2007.png = SharedAssets\marker_icons\seeff\commercial\2007.png
+		SharedAssets\marker_icons\seeff\commercial\2008.png = SharedAssets\marker_icons\seeff\commercial\2008.png
+		SharedAssets\marker_icons\seeff\commercial\2009.png = SharedAssets\marker_icons\seeff\commercial\2009.png
+		SharedAssets\marker_icons\seeff\commercial\2010.png = SharedAssets\marker_icons\seeff\commercial\2010.png
+		SharedAssets\marker_icons\seeff\commercial\2011.png = SharedAssets\marker_icons\seeff\commercial\2011.png
+		SharedAssets\marker_icons\seeff\commercial\2012.png = SharedAssets\marker_icons\seeff\commercial\2012.png
+		SharedAssets\marker_icons\seeff\commercial\2013.png = SharedAssets\marker_icons\seeff\commercial\2013.png
+		SharedAssets\marker_icons\seeff\commercial\2014.png = SharedAssets\marker_icons\seeff\commercial\2014.png
+		SharedAssets\marker_icons\seeff\commercial\2015.png = SharedAssets\marker_icons\seeff\commercial\2015.png
+		SharedAssets\marker_icons\seeff\commercial\2016.png = SharedAssets\marker_icons\seeff\commercial\2016.png
+		SharedAssets\marker_icons\seeff\commercial\2017.png = SharedAssets\marker_icons\seeff\commercial\2017.png
+		SharedAssets\marker_icons\seeff\commercial\2018.png = SharedAssets\marker_icons\seeff\commercial\2018.png
+		SharedAssets\marker_icons\seeff\commercial\2019.png = SharedAssets\marker_icons\seeff\commercial\2019.png
+		SharedAssets\marker_icons\seeff\commercial\2020.png = SharedAssets\marker_icons\seeff\commercial\2020.png
+		SharedAssets\marker_icons\seeff\commercial\commercial.psd = SharedAssets\marker_icons\seeff\commercial\commercial.psd
+		SharedAssets\marker_icons\seeff\commercial\current_buy.png = SharedAssets\marker_icons\seeff\commercial\current_buy.png
+		SharedAssets\marker_icons\seeff\commercial\current_rent.png = SharedAssets\marker_icons\seeff\commercial\current_rent.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "development", "development", "{3B2E36E6-63C1-4DDC-8102-7F01359E956B}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\seeff\development\2007.png = SharedAssets\marker_icons\seeff\development\2007.png
+		SharedAssets\marker_icons\seeff\development\2007.psd = SharedAssets\marker_icons\seeff\development\2007.psd
+		SharedAssets\marker_icons\seeff\development\2008.png = SharedAssets\marker_icons\seeff\development\2008.png
+		SharedAssets\marker_icons\seeff\development\2009.png = SharedAssets\marker_icons\seeff\development\2009.png
+		SharedAssets\marker_icons\seeff\development\2010.png = SharedAssets\marker_icons\seeff\development\2010.png
+		SharedAssets\marker_icons\seeff\development\2011.png = SharedAssets\marker_icons\seeff\development\2011.png
+		SharedAssets\marker_icons\seeff\development\2012.png = SharedAssets\marker_icons\seeff\development\2012.png
+		SharedAssets\marker_icons\seeff\development\2013.png = SharedAssets\marker_icons\seeff\development\2013.png
+		SharedAssets\marker_icons\seeff\development\2014.png = SharedAssets\marker_icons\seeff\development\2014.png
+		SharedAssets\marker_icons\seeff\development\2015.png = SharedAssets\marker_icons\seeff\development\2015.png
+		SharedAssets\marker_icons\seeff\development\2016.png = SharedAssets\marker_icons\seeff\development\2016.png
+		SharedAssets\marker_icons\seeff\development\2017.png = SharedAssets\marker_icons\seeff\development\2017.png
+		SharedAssets\marker_icons\seeff\development\2018.png = SharedAssets\marker_icons\seeff\development\2018.png
+		SharedAssets\marker_icons\seeff\development\2019.png = SharedAssets\marker_icons\seeff\development\2019.png
+		SharedAssets\marker_icons\seeff\development\2020.png = SharedAssets\marker_icons\seeff\development\2020.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "house or apartment", "house or apartment", "{2FF2BEBC-2D28-445D-A2A9-6E3CDA374F00}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\seeff\house or apartment\2007.png = SharedAssets\marker_icons\seeff\house or apartment\2007.png
+		SharedAssets\marker_icons\seeff\house or apartment\2008.png = SharedAssets\marker_icons\seeff\house or apartment\2008.png
+		SharedAssets\marker_icons\seeff\house or apartment\2009.png = SharedAssets\marker_icons\seeff\house or apartment\2009.png
+		SharedAssets\marker_icons\seeff\house or apartment\2010.png = SharedAssets\marker_icons\seeff\house or apartment\2010.png
+		SharedAssets\marker_icons\seeff\house or apartment\2011.png = SharedAssets\marker_icons\seeff\house or apartment\2011.png
+		SharedAssets\marker_icons\seeff\house or apartment\2012.png = SharedAssets\marker_icons\seeff\house or apartment\2012.png
+		SharedAssets\marker_icons\seeff\house or apartment\2013.png = SharedAssets\marker_icons\seeff\house or apartment\2013.png
+		SharedAssets\marker_icons\seeff\house or apartment\2014.png = SharedAssets\marker_icons\seeff\house or apartment\2014.png
+		SharedAssets\marker_icons\seeff\house or apartment\2015.png = SharedAssets\marker_icons\seeff\house or apartment\2015.png
+		SharedAssets\marker_icons\seeff\house or apartment\2016.png = SharedAssets\marker_icons\seeff\house or apartment\2016.png
+		SharedAssets\marker_icons\seeff\house or apartment\2017.png = SharedAssets\marker_icons\seeff\house or apartment\2017.png
+		SharedAssets\marker_icons\seeff\house or apartment\2018.png = SharedAssets\marker_icons\seeff\house or apartment\2018.png
+		SharedAssets\marker_icons\seeff\house or apartment\2019.png = SharedAssets\marker_icons\seeff\house or apartment\2019.png
+		SharedAssets\marker_icons\seeff\house or apartment\2020.png = SharedAssets\marker_icons\seeff\house or apartment\2020.png
+		SharedAssets\marker_icons\seeff\house or apartment\2021.png = SharedAssets\marker_icons\seeff\house or apartment\2021.png
+		SharedAssets\marker_icons\seeff\house or apartment\2022.png = SharedAssets\marker_icons\seeff\house or apartment\2022.png
+		SharedAssets\marker_icons\seeff\house or apartment\2023.png = SharedAssets\marker_icons\seeff\house or apartment\2023.png
+		SharedAssets\marker_icons\seeff\house or apartment\2024.png = SharedAssets\marker_icons\seeff\house or apartment\2024.png
+		SharedAssets\marker_icons\seeff\house or apartment\current_buy.png = SharedAssets\marker_icons\seeff\house or apartment\current_buy.png
+		SharedAssets\marker_icons\seeff\house or apartment\current_rent.png = SharedAssets\marker_icons\seeff\house or apartment\current_rent.png
+		SharedAssets\marker_icons\seeff\house or apartment\house.psd = SharedAssets\marker_icons\seeff\house or apartment\house.psd
+		SharedAssets\marker_icons\seeff\house or apartment\ss.PNG = SharedAssets\marker_icons\seeff\house or apartment\ss.PNG
+		SharedAssets\marker_icons\seeff\house or apartment\ss.PSD = SharedAssets\marker_icons\seeff\house or apartment\ss.PSD
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "other", "other", "{DA19E211-DD0C-44EF-AE95-6C0B1316E650}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\seeff\other\2007.png = SharedAssets\marker_icons\seeff\other\2007.png
+		SharedAssets\marker_icons\seeff\other\2008.png = SharedAssets\marker_icons\seeff\other\2008.png
+		SharedAssets\marker_icons\seeff\other\2009.png = SharedAssets\marker_icons\seeff\other\2009.png
+		SharedAssets\marker_icons\seeff\other\2010.png = SharedAssets\marker_icons\seeff\other\2010.png
+		SharedAssets\marker_icons\seeff\other\2011.png = SharedAssets\marker_icons\seeff\other\2011.png
+		SharedAssets\marker_icons\seeff\other\2012.png = SharedAssets\marker_icons\seeff\other\2012.png
+		SharedAssets\marker_icons\seeff\other\2013.png = SharedAssets\marker_icons\seeff\other\2013.png
+		SharedAssets\marker_icons\seeff\other\2014.png = SharedAssets\marker_icons\seeff\other\2014.png
+		SharedAssets\marker_icons\seeff\other\2015.png = SharedAssets\marker_icons\seeff\other\2015.png
+		SharedAssets\marker_icons\seeff\other\2016.png = SharedAssets\marker_icons\seeff\other\2016.png
+		SharedAssets\marker_icons\seeff\other\2017.png = SharedAssets\marker_icons\seeff\other\2017.png
+		SharedAssets\marker_icons\seeff\other\2018.png = SharedAssets\marker_icons\seeff\other\2018.png
+		SharedAssets\marker_icons\seeff\other\2019.png = SharedAssets\marker_icons\seeff\other\2019.png
+		SharedAssets\marker_icons\seeff\other\2020.png = SharedAssets\marker_icons\seeff\other\2020.png
+		SharedAssets\marker_icons\seeff\other\Other.psd = SharedAssets\marker_icons\seeff\other\Other.psd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "agricultural", "agricultural", "{D826F3FB-7FEA-4B56-A6F2-54233DF656F4}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\competitor\agricultural\2007.png = SharedAssets\marker_icons\competitor\agricultural\2007.png
+		SharedAssets\marker_icons\competitor\agricultural\2008.png = SharedAssets\marker_icons\competitor\agricultural\2008.png
+		SharedAssets\marker_icons\competitor\agricultural\2009.png = SharedAssets\marker_icons\competitor\agricultural\2009.png
+		SharedAssets\marker_icons\competitor\agricultural\2010.png = SharedAssets\marker_icons\competitor\agricultural\2010.png
+		SharedAssets\marker_icons\competitor\agricultural\2011.png = SharedAssets\marker_icons\competitor\agricultural\2011.png
+		SharedAssets\marker_icons\competitor\agricultural\2012.png = SharedAssets\marker_icons\competitor\agricultural\2012.png
+		SharedAssets\marker_icons\competitor\agricultural\2013.png = SharedAssets\marker_icons\competitor\agricultural\2013.png
+		SharedAssets\marker_icons\competitor\agricultural\2014.png = SharedAssets\marker_icons\competitor\agricultural\2014.png
+		SharedAssets\marker_icons\competitor\agricultural\2015.png = SharedAssets\marker_icons\competitor\agricultural\2015.png
+		SharedAssets\marker_icons\competitor\agricultural\2016.png = SharedAssets\marker_icons\competitor\agricultural\2016.png
+		SharedAssets\marker_icons\competitor\agricultural\2017.png = SharedAssets\marker_icons\competitor\agricultural\2017.png
+		SharedAssets\marker_icons\competitor\agricultural\2018.png = SharedAssets\marker_icons\competitor\agricultural\2018.png
+		SharedAssets\marker_icons\competitor\agricultural\2019.png = SharedAssets\marker_icons\competitor\agricultural\2019.png
+		SharedAssets\marker_icons\competitor\agricultural\2020.png = SharedAssets\marker_icons\competitor\agricultural\2020.png
+		SharedAssets\marker_icons\competitor\agricultural\agricultural.psd = SharedAssets\marker_icons\competitor\agricultural\agricultural.psd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "commercial", "commercial", "{AF379D03-3A02-48BF-A28E-3E9AA3757B45}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\competitor\commercial\2007.png = SharedAssets\marker_icons\competitor\commercial\2007.png
+		SharedAssets\marker_icons\competitor\commercial\2008.png = SharedAssets\marker_icons\competitor\commercial\2008.png
+		SharedAssets\marker_icons\competitor\commercial\2009.png = SharedAssets\marker_icons\competitor\commercial\2009.png
+		SharedAssets\marker_icons\competitor\commercial\2010.png = SharedAssets\marker_icons\competitor\commercial\2010.png
+		SharedAssets\marker_icons\competitor\commercial\2011.png = SharedAssets\marker_icons\competitor\commercial\2011.png
+		SharedAssets\marker_icons\competitor\commercial\2012.png = SharedAssets\marker_icons\competitor\commercial\2012.png
+		SharedAssets\marker_icons\competitor\commercial\2013.png = SharedAssets\marker_icons\competitor\commercial\2013.png
+		SharedAssets\marker_icons\competitor\commercial\2014.png = SharedAssets\marker_icons\competitor\commercial\2014.png
+		SharedAssets\marker_icons\competitor\commercial\2015.png = SharedAssets\marker_icons\competitor\commercial\2015.png
+		SharedAssets\marker_icons\competitor\commercial\2016.png = SharedAssets\marker_icons\competitor\commercial\2016.png
+		SharedAssets\marker_icons\competitor\commercial\2017.png = SharedAssets\marker_icons\competitor\commercial\2017.png
+		SharedAssets\marker_icons\competitor\commercial\2018.png = SharedAssets\marker_icons\competitor\commercial\2018.png
+		SharedAssets\marker_icons\competitor\commercial\2019.png = SharedAssets\marker_icons\competitor\commercial\2019.png
+		SharedAssets\marker_icons\competitor\commercial\2020.png = SharedAssets\marker_icons\competitor\commercial\2020.png
+		SharedAssets\marker_icons\competitor\commercial\commercial.psd = SharedAssets\marker_icons\competitor\commercial\commercial.psd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "development", "development", "{562D9421-4F2D-4BEA-855D-3A47F80CE42C}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\competitor\development\2007.png = SharedAssets\marker_icons\competitor\development\2007.png
+		SharedAssets\marker_icons\competitor\development\2008.png = SharedAssets\marker_icons\competitor\development\2008.png
+		SharedAssets\marker_icons\competitor\development\2009.png = SharedAssets\marker_icons\competitor\development\2009.png
+		SharedAssets\marker_icons\competitor\development\2010.png = SharedAssets\marker_icons\competitor\development\2010.png
+		SharedAssets\marker_icons\competitor\development\2011.png = SharedAssets\marker_icons\competitor\development\2011.png
+		SharedAssets\marker_icons\competitor\development\2012.png = SharedAssets\marker_icons\competitor\development\2012.png
+		SharedAssets\marker_icons\competitor\development\2013.png = SharedAssets\marker_icons\competitor\development\2013.png
+		SharedAssets\marker_icons\competitor\development\2014.png = SharedAssets\marker_icons\competitor\development\2014.png
+		SharedAssets\marker_icons\competitor\development\2015.png = SharedAssets\marker_icons\competitor\development\2015.png
+		SharedAssets\marker_icons\competitor\development\2016.png = SharedAssets\marker_icons\competitor\development\2016.png
+		SharedAssets\marker_icons\competitor\development\2017.png = SharedAssets\marker_icons\competitor\development\2017.png
+		SharedAssets\marker_icons\competitor\development\2018.png = SharedAssets\marker_icons\competitor\development\2018.png
+		SharedAssets\marker_icons\competitor\development\2019.png = SharedAssets\marker_icons\competitor\development\2019.png
+		SharedAssets\marker_icons\competitor\development\2020.png = SharedAssets\marker_icons\competitor\development\2020.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "house or apartment", "house or apartment", "{07E54569-9314-453D-AB3D-9C22AA12D453}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\competitor\house or apartment\2007.png = SharedAssets\marker_icons\competitor\house or apartment\2007.png
+		SharedAssets\marker_icons\competitor\house or apartment\2008.png = SharedAssets\marker_icons\competitor\house or apartment\2008.png
+		SharedAssets\marker_icons\competitor\house or apartment\2009.png = SharedAssets\marker_icons\competitor\house or apartment\2009.png
+		SharedAssets\marker_icons\competitor\house or apartment\2010.png = SharedAssets\marker_icons\competitor\house or apartment\2010.png
+		SharedAssets\marker_icons\competitor\house or apartment\2011.png = SharedAssets\marker_icons\competitor\house or apartment\2011.png
+		SharedAssets\marker_icons\competitor\house or apartment\2012.png = SharedAssets\marker_icons\competitor\house or apartment\2012.png
+		SharedAssets\marker_icons\competitor\house or apartment\2013.png = SharedAssets\marker_icons\competitor\house or apartment\2013.png
+		SharedAssets\marker_icons\competitor\house or apartment\2014.png = SharedAssets\marker_icons\competitor\house or apartment\2014.png
+		SharedAssets\marker_icons\competitor\house or apartment\2015.png = SharedAssets\marker_icons\competitor\house or apartment\2015.png
+		SharedAssets\marker_icons\competitor\house or apartment\2016.png = SharedAssets\marker_icons\competitor\house or apartment\2016.png
+		SharedAssets\marker_icons\competitor\house or apartment\2017.png = SharedAssets\marker_icons\competitor\house or apartment\2017.png
+		SharedAssets\marker_icons\competitor\house or apartment\2018.png = SharedAssets\marker_icons\competitor\house or apartment\2018.png
+		SharedAssets\marker_icons\competitor\house or apartment\2019.png = SharedAssets\marker_icons\competitor\house or apartment\2019.png
+		SharedAssets\marker_icons\competitor\house or apartment\2020.png = SharedAssets\marker_icons\competitor\house or apartment\2020.png
+		SharedAssets\marker_icons\competitor\house or apartment\2021.png = SharedAssets\marker_icons\competitor\house or apartment\2021.png
+		SharedAssets\marker_icons\competitor\house or apartment\2022.png = SharedAssets\marker_icons\competitor\house or apartment\2022.png
+		SharedAssets\marker_icons\competitor\house or apartment\2023.png = SharedAssets\marker_icons\competitor\house or apartment\2023.png
+		SharedAssets\marker_icons\competitor\house or apartment\2024.png = SharedAssets\marker_icons\competitor\house or apartment\2024.png
+		SharedAssets\marker_icons\competitor\house or apartment\house.psd = SharedAssets\marker_icons\competitor\house or apartment\house.psd
+		SharedAssets\marker_icons\competitor\house or apartment\ss.PNG = SharedAssets\marker_icons\competitor\house or apartment\ss.PNG
+		SharedAssets\marker_icons\competitor\house or apartment\ss.PSD = SharedAssets\marker_icons\competitor\house or apartment\ss.PSD
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "other", "other", "{39AB49BB-10A2-4275-AE2C-3C49BC52B7D7}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssets\marker_icons\competitor\other\2007.png = SharedAssets\marker_icons\competitor\other\2007.png
+		SharedAssets\marker_icons\competitor\other\2008.png = SharedAssets\marker_icons\competitor\other\2008.png
+		SharedAssets\marker_icons\competitor\other\2009.png = SharedAssets\marker_icons\competitor\other\2009.png
+		SharedAssets\marker_icons\competitor\other\2010.png = SharedAssets\marker_icons\competitor\other\2010.png
+		SharedAssets\marker_icons\competitor\other\2011.png = SharedAssets\marker_icons\competitor\other\2011.png
+		SharedAssets\marker_icons\competitor\other\2012.png = SharedAssets\marker_icons\competitor\other\2012.png
+		SharedAssets\marker_icons\competitor\other\2013.png = SharedAssets\marker_icons\competitor\other\2013.png
+		SharedAssets\marker_icons\competitor\other\2014.png = SharedAssets\marker_icons\competitor\other\2014.png
+		SharedAssets\marker_icons\competitor\other\2015.png = SharedAssets\marker_icons\competitor\other\2015.png
+		SharedAssets\marker_icons\competitor\other\2016.png = SharedAssets\marker_icons\competitor\other\2016.png
+		SharedAssets\marker_icons\competitor\other\2017.png = SharedAssets\marker_icons\competitor\other\2017.png
+		SharedAssets\marker_icons\competitor\other\2018.png = SharedAssets\marker_icons\competitor\other\2018.png
+		SharedAssets\marker_icons\competitor\other\2019.png = SharedAssets\marker_icons\competitor\other\2019.png
+		SharedAssets\marker_icons\competitor\other\2020.png = SharedAssets\marker_icons\competitor\other\2020.png
+		SharedAssets\marker_icons\competitor\other\Other.psd = SharedAssets\marker_icons\competitor\other\Other.psd
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketShareApp", "MarketShareApp\MarketShareApp.csproj", "{29D5DD20-7FAF-489E-BA92-6BCCB00965E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdParty", "3rdParty", "{103F53C2-08F3-4B27-B767-8C8EA26BA95C}"
+	ProjectSection(SolutionItems) = preProject
+		SharedScripts\3rdParty\additional-methods.min.js = SharedScripts\3rdParty\additional-methods.min.js
+		SharedScripts\3rdParty\jquery.blockUI.js = SharedScripts\3rdParty\jquery.blockUI.js
+		SharedScripts\3rdParty\jquery.contextMenu.js = SharedScripts\3rdParty\jquery.contextMenu.js
+		SharedScripts\3rdParty\jquery.ui.position.js = SharedScripts\3rdParty\jquery.ui.position.js
+		SharedScripts\3rdParty\MarkerClustererPlus.js = SharedScripts\3rdParty\MarkerClustererPlus.js
+		SharedScripts\3rdParty\OverlappingMarkerSpiderfier.js = SharedScripts\3rdParty\OverlappingMarkerSpiderfier.js
+		SharedScripts\3rdParty\Purl.js = SharedScripts\3rdParty\Purl.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{074C4602-68DF-4CAC-975D-2C938E6DBF5D}"
+	ProjectSection(SolutionItems) = preProject
+		SharedScripts\Core\ContactDetailsEditorWidget.js = SharedScripts\Core\ContactDetailsEditorWidget.js
+		SharedScripts\Core\ContentExpanderWidget.js = SharedScripts\Core\ContentExpanderWidget.js
+		SharedScripts\Core\Default.js = SharedScripts\Core\Default.js
+		SharedScripts\Core\Filtering.js = SharedScripts\Core\Filtering.js
+		SharedScripts\Core\MenuBuilder.js = SharedScripts\Core\MenuBuilder.js
+		SharedScripts\Core\MultiSelectWidget.js = SharedScripts\Core\MultiSelectWidget.js
+		SharedScripts\Core\ObjectBuilder.js = SharedScripts\Core\ObjectBuilder.js
+		SharedScripts\Core\Search.js = SharedScripts\Core\Search.js
+		SharedScripts\Core\StatisticsGenerator.js = SharedScripts\Core\StatisticsGenerator.js
+		SharedScripts\Core\Utils.js = SharedScripts\Core\Utils.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StyleSheets", "StyleSheets", "{D3678A6C-C3BD-4BAB-8974-49A95B433DFA}"
+	ProjectSection(SolutionItems) = preProject
+		SharedScripts\StyleSheets\ContactDetailsEditorWidgetStyles.css = SharedScripts\StyleSheets\ContactDetailsEditorWidgetStyles.css
+		SharedScripts\StyleSheets\ContentExpanderWidgetStyles.css = SharedScripts\StyleSheets\ContentExpanderWidgetStyles.css
+		SharedScripts\StyleSheets\Default.css = SharedScripts\StyleSheets\Default.css
+		SharedScripts\StyleSheets\jquery.contextMenu.css = SharedScripts\StyleSheets\jquery.contextMenu.css
+		SharedScripts\StyleSheets\MultiSelectWidget.css = SharedScripts\StyleSheets\MultiSelectWidget.css
+		SharedScripts\StyleSheets\Panel.css = SharedScripts\StyleSheets\Panel.css
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PublishScripts", "PublishScripts", "{AF20AB9F-877F-460B-AD89-FDB323C8908A}"
+	ProjectSection(SolutionItems) = preProject
+		PublishScripts\AzureWebsitePublishModule.psm1 = PublishScripts\AzureWebsitePublishModule.psm1
+		PublishScripts\Publish-WebApplicationWebsite.ps1 = PublishScripts\Publish-WebApplicationWebsite.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configurations", "{3B742B55-2575-4B0C-8700-14999217D163}"
+	ProjectSection(SolutionItems) = preProject
+		PublishScripts\Configurations\SeeffProspectingAzure-WAWS-dev.json = PublishScripts\Configurations\SeeffProspectingAzure-WAWS-dev.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeeffProspectingAuthService", "..\SeeffProspectingAuthorisationService\SeeffProspectingAuthService\SeeffProspectingAuthService\SeeffProspectingAuthService.csproj", "{083AD503-D7B6-4507-A117-193B1E13F185}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2943F40D-0E28-443E-9242-FEE187EA53E5}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://learnitsource.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = DataManager\\DataManager.csproj
+		SccProjectName1 = DataManager
+		SccLocalPath1 = DataManager
+		SccProjectUniqueName2 = MarketShareApp\\MarketShareApp.csproj
+		SccProjectName2 = MarketShareApp
+		SccLocalPath2 = MarketShareApp
+		SccProjectUniqueName3 = MarketShareProjectReleaseBuilder\\MarketShareAppReleaseOptimiser.csproj
+		SccProjectName3 = MarketShareProjectReleaseBuilder
+		SccLocalPath3 = MarketShareProjectReleaseBuilder
+		SccProjectUniqueName4 = ProspectingProject\\ProspectingProject.csproj
+		SccProjectName4 = ProspectingProject
+		SccLocalPath4 = ProspectingProject
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4871E3F5-911A-45EC-9471-B123DA3E617D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4871E3F5-911A-45EC-9471-B123DA3E617D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4871E3F5-911A-45EC-9471-B123DA3E617D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4871E3F5-911A-45EC-9471-B123DA3E617D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{361553D3-8CD3-4BB0-87EA-B11013C1FB8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{361553D3-8CD3-4BB0-87EA-B11013C1FB8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{361553D3-8CD3-4BB0-87EA-B11013C1FB8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{361553D3-8CD3-4BB0-87EA-B11013C1FB8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD155303-5AA8-4899-80C9-223E10665C7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD155303-5AA8-4899-80C9-223E10665C7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD155303-5AA8-4899-80C9-223E10665C7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD155303-5AA8-4899-80C9-223E10665C7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29D5DD20-7FAF-489E-BA92-6BCCB00965E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29D5DD20-7FAF-489E-BA92-6BCCB00965E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29D5DD20-7FAF-489E-BA92-6BCCB00965E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29D5DD20-7FAF-489E-BA92-6BCCB00965E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{083AD503-D7B6-4507-A117-193B1E13F185}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{083AD503-D7B6-4507-A117-193B1E13F185}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{083AD503-D7B6-4507-A117-193B1E13F185}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{083AD503-D7B6-4507-A117-193B1E13F185}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5C3A83BA-1E54-466D-A124-245D876ADDAA} = {AAF4EE1E-89E7-4FAF-9F3D-71EE26BCAC80}
+		{BD98ABD0-F702-4511-8A91-1BA6EA18A647} = {5C3A83BA-1E54-466D-A124-245D876ADDAA}
+		{0BDB9FD2-4774-4A94-990A-3A178A519F3A} = {5C3A83BA-1E54-466D-A124-245D876ADDAA}
+		{3266745C-5EB3-4D20-B403-B5C56E789762} = {5C3A83BA-1E54-466D-A124-245D876ADDAA}
+		{78207218-974E-4152-9FCC-7FCECB181B01} = {0BDB9FD2-4774-4A94-990A-3A178A519F3A}
+		{D0C189ED-172E-423F-8F9F-D782A8794F0A} = {0BDB9FD2-4774-4A94-990A-3A178A519F3A}
+		{3B2E36E6-63C1-4DDC-8102-7F01359E956B} = {0BDB9FD2-4774-4A94-990A-3A178A519F3A}
+		{2FF2BEBC-2D28-445D-A2A9-6E3CDA374F00} = {0BDB9FD2-4774-4A94-990A-3A178A519F3A}
+		{DA19E211-DD0C-44EF-AE95-6C0B1316E650} = {0BDB9FD2-4774-4A94-990A-3A178A519F3A}
+		{D826F3FB-7FEA-4B56-A6F2-54233DF656F4} = {BD98ABD0-F702-4511-8A91-1BA6EA18A647}
+		{AF379D03-3A02-48BF-A28E-3E9AA3757B45} = {BD98ABD0-F702-4511-8A91-1BA6EA18A647}
+		{562D9421-4F2D-4BEA-855D-3A47F80CE42C} = {BD98ABD0-F702-4511-8A91-1BA6EA18A647}
+		{07E54569-9314-453D-AB3D-9C22AA12D453} = {BD98ABD0-F702-4511-8A91-1BA6EA18A647}
+		{39AB49BB-10A2-4275-AE2C-3C49BC52B7D7} = {BD98ABD0-F702-4511-8A91-1BA6EA18A647}
+		{103F53C2-08F3-4B27-B767-8C8EA26BA95C} = {F2E7C5E6-E64B-4B83-AA41-6B9DD89F0B9B}
+		{074C4602-68DF-4CAC-975D-2C938E6DBF5D} = {F2E7C5E6-E64B-4B83-AA41-6B9DD89F0B9B}
+		{D3678A6C-C3BD-4BAB-8974-49A95B433DFA} = {F2E7C5E6-E64B-4B83-AA41-6B9DD89F0B9B}
+		{3B742B55-2575-4B0C-8700-14999217D163} = {AF20AB9F-877F-460B-AD89-FDB323C8908A}
+	EndGlobalSection
+EndGlobal

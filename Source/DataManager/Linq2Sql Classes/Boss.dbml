@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="boss" Class="BossDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=ADAMS-PC\SQLSERVER2012;Initial Catalog=boss;Integrated Security=True" SettingsObjectName="DataManager.Properties.Settings" SettingsPropertyName="bossConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.user_registration" Member="user_registrations">
+    <Type Name="user_registration">
+      <Column Name="registration_id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="user_name" Type="System.String" DbType="VarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="user_surname" Type="System.String" DbType="VarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="branch_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="user_email_address" Type="System.String" DbType="VarChar(250)" CanBeNull="true" />
+      <Column Name="user_private_email_address" Type="System.String" DbType="VarChar(250)" CanBeNull="true" />
+      <Column Name="user_preferred_name" Type="System.String" DbType="VarChar(250)" CanBeNull="true" />
+      <Column Name="user_cellphone_no" Type="System.String" DbType="VarChar(11) NOT NULL" CanBeNull="false" />
+      <Column Name="user_office_no" Type="System.String" DbType="VarChar(11)" CanBeNull="true" />
+      <Column Name="user_fax_no" Type="System.String" DbType="VarChar(11)" CanBeNull="true" />
+      <Column Name="designation" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="user_password" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="user_guid" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="created_date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="update_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="reminder" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DOB" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="licensee_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="confirmation" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="achiever" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="achiever_life_time" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="achiever_platinum" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="achiever_ordinary" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="id_no" Type="System.String" DbType="VarChar(13)" CanBeNull="true" />
+      <Column Name="fidelity_fund_no" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="physical_address_1" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="physical_address_2" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="physical_town_city" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="physical_province" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="physical_code" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="postal_address_1" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="postal_address_2" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="postal_town_city" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="postal_province" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="postal_code" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="smart_account" Type="System.Char" DbType="Char(1)" CanBeNull="true" />
+      <Column Name="pop_account" Type="System.Char" DbType="Char(1)" CanBeNull="true" />
+      <Column Name="acc_anniversary" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="home_language" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="fidelity_fund_expiry" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="start_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="region" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="sub_region" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="gender" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="sa_citizen" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="fkAgentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="license_referral_contact" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="birthday_wish" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="birthday_display" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="icas" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="search_group" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ms_area_permissions" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="smart_pass_email_summary" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="prospecting_areas" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="prospecting_credits" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="prospecting_contact_sync" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>
