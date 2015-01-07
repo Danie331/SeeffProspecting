@@ -692,6 +692,7 @@
     <Content Include="..\SharedScripts\StyleSheets\MultiSelectWidget.css">
       <Link>Scripts\StyleSheets\MultiSelectWidget.css</Link>
     </Content>
+    <Content Include="3rdPartyDLLs\SeeffGlobal.dll" />
     <Content Include="Assets\bin.png" />
     <Content Include="Assets\capture_address.png" />
     <Content Include="Assets\contact.png" />
@@ -713,6 +714,7 @@
     <Content Include="Database scripts\boss.sql" />
     <Content Include="Database scripts\seeff_prospecting.sql" />
     <Content Include="Database scripts\seeff_prospecting_data_takeon.sql" />
+    <Content Include="Data\DBSettings.xml" />
     <Content Include="Default.aspx" />
     <Content Include="Scripts\3rdParty\OpenTip.css" />
     <Content Include="Scripts\3rdParty\OpenTip.js" />
