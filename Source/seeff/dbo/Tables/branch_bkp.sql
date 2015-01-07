@@ -1,0 +1,27 @@
+﻿CREATE TABLE [dbo].[branch_bkp] (
+    [branch_bkp_id]                 INT            IDENTITY (1, 1) NOT NULL,
+    [branchId]                      INT            NOT NULL,
+    [branchName]                    NVARCHAR (100) NULL,
+    [branchURL]                     NVARCHAR (255) NULL,
+    [branchDialCode]                CHAR (50)      NULL,
+    [branchTelephone]               CHAR (50)      NULL,
+    [branchFax]                     CHAR (50)      NULL,
+    [branchCell]                    CHAR (50)      NULL,
+    [branchPostalAddress]           NVARCHAR (500) NULL,
+    [branchPhysicalAddress]         NVARCHAR (500) NULL,
+    [branchEmail]                   NVARCHAR (150) NULL,
+    [branchContact]                 INT            NULL,
+    [branchVax]                     VARCHAR (20)   NULL,
+    [fkBranchTypeId]                INT            NULL,
+    [fkAreaId]                      INT            NULL,
+    [fkCityId]                      INT            NULL,
+    [branchActive]                  BIT            CONSTRAINT [DF_branch_bkp_branchActive] DEFAULT (0) NULL,
+    [branchParentId]                INT            CONSTRAINT [DF_branch_bkp_branchParentId] DEFAULT (0) NOT NULL,
+    [branchCopy]                    TEXT           NULL,
+    [branchSpeciality]              TEXT           NULL,
+    [branchOpeningHours]            TEXT           NULL,
+    [branchLicenseeInformation]     TEXT           NULL,
+    [branchSubscribedPropertyGenie] TINYINT        CONSTRAINT [DF_branch_bkp_branchSubscribedPropertyGenie] DEFAULT (0) NULL,
+    CONSTRAINT [PK_branch_bkp] PRIMARY KEY CLUSTERED ([branch_bkp_id] ASC) WITH (FILLFACTOR = 90)
+);
+

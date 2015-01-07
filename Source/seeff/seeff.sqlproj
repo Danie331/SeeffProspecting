@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>seeff</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{ac381fa8-bce7-4fb7-9905-932ceff10449}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>seeff</RootNamespace>
+    <AssemblyName>seeff</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\category_action.sql" />
+    <Build Include="dbo\Tables\unmatched_listings_images.sql" />
+    <Build Include="dbo\Tables\kpi_branch_current_month.sql" />
+    <Build Include="dbo\Tables\competitor.sql" />
+    <Build Include="dbo\Tables\search-notupdated.sql" />
+    <Build Include="dbo\Tables\kpi_branch_month_end_total.sql" />
+    <Build Include="dbo\Tables\propertyFractional_bkp.sql" />
+    <Build Include="dbo\Tables\employmentOpportunity.sql" />
+    <Build Include="dbo\Tables\sms_agent.sql" />
+    <Build Include="dbo\Tables\enquiry.sql" />
+    <Build Include="dbo\Tables\propertyLead_bkp.sql" />
+    <Build Include="dbo\Tables\enquiry_property.sql" />
+    <Build Include="dbo\Tables\agent.sql" />
+    <Build Include="dbo\Tables\feature.sql" />
+    <Build Include="dbo\Tables\propertyPageView_bkp.sql" />
+    <Build Include="dbo\Tables\social_media.sql" />
+    <Build Include="dbo\Tables\featureType.sql" />
+    <Build Include="dbo\Tables\suburb_lookup.sql" />
+    <Build Include="dbo\Tables\images.sql" />
+    <Build Include="dbo\Tables\branch_bkp.sql" />
+    <Build Include="dbo\Tables\agent_bkp.sql" />
+    <Build Include="dbo\Tables\language.sql" />
+    <Build Include="dbo\Tables\google_markers.sql" />
+    <Build Include="dbo\Tables\property_stadium_10dec09.sql" />
+    <Build Include="dbo\Tables\property_extraFeature.sql" />
+    <Build Include="dbo\Tables\analytics_queue.sql" />
+    <Build Include="dbo\Tables\stadium_2010.sql" />
+    <Build Include="dbo\Tables\property_feature.sql" />
+    <Build Include="dbo\Tables\neighbouring_area.sql" />
+    <Build Include="dbo\Tables\city_2010.sql" />
+    <Build Include="dbo\Tables\property_images.sql" />
+    <Build Include="dbo\Tables\branch_area.sql" />
+    <Build Include="dbo\Tables\property_agent_X-unused.sql" />
+    <Build Include="dbo\Tables\branch_area_bkp.sql" />
+    <Build Include="dbo\Tables\active_property_deactive_branch_tracking.sql" />
+    <Build Include="dbo\Tables\related_branch_bkp.sql" />
+    <Build Include="dbo\Tables\propertyAlert-old.sql" />
+    <Build Include="dbo\Tables\propertyAlertLog.sql" />
+    <Build Include="dbo\Tables\analytics_daily.sql" />
+    <Build Include="dbo\Tables\propertyType.sql" />
+    <Build Include="dbo\Tables\related_area.sql" />
+    <Build Include="dbo\Tables\propertygenie_errors.sql" />
+    <Build Include="dbo\Tables\related_branch.sql" />
+    <Build Include="dbo\Tables\property_images_bkp.sql" />
+    <Build Include="dbo\Tables\seller.sql" />
+    <Build Include="dbo\Tables\analytics.sql" />
+    <Build Include="dbo\Tables\minRentalPeriod.sql" />
+    <Build Include="dbo\Tables\rental_access.sql" />
+    <Build Include="dbo\Tables\property_stadium.sql" />
+    <Build Include="dbo\Tables\tmpPropertyImages.sql" />
+    <Build Include="dbo\Tables\wl_enquiry.sql" />
+    <Build Include="dbo\Tables\feed_out_service.sql" />
+    <Build Include="dbo\Tables\unit.sql" />
+    <Build Include="dbo\Tables\property_features_type.sql" />
+    <Build Include="dbo\Tables\area_property_count.sql" />
+    <Build Include="dbo\Tables\property_features.sql" />
+    <Build Include="dbo\Tables\wl_follow_up.sql" />
+    <Build Include="dbo\Tables\propertyAlert_feature.sql" />
+    <Build Include="dbo\Tables\search.sql" />
+    <Build Include="dbo\Tables\branch_area_01jul09.sql" />
+    <Build Include="dbo\Tables\request.sql" />
+    <Build Include="dbo\Tables\wl_fnb_property_address.sql" />
+    <Build Include="dbo\Tables\service_status.sql" />
+    <Build Include="dbo\Tables\property_bkp.sql" />
+    <Build Include="dbo\Tables\news_archive.sql" />
+    <Build Include="dbo\Tables\espServiceProvider.sql" />
+    <Build Include="dbo\Tables\searchBoxExc.sql" />
+    <Build Include="dbo\Tables\private_property_listing_errors.sql" />
+    <Build Include="dbo\Tables\action.sql" />
+    <Build Include="dbo\Tables\propCtrl_images.sql" />
+    <Build Include="dbo\Tables\propctrl_users.sql" />
+    <Build Include="dbo\Tables\propCtrl_Sync.sql" />
+    <Build Include="dbo\Tables\propertygenie_sync_date.sql" />
+    <Build Include="dbo\Tables\kml_area.sql" />
+    <Build Include="dbo\Tables\property.sql" />
+    <Build Include="dbo\Tables\news.sql" />
+    <Build Include="dbo\Tables\propertyLead.sql" />
+    <Build Include="dbo\Tables\propertyPageView.sql" />
+    <Build Include="dbo\Tables\property_show_day_temp.sql" />
+    <Build Include="dbo\Tables\live_images.sql" />
+    <Build Include="dbo\Tables\area.sql" />
+    <Build Include="dbo\Tables\property_show_day.sql" />
+    <Build Include="dbo\Tables\agent_enquiry.sql" />
+    <Build Include="dbo\Tables\seoUrl.sql" />
+    <Build Include="dbo\Tables\map_property.sql" />
+    <Build Include="dbo\Tables\fractionalTitle.sql" />
+    <Build Include="dbo\Tables\branch_category_exception.sql" />
+    <Build Include="dbo\Tables\categories.sql" />
+    <Build Include="dbo\Tables\documents.sql" />
+    <Build Include="dbo\Tables\notices.sql" />
+    <Build Include="dbo\Tables\products.sql" />
+    <Build Include="dbo\Tables\kml_license.sql" />
+    <Build Include="dbo\Tables\users.sql" />
+    <Build Include="dbo\Tables\wl_marketing.sql" />
+    <Build Include="dbo\Tables\propctrl_branch_id.sql" />
+    <Build Include="dbo\Tables\feed_out_service_traffic.sql" />
+    <Build Include="dbo\Tables\propertyFractional.sql" />
+    <Build Include="dbo\Tables\webUsers.sql" />
+    <Build Include="dbo\Tables\branch.sql" />
+    <Build Include="dbo\Tables\seo_pages.sql" />
+    <Build Include="dbo\Tables\my_mail_processed_status.sql" />
+    <Build Include="dbo\Tables\my_mail_banner_type.sql" />
+    <Build Include="dbo\Tables\my_mail_property_queue.sql" />
+    <Build Include="dbo\Tables\propctrl_error.sql" />
+    <Build Include="dbo\Tables\propctrl_update_queue.sql" />
+    <Build Include="dbo\Tables\propctrl_error_type.sql" />
+    <Build Include="dbo\Tables\accommodation_enquiry_2010.sql" />
+    <Build Include="dbo\Tables\session.sql" />
+    <Build Include="dbo\Tables\property_agent.sql" />
+    <Build Include="dbo\Tables\propertyAlert.sql" />
+    <Build Include="dbo\Tables\enquiry_voyager.sql" />
+    <Build Include="dbo\Tables\propctrl_sync_date.sql" />
+    <Build Include="dbo\Tables\pdf_fact_sheet.sql" />
+    <Build Include="dbo\Tables\property_open_hour.sql" />
+    <Build Include="dbo\Tables\propctrl_suburbs.sql" />
+    <Build Include="dbo\Tables\schools_registration.sql" />
+    <Build Include="dbo\Tables\map_points.sql" />
+    <Build Include="dbo\Tables\golf_estate.sql" />
+    <Build Include="dbo\Tables\AreaMap.sql" />
+    <Build Include="dbo\Tables\voyager_enquiry.sql" />
+    <Build Include="dbo\Tables\bookingDates.sql" />
+    <Build Include="dbo\Tables\bookings.sql" />
+    <Build Include="dbo\Tables\propctrl_log.sql" />
+    <Build Include="dbo\Tables\log.sql" />
+    <Build Include="dbo\Tables\category.sql" />
+    <Build Include="dbo\Tables\delete_old_property.sql" />
+    <Build Include="dbo\Tables\sell_enquiry.sql" />
+    <Build Include="dbo\Tables\country.sql" />
+    <Build Include="dbo\Tables\wl_pg_property_delete.sql" />
+    <Build Include="dbo\Tables\development.sql" />
+    <Build Include="dbo\Tables\agent_category.sql" />
+    <Build Include="dbo\Tables\agent_language.sql" />
+    <Build Include="dbo\Tables\landlord_enquiry.sql" />
+    <Build Include="dbo\Tables\propertyPrice.sql" />
+    <Build Include="dbo\Tables\agentRole.sql" />
+    <Build Include="dbo\Tables\agentType.sql" />
+    <Build Include="dbo\Tables\license_enquiry.sql" />
+    <Build Include="dbo\Tables\property_extraFeature_bkp.sql" />
+    <Build Include="dbo\Tables\news-2009oct23.sql" />
+    <Build Include="dbo\Tables\area_kml.sql" />
+    <Build Include="dbo\Tables\areaType.sql" />
+    <Build Include="dbo\Tables\property_feature_bkp.sql" />
+    <Build Include="dbo\Tables\branch_enquiry.sql" />
+    <Build Include="dbo\Tables\branchType.sql" />
+    <Build Include="dbo\Views\bookingView.sql" />
+    <Build Include="dbo\Views\rentals.sql" />
+    <Build Include="dbo\Views\propertiesByBranchByProvince.sql" />
+    <Build Include="dbo\Views\propertyExport.sql" />
+    <Build Include="dbo\Views\propertyStadiumView.sql" />
+    <Build Include="dbo\Views\Active Properties.sql" />
+    <Build Include="dbo\Views\2010 Rental Search with Images.sql" />
+    <Build Include="dbo\Views\province list.sql" />
+    <Build Include="dbo\Views\residentialRentalPropertiesView.sql" />
+    <Build Include="dbo\Views\agentView.sql" />
+    <Build Include="dbo\Views\areaView.sql" />
+    <Build Include="dbo\Views\propertiesView.sql" />
+    <Build Include="dbo\Views\properties in area.sql" />
+    <Build Include="dbo\Views\stadiumView.sql" />
+    <Build Include="dbo\Views\testYz.sql" />
+    <Build Include="dbo\Views\seoStaticPages.sql" />
+    <Build Include="dbo\Views\agentExport.sql" />
+    <Build Include="dbo\Views\pg_residential_for_sale.sql" />
+    <Build Include="dbo\Views\propertiesByLocation.sql" />
+    <Build Include="dbo\Views\seomapping.sql" />
+    <Build Include="dbo\Views\branch_details_export.sql" />
+    <Build Include="dbo\Views\bookingsView.sql" />
+    <Build Include="dbo\Views\branchStaticPageSuburb.sql" />
+    <Build Include="dbo\Views\getEmploymentOpportunities.sql" />
+    <Build Include="dbo\Views\areasByBranch.sql" />
+    <Build Include="dbo\Views\development_agents.sql" />
+    <Build Include="dbo\Views\listOfGolfEstates.sql" />
+    <Build Include="dbo\Views\NumberOfPropertiesByBranch.sql" />
+    <Build Include="dbo\Views\propertiesPerBranch.sql" />
+    <Build Include="Security\Adam.sql" />
+    <Build Include="Security\SEEFFWEB_MacAdmin.sql" />
+    <Build Include="Security\seeff_com.sql" />
+    <Build Include="Security\boss_admin.sql" />
+    <Build Include="Security\admin-user.sql" />
+    <Build Include="Security\marketshare_%40dmin.sql" />
+    <Build Include="Security\IIS APPPOOL_m.seeff.com.sql" />
+    <Build Include="Security\IIS APPPOOL_mymail.seeff.com.sql" />
+    <Build Include="Security\IIS APPPOOL_integration.seeff.com.sql" />
+    <Build Include="Security\IIS APPPOOL_smartadmin.seeff.com.sql" />
+    <Build Include="Security\IIS APPPOOL_staging.seeff.com.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Functions\CalculateSearchPermLand.sql" />
+    <Build Include="dbo\Functions\PARTNERSHIP_AGENTID_COMMA_SEPARATED.sql" />
+    <Build Include="dbo\Functions\GetAreaPathMap.sql" />
+    <Build Include="dbo\Functions\PARTNERSHIP_DETAILS_COMMA_SEPARATED.sql" />
+    <Build Include="dbo\Functions\GET_NEXT_WEB_REF.sql" />
+    <Build Include="dbo\Functions\GetAreaParentName.sql" />
+    <Build Include="dbo\Stored Procedures\sp_feed_out_service_build.sql" />
+    <Build Include="dbo\Stored Procedures\sp_search_table_property_insert.sql" />
+    <Build Include="dbo\Stored Procedures\sp_area_property_count_build.sql" />
+    <Build Include="dbo\Stored Procedures\sp_search_table_build.sql" />
+    <Build Include="dbo\Stored Procedures\sp_update_search_table_by_date.sql" />
+    <Build Include="Security\Adam_1.sql" />
+    <Build Include="Security\seeff_com_1.sql" />
+    <Build Include="Security\SEEFFWEB_MacAdmin_1.sql" />
+    <Build Include="Security\Permissions.sql" />
+  </ItemGroup>
+</Project>

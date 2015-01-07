@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>ls_base</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{ba6abcb2-c090-4a6e-9534-12a358d68deb}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>ls_base</RootNamespace>
+    <AssemblyName>ls_base</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="Assemblies\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\area_load_queue.sql" />
+    <Build Include="dbo\Tables\area_fating.sql" />
+    <Build Include="dbo\Tables\area_layer.sql" />
+    <Build Include="dbo\Tables\province_id_lookup.sql" />
+    <Build Include="dbo\Tables\spatial_area_temp.sql" />
+    <Build Include="dbo\Tables\erf_nos_temp.sql" />
+    <Build Include="dbo\Tables\spatial_area.sql" />
+    <Build Include="dbo\Tables\spatial_license.sql" />
+    <Build Include="dbo\Tables\spatial_terretory.sql" />
+    <Build Include="dbo\Tables\base_data.sql" />
+    <Build Include="dbo\Tables\area_parent_lookup.sql" />
+    <Build Include="dbo\Tables\agencies_user_suburbs.sql" />
+    <Build Include="dbo\Tables\agency.sql" />
+    <Build Include="dbo\Tables\market_share_area_totals.sql" />
+    <Build Include="Security\LIGHTSTONE_antonf.sql" />
+    <Build Include="Security\LIGHTSTONE_cornev.sql" />
+    <Build Include="Security\IIS APPPOOL_smartadmin.seeff.com.sql" />
+    <Build Include="Security\IIS APPPOOL_staging.seeff.com.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Functions\ufn_get_area_parent_lookup_json.sql" />
+    <Build Include="dbo\Functions\license_id_from_area_id.sql" />
+    <Build Include="dbo\Functions\get_area_id_x.sql" />
+    <Build Include="dbo\Functions\get_license_id.sql" />
+    <Build Include="dbo\Functions\get_province_id.sql" />
+    <Build Include="dbo\Functions\ms_get_area_name.sql" />
+    <Build Include="dbo\Functions\point_inside_poly.sql" />
+    <Build Include="dbo\Functions\get_territory_name.sql" />
+    <Build Include="dbo\Functions\reverse_comma_delimited_string.sql" />
+    <Build Include="dbo\Functions\sp_update_property_addresses.sql" />
+    <Build Include="dbo\Functions\sp_update_seeff_area_ids.sql" />
+    <Build Include="dbo\Functions\get_area_types_for_area.sql" />
+    <Build Include="dbo\Functions\ms_area_kml.sql" />
+    <Build Include="dbo\Stored Procedures\sp_generate_area_parent_lookup_table.sql" />
+    <Build Include="dbo\Stored Procedures\validate_polygon_coords.sql" />
+    <Build Include="dbo\Stored Procedures\find_area_id.sql" />
+    <Build Include="dbo\Stored Procedures\populate_area_fating.sql" />
+    <Build Include="dbo\Stored Procedures\update_seeff_area_ids.sql" />
+    <Build Include="dbo\Stored Procedures\get_area_id.sql" />
+    <Build Include="dbo\Stored Procedures\sp_populate_area_layer_tbl.sql" />
+    <Build Include="dbo\Stored Procedures\sp_load_new_lightstone_data_step_4.sql" />
+    <Build Include="dbo\Stored Procedures\sp_update_area_layer_tbl.sql" />
+    <Build Include="dbo\Stored Procedures\sp_load_new_lightstone_data_step_1.sql" />
+    <Build Include="dbo\Stored Procedures\sp_load_new_lightstone_data_step_2_1.sql" />
+    <Build Include="dbo\Stored Procedures\sp_load_new_lightstone_data_step_2_2.sql" />
+    <Build Include="dbo\Stored Procedures\sp_load_new_lightstone_data_step_3.sql" />
+    <Build Include="Security\PROP_ADDRESSES_ASM_KEY.sql" />
+    <Build Include="Security\Permissions.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assemblies\kml_area_lookup_sql_lib.dll" />
+    <None Include="Assemblies\SeeffGlobal.dll" />
+    <None Include="Assemblies\GetPropertyAddress.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="kml_area_lookup_sql_lib">
+      <HintPath>Assemblies\kml_area_lookup_sql_lib.dll</HintPath>
+      <SqlAssemblyName>SeeffAreaIdUpdater</SqlAssemblyName>
+      <IsModelAware>True</IsModelAware>
+      <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
+      <SqlOwnerName>dbo</SqlOwnerName>
+      <SqlPermissionSet>EXTERNAL_ACCESS</SqlPermissionSet>
+    </Reference>
+    <Reference Include="SeeffGlobal">
+      <HintPath>Assemblies\SeeffGlobal.dll</HintPath>
+      <SqlAssemblyName>SeeffGlobal</SqlAssemblyName>
+      <IsModelAware>True</IsModelAware>
+      <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
+      <SqlOwnerName>dbo</SqlOwnerName>
+      <SqlPermissionSet>EXTERNAL_ACCESS</SqlPermissionSet>
+      <IsVisible>False</IsVisible>
+    </Reference>
+    <Reference Include="GetPropertyAddress">
+      <HintPath>Assemblies\GetPropertyAddress.dll</HintPath>
+      <SqlAssemblyName>PropertyAddressUpdater</SqlAssemblyName>
+      <IsModelAware>True</IsModelAware>
+      <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
+      <SqlOwnerName>dbo</SqlOwnerName>
+      <SqlPermissionSet>UNSAFE</SqlPermissionSet>
+    </Reference>
+  </ItemGroup>
+</Project>

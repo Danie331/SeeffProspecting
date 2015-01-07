@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[reports_hub_progress] (
+    [sps_transaction_id]      BIGINT          NOT NULL,
+    [sps_lic_deal_no]         VARCHAR (100)   NULL,
+    [sps_web_ref]             VARCHAR (50)    NULL,
+    [licensee_rep]            VARCHAR (250)   NULL,
+    [hub_rep]                 VARCHAR (250)   NULL,
+    [property_address]        VARCHAR (500)   NULL,
+    [bank_product]            VARCHAR (250)   NULL,
+    [current_status]          VARCHAR (150)   NULL,
+    [created_date]            DATETIME        NULL,
+    [forty_eight_hour_action] VARCHAR (150)   NULL,
+    [forty_eight_hour]        DATETIME        NULL,
+    [otp_status]              VARCHAR (150)   NULL,
+    [otp]                     DATETIME        NULL,
+    [bond_status]             VARCHAR (150)   NULL,
+    [bond]                    DATETIME        NULL,
+    [registration_status]     VARCHAR (150)   NULL,
+    [registration]            DATETIME        NULL,
+    [commission_status]       VARCHAR (150)   NULL,
+    [commission]              DATETIME        NULL,
+    [license_name]            VARCHAR (150)   NULL,
+    [region]                  VARCHAR (100)   NULL,
+    [branchName]              VARCHAR (150)   NULL,
+    [price]                   DECIMAL (18, 2) NULL
+);
+

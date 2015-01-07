@@ -1,0 +1,3 @@
+﻿CREATE USER [SEEFFWEB\MacAdmin]
+    WITH DEFAULT_SCHEMA = [SEEFFWEB\MacAdmin];
+

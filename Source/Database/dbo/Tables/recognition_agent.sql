@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[recognition_agent] (
+    [sps_transaction_id]               INT             NOT NULL,
+    [sps_transaction_ref]              VARCHAR (50)    NOT NULL,
+    [sps_referral_type]                VARCHAR (50)    NOT NULL,
+    [sps_referral_comm]                DECIMAL (18, 2) NOT NULL,
+    [sps_comm_non_mananged_amount]     DECIMAL (18, 2) NOT NULL,
+    [sps_rental_management_fee]        DECIMAL (18, 2) NOT NULL,
+    [sps_listing_price_monthly_rental] DECIMAL (18, 2) NOT NULL,
+    [sps_selling_price_admin_fee]      DECIMAL (18, 2) NOT NULL,
+    [listing_start_date]               DATETIME        NOT NULL,
+    [sold_end_date]                    DATETIME        NOT NULL,
+    [entity_id]                        INT             NOT NULL,
+    [entity_type]                      CHAR (1)        NOT NULL,
+    [unit_value]                       DECIMAL (18, 2) NOT NULL,
+    [sps_section]                      VARCHAR (50)    NOT NULL,
+    [sps_transaction_division]         VARCHAR (50)    NOT NULL,
+    [sps_showdays]                     INT             NULL,
+    [sps_solemandate]                  BIT             CONSTRAINT [DF_Recognition_agent_sps_solemandate] DEFAULT ((0)) NOT NULL,
+    [first_transaction]                BIT             CONSTRAINT [DF_recognition_agent_first_transaction] DEFAULT ((0)) NOT NULL,
+    [branch_id]                        INT             NOT NULL,
+    [reporting_date]                   DATETIME        NOT NULL,
+    [month_group]                      INT             NOT NULL,
+    [percentage_share]                 DECIMAL (18, 2) NOT NULL,
+    [record_type]                      VARCHAR (10)    NOT NULL
+);
+

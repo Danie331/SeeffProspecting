@@ -1,0 +1,370 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Boss</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{ac16cf1f-b140-4ef7-b7a6-517524099048}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Database</RootNamespace>
+    <AssemblyName>Database</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\sps_hub_supplier.sql" />
+    <Build Include="dbo\Tables\smart_pass_transaction_follower.sql" />
+    <Build Include="dbo\Tables\smart_pass_participants.sql" />
+    <Build Include="dbo\Tables\branch_control.sql" />
+    <Build Include="dbo\Tables\deal.sql" />
+    <Build Include="dbo\Tables\smart_pass_follower.sql" />
+    <Build Include="dbo\Tables\deal_enquiry.sql" />
+    <Build Include="dbo\Tables\smart_pass_comment.sql" />
+    <Build Include="dbo\Tables\sps_hub_invoice_schedule.sql" />
+    <Build Include="dbo\Tables\lightstone_areas.sql" />
+    <Build Include="dbo\Tables\languages.sql" />
+    <Build Include="dbo\Tables\license_lightstone.sql" />
+    <Build Include="dbo\Tables\complete_details.sql" />
+    <Build Include="dbo\Tables\MonthRentTotal.sql" />
+    <Build Include="dbo\Tables\license.sql" />
+    <Build Include="dbo\Tables\reports_hub_progress.sql" />
+    <Build Include="dbo\Tables\user_access.sql" />
+    <Build Include="dbo\Tables\reports_Sales_Recognition_Detail_Global.sql" />
+    <Build Include="dbo\Tables\product.sql" />
+    <Build Include="dbo\Tables\survey_option_values.sql" />
+    <Build Include="dbo\Tables\sps_hub_transaction.sql" />
+    <Build Include="dbo\Tables\licensee.sql" />
+    <Build Include="dbo\Tables\reports_Referral_Recognition_Detail.sql" />
+    <Build Include="dbo\Tables\stats_exception.sql" />
+    <Build Include="dbo\Tables\license_branches.sql" />
+    <Build Include="dbo\Tables\reports_Sales_Recognition_Detail.sql" />
+    <Build Include="dbo\Tables\reports_manager_summary.sql" />
+    <Build Include="dbo\Tables\smart_pass_person.sql" />
+    <Build Include="dbo\Tables\agent_property_list.sql" />
+    <Build Include="dbo\Tables\reports_guild.sql" />
+    <Build Include="dbo\Tables\reports_user_distribution.sql" />
+    <Build Include="dbo\Tables\reports_daily_track.sql" />
+    <Build Include="dbo\Tables\smart_acc_requests.sql" />
+    <Build Include="dbo\Tables\variable_lookup.sql" />
+    <Build Include="dbo\Tables\sps_hub_bank_product.sql" />
+    <Build Include="dbo\Tables\stats_nationalweekly.sql" />
+    <Build Include="dbo\Tables\certificate_track.sql" />
+    <Build Include="dbo\Tables\smart_pass_actual.sql" />
+    <Build Include="dbo\Tables\smart_acc_batch.sql" />
+    <Build Include="dbo\Tables\reports_seeff_letter.sql" />
+    <Build Include="dbo\Tables\survey.sql" />
+    <Build Include="dbo\Tables\prospecting_credit.sql" />
+    <Build Include="dbo\Tables\announcements.sql" />
+    <Build Include="dbo\Tables\area_json.sql" />
+    <Build Include="dbo\Tables\reports_month_end_cutoff_dates.sql" />
+    <Build Include="dbo\Tables\smart_pass.sql" />
+    <Build Include="dbo\Tables\partnership_group.sql" />
+    <Build Include="dbo\Tables\partnership.sql" />
+    <Build Include="dbo\Tables\user_signature.sql" />
+    <Build Include="dbo\Tables\recognition_exceptions.sql" />
+    <Build Include="dbo\Tables\user_language.sql" />
+    <Build Include="dbo\Tables\branch.sql" />
+    <Build Include="dbo\Tables\sps_other_income.sql" />
+    <Build Include="dbo\Tables\sps_agent_split.sql" />
+    <Build Include="dbo\Tables\reports_total_figures.sql" />
+    <Build Include="dbo\Tables\sps_reporting_person.sql" />
+    <Build Include="dbo\Tables\permission_type.sql" />
+    <Build Include="dbo\Tables\announcements_vote.sql" />
+    <Build Include="dbo\Tables\reports_total_rental.sql" />
+    <Build Include="dbo\Tables\permission_section.sql" />
+    <Build Include="dbo\Tables\p24_branches.sql" />
+    <Build Include="dbo\Tables\sale_transaction.sql" />
+    <Build Include="dbo\Tables\p24_stats.sql" />
+    <Build Include="dbo\Tables\permission.sql" />
+    <Build Include="dbo\Tables\license_sub.sql" />
+    <Build Include="dbo\Tables\smart_pass_lead.sql" />
+    <Build Include="dbo\Tables\boss_search.sql" />
+    <Build Include="dbo\Tables\reports_auto_letters.sql" />
+    <Build Include="dbo\Tables\propctrl_unmatched.sql" />
+    <Build Include="dbo\Tables\user_registration.sql" />
+    <Build Include="dbo\Tables\recognition_agent.sql" />
+    <Build Include="dbo\Tables\license_intranet.sql" />
+    <Build Include="dbo\Tables\smart_pass_digest.sql" />
+    <Build Include="dbo\Tables\sps_person.sql" />
+    <Build Include="dbo\Tables\sps_sbf_split.sql" />
+    <Build Include="dbo\Tables\access_log.sql" />
+    <Build Include="dbo\Tables\stats_page_views.sql" />
+    <Build Include="dbo\Tables\sps_rental.sql" />
+    <Build Include="dbo\Tables\sps_rental_renewal.sql" />
+    <Build Include="dbo\Tables\sms_voucher.sql" />
+    <Build Include="dbo\Tables\persons_in_transaction.sql" />
+    <Build Include="dbo\Tables\sps_custom_values.sql" />
+    <Build Include="dbo\Tables\sba_skill.sql" />
+    <Build Include="dbo\Tables\sps_custom_fields.sql" />
+    <Build Include="dbo\Tables\sba_answers.sql" />
+    <Build Include="dbo\Tables\reports_license_summary.sql" />
+    <Build Include="dbo\Tables\sba_user_info.sql" />
+    <Build Include="dbo\Tables\kml_license.sql" />
+    <Build Include="dbo\Tables\announcements_track.sql" />
+    <Build Include="dbo\Tables\sps_transaction.sql" />
+    <Build Include="dbo\Tables\survey_results.sql" />
+    <Build Include="dbo\Tables\sps_hub_comment.sql" />
+    <Build Include="dbo\Tables\survey_option.sql" />
+    <Build Include="dbo\Tables\voyager.sql" />
+    <Build Include="dbo\Tables\reports_rental_recognition.sql" />
+    <Build Include="dbo\Tables\sps_hub_follower.sql" />
+    <Build Include="dbo\Tables\survey_audiance.sql" />
+    <Build Include="dbo\Tables\sps_hub_transaction_follower.sql" />
+    <Build Include="dbo\Tables\sps_hub_users.sql" />
+    <Build Include="dbo\Tables\smart_acc_pop.sql" />
+    <Build Include="Security\Adam.sql" />
+    <Build Include="Security\market_share.sql" />
+    <Build Include="Security\prospecting_user.sql" />
+    <Build Include="Security\prospecting_user_1.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Functions\fnMIS_bank_product_name.sql" />
+    <Build Include="dbo\Functions\fnMIS_AgentName.sql" />
+    <Build Include="dbo\Functions\sales_company_comm.sql" />
+    <Build Include="dbo\Functions\get_user_license_id.sql" />
+    <Build Include="dbo\Functions\get_license_id_from_area_id.sql" />
+    <Build Include="dbo\Functions\fnMIS_SalesRecognition_Backup20140122.sql" />
+    <Build Include="dbo\Functions\fnMIS_SalesRecognition.sql" />
+    <Build Include="dbo\Functions\fnMIS_sales_commission.sql" />
+    <Build Include="dbo\Functions\get_area_desc_from_area_id.sql" />
+    <Build Include="dbo\Functions\get_entity_desc.sql" />
+    <Build Include="dbo\Functions\achiever_type.sql" />
+    <Build Include="dbo\Functions\fnMIS_AgentRegID.sql" />
+    <Build Include="dbo\Functions\fnMIS_SubRegion.sql" />
+    <Build Include="dbo\Functions\sales_units.sql" />
+    <Build Include="dbo\Functions\credited_agents.sql" />
+    <Build Include="dbo\Functions\credited_schedule_agents.sql" />
+    <Build Include="dbo\Functions\sales_actual_selling.sql" />
+    <Build Include="dbo\Functions\sales_comm_at_seven.sql" />
+    <Build Include="dbo\Functions\fnMIS_SalesRecog_Solitaire_Unit.sql" />
+    <Build Include="dbo\Functions\sales_comm_perc.sql" />
+    <Build Include="dbo\Functions\fnMIS_SalesRecog_Solitaire_Amount.sql" />
+    <Build Include="dbo\Functions\fnMIS_SalesRecog_Partnership_Unit.sql" />
+    <Build Include="dbo\Functions\fnMIS_SalesRecog_Partnership_Amount.sql" />
+    <Build Include="dbo\Functions\rental_comm_at_seven.sql" />
+    <Build Include="dbo\Functions\rental_comm_perc_managed.sql" />
+    <Build Include="dbo\Functions\rental_comm_perc_non_managed.sql" />
+    <Build Include="dbo\Functions\rental_remaining_period.sql" />
+    <Build Include="dbo\Functions\show_month.sql" />
+    <Build Include="dbo\Functions\person_by_roll.sql" />
+    <Build Include="dbo\Functions\no_unread_announcements.sql" />
+    <Build Include="dbo\Functions\fnMIS_MonthsApart.sql" />
+    <Build Include="dbo\Functions\last_smart_pass_comment.sql" />
+    <Build Include="dbo\Functions\fnMIS_ReferralRecog_Unit.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_Region_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Regional_Daily_Sales_YTD_per_License.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_National_Unit_YTD.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_License_Daily_DivSum.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_National_Rand_YTD.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_License_Daily_Summary.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_National_Month_Unit.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_License_Report.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_National_Daily_Sales.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_National_Month_Rand.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Ntnl_Daily_Sales_YTD_per_Division.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_National_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Region_Daily_Sales_Per_Division_Per_Region.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_License_Unit_YTD.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Region_Daily_Sales.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_License_Rand_YTD.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Ntnl_Daily_Sales_YTD_per_License.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_License_Month_Unit.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Region_Division_Summary.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_License_Month_Rand.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Ntnl_YTD_Summary_Division.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_License_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_National_Division_Summary.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Region_YTD_Summary.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HLR_PerRegion.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_ooba_Report.sql" />
+    <Build Include="dbo\Stored Procedures\spSmartPassDeleteRecord.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Region_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Mandates_Allocated_Per_License.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HLR_PerLicense.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_License_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Mandates_Allocated_Per_Region.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Mandates_License_ListPrice.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_License_Status_PerRegion.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Mandates_ListPrice.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_License_Status_PerLicense.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Sales_Recognition_Detail_Global.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Mandates_Region_ListPrice.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_License_Status.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Rent_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Sales_Recognition_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\smart_pass_search.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentalSchedule_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_SalesDetail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_OtherIncome_Per_Month.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HUB_Sold_Report.sql" />
+    <Build Include="dbo\Stored Procedures\moodle_validate_users.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_IncProjRep_SalesDetail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_OTPAccepted_HasReportingDate.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_License_Daily_Sales_Report.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_License_Sales_Per_Fin_Year_2010_2011.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Ntnl_Daily_Sales_Ladder.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_OTP_Accepted.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_OI_2011_2012.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_SRR_Nov2011_Oct2012.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_IncProj_OI_2011_2012.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_IncProjRep_SRRFigures.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Rental_OI_Verification_Letter.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentRecog_Totals_YTD.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentRecog_Totals_PerMonth.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentRecog_Totals_Month_License.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Res_Val_Price_Exception.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentRecog_Totals_YTD_License.sql" />
+    <Build Include="dbo\Stored Procedures\mymail_unsubscribe_client.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Backup_BOSS.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Cert_Track_License.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_LicenseDetail_Actives.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Cert_Track_National.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Bank_Deals_Summary.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Cert_Track_Region.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Bank_Deals_SOLD.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Bank_Deals_RECEIVED.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Bank_Deals_Accepted.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Bank_Deals_DECLINED.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_CPIP_Report.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Reports_SubRegion_Error.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HFA_03_NotExtPaidYToYou.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_VerificationLetter_SalesAtSeven.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_All_Referrals_Count.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Inter_Branch_Referral_Count.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Smart_Account_Cancellation_Report.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Rgn_CanTran_Summary.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_KeyIndicators.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Pipeline_with_ActSellPrice.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_OtherIncome.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Sales_Recognition_License_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_SalesReport_per_Month.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentalSchedule_per_Month.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentalReport_per_Month.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_DealMakers.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Sales_Recognition_License.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HFA_01_All.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HFA_02_NoSoldDate.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Sales_Recognition_License_YTD_Division.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HFA_03_NotExtPaidToYou.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_UPDATE_rental_recognition_Centurion.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HFA_04_NoSellPrice.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_LicenseDetail_Recog.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HFA_05_Agent.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HFA_06_ExpRegDate.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HFA_07_SellerName.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RegionDetail_Recog.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HFA_08_BuyerName.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_HFA_09_NoComment.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Lic_CanTran_Daily.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Sales_Recognition_Region.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Lic_CanTran_DivSum.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Sales_Recognition_Region_YTD_Division.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Lic_CanTran_Summary.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Sales_Recognition_Region_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Update_TOTAL_reports_license_summary.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_LicenseDetail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Sales_Recognition_National_YTD_Division.sql" />
+    <Build Include="dbo\Stored Procedures\moodle_course_name.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Sales_Recognition_National_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\exec_sql.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Sales_Recognition_National.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referrals_InComing.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referrals_Internal.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referrals_OutGoing.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Lic_Monthly_Rental_Total.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentRecog_Lic_YTDSummary.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentRecog_Lic_PerMonth.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RegionDetail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentRecog_Lic_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referral_Recognition_Region_YTD_Division.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Active_License_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referral_Recognition_Region_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referral_Recognition_Region.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_Mandates_Received.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referral_Recognition_National_YTD_Division.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentRecog_Reg_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referral_Recognition_National_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentRecog_Reg_PerMonth.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referral_Recognition_National.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RentRecog_Reg_YTDSummary.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referral_Recognition_License_YTD_Division.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Update_reports_rental_recognition.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referral_Recognition_License_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Lic_Key_Indicators.sql" />
+    <Build Include="dbo\Stored Procedures\moodle_user_courses.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referral_Recognition_License.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Referral_Recognition_Detail.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_ICAS_Excluding_Licensee.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_ICAS_Recon.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_ICAS.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_ICAS_Subscribers.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_REBOSA.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Hub_24Hour_Comments.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_Region_Unit_YTD.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_Region_Rand_YTD.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Region_Daily_Sales_YTD_per_Division.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_Region_Month_Unit.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Region_Daily_Sales_Per_Region.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_RA_Region_Month_Rand.sql" />
+    <Build Include="dbo\Stored Procedures\spMIS_Region_Daily_Sales_YTD_per_License.sql" />
+    <Build Include="Security\Adam_1.sql" />
+    <Build Include="Security\Permissions.sql" />
+  </ItemGroup>
+</Project>

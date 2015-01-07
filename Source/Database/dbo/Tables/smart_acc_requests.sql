@@ -1,0 +1,27 @@
+﻿CREATE TABLE [dbo].[smart_acc_requests] (
+    [smart_acc]                INT             IDENTITY (1, 1) NOT NULL,
+    [registration_id]          INT             NOT NULL,
+    [licensee_id]              INT             NOT NULL,
+    [smart_acc_name]           VARCHAR (250)   NOT NULL,
+    [smart_acc_surname]        VARCHAR (250)   NOT NULL,
+    [smart_acc_email]          VARCHAR (250)   NOT NULL,
+    [smart_acc_contact_no]     VARCHAR (20)    NOT NULL,
+    [smart_acc_accept]         CHAR (1)        NOT NULL,
+    [smart_acc_complete]       VARCHAR (50)    NULL,
+    [smart_acc_effective_date] DATETIME        NOT NULL,
+    [smart_acc_effective_time] VARCHAR (20)    NOT NULL,
+    [smart_acc_created_date]   DATETIME        CONSTRAINT [DF_smart_acc_requests_smart_acc_created_date] DEFAULT (getdate()) NULL,
+    [smart_acc_temp_password]  VARCHAR (20)    NULL,
+    [smart_acc_update_date]    DATETIME        NULL,
+    [smart_acc_recon_date]     DATETIME        NULL,
+    [smart_acc_inv_no]         VARCHAR (100)   NULL,
+    [smart_acc_recovered]      VARCHAR (5)     CONSTRAINT [DF_smart_acc_requests_smart_acc_recovered] DEFAULT ('No') NULL,
+    [batch_no]                 BIGINT          NULL,
+    [smart_acc_charge]         DECIMAL (18, 2) NULL,
+    [renew_account]            CHAR (1)        CONSTRAINT [DF_smart_acc_requests_deleted_reuse] DEFAULT ('Y') NOT NULL,
+    [remove_audit_date]        DATETIME        NULL,
+    [audit_registration_id]    INT             NULL,
+    [license_id]               INT             NULL,
+    CONSTRAINT [unique_smart_acc_email] UNIQUE NONCLUSTERED ([smart_acc_email] ASC)
+);
+

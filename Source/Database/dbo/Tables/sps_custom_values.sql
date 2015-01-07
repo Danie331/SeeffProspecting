@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[sps_custom_values] (
+    [custom_id]           BIGINT        IDENTITY (1, 1) NOT NULL,
+    [sps_transaction_ref] VARCHAR (50)  NOT NULL,
+    [label1]              VARCHAR (50)  NULL,
+    [field1]              VARCHAR (250) NULL,
+    [label2]              VARCHAR (50)  NULL,
+    [field2]              VARCHAR (250) NULL,
+    [label3]              VARCHAR (50)  NULL,
+    [field3]              VARCHAR (250) NULL,
+    [label4]              VARCHAR (50)  NULL,
+    [field4]              VARCHAR (250) NULL,
+    [label5]              VARCHAR (50)  NULL,
+    [field5]              VARCHAR (250) NULL,
+    [label6]              VARCHAR (50)  NULL,
+    [field6]              VARCHAR (250) NULL,
+    [label7]              VARCHAR (50)  NULL,
+    [field7]              VARCHAR (250) NULL,
+    [label8]              VARCHAR (50)  NULL,
+    [field8]              VARCHAR (250) NULL,
+    [label9]              VARCHAR (50)  NULL,
+    [field9]              VARCHAR (250) NULL,
+    [label10]             VARCHAR (50)  NULL,
+    [field10]             VARCHAR (250) NULL
+);
+

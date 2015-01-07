@@ -268,7 +268,7 @@ namespace ProspectingProject
             SQL += " WHERE        (prospecting_area.prospecting_area_id IN (" + areaIdList + "))";
             SQL += " GROUP BY prospecting_area.prospecting_area_id, prospecting_area.area_name";
             SQL += " ORDER BY prospecting_area.area_name";
-            DS = da.CommandSQL(SQL, "boss.dbo.license", (int)(SeeffGlobal.clsData.App.prospecting), HttpContext.Current.Server.MapPath("/data") + "/DBSettings.xml");
+            DS = da.CommandSQL(SQL, "boss.dbo.license", (int)(SeeffGlobal.clsData.App.prospecting), HttpContext.Current.Server.MapPath("/data") + @"\DBSettings.xml");
             if (!string.IsNullOrEmpty(da.CommandSQLErrMsg))
             {
                 //Add error logging

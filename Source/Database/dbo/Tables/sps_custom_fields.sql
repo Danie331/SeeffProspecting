@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[sps_custom_fields] (
+    [custom_fields_id] BIGINT       IDENTITY (1, 1) NOT NULL,
+    [license_id]       INT          NOT NULL,
+    [label1]           VARCHAR (50) NULL,
+    [type1]            VARCHAR (50) NULL,
+    [label2]           VARCHAR (50) NULL,
+    [type2]            VARCHAR (50) NULL,
+    [label3]           VARCHAR (50) NULL,
+    [type3]            VARCHAR (50) NULL,
+    [label4]           VARCHAR (50) NULL,
+    [type4]            VARCHAR (50) NULL,
+    [label5]           VARCHAR (50) NULL,
+    [type5]            VARCHAR (50) NULL,
+    [label6]           VARCHAR (50) NULL,
+    [type6]            VARCHAR (50) NULL,
+    [label7]           VARCHAR (50) NULL,
+    [type7]            VARCHAR (50) NULL,
+    [label8]           VARCHAR (50) NULL,
+    [type8]            VARCHAR (50) NULL,
+    [label9]           VARCHAR (50) NULL,
+    [type9]            VARCHAR (50) NULL,
+    [label10]          VARCHAR (50) NULL,
+    [type10]           VARCHAR (50) NULL
+);
+

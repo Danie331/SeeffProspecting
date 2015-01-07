@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[wl_enquiry] (
+    [pk_enquiry_id]     INT             IDENTITY (1, 1) NOT NULL,
+    [vendor_id]         VARCHAR (50)    NOT NULL,
+    [currency]          VARCHAR (10)    NOT NULL,
+    [increase]          DECIMAL (18, 2) NOT NULL,
+    [property_id]       INT             NOT NULL,
+    [property_ref]      INT             NOT NULL,
+    [agent_id]          INT             NOT NULL,
+    [branch_id]         INT             NOT NULL,
+    [property_price]    VARCHAR (50)    NOT NULL,
+    [rental_term]       VARCHAR (50)    NOT NULL,
+    [client_name]       VARCHAR (250)   NOT NULL,
+    [client_email]      VARCHAR (250)   NOT NULL,
+    [client_contact_no] VARCHAR (50)    NOT NULL,
+    [check_in_date]     VARCHAR (20)    NOT NULL,
+    [no_nights]         INT             NOT NULL,
+    [no_guests]         INT             NOT NULL,
+    [time_stamp]        DATETIME        CONSTRAINT [DF_wl_enquiry_time_stamp] DEFAULT (getdate()) NOT NULL,
+    [seeff_comm]        DECIMAL (18)    NULL,
+    [affiliate_comm]    DECIMAL (18)    NULL,
+    [agent_comm]        DECIMAL (18)    NULL,
+    [total_rent]        DECIMAL (18)    NULL,
+    [status]            VARCHAR (50)    CONSTRAINT [DF_wl_enquiry_status] DEFAULT ('New Enquiry') NULL
+);
+

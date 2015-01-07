@@ -310,9 +310,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeeffProspectingAuthService
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2943F40D-0E28-443E-9242-FEE187EA53E5}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Boss", "Database\Boss.sqlproj", "{AC16CF1F-B140-4EF7-B7A6-517524099048}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Databases", "Databases", "{5255F768-F46E-42CE-A23E-F448A046108E}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ls_base", "ls_base\ls_base.sqlproj", "{BA6ABCB2-C090-4A6E-9534-12A358D68DEB}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "seeff", "seeff\seeff.sqlproj", "{AC381FA8-BCE7-4FB7-9905-932CEFF10449}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "seeff_prospecting", "seeff_prospecting\seeff_prospecting.sqlproj", "{8898D3FE-B758-4196-9BC7-8E6FBA0BD1DC}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "seeff_spatial", "seeff_spatial\seeff_spatial.sqlproj", "{55D0812B-CAEC-4578-9E9A-9E7BB1B30FA5}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://learnitsource.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -331,6 +343,26 @@ Global
 		SccProjectUniqueName5 = SeeffProspectingAuthorisationService\\SeeffProspectingAuthService\\SeeffProspectingAuthService\\SeeffProspectingAuthService.csproj
 		SccProjectName5 = SeeffProspectingAuthorisationService/SeeffProspectingAuthService/SeeffProspectingAuthService
 		SccLocalPath5 = SeeffProspectingAuthorisationService\\SeeffProspectingAuthService\\SeeffProspectingAuthService
+		SccProjectUniqueName6 = Database\\Boss.sqlproj
+		SccProjectTopLevelParentUniqueName6 = MarketShare.sln
+		SccProjectName6 = Database
+		SccLocalPath6 = Database
+		SccProjectUniqueName7 = ls_base\\ls_base.sqlproj
+		SccProjectTopLevelParentUniqueName7 = MarketShare.sln
+		SccProjectName7 = ls_base
+		SccLocalPath7 = ls_base
+		SccProjectUniqueName8 = seeff\\seeff.sqlproj
+		SccProjectTopLevelParentUniqueName8 = MarketShare.sln
+		SccProjectName8 = seeff
+		SccLocalPath8 = seeff
+		SccProjectUniqueName9 = seeff_prospecting\\seeff_prospecting.sqlproj
+		SccProjectTopLevelParentUniqueName9 = MarketShare.sln
+		SccProjectName9 = seeff_prospecting
+		SccLocalPath9 = seeff_prospecting
+		SccProjectUniqueName10 = seeff_spatial\\seeff_spatial.sqlproj
+		SccProjectTopLevelParentUniqueName10 = MarketShare.sln
+		SccProjectName10 = seeff_spatial
+		SccLocalPath10 = seeff_spatial
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -357,6 +389,36 @@ Global
 		{083AD503-D7B6-4507-A117-193B1E13F185}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{083AD503-D7B6-4507-A117-193B1E13F185}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{083AD503-D7B6-4507-A117-193B1E13F185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC16CF1F-B140-4EF7-B7A6-517524099048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC16CF1F-B140-4EF7-B7A6-517524099048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC16CF1F-B140-4EF7-B7A6-517524099048}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{AC16CF1F-B140-4EF7-B7A6-517524099048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC16CF1F-B140-4EF7-B7A6-517524099048}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC16CF1F-B140-4EF7-B7A6-517524099048}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{BA6ABCB2-C090-4A6E-9534-12A358D68DEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA6ABCB2-C090-4A6E-9534-12A358D68DEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA6ABCB2-C090-4A6E-9534-12A358D68DEB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BA6ABCB2-C090-4A6E-9534-12A358D68DEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA6ABCB2-C090-4A6E-9534-12A358D68DEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA6ABCB2-C090-4A6E-9534-12A358D68DEB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{AC381FA8-BCE7-4FB7-9905-932CEFF10449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC381FA8-BCE7-4FB7-9905-932CEFF10449}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC381FA8-BCE7-4FB7-9905-932CEFF10449}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{AC381FA8-BCE7-4FB7-9905-932CEFF10449}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC381FA8-BCE7-4FB7-9905-932CEFF10449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC381FA8-BCE7-4FB7-9905-932CEFF10449}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{8898D3FE-B758-4196-9BC7-8E6FBA0BD1DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8898D3FE-B758-4196-9BC7-8E6FBA0BD1DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8898D3FE-B758-4196-9BC7-8E6FBA0BD1DC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{8898D3FE-B758-4196-9BC7-8E6FBA0BD1DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8898D3FE-B758-4196-9BC7-8E6FBA0BD1DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8898D3FE-B758-4196-9BC7-8E6FBA0BD1DC}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{55D0812B-CAEC-4578-9E9A-9E7BB1B30FA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55D0812B-CAEC-4578-9E9A-9E7BB1B30FA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55D0812B-CAEC-4578-9E9A-9E7BB1B30FA5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{55D0812B-CAEC-4578-9E9A-9E7BB1B30FA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55D0812B-CAEC-4578-9E9A-9E7BB1B30FA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55D0812B-CAEC-4578-9E9A-9E7BB1B30FA5}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -380,5 +442,10 @@ Global
 		{074C4602-68DF-4CAC-975D-2C938E6DBF5D} = {F2E7C5E6-E64B-4B83-AA41-6B9DD89F0B9B}
 		{D3678A6C-C3BD-4BAB-8974-49A95B433DFA} = {F2E7C5E6-E64B-4B83-AA41-6B9DD89F0B9B}
 		{3B742B55-2575-4B0C-8700-14999217D163} = {AF20AB9F-877F-460B-AD89-FDB323C8908A}
+		{AC16CF1F-B140-4EF7-B7A6-517524099048} = {5255F768-F46E-42CE-A23E-F448A046108E}
+		{BA6ABCB2-C090-4A6E-9534-12A358D68DEB} = {5255F768-F46E-42CE-A23E-F448A046108E}
+		{AC381FA8-BCE7-4FB7-9905-932CEFF10449} = {5255F768-F46E-42CE-A23E-F448A046108E}
+		{8898D3FE-B758-4196-9BC7-8E6FBA0BD1DC} = {5255F768-F46E-42CE-A23E-F448A046108E}
+		{55D0812B-CAEC-4578-9E9A-9E7BB1B30FA5} = {5255F768-F46E-42CE-A23E-F448A046108E}
 	EndGlobalSection
 EndGlobal

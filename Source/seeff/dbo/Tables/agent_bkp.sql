@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[agent_bkp] (
+    [agent_bkp_id]        INT            IDENTITY (1, 1) NOT NULL,
+    [agentId]             INT            NOT NULL,
+    [agentFirstName]      NVARCHAR (50)  NULL,
+    [agentSurname]        NVARCHAR (50)  NULL,
+    [fkAgentTypeId]       INT            NULL,
+    [fkAgentRoleId]       INT            NULL,
+    [agentEmail]          NVARCHAR (100) CONSTRAINT [DF_agent_bkp_agentEmail] DEFAULT (3) NULL,
+    [agentLogin]          NVARCHAR (20)  NULL,
+    [agentPassword]       CHAR (20)      NULL,
+    [fkBranchId]          INT            NULL,
+    [agentTelephone]      CHAR (20)      NULL,
+    [agentCell]           CHAR (20)      NULL,
+    [agentSendSms]        BIT            NULL,
+    [agentFax]            CHAR (20)      NULL,
+    [agentPhoto]          CHAR (200)     NULL,
+    [agentDisplayDetails] BIT            NULL,
+    [agentActive]         BIT            NULL,
+    [agentLastLogin]      SMALLDATETIME  NULL,
+    [agentAdded]          SMALLDATETIME  CONSTRAINT [DF_agent_bkp_agentAdded] DEFAULT (getdate()) NULL,
+    [agentBirthday]       SMALLDATETIME  NULL,
+    [fkAgentLicenseeId]   INT            CONSTRAINT [DF_agent_bkp_fkAgentLicenseeId] DEFAULT (0) NOT NULL,
+    CONSTRAINT [PK_agent_bkp] PRIMARY KEY CLUSTERED ([agent_bkp_id] ASC) WITH (FILLFACTOR = 90)
+);
+

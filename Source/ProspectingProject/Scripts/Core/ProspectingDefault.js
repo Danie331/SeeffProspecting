@@ -1240,7 +1240,7 @@ function getIconForMarker(marker) {
     function buildPathToIcon(property) {        
         if (property.SS_FH == "SS") {
             if (!marker.MarkerIsSpiderfied) {
-                return path += 'ssunprospected.png';
+                return path += 'ss_unprospected.png';
             }
         }       
         // Any other FH types

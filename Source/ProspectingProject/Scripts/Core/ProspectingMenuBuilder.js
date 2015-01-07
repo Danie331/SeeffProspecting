@@ -131,7 +131,7 @@ function buildSuburbsSummaryContent() {
 // Overridden from MenuBuilder.js
 function buildSuburbsSelectionHeaderHtml() {
     var tableHeader = $("<table class='prospectingSuburbsTbl' />");
-    tableHeader.append("<tr><td id='th_suburb'>Suburb</td><td id='th_withdetails'>Properties with contact details</td></tr>");
+    tableHeader.append("<tr><td id='th_suburb'>Suburb</td><td id='th_withdetails'>Prospected Properties</td></tr>");
 
     return tableHeader[0].outerHTML;
 }

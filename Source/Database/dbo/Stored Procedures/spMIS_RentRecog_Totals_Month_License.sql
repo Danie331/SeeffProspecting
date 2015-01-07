@@ -1,0 +1,54 @@
+﻿-- =============================================
+-- Author:		GW Swanepoel
+-- Create date: 2012-12-11
+-- Description:	Returns the totals for
+--				Units and Rental Recog amounts
+--				per month
+--				Used in report:
+--				RentalRecognitionPerLicense.xlsm
+-- =============================================
+CREATE PROCEDURE [dbo].[spMIS_RentRecog_Totals_Month_License] 
+	-- Add the parameters for the stored procedure here
+	@License_ID INT
+	,@Year_Start INT
+	,@Month_Start INT 
+	
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT 
+			'Total Recognition Amount: ' 
+			,ISNULL(SUM([comm]),0) AS [Total]
+			
+	  FROM 
+		[boss].[dbo].[reports_rental_recognition] AS RRR
+INNER JOIN
+		license ON RRR.license_id = license.license_id		
+WHERE 
+		(YEAR(CONTRACT_START_DATE) = @Year_Start)
+AND
+		(MONTH(CONTRACT_START_DATE) = @Month_Start)
+AND
+		(RRR.license_id = @License_ID)		
+				
+UNION
+
+SELECT 
+			'Total Units: ' 
+			,ISNULL(SUM([units]),0) AS [Total]
+	  FROM 
+		[boss].[dbo].[reports_rental_recognition] AS RRR
+INNER JOIN
+		license ON RRR.license_id = license.license_id		
+WHERE 
+		(YEAR(CONTRACT_START_DATE) = @Year_Start)
+AND
+		(MONTH(CONTRACT_START_DATE) = @Month_Start)
+AND
+		(RRR.license_id = @License_ID)		
+END
+
