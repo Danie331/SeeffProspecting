@@ -306,13 +306,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configura
 		PublishScripts\Configurations\SeeffProspectingAzure-WAWS-dev.json = PublishScripts\Configurations\SeeffProspectingAzure-WAWS-dev.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeeffProspectingAuthService", "..\SeeffProspectingAuthorisationService\SeeffProspectingAuthService\SeeffProspectingAuthService\SeeffProspectingAuthService.csproj", "{083AD503-D7B6-4507-A117-193B1E13F185}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeeffProspectingAuthService", "SeeffProspectingAuthorisationService\SeeffProspectingAuthService\SeeffProspectingAuthService\SeeffProspectingAuthService.csproj", "{083AD503-D7B6-4507-A117-193B1E13F185}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2943F40D-0E28-443E-9242-FEE187EA53E5}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://learnitsource.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -328,6 +328,9 @@ Global
 		SccProjectUniqueName4 = ProspectingProject\\ProspectingProject.csproj
 		SccProjectName4 = ProspectingProject
 		SccLocalPath4 = ProspectingProject
+		SccProjectUniqueName5 = SeeffProspectingAuthorisationService\\SeeffProspectingAuthService\\SeeffProspectingAuthService\\SeeffProspectingAuthService.csproj
+		SccProjectName5 = SeeffProspectingAuthorisationService/SeeffProspectingAuthService/SeeffProspectingAuthService
+		SccLocalPath5 = SeeffProspectingAuthorisationService\\SeeffProspectingAuthService\\SeeffProspectingAuthService
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

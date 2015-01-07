@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="SeeffProspectingAuthService.SeeffProspectingAuthService" CodeBehind="SeeffProspectingAuthService.svc.cs" %>
