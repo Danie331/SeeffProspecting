@@ -80,6 +80,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>3rdPartyDLLs\SeeffGlobal.dll</HintPath>
     </Reference>
+    <Reference Include="SlowCheetah.Tasks">
+      <HintPath>..\packages\SlowCheetah.Tasks.Unofficial.1.0.0\lib\SlowCheetah.Tasks.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq">
       <Private>True</Private>

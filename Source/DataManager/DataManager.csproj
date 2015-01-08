@@ -41,6 +41,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>3rd Party libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SlowCheetah.Tasks">
+      <HintPath>..\packages\SlowCheetah.Tasks.Unofficial.1.0.0\lib\SlowCheetah.Tasks.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -101,7 +104,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Linq2Sql Classes\Boss.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>Boss1.designer.cs</LastGenOutput>
@@ -114,6 +119,7 @@
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>Seeff1.designer.cs</LastGenOutput>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
