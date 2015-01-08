@@ -95,6 +95,7 @@ namespace ProspectingProject
                 ProspectingPropertyId = prospectingRecord.prospecting_property_id,
                 LightstonePropertyId = prospectingRecord.lightstone_property_id,
                 
+                // DANIE TODO: these must be loaded on demand.
                 Contacts = LoadContacts(prospectingContext, prospectingRecord, loadOwnedProperties),
                 ContactCompanies = LoadContactCompanies(prospectingContext, prospectingRecord),
                 
@@ -980,10 +981,13 @@ namespace ProspectingProject
                          , "", "", "", "", "", "", searchInputValues.EstateName, "", 0, 1000, "", "", 0, 0);
                      if (result.Tables.Count > 1 && result.Tables[1].Rows.Count > 0)
                      {
-                         foreach (DataRow row in result.Tables[1].Rows)
+                         using (var prospecting = new ProspectingDataContext())
                          {
-                           // here..   
-                             AddLightstonePropertyRow(row, matches);
+                             List<int?> existingLightstoneProps = prospecting.prospecting_properties.Select(p => p.lightstone_property_id).ToList();
+                             foreach (DataRow row in result.Tables[1].Rows)
+                             {                                 
+                                 AddLightstonePropertyRow(row, matches, existingLightstoneProps);
+                             }
                          }
                      }
                  }
@@ -1225,10 +1229,14 @@ namespace ProspectingProject
                 catch { return new NewProspectingLocation(); }
                 if (result.Tables[0] != null && result.Tables.Count > 1 && result.Tables[1].Rows.Count > 0)
                 {
-                    foreach (DataRow row in result.Tables[1].Rows)
+                    using (var prospecting = new ProspectingDataContext())
                     {
-                        AddLightstonePropertyRow(row, matches);                   
-                    }
+                        List<int?> existingLightstoneProps = prospecting.prospecting_properties.Select(p => p.lightstone_property_id).ToList();
+                        foreach (DataRow row in result.Tables[1].Rows)
+                        {
+                            AddLightstonePropertyRow(row, matches, existingLightstoneProps);
+                        }
+                    }                    
                 }
             }
 
@@ -1238,42 +1246,26 @@ namespace ProspectingProject
             return responsePacket;
         }
 
-        private static void AddLightstonePropertyRow(DataRow row, List<LightstonePropertyMatch> matches)
+        private static GeoLocation ConvertToGeoLocation(object lat, object lng)
         {
-            Func<object, object, GeoLocation> toLatLng = (lat, lng) =>
-            {
-                GeoLocation latLng = new GeoLocation();
-                latLng.Lat = Convert.ToDecimal(lat);
-                latLng.Lng = Convert.ToDecimal(lng);
-                return latLng;
-            };
+            GeoLocation latLng = new GeoLocation();
+            latLng.Lat = Convert.ToDecimal(lat);
+            latLng.Lng = Convert.ToDecimal(lng);
+            return latLng;
+        }
 
+        private static void AddLightstonePropertyRow(DataRow row, List<LightstonePropertyMatch> matches, List<int?> existingLightstoneProperties)
+        {
             int lightstonePropId = Convert.ToInt32(row["PROP_ID"]);
-            // Try find an item in the list with same prop id in order to add another Owner to prop.
-            var existingMatch = matches.FirstOrDefault(m => m.LightstonePropId == lightstonePropId);
-            if (existingMatch != null)
-            {
-                // This means that there is another owner on this property so add it to the owners list for this property
-                var propOwner = GetOwnerFromDataRow(row);
-                if (propOwner != null)
-                {
-                    var existingOwner = DetermineIfOwnerExists(existingMatch.Owners, propOwner); //existingMatch.Owners.FirstOrDefault(o => o.IdNumber == propOwner.IdNumber);
-                    if (existingOwner == null)
-                    {
-                        existingMatch.Owners.Add(propOwner);
-                    }
-                    else
-                    {
-                    }
-                }
-            }
-            else
+            if (!matches.Any(m => m.LightstonePropId == lightstonePropId))
             {
                 string streetOrUnitNo = row["STREET_NUMBER"].ToString();
                 if (string.IsNullOrWhiteSpace(streetOrUnitNo))
                 {
                     streetOrUnitNo = "n/a";
                 }
+
+                bool propertyPropIdExists = existingLightstoneProperties.Any(p => p == lightstonePropId);
                 // This is a new property that must be added
                 LightstonePropertyMatch match = new LightstonePropertyMatch
                 {
@@ -1284,7 +1276,7 @@ namespace ProspectingProject
                     StreetOrUnitNo = streetOrUnitNo,
                     LightstonePropId = lightstonePropId,
                     RegDate = row["REG_DATE"].ToString(),
-                    LatLng = toLatLng(row["Y"], row["X"]),
+                    LatLng = ConvertToGeoLocation(row["Y"], row["X"]),
                     SSName = row["SECTIONAL_TITLE"].ToString(),
                     SS_FH = row["property_type"].ToString(),
                     PurchPrice = row["PURCHASE_PRICE"].ToString(),
@@ -1292,7 +1284,7 @@ namespace ProspectingProject
                     SSNumber = row["SS_NUMBER"].ToString(),
                     SS_UnitNoFrom = row["SS_UnitNoFrom"].ToString(),
                     SS_UnitTo = row["SS_UnitTo"].ToString(),
-                    LightstoneIdExists = PropertyExists(lightstonePropId),   
+                    LightstoneIdExists = propertyPropIdExists,
                     ErfNo = row["ERF"].ToString(),
                     SS_ID = row["SS_ID"].ToString()
                 };
@@ -1301,20 +1293,12 @@ namespace ProspectingProject
                 var owners = owner != null ? new List<IProspectingContactEntity>(new[] { owner }) : new List<IProspectingContactEntity>();
                 match.Owners = owners;
                 matches.Add(match);
-            }  
+            }
         }
 
         private static IProspectingContactEntity DetermineIfOwnerExists(List<IProspectingContactEntity> owners, IProspectingContactEntity propOwner)
         {
             return owners.FirstOrDefault(o => o.IsSameEntity(propOwner));
-        }
-
-        private static bool PropertyExists(int lightstonePropId)
-        {
-            using (var prospecting = new ProspectingDataContext())
-            {
-                return prospecting.prospecting_properties.Any(pp => pp.lightstone_property_id == lightstonePropId);
-            }
         }
 
         private static NewProspectingLocation GenerateOutputForProspectingLocation(List<LightstonePropertyMatch> matchesForSuburb)
@@ -1404,7 +1388,7 @@ namespace ProspectingProject
                 Gender = DetermineOwnerGender(idNumber),
                 PersonPropertyRelationships = new List<KeyValuePair<int,int>>(),//ProspectingStaticData.PersonPropertyRelationshipTypes.First(t => t.Value == "Owner").Key,
                  PersonCompanyRelationshipType = null,
-                PropertiesOwned = LoadPropertiesOwnedByThisContact(idNumber, null),
+                //PropertiesOwned = LoadPropertiesOwnedByThisContact(idNumber, null),
                  ContactEntityType = ContactEntityType.NaturalPerson
             };
         }
@@ -1417,8 +1401,8 @@ namespace ProspectingProject
                 CKNumber = ckNo,
                 CompanyName = dr["BUYER_NAME"].ToString(),
                 CompanyType = dr["PERSON_TYPE_ID"].ToString(),
-                CompanyContacts = LoadCompanyContacts(ckNo),
-                ProspectingProperties = LoadPropertiesOwnedByCompany(ckNo),
+                //CompanyContacts = LoadCompanyContacts(ckNo),
+                //ProspectingProperties = LoadPropertiesOwnedByCompany(ckNo),
                  ContactEntityType = ContactEntityType.JuristicEntity
             };
 
@@ -1760,13 +1744,6 @@ namespace ProspectingProject
                     prospecting.prospecting_properties.InsertOnSubmit(newPropRecord);
                     prospecting.SubmitChanges(); // Create the property first before adding contacts
 
-                    //foreach (var owner in unit.Contacts/*.Owners*/)
-                    //{
-                    //    ContactDataPacket newContact = new ContactDataPacket { ContactPerson = owner, ProspectingPropertyId = newPropRecord.prospecting_property_id };
-                    //    SaveContactPerson(newContact);
-                    //}
-
-                    //
                     foreach (var owner in unit.Contacts)
                     {
                         if (owner.ContactEntityType == ContactEntityType.NaturalPerson)
@@ -1781,7 +1758,6 @@ namespace ProspectingProject
                         var newContact = new CompanyContactDataPacket { ContactCompany = (ProspectingContactCompany)owner, ProspectingPropertyId = newPropRecord.prospecting_property_id };
                         SaveContactCompany(newContact);
                     }
-                    //
 
                     var property = CreateProspectingProperty(prospecting, newPropRecord, true);
                     units.Add(property);
