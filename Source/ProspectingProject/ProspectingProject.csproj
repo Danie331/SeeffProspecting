@@ -82,9 +82,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>3rdPartyDLLs\SeeffGlobal.dll</HintPath>
     </Reference>
-    <Reference Include="SlowCheetah.Tasks">
-      <HintPath>..\packages\SlowCheetah.Tasks.Unofficial.1.0.0\lib\SlowCheetah.Tasks.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq">
       <Private>True</Private>
@@ -747,7 +744,6 @@
     <None Include="Properties\PublishProfiles\Seeff Server.pubxml" />
     <None Include="Properties\PublishProfiles\seeffprospecting - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\seeffprospecting - Web Deploy.pubxml" />
-    <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
     <None Include="Service References\ProspectingUserAuthService\configuration91.svcinfo" />
     <None Include="Service References\ProspectingUserAuthService\configuration.svcinfo" />
     <None Include="Service References\ProspectingUserAuthService\Reference.svcmap">
