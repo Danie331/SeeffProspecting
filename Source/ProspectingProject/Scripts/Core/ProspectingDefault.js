@@ -1442,13 +1442,8 @@ function buildInfoWindowContentForSS(unit) {
         });
     }
     ssUnits.sort(function (x, y) { return x.Unit - y.Unit;});
-    //var ssInfo = $("<div id='ssInfoDiv' />");
-    //ssInfo.empty();
-
-    //ssInfo.append(unit.SSName);
     var tableOfUnits = $("<table id='ssUnitsTbl' class='info-window' style='display: block;max-height:250px;overflow-y:auto;width:200px;' />");
     tableOfUnits.empty();
-    //tableOfUnits.append("<th>" + unit.SSName + "</th>");
 
     for (var i = 0; i < ssUnits.length; i++) {
         var u = ssUnits[i];
@@ -1456,22 +1451,10 @@ function buildInfoWindowContentForSS(unit) {
         tableOfUnits.append(unitContent);
     }
 
-    //ssInfo.append("<br />");
-    //ssInfo.append(tableOfUnits);
-
-    //return ssInfo;
     return tableOfUnits;
 }
 
 function openSSUnitInfo(unit) {
-    //currentProperty = unit;
-    
-    //updateOwnerDetailsEditor();
-    //updatePropertyNotesDiv();
-    //if (currentProperty.Contacts && currentProperty.Contacts.length > 0) {
-    //    showMenu("contactdetails");
-    //}
-
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
@@ -1485,9 +1468,6 @@ function openSSUnitInfo(unit) {
 
                 unit = null;
                 unit = data;
-
-                //unit.ProspectingProperty = null;
-                //unit.ProspectingProperty = data;
 
                 currentProperty = unit;
                 updateOwnerDetailsEditor();

@@ -64,43 +64,15 @@ namespace ProspectingProject
             {
                 return prospectingDB.prospecting_areas.First(n => n.prospecting_area_id == suburbId).area_name;
             }
-        }
+        }      
 
-        //private static ProspectingProperty CreateProspectingProperty(LightstoneListing lightstoneListing, List<LightstoneListing> allLightstoneListings)
-        //{
-        //    ProspectingProperty prop = new ProspectingProperty
-        //    {
-        //        ProspectingPropertyId = null, // This record can be inserted
-        //        LightstonePropertyId = lightstoneListing.PropertyId,
-        //        Contacts = new List<ProspectingContactPerson>(), // Cannot have contacts   
-        //        HasContactsWithDetails = false,
-        //        HasTracePSEnquiry = false,
-        //         LatLng = new GeoLocation { Lat = lightstoneListing.LatLong.Lat, Lng= lightstoneListing.LatLong.Lng },
-        //        SSUnits = LoadPropertiesInSS(lightstoneListing.PropertyId, allLightstoneListings),
-        //        PropertyAddress = lightstoneListing.PropertyAddress,
-        //        StreetOrUnitNo = lightstoneListing.StreetOrUnitNo,
-        //        SeeffAreaId = lightstoneListing.SeeffAreaId,
-
-        //        LightstoneSales = LoadLightstoneListingsForPoprId(lightstoneListing.PropertyId.Value, allLightstoneListings)
-        //    };
-
-        //    return prop;
-        //}       
-
-        private static ProspectingProperty CreateProspectingProperty(ProspectingDataContext prospectingContext, prospecting_property prospectingRecord, bool loadOwnedProperties)
+        private static ProspectingProperty CreateProspectingProperty(ProspectingDataContext prospectingContext, prospecting_property prospectingRecord, bool loadContactsAndCompanies, bool loadOwnedProperties)
         {
             var latLng = new GeoLocation { Lat= prospectingRecord.latitude.Value, Lng = prospectingRecord.longitude.Value};
             ProspectingProperty prop = new ProspectingProperty
             {
                 ProspectingPropertyId = prospectingRecord.prospecting_property_id,
-                LightstonePropertyId = prospectingRecord.lightstone_property_id,
-                
-                // DANIE TODO: these must be loaded on demand.
-                Contacts = LoadContacts(prospectingContext, prospectingRecord, loadOwnedProperties),
-                ContactCompanies = LoadContactCompanies(prospectingContext, prospectingRecord),
-                
-                //--HasContactsWithDetails = DetermineIfAnyContactsHaveDetails(prospectingRecord.prospecting_property_id),
-                //--HasTracePSEnquiry = HasTracePSEnquiry(prospectingRecord.prospecting_property_id),
+                LightstonePropertyId = prospectingRecord.lightstone_property_id,                              
                  LatLng = latLng,
                 PropertyAddress = prospectingRecord.property_address,
                 StreetOrUnitNo = prospectingRecord.street_or_unit_no,
@@ -118,6 +90,12 @@ namespace ProspectingProject
                 LastPurchPrice = prospectingRecord.last_purch_price,
                 Prospected =  Convert.ToBoolean(prospectingRecord.prospected)
             };
+
+            if (loadContactsAndCompanies)
+            {
+                prop.Contacts = LoadContacts(prospectingContext, prospectingRecord, loadOwnedProperties);
+                prop.ContactCompanies = LoadContactCompanies(prospectingContext, prospectingRecord);
+            }
 
             return prop;
         }
@@ -435,7 +413,7 @@ namespace ProspectingProject
                     SaveContactCompany(newContact);
                 }
 
-                var property = CreateProspectingProperty(prospecting, newPropRecord, true);
+                var property = CreateProspectingProperty(prospecting, newPropRecord, true, true);
 
                 //TODO : Run the Prospected Stored Proc
                 var newId = newPropRecord.prospecting_property_id;
@@ -1150,7 +1128,7 @@ namespace ProspectingProject
                 {
                     if (!prospectables.Any(p => p.LightstonePropertyId == prospectable.lightstone_property_id))
                     {
-                        ProspectingProperty prop = CreateProspectingProperty(prospectingDB, prospectable, false);
+                        ProspectingProperty prop = CreateProspectingProperty(prospectingDB, prospectable, false, false);
                         prospectables.Add(prop);
                     }
                 }
@@ -1759,7 +1737,7 @@ namespace ProspectingProject
                         SaveContactCompany(newContact);
                     }
 
-                    var property = CreateProspectingProperty(prospecting, newPropRecord, true);
+                    var property = CreateProspectingProperty(prospecting, newPropRecord, false, false);
                     units.Add(property);
                 }
 
@@ -1778,7 +1756,7 @@ namespace ProspectingProject
                                   select pp;
             foreach (var prospectable in propertiesOwned)
             {
-                prop =  CreateProspectingProperty(prospectingDB, prospectable, false);
+                prop =  CreateProspectingProperty(prospectingDB, prospectable, true, true);
             }
             return prop;
         }
