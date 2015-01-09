@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="seeff_prospecting" Class="ProspectingDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=ADAMS-PC\SQLSERVER2012;Initial Catalog=seeff_prospecting;User ID=prospecting_user" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="seeff_prospectingConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=learnit-dev;Initial Catalog=seeff_prospecting;User ID=prospecting_user" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="seeff_prospectingConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.prospecting_area" Member="prospecting_areas">
     <Type Name="prospecting_area">
       <Column Name="prospecting_area_id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />

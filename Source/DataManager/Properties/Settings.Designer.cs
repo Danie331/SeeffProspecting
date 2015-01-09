@@ -26,8 +26,7 @@ namespace DataManager.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ADAMS-PC\\SQLSERVER2012;Initial Catalog=ls_base;Integrated Security=Tr" +
-            "ue")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=learnit-dev;Initial Catalog=ls_base;Integrated Security=True")]
         public string ls_baseConnectionString {
             get {
                 return ((string)(this["ls_baseConnectionString"]));
@@ -37,7 +36,7 @@ namespace DataManager.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ADAMS-PC\\SQLSERVER2012;Initial Catalog=boss;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=learnit-dev;Initial Catalog=boss;Integrated Security=True")]
         public string bossConnectionString {
             get {
                 return ((string)(this["bossConnectionString"]));
@@ -47,8 +46,7 @@ namespace DataManager.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ADAMS-PC\\SQLSERVER2012;Initial Catalog=seeff;Integrated Security=True" +
-            "")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=learnit-dev;Initial Catalog=seeff;Integrated Security=True")]
         public string seeffConnectionString {
             get {
                 return ((string)(this["seeffConnectionString"]));
