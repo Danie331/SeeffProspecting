@@ -616,9 +616,6 @@
     <Content Include="..\SharedAssets\save_changes.png">
       <Link>Assets\save_changes.png</Link>
     </Content>
-    <Content Include="..\SharedAssets\seeff_logo.png">
-      <Link>Assets\seeff_logo.png</Link>
-    </Content>
     <Content Include="..\SharedAssets\snap.png">
       <Link>Assets\snap.png</Link>
     </Content>
@@ -711,6 +708,7 @@
     <Content Include="Assets\person.png" />
     <Content Include="Assets\phone_icon.png" />
     <Content Include="Assets\primary_contact.png" />
+    <Content Include="Assets\seeff_logo.png" />
     <Content Include="Assets\ss_edit.png" />
     <Content Include="Assets\tps_info.png" />
     <Content Include="Database scripts\boss.sql" />

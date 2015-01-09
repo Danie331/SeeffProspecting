@@ -10,9 +10,7 @@ namespace ProspectingProject
         public List<LightstonePropertyMatch> PropertyMatches { get; set; }
         public bool IsSectionalScheme { get; set; }
         public string SectionalScheme { get; set; }
-
-        public bool SSExists { get; set; }
-
+        public bool Exists { get; set; }
         public string ErrorMessage { get; set; }
     }
 }

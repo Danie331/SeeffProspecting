@@ -236,6 +236,21 @@ namespace ProspectingProject
 
         public static List<UserSuburb> GetAreaData(string areaIdList)
         {
+            //List<UserSuburb> suburbs = new List<UserSuburb>();
+            //var areas = areaIdList.Split(new[] { ',' }).Select(v => int.Parse(v));
+            //using (var context = new ProspectingDataContext())
+            //{
+            //    foreach (int areaId in areas)
+            //    {
+            //        string areaName = context.prospecting_areas.Where(a => a.prospecting_area_id == areaId).First().area_name;
+            //        int prospectedCount = context.prospecting_properties.Where(a => a.seeff_area_id == areaId).Count();
+
+            //        suburbs.Add(new UserSuburb { SuburbId = areaId, SuburbName = areaName, TotalFullyProspected = prospectedCount });
+            //    }
+
+            //    suburbs = suburbs.OrderBy(p => p.SuburbName).ToList();
+            //}
+
             List<UserSuburb> lList = new List<UserSuburb>();
 
             DataSet DS = null;
@@ -1279,68 +1294,78 @@ namespace ProspectingProject
             return owners.FirstOrDefault(o => o.IsSameEntity(propOwner));
         }
 
-        private static NewProspectingLocation GenerateOutputForProspectingLocation(List<LightstonePropertyMatch> matchesForSuburb)
+        private static NewProspectingLocation CreateNewProspectingLocationForSS(List<LightstonePropertyMatch> unitsForSS, string ssName)
         {
-            NewProspectingLocation propertyPacket = new NewProspectingLocation();
-            propertyPacket.PropertyMatches = matchesForSuburb;
-            propertyPacket.SSExists = false;
-            propertyPacket.IsSectionalScheme = false;
-            if  (propertyPacket.PropertyMatches.Count == 0)
+            var singleUnit = unitsForSS.First(u => !string.IsNullOrEmpty(u.StreetName) && !string.IsNullOrEmpty(u.StreetOrUnitNo));
+            string address = singleUnit.StreetName;
+            return new NewProspectingLocation
             {
-                return propertyPacket;
+                IsSectionalScheme = true,
+                PropertyMatches = unitsForSS,
+                Exists = DetermineIfSSExists(ssName, address),
+                SectionalScheme = ssName
+            };
+        }
+
+        // Test this for SS, FH, + search (1 ss and hybrid case), test the Count==0 case
+        private static List<NewProspectingLocation> GenerateOutputForProspectingLocation(List<LightstonePropertyMatch> matchesForSuburb)
+        {
+            List<NewProspectingLocation> prospectingEntity = new List<NewProspectingLocation>();
+            if (matchesForSuburb.Count == 0)
+            {
+                return prospectingEntity;
             }
 
-            // The following code tests for whether we should treat this location as a Sectional Scheme (block of flats)
-            // We need to assume at this level that the address of all matches is the same
-            // If *any* matches are marked as a "SS" we must perform the test.
-            if (propertyPacket.PropertyMatches.Any(m => m.SS_FH.ToLower() == "ss"))
+            if (matchesForSuburb.Any(m => m.SS_FH.ToLower() == "ss"))
             {
-                // If *all* matches are marked as "SS", have a purch price and same address (assumption as above), we can take it this is a block of flats
-                if (propertyPacket.PropertyMatches.All(m => m.SS_FH.ToLower() == "ss" /*&& !string.IsNullOrEmpty(m.PurchPrice)*/ ))
-                {
-                    propertyPacket.IsSectionalScheme = true;
-                    propertyPacket.SectionalScheme = propertyPacket.PropertyMatches.First(p => !string.IsNullOrEmpty(p.SSName)).SSName;
+                var distinctSectionalSchemes = matchesForSuburb.Where(s => !String.IsNullOrEmpty(s.SSName)).GroupBy(p => p.SSName);
+                if (matchesForSuburb.All(m => m.SS_FH.ToLower() == "ss" ))
+                {                    
+                    foreach (var ssGrouping in distinctSectionalSchemes)
+                    {
+                        var ss = CreateNewProspectingLocationForSS(ssGrouping.ToList(), ssGrouping.First().SSName);
+                        prospectingEntity.Add(ss);
+                    }
                 }
                 else
                 {
-                    // If some matches are "SS" but do not comply with all the pure conditions for this being an SS, it may *still* be an SS                  
-                    // In order to qualify as an SS, we must test the following conditions:
-                    var anomalousUnits = propertyPacket.PropertyMatches.Where(s => s.SS_FH.ToLower() != "ss");
-                    if ((anomalousUnits.Count(f => f.SS_FH == "FH") == 1) || (anomalousUnits.Any(f => string.IsNullOrEmpty(f.PurchPrice))))
+                    foreach (var ssGrouping in distinctSectionalSchemes)
                     {
-                        propertyPacket.IsSectionalScheme = propertyPacket.PropertyMatches.Except(anomalousUnits).All(m => m.SS_FH.ToLower() == "ss");
-                    }
-                    // If this is determined to be a SS, remove the anamolous units/matches
-                    if (propertyPacket.IsSectionalScheme)
-                    {
-                        propertyPacket.PropertyMatches = propertyPacket.PropertyMatches.Except(anomalousUnits).ToList();
-                        propertyPacket.SectionalScheme = propertyPacket.PropertyMatches.First(p => !string.IsNullOrEmpty(p.SSName)).SSName;
-                    }
-                    else
-                    {
-                        // If there are *any* units that have a SS name, but the block as a whole does not comply with SS requirements, then we just don't know
-                        string address = matchesForSuburb[0].StreetOrUnitNo + " " + matchesForSuburb[0].StreetName + " " + matchesForSuburb[0].Suburb + " " + matchesForSuburb[0].City;
-                        string msg = @"Warning: The location selected contains a mixture of SS and non-SS properties.<br \>
+                        var anomalousUnits = ssGrouping.Where(s => s.SS_FH.ToLower() != "ss");
+                        if ((anomalousUnits.Count(f => f.SS_FH == "FH") == 1) || (anomalousUnits.Any(f => string.IsNullOrEmpty(f.PurchPrice))))
+                        {
+                            bool isSectionalScheme = ssGrouping.ToList().Except(anomalousUnits).All(m => m.SS_FH.ToLower() == "ss");
+                            if (isSectionalScheme)
+                            {
+                                var ss = CreateNewProspectingLocationForSS(ssGrouping.ToList().Except(anomalousUnits).ToList(), ssGrouping.First().SSName);
+                                prospectingEntity.SectionalScheme = string.Join(", ", distinctSectionalSchemes.Select(gr => gr.First().SSName));
+                            }
+                            else
+                            {
+                                // If there are *any* units that have a SS name, but the block as a whole does not comply with SS requirements, then we just don't know
+                                string address = matchesForSuburb[0].StreetOrUnitNo + " " + matchesForSuburb[0].StreetName + " " + matchesForSuburb[0].Suburb + " " + matchesForSuburb[0].City;
+                                string msg = @"Warning: The location selected contains a mixture of SS and non-SS properties.<br \>
                                Cannot determine the type of entity under the clicked location (please contact support)<br />" +
-                                      "Address: " + address;
-                        propertyPacket.ErrorMessage = msg;
-                    }
+                                              "Address: " + address;
+                                prospectingEntity.ErrorMessage = msg;
+                            }
+                        }
+                    }                                                            
                 }
             }
 
-            if (propertyPacket.IsSectionalScheme)
+            if (prospectingEntity.IsSectionalScheme)
             {
-                propertyPacket.PropertyMatches = propertyPacket.PropertyMatches.OrderBy(m => m.Unit).ToList();
-                propertyPacket.SSExists = SSExists(propertyPacket.SectionalScheme);
+                prospectingEntity.PropertyMatches = prospectingEntity.PropertyMatches.OrderBy(m => m.Unit).ToList();
             }
-            return propertyPacket;
+            return prospectingEntity;
         }
 
-        private static bool SSExists(string ssName)
+        private static bool DetermineIfSSExists(string ssName, string address)
         {
             using (var prospecting = new ProspectingDataContext())
             {
-                return prospecting.prospecting_properties.Any(pp => pp.ss_name == ssName);
+                return prospecting.prospecting_properties.Any(pp => pp.ss_name == ssName.ToUpper() && pp.property_address.Contains(address.ToUpper()));
             }
         }
 

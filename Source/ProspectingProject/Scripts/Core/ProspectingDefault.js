@@ -138,7 +138,7 @@ function generateOutputFromLightstone(data) {
     if (data.PropertyMatches && data.PropertyMatches.length > 0 && !data.ErrorMessage) {
 
         if (data.IsSectionalScheme) {
-            div.append("The following sectional scheme was found here: " + data.SectionalScheme);
+            div.append("The following sectional scheme(s) were found here: " + data.SectionalScheme);
             div.append("<br />");
             div.append("Address: " + buildAddress(data.PropertyMatches[0], false));
             div.append("<br />");
