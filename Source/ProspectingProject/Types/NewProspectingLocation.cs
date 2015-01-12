@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ProspectingProject
 {
-    public class NewProspectingLocation
+    public class NewProspectingEntity
     {
         public List<LightstonePropertyMatch> PropertyMatches { get; set; }
         public bool IsSectionalScheme { get; set; }

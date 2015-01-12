@@ -960,7 +960,7 @@ namespace ProspectingProject
                                                                       select c);
         }
 
-        public static List<NewProspectingLocation> FindMatchingProperties(SearchInputPacket searchInputValues)
+        public static List<NewProspectingEntity> FindMatchingProperties(SearchInputPacket searchInputValues)
         {
             List<LightstonePropertyMatch> matches = new List<LightstonePropertyMatch>();
             // Step 1:  Search lightstone for matches
@@ -1004,7 +1004,7 @@ namespace ProspectingProject
                 }
             }
 
-              List<NewProspectingLocation> locations = new List<NewProspectingLocation>();
+              List<NewProspectingEntity> locations = new List<NewProspectingEntity>();
              // Load all SS's
               foreach (var item in uniqueSS)
               {
@@ -1012,16 +1012,16 @@ namespace ProspectingProject
                                       where m.SS_FH == "SS" && m.SS_ID == item
                                       select m;
                   List<LightstonePropertyMatch> ssMatches = new List<LightstonePropertyMatch>(allUnitsForSS);
-                  NewProspectingLocation ssLoc = GenerateOutputForProspectingLocation(ssMatches);
-                  locations.Add(ssLoc);
+                  List<NewProspectingEntity> ssLoc = GenerateOutputForProspectingLocation(ssMatches);
+                  locations.AddRange(ssLoc);
               }
             // Load all FH's
               foreach (var m in matches)
               {
                   if (m.SS_FH == "FH")
                   {
-                      NewProspectingLocation ssLoc = GenerateOutputForProspectingLocation(new [] {m}.ToList());
-                      locations.Add(ssLoc);
+                      List<NewProspectingEntity> ssLoc = GenerateOutputForProspectingLocation(new [] {m}.ToList());
+                      locations.AddRange(ssLoc);
                   }
               }
 
@@ -1204,7 +1204,7 @@ namespace ProspectingProject
             return results;
         }
 
-        public static NewProspectingLocation GetMatchingAddresses(ProspectingPropertyInputData dataPacket)
+        public static List<NewProspectingEntity> GetMatchingAddresses(ProspectingPropertyInputData dataPacket)
         {            
             List<LightstonePropertyMatch> matches = new List<LightstonePropertyMatch>();
             using (lightstoneSeeffService.Seeff service = new lightstoneSeeffService.Seeff())
@@ -1219,7 +1219,7 @@ namespace ProspectingProject
                     result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", "", "", "", "", "", ""
                         , "", "", "", "", "", "", "", "", "", "", "", 0, 1000, "", "", lng, lat);
                 }
-                catch { return new NewProspectingLocation(); }
+                catch { return new List<NewProspectingEntity>(); }
                 if (result.Tables[0] != null && result.Tables.Count > 1 && result.Tables[1].Rows.Count > 0)
                 {
                     using (var prospecting = new ProspectingDataContext())
@@ -1294,74 +1294,81 @@ namespace ProspectingProject
             return owners.FirstOrDefault(o => o.IsSameEntity(propOwner));
         }
 
-        private static NewProspectingLocation CreateNewProspectingLocationForSS(List<LightstonePropertyMatch> unitsForSS, string ssName)
+        private static NewProspectingEntity CreateProspectingEntityForSS(List<LightstonePropertyMatch> unitsForSS, string ssName)
         {
             var singleUnit = unitsForSS.First(u => !string.IsNullOrEmpty(u.StreetName) && !string.IsNullOrEmpty(u.StreetOrUnitNo));
             string address = singleUnit.StreetName;
-            return new NewProspectingLocation
+            return new NewProspectingEntity
             {
                 IsSectionalScheme = true,
-                PropertyMatches = unitsForSS,
-                Exists = DetermineIfSSExists(ssName, address),
+                PropertyMatches = unitsForSS.OrderBy(m => m.Unit).ToList(),
+                Exists = DetermineIfSSAlreadyExists(ssName, address),
                 SectionalScheme = ssName
             };
         }
 
-        // Test this for SS, FH, + search (1 ss and hybrid case), test the Count==0 case
-        private static List<NewProspectingLocation> GenerateOutputForProspectingLocation(List<LightstonePropertyMatch> matchesForSuburb)
+        
+        private static List<NewProspectingEntity> GenerateOutputForProspectingLocation(List<LightstonePropertyMatch> matchesForSuburb)
         {
-            List<NewProspectingLocation> prospectingEntity = new List<NewProspectingLocation>();
+            List<NewProspectingEntity> prospectingEntities = new List<NewProspectingEntity>();
             if (matchesForSuburb.Count == 0)
             {
-                return prospectingEntity;
+                return new List<NewProspectingEntity>();
             }
 
-            if (matchesForSuburb.Any(m => m.SS_FH.ToLower() == "ss"))
+            // Sectional schemes
+            var sectionalSchemes = matchesForSuburb.Where(ss => !string.IsNullOrEmpty(ss.SS_ID)).Gr.GroupBy(ss => ss.SS_ID);
+            // Include the FH units into the sectional scheme when the erf no is the same as the units in the SS.
+            sectionalSchemes = from ss in sectionalSchemes
+                               let erfNo = ss.First().ErfNo
+                               let unitsToInclude = matchesForSuburb.Where(m => m.SS_FH == "FH" && m.ErfNo == erfNo)
+                               select new
+                               {
+
+                               };
+            foreach (var ss in sectionalSchemes)
             {
-                var distinctSectionalSchemes = matchesForSuburb.Where(s => !String.IsNullOrEmpty(s.SSName)).GroupBy(p => p.SSName);
-                if (matchesForSuburb.All(m => m.SS_FH.ToLower() == "ss" ))
-                {                    
-                    foreach (var ssGrouping in distinctSectionalSchemes)
-                    {
-                        var ss = CreateNewProspectingLocationForSS(ssGrouping.ToList(), ssGrouping.First().SSName);
-                        prospectingEntity.Add(ss);
-                    }
+                string erfNo = ss.First().ErfNo;
+                var unitsToInclude = matchesForSuburb.Where(m => m.SS_FH == "FH" && m.ErfNo == erfNo);                
+            }
+
+            // Group by erf no
+            var groupsByErf = matchesForSuburb.GroupBy(m => m.ErfNo); // portion
+            foreach (var group in groupsByErf)
+            {
+                // Determine whether this group conforms to a SS
+                if (group.Any(ss => !String.IsNullOrEmpty(ss.SSName))) // ss_id
+                {
+                    var unitsToMarkAsFS = group.Where(u => u.SS_FH.ToUpper() == "FH").ToList();
+                    unitsToMarkAsFS.ForEach(unit => unit.SS_FH = "FS");
+
+                    string ssName = group.First(u => !String.IsNullOrEmpty(u.SSName)).SSName;
+                    var ss = CreateProspectingEntityForSS(group.ToList(), ssName);
+                    prospectingEntities.Add(ss);
                 }
                 else
                 {
-                    foreach (var ssGrouping in distinctSectionalSchemes)
-                    {
-                        var anomalousUnits = ssGrouping.Where(s => s.SS_FH.ToLower() != "ss");
-                        if ((anomalousUnits.Count(f => f.SS_FH == "FH") == 1) || (anomalousUnits.Any(f => string.IsNullOrEmpty(f.PurchPrice))))
+                    if (group.Count() == 1)
+                    {  // prop id
+                        var fh = group.ToList();
+                        prospectingEntities.Add(new NewProspectingEntity
                         {
-                            bool isSectionalScheme = ssGrouping.ToList().Except(anomalousUnits).All(m => m.SS_FH.ToLower() == "ss");
-                            if (isSectionalScheme)
-                            {
-                                var ss = CreateNewProspectingLocationForSS(ssGrouping.ToList().Except(anomalousUnits).ToList(), ssGrouping.First().SSName);
-                                prospectingEntity.SectionalScheme = string.Join(", ", distinctSectionalSchemes.Select(gr => gr.First().SSName));
-                            }
-                            else
-                            {
-                                // If there are *any* units that have a SS name, but the block as a whole does not comply with SS requirements, then we just don't know
-                                string address = matchesForSuburb[0].StreetOrUnitNo + " " + matchesForSuburb[0].StreetName + " " + matchesForSuburb[0].Suburb + " " + matchesForSuburb[0].City;
-                                string msg = @"Warning: The location selected contains a mixture of SS and non-SS properties.<br \>
-                               Cannot determine the type of entity under the clicked location (please contact support)<br />" +
-                                              "Address: " + address;
-                                prospectingEntity.ErrorMessage = msg;
-                            }
-                        }
-                    }                                                            
+                            IsSectionalScheme = false,
+                            PropertyMatches = fh,
+                            Exists = fh[0].LightstoneIdExists
+                        });
+                    }
+                    else
+                    {
+                        // This case is undefined - here we have several FH's with the same erf no (which does not make sense)
+                    }
                 }
             }
 
-            if (prospectingEntity.IsSectionalScheme)
-            {
-                prospectingEntity.PropertyMatches = prospectingEntity.PropertyMatches.OrderBy(m => m.Unit).ToList();
-            }
-            return prospectingEntity;
+            return prospectingEntities;
         }
 
-        private static bool DetermineIfSSExists(string ssName, string address)
+        private static bool DetermineIfSSAlreadyExists(string ssName, string address)
         {
             using (var prospecting = new ProspectingDataContext())
             {
