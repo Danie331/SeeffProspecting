@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -36,6 +37,7 @@ namespace ProspectingProject
 
         public bool LightstoneIdExists { get; set; }
 
+        [JsonIgnore]
         public List<IProspectingContactEntity> Owners { get; set; }
 
         public bool Equals(LightstonePropertyMatch x, LightstonePropertyMatch y)

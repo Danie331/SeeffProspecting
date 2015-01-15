@@ -14,32 +14,3 @@ function newPersonContact(firstname, surname, title, idNo, propRelationshipType,
     }
     return { ContactPersonId: null, Firstname: firstname, Surname: surname, Title: title, IdNumber: idNo, PersonPropertyRelationships: personPropertyRelationships, PhoneNumbers: arrayPhoneNumbers, EmailAddresses: arrayEmailAddresses, IsPOPIrestricted: isPOPIrestricted, Gender: gender, PersonCompanyRelationshipType: companyRelationshipType, ContactCompanyId: contactCompanyId };
 }
-
-function newProspectingRecord (location)
-{
-    return {
-        PropertyAddress: location.StreetName + ', ' + location.Suburb + ', ' + location.City,
-        StreetOrUnitNo: location.StreetOrUnitNo,
-
-        // Old way of allocating the lat/long to this property (using clicked point)
-        //LatLng: { Lat: currentClickLatLng.lat(), Lng: currentClickLatLng.lng() },
-        // New way: use the lat/long returned for this erf from lightstone
-        LatLng: { Lat: location.LatLng.Lat, Lng: location.LatLng.Lng },
-
-        LightstonePropertyId: location.LightstonePropId,
-        LightstoneIDOrCKNo: location.IDorCKNo,
-        LightstoneRegDate: location.RegDate,
-        SS_FH: location.SS_FH,
-        SSName: location.SSName,
-        SSNumber: location.SSNumber,
-        SS_ID: location.SS_ID,
-        Unit: location.Unit,
-        SSDoorNo: location.SSDoorNo,
-        LastPurchPrice: location.PurchPrice,
-        ErfNo: location.ErfNo,
-
-        // Owner info
-        Owners: location.Owners,
-        Contacts: location.Owners
-    };
-}

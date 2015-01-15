@@ -30,21 +30,12 @@ function initEventHandlers() {
                     switch (key) {
                         case "Search Lightstone here":
                             $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Lightstone results...</p>' });
-                            findGoogleAddressAtLatLng(currentClickLatLng, function (data) { buildLightstoneMatchesContent(data); });
+                            buildLightstoneMatchesContent();
                             break;
-                        //case "Find Google address here":
-                        //    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Google address...</p>' });
-                        //    findGoogleAddressAtLatLng(currentClickLatLng, function (data) { buildGoogleAddressContent(data); });
-                        //    break;
-                        //case "Capture address here":
-                        //    buildManualCaptureAddress(null, 'create');
-                        //    break;
                     }
                 },
                 items: {
                     "Search Lightstone here": { name: "Search Lightstone here", icon: "lightstone" },
-                    //"Find Google address here": { name: "Find Google address here", icon: "google" }//,
-                    //"Capture address here": { name: "Capture address here", icon: "capture" },
                 }
             };
         }
@@ -72,53 +63,21 @@ function showPopupAtLocation(loc, contentHtml) {
     $.unblockUI();
 }
 
-function findGoogleAddressAtLatLng(currentClickLatLng, actionOnSuccess) {
-    var lat = currentClickLatLng.lat();
-    var lng = currentClickLatLng.lng();
-    // Use reverse geo-coding to try obtain the address..
-    var latLngPair = lat + ',' + lng;
-    var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latLngPair + '&sensor=true&key=AIzaSyDWHlk3fmGm0oDsqVaoBM3_YocW5xPKtwA';
+function buildLightstoneMatchesContent() {
+    clearLightstoneSearchResults(); // This is to ensure that any existing results from a lightstone search are removed from front-end because the server cache is receiving new data making the existing results stale. 
     $.ajax({
-        type: "GET",
-        url: url,
-        dataType: "json"
-    }).done(function(data) {actionOnSuccess(data); });
-}
-
-function buildLightstoneMatchesContent(data) {
-
-    function getAddress(data) {
-        if (data && data.results.length > 0) {
-            var suburb = data.results[0].address_components[2].short_name;
-            var streetName = data.results[0].address_components[1].long_name;
-            streetName = streetName.replace(' Street', '').replace(' Road', '').replace(' Drive', '').replace(' Avenue', '').replace(' Crescent', '').replace(' Way', '').replace(' Lane', '').replace(' Close', '').replace(' Circle', '').trim();
-            streetName = streetName.replace(' Straat', '').trim();
-            var streetOrUnitNo = data.results[0].address_components[0].short_name;
-            return { StreetName: streetName, StreetOrUnitNo: streetOrUnitNo };
-        }
-
-        return null;
-    }
-
-    var address = getAddress(data);
-    // POST the partial address to the server to determine all possible matches
-    if (address) {
-        $.ajax({
-            type: "POST",
-            url: "RequestHandler.ashx",
-            data: JSON.stringify({
-                Instruction: 'get_matching_addresses',
-                StreetName: address.StreetName,
-                StreetOrUnitNo: address.StreetOrUnitNo,
-                LatLng: { Lat: currentClickLatLng.lat(), Lng: currentClickLatLng.lng() },
-                SeeffAreaId: currentSuburb.SuburbId
-            }),
-            dataType: "json",
-        }).done(function (matchesData) {
-            var content = generateOutputFromLightstone(matchesData);
-            showPopupAtLocation(currentClickLatLng, content);
-        });
-    }
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({
+            Instruction: 'get_matching_addresses',
+            LatLng: { Lat: currentClickLatLng.lat(), Lng: currentClickLatLng.lng() },
+            SeeffAreaId: currentSuburb.SuburbId
+        }),
+        dataType: "json",
+    }).done(function (matchesData) {
+        var content = generateOutputFromLightstone(matchesData);
+        showPopupAtLocation(currentClickLatLng, content);
+    });
 }
 
 function generateOutputFromLightstone(data) {
@@ -130,111 +89,99 @@ function generateOutputFromLightstone(data) {
         return area.StreetOrUnitNo + ' ' + area.StreetName + ', ' + area.Suburb + ', ' + area.City;
     }
 
-    function toggleCreateProspectBtn(lightstoneIdExists) {
-        $('#createProspectBtn').attr("disabled", lightstoneIdExists);
-    }
-
     var div = $("<div />");
-    if (data.PropertyMatches && data.PropertyMatches.length > 0 && !data.ErrorMessage) {
-
-        if (data.IsSectionalScheme) {
-            div.append("The following sectional scheme(s) were found here: " + data.SectionalScheme);
-            div.append("<br />");
-            div.append("Address: " + buildAddress(data.PropertyMatches[0], false));
-            div.append("<br />");
-            div.append("Number of units that will be created: " + data.PropertyMatches.length);
-            div.append("<p />");
-
-            var disabled = data.SSExists ? 'disabled' : '';
-            var createBtn = $('<input type="button" id="createSSProspectBtn" value="Create Sectional Scheme Here" ' + disabled + ' />');
-            div.append(createBtn);
-
-            $('body').unbind('click.createSS').on('click.createSS', '#createSSProspectBtn', function () {
-                closeInfoWindow();
-
-                // Add each to spiderfier, adjust saving to save "SS" (and loading SS as well), supress "marker click"
-                var units = [];
-                //var ownedByCompanies = false;
-                for (var i = 0; i < data.PropertyMatches.length; i++)
-                {
-                    var match = data.PropertyMatches[i];
-                    var record = newProspectingRecord(match);
-                    units.push(record);
-                    //if (!ensureAllIDNumbersValidForAllContacts(record)) {
-                    //    ownedByCompanies = true;
-                    //}
-                    //createProspectingRecord(record, false);
-                }
-
-                //if (!ownedByCompanies) {
-                    createSectionalTitle(units, function () {
-                        // Center the map (and offset it to the right to accomodate the panel (if open))
-                        var pos = calcMapCenterWithOffset(units[0].LatLng.Lat, units[0].LatLng.Lng, -200, 0);
-                        map.setCenter(pos);
-                    });
-                //}
-                //else {
-                //    alert('Unable to create sectional title at this address: One or more units are owned by companies.');
-                //}
-            });
-        }
-        else {
-            div.append("The following addresses were found at this location: <br />");
-            div.append("<p/>");
-            var form = $('<form id="areaMatchesForm" />');
-            form.empty();
-            div.append(form);
-            $.each(data.PropertyMatches, function (index, area) {
-                var radioItemId = 'radioitem_' + index;
-                area.ItemId = index;
-                var selected = index == 0 ? 'checked' : '';
-                var areaRadioItem = $('<input type="radio" name="radio_list" id="' + radioItemId + '" value="' + index + '" ' + selected + '/><label for="' + radioItemId + '">' + buildAddress(area, true) + '</label>');
-
-                //areaRadioItem.append(buildAddress(area, true));
-                form.append(areaRadioItem);
-
-                // Add click handler to the radio item
-                $('body').unbind('click.' + radioItemId).on('click.' + radioItemId, '#' + radioItemId, function () {
-                    var lightstoneIDExists = area.LightstoneIdExists ||
-                                    (currentProperty && currentProperty.LightstonePropertyId == area.LightstonePropId);
-                    toggleCreateProspectBtn(lightstoneIDExists);
-                });
-
+    if (data.length != 0) {
+        div.append('<span class="searchResultsHeader">The following Lightstone complexes and properties were found at this location:<p /></span>');
+        var form = $('<form id="areaMatchesForm" />');
+        form.empty();        
+        var itemIndex = {};
+        $.each(data, function (index, entity) {
+            var itemDescription = '';
+            var entityAlreadyExists = false;
+            if (entity.IsSectionalScheme) {
+                var numUnits = entity.PropertyMatches.length;
+                itemDescription = entity.SectionalScheme + ' (' + numUnits + ' units) : ' + buildAddress(entity.PropertyMatches[0], false);
+                entityAlreadyExists = entity.Exists;
+            }
+            else {
+                // Must be an FH. FRM add here.
+                var freehold = entity.PropertyMatches[0]; 
+                itemDescription = buildAddress(freehold, true);
+                entityAlreadyExists = freehold.LightstoneIdExists || (currentProperty && currentProperty.LightstonePropertyId == freehold.LightstonePropId);
+            }
+            // Only add the search result if it does not already exist
+            if (!entityAlreadyExists) {
+                var checkItemId = 'checkitem_' + index;
+                var areaCheckItem = $('<input type="checkbox" name="check_list" id="' + checkItemId + '" value="' + index + '" checked /><label for="' + checkItemId + '">' + itemDescription + '</label>');
+                itemIndex[checkItemId] = entity;
+                form.append(areaCheckItem);
                 form.append("<br />");
-            });
-            form.append('<p />');
+            }
+        });        
 
-            var lightstoneIDExists = data.PropertyMatches[0].LightstoneIdExists ||
-                                    (currentProperty && currentProperty.LightstonePropertyId == data.PropertyMatches[0].LightstonePropId);
-            var disabledAttr = lightstoneIDExists ? 'disabled' : '';
-            var selectorBtn = $('<input type="button" id="createProspectBtn" value="Create Prospect Here" ' + disabledAttr + '/>');
-            form.append(selectorBtn);
+        form.append("<p />");
+        var createBtn = $('<input type="button" id="createProspectBtn" value="Create Prospect(s)" />');
+        form.append(createBtn);
 
-            $('body').unbind('click.createProspect').on('click.createProspect', '#createProspectBtn', function () {
-                var selectedItem = $('input[name="radio_list"]:checked', '#areaMatchesForm').val();
-                if (!selectedItem) return;
-                var a = $.grep(data.PropertyMatches, function (ar) {
-                    return ar.ItemId == selectedItem;
-                })[0];
-
-                closeInfoWindow();
-                var record = newProspectingRecord(a);
-                //if (ensureAllIDNumbersValidForAllContacts(record)) {
-                createProspectingRecord(record, true, function () {
-                    // Center the map (and offset it to the right to accomodate the panel (if open))
-                    var pos = calcMapCenterWithOffset(a.LatLng.Lat, a.LatLng.Lng, -200, 0);
-                    map.setCenter(pos);
-                });
-                //}
-                //else {
-                //    alert('Unable to create a prospect here at this stage: The property is owned by a company.');
-                //}
-            });
+        // If no items were added, show it.
+        if ($.isEmptyObject(itemIndex)) {
+            div.empty();
+            div.append('All properties and complexes have already been prospected at this location.');
+            createBtn.attr('disabled', 'disabled');
         }
+
+        div.append(form);
+
+        $('body').unbind('click.createProspect').on('click.createProspect', '#createProspectBtn', function () {
+            var selectedEntities = [];
+            $('#areaMatchesForm input:checked').each(function () {
+                var id = $(this).attr('id');
+                var entity = itemIndex[id];
+                selectedEntities.push(entity);
+            });
+
+            if (selectedEntities.length > 0) {
+                closeInfoWindow();
+                $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Creating new prospects...</p>' });
+
+                createProspectingEntities(selectedEntities, function (data) {
+                    var dataObject = $.parseJSON(data);
+                    if (dataObject.CreationErrorMsg) {
+                        $.unblockUI();
+                        alert(dataObject.CreationErrorMsg);
+                    }
+                    else {
+                        if (currentSuburb) {
+                            clearSuburbBySuburbId(currentSuburb.SuburbId);
+                            currentSuburb.IsInitialised = false;
+                        }
+                        var seeffSuburbId = dataObject.SeeffAreaId;
+                        loadSuburb(seeffSuburbId, false, function () {
+                            var countProspectsCreated = Object.keys(dataObject.SectionalSchemes).length + dataObject.FhProperties.length;
+                            if (countProspectsCreated == 1) {
+                                // if only one unit was created, show its info bubble
+                                var targetProp = $.grep(currentSuburb.ProspectingProperties, function(pp, x){
+                                    return pp.LightstonePropertyId == dataObject.TargetProspect.LightstonePropertyId;
+                                })[0];
+                                
+                                currentProperty = targetProp;
+                                new google.maps.event.trigger(currentProperty.Marker, 'click');
+                            } else {
+                                currentProperty = null;
+                            }
+                        }, false);
+                    }
+                },
+                function (data) {
+                    $.unblockUI();
+                    alert(data.CreationErrorMsg);
+                });
+            }
+        });
     }
     else {
-        if (data.ErrorMessage) {
-            div.append(data.ErrorMessage);
+        if (data.CreationErrorMsg) {
+            div.append(data.CreationErrorMsg);
         }
         else {
             div.append("No Lightstone data found for this location.");
@@ -244,136 +191,29 @@ function generateOutputFromLightstone(data) {
     return div;
 }
 
-function ensureAllIDNumbersValidForAllContacts(prospectingRecord) {
-    // ss
-    if (prospectingRecord.Owners && prospectingRecord.Owners.length > 0) {
-        for (var i = 0; i < prospectingRecord.Owners.length; i++) {
-            var owner = prospectingRecord.Owners[i];
-            if (isCKNumber(owner.IdNumber)) {
-                return false;
-            }
+function createProspectingEntities(selectedEntities, callbackSuccess, callbackFail) {
+    var inputData = { Instruction: 'create_new_prospects', SectionalSchemes: [], FHProperties: [] };
+    $.each(selectedEntities, function (index, entity) {
+        if (entity.IsSectionalScheme) {
+            inputData.SectionalSchemes.push(entity);
         }
-    }
-
-    if (prospectingRecord.Contacts && prospectingRecord.Contacts.length > 0) {
-        for (var i = 0; i <  prospectingRecord.Contacts.length; i++) {
-            var contact = prospectingRecord.Contacts[i];
-            if (isCKNumber(contact.IdNumber)) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-function buildGoogleAddressContent(data) {
-    var div = $("<div />");
-    div.append("The following address was obtained from Google for the location clicked:");
-    div.append("<p />");
-    
-    if (data && data.results.length > 0) {
-        div.append(data.results[0].formatted_address);
-        div.append("<p/>");
-
-        //var captureAddressBtn = $("<input type='button' id='captureGoogleAddressBtn' value='Capture Address' />");
-        //$('body').unbind('click.gotoCaptureScreen').on('click.gotoCaptureScreen', '#captureGoogleAddressBtn', function () {
-        //    var content = buildManualCaptureAddress(data, 'create');
-        //    infowindow.setContent(content[0].outerHTML);
-        //});
-        //div.append(captureAddressBtn);
-    }
-    else {
-        div.append("No results found.");
-    }
-
-    showPopupAtLocation(currentClickLatLng, div);
-}
-
-function buildManualCaptureAddress(data, action) {
-
-    function validateForm() {
-
-        var streetNo = $('#streetNoInput').val();
-        var streetName = $('#streetNameInput').val();
-        var suburbName = $('#suburbNameInput').val();
-        var cityTown = $('#cityTownInput').val();
-        return streetNo.length > 0 && streetName.length > 0 && suburbName.length > 0 && cityTown.length > 0;
-    }
-
-    var div = $("<div class='info-window' />");
-    div.append("Captured address:");
-    div.append("<p/>");
-    div.append("<label style='display:inline-block;width:100px;'>Street no.:</label><input type='text' id='streetNoInput' size='30' />");
-    div.append("<br/>");
-    div.append("<label style='display:inline-block;width:100px;'>Street name:</label><input type='text' id='streetNameInput' size='30' />");
-    div.append("<br />");
-    div.append("<label style='display:inline-block;width:100px;'>Suburb:</label><input type='text' id='suburbNameInput' size='30' />");
-    div.append("<br />");
-    div.append("<label style='display:inline-block;width:100px;'>City or Town:</label><input type='text' id='cityTownInput' size='30' />");
-    div.append("<p />");
-
-    var actionBtnName = '';
-    switch (action) {
-        case "create": actionBtnName = 'Create Prospect';
-            break;
-        case "update": actionBtnName = 'Update';
-            break;
-    }
-    var createProspectBtn = $("<input type='button' id='captureNewAddressBtn' value='" + actionBtnName + "' />");
-    $('body').unbind('click.createProspectFromAddress').on('click.createProspectFromAddress', '#captureNewAddressBtn', function () {
-        if (validateForm()) {
-            var streetNoInput = $('#streetNoInput').val();
-            var streetNameInput = $('#streetNameInput').val();
-            var suburbNameInput = $('#suburbNameInput').val();
-            var cityTownInput = $('#cityTownInput').val();
-
-            if (action == 'create') {
-                var recordForInsert = {
-                    PropertyAddress: streetNameInput + ', ' + suburbNameInput + ', ' + cityTownInput,
-                    StreetOrUnitNo: streetNoInput,
-                    LatLng: { Lat: currentClickLatLng.lat(), Lng: currentClickLatLng.lng() },
-                    LightstonePropertyId: null,
-                    LightstoneIDOrCKNo: null
-                };
-
-                createProspectingRecord(recordForInsert);
-                closeInfoWindow();
-            }
-            else if (action == 'update') {
-                // At this stage can only update the address portion og the property.
-                var recordForUpdate = {
-                    PropertyAddress: streetNameInput + ', ' + suburbNameInput + ', ' + cityTownInput,
-                    StreetOrUnitNo: streetNoInput,
-                    ProspectingPropertyId: currentProperty.ProspectingPropertyId
-                };
-
-                updateProspectingRecord(recordForUpdate);
-            }
-        } else {
-            alert("Some details are missing.");
+        else {
+            // Must be FH
+            inputData.FHProperties.push(entity);
         }
     });
-    //div.append(createProspectBtn);
-    if (data) {
-        var packet = data;
-        if (data.results && data.results.length > 0) {
-            var handle = data.results[0].address_components;
-            packet.StreetOrUnitNo = handle[0].long_name;
-            packet.StreetName = handle[1].long_name;
-            packet.Suburb = handle[3].long_name;
-            packet.CityTown = handle[4].long_name;
-        }
-        
-        div.find('#streetNoInput').attr('value', packet.StreetOrUnitNo);
-        div.find('#streetNameInput').attr('value', packet.StreetName);
-        div.find('#suburbNameInput').attr('value', packet.Suburb);
-        div.find('#cityTownInput').attr('value', packet.CityTown);
-        return div;
-    }
-    else {
-        showPopupAtLocation(currentClickLatLng, div);
-    }
+
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify(inputData)
+    })
+        .done(function (data) {
+            if (callbackSuccess) callbackSuccess(data);
+        })
+        .fail(function (data) {
+            if (callbackFail) callbackFail(data);
+        });
 }
 
 function fromLatLngToPoint(latLng, map) {
@@ -421,14 +261,6 @@ function performPersonLookup(idNumber, checkForExisting) {
                                 // If the popi option was selected, then delete all their contact info
                                 handleSaveContactDetails([], []);
                             }
-
-                            //This function is no longer needed as the details are fetched from the server 
-                            //when the user clicks on the property in a suburb. 2014-10-08
-                            //updateSuburbContactsList();
-
-                            //if (saveDetailsFunction) {
-                            //    saveDetailsFunction();
-                            //}
                         });
                     });
                 }
@@ -462,8 +294,6 @@ function performPersonLookup(idNumber, checkForExisting) {
                         availableCredit = data.AvailableTracePsCredits;
                         $('#availableCreditLabel').text(availableCredit);
                     }
-                    //updatePropertyInfoMenu(data);
-                    //updateOwnerDetailsEditorWithBrandNewContact(currentTracePSInfoPacket, currentTracePSContactRows);
                     if (data.EnquirySuccessful) {
                         populateContactLookupInfo(data);
                     }
@@ -527,7 +357,7 @@ function getDetailsForProperty(prospectingProperty) {
     });
 }
 
-function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad) {
+function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCentreMap) {
 
     var suburb = getSuburbById(suburbId);
     if (suburb == null) {
@@ -544,7 +374,9 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad) {
             success: function (data, textStatus, jqXHR) {
                 if (textStatus == "success" && data.PolyCoords.length > 0) {
                     initialiseAndDisplaySuburb(suburb, data, showSeeffCurrentListings);
-                    centreMap(suburb);
+                    if (mustCentreMap !== false) {
+                        centreMap(suburb);
+                    }
                     $.unblockUI();
                     if (actionAfterLoad) {
                         actionAfterLoad();
@@ -562,7 +394,9 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad) {
         });
     } else {
         initialiseAndDisplaySuburb(suburb, null, showSeeffCurrentListings);
-        centreMap(suburb);
+        if (mustCentreMap !== false) {
+            centreMap(suburb);
+        }
         $.unblockUI();
         if (actionAfterLoad) {
             actionAfterLoad();
@@ -596,10 +430,6 @@ function setCurrentMarker(suburb, property) {
                             if (pp.SS_FH == "FH") {
                                 pp.Marker.setIcon('Assets/marker_icons/prospecting/prospected.png');
                             } else {
-                                ////"#009900" : "#FBB917";
-                                //var id = "unit" + id;
-                                //var newtr = ""; //buildUnitContentRow(pp)
-                                //$(id).parent().replaceWith(newtr);
                                 changeBgColour(testpp.LightstonePropertyId, "#009900");
                             };
                         }
@@ -607,12 +437,6 @@ function setCurrentMarker(suburb, property) {
                             if (pp.SS_FH == "FH") {
                                 pp.Marker.setIcon('Assets/marker_icons/prospecting/unprospected.png');
                             } else {
-                                ////var id = "#unit" + testpp.LightstonePropertyId;
-                                ////var row = $(id);
-                                ////row.css('background-color', "#FBB917");
-                                //var id = "unit" + id;
-                                //var newtr = ""; //buildUnitContentRow(pp)
-                                //$(id).parent().replaceWith(newtr);
                                 changeBgColour(testpp.LightstonePropertyId, "#FBB917");
                             };
                         };
@@ -668,7 +492,7 @@ function markerClick() {
 
 function loadProspectingProperty(marker) {
     openInfoWindow(marker, function () {
-        if (marker.ProspectingProperty.SS_FH == "SS") {
+        if (marker.ProspectingProperty.SS_FH == "SS" || marker.ProspectingProperty.SS_FH == "FS") {
             currentProperty = null;
         }
         else {
@@ -684,229 +508,7 @@ function loadProspectingProperty(marker) {
     });
 }
 
-
-function prepareUnits(units) {
-    for (var u=0;u<units.length;u++) {        
-        units[u].ContactPersons = getContactPersons(units[u]);
-        units[u].ContactCompanies = getContactCompanies(units[u]);
-    }
-    return units;
-}
-
-function createSectionalTitle(units, actionWhenDone) {
-    var seeffAreaId = currentSuburb ? currentSuburb.SuburbId : null;
-
-    units = prepareUnits(units);
-    var inputPacket = {
-        Instruction: "create_sectional_title",
-        Units: units,
-        SeeffAreaId: seeffAreaId
-    };
-
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Creating sectional title...</p>' });
-    $.ajax({
-        type: "POST",
-        url: "RequestHandler.ashx",
-        data: JSON.stringify(inputPacket),
-        success: function (data, textStatus, jqXHR) {
-            $.unblockUI();
-            if (textStatus == "success") {
-                if (data[0].CreateError) {
-                    alert(data[0].CreateError);
-                } else {
-                    units = data;
-                    var suburb = $.grep(suburbsInfo, function (s) {
-                        return s.SuburbId == units[0].SeeffAreaId;
-                    })[0];
-
-                    //  Create a unique identifier by which this SS will be identified
-                    //var ss_id = generateUniqueID();
-                    if (suburb != currentSuburb) {
-                        if (currentSuburb) {
-                            clearSuburbBySuburbId(currentSuburb.SuburbId);
-                        }
-                        //Load for SS
-                        loadSuburb(suburb.SuburbId, null, function () {           
-                            currentProperty = $.grep(suburb.ProspectingProperties, function (p) {
-                                return p.LightstonePropertyId == units[0].LightstonePropertyId;
-                            })[0];
-                            if (!currentProperty) {
-                                for (var u = 0; u < units.length; u++) {
-                                    var unit = units[u];
-                                    //unit.ss_id = ss_id;
-
-                                    suburb.ProspectingProperties.push(unit);
-                                    var marker = createMarkerForProperty(unit);
-                                    marker.Suburb = suburb;
-                                    suburb.Markers.push(marker);
-                                    suburb.MarkerClusterer.addMarker(marker);
-                                    suburb.VisibleMarkers.push(marker);
-                                    updateSuburbSelectionStats(suburb);
-                                    unit.Marker.setIcon(getIconForMarker(unit.Marker));
-                                    //enableSpiderfier(suburb, [marker]);                                
-                                    currentProperty = unit;
-                                }
-                            }
-                            new google.maps.event.trigger(currentProperty.Marker, 'click');
-                            if (actionWhenDone) {
-                                actionWhenDone();
-                            }
-                        });
-                    }
-                    else {
-                        for (var u = 0; u < units.length; u++) {
-                            var unit = units[u];
-                            //unit.ss_id = ss_id;
-
-                            suburb.ProspectingProperties.push(unit);
-                            var marker = createMarkerForProperty(unit);
-                            marker.Suburb = suburb;
-                            suburb.Markers.push(marker);
-                            suburb.MarkerClusterer.addMarker(marker);
-                            suburb.VisibleMarkers.push(marker);
-                            updateSuburbSelectionStats(suburb);
-                            unit.Marker.setIcon(getIconForMarker(unit.Marker));
-                            enableSpiderfier(suburb, [marker]);                            
-                            currentProperty = unit;
-                        }
-                        new google.maps.event.trigger(currentProperty.Marker, 'click');
-                        if (actionWhenDone) {
-                            actionWhenDone();
-                        }
-                    }
-                }
-            } else {
-                alert('Could not create sectional scheme. Please contact support.');
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            $.unblockUI();
-            alert(jqXHR.status);
-            alert(jqXHR.responseText);
-        },
-        dataType: "json"
-    });
-}
-
-function getContactPersons(property) {
-    return $.grep(property.Owners, function (o) {
-        return o.ContactEntityType == 1;
-    });
-}
-
-function getContactCompanies(property) {
-    return $.grep(property.Owners, function (o) {
-        return o.ContactEntityType == 2;
-    });
-}
-
-function createProspectingRecord(property, showLinkedOwnershipDialog, actionWhenDone) {
-
-    var seeffAreaId = currentSuburb ? currentSuburb.SuburbId : null;
-    var inputPacket = {
-        Instruction: "create_new_prospecting_property", LightstoneId: property.LightstonePropertyId, PropertyAddress: property.PropertyAddress,
-        StreetOrUnitNo: property.StreetOrUnitNo, LatLng: property.LatLng, LightstoneIDOrCKNo: property.LightstoneIDOrCKNo,
-        LightstoneRegDate: property.LightstoneRegDate, SeeffAreaId: seeffAreaId, LastPurchPrice: property.LastPurchPrice,
-        ErfNo: property.ErfNo,
-
-        // Sectional Schemes
-        SS_FH: property.SS_FH,
-        SSName: property.SSName,
-        SSNumber: property.SSNumber,
-        Unit: property.Unit,
-        SS_ID: property.SS_ID,
-
-        Owners: property.Owners, //remove
-        ContactPersons: getContactPersons(property),
-        ContactCompanies: getContactCompanies(property)
-    };
-
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Creating new prospect...</p>' });
-    $.ajax({
-        type: "POST",
-        url: "RequestHandler.ashx",
-        data: JSON.stringify(inputPacket),
-        success: function (data, textStatus, jqXHR) {
-            $.unblockUI();
-            if (textStatus == "success") {
-                if (data.CreateError) {
-                    alert(data.CreateError);
-                } else {            
-                    property = data;
-                    var suburb = $.grep(suburbsInfo, function (s) {
-                        return s.SuburbId == property.SeeffAreaId;
-                    })[0];
-                    if (!suburb) {
-                        alert("The prospecting property you created falls outside of your available suburbs!");
-                        return;
-                    }
-                    if (suburb != currentSuburb) {
-                        if (currentSuburb) {
-                            clearSuburbBySuburbId(currentSuburb.SuburbId);
-                        }
-                        //load for FH
-                        loadSuburb(suburb.SuburbId, null, function ()
-                        {                          
-                            currentProperty = $.grep(suburb.ProspectingProperties, function (pp) {
-                                return pp.LightstonePropertyId == property.LightstonePropertyId;
-                            })[0];
-                            if (!currentProperty) {
-                                suburb.ProspectingProperties.push(property);
-                                var marker = createMarkerForProperty(property);
-                                marker.Suburb = suburb;
-                                suburb.Markers.push(marker);
-                                suburb.MarkerClusterer.addMarker(marker);
-                                suburb.VisibleMarkers.push(marker);
-                                updateSuburbSelectionStats(suburb);
-                                property.Marker.setIcon(getIconForMarker(property.Marker));
-                                //enableSpiderfier(suburb, [marker]);
-                                currentProperty = property;
-                            }
-                            new google.maps.event.trigger(currentProperty.Marker, 'click');
-
-                            if (showLinkedOwnershipDialog) {
-                                linkAndShowExistingOwners(property);
-                            }
-
-                            if (actionWhenDone) {
-                                actionWhenDone();
-                            }
-                        });
-                    }
-                    else {
-                        suburb.ProspectingProperties.push(property);
-                        var marker = createMarkerForProperty(property);
-                        marker.Suburb = suburb;
-                        suburb.Markers.push(marker);
-                        suburb.MarkerClusterer.addMarker(marker);
-                        suburb.VisibleMarkers.push(marker);
-                        updateSuburbSelectionStats(suburb);
-                        property.Marker.setIcon(getIconForMarker(property.Marker));
-                        //enableSpiderfier(suburb, [marker]);
-
-                        new google.maps.event.trigger(marker, 'click');
-                        currentProperty = property;
-
-                        if (showLinkedOwnershipDialog) {
-                            linkAndShowExistingOwners(property);
-                        }
-
-                        if (actionWhenDone) {
-                            actionWhenDone();
-                        }
-                    }
-                }
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            $.unblockUI();
-            alert(jqXHR.status);
-            alert(jqXHR.responseText);
-        },
-        dataType: "json"
-    });
-}
-
+// Left here for legacy only - can remove in a future version.
 function linkAndShowExistingOwners(property) {
     var otherPropsOwnedByTheseOwners = [];
     for (var o = 0; o < property.Contacts.length; o++) {
@@ -1180,10 +782,6 @@ function initialiseAndDisplaySuburb(suburb, data, showSeeffCurrentListings, sear
         drawPolygonForSuburb(suburb);
 
         currentSuburb = suburb;
-        //This function is no longer needed as the details are fetched from the server 
-        //when the user clicks on the property in a suburb. 2014-10-08. This record was 
-        //already commented out by Danie
-        //updateSuburbContactsList();
     }
 }
 
@@ -1213,19 +811,6 @@ function drawPolygonForSuburb(suburb) {
     });
 }
 
-function getMarkersThatWillSpiderfyWithProp(suburb, ssUnits) {
-    var markersWillSpiderfy = [];
-    var sub
-    for(var i=0;i<suburb.Markers.length;i++) {
-        var marker = suburb.Markers[i];
-        if ($.inArray(marker.LightstonePropertyId, ssUnits) > -1) {
-            markersWillSpiderfy.push(marker);
-        }
-    }
-
-    return markersWillSpiderfy;
-}
-
 function getIconForMarker(marker) {
     var path = 'Assets/marker_icons/prospecting/';
     // Otherwise at this stage it *might* still be a lightstone property, or prospected property, or a prospected lightstone property.
@@ -1238,7 +823,7 @@ function getIconForMarker(marker) {
     }
 
     function buildPathToIcon(property) {        
-        if (property.SS_FH == "SS") {
+        if (property.SS_FH == "SS" || property.SS_FH == "FS") {
             if (!marker.MarkerIsSpiderfied) {
                 return path += 'ss_unprospected.png';
             }
@@ -1258,38 +843,6 @@ function getIconForMarker(marker) {
 
         return 'unprospected.png';
     }
-}
-
-function allUnitsFullyProspected(units) {
-    for (var u = 0; u < units.length; u++) {
-        var unit = units[u];
-        if (!hasAnyContactDetails(unit.ProspectingProperty)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-/* Remove */
-function hasAnyContactDetails(property) {
-
-    function contactHasDetails(contact) {
-        if (!contact.PhoneNumbers && !contact.EmailAddresses) return false;
-        if ((contact.PhoneNumbers && contact.PhoneNumbers.length == 0) && (contact.EmailAddresses && contact.EmailAddresses.length == 0)) return false;
-
-        return true;
-    }
-
-    if (!property.Contacts || property.Contacts.length == 0) return false;
-
-    for (var c = 0; c < property.Contacts.length; c++) {
-        var contact = property.Contacts[c];
-        if (contactHasDetails(contact)) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 function getAllMarkersThatWillSpiderfy(property) {
@@ -1369,13 +922,6 @@ function buildInfoWindowContentForSS(unit) {
     function buildUnitContentRow(unit) {
 
         function getBGColourForRow(unit) {
-            //if (unit.Contacts && unit.Contacts.length) {
-            //    hasContactsWithDetails = $.grep(unit.Contacts, function (c) {
-            //        return (c.PhoneNumbers && c.PhoneNumbers.length) || (c.EmailAddresses && c.EmailAddresses.length);
-            //    }).length > 0;
-            //}
-
-            //Changed to work with Prospected 2014-10-07
             var hasContactsWithDetails = false;
             if (unit.Prospected) {
                 hasContactsWithDetails = true;
@@ -1391,9 +937,16 @@ function buildInfoWindowContentForSS(unit) {
         var unitRegDate = 'Reg date: ' + formatDate(unit.LightstoneRegDate);
         var unitLastSalePrice = 'Last sale price: ' + formatRandValue(unit.LastPurchPrice);
         var ssDoorNo = unit.SSDoorNo ? ' (Door no. ' + unit.SSDoorNo + ')' : '';
-        var unitContent = "Unit " + unit.Unit + ssDoorNo + '<br />' +
+        var unitContent = '';
+        if (unit.SS_FH == 'FS') {
+            unitContent = 'Property ID: ' + unit.LightstonePropertyId + '<br />' +
+                          'ERF no.: ' + unit.ErfNo;
+        } else {
+            unitContent = "Unit " + unit.Unit + ssDoorNo + '<br />' +
                            unitRegDate + '<br />' +
                            unitLastSalePrice;
+        }
+        
         var td = tr.append($("<td id='" + id + "' class='unittd' data-color='" + color + "' style='cursor:pointer;width:150px;text-align:left;" + bgcolor + "' />").append(unitContent));
 
         $('body').unbind('mouseover.' + id).on('mouseover.' + id, '#' + id, function () {
@@ -1441,7 +994,14 @@ function buildInfoWindowContentForSS(unit) {
             return pp.SSNumber == unit.SSNumber;
         });
     }
-    ssUnits.sort(function (x, y) { return x.Unit - y.Unit;});
+
+    $.each(ssUnits, function (i, u) {
+        if (u.SS_FH == 'FS') u.Unit = 99999999;
+    });
+    ssUnits.sort(function (x, y) {
+        return x.Unit - y.Unit;
+    });
+
     var tableOfUnits = $("<table id='ssUnitsTbl' class='info-window' style='display: block;max-height:250px;overflow-y:auto;width:200px;' />");
     tableOfUnits.empty();
 
@@ -1493,22 +1053,12 @@ function openSSUnitInfo(unit) {
 function buildContentForInfoWindow(property) {
     var div = $("<div class='info-window' />");   
     // test for fh, test in chrome, mouille point, sort, fixed header
-    if (property.SS_FH == 'SS') {
+    if (property.SS_FH == 'SS' || property.SS_FH == 'FS') {
         var header = $("<label>" + property.SSName + "</label>");
         div.append(header);
         div.append("<br />");
         var ss = buildInfoWindowContentForSS(property);
         div.append(ss);
-        //div.append("<br />");
-        //div.append("Unit " + property.Unit + " in " + property.SSName + " (SS number: " + property.SSNumber + ")");
-        //div.append("<br />");
-        //div.append("Lightstone Property ID: " + property.LightstonePropertyId);
-        //div.append("<br />");
-        //div.append("Lightstone Reg. Date: " + property.LightstoneRegDate);
-        //div.append("<br />");
-        //div.append("Erf No.: " + (property.ErfNo ? property.ErfNo : "n/a"));
-        //div.append("<br />");
-        //div.append("Last sale price: " + (property.LastPurchPrice ? formatRandValue(property.LastPurchPrice) : "n/a"));
     }
     else { // FH
         var address = property.StreetOrUnitNo + " " + property.PropertyAddress;
@@ -1533,15 +1083,8 @@ function buildContentForInfoWindow(property) {
         if (property.Contacts.length) {
             $.each(property.Contacts, function (idx, c) {
 
-                //var relationshipToProp = $.grep(c.PersonPropertyRelationships, function (rel) {
-                //    return rel.Key == property.ProspectingPropertyId;
-                //})[0];
-                
-                //var isOwner = relationshipToProp ? (relationshipToProp.Value == 1) : null;  // TODO: do this properly!!!!!!!
-                //if (isOwner) {
-                    div.append(c.Firstname + " " + c.Surname + " (ID Number:" + c.IdNumber + ")");
-                    div.append("<br />");
-                //}
+                div.append(c.Firstname + " " + c.Surname + " (ID Number:" + c.IdNumber + ")");
+                div.append("<br />");
             });
         }
         if (property.ContactCompanies.length) {
@@ -1550,16 +1093,6 @@ function buildContentForInfoWindow(property) {
                 div.append("<br />");
             });
         }
-
-        // Edit functionality
-        //var editAddressBtn = $("<input type='button' id='editAddressBtn' value='View Full Address..' />");
-        //$('body').unbind('click.updatePropertyAddress').on('click.updatePropertyAddress', '#editAddressBtn', function () {
-        //    var content = buildManualCaptureAddress(stripPropertyAddress(property), 'update');
-        //    infowindow.setContent(content[0].outerHTML);
-        //});
-
-        //div.append("<p />");
-        //div.append(editAddressBtn);
     }  
    
     return div[0].outerHTML;
@@ -1675,49 +1208,6 @@ function showSavedSplashDialog(text) {
             setTimeout(function () {
                 $('#itemSavedDialogSplash').dialog('close');
             }, 1000);
-        }
-    });
-}
-
-
-function searchContacts() {
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Searching for matching properties...</p>' });
-
-    var idNumber = $('#idNumberSearchTextbox').val();
-    var phoneNumber = $('#phoneNumberSearchTextbox').val();
-    var emailAddress = $('#emailAddressSearchTextbox').val();
-    var propertyAddress = $('#propertyAddressSearchTextbox').val();
-    var streetOrUnitNo = $('#streetOrUnitNoSearchTextbox').val();
-
-    var currentSuburbId = currentSuburb ? currentSuburb.SuburbId : null;
-
-    $.ajax({
-        type: "POST",
-        url: "RequestHandler.ashx",
-        data: JSON.stringify({
-            Instruction: 'search_for_matches',
-            CurrentSuburbId: currentSuburbId,
-            IDNumber: idNumber,
-            PhoneNumber: phoneNumber,
-            EmailAddress: emailAddress,
-            PropertyAddress: propertyAddress,
-            StreetOrUnitNo: streetOrUnitNo
-        }),
-        dataType: "json",
-    }).done(function (data) {
-        $.unblockUI();
-        if (data.MatchingPropertiesOutsideCurrentSuburb.length == 0 && data.ProspectingProperties.length == 0) {            
-            showSavedSplashDialog('No matches found');
-        }
-        else {
-            if (data.ProspectingProperties.length > 0) {              
-                initCurrentSearchResults(data.ProspectingProperties);
-            }
-
-            if (data.MatchingPropertiesOutsideCurrentSuburb.length > 0) {
-                showDialogOtherResults(data.MatchingPropertiesOutsideCurrentSuburb);
-            }
-            // TODO: other matches + no current suburb + click searched marker
         }
     });
 }
@@ -1872,7 +1362,7 @@ function performLightstoneSearch() {
 
 function showSearchedPropertyOnMap(result) {  
 
-    var content = generateOutputFromLightstone(result);
+    var content = generateOutputFromLightstone([result]);
     var firstResult = result.PropertyMatches[0];
 
     var latLng = new google.maps.LatLng(firstResult.LatLng.Lat, firstResult.LatLng.Lng);

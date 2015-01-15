@@ -36,10 +36,6 @@ namespace ProspectingProject
                     var matchingAddressesFromLightstone = LoadMatchingLightstoneAddresses(json);
                     context.Response.Write(matchingAddressesFromLightstone);
                     break;
-                case "create_new_prospecting_property":
-                    var newProspect = CreateNewProspect(json);
-                    context.Response.Write(newProspect);
-                    break;
                 case "update_prospecting_property":
                     var updatedProspectResult = UpdateProspectingProperty(json);
                     context.Response.Write(updatedProspectResult);
@@ -64,15 +60,23 @@ namespace ProspectingProject
                     var results = SearchForPropertiesWithMatchingDetails(json);
                     context.Response.Write(results);
                     break;
-                case "create_sectional_title":
-                    var result = CreateSectionalScheme(json);
-                    context.Response.Write(result);
-                    break;
                 case "get_existing_prospecting_property":
                     var existingProspect = GetProspectedProperty(json);
                     context.Response.Write(existingProspect);
                     break;
+                case "create_new_prospects":
+                    var prospectingEntities = CreateProspectingEntities(json);
+                    context.Response.Write(prospectingEntities);
+                    break;
             }
+        }
+
+        private string CreateProspectingEntities(string json)
+        {
+            var prospectingEntityBundle = ProspectingDomain.Deserialise<ProspectingEntityInputBundle>(json);
+            List<NewProspectingEntity> searchResults = (List<NewProspectingEntity>)HttpContext.Current.Session["ProspectingEntities"];
+            var results = ProspectingDomain.CreateNewProspectingEntities(prospectingEntityBundle, searchResults);
+            return ProspectingDomain.SerializeToJsonWithDefaults(results);
         }
 
         private string GetProspectedProperty(string json)
@@ -82,17 +86,12 @@ namespace ProspectingProject
             return ProspectingDomain.SerializeToJsonWithDefaults(Prop);
         }
 
-        private string CreateSectionalScheme(string json)
-        {
-            var sectionalTitle = ProspectingDomain.Deserialise<SectionalTitle>(json);
-            var result = ProspectingDomain.CreateSectionalTitle(sectionalTitle);
-            return ProspectingDomain.SerializeToJsonWithDefaults(result);
-        }
-
         private string SearchForPropertiesWithMatchingDetails(string json)
         {
             var searchInputValues = ProspectingDomain.Deserialise<SearchInputPacket>(json);
-            var searchResults = ProspectingDomain.FindMatchingProperties(searchInputValues);            
+            var searchResults = ProspectingDomain.FindMatchingProperties(searchInputValues);
+            HttpContext.Current.Session["ProspectingEntities"] = null;
+            HttpContext.Current.Session["ProspectingEntities"] = searchResults;
             return ProspectingDomain.SerializeToJsonWithDefaults(searchResults);
         }
 
@@ -131,17 +130,12 @@ namespace ProspectingProject
             return ProspectingDomain.SerializeToJsonWithDefaults("success");
         }
 
-        private string CreateNewProspect(string json)
-        {
-            ProspectingPropertyInputData dataPacket = ProspectingDomain.Deserialise<ProspectingPropertyInputData>(json);            
-            ProspectingProperty newProp = ProspectingDomain.CreateNewProspectingRecord(dataPacket);
-            return ProspectingDomain.SerializeToJsonWithDefaults(newProp);
-        }
-
         private string LoadMatchingLightstoneAddresses(string json)
         {
             ProspectingPropertyInputData dataPacket = ProspectingDomain.Deserialise<ProspectingPropertyInputData>(json);
             var matches = ProspectingDomain.GetMatchingAddresses(dataPacket);
+            HttpContext.Current.Session["ProspectingEntities"] = null;
+            HttpContext.Current.Session["ProspectingEntities"] = matches;
             return ProspectingDomain.SerializeToJsonWithDefaults(matches);
         }
 

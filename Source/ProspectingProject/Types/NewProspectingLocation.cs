@@ -12,5 +12,9 @@ namespace ProspectingProject
         public string SectionalScheme { get; set; }
         public bool Exists { get; set; }
         public string ErrorMessage { get; set; }
+
+        public string SS_ID { get; set; }
+
+        public int? SeeffAreaId { get; set; }
     }
 }

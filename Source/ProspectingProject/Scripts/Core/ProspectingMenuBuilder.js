@@ -60,10 +60,15 @@ function buildSearchMenu() {
     return searchDiv;
 }
 
-function createLightstoneSearchResultsDiv(results) {
-
+function clearLightstoneSearchResults() {
     var resultsDiv = $('#lightstoneResultsDiv');
     resultsDiv.empty();
+    return resultsDiv;
+}
+
+function createLightstoneSearchResultsDiv(results) {
+
+    var resultsDiv = clearLightstoneSearchResults();
     
     if (results.length == 0) {
         resultsDiv.append("No results found.");
@@ -74,7 +79,7 @@ function createLightstoneSearchResultsDiv(results) {
 
         if (result.IsSectionalScheme) {
             var propMatches = result.PropertyMatches;
-            var ssId = propMatches[0].SSName + "_" + propMatches[0].StreetName;
+            var ssId = propMatches[0].SSName + "_" + propMatches[0].SS_ID;
             var resultDiv = $("<div id='" + ssId + "' style='border:1px solid;border-radius:3px;cursor:pointer;' />");
             resultDiv.hover(function () { $(this).css('background-color', '#b0c4de'); }, function () { $(this).css('background-color', 'white'); });
             resultDiv.click(function () {

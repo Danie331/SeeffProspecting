@@ -791,6 +791,8 @@
     <Compile Include="Types\IListing.cs" />
     <Compile Include="Types\ILocation.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\ContactRow.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\ProspectingEntityInputBundle.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\ProspectingEntityOutputBundle.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\ProspectingPropertyInputData.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\DefaultProspectingDataResponsePacket.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\ContactDetails.cs" />
@@ -811,7 +813,6 @@
     <Compile Include="Types\ProspectingStaticData.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\ProspectingSuburb.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\SuburbDataRequestPacket.cs" />
-    <Compile Include="Types\SectionalTitle.cs" />
     <Compile Include="Web References\lightstoneSeeffService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
