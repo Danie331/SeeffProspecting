@@ -364,6 +364,7 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCent
         suburb = newSuburb();
         suburb.SuburbId = suburbId;
     }
+    suburb.IsInitialised = false; // Adding this line in here to force obtaining the latest data from the database each load (this is important because the contacts for the property could be updated elsewhere and changes must reflect)
 
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading ' + suburb.SuburbName + '...</p>' });
     if (!suburb.IsInitialised) {
