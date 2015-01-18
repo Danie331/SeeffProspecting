@@ -88,7 +88,10 @@ namespace ProspectingProject
                 Unit = prospectingRecord.unit,
                 SSDoorNo = prospectingRecord.ss_door_number,
                 LastPurchPrice = prospectingRecord.last_purch_price,
-                Prospected =  Convert.ToBoolean(prospectingRecord.prospected)
+                Prospected =  Convert.ToBoolean(prospectingRecord.prospected),
+                FarmName = prospectingRecord.farm_name,
+                Portion = prospectingRecord.portion_no != null ? prospectingRecord.portion_no.ToString() : "n/a",
+                 LightstoneSuburb = prospectingRecord.lightstone_suburb
             };
 
             switch (prospectingRecord.ss_fh)
@@ -96,6 +99,7 @@ namespace ProspectingProject
                 case "SS": prop.SS_FH = "SS"; break;
                 case "FH": prop.SS_FH = "FH"; break;
                 case "FS": prop.SS_FH = "FS"; break;
+                case "FRM": prop.SS_FH = "FRM"; break;
                 default: prop.SS_FH = "FH"; break;
             }
 
@@ -130,7 +134,10 @@ namespace ProspectingProject
                 Unit = prospectingRecord.unit,
                 SSDoorNo = prospectingRecord.ss_door_number,
                 LastPurchPrice = prospectingRecord.last_purch_price,
-                Prospected = Convert.ToBoolean(prospectingRecord.prospected)
+                Prospected = Convert.ToBoolean(prospectingRecord.prospected),
+                  FarmName = prospectingRecord.farm_name,
+                   Portion = prospectingRecord.portion_no.HasValue ? prospectingRecord.portion_no.ToString() : null,
+                    LightstoneSuburb = prospectingRecord.lightstone_suburb
             };
 
             return prop;
@@ -388,12 +395,12 @@ namespace ProspectingProject
         /// <summary>
         /// Creates a new prospect for an entirely new prospected location
         /// </summary>
-        public static ProspectingProperty CreateNewProspectingRecord(NewProspectingEntity fhEntity)
+        public static ProspectingProperty CreateNewProspectingRecord(NewProspectingEntity recordToCreate)
         {
-            var fhProperty = fhEntity.PropertyMatches[0];
-            if (!fhEntity.SeeffAreaId.HasValue)
+            var standaloneUnit = recordToCreate.PropertyMatches[0];
+            if (!recordToCreate.SeeffAreaId.HasValue)
             {
-                if (!ProspectWithinOwnedSuburbs(fhProperty.LatLng))
+                if (!ProspectWithinOwnedSuburbs(standaloneUnit.LatLng))
                 {
                     throw new Exception("Cannot create new prospect: The property falls outside of your available suburbs.");
                 }
@@ -401,30 +408,35 @@ namespace ProspectingProject
 
             using (var prospecting = new ProspectingDataContext())
             {
-                int areaId = fhEntity.SeeffAreaId.HasValue ? fhEntity.SeeffAreaId.Value : prospecting.find_area_id(fhProperty.LatLng.Lat, fhProperty.LatLng.Lng, "R", null);
+                int areaId = recordToCreate.SeeffAreaId.HasValue ? recordToCreate.SeeffAreaId.Value : prospecting.find_area_id(standaloneUnit.LatLng.Lat, standaloneUnit.LatLng.Lng, "R", null);
                 var newPropRecord = new prospecting_property
                 {
-                    lightstone_property_id = fhProperty.LightstonePropId,
-                    latitude = fhProperty.LatLng.Lat,
-                    longitude = fhProperty.LatLng.Lng,
-                    property_address = string.Concat(fhProperty.StreetName + ", " + fhProperty.Suburb + ", " + fhProperty.City),
-                    street_or_unit_no = fhProperty.StreetOrUnitNo,
+                    lightstone_property_id = standaloneUnit.LightstonePropId,
+                    latitude = standaloneUnit.LatLng.Lat,
+                    longitude = standaloneUnit.LatLng.Lng,
+                    property_address = string.Concat(standaloneUnit.StreetName + ", " + standaloneUnit.Suburb + ", " + standaloneUnit.City),
+                    street_or_unit_no = standaloneUnit.StreetOrUnitNo,
                     seeff_area_id = areaId,
-                    lightstone_reg_date = fhProperty.RegDate,
-                    erf_no = int.Parse(fhProperty.ErfNo, CultureInfo.InvariantCulture),
-                    ss_fh = fhProperty.SS_FH,
-                    ss_id = fhProperty.SS_ID,
-                    ss_name = !string.IsNullOrEmpty(fhProperty.SSName) ? fhProperty.SSName : null,
-                    ss_number = !string.IsNullOrEmpty(fhProperty.SSNumber) ? fhProperty.SSNumber : null,
-                    unit = !string.IsNullOrEmpty(fhProperty.Unit) ? fhProperty.Unit : null,
+                    lightstone_reg_date = standaloneUnit.RegDate,
+                    erf_no = int.Parse(standaloneUnit.ErfNo, CultureInfo.InvariantCulture),
+                    ss_fh = standaloneUnit.SS_FH,
+                    ss_id = standaloneUnit.SS_ID,
+                    ss_name = !string.IsNullOrEmpty(standaloneUnit.SSName) ? standaloneUnit.SSName : null,
+                    ss_number = !string.IsNullOrEmpty(standaloneUnit.SSNumber) ? standaloneUnit.SSNumber : null,
+                    unit = !string.IsNullOrEmpty(standaloneUnit.Unit) ? standaloneUnit.Unit : null,
                     ss_door_number = null,
-                    last_purch_price = !string.IsNullOrEmpty(fhProperty.PurchPrice) ? decimal.Parse(fhProperty.PurchPrice, CultureInfo.InvariantCulture) : (decimal?)null
+                    last_purch_price = !string.IsNullOrEmpty(standaloneUnit.PurchPrice) ? decimal.Parse(standaloneUnit.PurchPrice, CultureInfo.InvariantCulture) : (decimal?)null,
+
+                    // Farms
+                    farm_name = !string.IsNullOrEmpty(standaloneUnit.FarmName) ? standaloneUnit.FarmName : null,
+                    portion_no =!string.IsNullOrEmpty(standaloneUnit.Portion) ? int.Parse(standaloneUnit.Portion) : (int?)null,
+                    lightstone_suburb = !string.IsNullOrEmpty(standaloneUnit.LightstoneSuburb) ? standaloneUnit.LightstoneSuburb : null
                 };
 
                 prospecting.prospecting_properties.InsertOnSubmit(newPropRecord);
                 prospecting.SubmitChanges(); // Create the property first before adding contacts
 
-                foreach (var owner in fhProperty.Owners)
+                foreach (var owner in standaloneUnit.Owners)
                 {
                     if (owner.ContactEntityType == ContactEntityType.NaturalPerson)
                     {
@@ -439,7 +451,7 @@ namespace ProspectingProject
                 }
 
                 var property = CreateProspectingProperty(prospecting, newPropRecord, true, true);
-                fhEntity.SeeffAreaId = property.SeeffAreaId = areaId;
+                recordToCreate.SeeffAreaId = property.SeeffAreaId = areaId;
                 return property;
             }
         }
@@ -957,7 +969,7 @@ namespace ProspectingProject
                 DataSet result = null;
                 try
                 {
-                    result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", searchInputValues.DeedTown, searchInputValues.ErfNo, ""
+                    result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", searchInputValues.DeedTown, searchInputValues.ErfNo, searchInputValues.Portion
                         , searchInputValues.SSName, searchInputValues.Unit, searchInputValues.Suburb, searchInputValues.StreetName, searchInputValues.StreetOrUnitNo, ""
                         , "", "", "", "", "", "", searchInputValues.EstateName, "", 0, 1000, "", "", 0, 0);
                     if (result.Tables.Count > 1 && result.Tables[1].Rows.Count > 0)
@@ -1163,8 +1175,6 @@ namespace ProspectingProject
                 double lng = Convert.ToDouble(dataPacket.LatLng.Lng);
                 try
                 {
-                    //result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", "", "", "", "", "", ""
-                    //    , dataPacket.StreetName, dataPacket.StreetOrUnitNo, "", "", "", "", "", "", "", "", "", 0, 1000, "", "", 0, 0);
                     result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", "", "", "", "", "", ""
                         , "", "", "", "", "", "", "", "", "", "", "", 0, 1000, "", "", lng, lat);
                 }
@@ -1251,7 +1261,10 @@ namespace ProspectingProject
                     SS_UnitTo = row["SS_UnitTo"] != null ? row["SS_UnitTo"].ToString() : string.Empty,
                     LightstoneIdExists = propertyPropIdExists,
                     ErfNo = row["ERF"] != null ? row["ERF"].ToString() : string.Empty,
-                    SS_ID = row["SS_ID"] != null ? row["SS_ID"].ToString() : string.Empty
+                    SS_ID = row["SS_ID"] != null ? row["SS_ID"].ToString() : string.Empty,
+                    FarmName = row["FARMNAME"] != null ? row["FARMNAME"].ToString() : string.Empty,
+                    Portion = row["PORTION"] != null ? row["PORTION"].ToString() : string.Empty,
+                    LightstoneSuburb = row["SUBURB"] != null ? row["SUBURB"].ToString() : string.Empty
                 };
 
                 var owner = GetOwnerFromDataRow(row);
@@ -1298,7 +1311,13 @@ namespace ProspectingProject
             {
                 string erfNo = ssUnitCollection.First().ErfNo;
                 string ss_id = ssUnitCollection.Key;
-                var unitsToInclude = matchesForSuburb.Where(m => m.SS_FH == "FH" && m.ErfNo == erfNo).ToList();
+                var unitsToInclude = matchesForSuburb.Where(m => {
+                    if (m.SS_FH == "FH" && m.ErfNo == erfNo)
+                        return true;
+                    if (m.SS_FH == "FRM" && m.ErfNo == erfNo && m.LatLng.Equals(ssUnitCollection.First().LatLng))
+                        return true;
+                    return false;
+                }).ToList();
                 string ssName = ssUnitCollection.First(u => !String.IsNullOrEmpty(u.SSName)).SSName;
                 unitsToInclude.ForEach(u => { u.SS_FH = "FS"; u.SS_ID = ss_id; u.SSName = ssName;});
                 var ssEntity = CreateProspectingEntityForSS(ssUnitCollection.Union(unitsToInclude).ToList(), ssName, seeffAreaId);
@@ -1306,6 +1325,8 @@ namespace ProspectingProject
                 prospectingEntities.Add(ssEntity);
                 ssMatches.AddRange(unitsToInclude);
             }
+
+            matchesForSuburb = matchesForSuburb.OrderBy(m => m.SS_FH).ThenBy(m => m.ErfNo).ThenBy(m => m.Portion).ToList();
 
             // Handle all other matches (normal FH etc)
             foreach (var match in matchesForSuburb.Except(ssMatches))
@@ -1319,6 +1340,19 @@ namespace ProspectingProject
                         Exists = match.LightstoneIdExists,
                         SeeffAreaId = seeffAreaId
                     });
+                } 
+           
+                // Farms
+                if (match.SS_FH == "FRM")
+                {
+                    prospectingEntities.Add(new NewProspectingEntity
+                                       {
+                                           IsSectionalScheme = false,
+                                           IsFarm = true,
+                                           PropertyMatches = new[] { match }.ToList(),
+                                           Exists = match.LightstoneIdExists,
+                                           SeeffAreaId = seeffAreaId
+                                       });
                 }
             }
 
@@ -1635,7 +1669,7 @@ namespace ProspectingProject
             }
             if (string.IsNullOrWhiteSpace(results.OwnerName) || results.ContactRows.Count == 0)
             {
-                results.ErrorMsg = "No contact information could be found for this property.";
+                results.ErrorMsg = "No contact information could be found for this individual.";
             }
 
             results.IdCkNo = idOrCK;
@@ -1712,7 +1746,12 @@ namespace ProspectingProject
                         ss_number = !string.IsNullOrEmpty(unit.SSNumber) ? unit.SSNumber : null,
                         unit = !string.IsNullOrEmpty(unit.Unit) ? unit.Unit : null,
                         ss_id = !string.IsNullOrEmpty(unit.SS_ID) ? unit.SS_ID : null,
-                        last_purch_price = !string.IsNullOrEmpty(unit.PurchPrice) ? decimal.Parse(unit.PurchPrice, CultureInfo.InvariantCulture) : (decimal?)null
+                        last_purch_price = !string.IsNullOrEmpty(unit.PurchPrice) ? decimal.Parse(unit.PurchPrice, CultureInfo.InvariantCulture) : (decimal?)null,
+
+                        // Farms
+                        farm_name = !string.IsNullOrEmpty(unit.FarmName) ? unit.FarmName : null,
+                        portion_no = !string.IsNullOrEmpty(unit.Portion) ? int.Parse(unit.Portion) : (int?)null,
+                        lightstone_suburb = !string.IsNullOrEmpty(unit.LightstoneSuburb) ? unit.LightstoneSuburb : null
                     };
 
                     prospecting.prospecting_properties.InsertOnSubmit(newPropRecord);
@@ -1743,18 +1782,13 @@ namespace ProspectingProject
 
         public static ProspectingProperty GetProspectingProperty(ProspectingPropertyId dataPacket)
         {
-            ProspectingProperty prop = new ProspectingProperty();
-            var prospectingDB =  new ProspectingDataContext();
-            int prospecting_property_id = (int)(dataPacket.PropertyId);
-
-            var propertiesOwned = from pp in prospectingDB.prospecting_properties
-                                  where pp.prospecting_property_id == prospecting_property_id
-                                  select pp;
-            foreach (var prospectable in propertiesOwned)
+            using (var prospectingDB = new ProspectingDataContext())
             {
-                prop =  CreateProspectingProperty(prospectingDB, prospectable, true, true);
+                int lightstoneId = dataPacket.LightstonePropertyId;
+                var propRecord = prospectingDB.prospecting_properties.First(pp => pp.lightstone_property_id == lightstoneId);
+
+                return CreateProspectingProperty(prospectingDB, propRecord, true, true);
             }
-            return prop;
         }
 
         public static void MarkAsProspected(int propertyId)
@@ -1817,14 +1851,14 @@ namespace ProspectingProject
                 }
 
                 // Create free-holds
-                var freeholdsInSearch = searchResults.Where(s => !s.IsSectionalScheme);
-                var freeholdsToCreate = freeholdsInSearch.Where(fh => prospectingEntityBundle.FHProperties.Any(h => h.PropertyMatches[0].LightstonePropId == fh.PropertyMatches[0].LightstonePropId));
-                foreach (var fh in freeholdsToCreate)
+                var targetUnits = searchResults.Where(s => !s.IsSectionalScheme);
+                var targetUnitsToCreate = targetUnits.Where(fh => prospectingEntityBundle.FHProperties.Any(h => h.PropertyMatches[0].LightstonePropId == fh.PropertyMatches[0].LightstonePropId));
+                foreach (var unit in targetUnitsToCreate)
                 {
-                    var fhResult = CreateNewProspectingRecord(fh);
-                    outputBundle.FhProperties.Add(fhResult);
-                    outputBundle.TargetProspect = fhResult;
-                    outputBundle.SeeffAreaId = fh.SeeffAreaId;
+                    var unitResult = CreateNewProspectingRecord(unit);
+                    outputBundle.FhProperties.Add(unitResult);
+                    outputBundle.TargetProspect = unitResult;
+                    outputBundle.SeeffAreaId = unit.SeeffAreaId;
                 }
             }
             catch (Exception e)

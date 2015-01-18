@@ -16,5 +16,8 @@ namespace ProspectingProject
         public string SS_ID { get; set; }
 
         public int? SeeffAreaId { get; set; }
+
+        // Farms
+        public bool IsFarm { get; set; }
     }
 }

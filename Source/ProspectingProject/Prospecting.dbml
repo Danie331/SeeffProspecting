@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="seeff_prospecting" Class="ProspectingDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=learnit-dev;Initial Catalog=seeff_prospecting;User ID=prospecting_user" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="seeff_prospectingConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=louise-pc;Initial Catalog=seeff_prospecting;User ID=prospecting_user" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="seeff_prospectingConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.prospecting_area" Member="prospecting_areas">
     <Type Name="prospecting_area">
       <Column Name="prospecting_area_id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -189,6 +189,17 @@
       <Association Name="prospecting_person_title_prospecting_contact_person" Member="prospecting_contact_persons" ThisKey="prospecting_person_title_id" OtherKey="person_title" Type="prospecting_contact_person" />
     </Type>
   </Table>
+  <Table Name="dbo.prospecting_trace_ps_enquiry" Member="prospecting_trace_ps_enquiries">
+    <Type Name="prospecting_trace_ps_enquiry">
+      <Column Name="prospecting_trace_ps_enquiry_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="prospecting_property_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="[user]" Member="user" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="date_of_enquiry" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="successful" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="id_number" Type="System.String" DbType="VarChar(13) NOT NULL" CanBeNull="false" />
+      <Association Name="prospecting_property_prospecting_trace_ps_enquiry" Member="prospecting_property" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_property" IsForeignKey="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.prospecting_property" Member="prospecting_properties">
     <Type Name="prospecting_property">
       <Column Name="prospecting_property_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -226,25 +237,16 @@
       <Column Name="ss_name" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
       <Column Name="ss_number" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="unit" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="ss_fh" Type="System.String" DbType="VarChar(2)" CanBeNull="true" />
+      <Column Name="ss_fh" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
       <Column Name="last_purch_price" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
       <Column Name="ss_id" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Column Name="ss_door_number" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="prospected" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="farm_name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="lightstone_suburb" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Association Name="prospecting_property_prospecting_company_property_relationship" Member="prospecting_company_property_relationships" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_company_property_relationship" />
       <Association Name="prospecting_property_prospecting_person_property_relationship" Member="prospecting_person_property_relationships" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_person_property_relationship" />
       <Association Name="prospecting_property_prospecting_trace_ps_enquiry" Member="prospecting_trace_ps_enquiries" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_trace_ps_enquiry" />
-    </Type>
-  </Table>
-  <Table Name="dbo.prospecting_trace_ps_enquiry" Member="prospecting_trace_ps_enquiries">
-    <Type Name="prospecting_trace_ps_enquiry">
-      <Column Name="prospecting_trace_ps_enquiry_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="prospecting_property_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="[user]" Member="user" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
-      <Column Name="date_of_enquiry" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="successful" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="id_number" Type="System.String" DbType="VarChar(13) NOT NULL" CanBeNull="false" />
-      <Association Name="prospecting_property_prospecting_trace_ps_enquiry" Member="prospecting_property" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_property" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.find_area_id" Method="find_area_id">

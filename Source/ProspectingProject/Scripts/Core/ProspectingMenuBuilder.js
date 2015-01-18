@@ -1,16 +1,18 @@
 ﻿var currentTracePSInfoPacket = null;
 var currentTracePSContactRows = null;
 
+// Overridden from MenuBuilder.js
+function fixElementHeightForIE(elementId) {
+    var maxHeight = $(document).height();
+    var newValue = 0.9 * maxHeight - 100;
+    $('#' + elementId).css('height', newValue + 'px');
+}
 
 function createProspectingMenu() {
     var menuItem = createMenuItem("Suburb Selection", "suburbselector", buildSuburbSelectionHtml());
     appendMenuItemContent(menuItem.MenuItemContent);
     fixElementHeightForIE('suburbsDiv');
     menuItems.push(menuItem);
-
-    //menuItem = createMenuItem("Owner Lookup", "ownersearch", buildOwnerLookup());
-    //appendMenuItemContent(menuItem.MenuItemContent);
-    //menuItems.push(menuItem);
 
     menuItem = createMenuItem("Contact Details", "contactdetails", buildContactDetailsDiv());
     appendMenuItemContent(menuItem.MenuItemContent);
@@ -42,13 +44,26 @@ function buildSearchMenu() {
                       <input type='text' name='complexNameInput' id='complexNameInput' style='width:100%;'><p />\
                       <label for='erfNoInput'>ERF Number</label><br />\
                       <input type='text' name='erfNoInput' id='erfNoInput' style='width:100%;'><p />\
+                      <label for='portionNoInput'>Portion Number</label><br />\
+                      <input type='text' name='portionNoInput' id='portionNoInputBox' style='width:100%;' disabled><p />\
                       <label for='estateNameInput'>Estate Name</label><br />\
                       <input type='text' name='estateNameInput' id='estateNameInput' style='width:100%;'><p />");
+
+    // Portion number only valid when erf no present
+    $('#contentarea').on('keyup', '#erfNoInput', function () {        
+        var str = $(this).val();
+        if (str.length > 0) {
+            $('#portionNoInputBox').removeAttr("disabled");
+        } else {
+            $('#portionNoInputBox').val('');
+            $('#portionNoInputBox').attr('disabled', 'disabled');            
+        }        
+    });
 
     var searchBtn = $("<input type='button' id='searchLightstoneMatchesBtn' value='Search..' style='float:right;' />");
     searchDiv.append(searchBtn);
     searchDiv.append("<p style='padding:10px;' />");
-    var searchResultsDiv = $("<div id='lightstoneResultsDiv' style='height:300px;overflow-y:auto;' />");
+    var searchResultsDiv = $("<div id='lightstoneResultsDiv' style='height:250px;overflow-y:auto;' />");
     searchDiv.append(searchResultsDiv);
 
     // Must try to infer province
@@ -92,7 +107,21 @@ function createLightstoneSearchResultsDiv(results) {
 
             resultsDiv.append(resultDiv);
         }
-        else {
+        else if (result.IsFarm) {
+            var frmPortion = result.PropertyMatches[0];
+            var frmId = 'FRM_' + frmPortion.LightstonePropId;
+            var resultDiv = $("<div id='" + frmId + "' style='border:1px solid;border-radius:3px;cursor:pointer;' />");
+            resultDiv.hover(function () { $(this).css('background-color', '#b0c4de'); }, function () { $(this).css('background-color', 'white'); });
+            resultDiv.click(function () {
+                showSearchedPropertyOnMap(result);
+            });
+
+            var resultContent = "Farm: " + frmPortion.FarmName + " [Erf no.: " + frmPortion.ErfNo + ", Portion: " + frmPortion.Portion + "]";
+            resultDiv.append(resultContent);
+
+            resultsDiv.append(resultDiv);
+        }
+        else { // FH
             var fhProperty = result.PropertyMatches[0];
             var fhId = "FH" + "_" + fhProperty.LightstonePropId;
             var resultDiv = $("<div id='" + fhId + "' style='border:1px solid;border-radius:3px;cursor:pointer;' />");
@@ -139,6 +168,19 @@ function buildSuburbsSelectionHeaderHtml() {
     tableHeader.append("<tr><td id='th_suburb'>Suburb</td><td id='th_withdetails'>Prospected Properties</td></tr>");
 
     return tableHeader[0].outerHTML;
+}
+
+// Overridden from MenuBuilder.js
+function buildSuburbSelectionHtml() {
+
+    var html = "<div id='suburbsInfoDiv' class='contentdiv'>"
+                + "<div id='suburbsSummaryDiv' style='font-size:12px;'>" + buildSuburbsSummaryContent() + "</div><p/>"
+                + buildSuburbsSelectionHeaderHtml()
+                + "<div id='suburbsDiv'>"
+                + buildSuburbsSelectionHtml()
+                + "</div></div>";
+
+    return html;
 }
 
 // Overridden from MenuBuilder.js

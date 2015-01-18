@@ -697,6 +697,7 @@
     <Content Include="Assets\contact.png" />
     <Content Include="Assets\email_icon.png" />
     <Content Include="Assets\fh_edit.png" />
+    <Content Include="Assets\frm_edit.png" />
     <Content Include="Assets\google.png" />
     <Content Include="Assets\lightstone.png" />
     <Content Include="Assets\make_primary_contact.png" />

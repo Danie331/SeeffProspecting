@@ -7,6 +7,6 @@ namespace ProspectingProject
 {
     public class ProspectingPropertyId
     {
-        public int PropertyId { get; set; }
+        public int LightstonePropertyId { get; set; }
     }
 }

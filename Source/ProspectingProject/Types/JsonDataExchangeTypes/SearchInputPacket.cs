@@ -35,6 +35,7 @@ namespace ProspectingProject
         public string Unit { get; set; }
 
         public string ErfNo { get; set; }
+        public string Portion { get; set; }
 
         public string EstateName { get; set; }
     }

@@ -103,6 +103,11 @@ function generateOutputFromLightstone(data) {
                 itemDescription = entity.SectionalScheme + ' (' + numUnits + ' units) : ' + buildAddress(entity.PropertyMatches[0], false);
                 entityAlreadyExists = entity.Exists;
             }
+            else if (entity.IsFarm) {
+                var frmPortion = entity.PropertyMatches[0];
+                itemDescription = "Farm: " + frmPortion.FarmName + " [Erf no.: " + frmPortion.ErfNo + ", Portion: " + frmPortion.Portion + "]";
+                entityAlreadyExists = frmPortion.LightstoneIdExists || (currentProperty && currentProperty.LightstonePropertyId == frmPortion.LightstonePropId);
+            }
             else {
                 // Must be an FH. FRM add here.
                 var freehold = entity.PropertyMatches[0]; 
@@ -409,7 +414,7 @@ function setCurrentMarker(suburb, property) {
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", PropertyId: property.ProspectingPropertyId }),
+        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", LightstonePropertyId: property.LightstonePropertyId }),
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
@@ -465,15 +470,13 @@ function markerClick() {
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", PropertyId: marker.ProspectingProperty.ProspectingPropertyId }),
+        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", LightstonePropertyId: marker.ProspectingProperty.LightstonePropertyId }),
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
                 if (data.ErrorMsg && data.ErrorMsg.length > 0) {
                     alert(data.ErrorMsg);
                 }
-                
-                marker.ProspectingProperty = null;
 
                 marker.ProspectingProperty = data;
                 currentMarker = marker;
@@ -1019,7 +1022,7 @@ function openSSUnitInfo(unit) {
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", PropertyId: unit.ProspectingPropertyId }),
+        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", LightstonePropertyId: unit.LightstonePropertyId }),
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
@@ -1027,9 +1030,7 @@ function openSSUnitInfo(unit) {
                     alert(data.ErrorMsg);
                 }
 
-                unit = null;
                 unit = data;
-
                 currentProperty = unit;
                 updateOwnerDetailsEditor();
                 updatePropertyNotesDiv();
@@ -1061,8 +1062,11 @@ function buildContentForInfoWindow(property) {
         var ss = buildInfoWindowContentForSS(property);
         div.append(ss);
     }
-    else { // FH
+    else { // FH and FRM
         var address = property.StreetOrUnitNo + " " + property.PropertyAddress;
+        if (property.SS_FH == 'FRM') {
+            address = 'Farm: ' + property.FarmName + " (" + property.LightstoneSuburb + ")";
+        }
         div.append(address);
 
         var contacts = "Number of contacts captured: " + property.Contacts.length;
@@ -1074,6 +1078,8 @@ function buildContentForInfoWindow(property) {
         }
         div.append("<br />");
         div.append("Erf No.: " + (property.ErfNo ? property.ErfNo : "n/a"));
+        div.append("<br />");
+        div.append("Portion: " + (property.Portion ? property.Portion : "n/a"));
         div.append("<br />");
         div.append("Last sale price: " + (property.LastPurchPrice ? formatRandValue(property.LastPurchPrice) : "n/a"));
 
@@ -1331,6 +1337,7 @@ function performLightstoneSearch() {
     var streetNo = $('#streetNoInput').val().trim();
     var complexName = $('#complexNameInput').val().trim();
     var erfNo = $('#erfNoInput').val().trim();
+    var portion = $('#portionNoInputBox').val().trim();
     var estateName = $('#estateNameInput').val().trim();
 
     try{
@@ -1347,6 +1354,7 @@ function performLightstoneSearch() {
                     StreetOrUnitNo: streetNo,
                     SSName: complexName,
                     ErfNo: erfNo,
+                    Portion: portion,
                     EstateName: estateName
                 }),
                 dataType: "json",

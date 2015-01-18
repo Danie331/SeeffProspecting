@@ -35,6 +35,11 @@ namespace ProspectingProject
         public string SS_FH { get; set; }
         public string SS_ID { get; set; }
 
+        // Farms
+        public string FarmName { get; set; }
+        public string Portion { get; set; }
+        public string LightstoneSuburb { get; set; }
+
         public bool LightstoneIdExists { get; set; }
 
         [JsonIgnore]

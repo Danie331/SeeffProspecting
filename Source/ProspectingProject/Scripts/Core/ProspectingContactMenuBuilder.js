@@ -596,7 +596,7 @@ function buildPropertyAddressEditor(property) {
         addressContent.append("<p />");
         addressContent.append(updateAddressBtn);
     }
-    else {
+    else if (property.SS_FH == 'SS' || property.SS_FH == 'FS') {
         addressContent.append("<label class='fieldAlignment'>Sectional scheme:</label><input type='text' id='ssNameTextBox' name='ssNameTextBox' size='40' value='" + property.SSName + "' readonly />");
         addressContent.append("<br />");
         addressContent.append("<label class='fieldAlignment'>Lightstone unit no.:</label><input type='text' id='unitNrTextBox' name='unitNrTextBox' size='5' value='" + property.Unit + "' readonly />");
@@ -606,6 +606,10 @@ function buildPropertyAddressEditor(property) {
         addressContent.append("<label class='fieldAlignment'>ERF no.:</label><input type='text' id='erfTextBox' name='erfTextBox' size='10' value='" + property.ErfNo + "' readonly/>");
         addressContent.append("<p />");
         addressContent.append(updateAddressBtn);
+    }
+    else {
+        // FRM
+        addressContent.append("Name of farm: " + property.FarmName + "<br />" + "Erf no.: " + property.ErfNo + "<br />" + "Portion: " + property.Portion);
     }
 
     updateAddressBtn.unbind('click').on('click', function () {
@@ -623,9 +627,23 @@ function buildPropertyAddressEditor(property) {
         }        
     });
 
-    var headerIcon = property.SS_FH == "FH" ? "fh_edit.png" : "ss_edit.png";
-    var headerHtml = "<label style='cursor:pointer;'>" + property.StreetOrUnitNo + " " + property.PropertyAddress + "</label>";
-    var editBtnMock = "<input style='cursor:pointer;' type='button' value='Edit..' style='display: inline-block;' />";
+    var headerIcon = '';
+    switch (property.SS_FH) {
+        case "FH": headerIcon = "fh_edit.png"; break;
+        case "SS":
+        case "FS":
+            headerIcon = "ss_edit.png"; break;
+        case "FRM": headerIcon = "frm_edit.png"; break;
+    }
+    var headerHtml = '';
+    var editBtnMock = '';
+    if (property.SS_FH != 'FRM' && !property.FarmName) {
+        headerHtml = "<label style='cursor:pointer;'>" + property.StreetOrUnitNo + " " + property.PropertyAddress + "</label>";
+        editBtnMock = "<input style='cursor:pointer;' type='button' value='Edit..' style='display: inline-block;' />";
+    }
+    else {
+        headerHtml = "<label style='cursor:pointer;'>Farm: " + property.FarmName + " (" + property.LightstoneSuburb + ")" + "</label>";
+    }
     headerHtml = headerHtml + "&nbsp;&nbsp;" + editBtnMock;
     var addressEditorSection = buildContentExpanderItem('propertyDetailsEditor', 'Assets/' + headerIcon, headerHtml, addressContent);
     return new ContentExpanderWidget('#contentarea', [addressEditorSection], "propertyEditorExpander");
@@ -640,14 +658,9 @@ function buildContactDashboard(contacts) {
     container.append(propertyDetailsEditorContent);
     container.append("<hr /><p />");
 
-    //container.append("Use the 'TPS' button to perform a search for contact details of the selected owner. ");
-    //container.append("The cost of such an enquiry, if successful, is 60c (excl. VAT).");
-    //container.append("<p />");
-
     var availableCreditLabel = $("<label id='availableCreditLabel' style='color: red;' />");
     container.append("Available Prospecting credit: ");
     container.append(availableCreditLabel);
-    //container.append(" Prospecting credits available.");
     availableCreditLabel.text(availableCredit);
 
     container.append("<br />");

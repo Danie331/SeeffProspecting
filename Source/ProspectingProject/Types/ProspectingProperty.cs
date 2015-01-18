@@ -41,6 +41,11 @@ namespace ProspectingProject
 
         public int? ErfNo { get; set; }
 
+        // Farms
+        public string FarmName { get; set; }
+        public string Portion { get; set; }
+        public string LightstoneSuburb { get; set; }
+
         public string CreateError { get; set; } // Holds information on whether there was a problem creating this prospect 
 
         public bool Equals(ProspectingProperty x, ProspectingProperty y)

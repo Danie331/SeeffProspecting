@@ -28,66 +28,66 @@ namespace ProspectingProject
 		
 		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
 		
-	#region Extensibility Method Definitions
-	partial void OnCreated();
-	partial void Insertprospecting_area(prospecting_area instance);
-	partial void Updateprospecting_area(prospecting_area instance);
-	partial void Deleteprospecting_area(prospecting_area instance);
-	partial void Insertprospecting_area_dialing_code(prospecting_area_dialing_code instance);
-	partial void Updateprospecting_area_dialing_code(prospecting_area_dialing_code instance);
-	partial void Deleteprospecting_area_dialing_code(prospecting_area_dialing_code instance);
-	partial void Insertprospecting_area_layer(prospecting_area_layer instance);
-	partial void Updateprospecting_area_layer(prospecting_area_layer instance);
-	partial void Deleteprospecting_area_layer(prospecting_area_layer instance);
-	partial void Insertprospecting_company_property_relationship(prospecting_company_property_relationship instance);
-	partial void Updateprospecting_company_property_relationship(prospecting_company_property_relationship instance);
-	partial void Deleteprospecting_company_property_relationship(prospecting_company_property_relationship instance);
-	partial void Insertprospecting_company_property_relationship_type(prospecting_company_property_relationship_type instance);
-	partial void Updateprospecting_company_property_relationship_type(prospecting_company_property_relationship_type instance);
-	partial void Deleteprospecting_company_property_relationship_type(prospecting_company_property_relationship_type instance);
-	partial void Insertprospecting_contact_company(prospecting_contact_company instance);
-	partial void Updateprospecting_contact_company(prospecting_contact_company instance);
-	partial void Deleteprospecting_contact_company(prospecting_contact_company instance);
-	partial void Insertprospecting_contact_detail(prospecting_contact_detail instance);
-	partial void Updateprospecting_contact_detail(prospecting_contact_detail instance);
-	partial void Deleteprospecting_contact_detail(prospecting_contact_detail instance);
-	partial void Insertprospecting_contact_detail_type(prospecting_contact_detail_type instance);
-	partial void Updateprospecting_contact_detail_type(prospecting_contact_detail_type instance);
-	partial void Deleteprospecting_contact_detail_type(prospecting_contact_detail_type instance);
-	partial void Insertprospecting_contact_person(prospecting_contact_person instance);
-	partial void Updateprospecting_contact_person(prospecting_contact_person instance);
-	partial void Deleteprospecting_contact_person(prospecting_contact_person instance);
-	partial void Insertprospecting_kml_area(prospecting_kml_area instance);
-	partial void Updateprospecting_kml_area(prospecting_kml_area instance);
-	partial void Deleteprospecting_kml_area(prospecting_kml_area instance);
-	partial void Insertprospecting_person_company_relationship(prospecting_person_company_relationship instance);
-	partial void Updateprospecting_person_company_relationship(prospecting_person_company_relationship instance);
-	partial void Deleteprospecting_person_company_relationship(prospecting_person_company_relationship instance);
-	partial void Insertprospecting_person_company_relationship_type(prospecting_person_company_relationship_type instance);
-	partial void Updateprospecting_person_company_relationship_type(prospecting_person_company_relationship_type instance);
-	partial void Deleteprospecting_person_company_relationship_type(prospecting_person_company_relationship_type instance);
-	partial void Insertprospecting_person_person_relationship(prospecting_person_person_relationship instance);
-	partial void Updateprospecting_person_person_relationship(prospecting_person_person_relationship instance);
-	partial void Deleteprospecting_person_person_relationship(prospecting_person_person_relationship instance);
-	partial void Insertprospecting_person_person_relationship_type(prospecting_person_person_relationship_type instance);
-	partial void Updateprospecting_person_person_relationship_type(prospecting_person_person_relationship_type instance);
-	partial void Deleteprospecting_person_person_relationship_type(prospecting_person_person_relationship_type instance);
-	partial void Insertprospecting_person_property_relationship(prospecting_person_property_relationship instance);
-	partial void Updateprospecting_person_property_relationship(prospecting_person_property_relationship instance);
-	partial void Deleteprospecting_person_property_relationship(prospecting_person_property_relationship instance);
-	partial void Insertprospecting_person_property_relationship_type(prospecting_person_property_relationship_type instance);
-	partial void Updateprospecting_person_property_relationship_type(prospecting_person_property_relationship_type instance);
-	partial void Deleteprospecting_person_property_relationship_type(prospecting_person_property_relationship_type instance);
-	partial void Insertprospecting_person_title(prospecting_person_title instance);
-	partial void Updateprospecting_person_title(prospecting_person_title instance);
-	partial void Deleteprospecting_person_title(prospecting_person_title instance);
-	partial void Insertprospecting_property(prospecting_property instance);
-	partial void Updateprospecting_property(prospecting_property instance);
-	partial void Deleteprospecting_property(prospecting_property instance);
-	partial void Insertprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
-	partial void Updateprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
-	partial void Deleteprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnCreated();
+    partial void Insertprospecting_area(prospecting_area instance);
+    partial void Updateprospecting_area(prospecting_area instance);
+    partial void Deleteprospecting_area(prospecting_area instance);
+    partial void Insertprospecting_area_dialing_code(prospecting_area_dialing_code instance);
+    partial void Updateprospecting_area_dialing_code(prospecting_area_dialing_code instance);
+    partial void Deleteprospecting_area_dialing_code(prospecting_area_dialing_code instance);
+    partial void Insertprospecting_area_layer(prospecting_area_layer instance);
+    partial void Updateprospecting_area_layer(prospecting_area_layer instance);
+    partial void Deleteprospecting_area_layer(prospecting_area_layer instance);
+    partial void Insertprospecting_company_property_relationship(prospecting_company_property_relationship instance);
+    partial void Updateprospecting_company_property_relationship(prospecting_company_property_relationship instance);
+    partial void Deleteprospecting_company_property_relationship(prospecting_company_property_relationship instance);
+    partial void Insertprospecting_company_property_relationship_type(prospecting_company_property_relationship_type instance);
+    partial void Updateprospecting_company_property_relationship_type(prospecting_company_property_relationship_type instance);
+    partial void Deleteprospecting_company_property_relationship_type(prospecting_company_property_relationship_type instance);
+    partial void Insertprospecting_contact_company(prospecting_contact_company instance);
+    partial void Updateprospecting_contact_company(prospecting_contact_company instance);
+    partial void Deleteprospecting_contact_company(prospecting_contact_company instance);
+    partial void Insertprospecting_contact_detail(prospecting_contact_detail instance);
+    partial void Updateprospecting_contact_detail(prospecting_contact_detail instance);
+    partial void Deleteprospecting_contact_detail(prospecting_contact_detail instance);
+    partial void Insertprospecting_contact_detail_type(prospecting_contact_detail_type instance);
+    partial void Updateprospecting_contact_detail_type(prospecting_contact_detail_type instance);
+    partial void Deleteprospecting_contact_detail_type(prospecting_contact_detail_type instance);
+    partial void Insertprospecting_contact_person(prospecting_contact_person instance);
+    partial void Updateprospecting_contact_person(prospecting_contact_person instance);
+    partial void Deleteprospecting_contact_person(prospecting_contact_person instance);
+    partial void Insertprospecting_kml_area(prospecting_kml_area instance);
+    partial void Updateprospecting_kml_area(prospecting_kml_area instance);
+    partial void Deleteprospecting_kml_area(prospecting_kml_area instance);
+    partial void Insertprospecting_person_company_relationship(prospecting_person_company_relationship instance);
+    partial void Updateprospecting_person_company_relationship(prospecting_person_company_relationship instance);
+    partial void Deleteprospecting_person_company_relationship(prospecting_person_company_relationship instance);
+    partial void Insertprospecting_person_company_relationship_type(prospecting_person_company_relationship_type instance);
+    partial void Updateprospecting_person_company_relationship_type(prospecting_person_company_relationship_type instance);
+    partial void Deleteprospecting_person_company_relationship_type(prospecting_person_company_relationship_type instance);
+    partial void Insertprospecting_person_person_relationship(prospecting_person_person_relationship instance);
+    partial void Updateprospecting_person_person_relationship(prospecting_person_person_relationship instance);
+    partial void Deleteprospecting_person_person_relationship(prospecting_person_person_relationship instance);
+    partial void Insertprospecting_person_person_relationship_type(prospecting_person_person_relationship_type instance);
+    partial void Updateprospecting_person_person_relationship_type(prospecting_person_person_relationship_type instance);
+    partial void Deleteprospecting_person_person_relationship_type(prospecting_person_person_relationship_type instance);
+    partial void Insertprospecting_person_property_relationship(prospecting_person_property_relationship instance);
+    partial void Updateprospecting_person_property_relationship(prospecting_person_property_relationship instance);
+    partial void Deleteprospecting_person_property_relationship(prospecting_person_property_relationship instance);
+    partial void Insertprospecting_person_property_relationship_type(prospecting_person_property_relationship_type instance);
+    partial void Updateprospecting_person_property_relationship_type(prospecting_person_property_relationship_type instance);
+    partial void Deleteprospecting_person_property_relationship_type(prospecting_person_property_relationship_type instance);
+    partial void Insertprospecting_person_title(prospecting_person_title instance);
+    partial void Updateprospecting_person_title(prospecting_person_title instance);
+    partial void Deleteprospecting_person_title(prospecting_person_title instance);
+    partial void Insertprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
+    partial void Updateprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
+    partial void Deleteprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
+    partial void Insertprospecting_property(prospecting_property instance);
+    partial void Updateprospecting_property(prospecting_property instance);
+    partial void Deleteprospecting_property(prospecting_property instance);
+    #endregion
 		
 		public ProspectingDataContext() : 
 				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["seeff_prospectingConnectionString1"].ConnectionString, mappingSource)
@@ -255,19 +255,19 @@ namespace ProspectingProject
 			}
 		}
 		
-		public System.Data.Linq.Table<prospecting_property> prospecting_properties
-		{
-			get
-			{
-				return this.GetTable<prospecting_property>();
-			}
-		}
-		
 		public System.Data.Linq.Table<prospecting_trace_ps_enquiry> prospecting_trace_ps_enquiries
 		{
 			get
 			{
 				return this.GetTable<prospecting_trace_ps_enquiry>();
+			}
+		}
+		
+		public System.Data.Linq.Table<prospecting_property> prospecting_properties
+		{
+			get
+			{
+				return this.GetTable<prospecting_property>();
 			}
 		}
 		
@@ -300,15 +300,15 @@ namespace ProspectingProject
 		
 		private EntitySet<prospecting_kml_area> _prospecting_kml_areas;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onprospecting_area_idChanging(int value);
-	partial void Onprospecting_area_idChanged();
-	partial void Onarea_nameChanging(string value);
-	partial void Onarea_nameChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onprospecting_area_idChanging(int value);
+    partial void Onprospecting_area_idChanged();
+    partial void Onarea_nameChanging(string value);
+    partial void Onarea_nameChanged();
+    #endregion
 		
 		public prospecting_area()
 		{
@@ -442,17 +442,17 @@ namespace ProspectingProject
 		
 		private EntitySet<prospecting_contact_detail> _prospecting_contact_details;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onprospecting_area_dialing_code_idChanging(int value);
-	partial void Onprospecting_area_dialing_code_idChanged();
-	partial void Ondialing_code_idChanging(int value);
-	partial void Ondialing_code_idChanged();
-	partial void Oncode_descChanging(string value);
-	partial void Oncode_descChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onprospecting_area_dialing_code_idChanging(int value);
+    partial void Onprospecting_area_dialing_code_idChanged();
+    partial void Ondialing_code_idChanging(int value);
+    partial void Ondialing_code_idChanged();
+    partial void Oncode_descChanging(string value);
+    partial void Oncode_descChanged();
+    #endregion
 		
 		public prospecting_area_dialing_code()
 		{
@@ -584,21 +584,21 @@ namespace ProspectingProject
 		
 		private EntityRef<prospecting_area> _prospecting_area;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onarea_layer_idChanging(int value);
-	partial void Onarea_layer_idChanged();
-	partial void Onprospecting_area_idChanging(int value);
-	partial void Onprospecting_area_idChanged();
-	partial void Onarea_typeChanging(string value);
-	partial void Onarea_typeChanged();
-	partial void Onprovince_idChanging(System.Nullable<int> value);
-	partial void Onprovince_idChanged();
-	partial void Onformatted_poly_coordsChanging(string value);
-	partial void Onformatted_poly_coordsChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onarea_layer_idChanging(int value);
+    partial void Onarea_layer_idChanged();
+    partial void Onprospecting_area_idChanging(int value);
+    partial void Onprospecting_area_idChanged();
+    partial void Onarea_typeChanging(string value);
+    partial void Onarea_typeChanged();
+    partial void Onprovince_idChanging(System.Nullable<int> value);
+    partial void Onprovince_idChanged();
+    partial void Onformatted_poly_coordsChanging(string value);
+    partial void Onformatted_poly_coordsChanged();
+    #endregion
 		
 		public prospecting_area_layer()
 		{
@@ -791,25 +791,25 @@ namespace ProspectingProject
 		
 		private EntityRef<prospecting_property> _prospecting_property;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Oncompany_property_relationship_idChanging(int value);
-	partial void Oncompany_property_relationship_idChanged();
-	partial void Oncontact_company_idChanging(int value);
-	partial void Oncontact_company_idChanged();
-	partial void Onprospecting_property_idChanging(int value);
-	partial void Onprospecting_property_idChanged();
-	partial void Onrelationship_to_propertyChanging(int value);
-	partial void Onrelationship_to_propertyChanged();
-	partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Oncreated_dateChanged();
-	partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Onupdated_dateChanged();
-	partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
-	partial void Oncreated_byChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Oncompany_property_relationship_idChanging(int value);
+    partial void Oncompany_property_relationship_idChanged();
+    partial void Oncontact_company_idChanging(int value);
+    partial void Oncontact_company_idChanged();
+    partial void Onprospecting_property_idChanging(int value);
+    partial void Onprospecting_property_idChanged();
+    partial void Onrelationship_to_propertyChanging(int value);
+    partial void Onrelationship_to_propertyChanged();
+    partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Oncreated_dateChanged();
+    partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_dateChanged();
+    partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
+    partial void Oncreated_byChanged();
+    #endregion
 		
 		public prospecting_company_property_relationship()
 		{
@@ -1107,15 +1107,15 @@ namespace ProspectingProject
 		
 		private EntitySet<prospecting_company_property_relationship> _prospecting_company_property_relationships;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Oncompany_property_relationship_type_idChanging(int value);
-	partial void Oncompany_property_relationship_type_idChanged();
-	partial void Onrelationship_descChanging(string value);
-	partial void Onrelationship_descChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Oncompany_property_relationship_type_idChanging(int value);
+    partial void Oncompany_property_relationship_type_idChanged();
+    partial void Onrelationship_descChanging(string value);
+    partial void Onrelationship_descChanged();
+    #endregion
 		
 		public prospecting_company_property_relationship_type()
 		{
@@ -1234,25 +1234,25 @@ namespace ProspectingProject
 		
 		private EntitySet<prospecting_person_company_relationship> _prospecting_person_company_relationships;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Oncontact_company_idChanging(int value);
-	partial void Oncontact_company_idChanged();
-	partial void Oncompany_nameChanging(string value);
-	partial void Oncompany_nameChanged();
-	partial void OnCK_numberChanging(string value);
-	partial void OnCK_numberChanged();
-	partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Oncreated_dateChanged();
-	partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Onupdated_dateChanged();
-	partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
-	partial void Oncreated_byChanged();
-	partial void Oncompany_typeChanging(string value);
-	partial void Oncompany_typeChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Oncontact_company_idChanging(int value);
+    partial void Oncontact_company_idChanged();
+    partial void Oncompany_nameChanging(string value);
+    partial void Oncompany_nameChanged();
+    partial void OnCK_numberChanging(string value);
+    partial void OnCK_numberChanged();
+    partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Oncreated_dateChanged();
+    partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_dateChanged();
+    partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
+    partial void Oncreated_byChanged();
+    partial void Oncompany_typeChanging(string value);
+    partial void Oncompany_typeChanged();
+    #endregion
 		
 		public prospecting_contact_company()
 		{
@@ -1498,25 +1498,25 @@ namespace ProspectingProject
 		
 		private EntityRef<prospecting_contact_person> _prospecting_contact_person;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onprospecting_contact_detail_idChanging(int value);
-	partial void Onprospecting_contact_detail_idChanged();
-	partial void Oncontact_detail_typeChanging(int value);
-	partial void Oncontact_detail_typeChanged();
-	partial void Oncontact_person_idChanging(int value);
-	partial void Oncontact_person_idChanged();
-	partial void Oncontact_detailChanging(string value);
-	partial void Oncontact_detailChanged();
-	partial void Onintl_dialing_code_idChanging(System.Nullable<int> value);
-	partial void Onintl_dialing_code_idChanged();
-	partial void Oneleventh_digitChanging(System.Nullable<int> value);
-	partial void Oneleventh_digitChanged();
-	partial void Onis_primary_contactChanging(bool value);
-	partial void Onis_primary_contactChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onprospecting_contact_detail_idChanging(int value);
+    partial void Onprospecting_contact_detail_idChanged();
+    partial void Oncontact_detail_typeChanging(int value);
+    partial void Oncontact_detail_typeChanged();
+    partial void Oncontact_person_idChanging(int value);
+    partial void Oncontact_person_idChanged();
+    partial void Oncontact_detailChanging(string value);
+    partial void Oncontact_detailChanged();
+    partial void Onintl_dialing_code_idChanging(System.Nullable<int> value);
+    partial void Onintl_dialing_code_idChanged();
+    partial void Oneleventh_digitChanging(System.Nullable<int> value);
+    partial void Oneleventh_digitChanged();
+    partial void Onis_primary_contactChanging(bool value);
+    partial void Onis_primary_contactChanged();
+    #endregion
 		
 		public prospecting_contact_detail()
 		{
@@ -1813,15 +1813,15 @@ namespace ProspectingProject
 		
 		private EntitySet<prospecting_contact_detail> _prospecting_contact_details;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Oncontact_detail_type_idChanging(int value);
-	partial void Oncontact_detail_type_idChanged();
-	partial void Ontype_descChanging(string value);
-	partial void Ontype_descChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Oncontact_detail_type_idChanging(int value);
+    partial void Oncontact_detail_type_idChanged();
+    partial void Ontype_descChanging(string value);
+    partial void Ontype_descChanged();
+    #endregion
 		
 		public prospecting_contact_detail_type()
 		{
@@ -1963,41 +1963,41 @@ namespace ProspectingProject
 		
 		private EntityRef<prospecting_person_title> _prospecting_person_title;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Oncontact_person_idChanging(int value);
-	partial void Oncontact_person_idChanged();
-	partial void Onperson_titleChanging(System.Nullable<int> value);
-	partial void Onperson_titleChanged();
-	partial void Onperson_genderChanging(string value);
-	partial void Onperson_genderChanged();
-	partial void Onid_numberChanging(string value);
-	partial void Onid_numberChanged();
-	partial void OnfirstnameChanging(string value);
-	partial void OnfirstnameChanged();
-	partial void OnsurnameChanging(string value);
-	partial void OnsurnameChanged();
-	partial void Onjob_titleChanging(string value);
-	partial void Onjob_titleChanged();
-	partial void Onpropcntrl_buyer_idChanging(System.Nullable<int> value);
-	partial void Onpropcntrl_buyer_idChanged();
-	partial void Onreferral_networkChanging(System.Nullable<bool> value);
-	partial void Onreferral_networkChanged();
-	partial void OninvestorChanging(System.Nullable<bool> value);
-	partial void OninvestorChanged();
-	partial void Onis_popi_restrictedChanging(bool value);
-	partial void Onis_popi_restrictedChanged();
-	partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Oncreated_dateChanged();
-	partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Onupdated_dateChanged();
-	partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
-	partial void Oncreated_byChanged();
-	partial void Oncomments_notesChanging(string value);
-	partial void Oncomments_notesChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Oncontact_person_idChanging(int value);
+    partial void Oncontact_person_idChanged();
+    partial void Onperson_titleChanging(System.Nullable<int> value);
+    partial void Onperson_titleChanged();
+    partial void Onperson_genderChanging(string value);
+    partial void Onperson_genderChanged();
+    partial void Onid_numberChanging(string value);
+    partial void Onid_numberChanged();
+    partial void OnfirstnameChanging(string value);
+    partial void OnfirstnameChanged();
+    partial void OnsurnameChanging(string value);
+    partial void OnsurnameChanged();
+    partial void Onjob_titleChanging(string value);
+    partial void Onjob_titleChanged();
+    partial void Onpropcntrl_buyer_idChanging(System.Nullable<int> value);
+    partial void Onpropcntrl_buyer_idChanged();
+    partial void Onreferral_networkChanging(System.Nullable<bool> value);
+    partial void Onreferral_networkChanged();
+    partial void OninvestorChanging(System.Nullable<bool> value);
+    partial void OninvestorChanged();
+    partial void Onis_popi_restrictedChanging(bool value);
+    partial void Onis_popi_restrictedChanged();
+    partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Oncreated_dateChanged();
+    partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_dateChanged();
+    partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
+    partial void Oncreated_byChanged();
+    partial void Oncomments_notesChanging(string value);
+    partial void Oncomments_notesChanged();
+    #endregion
 		
 		public prospecting_contact_person()
 		{
@@ -2514,23 +2514,23 @@ namespace ProspectingProject
 		
 		private EntityRef<prospecting_area> _prospecting_area;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onprospecting_kml_area_idChanging(int value);
-	partial void Onprospecting_kml_area_idChanged();
-	partial void Onprospecting_area_idChanging(int value);
-	partial void Onprospecting_area_idChanged();
-	partial void OnlatitudeChanging(decimal value);
-	partial void OnlatitudeChanged();
-	partial void OnlongitudeChanging(decimal value);
-	partial void OnlongitudeChanged();
-	partial void Onarea_typeChanging(char value);
-	partial void Onarea_typeChanged();
-	partial void OnseqChanging(int value);
-	partial void OnseqChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onprospecting_kml_area_idChanging(int value);
+    partial void Onprospecting_kml_area_idChanged();
+    partial void Onprospecting_area_idChanging(int value);
+    partial void Onprospecting_area_idChanged();
+    partial void OnlatitudeChanging(decimal value);
+    partial void OnlatitudeChanged();
+    partial void OnlongitudeChanging(decimal value);
+    partial void OnlongitudeChanged();
+    partial void Onarea_typeChanging(char value);
+    partial void Onarea_typeChanged();
+    partial void OnseqChanging(int value);
+    partial void OnseqChanged();
+    #endregion
 		
 		public prospecting_kml_area()
 		{
@@ -2743,25 +2743,25 @@ namespace ProspectingProject
 		
 		private EntityRef<prospecting_person_company_relationship_type> _prospecting_person_company_relationship_type;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onperson_company_relationship_idChanging(int value);
-	partial void Onperson_company_relationship_idChanged();
-	partial void Oncontact_person_idChanging(int value);
-	partial void Oncontact_person_idChanged();
-	partial void Oncontact_company_idChanging(System.Nullable<int> value);
-	partial void Oncontact_company_idChanged();
-	partial void Onrelationship_to_companyChanging(System.Nullable<int> value);
-	partial void Onrelationship_to_companyChanged();
-	partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Oncreated_dateChanged();
-	partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Onupdated_dateChanged();
-	partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
-	partial void Oncreated_byChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onperson_company_relationship_idChanging(int value);
+    partial void Onperson_company_relationship_idChanged();
+    partial void Oncontact_person_idChanging(int value);
+    partial void Oncontact_person_idChanged();
+    partial void Oncontact_company_idChanging(System.Nullable<int> value);
+    partial void Oncontact_company_idChanged();
+    partial void Onrelationship_to_companyChanging(System.Nullable<int> value);
+    partial void Onrelationship_to_companyChanged();
+    partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Oncreated_dateChanged();
+    partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_dateChanged();
+    partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
+    partial void Oncreated_byChanged();
+    #endregion
 		
 		public prospecting_person_company_relationship()
 		{
@@ -3059,15 +3059,15 @@ namespace ProspectingProject
 		
 		private EntitySet<prospecting_person_company_relationship> _prospecting_person_company_relationships;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onperson_company_relationship_type_idChanging(int value);
-	partial void Onperson_company_relationship_type_idChanged();
-	partial void Onrelationship_descChanging(string value);
-	partial void Onrelationship_descChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onperson_company_relationship_type_idChanging(int value);
+    partial void Onperson_company_relationship_type_idChanged();
+    partial void Onrelationship_descChanging(string value);
+    partial void Onrelationship_descChanged();
+    #endregion
 		
 		public prospecting_person_company_relationship_type()
 		{
@@ -3188,25 +3188,25 @@ namespace ProspectingProject
 		
 		private EntityRef<prospecting_person_person_relationship_type> _prospecting_person_person_relationship_type;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onperson_person_relationship_idChanging(int value);
-	partial void Onperson_person_relationship_idChanged();
-	partial void Oncontact_person_idChanging(int value);
-	partial void Oncontact_person_idChanged();
-	partial void Onrelated_contacted_person_idChanging(int value);
-	partial void Onrelated_contacted_person_idChanged();
-	partial void Onrelationship_to_personChanging(int value);
-	partial void Onrelationship_to_personChanged();
-	partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Oncreated_dateChanged();
-	partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Onupdated_dateChanged();
-	partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
-	partial void Oncreated_byChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onperson_person_relationship_idChanging(int value);
+    partial void Onperson_person_relationship_idChanged();
+    partial void Oncontact_person_idChanging(int value);
+    partial void Oncontact_person_idChanged();
+    partial void Onrelated_contacted_person_idChanging(int value);
+    partial void Onrelated_contacted_person_idChanged();
+    partial void Onrelationship_to_personChanging(int value);
+    partial void Onrelationship_to_personChanged();
+    partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Oncreated_dateChanged();
+    partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_dateChanged();
+    partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
+    partial void Oncreated_byChanged();
+    #endregion
 		
 		public prospecting_person_person_relationship()
 		{
@@ -3504,15 +3504,15 @@ namespace ProspectingProject
 		
 		private EntitySet<prospecting_person_person_relationship> _prospecting_person_person_relationships;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onperson_person_relationship_type_idChanging(int value);
-	partial void Onperson_person_relationship_type_idChanged();
-	partial void Onrelationship_descChanging(string value);
-	partial void Onrelationship_descChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onperson_person_relationship_type_idChanging(int value);
+    partial void Onperson_person_relationship_type_idChanged();
+    partial void Onrelationship_descChanging(string value);
+    partial void Onrelationship_descChanged();
+    #endregion
 		
 		public prospecting_person_person_relationship_type()
 		{
@@ -3637,29 +3637,29 @@ namespace ProspectingProject
 		
 		private EntityRef<prospecting_property> _prospecting_property;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onperson_property_relationship_idChanging(int value);
-	partial void Onperson_property_relationship_idChanged();
-	partial void Oncontact_person_idChanging(int value);
-	partial void Oncontact_person_idChanged();
-	partial void Onprospecting_property_idChanging(int value);
-	partial void Onprospecting_property_idChanged();
-	partial void Onrelationship_to_propertyChanging(int value);
-	partial void Onrelationship_to_propertyChanged();
-	partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Oncreated_dateChanged();
-	partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Onupdated_dateChanged();
-	partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
-	partial void Oncreated_byChanged();
-	partial void Onfrom_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Onfrom_dateChanged();
-	partial void Onto_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Onto_dateChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onperson_property_relationship_idChanging(int value);
+    partial void Onperson_property_relationship_idChanged();
+    partial void Oncontact_person_idChanging(int value);
+    partial void Oncontact_person_idChanged();
+    partial void Onprospecting_property_idChanging(int value);
+    partial void Onprospecting_property_idChanged();
+    partial void Onrelationship_to_propertyChanging(int value);
+    partial void Onrelationship_to_propertyChanged();
+    partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Oncreated_dateChanged();
+    partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_dateChanged();
+    partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
+    partial void Oncreated_byChanged();
+    partial void Onfrom_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onfrom_dateChanged();
+    partial void Onto_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onto_dateChanged();
+    #endregion
 		
 		public prospecting_person_property_relationship()
 		{
@@ -3997,15 +3997,15 @@ namespace ProspectingProject
 		
 		private EntitySet<prospecting_person_property_relationship> _prospecting_person_property_relationships;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onperson_property_relationship_type_idChanging(int value);
-	partial void Onperson_property_relationship_type_idChanged();
-	partial void Onrelationship_descChanging(string value);
-	partial void Onrelationship_descChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onperson_property_relationship_type_idChanging(int value);
+    partial void Onperson_property_relationship_type_idChanged();
+    partial void Onrelationship_descChanging(string value);
+    partial void Onrelationship_descChanged();
+    #endregion
 		
 		public prospecting_person_property_relationship_type()
 		{
@@ -4112,15 +4112,15 @@ namespace ProspectingProject
 		
 		private EntitySet<prospecting_contact_person> _prospecting_contact_persons;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onprospecting_person_title_idChanging(int value);
-	partial void Onprospecting_person_title_idChanged();
-	partial void Onperson_titleChanging(string value);
-	partial void Onperson_titleChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onprospecting_person_title_idChanging(int value);
+    partial void Onprospecting_person_title_idChanged();
+    partial void Onperson_titleChanging(string value);
+    partial void Onperson_titleChanged();
+    #endregion
 		
 		public prospecting_person_title()
 		{
@@ -4214,6 +4214,229 @@ namespace ProspectingProject
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.prospecting_trace_ps_enquiry")]
+	public partial class prospecting_trace_ps_enquiry : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _prospecting_trace_ps_enquiry_id;
+		
+		private int _prospecting_property_id;
+		
+		private System.Guid _user;
+		
+		private System.DateTime _date_of_enquiry;
+		
+		private bool _successful;
+		
+		private string _id_number;
+		
+		private EntityRef<prospecting_property> _prospecting_property;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onprospecting_trace_ps_enquiry_idChanging(int value);
+    partial void Onprospecting_trace_ps_enquiry_idChanged();
+    partial void Onprospecting_property_idChanging(int value);
+    partial void Onprospecting_property_idChanged();
+    partial void OnuserChanging(System.Guid value);
+    partial void OnuserChanged();
+    partial void Ondate_of_enquiryChanging(System.DateTime value);
+    partial void Ondate_of_enquiryChanged();
+    partial void OnsuccessfulChanging(bool value);
+    partial void OnsuccessfulChanged();
+    partial void Onid_numberChanging(string value);
+    partial void Onid_numberChanged();
+    #endregion
+		
+		public prospecting_trace_ps_enquiry()
+		{
+			this._prospecting_property = default(EntityRef<prospecting_property>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_trace_ps_enquiry_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int prospecting_trace_ps_enquiry_id
+		{
+			get
+			{
+				return this._prospecting_trace_ps_enquiry_id;
+			}
+			set
+			{
+				if ((this._prospecting_trace_ps_enquiry_id != value))
+				{
+					this.Onprospecting_trace_ps_enquiry_idChanging(value);
+					this.SendPropertyChanging();
+					this._prospecting_trace_ps_enquiry_id = value;
+					this.SendPropertyChanged("prospecting_trace_ps_enquiry_id");
+					this.Onprospecting_trace_ps_enquiry_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_property_id", DbType="Int NOT NULL")]
+		public int prospecting_property_id
+		{
+			get
+			{
+				return this._prospecting_property_id;
+			}
+			set
+			{
+				if ((this._prospecting_property_id != value))
+				{
+					if (this._prospecting_property.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onprospecting_property_idChanging(value);
+					this.SendPropertyChanging();
+					this._prospecting_property_id = value;
+					this.SendPropertyChanged("prospecting_property_id");
+					this.Onprospecting_property_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[user]", Storage="_user", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid user
+		{
+			get
+			{
+				return this._user;
+			}
+			set
+			{
+				if ((this._user != value))
+				{
+					this.OnuserChanging(value);
+					this.SendPropertyChanging();
+					this._user = value;
+					this.SendPropertyChanged("user");
+					this.OnuserChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date_of_enquiry", DbType="DateTime NOT NULL")]
+		public System.DateTime date_of_enquiry
+		{
+			get
+			{
+				return this._date_of_enquiry;
+			}
+			set
+			{
+				if ((this._date_of_enquiry != value))
+				{
+					this.Ondate_of_enquiryChanging(value);
+					this.SendPropertyChanging();
+					this._date_of_enquiry = value;
+					this.SendPropertyChanged("date_of_enquiry");
+					this.Ondate_of_enquiryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_successful", DbType="Bit NOT NULL")]
+		public bool successful
+		{
+			get
+			{
+				return this._successful;
+			}
+			set
+			{
+				if ((this._successful != value))
+				{
+					this.OnsuccessfulChanging(value);
+					this.SendPropertyChanging();
+					this._successful = value;
+					this.SendPropertyChanged("successful");
+					this.OnsuccessfulChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_number", DbType="VarChar(13) NOT NULL", CanBeNull=false)]
+		public string id_number
+		{
+			get
+			{
+				return this._id_number;
+			}
+			set
+			{
+				if ((this._id_number != value))
+				{
+					this.Onid_numberChanging(value);
+					this.SendPropertyChanging();
+					this._id_number = value;
+					this.SendPropertyChanged("id_number");
+					this.Onid_numberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_prospecting_trace_ps_enquiry", Storage="_prospecting_property", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id", IsForeignKey=true)]
+		public prospecting_property prospecting_property
+		{
+			get
+			{
+				return this._prospecting_property.Entity;
+			}
+			set
+			{
+				prospecting_property previousValue = this._prospecting_property.Entity;
+				if (((previousValue != value) 
+							|| (this._prospecting_property.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._prospecting_property.Entity = null;
+						previousValue.prospecting_trace_ps_enquiries.Remove(this);
+					}
+					this._prospecting_property.Entity = value;
+					if ((value != null))
+					{
+						value.prospecting_trace_ps_enquiries.Add(this);
+						this._prospecting_property_id = value.prospecting_property_id;
+					}
+					else
+					{
+						this._prospecting_property_id = default(int);
+					}
+					this.SendPropertyChanged("prospecting_property");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.prospecting_property")]
 	public partial class prospecting_property : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -4300,97 +4523,105 @@ namespace ProspectingProject
 		
 		private System.Nullable<bool> _prospected;
 		
+		private string _farm_name;
+		
+		private string _lightstone_suburb;
+		
 		private EntitySet<prospecting_company_property_relationship> _prospecting_company_property_relationships;
 		
 		private EntitySet<prospecting_person_property_relationship> _prospecting_person_property_relationships;
 		
 		private EntitySet<prospecting_trace_ps_enquiry> _prospecting_trace_ps_enquiries;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onprospecting_property_idChanging(int value);
-	partial void Onprospecting_property_idChanged();
-	partial void Onlicence_idChanging(System.Nullable<int> value);
-	partial void Onlicence_idChanged();
-	partial void Onseeff_area_idChanging(System.Nullable<int> value);
-	partial void Onseeff_area_idChanged();
-	partial void Ondevelopment_idChanging(System.Nullable<int> value);
-	partial void Ondevelopment_idChanged();
-	partial void Onlightstone_property_idChanging(System.Nullable<int> value);
-	partial void Onlightstone_property_idChanged();
-	partial void Onpropstats_idChanging(System.Nullable<int> value);
-	partial void Onpropstats_idChanged();
-	partial void Onwindeed_idChanging(System.Nullable<int> value);
-	partial void Onwindeed_idChanged();
-	partial void Onerf_noChanging(System.Nullable<int> value);
-	partial void Onerf_noChanged();
-	partial void Onportion_noChanging(System.Nullable<int> value);
-	partial void Onportion_noChanged();
-	partial void Onproperty_addressChanging(string value);
-	partial void Onproperty_addressChanged();
-	partial void Onstreet_or_unit_noChanging(string value);
-	partial void Onstreet_or_unit_noChanged();
-	partial void Onphoto_urlChanging(string value);
-	partial void Onphoto_urlChanged();
-	partial void OnlatitudeChanging(System.Nullable<decimal> value);
-	partial void OnlatitudeChanged();
-	partial void OnlongitudeChanging(System.Nullable<decimal> value);
-	partial void OnlongitudeChanged();
-	partial void OnageChanging(System.Nullable<System.DateTime> value);
-	partial void OnageChanged();
-	partial void Onerf_sizeChanging(System.Nullable<int> value);
-	partial void Onerf_sizeChanged();
-	partial void Ondwell_sizeChanging(System.Nullable<int> value);
-	partial void Ondwell_sizeChanged();
-	partial void OnconditionChanging(string value);
-	partial void OnconditionChanged();
-	partial void OnbedsChanging(System.Nullable<int> value);
-	partial void OnbedsChanged();
-	partial void OnbathsChanging(System.Nullable<int> value);
-	partial void OnbathsChanged();
-	partial void OnreceptionsChanging(System.Nullable<int> value);
-	partial void OnreceptionsChanged();
-	partial void OnstudiesChanging(System.Nullable<int> value);
-	partial void OnstudiesChanged();
-	partial void OngaragesChanging(System.Nullable<int> value);
-	partial void OngaragesChanged();
-	partial void Onparking_baysChanging(System.Nullable<int> value);
-	partial void Onparking_baysChanged();
-	partial void OnpoolChanging(System.Nullable<bool> value);
-	partial void OnpoolChanged();
-	partial void Onstaff_accomodationChanging(System.Nullable<bool> value);
-	partial void Onstaff_accomodationChanged();
-	partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Oncreated_dateChanged();
-	partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
-	partial void Onupdated_dateChanged();
-	partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
-	partial void Oncreated_byChanged();
-	partial void Onlightstone_id_or_ck_noChanging(string value);
-	partial void Onlightstone_id_or_ck_noChanged();
-	partial void Onlightstone_reg_dateChanging(string value);
-	partial void Onlightstone_reg_dateChanged();
-	partial void OncommentsChanging(string value);
-	partial void OncommentsChanged();
-	partial void Onss_nameChanging(string value);
-	partial void Onss_nameChanged();
-	partial void Onss_numberChanging(string value);
-	partial void Onss_numberChanged();
-	partial void OnunitChanging(string value);
-	partial void OnunitChanged();
-	partial void Onss_fhChanging(string value);
-	partial void Onss_fhChanged();
-	partial void Onlast_purch_priceChanging(System.Nullable<decimal> value);
-	partial void Onlast_purch_priceChanged();
-	partial void Onss_idChanging(string value);
-	partial void Onss_idChanged();
-	partial void Onss_door_numberChanging(string value);
-	partial void Onss_door_numberChanged();
-	partial void OnprospectedChanging(System.Nullable<bool> value);
-	partial void OnprospectedChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onprospecting_property_idChanging(int value);
+    partial void Onprospecting_property_idChanged();
+    partial void Onlicence_idChanging(System.Nullable<int> value);
+    partial void Onlicence_idChanged();
+    partial void Onseeff_area_idChanging(System.Nullable<int> value);
+    partial void Onseeff_area_idChanged();
+    partial void Ondevelopment_idChanging(System.Nullable<int> value);
+    partial void Ondevelopment_idChanged();
+    partial void Onlightstone_property_idChanging(System.Nullable<int> value);
+    partial void Onlightstone_property_idChanged();
+    partial void Onpropstats_idChanging(System.Nullable<int> value);
+    partial void Onpropstats_idChanged();
+    partial void Onwindeed_idChanging(System.Nullable<int> value);
+    partial void Onwindeed_idChanged();
+    partial void Onerf_noChanging(System.Nullable<int> value);
+    partial void Onerf_noChanged();
+    partial void Onportion_noChanging(System.Nullable<int> value);
+    partial void Onportion_noChanged();
+    partial void Onproperty_addressChanging(string value);
+    partial void Onproperty_addressChanged();
+    partial void Onstreet_or_unit_noChanging(string value);
+    partial void Onstreet_or_unit_noChanged();
+    partial void Onphoto_urlChanging(string value);
+    partial void Onphoto_urlChanged();
+    partial void OnlatitudeChanging(System.Nullable<decimal> value);
+    partial void OnlatitudeChanged();
+    partial void OnlongitudeChanging(System.Nullable<decimal> value);
+    partial void OnlongitudeChanged();
+    partial void OnageChanging(System.Nullable<System.DateTime> value);
+    partial void OnageChanged();
+    partial void Onerf_sizeChanging(System.Nullable<int> value);
+    partial void Onerf_sizeChanged();
+    partial void Ondwell_sizeChanging(System.Nullable<int> value);
+    partial void Ondwell_sizeChanged();
+    partial void OnconditionChanging(string value);
+    partial void OnconditionChanged();
+    partial void OnbedsChanging(System.Nullable<int> value);
+    partial void OnbedsChanged();
+    partial void OnbathsChanging(System.Nullable<int> value);
+    partial void OnbathsChanged();
+    partial void OnreceptionsChanging(System.Nullable<int> value);
+    partial void OnreceptionsChanged();
+    partial void OnstudiesChanging(System.Nullable<int> value);
+    partial void OnstudiesChanged();
+    partial void OngaragesChanging(System.Nullable<int> value);
+    partial void OngaragesChanged();
+    partial void Onparking_baysChanging(System.Nullable<int> value);
+    partial void Onparking_baysChanged();
+    partial void OnpoolChanging(System.Nullable<bool> value);
+    partial void OnpoolChanged();
+    partial void Onstaff_accomodationChanging(System.Nullable<bool> value);
+    partial void Onstaff_accomodationChanged();
+    partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Oncreated_dateChanged();
+    partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_dateChanged();
+    partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
+    partial void Oncreated_byChanged();
+    partial void Onlightstone_id_or_ck_noChanging(string value);
+    partial void Onlightstone_id_or_ck_noChanged();
+    partial void Onlightstone_reg_dateChanging(string value);
+    partial void Onlightstone_reg_dateChanged();
+    partial void OncommentsChanging(string value);
+    partial void OncommentsChanged();
+    partial void Onss_nameChanging(string value);
+    partial void Onss_nameChanged();
+    partial void Onss_numberChanging(string value);
+    partial void Onss_numberChanged();
+    partial void OnunitChanging(string value);
+    partial void OnunitChanged();
+    partial void Onss_fhChanging(string value);
+    partial void Onss_fhChanged();
+    partial void Onlast_purch_priceChanging(System.Nullable<decimal> value);
+    partial void Onlast_purch_priceChanged();
+    partial void Onss_idChanging(string value);
+    partial void Onss_idChanged();
+    partial void Onss_door_numberChanging(string value);
+    partial void Onss_door_numberChanged();
+    partial void OnprospectedChanging(System.Nullable<bool> value);
+    partial void OnprospectedChanged();
+    partial void Onfarm_nameChanging(string value);
+    partial void Onfarm_nameChanged();
+    partial void Onlightstone_suburbChanging(string value);
+    partial void Onlightstone_suburbChanged();
+    #endregion
 		
 		public prospecting_property()
 		{
@@ -5100,7 +5331,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_fh", DbType="VarChar(2)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_fh", DbType="VarChar(3)")]
 		public string ss_fh
 		{
 			get
@@ -5200,6 +5431,46 @@ namespace ProspectingProject
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_farm_name", DbType="NVarChar(255)")]
+		public string farm_name
+		{
+			get
+			{
+				return this._farm_name;
+			}
+			set
+			{
+				if ((this._farm_name != value))
+				{
+					this.Onfarm_nameChanging(value);
+					this.SendPropertyChanging();
+					this._farm_name = value;
+					this.SendPropertyChanged("farm_name");
+					this.Onfarm_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lightstone_suburb", DbType="NVarChar(255)")]
+		public string lightstone_suburb
+		{
+			get
+			{
+				return this._lightstone_suburb;
+			}
+			set
+			{
+				if ((this._lightstone_suburb != value))
+				{
+					this.Onlightstone_suburbChanging(value);
+					this.SendPropertyChanging();
+					this._lightstone_suburb = value;
+					this.SendPropertyChanged("lightstone_suburb");
+					this.Onlightstone_suburbChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_prospecting_company_property_relationship", Storage="_prospecting_company_property_relationships", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id")]
 		public EntitySet<prospecting_company_property_relationship> prospecting_company_property_relationships
 		{
@@ -5293,229 +5564,6 @@ namespace ProspectingProject
 		{
 			this.SendPropertyChanging();
 			entity.prospecting_property = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.prospecting_trace_ps_enquiry")]
-	public partial class prospecting_trace_ps_enquiry : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _prospecting_trace_ps_enquiry_id;
-		
-		private int _prospecting_property_id;
-		
-		private System.Guid _user;
-		
-		private System.DateTime _date_of_enquiry;
-		
-		private bool _successful;
-		
-		private string _id_number;
-		
-		private EntityRef<prospecting_property> _prospecting_property;
-		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void Onprospecting_trace_ps_enquiry_idChanging(int value);
-	partial void Onprospecting_trace_ps_enquiry_idChanged();
-	partial void Onprospecting_property_idChanging(int value);
-	partial void Onprospecting_property_idChanged();
-	partial void OnuserChanging(System.Guid value);
-	partial void OnuserChanged();
-	partial void Ondate_of_enquiryChanging(System.DateTime value);
-	partial void Ondate_of_enquiryChanged();
-	partial void OnsuccessfulChanging(bool value);
-	partial void OnsuccessfulChanged();
-	partial void Onid_numberChanging(string value);
-	partial void Onid_numberChanged();
-	#endregion
-		
-		public prospecting_trace_ps_enquiry()
-		{
-			this._prospecting_property = default(EntityRef<prospecting_property>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_trace_ps_enquiry_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int prospecting_trace_ps_enquiry_id
-		{
-			get
-			{
-				return this._prospecting_trace_ps_enquiry_id;
-			}
-			set
-			{
-				if ((this._prospecting_trace_ps_enquiry_id != value))
-				{
-					this.Onprospecting_trace_ps_enquiry_idChanging(value);
-					this.SendPropertyChanging();
-					this._prospecting_trace_ps_enquiry_id = value;
-					this.SendPropertyChanged("prospecting_trace_ps_enquiry_id");
-					this.Onprospecting_trace_ps_enquiry_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_property_id", DbType="Int NOT NULL")]
-		public int prospecting_property_id
-		{
-			get
-			{
-				return this._prospecting_property_id;
-			}
-			set
-			{
-				if ((this._prospecting_property_id != value))
-				{
-					if (this._prospecting_property.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onprospecting_property_idChanging(value);
-					this.SendPropertyChanging();
-					this._prospecting_property_id = value;
-					this.SendPropertyChanged("prospecting_property_id");
-					this.Onprospecting_property_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[user]", Storage="_user", DbType="UniqueIdentifier NOT NULL")]
-		public System.Guid user
-		{
-			get
-			{
-				return this._user;
-			}
-			set
-			{
-				if ((this._user != value))
-				{
-					this.OnuserChanging(value);
-					this.SendPropertyChanging();
-					this._user = value;
-					this.SendPropertyChanged("user");
-					this.OnuserChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date_of_enquiry", DbType="DateTime NOT NULL")]
-		public System.DateTime date_of_enquiry
-		{
-			get
-			{
-				return this._date_of_enquiry;
-			}
-			set
-			{
-				if ((this._date_of_enquiry != value))
-				{
-					this.Ondate_of_enquiryChanging(value);
-					this.SendPropertyChanging();
-					this._date_of_enquiry = value;
-					this.SendPropertyChanged("date_of_enquiry");
-					this.Ondate_of_enquiryChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_successful", DbType="Bit NOT NULL")]
-		public bool successful
-		{
-			get
-			{
-				return this._successful;
-			}
-			set
-			{
-				if ((this._successful != value))
-				{
-					this.OnsuccessfulChanging(value);
-					this.SendPropertyChanging();
-					this._successful = value;
-					this.SendPropertyChanged("successful");
-					this.OnsuccessfulChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_number", DbType="VarChar(13) NOT NULL", CanBeNull=false)]
-		public string id_number
-		{
-			get
-			{
-				return this._id_number;
-			}
-			set
-			{
-				if ((this._id_number != value))
-				{
-					this.Onid_numberChanging(value);
-					this.SendPropertyChanging();
-					this._id_number = value;
-					this.SendPropertyChanged("id_number");
-					this.Onid_numberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_prospecting_trace_ps_enquiry", Storage="_prospecting_property", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id", IsForeignKey=true)]
-		public prospecting_property prospecting_property
-		{
-			get
-			{
-				return this._prospecting_property.Entity;
-			}
-			set
-			{
-				prospecting_property previousValue = this._prospecting_property.Entity;
-				if (((previousValue != value) 
-							|| (this._prospecting_property.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._prospecting_property.Entity = null;
-						previousValue.prospecting_trace_ps_enquiries.Remove(this);
-					}
-					this._prospecting_property.Entity = value;
-					if ((value != null))
-					{
-						value.prospecting_trace_ps_enquiries.Add(this);
-						this._prospecting_property_id = value.prospecting_property_id;
-					}
-					else
-					{
-						this._prospecting_property_id = default(int);
-					}
-					this.SendPropertyChanged("prospecting_property");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
 		}
 	}
 }
