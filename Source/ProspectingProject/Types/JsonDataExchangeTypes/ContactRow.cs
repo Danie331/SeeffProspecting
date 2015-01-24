@@ -11,5 +11,6 @@ namespace ProspectingProject
         public string Phone { get; set; }
         public string Type { get; set; }
         public string Date { get; set; }
+        public string EmailAddress { get; set; }
     }
 }

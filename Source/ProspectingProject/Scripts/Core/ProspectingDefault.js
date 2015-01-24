@@ -261,11 +261,6 @@ function performPersonLookup(idNumber, checkForExisting) {
                             showSavedSplashDialog('Contact Saved!');       
                             addOrUpdateContactToCurrentProperty(data);
                             buildPersonContactMenu(currentProperty.Contacts, false);
-
-                            if (currentPersonContact.IsPOPIrestricted) {
-                                // If the popi option was selected, then delete all their contact info
-                                handleSaveContactDetails([], []);
-                            }
                         });
                     });
                 }
@@ -627,6 +622,12 @@ function addOrUpdateContactToCurrentProperty(newContact) {
     });
 
     if (contactExists.length == 0) {
+
+        if (newContact.IsPOPIrestricted) {
+            newContact.PhoneNumbers = [];
+            newContact.EmailAddresses = [];
+        }
+
         currentProperty.Contacts.push(newContact);
     } else {
         var contact = contactExists[0];
@@ -639,6 +640,11 @@ function addOrUpdateContactToCurrentProperty(newContact) {
         contact.EmailAddresses = newContact.EmailAddresses;
         contact.Comments = newContact.Comments;
         contact.IsPOPIrestricted = newContact.IsPOPIrestricted;
+
+        if (contact.IsPOPIrestricted) {
+            contact.PhoneNumbers = [];
+            contact.EmailAddresses = [];
+        }
     }
 }
 
@@ -938,6 +944,7 @@ function buildInfoWindowContentForSS(unit) {
         var color = getBGColourForRow(unit);
         var bgcolor = "background-color:" + color;
 
+        var unitPropId = 'Property ID: ' + unit.LightstonePropertyId;
         var unitRegDate = 'Reg date: ' + formatDate(unit.LightstoneRegDate);
         var unitLastSalePrice = 'Last sale price: ' + formatRandValue(unit.LastPurchPrice);
         var ssDoorNo = unit.SSDoorNo ? ' (Door no. ' + unit.SSDoorNo + ')' : '';
@@ -947,6 +954,7 @@ function buildInfoWindowContentForSS(unit) {
                           'ERF no.: ' + unit.ErfNo;
         } else {
             unitContent = "Unit " + unit.Unit + ssDoorNo + '<br />' +
+                           unitPropId + '<br />' +
                            unitRegDate + '<br />' +
                            unitLastSalePrice;
         }
@@ -1072,6 +1080,8 @@ function buildContentForInfoWindow(property) {
         var contacts = "Number of contacts captured: " + property.Contacts.length;
         div.append("<br />");
         div.append(contacts);
+        div.append("<br />");
+        div.append("Property ID: " + property.LightstonePropertyId);
         if (property.LightstoneRegDate) {
             div.append("<br />");
             div.append("Reg. date (from Lightstone): " + formatDate(property.LightstoneRegDate));
@@ -1328,7 +1338,16 @@ function showDialogExistingContactFound(contact, proceedAction) {
 function performLightstoneSearch() {
 
     function atLeastOneFieldPopulated() {
-        return deedTown.length > 0 || suburb.length > 0 || streetName.length > 0 || streetNo.length > 0 || complexName.length > 0 || erfNo.length > 0 || estateName.length > 0;
+        return deedTown.length > 0 ||
+            suburb.length > 0 ||
+            streetName.length > 0 ||
+            streetNo.length > 0 ||
+            complexName.length > 0 ||
+            erfNo.length > 0 ||
+            estateName.length > 0 ||
+            propertyID.length > 0 ||
+            ownerName.length > 0 ||
+            ownerIdNo.length > 0;
     }
 
     var deedTown = $('#deedTownInput').val().trim();
@@ -1339,6 +1358,9 @@ function performLightstoneSearch() {
     var erfNo = $('#erfNoInput').val().trim();
     var portion = $('#portionNoInputBox').val().trim();
     var estateName = $('#estateNameInput').val().trim();
+    var propertyID = $('#propertyIdInput').val().trim();
+    var ownerName = $('#ownerNameInput').val().trim();
+    var ownerIdNo = $('#ownerIDnoInput').val().trim();
 
     try{
         if (atLeastOneFieldPopulated()) {
@@ -1355,7 +1377,10 @@ function performLightstoneSearch() {
                     SSName: complexName,
                     ErfNo: erfNo,
                     Portion: portion,
-                    EstateName: estateName
+                    EstateName: estateName,
+                    PropertyID: propertyID,
+                    OwnerName: ownerName,
+                    OwnerIdNumber: ownerIdNo
                 }),
                 dataType: "json",
             }).done(function (results) {

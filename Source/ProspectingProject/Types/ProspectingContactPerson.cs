@@ -29,6 +29,19 @@ namespace ProspectingProject
         public bool IsPOPIrestricted { get; set; }
         public int? ContactCompanyId { get; set; }
 
+        // New fields from Dracore
+        public string DeceasedStatus { get; set; }
+        public string AgeGroup { get; set; }
+        public string Location { get; set; }
+        public string MaritalStatus { get; set; }
+        public string HomeOwnership { get; set; }
+        public string Directorship { get; set; }
+        public string PhysicalAddress { get; set; }
+        public string Employer { get; set; }
+        public string Occupation { get; set; }
+        public string BureauAdverseIndicator { get; set; }
+        public string Citizenship { get; set; }
+
         public IEnumerable<ProspectingContactDetail> PhoneNumbers { get; set; }
         public IEnumerable<ProspectingContactDetail> EmailAddresses { get; set; }
 

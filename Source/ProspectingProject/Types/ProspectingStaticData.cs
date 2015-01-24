@@ -55,6 +55,19 @@ namespace ProspectingProject
                                                                                                                                                             Comments = pcp.comments_notes,
                                                                                                                                                             IsPOPIrestricted = pcp.is_popi_restricted,
                                                                                                                                                             PropertiesOwned = loadOwnedProperties ? ProspectingDomain.LoadPropertiesOwnedByThisContact(pcp.id_number, ctx) : null,
+
+                                                                                                                                                            // Dracore fields
+                                                                                                                                                            AgeGroup = pcp.age_group,
+                                                                                                                                                            BureauAdverseIndicator = pcp.bureau_adverse_indicator,
+                                                                                                                                                            Citizenship = pcp.citizenship,
+                                                                                                                                                            DeceasedStatus = pcp.deceased_status,
+                                                                                                                                                            Directorship = pcp.directorship,
+                                                                                                                                                            Occupation = pcp.occupation,
+                                                                                                                                                            Employer = pcp.employer,
+                                                                                                                                                            PhysicalAddress = pcp.physical_address,
+                                                                                                                                                            HomeOwnership = pcp.home_ownership,
+                                                                                                                                                            MaritalStatus = pcp.marital_status,
+                                                                                                                                                            Location = pcp.location,
                                                                                                                                                         }));
             PropertyCompanyContactsRetriever = CompiledQuery.Compile((ProspectingDataContext ctx, prospecting_property property, bool loadOwnedProperties) => (from pcpr in ctx.prospecting_company_property_relationships
                                                                                                                                                                join ppcr in ctx.prospecting_person_company_relationships on pcpr.contact_company_id equals ppcr.contact_company_id
@@ -74,6 +87,19 @@ namespace ProspectingProject
                                                 Comments = pcp.comments_notes,
                                                 IsPOPIrestricted = pcp.is_popi_restricted,
                                                 PropertiesOwned = loadOwnedProperties ? ProspectingDomain.LoadPropertiesOwnedByThisContact(pcp.id_number, ctx) : null,
+
+                                                // Dracore fields
+                                                AgeGroup = pcp.age_group,
+                                                BureauAdverseIndicator = pcp.bureau_adverse_indicator,
+                                                Citizenship = pcp.citizenship,
+                                                DeceasedStatus = pcp.deceased_status,
+                                                Directorship = pcp.directorship,
+                                                Occupation = pcp.occupation,
+                                                Employer = pcp.employer,
+                                                PhysicalAddress = pcp.physical_address,
+                                                HomeOwnership = pcp.home_ownership,
+                                                MaritalStatus = pcp.marital_status,
+                                                Location = pcp.location
                                             }));
 
             PropertyContactPhoneNumberRetriever = CompiledQuery.Compile((ProspectingDataContext ctx, ProspectingContactPerson cp) => (from det in ctx.prospecting_contact_details

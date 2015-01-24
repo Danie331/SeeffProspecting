@@ -38,5 +38,9 @@ namespace ProspectingProject
         public string Portion { get; set; }
 
         public string EstateName { get; set; }
+        public string PropertyID { get; set; }
+
+        public string OwnerName { get; set; }
+        public string OwnerIdNumber { get; set; }
     }
 }

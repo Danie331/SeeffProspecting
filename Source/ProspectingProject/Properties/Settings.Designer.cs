@@ -32,5 +32,25 @@ namespace ProspectingProject.Properties {
                 return ((string)(this["ProspectingProject_lightstoneSeeffService_Seeff"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://test.govault.co.za/ws/ConsumerQuery.asmx")]
+        public string Dracore_test {
+            get {
+                return ((string)(this["Dracore_test"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://www.govault.co.za/ws/ConsumerQuery.asmx")]
+        public string Dracore_live {
+            get {
+                return ((string)(this["Dracore_live"]));
+            }
+        }
     }
 }

@@ -68,6 +68,18 @@ text-align:left;
     text-align: left; 
 }
 
+.fieldAlignmentShortWidth {
+    display: inline-block;
+    width: 110px;
+    text-align: left; 
+}
+
+.fieldAlignRight {
+    display: inline-block;
+    width: 60%;
+    text-align: right; 
+}
+
 .login-div {
     width: 600px;
     margin: 0 auto;

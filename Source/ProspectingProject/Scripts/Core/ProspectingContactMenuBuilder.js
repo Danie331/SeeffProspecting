@@ -42,20 +42,49 @@ function getProspectingPhoneTypeId(itemTypeText) {
 }
 
 function openAndPopulateNewContactPerson(infoPacket) {
-    var contactNos = [];
+    var contactNos = [], contactEmails = [];
     $.each(infoPacket.ContactRows, function (idx, item) {
-        var phoneNumberTypeId = getProspectingPhoneTypeId(item.Type);
-        var contactRow = newContactItem(generateUniqueID(), phoneNumberTypeId, item.Phone, false, true, 'PHONE', getSADialingCodeId(), null);
-        contactNos.push(contactRow);
+        switch (item.Type) {
+            case "cell": case "home": case "work":
+                var phoneNumberTypeId = getProspectingPhoneTypeId(item.Type);
+                var contactRow = newContactItem(generateUniqueID(), phoneNumberTypeId, item.Phone, false, true, 'PHONE', getSADialingCodeId(), null);
+                contactNos.push(contactRow);
+                break;
+            case "email":
+                var emailType = $.grep(prospectingContext.ContactEmailTypes, function (i) { return i.Value == 'private email'; })[0].Key;
+                var emailRow = newContactItem(generateUniqueID(), emailType, item.EmailAddress, false, true, 'EMAIL', null, null);
+                contactEmails.push(emailRow);
+                break;
+        }
     });
 
-    var ownerRelationshipType = $.grep(prospectingContext.PersonPropertyRelationshipTypes, function(val) {
+    var ownerRelationshipType = $.grep(prospectingContext.PersonPropertyRelationshipTypes, function (val) {
         return val.Value == 'Owner';
     })[0];
 
     infoPacket.OwnerName = toTitleCase(infoPacket.OwnerName);
     infoPacket.OwnerSurname = toTitleCase(infoPacket.OwnerSurname);
-    var newContact = newPersonContact(infoPacket.OwnerName, infoPacket.OwnerSurname, null, infoPacket.IdCkNo, ownerRelationshipType.Key, contactNos, null, false, infoPacket.OwnerGender);
+    var newContact = newPersonContact(infoPacket.OwnerName,
+        infoPacket.OwnerSurname,
+        infoPacket.Title,
+        infoPacket.IdCkNo,
+        ownerRelationshipType.Key,
+        contactNos, contactEmails,
+        false,
+        infoPacket.OwnerGender,
+        null,
+        null,
+        infoPacket.DeceasedStatus,
+        infoPacket.AgeGroup,
+        infoPacket.Location,
+        infoPacket.MaritalStatus,
+        infoPacket.HomeOwnership,
+        infoPacket.Directorship,
+        infoPacket.PhysicalAddress,
+        infoPacket.Employer,
+        infoPacket.Occupation,
+        infoPacket.BureauAdverseIndicator,
+        infoPacket.Citizenship);
     return newContact;
 }
 
@@ -69,10 +98,19 @@ function buildExpanderWidget(contact) {
 }
 
 function buildGeneralInfoHtml(contact) {
+
     $('#contactPersonHeaderDiv').remove();
     var html = $("<div id='contactPersonHeaderDiv' />");
     html.append("<label class='fieldAlignment'>Gender: </label>");
     html.append(buildPersonGenderCombo());
+
+    // POPI opt-out box
+    var checked = '';
+    if (contact && contact.IsPOPIrestricted) {
+        checked = 'checked';
+    }
+    html.append("<label class='fieldAlignRight' style='cursor:pointer;' title='Select this option to indicate that this person is no longer to be contacted'>POPI opt-out<input type='checkbox' name='popiCheckbox' id='popiCheckbox' style='cursor:pointer;' " + checked + "  /></label>");
+
     html.append("<br />");
     html.append("<label class='fieldAlignment'>Title: </label>");
     html.append(buildPersonTitleCombo());
@@ -93,26 +131,11 @@ function buildGeneralInfoHtml(contact) {
     var companySelect = buildCompanySelectorCombo();
     html.append(companySelect);
 
-    // TODO: POPI
-    //var popiBox = $("<label><input type='checkbox' id='popiCheckbox' />POPI restricted</label>");   
-    //popiBox.find('#popiCheckbox').click(handlePOPIclick);
-    //html.append("<br />");
-    //html.append(popiBox);
-
-    // TODO:
-    //html.append("<br />");
-    //html.append("<label class='fieldAlignment'>This contact is related to: </label>");
-    //var relationshipsToContact = buildRelationshipsToContact(contact.LinkedContacts);
-    //html.append(relationshipsToContact);
-
     html.append("<p />");
     var saveBtn = $("<input type='button' id='personGeneralSaveBtn' value='Save..' />");
     html.append(saveBtn);
     saveBtn.click(function () { handleSaveContactPerson(); });
 
-    //if (!contact) {
-    //    saveBtn.css('display', 'none');
-    //}
     if (contact) {
         // If this contact has any contact details, hide the save button on the person header section
         if ((contact.PhoneNumbers && contact.PhoneNumbers.length > 0) || (contact.EmailAddresses && contact.EmailAddresses.length > 0)) {
@@ -138,6 +161,13 @@ function buildGeneralInfoHtml(contact) {
         }
         html.find('#genderCheckbox').val(contact.Gender);
         //popiBox.find('#popiCheckbox').prop('checked', contact.IsPOPIrestricted);
+
+        // Determine if POPI flag is set for this contact, render info accordingly.
+        if (contact.IsPOPIrestricted) {
+            html.prepend("<label style='color:red;font-size:14px;'>This contact has opted out and may not be modified.</label><br />");
+            html.find('input').attr('disabled', true);
+            html.find('select').prop('disabled', true);
+        }
     }
 
     return html;
@@ -263,8 +293,14 @@ function handleSaveContactDetails(phoneNumbers, emailAddresses) {
     handleSaveContactPerson(function () {
 
         if (currentPersonContact) {
-            currentPersonContact.PhoneNumbers = phoneNumbers;
-            currentPersonContact.EmailAddresses = emailAddresses;
+
+            if (!currentPersonContact.IsPOPIrestricted) {
+                currentPersonContact.PhoneNumbers = phoneNumbers;
+                currentPersonContact.EmailAddresses = emailAddresses;
+            } else {
+                currentPersonContact.PhoneNumbers = [];
+                currentPersonContact.EmailAddresses = [];
+            }
             if (!validateCorrectnessOfInputs(phoneNumbers, emailAddresses)) {
                 alert('Some of the contact details you have specified are not valid.');
                 return;
@@ -280,19 +316,6 @@ function handleSaveContactDetails(phoneNumbers, emailAddresses) {
                         contactDetailsWidget.resetItemArrays(currentPersonContact.PhoneNumbers, currentPersonContact.EmailAddresses);
                         contactDetailsWidget.rebuildDivs(!currentPersonContact.IsPOPIrestricted);
                         addOrUpdateContactToCurrentProperty(data);
-                        //currentProperty.HasContactsWithDetails = hasAnyContactDetails(currentProperty);
-
-                        // Icon must change as soon as we add contact details for the property:
-
-                        //TODO -- Not critical 
-                        //currentProperty.Marker.setIcon(getIconForMarker(currentProperty.Marker)); 
-                        //updateSuburbSelectionStats(currentProperty.Marker.Suburb);
-
-                        //alert('Contact details saved successfully!');
-                        //This function is no longer needed as the details are fetched from the server 
-                        //when the user clicks on the property in a suburb. 2014-10-08
-                        //updateSuburbContactsList();
-                        //showSavedSplashDialog('Details Saved!');
                     });
                 } else {
                     alert('A contact with these details already exists. ');
@@ -339,9 +362,27 @@ function handleSaveContactPerson(saveDetailsFunction) {
         return;
     }
 
+    // Handle the POPI checkbox
+    var popiOptionSelected = $('#popiCheckbox').is(':checked');
+    if (popiOptionSelected) {
+        var message = 'Warning: By selecting the POPI option this contact\'s details will be removed from the system and the record will become read-only.' + 
+                      ' Only use this option if this person no longer wishes to be contacted through this system.' + 
+                      '\n\nClick \'OK\' to continue with this action, \'Cancel\' to abort.';
+        if (!confirm(message)) {
+            return;
+        }
+    }
+
     if (currentPersonContact) {
-        currentPersonContact.PhoneNumbers = contactDetailsWidget.getPhoneNumbers();
-        currentPersonContact.EmailAddresses = contactDetailsWidget.getEmailAddresses();
+        currentPersonContact.IsPOPIrestricted = popiOptionSelected;
+        if (!popiOptionSelected) {
+            currentPersonContact.PhoneNumbers = contactDetailsWidget.getPhoneNumbers();
+            currentPersonContact.EmailAddresses = contactDetailsWidget.getEmailAddresses();
+        }
+        else {
+            currentPersonContact.PhoneNumbers = [];
+            currentPersonContact.EmailAddresses = [];
+        }
     }
 
     savePersonInfo(function (existingContact) {
@@ -370,6 +411,7 @@ function handleSaveContactPerson(saveDetailsFunction) {
                 currentPersonContact.Surname = surname;
                 currentPersonContact.Fullname = firstname + ' ' + surname;
                 currentPersonContact.IdNumber = idNo;
+                currentPersonContact.IsPOPIrestricted = popiOptionSelected;
 
                 if (propertyRelationship) {
                     // Search for an existing relationship with property, if found modify its value
@@ -392,16 +434,15 @@ function handleSaveContactPerson(saveDetailsFunction) {
                     currentPersonContact.ContactCompanyId = contactCompanyId;
                     currentPersonContact.PersonPropertyRelationships = [];
                 }
-                currentPersonContact.IsPOPIrestricted = false;//$('#popiCheckbox').is(":checked");
                 currentPersonContact.Gender = gender;                
             }
             else {
                 // Must be a new contact
                 if (propertyRelationship) {
-                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, propertyRelationship, null, null, /*$('#popiCheckbox').is(":checked")*/false, gender, null, null);
+                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, propertyRelationship, null, null, popiOptionSelected, gender, null, null);
                 }
                 else if (companyRelationship) {
-                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, null, null, null, /*$('#popiCheckbox').is(":checked")*/false, gender, companyRelationship, contactCompanyId);
+                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, null, null, null, popiOptionSelected, gender, companyRelationship, contactCompanyId);
                 }
             }
             saveContact(currentPersonContact, currentProperty, function (data) {
@@ -413,15 +454,6 @@ function handleSaveContactPerson(saveDetailsFunction) {
 
                 currentPersonContact.PhoneNumbers = data.PhoneNumbers;
                 currentPersonContact.EmailAddresses = data.EmailAddresses;
-
-                if (currentPersonContact.IsPOPIrestricted) {
-                    // If the popi option was selected, then delete all their contact info
-                    handleSaveContactDetails([], []);
-                }
-
-                //This function is no longer needed as the details are fetched from the server 
-                //when the user clicks on the property in a suburb. 2014-10-08
-                //updateSuburbContactsList();
 
                 if (saveDetailsFunction) {
                     saveDetailsFunction();
@@ -439,41 +471,12 @@ function handleSaveContactPerson(saveDetailsFunction) {
                     showSavedSplashDialog('Contact Saved!');
                     addOrUpdateContactToCurrentProperty(data);
                     buildPersonContactMenu(currentProperty.Contacts, false);
-
-                    if (currentPersonContact.IsPOPIrestricted) {
-                        // If the popi option was selected, then delete all their contact info
-                        handleSaveContactDetails([], []);
-                    }
-
-                    //This function is no longer needed as the details are fetched from the server 
-                    //when the user clicks on the property in a suburb. 2014-10-08
-                    //updateSuburbContactsList();
-
-                    //if (saveDetailsFunction) {
-                    //    saveDetailsFunction();
-                    //}
                     setCurrentMarker(currentSuburb, currentProperty);
                 });
             });
         }
     });
 }
-
-//This function is no longer needed as the details are fetched from the server 
-//when the user clicks on the property in a suburb. 2014-10-08
-//function updateSuburbContactsList() {
-//    currentSuburb.AllContacts = [];
-//    var allPropsInSuburb = currentSuburb.ProspectingProperties;
-//    if (allPropsInSuburb && allPropsInSuburb.length > 0) {
-//        for (var s = 0; s < allPropsInSuburb.length; s++) {
-//            var property = allPropsInSuburb[s];
-//            for (var c = 0; c < property.Contacts.length; c++) {
-//                var contact = property.Contacts[c];
-//                currentSuburb.AllContacts.push(contact);
-//            }
-//        }
-//    }
-//}
 
 function validateCorrectnessOfPersonInfo() {
     var title = $('#personTitle').children(":selected").attr('value');
@@ -665,13 +668,13 @@ function buildContactDashboard(contacts) {
 
     container.append("<br />");
     container.append("ID number of contact person: <input type='text' id='knownIdTextbox' style='padding:2px;' />&nbsp;");
-    var searchKnownIdBtn = $("<input type='button' id='knownIdSearch' value='Lookup' style='display:inline-block;vertical-align:bottom;' />");
+    var searchKnownIdBtn = $("<input type='button' id='knownIdSearch' value='Contact Lookup' style='display:inline-block;vertical-align:bottom;cursor:pointer;' />");
     container.append(searchKnownIdBtn);
     var tpsInfo = $("<img src='Assets/tps_info.png' style='cursor:pointer;vertical-align:bottom;padding-left:10px;' />");
     container.append(tpsInfo);
 
     tpsInfo.on('mouseover', function () {
-        tooltip.pop(this, "Performs a search for contact details of the selected owner. The cost of such an enquiry, if successful, is 60c (excl. VAT).", { sticky: true, maxWidth: 500 });
+        tooltip.pop(this, "Searches for contact details for the specified ID number. The cost of such an enquiry, if successful, is R 1.00 (excl. VAT).", { sticky: true, maxWidth: 500 });
     });
     tpsInfo.on('mouseout', function () {
         tooltip.hide();
@@ -761,18 +764,13 @@ function buildContactDashboard(contacts) {
 
         var personLookupBtnId = 'lookup_btn_' + contact.IdNumber;
         var lookupTd = $('<td />');
-        var performLookupBtn = $("<input type='button' id='" + personLookupBtnId + "' value='TPS' title='Performs a search for contact details of the selected owner. The cost of such an enquiry, if successful, is 60c (excl. VAT).' style='cursor:pointer;' />");
+        var disabled = contact.IsPOPIrestricted ? 'disabled' : '';
+        var performLookupBtn = $("<input type='button' id='" + personLookupBtnId + "' value='Contact Lookup' title='Searches for contact details for the selected owner. The cost of such an enquiry, if successful, is R 1.00 (excl. VAT).' style='cursor:pointer;' " + disabled + "/>");
         performLookupBtn.click(function (e) {
             e.stopPropagation();
             performPersonLookup(contact.IdNumber, false);
         });
         lookupTd.append(performLookupBtn);
-        //performLookupBtn.on('mouseover', function () {
-        //    tooltip.pop(performLookupBtn, "Performs a search for contact details of the selected owner. The cost of such an enquiry, if successful, is 60c (excl. VAT).", { sticky: true, maxWidth: 500 });
-        //});
-        //performLookupBtn.on('mouseout', function () {
-        //    tooltip.hide();
-        //});
 
         tableRow.append(lookupTd);
 
@@ -808,20 +806,50 @@ function populateContactLookupInfo(infoPacket) {
         currentPersonContact = contactPerson;
     }
 
-    var contactNos = [];
+    // We cannot determine person's title from Lightstone, but we can from Dracore - try set title here
+    if (!currentPersonContact.Title) {
+        currentPersonContact.Title = infoPacket.Title;
+    }
+    // Populate the object with the rest of the dracore fields
+    currentPersonContact.DeceasedStatus = infoPacket.DeceasedStatus;
+    currentPersonContact.AgeGroup = infoPacket.AgeGroup;
+    currentPersonContact.Location = infoPacket.Location;
+    currentPersonContact.MaritalStatus = infoPacket.MaritalStatus;
+    currentPersonContact.HomeOwnership = infoPacket.HomeOwnership;
+    currentPersonContact.Directorship = infoPacket.Directorship;
+    currentPersonContact.PhysicalAddress = infoPacket.PhysicalAddress;
+    currentPersonContact.Employer = infoPacket.Employer;
+    currentPersonContact.Occupation = infoPacket.Occupation;
+    currentPersonContact.BureauAdverseIndicator = infoPacket.BureauAdverseIndicator;
+    currentPersonContact.Citizenship = infoPacket.Citizenship;
+
+    var contactNos = [], contactEmails = [];
     $.each(contactRows, function (idx, item) {
-        var phoneNumberTypeId = getProspectingPhoneTypeId(item.Type);
-        var contactRow = newContactItem(generateUniqueID(), phoneNumberTypeId, item.Phone, false, true, 'PHONE', getSADialingCodeId(), null);
-        contactNos.push(contactRow);
+        switch (item.Type) {
+            case "cell": case "home": case "work":
+                var phoneNumberTypeId = getProspectingPhoneTypeId(item.Type);
+                var contactRow = newContactItem(generateUniqueID(), phoneNumberTypeId, item.Phone, false, true, 'PHONE', getSADialingCodeId(), null);
+                contactNos.push(contactRow);
+                break;
+            case "email":
+                var emailType = $.grep(prospectingContext.ContactEmailTypes, function (i) { return i.Value == 'private email'; })[0].Key;
+                var emailRow = newContactItem(generateUniqueID(), emailType, item.EmailAddress, false, true, 'EMAIL', null, null);
+                contactEmails.push(emailRow);
+                break;
+        }       
     });
 
+    if (!currentPersonContact.PhoneNumbers) {
+        currentPersonContact.PhoneNumbers = [];
+    }
+    if (!currentPersonContact.EmailAddresses) {
+        currentPersonContact.EmailAddresses = [];
+    }
+    // Check the phone no's on the current contact person against the incoming data, exclude new data that matches existing data
     $.each(contactNos, function (idx, ph) {
-        var itemPresent = false;
-        if (!currentPersonContact.PhoneNumbers) {
-            currentPersonContact.PhoneNumbers = [];
-        }
+        var itemPresent = false;        
         $.each(currentPersonContact.PhoneNumbers, function (idx2, ph2) {
-            if (ph.ItemContent == ph2.ItemContent)            {
+            if (ph.ItemContent == ph2.ItemContent) {
                 itemPresent = true;
             }
         });
@@ -829,6 +857,20 @@ function populateContactLookupInfo(infoPacket) {
         if (!itemPresent) {
             currentPersonContact.PhoneNumbers.push(ph);
             // TODO: also validate here whether this number doesn't belong to another contact
+        }
+    });
+
+    // Check emails against incoming data - exclude new data that already exists
+    $.each(contactEmails, function (idx, em) {
+        var itemPresent = false;        
+        $.each(currentPersonContact.EmailAddresses, function (idx2, em2) {
+            if (em.ItemContent == em2.ItemContent) {
+                itemPresent = true;
+            }
+        });
+
+        if (!itemPresent) {
+            currentPersonContact.EmailAddresses.push(em);
         }
     });
 

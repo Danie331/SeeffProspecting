@@ -22,6 +22,10 @@ function ContactDetailsEditorWidget(containerElementId, arrayOfPhoneNumberObject
         containerDiv = $(containerElementId);
 
         var html = $("<div id='contactDetails' />");
+        //if (!_canEdit) {
+        //    html.append("<label style='color:red;font-size:14px;'>This contact has opted out and may not be modified.</label><br />");
+        //}
+
         var phoneNumbersDiv = $("<form id='phoneNumbersDiv' class='phoneContactSection' />");
         var emailAddressesDiv = $("<form id='emailAddressesDiv' class='emailContactSection' />");
 

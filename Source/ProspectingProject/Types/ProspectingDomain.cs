@@ -430,7 +430,10 @@ namespace ProspectingProject
                     // Farms
                     farm_name = !string.IsNullOrEmpty(standaloneUnit.FarmName) ? standaloneUnit.FarmName : null,
                     portion_no =!string.IsNullOrEmpty(standaloneUnit.Portion) ? int.Parse(standaloneUnit.Portion) : (int?)null,
-                    lightstone_suburb = !string.IsNullOrEmpty(standaloneUnit.LightstoneSuburb) ? standaloneUnit.LightstoneSuburb : null
+                    lightstone_suburb = !string.IsNullOrEmpty(standaloneUnit.LightstoneSuburb) ? standaloneUnit.LightstoneSuburb : null,
+
+                    created_by = Guid.Parse((string)HttpContext.Current.Session["user_guid"]),
+                    created_date = DateTime.Now
                 };
 
                 prospecting.prospecting_properties.InsertOnSubmit(newPropRecord);
@@ -671,6 +674,18 @@ namespace ProspectingProject
                     contact.comments_notes = incomingContact.Comments;
                     contact.is_popi_restricted = incomingContact.IsPOPIrestricted;
 
+                   contact.deceased_status =  incomingContact.DeceasedStatus;
+                   contact.age_group = incomingContact.AgeGroup;
+                   contact.location = incomingContact.Location;
+                   contact.marital_status = incomingContact.MaritalStatus;
+                   contact.home_ownership = incomingContact.HomeOwnership;
+                   contact.directorship = incomingContact.Directorship;
+                   contact.physical_address = incomingContact.PhysicalAddress;
+                   contact.employer = incomingContact.Employer;
+                   contact.occupation = incomingContact.Occupation;
+                   contact.bureau_adverse_indicator = incomingContact.BureauAdverseIndicator;
+                   contact.citizenship = incomingContact.Citizenship;
+
                     if (dataPacket.ContactCompanyId.HasValue)
                     {
                         // This contact has a relationship with a company as opposed to a property
@@ -821,7 +836,19 @@ namespace ProspectingProject
                             job_title = "",
                             comments_notes = incomingContact.Comments,
                             created_by = Guid.Parse((string)HttpContext.Current.Session["user_guid"]),
-                             created_date = DateTime.Now
+                             created_date = DateTime.Now,
+                            deceased_status = incomingContact.DeceasedStatus,
+                            age_group = incomingContact.AgeGroup,
+                            location = incomingContact.Location,
+                            marital_status = incomingContact.MaritalStatus,
+                            home_ownership = incomingContact.HomeOwnership,
+                            directorship = incomingContact.Directorship,
+                            physical_address = incomingContact.PhysicalAddress,
+                            employer = incomingContact.Employer,
+                            occupation = incomingContact.Occupation,
+                            bureau_adverse_indicator = incomingContact.BureauAdverseIndicator,
+                            citizenship = incomingContact.Citizenship,
+                            is_popi_restricted = incomingContact.IsPOPIrestricted,
                         };
                         prospecting.prospecting_contact_persons.InsertOnSubmit(newContact);
                         prospecting.SubmitChanges();
@@ -969,9 +996,11 @@ namespace ProspectingProject
                 DataSet result = null;
                 try
                 {
+                    int propertyID = 0;
+                    int.TryParse(searchInputValues.PropertyID, out propertyID);
                     result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", searchInputValues.DeedTown, searchInputValues.ErfNo, searchInputValues.Portion
                         , searchInputValues.SSName, searchInputValues.Unit, searchInputValues.Suburb, searchInputValues.StreetName, searchInputValues.StreetOrUnitNo, ""
-                        , "", "", "", "", "", "", searchInputValues.EstateName, "", 0, 1000, "", "", 0, 0);
+                        , "", "", "", "", searchInputValues.OwnerName, searchInputValues.OwnerIdNumber, searchInputValues.EstateName, "", propertyID, 1000, "", "", 0, 0);
                     if (result.Tables.Count > 1 && result.Tables[1].Rows.Count > 0)
                     {
                         using (var prospecting = new ProspectingDataContext())
@@ -1036,7 +1065,7 @@ namespace ProspectingProject
                 if (existingContactWithDetail != null)
                 {
                     var phoneTypeIds = ProspectingStaticData.ContactPhoneTypes.Select(k => k.Key);
-                var emailTypeIds = ProspectingStaticData.ContactEmailTypes.Select(k => k.Key);
+                    var emailTypeIds = ProspectingStaticData.ContactEmailTypes.Select(k => k.Key);
                     ProspectingContactPerson person = new ProspectingContactPerson
                     {
                         Firstname = existingContactWithDetail.firstname,
@@ -1044,40 +1073,53 @@ namespace ProspectingProject
                         IdNumber = existingContactWithDetail.id_number,
                         PropertiesOwned = LoadPropertiesOwnedByThisContact(existingContactWithDetail.id_number, prospecting),
                         ContactPersonId = existingContactWithDetail.contact_person_id,
-                        PersonPropertyRelationships = new List<KeyValuePair<int,int>>(),//ProspectingStaticData.PersonPropertyRelationshipTypes.First(s => s.Value == "Owner").Key,
-                         PersonCompanyRelationshipType = null,
-                         Gender = existingContactWithDetail.person_gender,
-                          Title = existingContactWithDetail.person_title,
-                           
-                          PhoneNumbers = (from det in prospecting.prospecting_contact_details
-                                            where det.contact_person_id == existingContactWithDetail.contact_person_id
-                                            && phoneTypeIds.Contains(det.contact_detail_type)
-                                            select new ProspectingContactDetail
-                                            {
-                                                ItemId = det.prospecting_contact_detail_id.ToString(),
-                                                ContactItemType = "PHONE",
-                                                ItemContent = det.contact_detail,
-                                                IsPrimary = det.is_primary_contact,
-                                                ItemType = det.contact_detail_type,
-                                                IsValid = true,
-                                                IntDialingCode = det.intl_dialing_code_id,
-                                                EleventhDigit = det.eleventh_digit
-                                            }).ToList(),
+                        PersonPropertyRelationships = new List<KeyValuePair<int, int>>(),//ProspectingStaticData.PersonPropertyRelationshipTypes.First(s => s.Value == "Owner").Key,
+                        PersonCompanyRelationshipType = null,
+                        Gender = existingContactWithDetail.person_gender,
+                        Title = existingContactWithDetail.person_title,
+                        IsPOPIrestricted = existingContactWithDetail.is_popi_restricted,
 
-                    EmailAddresses = (from det in prospecting.prospecting_contact_details
-                                              where det.contact_person_id == existingContactWithDetail.contact_person_id
-                                              && emailTypeIds.Contains(det.contact_detail_type)
-                                              select new ProspectingContactDetail
-                                              {
-                                                  ItemId = det.prospecting_contact_detail_id.ToString(),
-                                                  ContactItemType = "EMAIL",
-                                                  ItemContent = det.contact_detail,
-                                                  IsPrimary = det.is_primary_contact,
-                                                  ItemType = det.contact_detail_type,
-                                                  IsValid = true,
-                                                  IntDialingCode = det.intl_dialing_code_id,
-                                                  EleventhDigit = det.eleventh_digit
-                                              }).ToList()
+                        DeceasedStatus = existingContactWithDetail.deceased_status,
+                        AgeGroup = existingContactWithDetail.age_group,
+                        Location = existingContactWithDetail.location,
+                        MaritalStatus = existingContactWithDetail.marital_status,
+                        HomeOwnership = existingContactWithDetail.home_ownership,
+                        Directorship = existingContactWithDetail.directorship,
+                        PhysicalAddress = existingContactWithDetail.physical_address,
+                        Employer = existingContactWithDetail.employer,
+                        Occupation = existingContactWithDetail.occupation,
+                        BureauAdverseIndicator = existingContactWithDetail.bureau_adverse_indicator,
+                        Citizenship = existingContactWithDetail.citizenship,
+
+                        PhoneNumbers = (from det in prospecting.prospecting_contact_details
+                                        where det.contact_person_id == existingContactWithDetail.contact_person_id
+                                        && phoneTypeIds.Contains(det.contact_detail_type)
+                                        select new ProspectingContactDetail
+                                        {
+                                            ItemId = det.prospecting_contact_detail_id.ToString(),
+                                            ContactItemType = "PHONE",
+                                            ItemContent = det.contact_detail,
+                                            IsPrimary = det.is_primary_contact,
+                                            ItemType = det.contact_detail_type,
+                                            IsValid = true,
+                                            IntDialingCode = det.intl_dialing_code_id,
+                                            EleventhDigit = det.eleventh_digit
+                                        }).ToList(),
+
+                        EmailAddresses = (from det in prospecting.prospecting_contact_details
+                                          where det.contact_person_id == existingContactWithDetail.contact_person_id
+                                          && emailTypeIds.Contains(det.contact_detail_type)
+                                          select new ProspectingContactDetail
+                                          {
+                                              ItemId = det.prospecting_contact_detail_id.ToString(),
+                                              ContactItemType = "EMAIL",
+                                              ItemContent = det.contact_detail,
+                                              IsPrimary = det.is_primary_contact,
+                                              ItemType = det.contact_detail_type,
+                                              IsValid = true,
+                                              IntDialingCode = det.intl_dialing_code_id,
+                                              EleventhDigit = det.eleventh_digit
+                                          }).ToList()
                     };
 
                     return person;
@@ -1139,7 +1181,7 @@ namespace ProspectingProject
                     if (newBalanceLessOne > -1)
                     {
                         creditTaken = true;
-                        results = MakeTracePsEnquiry(dataPacket.LightstoneIDOrCKNo);
+                        results = PerformPersonDetailsEnquiry(dataPacket.LightstoneIDOrCKNo);
                         SaveEnquiryAgainstProperty(dataPacket.ProspectingPropertyId, results);
                         results.AvailableTracePsCredits = newBalanceLessOne;
                     }
@@ -1471,6 +1513,9 @@ namespace ProspectingProject
                                            Gender = cc.person_gender,
                                            Comments = cc.comments_notes,
                                            IsPOPIrestricted = cc.is_popi_restricted,
+
+                                           // In due course may need to add the Dracore fields here
+
                                            PhoneNumbers = (from det in prospecting.prospecting_contact_details
                                                            where det.contact_person_id == cpr.contact_person_id
                                                            && phoneTypeIds.Contains(det.contact_detail_type)
@@ -1591,90 +1636,143 @@ namespace ProspectingProject
             }
             catch
             {
-                // For now just supress an error here. TODO: fix this.
+                // For now just supress an error here. TODO: fix this later.
             }
         }
 
-        private static ProspectingDataResponsePacket MakeTracePsEnquiry(string idOrCK)
+        private static bool IsValidIDNumber(string input)
+        {
+            var regex = new Regex("^[0-9]+$");
+            long val;
+            bool isLong = long.TryParse(input, out val);
+            return input.Length == 13 && regex.IsMatch(input) && isLong;
+        }
+
+        private static IDracoreService GetDracoreService()
+        {
+            return HttpContext.Current.IsDebuggingEnabled ? (IDracoreService)new DracoreTestService() : new DracoreLiveService();
+        }
+
+        private static string GetContactNumber(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return null;
+            // For now we check that there are a minimum of 10 digits contained in the number - must allow for: +27724707471, 0724707471, 072 470 7471 and 072-470-7471
+            int numDigits = 0;
+            numDigits = input.ToCharArray().Count(d => char.IsDigit(d));
+            return numDigits >= 10 ? input : null;
+        }
+
+        private static string GetEmailAddress(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return null;
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(input);
+                return input;
+            }
+            catch { return null; }
+        }
+
+        private static ProspectingDataResponsePacket PerformPersonDetailsEnquiry(string idNumber)
         {
             ProspectingDataResponsePacket results = new ProspectingDataResponsePacket();
             results.EnquirySuccessful = true;
-            XDocument outputXml = null;// XDocument.Parse(TracePSTemp.Data);
-
-            idOrCK = idOrCK.Replace("/", "%2F");
-            idOrCK = HttpContext.Current.Server.UrlEncode(idOrCK);
-            Uri uri = new Uri(@"http://ws.traceps.co.za/ws/idnLookup/11222122/" + idOrCK);
-
-            try
-            {
-                WebRequest req = WebRequest.Create(uri);
-                req.Timeout = 15 * 1000;
-                req.Method = "GET";
-                req.Credentials = GetCredentialsForUser();
-                HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
-                if (resp.StatusCode == HttpStatusCode.OK)
-                {
-                    using (Stream respStream = resp.GetResponseStream())
-                    {
-                        StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
-                        string xml = reader.ReadToEnd();
-                        outputXml = XDocument.Parse(xml);
-                    }
-                }
-            }
-            catch
-            {
-                // *Note*: If the request fails at some point, we could set the EnquirySuccessful flag to false here. 
-                // However, Adam has requested that in this case, we cannot be sure whether the TracePS enquiry succeeded or failed,
-                // and as such must assume success (The licensee must fit the bill in a case of uncertainty.)
-
-                //results.EnquirySuccessful = false;
-                results.ErrorMsg = "Error occurred during service call. Please contact support.";
-                return results;
-            }
-            foreach (var element in outputXml.Descendants("category"))
-            {
-                if (element.Attribute("name").Value == "contact")
-                {
-                    results.ContactRows = (from e in element.Descendants("row")
-                                           select new ContactRow
-                                           {
-                                               Phone = e.Descendants("field").Where(f => f.Attribute("name").Value == "phone").FirstOrDefault().Value,
-                                               Type = e.Descendants("field").Where(f => f.Attribute("name").Value == "type").FirstOrDefault().Value,
-                                               Date = e.Descendants("field").Where(f => f.Attribute("name").Value == "date").FirstOrDefault().Value
-                                           }).OrderByDescending(d => 
-                                               {
-                                                   if (!string.IsNullOrEmpty(d.Date))
-                                                   {
-                                                       return Convert.ToDateTime(d.Date);
-                                                   }
-                                                   return DateTime.Now; 
-                                               }).ToList();
-                }
-
-                if (element.Attribute("name").Value == "person")
-                {
-                    string surname = element.Descendants().First(s => s.Attribute("name").Value == "surname").Value;
-                    string name1 = element.Descendants().First(s => s.Attribute("name").Value == "name1").Value;
-                    string name2 = element.Descendants().First(s => s.Attribute("name").Value == "name2").Value;
-                    results.OwnerName = string.Concat(name1, " ", name2);
-                    results.OwnerSurname = surname;
-                }
-            }
-
-            string outputXmlString = outputXml.ToString();
-            if (outputXmlString.Contains("ERR04") && outputXmlString.Contains("No result found"))
+            results.IdCkNo = idNumber;
+            // Check #1: Check if the ID number is valid, ie 13 digits and convertible to a long.
+            if (!IsValidIDNumber(idNumber))
             {
                 results.EnquirySuccessful = false;
-            }
-            if (string.IsNullOrWhiteSpace(results.OwnerName) || results.ContactRows.Count == 0)
-            {
-                results.ErrorMsg = "No contact information could be found for this individual.";
+                results.ErrorMsg = "Invalid ID number specified.";
+                return results;
             }
 
-            results.IdCkNo = idOrCK;
-            results.OwnerGender = DetermineOwnerGender(idOrCK);
-            return results;
+            // Check #2: Attempt the service call, on error set the error and return
+            Consumer003 dracoreResult = null;
+            try
+            {
+                IDracoreService dracoreService = GetDracoreService();
+                dracoreResult = dracoreService.ByIdTYPE003(long.Parse(idNumber, CultureInfo.InvariantCulture));
+            }
+            catch (Exception ex)
+            {
+                results.EnquirySuccessful = false;
+                results.ErrorMsg = ex.Message;
+                return results;
+            }
+
+            // Check #3: If the service call succeeds, check the service_error property for any internal errors within service
+            if (!string.IsNullOrEmpty(dracoreResult.SERVICE_ERROR) && dracoreResult.SERVICE_ERROR != "none")
+            {
+                // SERVICE_ERROR from service
+                results.EnquirySuccessful = false;
+                if (dracoreResult.SERVICE_ERROR.ToLower().Contains("record not found"))
+                {
+                    results.ErrorMsg = "No 3rd-party information was found for this ID number.";
+                }
+                else
+                {
+                    results.ErrorMsg = dracoreResult.SERVICE_ERROR;
+                }
+                return results;
+            }
+
+            Func<string, string> purgeField = item => string.IsNullOrWhiteSpace(item) ? null : item; 
+
+            // Now process the results
+            string title = purgeField(dracoreResult.TITLE);
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                var kvp = ProspectingStaticData.ContactPersonTitle.FirstOrDefault(l => l.Value.ToUpper() == title.ToUpper());
+                title = kvp.Key > 0 ? kvp.Key.ToString() : null;
+            }
+            results.Title = title;
+            results.OwnerName = purgeField(dracoreResult.FIRST_NAME);
+            results.OwnerSurname = purgeField(dracoreResult.SURNAME);
+            results.DeceasedStatus = purgeField(dracoreResult.DECEASED_STATUS);
+            results.Citizenship = purgeField(dracoreResult.CITIZENSHIP);
+            results.OwnerGender = DetermineOwnerGender(idNumber);
+            results.AgeGroup = purgeField(dracoreResult.AGE_GROUP);
+            results.Location = purgeField(dracoreResult.LOCATION);
+            results.MaritalStatus = purgeField(dracoreResult.MARITAL_STATUS1);
+            results.HomeOwnership = purgeField(dracoreResult.HOMEOWNERSHIP);
+            results.Directorship = purgeField(dracoreResult.DIRECTORSHIP1);
+            results.PhysicalAddress = purgeField(dracoreResult.PHYSICALADDR1);
+            results.Employer = purgeField(dracoreResult.EMPLOYER_1);
+            results.Occupation = purgeField(dracoreResult.OCCUPATION_1);
+
+            // Add the contact rows
+            string cellPhone = GetContactNumber(dracoreResult.CELL_1);
+            string homePhone = GetContactNumber(dracoreResult.HOME_1);
+            string workPhone = GetContactNumber(dracoreResult.WORK_1);
+            string email = GetEmailAddress(dracoreResult.EMAIL_1);
+
+            if (new[] { cellPhone, homePhone, workPhone, email }.All(item => string.IsNullOrWhiteSpace(item)))
+            {
+                results.EnquirySuccessful = false; // CHECK THIS!!! - If no contact info found was the enquiry a success or failure?
+                results.ErrorMsg = "A record was found for this ID number, however no contact details are present.";
+                return results;
+            }
+
+            if (!string.IsNullOrWhiteSpace(cellPhone))
+            {
+                results.ContactRows.Add(new ContactRow {  Phone = cellPhone, Type = "cell", Date = DateTime.Now.ToString() });
+            }
+            if (!string.IsNullOrWhiteSpace(homePhone))
+            {
+                results.ContactRows.Add(new ContactRow { Phone = homePhone, Type = "home", Date = DateTime.Now.ToString() });
+            }
+            if (!string.IsNullOrWhiteSpace(workPhone))
+            {
+                results.ContactRows.Add(new ContactRow { Phone = workPhone, Type = "work", Date = DateTime.Now.ToString() });
+            }
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                results.ContactRows.Add(new ContactRow { EmailAddress = email, Type = "email", Date = DateTime.Now.ToString() });
+            }
+
+            return results; 
         }
 
         private static string DetermineOwnerGender(string idOrCK)
@@ -1751,7 +1849,10 @@ namespace ProspectingProject
                         // Farms
                         farm_name = !string.IsNullOrEmpty(unit.FarmName) ? unit.FarmName : null,
                         portion_no = !string.IsNullOrEmpty(unit.Portion) ? int.Parse(unit.Portion) : (int?)null,
-                        lightstone_suburb = !string.IsNullOrEmpty(unit.LightstoneSuburb) ? unit.LightstoneSuburb : null
+                        lightstone_suburb = !string.IsNullOrEmpty(unit.LightstoneSuburb) ? unit.LightstoneSuburb : null,
+
+                        created_by = Guid.Parse((string)HttpContext.Current.Session["user_guid"]),
+                        created_date = DateTime.Now
                     };
 
                     prospecting.prospecting_properties.InsertOnSubmit(newPropRecord);

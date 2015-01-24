@@ -785,6 +785,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Services\DracoreLiveService.cs" />
+    <Compile Include="Services\DracoreServiceProxy.cs" />
+    <Compile Include="Services\DracoreTestService.cs" />
+    <Compile Include="Services\IDracoreService.cs" />
     <Compile Include="Types\IProspectingContactEntity.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\BaseDataRequestPacket.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\CompanyContactDataPacket.cs" />
