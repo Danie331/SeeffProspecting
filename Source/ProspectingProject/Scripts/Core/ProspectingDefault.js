@@ -310,53 +310,6 @@ function performPersonLookup(idNumber, checkForExisting) {
     }
 }
 
-function getDetailsForProperty(prospectingProperty) {
-
-    var prospectingPropId = prospectingProperty.ProspectingPropertyId;
-    var lightstonePropID = prospectingProperty.LightstonePropertyId;
-    var lightstoneIdOrCkNo = prospectingProperty.LightstoneIDOrCKNo;
-    // If attemtping to do a search on a manually entered ID number, use it instead.
-    // In this case we must first validate the ID number and proceed only if valid..
-    var manuallyEnteredID = $('#knownIdTextbox').val();
-    if (manuallyEnteredID.length > 0) {
-        if (validIDNumber(manuallyEnteredID)) {
-            lightstoneIdOrCkNo = manuallyEnteredID;
-        }
-        else {
-            $.unblockUI();
-            alert('The ID number you are trying to search on is not valid.');
-            return;
-        }
-    }
-
-    $.ajax({
-        type: "POST",
-        url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "get_prop_owner_details", ProspectingPropertyId: prospectingPropId, LightstoneId: lightstonePropID, LightstoneIDOrCKNo: lightstoneIdOrCkNo }),
-        success: function (data, textStatus, jqXHR) {
-            $.unblockUI();
-            if (textStatus == "success" && data) {
-                if (data.ErrorMsg && data.ErrorMsg.length > 0) {
-                    alert(data.ErrorMsg);
-                }
-                currentMarker.ContactInfoPacket = data;
-                if (data.AvailableTracePsCredits != null) {
-                    // If the AvailableTracePsCredits is not null, then update the availableCredit variable
-                    availableCredit = data.AvailableTracePsCredits;
-                }
-                updatePropertyInfoMenu(data);               
-            } else {
-                alert('Could not complete request.');
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status);
-            alert(jqXHR.responseText);
-        },
-        dataType: "json"
-    });
-}
-
 function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCentreMap) {
 
     var suburb = getSuburbById(suburbId);
@@ -1203,11 +1156,6 @@ function closeInfoWindow() {
         currentTracePSInfoPacket = null;
         currentTracePSContactRows = null;
     }
-}
-
-function tryGetContactInfoForProperty() {
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Performing Enquiry...</p>' });
-    getDetailsForProperty(currentProperty);
 }
 
 function showSavedSplashDialog(text) {

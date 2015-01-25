@@ -269,60 +269,6 @@ function updateSuburbSelectionStats(suburb) {
     withoutDetailsLabel.text("(" + totalPropsWithoutContactDetails + ")");
 }
 
-function buildOwnerLookup() {
-    var propInfoDiv = $("<div id='propertyInfoDiv' />");
-
-    var buttonDiv = $("<div id='performEnquiryDiv' style='font-family: Verdana;font-size: 12px;margin: 10px 10px;display:none;' />");
-    buttonDiv.append("Use the button below to perform a search for contact details of the property owner. The cost of such an enquiry, if successful, is 60c (excl. VAT)");
-    buttonDiv.append("<p />");
-
-    var availableCreditLabel = $("<label id='availableCreditLabel' />");
-    buttonDiv.append("You have ");
-    buttonDiv.append(availableCreditLabel);
-    buttonDiv.append(" Prospecting credits available.");
-    availableCreditLabel.text(availableCredit);
-
-    buttonDiv.append("<p />");
-    buttonDiv.append("<label id='previousEnquiryLabel' style='display:none;'>Note: A previous enquiry has been made against this property.</label>");
-    buttonDiv.append("<p />");
-    var getContactInfoBtn = $("<input type='button' id='getContactInfoBtn' value='Search for owner details' />");
-    buttonDiv.append(getContactInfoBtn);
-    getContactInfoBtn.click(tryGetContactInfoForProperty);
-    buttonDiv.append("<p />");
-
-    buttonDiv.append("- OR -");
-    buttonDiv.append("<br />");
-    buttonDiv.append("Search using the ID number of a known contact person: <input type='text' id='knownIdTextbox' />");
-    buttonDiv.append("<br />");
-    buttonDiv.append("<hr /><br />");
-
-    var div = $("<div id='propertyContactResultsDiv' style='font-family: Verdana;font-size: 12px;margin: 10px 10px;display:none;' />");
-    div.append("The following details were found for the owner of this property:");
-    div.append("<br /><br />");
-    div.append("<label id='contactPersonNameLabel'></label>");
-    div.append("<br />");
-    div.append("<label id='contactPersonSurnameLabel'></label>");
-    div.append("<br />");
-    div.append("<label id='contactIDorCKnoLabel'></label>");
-    div.append("<br /><br />");
-
-    //menu.on('click', '#getContactInfoBtn', tryGetContactInfoForProperty);
-
-    var table = $("<table id='propertyOwnerContactInfoTbl' style='width:100%;' />");
-    div.append(table);
-    var errLbl = $("<div id='errLabel' style='font-family: Verdana;font-size: 12px;margin: 10px 10px;' />");
-    div.append(errLbl);
-
-    var lightstoneHistoryDiv = $("<div id='lightstoneHistoryDiv' style='font-family: Verdana;font-size: 12px;margin: 10px 10px;display:none;' />");
-
-    propInfoDiv.append(buttonDiv);
-    propInfoDiv.append(div);
-    propInfoDiv.append(lightstoneHistoryDiv);
-
-    return propInfoDiv;
-}
-
-
 function buildContactsResultsDiv(infoPacket) {
 
     currentTracePSInfoPacket = infoPacket;

@@ -78,15 +78,15 @@ namespace ProspectingProject
     partial void Insertprospecting_person_title(prospecting_person_title instance);
     partial void Updateprospecting_person_title(prospecting_person_title instance);
     partial void Deleteprospecting_person_title(prospecting_person_title instance);
-    partial void Insertprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
-    partial void Updateprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
-    partial void Deleteprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
     partial void Insertprospecting_property(prospecting_property instance);
     partial void Updateprospecting_property(prospecting_property instance);
     partial void Deleteprospecting_property(prospecting_property instance);
     partial void Insertprospecting_contact_person(prospecting_contact_person instance);
     partial void Updateprospecting_contact_person(prospecting_contact_person instance);
     partial void Deleteprospecting_contact_person(prospecting_contact_person instance);
+    partial void Insertprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
+    partial void Updateprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
+    partial void Deleteprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
     #endregion
 		
 		public ProspectingDataContext() : 
@@ -247,14 +247,6 @@ namespace ProspectingProject
 			}
 		}
 		
-		public System.Data.Linq.Table<prospecting_trace_ps_enquiry> prospecting_trace_ps_enquiries
-		{
-			get
-			{
-				return this.GetTable<prospecting_trace_ps_enquiry>();
-			}
-		}
-		
 		public System.Data.Linq.Table<prospecting_property> prospecting_properties
 		{
 			get
@@ -268,6 +260,14 @@ namespace ProspectingProject
 			get
 			{
 				return this.GetTable<prospecting_contact_person>();
+			}
+		}
+		
+		public System.Data.Linq.Table<prospecting_trace_ps_enquiry> prospecting_trace_ps_enquiries
+		{
+			get
+			{
+				return this.GetTable<prospecting_trace_ps_enquiry>();
 			}
 		}
 		
@@ -3635,229 +3635,6 @@ namespace ProspectingProject
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.prospecting_trace_ps_enquiry")]
-	public partial class prospecting_trace_ps_enquiry : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _prospecting_trace_ps_enquiry_id;
-		
-		private int _prospecting_property_id;
-		
-		private System.Guid _user;
-		
-		private System.DateTime _date_of_enquiry;
-		
-		private bool _successful;
-		
-		private string _id_number;
-		
-		private EntityRef<prospecting_property> _prospecting_property;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void Onprospecting_trace_ps_enquiry_idChanging(int value);
-    partial void Onprospecting_trace_ps_enquiry_idChanged();
-    partial void Onprospecting_property_idChanging(int value);
-    partial void Onprospecting_property_idChanged();
-    partial void OnuserChanging(System.Guid value);
-    partial void OnuserChanged();
-    partial void Ondate_of_enquiryChanging(System.DateTime value);
-    partial void Ondate_of_enquiryChanged();
-    partial void OnsuccessfulChanging(bool value);
-    partial void OnsuccessfulChanged();
-    partial void Onid_numberChanging(string value);
-    partial void Onid_numberChanged();
-    #endregion
-		
-		public prospecting_trace_ps_enquiry()
-		{
-			this._prospecting_property = default(EntityRef<prospecting_property>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_trace_ps_enquiry_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int prospecting_trace_ps_enquiry_id
-		{
-			get
-			{
-				return this._prospecting_trace_ps_enquiry_id;
-			}
-			set
-			{
-				if ((this._prospecting_trace_ps_enquiry_id != value))
-				{
-					this.Onprospecting_trace_ps_enquiry_idChanging(value);
-					this.SendPropertyChanging();
-					this._prospecting_trace_ps_enquiry_id = value;
-					this.SendPropertyChanged("prospecting_trace_ps_enquiry_id");
-					this.Onprospecting_trace_ps_enquiry_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_property_id", DbType="Int NOT NULL")]
-		public int prospecting_property_id
-		{
-			get
-			{
-				return this._prospecting_property_id;
-			}
-			set
-			{
-				if ((this._prospecting_property_id != value))
-				{
-					if (this._prospecting_property.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onprospecting_property_idChanging(value);
-					this.SendPropertyChanging();
-					this._prospecting_property_id = value;
-					this.SendPropertyChanged("prospecting_property_id");
-					this.Onprospecting_property_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[user]", Storage="_user", DbType="UniqueIdentifier NOT NULL")]
-		public System.Guid user
-		{
-			get
-			{
-				return this._user;
-			}
-			set
-			{
-				if ((this._user != value))
-				{
-					this.OnuserChanging(value);
-					this.SendPropertyChanging();
-					this._user = value;
-					this.SendPropertyChanged("user");
-					this.OnuserChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date_of_enquiry", DbType="DateTime NOT NULL")]
-		public System.DateTime date_of_enquiry
-		{
-			get
-			{
-				return this._date_of_enquiry;
-			}
-			set
-			{
-				if ((this._date_of_enquiry != value))
-				{
-					this.Ondate_of_enquiryChanging(value);
-					this.SendPropertyChanging();
-					this._date_of_enquiry = value;
-					this.SendPropertyChanged("date_of_enquiry");
-					this.Ondate_of_enquiryChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_successful", DbType="Bit NOT NULL")]
-		public bool successful
-		{
-			get
-			{
-				return this._successful;
-			}
-			set
-			{
-				if ((this._successful != value))
-				{
-					this.OnsuccessfulChanging(value);
-					this.SendPropertyChanging();
-					this._successful = value;
-					this.SendPropertyChanged("successful");
-					this.OnsuccessfulChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_number", DbType="VarChar(13) NOT NULL", CanBeNull=false)]
-		public string id_number
-		{
-			get
-			{
-				return this._id_number;
-			}
-			set
-			{
-				if ((this._id_number != value))
-				{
-					this.Onid_numberChanging(value);
-					this.SendPropertyChanging();
-					this._id_number = value;
-					this.SendPropertyChanged("id_number");
-					this.Onid_numberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_prospecting_trace_ps_enquiry", Storage="_prospecting_property", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id", IsForeignKey=true)]
-		public prospecting_property prospecting_property
-		{
-			get
-			{
-				return this._prospecting_property.Entity;
-			}
-			set
-			{
-				prospecting_property previousValue = this._prospecting_property.Entity;
-				if (((previousValue != value) 
-							|| (this._prospecting_property.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._prospecting_property.Entity = null;
-						previousValue.prospecting_trace_ps_enquiries.Remove(this);
-					}
-					this._prospecting_property.Entity = value;
-					if ((value != null))
-					{
-						value.prospecting_trace_ps_enquiries.Add(this);
-						this._prospecting_property_id = value.prospecting_property_id;
-					}
-					else
-					{
-						this._prospecting_property_id = default(int);
-					}
-					this.SendPropertyChanged("prospecting_property");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.prospecting_property")]
 	public partial class prospecting_property : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -5828,6 +5605,253 @@ namespace ProspectingProject
 		{
 			this.SendPropertyChanging();
 			entity.prospecting_contact_person = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.prospecting_trace_ps_enquiry")]
+	public partial class prospecting_trace_ps_enquiry : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _prospecting_trace_ps_enquiry_id;
+		
+		private int _prospecting_property_id;
+		
+		private System.Guid _user;
+		
+		private System.DateTime _date_of_enquiry;
+		
+		private bool _successful;
+		
+		private string _id_number;
+		
+		private string _HWCE_indicator;
+		
+		private EntityRef<prospecting_property> _prospecting_property;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onprospecting_trace_ps_enquiry_idChanging(int value);
+    partial void Onprospecting_trace_ps_enquiry_idChanged();
+    partial void Onprospecting_property_idChanging(int value);
+    partial void Onprospecting_property_idChanged();
+    partial void OnuserChanging(System.Guid value);
+    partial void OnuserChanged();
+    partial void Ondate_of_enquiryChanging(System.DateTime value);
+    partial void Ondate_of_enquiryChanged();
+    partial void OnsuccessfulChanging(bool value);
+    partial void OnsuccessfulChanged();
+    partial void Onid_numberChanging(string value);
+    partial void Onid_numberChanged();
+    partial void OnHWCE_indicatorChanging(string value);
+    partial void OnHWCE_indicatorChanged();
+    #endregion
+		
+		public prospecting_trace_ps_enquiry()
+		{
+			this._prospecting_property = default(EntityRef<prospecting_property>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_trace_ps_enquiry_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int prospecting_trace_ps_enquiry_id
+		{
+			get
+			{
+				return this._prospecting_trace_ps_enquiry_id;
+			}
+			set
+			{
+				if ((this._prospecting_trace_ps_enquiry_id != value))
+				{
+					this.Onprospecting_trace_ps_enquiry_idChanging(value);
+					this.SendPropertyChanging();
+					this._prospecting_trace_ps_enquiry_id = value;
+					this.SendPropertyChanged("prospecting_trace_ps_enquiry_id");
+					this.Onprospecting_trace_ps_enquiry_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_property_id", DbType="Int NOT NULL")]
+		public int prospecting_property_id
+		{
+			get
+			{
+				return this._prospecting_property_id;
+			}
+			set
+			{
+				if ((this._prospecting_property_id != value))
+				{
+					if (this._prospecting_property.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onprospecting_property_idChanging(value);
+					this.SendPropertyChanging();
+					this._prospecting_property_id = value;
+					this.SendPropertyChanged("prospecting_property_id");
+					this.Onprospecting_property_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[user]", Storage="_user", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid user
+		{
+			get
+			{
+				return this._user;
+			}
+			set
+			{
+				if ((this._user != value))
+				{
+					this.OnuserChanging(value);
+					this.SendPropertyChanging();
+					this._user = value;
+					this.SendPropertyChanged("user");
+					this.OnuserChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date_of_enquiry", DbType="DateTime NOT NULL")]
+		public System.DateTime date_of_enquiry
+		{
+			get
+			{
+				return this._date_of_enquiry;
+			}
+			set
+			{
+				if ((this._date_of_enquiry != value))
+				{
+					this.Ondate_of_enquiryChanging(value);
+					this.SendPropertyChanging();
+					this._date_of_enquiry = value;
+					this.SendPropertyChanged("date_of_enquiry");
+					this.Ondate_of_enquiryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_successful", DbType="Bit NOT NULL")]
+		public bool successful
+		{
+			get
+			{
+				return this._successful;
+			}
+			set
+			{
+				if ((this._successful != value))
+				{
+					this.OnsuccessfulChanging(value);
+					this.SendPropertyChanging();
+					this._successful = value;
+					this.SendPropertyChanged("successful");
+					this.OnsuccessfulChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_number", DbType="VarChar(13) NOT NULL", CanBeNull=false)]
+		public string id_number
+		{
+			get
+			{
+				return this._id_number;
+			}
+			set
+			{
+				if ((this._id_number != value))
+				{
+					this.Onid_numberChanging(value);
+					this.SendPropertyChanging();
+					this._id_number = value;
+					this.SendPropertyChanged("id_number");
+					this.Onid_numberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HWCE_indicator", DbType="VarChar(4)")]
+		public string HWCE_indicator
+		{
+			get
+			{
+				return this._HWCE_indicator;
+			}
+			set
+			{
+				if ((this._HWCE_indicator != value))
+				{
+					this.OnHWCE_indicatorChanging(value);
+					this.SendPropertyChanging();
+					this._HWCE_indicator = value;
+					this.SendPropertyChanged("HWCE_indicator");
+					this.OnHWCE_indicatorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_prospecting_trace_ps_enquiry", Storage="_prospecting_property", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id", IsForeignKey=true)]
+		public prospecting_property prospecting_property
+		{
+			get
+			{
+				return this._prospecting_property.Entity;
+			}
+			set
+			{
+				prospecting_property previousValue = this._prospecting_property.Entity;
+				if (((previousValue != value) 
+							|| (this._prospecting_property.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._prospecting_property.Entity = null;
+						previousValue.prospecting_trace_ps_enquiries.Remove(this);
+					}
+					this._prospecting_property.Entity = value;
+					if ((value != null))
+					{
+						value.prospecting_trace_ps_enquiries.Add(this);
+						this._prospecting_property_id = value.prospecting_property_id;
+					}
+					else
+					{
+						this._prospecting_property_id = default(int);
+					}
+					this.SendPropertyChanged("prospecting_property");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

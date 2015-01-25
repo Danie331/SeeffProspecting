@@ -15,7 +15,7 @@ namespace ProspectingProject
             _token = new Token();
             string now = DateTime.Now.ToString();
 
-            string ipAddress = "154.69.179.56";
+            string ipAddress = "105.236.239.220";
             string sUsername = "ghJodie";
             string sPassword = "password";
             string sToHash = sUsername + now + sPassword + ipAddress;

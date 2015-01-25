@@ -38,5 +38,7 @@ namespace ProspectingProject
         public string Citizenship { get; set; }
 
         public string ErrorMsg { get; set; }
+
+        public string HWCE_indicator { get; set; }
     }
 }

@@ -1615,7 +1615,8 @@ namespace ProspectingProject
                         user = Guid.Parse((string)HttpContext.Current.Session["user_guid"]),
                         date_of_enquiry = DateTime.Now,
                         successful = string.IsNullOrEmpty(results.ErrorMsg),
-                        id_number = results.IdCkNo
+                        id_number = results.IdCkNo,
+                        HWCE_indicator = results.HWCE_indicator
                     };
                     prospecting.prospecting_trace_ps_enquiries.InsertOnSubmit(newRecord);
 
@@ -1755,23 +1756,30 @@ namespace ProspectingProject
                 return results;
             }
 
-            if (!string.IsNullOrWhiteSpace(cellPhone))
-            {
-                results.ContactRows.Add(new ContactRow {  Phone = cellPhone, Type = "cell", Date = DateTime.Now.ToString() });
-            }
+            char[] HWCE_indicators = "0000".ToCharArray(); // NB order in which we add flags NB.
+
             if (!string.IsNullOrWhiteSpace(homePhone))
             {
                 results.ContactRows.Add(new ContactRow { Phone = homePhone, Type = "home", Date = DateTime.Now.ToString() });
+                HWCE_indicators[0] = '1';
             }
             if (!string.IsNullOrWhiteSpace(workPhone))
             {
                 results.ContactRows.Add(new ContactRow { Phone = workPhone, Type = "work", Date = DateTime.Now.ToString() });
+                HWCE_indicators[1] = '1';
+            }
+            if (!string.IsNullOrWhiteSpace(cellPhone))
+            {
+                results.ContactRows.Add(new ContactRow {  Phone = cellPhone, Type = "cell", Date = DateTime.Now.ToString() });
+                HWCE_indicators[2] = '1';
             }
             if (!string.IsNullOrWhiteSpace(email))
             {
                 results.ContactRows.Add(new ContactRow { EmailAddress = email, Type = "email", Date = DateTime.Now.ToString() });
+                HWCE_indicators[3] = '1';
             }
 
+            results.HWCE_indicator = new String(HWCE_indicators);
             return results; 
         }
 
