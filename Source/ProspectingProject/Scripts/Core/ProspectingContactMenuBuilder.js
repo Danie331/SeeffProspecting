@@ -484,9 +484,9 @@ function validateCorrectnessOfPersonInfo() {
     var surname = $('#surnameTextBox').val();
     var relType = $('#relTypesSelect').children(":selected").attr('value');
     var gender = $('#genderCheckbox').children(":selected").attr('value');
-    var idNo = $('#idOrCkTextBox').val();
+    var idNo = $('#idOrCkTextBox').val().trim();
 
-    return firstname.length > 0 && surname.length > 0 && relType.length > 0 && gender.length > 0 && idNo.length > 0;
+    return firstname.length > 0 && surname.length > 0 && relType.length > 0 && gender.length > 0 && idNo.length == 13;
 }
 
 // Valid if the contact has at least firstname, surname, and relationship type
@@ -681,9 +681,11 @@ function buildContactDashboard(contacts) {
     });
 
     searchKnownIdBtn.click(function () {
-        var idNumber = $('#knownIdTextbox').val();
-        if (idNumber.length > 0) {
+        var idNumber = $('#knownIdTextbox').val().trim();
+        if (idNumber.length == 13) {
             performPersonLookup(idNumber, true);
+        } else {
+            alert('The ID number you entered is not valid.');
         }
     });
     container.append("<br />");

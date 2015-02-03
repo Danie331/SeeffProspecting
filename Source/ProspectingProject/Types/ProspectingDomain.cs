@@ -1403,11 +1403,19 @@ namespace ProspectingProject
 
         private static bool DetermineIfSSAlreadyExists(string ssName, string address, string ss_id)
         {
-            bool exists = false;
+            bool exists = true;
             using (var prospecting = new ProspectingDataContext())
             {
-                exists = prospecting.prospecting_properties.Any(pp => pp.ss_name == ssName.ToUpper() && pp.property_address.Contains(address.ToUpper()))
-                    || prospecting.prospecting_properties.Any(pp => pp.ss_id == ss_id);
+                // Backwards compat for SSNumber - TODO: remove once all SS's are re-prospected with SS_ID's
+                if (!string.IsNullOrWhiteSpace(address))
+                {
+                    exists = prospecting.prospecting_properties.Any(pp => pp.ss_name == ssName.ToUpper() && pp.property_address.Contains(address.ToUpper()))
+                        || prospecting.prospecting_properties.Any(pp => pp.ss_id == ss_id);
+                }
+                else
+                {
+                    exists = prospecting.prospecting_properties.Any(pp => pp.ss_id == ss_id);
+                }
 
                 return exists;
             }
@@ -1566,6 +1574,12 @@ namespace ProspectingProject
 
         private static string MakeIDUnique(string idNumber, string surname)
         {
+            idNumber = idNumber.Trim();
+
+            if (idNumber.Contains("/") || idNumber.Contains("\\"))
+            {
+                return idNumber;
+            }
             int nr;
             // Just birthday digits available
             if (idNumber.Length == 6 && int.TryParse(idNumber, out nr))
@@ -1651,7 +1665,8 @@ namespace ProspectingProject
 
         private static IDracoreService GetDracoreService()
         {
-            return HttpContext.Current.IsDebuggingEnabled ? (IDracoreService)new DracoreTestService() : new DracoreLiveService();
+            bool isTestEnvironment = HttpContext.Current.IsDebuggingEnabled;
+            return isTestEnvironment ? (IDracoreService)new DracoreTestService() : new DracoreLiveService();
         }
 
         private static string GetContactNumber(string input)
@@ -1834,6 +1849,29 @@ namespace ProspectingProject
             using (var prospecting = new ProspectingDataContext())
             {
                 int areaId = sectionalTitle.SeeffAreaId.HasValue ? sectionalTitle.SeeffAreaId.Value : prospecting.find_area_id(latLng.Lat, latLng.Lng, "R", null);
+
+                // Ensure that we are creating ALL units for this sectional title, not just one
+                using (lightstoneSeeffService.Seeff service = new lightstoneSeeffService.Seeff())
+                {
+                    string erf = sectionalTitle.PropertyMatches.First(s => !string.IsNullOrWhiteSpace(s.ErfNo)).ErfNo;
+                    string ssName = sectionalTitle.SectionalScheme;
+                    DataSet result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", "", erf, "", ssName, "", ""
+                       , "", "", "", "", "", "", "", "", "", "", "", 0, 1000, "", "", 0.0, 0.0);
+
+                    if (sectionalTitle.PropertyMatches.Count < result.Tables[1].Rows.Count)
+                    {
+                        List<LightstonePropertyMatch> matches = new List<LightstonePropertyMatch>();
+                        List<int?> existingLightstoneProps = prospecting.prospecting_properties.Select(p => p.lightstone_property_id).ToList();
+                        // This means we must create the sectional title from scratch
+                        foreach (DataRow row in result.Tables[1].Rows)
+                        {
+                            AddLightstonePropertyRow(row, matches, existingLightstoneProps);
+                        }
+                        var completeSS = GenerateOutputForProspectingEntity(matches, areaId)[0];
+                        sectionalTitle = completeSS;
+                    }
+                }
+                
                 List<ProspectingProperty> units = new List<ProspectingProperty>();
                 foreach (var unit in sectionalTitle.PropertyMatches)
                 {
@@ -1956,7 +1994,7 @@ namespace ProspectingProject
                     string ssId = ssUnits.First(u => !String.IsNullOrEmpty(u.SS_ID)).SS_ID;
                     outputBundle.SectionalSchemes.Add(ssId, ssUnits);
                     outputBundle.TargetProspect = ssUnits.First(); // We don't need to set this in the loop each time, but saves me writing additional code checks.
-                    outputBundle.SeeffAreaId = ss.SeeffAreaId;
+                    outputBundle.SeeffAreaId = ssUnits.First().SeeffAreaId;
                 }
 
                 // Create free-holds
