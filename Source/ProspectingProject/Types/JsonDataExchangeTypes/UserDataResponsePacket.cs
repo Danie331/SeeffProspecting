@@ -10,6 +10,6 @@ namespace ProspectingProject
         public Guid UserGuid { get; set; }
         public string AvailableSuburbs { get; set; }
         public string StaticProspectingData { get; set; }
-        public int AvailableCredit { get; set; }
+        public decimal AvailableCredit { get; set; }
     }
 }

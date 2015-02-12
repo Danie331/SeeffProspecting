@@ -283,7 +283,7 @@ function buildContactsResultsDiv(infoPacket) {
         div.css('display', 'block');
         $('#contactPersonNameLabel').text("Name: " + infoPacket.OwnerName);
         $('#contactPersonSurnameLabel').text("Surname: " + infoPacket.OwnerSurname);
-        $('#contactIDorCKnoLabel').text("ID number: " + infoPacket.IdCkNo);
+        $('#contactIDorCKnoLabel').text("ID number: " + infoPacket.IdNumber);
 
         var table = $('#propertyOwnerContactInfoTbl');
         table.empty();

@@ -15,9 +15,9 @@ namespace SeeffProspectingAuthService
         ProspectingUserAuthPacket GetUserInfo(Guid userGuid);
 
         [OperationContract]
-        int TakeOneCredit(Guid userGuid);
+        decimal DebitUserBalance(decimal amount, Guid userGuid);
 
         [OperationContract]
-        int ReimburseOneCredit(Guid userGuid);
+        decimal CreditUserBalance(decimal amount, Guid userGuid);
     }
 }

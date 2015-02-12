@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace ProspectingProject
 {
 
-    public class ProspectingPropertyInputData : BaseDataRequestPacket
+    public class ProspectingInputData : BaseDataRequestPacket
     {
         // Basic
         public int? ProspectingPropertyId { get; set; }
@@ -37,5 +37,8 @@ namespace ProspectingProject
         public string SS_ID { get; set; }
         public string SSDoorNo { get; set; }
         public Boolean Prospected { get; set; }
+
+        // This caters for the different enquiry/lookup types : should be equal to one of the types in ProspectingStaticData.
+        public string PersonLookupType { get; set; }
     }
 }

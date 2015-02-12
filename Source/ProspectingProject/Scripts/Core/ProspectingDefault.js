@@ -236,78 +236,38 @@ function handleMapClick(event) {
     $('.context-menu-prospect').contextMenu({ x: point.x, y: point.y });
 }
 
-function performPersonLookup(idNumber, checkForExisting) {
+function performPersonLookup(idNumber, lookupType) {
 
-    if (checkForExisting) {
-        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Looking for existing contact...</p>' });
-        $.ajax({
-            type: "POST",
-            url: "RequestHandler.ashx",
-            data: JSON.stringify({ Instruction: 'check_for_existing_contact', PhoneNumbers: [], EmailAddresses: [], IdNumber: idNumber }),
-            dataType: "json",
-        }).done(function (contact) {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Performing Enquiry...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: "get_prop_owner_details", LightstoneIDOrCKNo: idNumber, PersonLookupType: lookupType, ProspectingPropertyId: currentProperty.ProspectingPropertyId }),
+        success: function (data, textStatus, jqXHR) {
             $.unblockUI();
-            if (contact && contact.PropertiesOwned && contact.PropertiesOwned.length > 0) {
-                var propertiesOtherThanCurrentProp = $.grep(contact.PropertiesOwned, function (p) {
-                    return p.LightstonePropertyId != currentProperty.LightstonePropertyId;
-                });
-
-                if (propertiesOtherThanCurrentProp.length > 0) {
-                    showDialogExistingContactFound(contact, function ()
-                    {
-                        currentPersonContact = contact;
-                        saveContact(currentPersonContact, currentProperty, function (data) {
-                            //alert('Contact saved successfully!');
-                            showSavedSplashDialog('Contact Saved!');       
-                            addOrUpdateContactToCurrentProperty(data);
-                            buildPersonContactMenu(currentProperty.Contacts, false);
-                        });
-                    });
+            if (textStatus == "success" && data) {
+                if (data.ErrorMsg && data.ErrorMsg.length > 0) {
+                    alert(data.ErrorMsg);
                 }
-                else {
-                    doLookup();
+                currentMarker.ContactInfoPacket = data;
+                if (data.WalletBalance != null) {
+                    // If the AvailableTracePsCredits is not null, then update the availableCredit variable
+                    availableCredit = data.WalletBalance;
+                    $('#availableCreditLabel').text(availableCredit);
                 }
+                if (data.EnquirySuccessful) {
+                    populateContactLookupInfo(data);
+                }
+            } else {
+                alert('Could not complete request.');
             }
-            else {
-                doLookup();
-            }
-        });
-    } else {
-        doLookup();
-    }
-
-    function doLookup() {
-        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Performing Enquiry...</p>' });
-        $.ajax({
-            type: "POST",
-            url: "RequestHandler.ashx",
-            data: JSON.stringify({ Instruction: "get_prop_owner_details", LightstoneIDOrCKNo: idNumber, ProspectingPropertyId: currentProperty.ProspectingPropertyId }),
-            success: function (data, textStatus, jqXHR) {
-                $.unblockUI();
-                if (textStatus == "success" && data) {
-                    if (data.ErrorMsg && data.ErrorMsg.length > 0) {
-                        alert(data.ErrorMsg);
-                    }
-                    currentMarker.ContactInfoPacket = data;
-                    if (data.AvailableTracePsCredits != null) {
-                        // If the AvailableTracePsCredits is not null, then update the availableCredit variable
-                        availableCredit = data.AvailableTracePsCredits;
-                        $('#availableCreditLabel').text(availableCredit);
-                    }
-                    if (data.EnquirySuccessful) {
-                        populateContactLookupInfo(data);
-                    }
-                } else {
-                    alert('Could not complete request.');
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.status);
-                alert(jqXHR.responseText);
-            },
-            dataType: "json"
-        });
-    }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.status);
+            alert(jqXHR.responseText);
+        },
+        dataType: "json"
+    });
 }
 
 function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCentreMap) {
@@ -380,6 +340,7 @@ function setCurrentMarker(suburb, property) {
 
                 $.each(suburb.ProspectingProperties, function (idx, pp) {
                     if (pp.ProspectingPropertyId == testpp.ProspectingPropertyId) {
+                        pp.Prospected = testpp.Prospected;
                         if (testpp.Prospected) {
                             if (pp.SS_FH == "FH") {
                                 pp.Marker.setIcon('Assets/marker_icons/prospecting/prospected.png');
@@ -998,7 +959,6 @@ function openSSUnitInfo(unit) {
                 if (currentProperty.Contacts && currentProperty.Contacts.length > 0) {
                     showMenu("contactdetails");
                 }
-
 
             } else {
                 alert('Could not complete request.');

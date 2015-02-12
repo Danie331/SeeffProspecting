@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://41.222.226.213/SeeffProspectingAuthService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:import schemaLocation="http://41.222.226.213/SeeffProspectingAuthService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/SeeffProspectingAuthService" />
+  <xs:import schemaLocation="http://localhost:63146/SeeffProspectingAuthService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://localhost:63146/SeeffProspectingAuthService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/SeeffProspectingAuthService" />
   <xs:element name="GetUserInfo">
     <xs:complexType>
       <xs:sequence>
@@ -16,31 +16,33 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="TakeOneCredit">
+  <xs:element name="DebitUserBalance">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="amount" type="xs:decimal" />
         <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="userGuid" type="q3:guid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="TakeOneCreditResponse">
+  <xs:element name="DebitUserBalanceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="TakeOneCreditResult" type="xs:int" />
+        <xs:element minOccurs="0" name="DebitUserBalanceResult" type="xs:decimal" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ReimburseOneCredit">
+  <xs:element name="CreditUserBalance">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="amount" type="xs:decimal" />
         <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="userGuid" type="q4:guid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ReimburseOneCreditResponse">
+  <xs:element name="CreditUserBalanceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="ReimburseOneCreditResult" type="xs:int" />
+        <xs:element minOccurs="0" name="CreditUserBalanceResult" type="xs:decimal" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

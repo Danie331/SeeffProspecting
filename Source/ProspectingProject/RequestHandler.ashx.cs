@@ -125,14 +125,14 @@ namespace ProspectingProject
 
         private string UpdateProspectingProperty(string json)
         {
-            ProspectingPropertyInputData dataPacket = ProspectingDomain.Deserialise<ProspectingPropertyInputData>(json);            
+            ProspectingInputData dataPacket = ProspectingDomain.Deserialise<ProspectingInputData>(json);            
             ProspectingDomain.UpdateProspectingRecord(dataPacket);
             return ProspectingDomain.SerializeToJsonWithDefaults("success");
         }
 
         private string LoadMatchingLightstoneAddresses(string json)
         {
-            ProspectingPropertyInputData dataPacket = ProspectingDomain.Deserialise<ProspectingPropertyInputData>(json);
+            ProspectingInputData dataPacket = ProspectingDomain.Deserialise<ProspectingInputData>(json);
             var matches = ProspectingDomain.GetMatchingAddresses(dataPacket);
             HttpContext.Current.Session["ProspectingEntities"] = null;
             HttpContext.Current.Session["ProspectingEntities"] = matches;
@@ -141,8 +141,8 @@ namespace ProspectingProject
 
         private string LookupPersonDetails(string json)
         {
-            ProspectingPropertyInputData dataPacket = ProspectingDomain.Deserialise<ProspectingPropertyInputData>(json);
-            ProspectingDataResponsePacket results = ProspectingDomain.PerformLookupTransaction(dataPacket);
+            ProspectingInputData dataPacket = ProspectingDomain.Deserialise<ProspectingInputData>(json);
+            PersonEnquiryResponsePacket results = ProspectingDomain.PerformLookup(dataPacket);
             return ProspectingDomain.SerializeToJsonWithDefaults(results);            
         }
 

@@ -16,6 +16,6 @@ namespace SeeffProspectingAuthService
         public string SuburbsList { get; set; }
 
         [DataMember]
-        public int AvailableCredit { get; set; }
+        public decimal AvailableCredit { get; set; }
     }
 }

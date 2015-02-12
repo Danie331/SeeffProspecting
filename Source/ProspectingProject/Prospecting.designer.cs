@@ -84,9 +84,9 @@ namespace ProspectingProject
     partial void Insertprospecting_contact_person(prospecting_contact_person instance);
     partial void Updateprospecting_contact_person(prospecting_contact_person instance);
     partial void Deleteprospecting_contact_person(prospecting_contact_person instance);
-    partial void Insertprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
-    partial void Updateprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
-    partial void Deleteprospecting_trace_ps_enquiry(prospecting_trace_ps_enquiry instance);
+    partial void Insertservice_enquiry_log(service_enquiry_log instance);
+    partial void Updateservice_enquiry_log(service_enquiry_log instance);
+    partial void Deleteservice_enquiry_log(service_enquiry_log instance);
     #endregion
 		
 		public ProspectingDataContext() : 
@@ -263,11 +263,11 @@ namespace ProspectingProject
 			}
 		}
 		
-		public System.Data.Linq.Table<prospecting_trace_ps_enquiry> prospecting_trace_ps_enquiries
+		public System.Data.Linq.Table<service_enquiry_log> service_enquiry_logs
 		{
 			get
 			{
-				return this.GetTable<prospecting_trace_ps_enquiry>();
+				return this.GetTable<service_enquiry_log>();
 			}
 		}
 		
@@ -3729,7 +3729,7 @@ namespace ProspectingProject
 		
 		private EntitySet<prospecting_person_property_relationship> _prospecting_person_property_relationships;
 		
-		private EntitySet<prospecting_trace_ps_enquiry> _prospecting_trace_ps_enquiries;
+		private EntitySet<service_enquiry_log> _service_enquiry_logs;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -3825,7 +3825,7 @@ namespace ProspectingProject
 		{
 			this._prospecting_company_property_relationships = new EntitySet<prospecting_company_property_relationship>(new Action<prospecting_company_property_relationship>(this.attach_prospecting_company_property_relationships), new Action<prospecting_company_property_relationship>(this.detach_prospecting_company_property_relationships));
 			this._prospecting_person_property_relationships = new EntitySet<prospecting_person_property_relationship>(new Action<prospecting_person_property_relationship>(this.attach_prospecting_person_property_relationships), new Action<prospecting_person_property_relationship>(this.detach_prospecting_person_property_relationships));
-			this._prospecting_trace_ps_enquiries = new EntitySet<prospecting_trace_ps_enquiry>(new Action<prospecting_trace_ps_enquiry>(this.attach_prospecting_trace_ps_enquiries), new Action<prospecting_trace_ps_enquiry>(this.detach_prospecting_trace_ps_enquiries));
+			this._service_enquiry_logs = new EntitySet<service_enquiry_log>(new Action<service_enquiry_log>(this.attach_service_enquiry_logs), new Action<service_enquiry_log>(this.detach_service_enquiry_logs));
 			OnCreated();
 		}
 		
@@ -4695,16 +4695,16 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_prospecting_trace_ps_enquiry", Storage="_prospecting_trace_ps_enquiries", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id")]
-		public EntitySet<prospecting_trace_ps_enquiry> prospecting_trace_ps_enquiries
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_service_enquiry_log", Storage="_service_enquiry_logs", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id")]
+		public EntitySet<service_enquiry_log> service_enquiry_logs
 		{
 			get
 			{
-				return this._prospecting_trace_ps_enquiries;
+				return this._service_enquiry_logs;
 			}
 			set
 			{
-				this._prospecting_trace_ps_enquiries.Assign(value);
+				this._service_enquiry_logs.Assign(value);
 			}
 		}
 		
@@ -4752,13 +4752,13 @@ namespace ProspectingProject
 			entity.prospecting_property = null;
 		}
 		
-		private void attach_prospecting_trace_ps_enquiries(prospecting_trace_ps_enquiry entity)
+		private void attach_service_enquiry_logs(service_enquiry_log entity)
 		{
 			this.SendPropertyChanging();
 			entity.prospecting_property = this;
 		}
 		
-		private void detach_prospecting_trace_ps_enquiries(prospecting_trace_ps_enquiry entity)
+		private void detach_service_enquiry_logs(service_enquiry_log entity)
 		{
 			this.SendPropertyChanging();
 			entity.prospecting_property = null;
@@ -5608,13 +5608,13 @@ namespace ProspectingProject
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.prospecting_trace_ps_enquiry")]
-	public partial class prospecting_trace_ps_enquiry : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.service_enquiry_log")]
+	public partial class service_enquiry_log : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _prospecting_trace_ps_enquiry_id;
+		private int _service_enquiry_log_id;
 		
 		private int _prospecting_property_id;
 		
@@ -5628,14 +5628,22 @@ namespace ProspectingProject
 		
 		private string _HWCE_indicator;
 		
+		private string _service_type_name;
+		
+		private System.Nullable<decimal> _enquiry_cost;
+		
+		private string _status_message;
+		
+		private string _exception;
+		
 		private EntityRef<prospecting_property> _prospecting_property;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void Onprospecting_trace_ps_enquiry_idChanging(int value);
-    partial void Onprospecting_trace_ps_enquiry_idChanged();
+    partial void Onservice_enquiry_log_idChanging(int value);
+    partial void Onservice_enquiry_log_idChanged();
     partial void Onprospecting_property_idChanging(int value);
     partial void Onprospecting_property_idChanged();
     partial void OnuserChanging(System.Guid value);
@@ -5648,30 +5656,38 @@ namespace ProspectingProject
     partial void Onid_numberChanged();
     partial void OnHWCE_indicatorChanging(string value);
     partial void OnHWCE_indicatorChanged();
+    partial void Onservice_type_nameChanging(string value);
+    partial void Onservice_type_nameChanged();
+    partial void Onenquiry_costChanging(System.Nullable<decimal> value);
+    partial void Onenquiry_costChanged();
+    partial void Onstatus_messageChanging(string value);
+    partial void Onstatus_messageChanged();
+    partial void OnexceptionChanging(string value);
+    partial void OnexceptionChanged();
     #endregion
 		
-		public prospecting_trace_ps_enquiry()
+		public service_enquiry_log()
 		{
 			this._prospecting_property = default(EntityRef<prospecting_property>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_trace_ps_enquiry_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int prospecting_trace_ps_enquiry_id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_service_enquiry_log_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int service_enquiry_log_id
 		{
 			get
 			{
-				return this._prospecting_trace_ps_enquiry_id;
+				return this._service_enquiry_log_id;
 			}
 			set
 			{
-				if ((this._prospecting_trace_ps_enquiry_id != value))
+				if ((this._service_enquiry_log_id != value))
 				{
-					this.Onprospecting_trace_ps_enquiry_idChanging(value);
+					this.Onservice_enquiry_log_idChanging(value);
 					this.SendPropertyChanging();
-					this._prospecting_trace_ps_enquiry_id = value;
-					this.SendPropertyChanged("prospecting_trace_ps_enquiry_id");
-					this.Onprospecting_trace_ps_enquiry_idChanged();
+					this._service_enquiry_log_id = value;
+					this.SendPropertyChanged("service_enquiry_log_id");
+					this.Onservice_enquiry_log_idChanged();
 				}
 			}
 		}
@@ -5800,7 +5816,87 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_prospecting_trace_ps_enquiry", Storage="_prospecting_property", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_service_type_name", DbType="VarChar(20)")]
+		public string service_type_name
+		{
+			get
+			{
+				return this._service_type_name;
+			}
+			set
+			{
+				if ((this._service_type_name != value))
+				{
+					this.Onservice_type_nameChanging(value);
+					this.SendPropertyChanging();
+					this._service_type_name = value;
+					this.SendPropertyChanged("service_type_name");
+					this.Onservice_type_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_enquiry_cost", DbType="Decimal(19,4)")]
+		public System.Nullable<decimal> enquiry_cost
+		{
+			get
+			{
+				return this._enquiry_cost;
+			}
+			set
+			{
+				if ((this._enquiry_cost != value))
+				{
+					this.Onenquiry_costChanging(value);
+					this.SendPropertyChanging();
+					this._enquiry_cost = value;
+					this.SendPropertyChanged("enquiry_cost");
+					this.Onenquiry_costChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status_message", DbType="VarChar(255)")]
+		public string status_message
+		{
+			get
+			{
+				return this._status_message;
+			}
+			set
+			{
+				if ((this._status_message != value))
+				{
+					this.Onstatus_messageChanging(value);
+					this.SendPropertyChanging();
+					this._status_message = value;
+					this.SendPropertyChanged("status_message");
+					this.Onstatus_messageChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_exception", DbType="NVarChar(MAX)")]
+		public string exception
+		{
+			get
+			{
+				return this._exception;
+			}
+			set
+			{
+				if ((this._exception != value))
+				{
+					this.OnexceptionChanging(value);
+					this.SendPropertyChanging();
+					this._exception = value;
+					this.SendPropertyChanged("exception");
+					this.OnexceptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_service_enquiry_log", Storage="_prospecting_property", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id", IsForeignKey=true)]
 		public prospecting_property prospecting_property
 		{
 			get
@@ -5817,12 +5913,12 @@ namespace ProspectingProject
 					if ((previousValue != null))
 					{
 						this._prospecting_property.Entity = null;
-						previousValue.prospecting_trace_ps_enquiries.Remove(this);
+						previousValue.service_enquiry_logs.Remove(this);
 					}
 					this._prospecting_property.Entity = value;
 					if ((value != null))
 					{
-						value.prospecting_trace_ps_enquiries.Add(this);
+						value.service_enquiry_logs.Add(this);
 						this._prospecting_property_id = value.prospecting_property_id;
 					}
 					else

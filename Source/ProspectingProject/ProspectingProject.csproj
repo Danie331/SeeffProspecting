@@ -695,6 +695,8 @@
     <Content Include="Assets\bin.png" />
     <Content Include="Assets\capture_address.png" />
     <Content Include="Assets\contact.png" />
+    <Content Include="Assets\dracore_email_lookup.png" />
+    <Content Include="Assets\dracore_phone_lookup.png" />
     <Content Include="Assets\email_icon.png" />
     <Content Include="Assets\fh_edit.png" />
     <Content Include="Assets\frm_edit.png" />
@@ -712,6 +714,7 @@
     <Content Include="Assets\seeff_logo.png" />
     <Content Include="Assets\ss_edit.png" />
     <Content Include="Assets\tps_info.png" />
+    <Content Include="Assets\traceps_lookup.png" />
     <Content Include="Database scripts\boss.sql" />
     <Content Include="Database scripts\seeff_prospecting.sql" />
     <Content Include="Database scripts\seeff_prospecting_data_takeon.sql" />
@@ -732,9 +735,6 @@
     <Content Include="Scripts\Core\ProspectingObjectBuilder.js" />
     <Content Include="Scripts\StyleSheets\Panel.css" />
     <Content Include="Scripts\StyleSheets\ProspectingDefault.css" />
-    <Content Include="Service References\ProspectingUserAuthService\ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
     <Content Include="Prospecting.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>Prospecting.designer.cs</LastGenOutput>
@@ -745,18 +745,31 @@
     <None Include="Properties\PublishProfiles\Seeff Server.pubxml" />
     <None Include="Properties\PublishProfiles\seeffprospecting - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\seeffprospecting - Web Deploy.pubxml" />
+    <Content Include="Service References\ProspectingUserAuthService\ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService.wsdl" />
+    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\lightstoneSeeffService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\lightstoneSeeffService\seeff.disco" />
+    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService.disco" />
     <None Include="Service References\ProspectingUserAuthService\configuration91.svcinfo" />
     <None Include="Service References\ProspectingUserAuthService\configuration.svcinfo" />
     <None Include="Service References\ProspectingUserAuthService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService1.disco" />
-    <None Include="Web References\lightstoneSeeffService\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\lightstoneSeeffService\seeff.disco" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -785,10 +798,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Services\DracoreLiveService.cs" />
-    <Compile Include="Services\DracoreServiceProxy.cs" />
-    <Compile Include="Services\DracoreTestService.cs" />
-    <Compile Include="Services\IDracoreService.cs" />
+    <Compile Include="Services\Dracore\DracoreEmailAddressLookup.cs" />
+    <Compile Include="Services\Dracore\DracoreLiveService.cs" />
+    <Compile Include="Services\Dracore\DracorePhoneNumberLookup.cs" />
+    <Compile Include="Services\Dracore\DracoreServiceProxy.cs" />
+    <Compile Include="Services\Dracore\DracoreTestService.cs" />
+    <Compile Include="Services\Dracore\IDracoreService.cs" />
+    <Compile Include="Services\EnquiryServiceFactory.cs" />
+    <Compile Include="Services\EnquiryServiceManager.cs" />
+    <Compile Include="Services\IPersonEnquiryService.cs" />
+    <Compile Include="Services\TracePS\ITracepsService.cs" />
+    <Compile Include="Services\TracePS\TracepsLiveService.cs" />
+    <Compile Include="Services\TracePS\TracepsPhoneNumberLookup.cs" />
+    <Compile Include="Services\TracePS\TracepsTestService.cs" />
     <Compile Include="Types\IProspectingContactEntity.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\BaseDataRequestPacket.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\CompanyContactDataPacket.cs" />
@@ -862,16 +884,6 @@
     <Content Include="RequestHandler.ashx" />
     <None Include="Web References\lightstoneSeeffService\seeff.wsdl" />
     <Content Include="packages.config" />
-    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService1.wsdl" />
-    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService31.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService32.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -902,15 +914,14 @@
     </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\ProspectingUserAuthService\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Prospecting.dbml.layout">
       <DependentUpon>Prospecting.dbml</DependentUpon>
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ProspectingUserAuthService\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

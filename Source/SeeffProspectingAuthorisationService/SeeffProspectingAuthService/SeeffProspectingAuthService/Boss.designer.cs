@@ -190,9 +190,15 @@ namespace SeeffProspectingAuthService
 		
 		private string _prospecting_areas;
 		
-		private int _prospecting_credits;
+		private decimal _prospecting_credits;
 		
 		private bool _prospecting_contact_sync;
+		
+		private bool _active;
+		
+		private bool _prospecting_control;
+		
+		private bool _compliance_access;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -308,10 +314,16 @@ namespace SeeffProspectingAuthService
     partial void Onsmart_pass_email_summaryChanged();
     partial void Onprospecting_areasChanging(string value);
     partial void Onprospecting_areasChanged();
-    partial void Onprospecting_creditsChanging(int value);
+    partial void Onprospecting_creditsChanging(decimal value);
     partial void Onprospecting_creditsChanged();
     partial void Onprospecting_contact_syncChanging(bool value);
     partial void Onprospecting_contact_syncChanged();
+    partial void OnactiveChanging(bool value);
+    partial void OnactiveChanged();
+    partial void Onprospecting_controlChanging(bool value);
+    partial void Onprospecting_controlChanged();
+    partial void Oncompliance_accessChanging(bool value);
+    partial void Oncompliance_accessChanged();
     #endregion
 		
 		public user_registration()
@@ -1419,8 +1431,8 @@ namespace SeeffProspectingAuthService
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_credits", DbType="Int NOT NULL")]
-		public int prospecting_credits
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_credits", DbType="Decimal(18,2) NOT NULL")]
+		public decimal prospecting_credits
 		{
 			get
 			{
@@ -1455,6 +1467,66 @@ namespace SeeffProspectingAuthService
 					this._prospecting_contact_sync = value;
 					this.SendPropertyChanged("prospecting_contact_sync");
 					this.Onprospecting_contact_syncChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_active", DbType="Bit NOT NULL")]
+		public bool active
+		{
+			get
+			{
+				return this._active;
+			}
+			set
+			{
+				if ((this._active != value))
+				{
+					this.OnactiveChanging(value);
+					this.SendPropertyChanging();
+					this._active = value;
+					this.SendPropertyChanged("active");
+					this.OnactiveChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_control", DbType="Bit NOT NULL")]
+		public bool prospecting_control
+		{
+			get
+			{
+				return this._prospecting_control;
+			}
+			set
+			{
+				if ((this._prospecting_control != value))
+				{
+					this.Onprospecting_controlChanging(value);
+					this.SendPropertyChanging();
+					this._prospecting_control = value;
+					this.SendPropertyChanged("prospecting_control");
+					this.Onprospecting_controlChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_compliance_access", DbType="Bit NOT NULL")]
+		public bool compliance_access
+		{
+			get
+			{
+				return this._compliance_access;
+			}
+			set
+			{
+				if ((this._compliance_access != value))
+				{
+					this.Oncompliance_accessChanging(value);
+					this.SendPropertyChanging();
+					this._compliance_access = value;
+					this.SendPropertyChanged("compliance_access");
+					this.Oncompliance_accessChanged();
 				}
 			}
 		}

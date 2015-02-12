@@ -25,13 +25,18 @@ namespace ProspectingProject
 
             _token.Username = "gvuAdam";
             _token.TokenVerify = sTokenVerify;
-            _token.SubAccountRef = "109";//HttpContext.Current.Session["user_guid"].ToString();
+            _token.SubAccountRef = "109";
             _token.RequestTime = now;
         }
 
-        public Consumer003 ByIdTYPE003(long idNumber)
+        public Consumer001 ByIdTYPE001(long prospectingIdNumber)
         {
-            return ByIdTYPE003(_token, idNumber);
+            return ByIdTYPE001(_token, prospectingIdNumber);
+        }
+
+        public Consumer002 ByIdTYPE002(long prospectingIdNumber)
+        {
+            return ByIdTYPE002(_token, prospectingIdNumber);
         }
     }
 }

@@ -62,12 +62,12 @@ function openAndPopulateNewContactPerson(infoPacket) {
         return val.Value == 'Owner';
     })[0];
 
-    infoPacket.OwnerName = toTitleCase(infoPacket.OwnerName);
-    infoPacket.OwnerSurname = toTitleCase(infoPacket.OwnerSurname);
+    infoPacket.OwnerName = infoPacket.OwnerName != null ? toTitleCase(infoPacket.OwnerName) : null;
+    infoPacket.OwnerSurname = infoPacket.OwnerSurname != null ? toTitleCase(infoPacket.OwnerSurname) : null;
     var newContact = newPersonContact(infoPacket.OwnerName,
         infoPacket.OwnerSurname,
         infoPacket.Title,
-        infoPacket.IdCkNo,
+        infoPacket.IdNumber,
         ownerRelationshipType.Key,
         contactNos, contactEmails,
         false,
@@ -132,7 +132,7 @@ function buildGeneralInfoHtml(contact) {
     html.append(companySelect);
 
     html.append("<p />");
-    var saveBtn = $("<input type='button' id='personGeneralSaveBtn' value='Save..' />");
+    var saveBtn = $("<input type='button' id='personGeneralSaveBtn' value='Save..' style='cursor:pointer;' />");
     html.append(saveBtn);
     saveBtn.click(function () { handleSaveContactPerson(); });
 
@@ -316,6 +316,16 @@ function handleSaveContactDetails(phoneNumbers, emailAddresses) {
                         contactDetailsWidget.resetItemArrays(currentPersonContact.PhoneNumbers, currentPersonContact.EmailAddresses);
                         contactDetailsWidget.rebuildDivs(!currentPersonContact.IsPOPIrestricted);
                         addOrUpdateContactToCurrentProperty(data);
+
+                        if (currentProperty != null) {
+                            var hasContactDetails = false;
+                            if (data.PhoneNumbers && data.PhoneNumbers.length > 0)
+                                hasContactDetails = true;
+                            if (data.EmailAddresses && data.EmailAddresses.length > 0)
+                                hasContactDetails = true;
+
+                            currentProperty.Prospected = hasContactDetails;
+                        }
                     });
                 } else {
                     alert('A contact with these details already exists. ');
@@ -662,33 +672,33 @@ function buildContactDashboard(contacts) {
     container.append("<hr /><p />");
 
     var availableCreditLabel = $("<label id='availableCreditLabel' style='color: red;' />");
-    container.append("Available Prospecting credit: ");
+    container.append("Available Prospecting amount: R ");
     container.append(availableCreditLabel);
     availableCreditLabel.text(availableCredit);
 
     container.append("<br />");
-    container.append("ID number of contact person: <input type='text' id='knownIdTextbox' style='padding:2px;' />&nbsp;");
-    var searchKnownIdBtn = $("<input type='button' id='knownIdSearch' value='Contact Lookup' style='display:inline-block;vertical-align:bottom;cursor:pointer;' />");
-    container.append(searchKnownIdBtn);
-    var tpsInfo = $("<img src='Assets/tps_info.png' style='cursor:pointer;vertical-align:bottom;padding-left:10px;' />");
-    container.append(tpsInfo);
+    //container.append("ID number of contact person: <input type='text' id='knownIdTextbox' style='padding:2px;' />&nbsp;");
+    //var searchKnownIdBtn = $("<input type='button' id='knownIdSearch' value='Contact Lookup' style='display:inline-block;vertical-align:bottom;cursor:pointer;' />");
+    //container.append(searchKnownIdBtn);
+    //var tpsInfo = $("<img src='Assets/tps_info.png' style='cursor:pointer;vertical-align:bottom;padding-left:10px;' />");
+    //container.append(tpsInfo);
 
-    tpsInfo.on('mouseover', function () {
-        tooltip.pop(this, "Searches for contact details for the specified ID number. The cost of such an enquiry, if successful, is R 1.00 (excl. VAT).", { sticky: true, maxWidth: 500 });
-    });
-    tpsInfo.on('mouseout', function () {
-        tooltip.hide();
-    });
+    //tpsInfo.on('mouseover', function () {
+    //    tooltip.pop(this, "Searches for contact details for the specified ID number. The cost of such an enquiry, if successful, is R 1.00 (excl. VAT).", { sticky: true, maxWidth: 500 });
+    //});
+    //tpsInfo.on('mouseout', function () {
+    //    tooltip.hide();
+    //});
 
-    searchKnownIdBtn.click(function () {
-        var idNumber = $('#knownIdTextbox').val().trim();
-        if (idNumber.length == 13) {
-            performPersonLookup(idNumber, true);
-        } else {
-            alert('The ID number you entered is not valid.');
-        }
-    });
-    container.append("<br />");
+    //searchKnownIdBtn.click(function () {
+    //    var idNumber = $('#knownIdTextbox').val().trim();
+    //    if (idNumber.length == 13) {
+    //        performPersonLookup(idNumber, true);
+    //    } else {
+    //        alert('The ID number you entered is not valid.');
+    //    }
+    //});
+    //container.append("<br />");
     container.append("<hr /><br />");
 
     // Companies
@@ -708,7 +718,7 @@ function buildContactDashboard(contacts) {
     }
 
     var table = $("<table id='contactsTbl' style='width: 100%;' />");
-    table.append($("<tr> <th>Contact Name</th> <th>ID No.</th> <th>Has Details</th> <th>Person Lookup</th> </tr>"));
+    table.append($("<tr> <th>Contact Name</th> <th>ID No.</th> <th>Has Details</th> </tr>"));
 
     $.each(contacts, function (idx, c) {
         var contactRow = buildContactRow(c);
@@ -729,14 +739,6 @@ function buildContactDashboard(contacts) {
             var rowId = row.attr('id');
             var idNumber = rowId.replace('contact_person_', '');
 
-            // Find the contact to display
-            //var selectedValue = $(this).val();
-            //if (selectedValue == '') return;
-            //if (selectedValue == 'new_contact_person') {
-            //    openExpanderWidget(newContactDetails);
-            //    currentPersonContact = null;
-            //    return;
-            //}
             var contactPerson = $.grep(contacts, function (c) {
                 return idNumber == c.IdNumber; // person or company
             })[0];
@@ -757,31 +759,30 @@ function buildContactDashboard(contacts) {
         var hasPhoneNumber = contact.PhoneNumbers != null && contact.PhoneNumbers.length > 0;
         var hasEmailAddress = contact.EmailAddresses != null && contact.EmailAddresses.length > 0;
         if (hasPhoneNumber) {
-            phoneEmailIdicatorData.append($("<img src='Assets/phone_icon.png' style='display:inline-block;padding:2px;float:right;' title='Has contact phone number(s)' />"));
+            phoneEmailIdicatorData.append($("<img src='Assets/phone_icon.png' style='display:inline-block;padding:2px;' title='Has contact phone number(s)' />"));
         }
         if (hasEmailAddress) {
-            phoneEmailIdicatorData.append($("<img src='Assets/email_icon.png' style='display:inline-block;padding:2px;float:right;' title='Has contact email address(es)' />"));
+            phoneEmailIdicatorData.append($("<img src='Assets/email_icon.png' style='display:inline-block;padding:2px;' title='Has contact email address(es)' />"));
         }
         tableRow.append(phoneEmailIdicatorData);
 
-        var personLookupBtnId = 'lookup_btn_' + contact.IdNumber;
-        var lookupTd = $('<td />');
-        var disabled = contact.IsPOPIrestricted ? 'disabled' : '';
-        var performLookupBtn = $("<input type='button' id='" + personLookupBtnId + "' value='Contact Lookup' title='Searches for contact details for the selected owner. The cost of such an enquiry, if successful, is R 1.00 (excl. VAT).' style='cursor:pointer;' " + disabled + "/>");
-        performLookupBtn.click(function (e) {
-            e.stopPropagation();
-            performPersonLookup(contact.IdNumber, false);
-        });
-        lookupTd.append(performLookupBtn);
-
-        tableRow.append(lookupTd);
+        //var personLookupBtnId = 'lookup_btn_' + contact.IdNumber;
+        //var lookupTd = $('<td />');
+        //var disabled = contact.IsPOPIrestricted ? 'disabled' : '';
+        //var performLookupBtn = $("<input type='button' id='" + personLookupBtnId + "' value='Contact Lookup' title='Searches for contact details for the selected owner. The cost of such an enquiry, if successful, is R 1.00 (excl. VAT).' style='cursor:pointer;' " + disabled + "/>");
+        //performLookupBtn.click(function (e) {
+        //    e.stopPropagation();
+        //    performPersonLookup(contact.IdNumber, false);
+        //});
+        //lookupTd.append(performLookupBtn);
+        //tableRow.append(lookupTd);
 
         return tableRow;
     }
 
     container.append(table);
     //container.append("<br />");
-    var addNewContactBtn = $("<input type='button' id='createNewContactBtn' value='Manually Capture Contact' style='display:inline-block;float: right;' />");
+    var addNewContactBtn = $("<input type='button' id='createNewContactBtn' value='Manually Capture Contact' style='display:inline-block;float: right;cursor: pointer;' />");
     container.append(addNewContactBtn);
     addNewContactBtn.click(function () {
         $('#contactsExpander').remove();
@@ -794,7 +795,7 @@ function buildContactDashboard(contacts) {
 
 function populateContactLookupInfo(infoPacket) {
 
-    var idNumber = infoPacket.IdCkNo;
+    var idNumber = infoPacket.IdNumber;
     var contactRows = infoPacket.ContactRows;
 
     var contactPerson = $.grep(currentProperty.Contacts, function (c) {

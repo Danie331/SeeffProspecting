@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
-  <contractRef ref="http://41.222.226.213/SeeffProspectingAuthService.svc?wsdl" docRef="http://41.222.226.213/SeeffProspectingAuthService.svc" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <contractRef ref="http://localhost:63146/SeeffProspectingAuthService.svc?wsdl" docRef="http://localhost:63146/SeeffProspectingAuthService.svc" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
 </discovery>

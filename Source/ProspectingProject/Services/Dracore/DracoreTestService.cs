@@ -15,7 +15,7 @@ namespace ProspectingProject
             _token = new Token();
             string now = DateTime.Now.ToString();
 
-            string ipAddress = "105.236.239.220";
+            string ipAddress = "41.150.204.243";
             string sUsername = "ghJodie";
             string sPassword = "password";
             string sToHash = sUsername + now + sPassword + ipAddress;
@@ -26,15 +26,23 @@ namespace ProspectingProject
 
             _token.Username = "ghJodie";
             _token.TokenVerify = sTokenVerify;
-            _token.SubAccountRef = HttpContext.Current.Session["user_guid"].ToString();
             _token.RequestTime = now;
         }
 
-        public Consumer003 ByIdTYPE003(long idNumber)
+        // Phone only
+        public Consumer001 ByIdTYPE001(long prospectingIdNumber)
         {
-            Consumer003 result = ByIdTYPE003(_token, 6805055722082);
-            result.EMAIL_1 = "test_email@test.com";
-            //result.HOME_1 = "6557657767";
+            Consumer001 result = ByIdTYPE001(_token, 6805055722082);
+            result.HOME_1 = "0215558160";
+            result.WORK_1 = "0214568759";
+            return result;
+        }
+
+        // Email only
+        public Consumer002 ByIdTYPE002(long prospectingIdNumber)
+        {
+            Consumer002 result = ByIdTYPE002(_token, 6805055722082);
+            result.EMAIL_1 = "some_bogus_email@test.com";
             return result;
         }
     }

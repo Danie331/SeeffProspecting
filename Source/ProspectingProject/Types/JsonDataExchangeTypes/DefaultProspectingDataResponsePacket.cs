@@ -8,20 +8,21 @@ namespace ProspectingProject
     /// <summary>
     /// Data results after performing an enquiry against a person
     /// </summary>
-    public class ProspectingDataResponsePacket
+    public class PersonEnquiryResponsePacket
     {
-        public ProspectingDataResponsePacket()
+        private string _errorMessage = null;
+        public PersonEnquiryResponsePacket()
         {
             ContactRows = new List<ContactRow>();
         }
 
-        public string IdCkNo { get; set; }
+        public string IdNumber { get; set; }
         public List<ContactRow> ContactRows { get; set; }
         public string OwnerName { get; set; }
         public string OwnerSurname { get; set; }
         public string OwnerGender { get; set; }
         public bool EnquirySuccessful { get; set; }
-        public int? AvailableTracePsCredits { get; set; }
+        public decimal? WalletBalance { get; set; }
 
         // New fields by Dracore
         public string Title { get; set; }
@@ -37,8 +38,19 @@ namespace ProspectingProject
         public string BureauAdverseIndicator { get; set; }
         public string Citizenship { get; set; }
 
-        public string ErrorMsg { get; set; }
+        // See how this renders on front-end
+        public string ErrorMsg 
+        {
+            get { return _errorMessage; }
+            set
+            {
+                _errorMessage = value;
+                EnquirySuccessful = false;
+            } 
+        }
 
         public string HWCE_indicator { get; set; }
+
+        public string LookupType { get; set; }
     }
 }

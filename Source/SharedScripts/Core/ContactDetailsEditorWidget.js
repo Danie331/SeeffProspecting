@@ -72,7 +72,7 @@ function ContactDetailsEditorWidget(containerElementId, arrayOfPhoneNumberObject
     };
 
     function buildSaveBtn() {
-        var button = $("<input type='button' id='saveContactDetailsBtn' value='Save..' />");
+        var button = $("<input type='button' id='saveContactDetailsBtn' value='Save..' style='cursor:pointer;' />");
         button.prop('disabled', !_canEdit);
         button.on('click', function () { saveBtnClick(_phoneNumbers, _emailAddresses); });
 
@@ -100,7 +100,7 @@ function ContactDetailsEditorWidget(containerElementId, arrayOfPhoneNumberObject
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function buildPhoneNumbers(phoneNumbersDiv) {
-        insertAddNewPhoneBtn(phoneNumbersDiv);
+        addContactPhoneCaptureOptions(phoneNumbersDiv);
         if (_phoneNumbers) {
             $.each(_phoneNumbers, function (index, item) {
                 var elements = buildPhoneContactRow(item, _phoneTypes);
@@ -110,7 +110,7 @@ function ContactDetailsEditorWidget(containerElementId, arrayOfPhoneNumberObject
     }
 
     function buildEmailAddresses(emailAddressesDiv) {
-        insertAddNewEmailBtn(emailAddressesDiv);
+        addContactEmailCaptureOptions(emailAddressesDiv);
         if (_emailAddresses) {
             $.each(_emailAddresses, function (index, item) {
                 var elements = buildEmailContactRow(item, _emailTypes);
@@ -471,9 +471,17 @@ function ContactDetailsEditorWidget(containerElementId, arrayOfPhoneNumberObject
         someDiv.append("<p class='contact-newItemSplitter' />");
     }
 
-    function insertAddNewPhoneBtn(targetDiv) {
-        var link = $("<input type='button' id='addPhone' value='Add number..' class='addNewItemBtn' />");
-        targetDiv.append(link);
+    function addContactPhoneCaptureOptions(targetDiv) {
+
+        var lookupsDiv = $("<div id='contactPhoneLookups' />");
+        var dracoreBtn = $("<input id='dracorePhoneLookupBtn' type='button' style='margin-right: 5px;display:inline-block;cursor:pointer;' value='Dracore Look-up' title='This will cost R 0.60c (excl. VAT) if successful'></input>");
+        var tracepsBtn = $("<input id='tracepsLookupBtn' type='button' style='margin-right: 5px;display:inline-block;cursor:pointer;' value='TracePS Look-up' title='This will cost R 0.60c (excl. VAT) if successful'></input>");
+        var link = $("<input type='button' id='addPhone' value='Manually add new number..' class='addNewItemBtn' style='display:inline-block;cursor:pointer;' />");
+        lookupsDiv.append(dracoreBtn).append(tracepsBtn).append(link).append('<p />');
+
+        targetDiv.append(lookupsDiv);
+        dracoreBtn.prop('disabled', !_canEdit);
+        tracepsBtn.prop('disabled', !_canEdit);
         link.prop('disabled', !_canEdit);
 
         containerDiv.unbind('click.addPhone').on('click.addPhone', '#addPhone', function () {
@@ -487,11 +495,51 @@ function ContactDetailsEditorWidget(containerElementId, arrayOfPhoneNumberObject
             _phoneNumbers.push(newRow);
             toggleSaveBtnEnabled(false);
         });
+
+        containerDiv.unbind('click.dracorePhoneLookupBtn').on('click.dracorePhoneLookupBtn', '#dracorePhoneLookupBtn', function () {            
+            var idNumber = getIDNumberForLookup();
+            if (idNumber) {
+                performPersonLookup(idNumber, 'DRACORE_PHONE');
+            } else {
+                alert('The ID number specified is not valid.');
+            }
+        });
+
+        containerDiv.unbind('click.tracepsLookupBtn').on('click.tracepsLookupBtn', '#tracepsLookupBtn', function () {
+            var idNumber = getIDNumberForLookup();
+            if (idNumber) {
+                performPersonLookup(idNumber, 'TRACEPS');
+            } else {
+                alert('The ID number specified is not valid.');
+            }
+        });
     }
 
-    function insertAddNewEmailBtn(targetDiv) {
-        var link = $("<input type='button' id='addEmail' value='Add email..' class='addNewItemBtn' />");
-        targetDiv.append(link);
+    function getIDNumberForLookup() {
+        // currentPersonContact != null, currentPersonContact == null, currentPersonContact == null BUT an ID number has been entered (not saved - test before and after save) 
+        var idNumber = null;
+        if (currentPersonContact != null) {
+            idNumber = currentPersonContact.IdNumber;
+        }
+        if (currentPersonContact == null) {
+            // Test whether an ID number has been entered when capturing manually
+            var idNo = $('#idOrCkTextBox').val().trim();
+            if (idNo.length == 13) { // change this to do a proper ID check.
+                idNumber = idNo;
+            }
+        }
+
+        return idNumber;
+    }
+
+    function addContactEmailCaptureOptions(targetDiv) {
+        var lookupDiv = $("<div id='contactEmailLookups' />");
+        var dracoreEmail = $("<input id='dracoreEmailLookupBtn' type='button' style='margin-right: 5px;display:inline-block;cursor:pointer;' value='Dracore Look-up' title='This will cost R 0.40c (excl. VAT) if successful'></input>");
+        var link = $("<input type='button' id='addEmail' value='Manually add new email..' class='addNewItemBtn' style='display:inline-block;cursor:pointer;' />");
+        lookupDiv.append(dracoreEmail).append(link).append('<p />');
+
+        targetDiv.append(lookupDiv);
+        dracoreEmail.prop('disabled', !_canEdit);
         link.prop('disabled', !_canEdit);
 
         containerDiv.unbind('click.addEmail').on('click.addEmail', '#addEmail', function () {
@@ -504,6 +552,15 @@ function ContactDetailsEditorWidget(containerElementId, arrayOfPhoneNumberObject
 
             _emailAddresses.push(newRow);
             toggleSaveBtnEnabled(false);
+        });
+
+        containerDiv.unbind('click.dracoreEmailLookupBtn').on('click.dracoreEmailLookupBtn', '#dracoreEmailLookupBtn', function () {
+            var idNumber = getIDNumberForLookup();
+            if (idNumber) {
+                performPersonLookup(idNumber, 'DRACORE_EMAIL');
+            } else {
+                alert('The ID number specified is not valid.');
+            }
         });
     }
 

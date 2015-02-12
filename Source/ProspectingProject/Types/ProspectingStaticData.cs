@@ -8,6 +8,10 @@ namespace ProspectingProject
 {
     public class ProspectingStaticData
     {
+        public const string DracorePhoneEnquiryRequest = "DRACORE_PHONE";
+        public const string DracoreEmailEnquiryRequest = "DRACORE_EMAIL";
+        public const string TracePSEnquiryRequest = "TRACEPS";
+
         public static List<KeyValuePair<int, string>> ContactDetailTypes {get; set;}
         public static List<KeyValuePair<int, string>> PersonPropertyRelationshipTypes { get; set; }
         public static List<KeyValuePair<int, string>> CompanyPropertyRelationshipTypes { get; set; }

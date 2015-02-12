@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="zvk5qOLoWvL7xNlVwr97Yzazl7k=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="uKGnRkR09U05rJSnTHuCftARfmE=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="BasicHttpBinding_ISeeffProspectingAuthService1">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BasicHttpBinding_ISeeffProspectingAuthService" contract="ProspectingUserAuthService.ISeeffProspectingAuthService" bindingType="basicHttpBinding" address="http://41.222.226.213/SeeffProspectingAuthService.svc" bindingConfiguration="BasicHttpBinding_ISeeffProspectingAuthService1">
+    <endpoint name="BasicHttpBinding_ISeeffProspectingAuthService" contract="ProspectingUserAuthService.ISeeffProspectingAuthService" bindingType="basicHttpBinding" address="http://localhost:63146/SeeffProspectingAuthService.svc" bindingConfiguration="BasicHttpBinding_ISeeffProspectingAuthService1">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://41.222.226.213/SeeffProspectingAuthService.svc</serializedValue>
+          <serializedValue>http://localhost:63146/SeeffProspectingAuthService.svc</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

@@ -210,7 +210,7 @@
       <Column Name="lightstone_suburb" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Association Name="prospecting_property_prospecting_company_property_relationship" Member="prospecting_company_property_relationships" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_company_property_relationship" />
       <Association Name="prospecting_property_prospecting_person_property_relationship" Member="prospecting_person_property_relationships" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_person_property_relationship" />
-      <Association Name="prospecting_property_prospecting_trace_ps_enquiry" Member="prospecting_trace_ps_enquiries" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_trace_ps_enquiry" />
+      <Association Name="prospecting_property_service_enquiry_log" Member="service_enquiry_logs" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="service_enquiry_log" />
     </Type>
   </Table>
   <Table Name="dbo.prospecting_contact_person" Member="prospecting_contact_persons">
@@ -249,16 +249,20 @@
       <Association Name="prospecting_person_title_prospecting_contact_person" Member="prospecting_person_title" ThisKey="person_title" OtherKey="prospecting_person_title_id" Type="prospecting_person_title" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.prospecting_trace_ps_enquiry" Member="prospecting_trace_ps_enquiries">
-    <Type Name="prospecting_trace_ps_enquiry">
-      <Column Name="prospecting_trace_ps_enquiry_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+  <Table Name="dbo.service_enquiry_log" Member="service_enquiry_logs">
+    <Type Name="service_enquiry_log">
+      <Column Name="service_enquiry_log_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="prospecting_property_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="[user]" Member="user" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
       <Column Name="date_of_enquiry" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="successful" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="id_number" Type="System.String" DbType="VarChar(13) NOT NULL" CanBeNull="false" />
       <Column Name="HWCE_indicator" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
-      <Association Name="prospecting_property_prospecting_trace_ps_enquiry" Member="prospecting_property" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_property" IsForeignKey="true" />
+      <Column Name="service_type_name" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="enquiry_cost" Type="System.Decimal" DbType="Decimal(19,4)" CanBeNull="true" />
+      <Column Name="status_message" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="exception" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="prospecting_property_service_enquiry_log" Member="prospecting_property" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_property" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.find_area_id" Method="find_area_id">

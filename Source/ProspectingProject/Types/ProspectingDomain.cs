@@ -11,7 +11,7 @@ using System.Web;
 using System.Web.Script.Serialization;
 using System.Xml.Linq;
 using Newtonsoft.Json;
-using ProspectingProject.ProspectingUserAuthService;
+using ProspectingProject.Services;
 
 namespace ProspectingProject
 {
@@ -162,14 +162,6 @@ namespace ProspectingProject
             return companies;
         }
 
-        private static bool HasTracePSEnquiry(int prospectingPropertyId)
-        {
-            using (var prospectingDB = new ProspectingDataContext())
-            {
-                return prospectingDB.prospecting_trace_ps_enquiries.Any(s => s.prospecting_property_id == prospectingPropertyId);
-            }
-        }
-
         private static bool DetermineIfAnyContactsHaveDetails(int prospectingPropertyId)
         {
             using (var prospectingDB = new ProspectingDataContext())
@@ -183,40 +175,6 @@ namespace ProspectingProject
             }
         }
 
-        //private static List<int?> LoadPropertiesInSS(int? lightstonePropertyId, List<LightstoneListing> allLightstoneListings)
-        //{
-        //    if (lightstonePropertyId == null || allLightstoneListings == null)
-        //    {
-        //        return new List<int?>();
-        //    }
-
-        //    // Load all units that are part of the sectional scheme this unit belongs to
-        //    var unit = allLightstoneListings.First(s => s.PropertyId == lightstonePropertyId);
-        //    return (from ss in allLightstoneListings
-        //            where ss.PropertyId != unit.PropertyId && ss.LatLong.Equals(unit.LatLong)
-        //            select ss.PropertyId).ToList();
-        //}
-
-        //private static List<LightstoneListing> LoadLightstoneListingsForPoprId(int? propId, List<LightstoneListing> listings)
-        //{
-        //    if (propId == null || listings == null) return null;
-
-        //    return listings.Where(c => c.PropertyId == propId).OrderByDescending(a => a.RegDate).ToList();
-        //}
-
-        //private static bool HasContacts(prospecting_property property)
-        //{
-        //    //if (property == null) return false;
-
-        //    //using (var ls_base = new LightStoneDataContext())
-        //    //{
-        //    //    var existingContacts = from contact in ls_base.prospecting_contacts
-        //    //                           where contact.prospecting_property_id == property.prospecting_property_id
-        //    //                           select contact;
-        //    //    return existingContacts.Count() > 0;
-        //    //}
-        //    return false;
-        //}
         public static string LoadSuburbInfoForUser(string suburbsWithPermissions)
         {
             Regex regexSplitter = new Regex(@"\[(.*?)\]");
@@ -293,56 +251,7 @@ namespace ProspectingProject
                 }
             }
             return lList; 
-        }
-
-        private static int GetNumberPartiallyProspectedProperties(int areaId, ProspectingDataContext context)
-        {
-            return 0;
-            int count = 0;
-            var prospectingProperties = context.prospecting_properties.Where(pp => pp.seeff_area_id == areaId);
-            foreach (var property in prospectingProperties)
-            {
-                var contactsForProperty = from cpp in context.prospecting_person_property_relationships
-                                          join c in context.prospecting_contact_persons on cpp.contact_person_id equals c.contact_person_id
-                                          where cpp.prospecting_property_id == property.prospecting_property_id
-                                          select c;
-                var numContactsWithCOntactDetails = from c in contactsForProperty
-                                                    join cpd in context.prospecting_contact_details on c.contact_person_id equals cpd.contact_person_id
-                                                    select c;
-                if (numContactsWithCOntactDetails.Count() == 0)
-                {
-                    count++;
-                }
-            }
-
-            return count;
-        }
-
-        private static int GetNumberFullyProspectedProperties(int areaId, ProspectingDataContext context)
-        {
-            var prospectingPropertiesWithContactableOwners = (from pp in context.prospecting_properties
-                                                          from cpp in context.prospecting_person_property_relationships
-                                                          join c in context.prospecting_contact_persons on cpp.contact_person_id equals c.contact_person_id
-                                                          join cpd in context.prospecting_contact_details on c.contact_person_id equals cpd.contact_person_id
-                                                          where cpp.prospecting_property_id == pp.prospecting_property_id && pp.seeff_area_id == areaId
-                                                          select pp).Distinct();
-
-            // do this, then check DATA!
-            //
-            //
-
-            var prospectingPropertiesOwnedByCompaniesWithContactableOwners = (from a in context.prospecting_properties
-                                                                              join b in context.prospecting_company_property_relationships on a.prospecting_property_id equals b.prospecting_property_id
-                                                                              join c in context.prospecting_person_company_relationships on b.contact_company_id equals c.contact_company_id
-                                                                              join d in context.prospecting_contact_persons on c.contact_person_id equals d.contact_person_id
-                                                                              join cpd in context.prospecting_contact_details on d.contact_person_id equals cpd.contact_person_id
-                                                                              where a.seeff_area_id == areaId
-                                                                              select a).Distinct();
-
-                // Ensure that there is no duplication in the 2 lists
-
-            return prospectingPropertiesWithContactableOwners.Union(prospectingPropertiesOwnedByCompaniesWithContactableOwners).Count();
-        }  
+        } 
 
         public static string SerialiseStaticProspectingData()
         {
@@ -437,7 +346,19 @@ namespace ProspectingProject
                 };
 
                 prospecting.prospecting_properties.InsertOnSubmit(newPropRecord);
-                prospecting.SubmitChanges(); // Create the property first before adding contacts
+                try
+                {
+                    prospecting.SubmitChanges(); // Create the property first before adding contacts
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Contains("Cannot insert duplicate key in object"))
+                    {
+                        throw new Exception("Property already exists in the system.");
+                    }
+
+                    throw;
+                }
 
                 foreach (var owner in standaloneUnit.Owners)
                 {
@@ -586,7 +507,7 @@ namespace ProspectingProject
             return (T)JsonConvert.DeserializeObject<T>(json);
         }
 
-        public static void UpdateProspectingRecord(ProspectingPropertyInputData dataPacket)
+        public static void UpdateProspectingRecord(ProspectingInputData dataPacket)
         {
             using (var prospecting = new ProspectingDataContext())
             {
@@ -616,9 +537,7 @@ namespace ProspectingProject
 
         public static UserDataResponsePacket LoadUser(Guid userGuid)
         {
-            string endpoint = HttpContext.Current.IsDebuggingEnabled ? "LOCALHOST" : "BasicHttpBinding_ISeeffProspectingAuthService";
-
-            using (var authService = new SeeffProspectingAuthServiceClient(endpoint))
+            using (var authService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 var userAuthPacket = authService.GetUserInfo(userGuid);
                 return new UserDataResponsePacket
@@ -628,26 +547,6 @@ namespace ProspectingProject
                     StaticProspectingData = SerialiseStaticProspectingData(),
                     AvailableCredit = userAuthPacket.AvailableCredit
                 };
-            }
-        }
-
-        public static int ReimburseTracePsCredit(Guid guid)
-        {
-            string endpoint = HttpContext.Current.IsDebuggingEnabled ? "LOCALHOST" : "BasicHttpBinding_ISeeffProspectingAuthService";
-
-            using (var authService = new SeeffProspectingAuthServiceClient(endpoint))
-            {
-                return authService.ReimburseOneCredit(guid);
-            }
-        }
-
-        public static int DeductTracePsCredit(Guid guid)
-        {
-            string endpoint = HttpContext.Current.IsDebuggingEnabled ? "LOCALHOST" : "BasicHttpBinding_ISeeffProspectingAuthService";
-
-            using (var authService = new SeeffProspectingAuthServiceClient(endpoint))
-            {
-                return authService.TakeOneCredit(guid);
             }
         }
 
@@ -1003,10 +902,31 @@ namespace ProspectingProject
                         , "", "", "", "", searchInputValues.OwnerName, searchInputValues.OwnerIdNumber, searchInputValues.EstateName, "", propertyID, 1000, "", "", 0, 0);
                     if (result.Tables.Count > 1 && result.Tables[1].Rows.Count > 0)
                     {
+                        List<DataRow> dataRowCollection = new List<DataRow>();
+                        dataRowCollection.AddRange(result.Tables[1].Rows.Cast<DataRow>());
+                        // When only the owner ID number or name is given, we must search again using all the property Id's in the result set
+                        if (OnlyOwnerNameOrIDProvided(searchInputValues))
+                        {
+                            dataRowCollection.Clear();
+                            // Find all the property Id's in the results, and search again using those
+                            List<int> resultsPropIds = new List<int>();
+                            foreach (DataRow row in result.Tables[1].Rows)
+                            {
+                                int propId = Convert.ToInt32(row["PROP_ID"]);
+                                resultsPropIds.Add(propId);
+                            }
+                            resultsPropIds = resultsPropIds.Distinct().ToList();
+                            foreach (int propId in resultsPropIds)
+                            {
+                                result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", "", "", "", "", "", "", "", "", ""
+                                                                        , "", "", "", "", "", "", "", "", propId, 1000, "", "", 0, 0);
+                                dataRowCollection.AddRange(result.Tables[1].Rows.Cast<DataRow>());
+                            }
+                        }
                         using (var prospecting = new ProspectingDataContext())
                         {
                             List<int?> existingLightstoneProps = prospecting.prospecting_properties.Select(p => p.lightstone_property_id).ToList();
-                            foreach (DataRow row in result.Tables[1].Rows)
+                            foreach (DataRow row in dataRowCollection)
                             {
                                 AddLightstonePropertyRow(row, matches, existingLightstoneProps);
                             }
@@ -1018,6 +938,23 @@ namespace ProspectingProject
 
             List<NewProspectingEntity> prospectingEntities = GenerateOutputForProspectingEntity(matches, null);
             return prospectingEntities;
+        }
+
+        private static bool OnlyOwnerNameOrIDProvided(SearchInputPacket searchInputValues)
+        {
+            if (!string.IsNullOrEmpty(searchInputValues.DeedTown)) return false;
+            if (!string.IsNullOrEmpty(searchInputValues.EstateName)) return false;
+            if (!string.IsNullOrEmpty(searchInputValues.SSName)) return false;
+            if (!string.IsNullOrEmpty(searchInputValues.ErfNo)) return false;
+            if (!string.IsNullOrEmpty(searchInputValues.Suburb)) return false;
+            if (!string.IsNullOrEmpty(searchInputValues.StreetName)) return false;
+            if (!string.IsNullOrEmpty(searchInputValues.StreetOrUnitNo)) return false;
+            if (!string.IsNullOrEmpty(searchInputValues.PropertyID)) return false;
+
+            if (!string.IsNullOrEmpty(searchInputValues.OwnerName) || !string.IsNullOrEmpty(searchInputValues.OwnerIdNumber))
+                return true;
+
+            return false;
         }
 
         public static void SavePropertyNotesComments(PropertyCommentsNotes propNotesContainer)
@@ -1168,46 +1105,20 @@ namespace ProspectingProject
             return suburb;
         }
 
-        public static ProspectingDataResponsePacket PerformLookupTransaction(ProspectingPropertyInputData dataPacket)
+        public static PersonEnquiryResponsePacket PerformLookup(ProspectingInputData dataPacket)
         {
-            ProspectingDataResponsePacket results = new ProspectingDataResponsePacket();
-            if (!string.IsNullOrEmpty(dataPacket.LightstoneIDOrCKNo))
+            EnquiryServiceManager enquiryService = new EnquiryServiceManager(dataPacket);
+            if (enquiryService.IsPersonLookup())
             {
-                var guid = Guid.Parse((string)HttpContext.Current.Session["user_guid"]);
-                bool creditTaken = false;
-                try
-                {
-                    int newBalanceLessOne = ProspectingDomain.DeductTracePsCredit(guid);
-                    if (newBalanceLessOne > -1)
-                    {
-                        creditTaken = true;
-                        results = PerformPersonDetailsEnquiry(dataPacket.LightstoneIDOrCKNo);
-                        SaveEnquiryAgainstProperty(dataPacket.ProspectingPropertyId, results);
-                        results.AvailableTracePsCredits = newBalanceLessOne;
-                    }
-                    else
-                    {
-                        results.AvailableTracePsCredits = 0;
-                        results.ErrorMsg = "You have no prospecting credits available.";
-                    }
-                }
-                finally
-                {
-                    if (!results.EnquirySuccessful && creditTaken)
-                    {
-                        int newBalancePlusOne = ProspectingDomain.ReimburseTracePsCredit(guid);
-                        results.AvailableTracePsCredits = newBalancePlusOne;
-                    }
-                }
+                return enquiryService.PerformPersonEnquiry();
             }
             else
             {
-                results = new ProspectingDataResponsePacket { ErrorMsg = "No ID number associated with this property." };
+                throw new Exception("Unsupported lookup type");
             }
-            return results;
         }
 
-        public static List<NewProspectingEntity> GetMatchingAddresses(ProspectingPropertyInputData dataPacket)
+        public static List<NewProspectingEntity> GetMatchingAddresses(ProspectingInputData dataPacket)
         {            
             List<LightstonePropertyMatch> matches = new List<LightstonePropertyMatch>();
             using (lightstoneSeeffService.Seeff service = new lightstoneSeeffService.Seeff())
@@ -1616,46 +1527,7 @@ namespace ProspectingProject
             }
         }
 
-        private static void SaveEnquiryAgainstProperty(int? prospectingPropertyId, ProspectingDataResponsePacket results)
-        {
-            try
-            {
-                using (var prospecting = new ProspectingDataContext())
-                {
-                    // This is an UPSERT                               
-                    var newRecord = new prospecting_trace_ps_enquiry
-                    {
-                        prospecting_property_id = prospectingPropertyId.Value,
-                        user = Guid.Parse((string)HttpContext.Current.Session["user_guid"]),
-                        date_of_enquiry = DateTime.Now,
-                        successful = string.IsNullOrEmpty(results.ErrorMsg),
-                        id_number = results.IdCkNo,
-                        HWCE_indicator = results.HWCE_indicator
-                    };
-                    prospecting.prospecting_trace_ps_enquiries.InsertOnSubmit(newRecord);
-
-                    // If there is no primary ID number associated with this property, set it now:
-                    var existingProspectingRecord = (from prop in prospecting.prospecting_properties
-                                                     where prop.prospecting_property_id == prospectingPropertyId
-                                                     select prop).FirstOrDefault();
-                    if (existingProspectingRecord != null)
-                    {
-                        if (string.IsNullOrEmpty(existingProspectingRecord.lightstone_id_or_ck_no))
-                        {
-                            existingProspectingRecord.lightstone_id_or_ck_no = results.IdCkNo;
-                        }
-                    }
-
-                    prospecting.SubmitChanges();
-                }
-            }
-            catch
-            {
-                // For now just supress an error here. TODO: fix this later.
-            }
-        }
-
-        private static bool IsValidIDNumber(string input)
+        public static bool IsValidIDNumber(string input)
         {
             var regex = new Regex("^[0-9]+$");
             long val;
@@ -1663,13 +1535,7 @@ namespace ProspectingProject
             return input.Length == 13 && regex.IsMatch(input) && isLong;
         }
 
-        private static IDracoreService GetDracoreService()
-        {
-            bool isTestEnvironment = HttpContext.Current.IsDebuggingEnabled;
-            return isTestEnvironment ? (IDracoreService)new DracoreTestService() : new DracoreLiveService();
-        }
-
-        private static string GetContactNumber(string input)
+        public static string GetContactNumber(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
                 return null;
@@ -1691,120 +1557,13 @@ namespace ProspectingProject
             catch { return null; }
         }
 
-        private static ProspectingDataResponsePacket PerformPersonDetailsEnquiry(string idNumber)
-        {
-            ProspectingDataResponsePacket results = new ProspectingDataResponsePacket();
-            results.EnquirySuccessful = true;
-            results.IdCkNo = idNumber;
-            // Check #1: Check if the ID number is valid, ie 13 digits and convertible to a long.
-            if (!IsValidIDNumber(idNumber))
-            {
-                results.EnquirySuccessful = false;
-                results.ErrorMsg = "Invalid ID number specified.";
-                return results;
-            }
-
-            // Check #2: Attempt the service call, on error set the error and return
-            Consumer003 dracoreResult = null;
-            try
-            {
-                IDracoreService dracoreService = GetDracoreService();
-                dracoreResult = dracoreService.ByIdTYPE003(long.Parse(idNumber, CultureInfo.InvariantCulture));
-            }
-            catch (Exception ex)
-            {
-                results.EnquirySuccessful = false;
-                results.ErrorMsg = ex.Message;
-                return results;
-            }
-
-            // Check #3: If the service call succeeds, check the service_error property for any internal errors within service
-            if (!string.IsNullOrEmpty(dracoreResult.SERVICE_ERROR) && dracoreResult.SERVICE_ERROR != "none")
-            {
-                // SERVICE_ERROR from service
-                results.EnquirySuccessful = false;
-                if (dracoreResult.SERVICE_ERROR.ToLower().Contains("record not found"))
-                {
-                    results.ErrorMsg = "No 3rd-party information was found for this ID number.";
-                }
-                else
-                {
-                    results.ErrorMsg = dracoreResult.SERVICE_ERROR;
-                }
-                return results;
-            }
-
-            Func<string, string> purgeField = item => string.IsNullOrWhiteSpace(item) ? null : item; 
-
-            // Now process the results
-            string title = purgeField(dracoreResult.TITLE);
-            if (!string.IsNullOrWhiteSpace(title))
-            {
-                var kvp = ProspectingStaticData.ContactPersonTitle.FirstOrDefault(l => l.Value.ToUpper() == title.ToUpper());
-                title = kvp.Key > 0 ? kvp.Key.ToString() : null;
-            }
-            results.Title = title;
-            results.OwnerName = purgeField(dracoreResult.FIRST_NAME);
-            results.OwnerSurname = purgeField(dracoreResult.SURNAME);
-            results.DeceasedStatus = purgeField(dracoreResult.DECEASED_STATUS);
-            results.Citizenship = purgeField(dracoreResult.CITIZENSHIP);
-            results.OwnerGender = DetermineOwnerGender(idNumber);
-            results.AgeGroup = purgeField(dracoreResult.AGE_GROUP);
-            results.Location = purgeField(dracoreResult.LOCATION);
-            results.MaritalStatus = purgeField(dracoreResult.MARITAL_STATUS1);
-            results.HomeOwnership = purgeField(dracoreResult.HOMEOWNERSHIP);
-            results.Directorship = purgeField(dracoreResult.DIRECTORSHIP1);
-            results.PhysicalAddress = purgeField(dracoreResult.PHYSICALADDR1);
-            results.Employer = purgeField(dracoreResult.EMPLOYER_1);
-            results.Occupation = purgeField(dracoreResult.OCCUPATION_1);
-
-            // Add the contact rows
-            string cellPhone = GetContactNumber(dracoreResult.CELL_1);
-            string homePhone = GetContactNumber(dracoreResult.HOME_1);
-            string workPhone = GetContactNumber(dracoreResult.WORK_1);
-            string email = GetEmailAddress(dracoreResult.EMAIL_1);
-
-            if (new[] { cellPhone, homePhone, workPhone, email }.All(item => string.IsNullOrWhiteSpace(item)))
-            {
-                results.EnquirySuccessful = false; // CHECK THIS!!! - If no contact info found was the enquiry a success or failure?
-                results.ErrorMsg = "A record was found for this ID number, however no contact details are present.";
-                return results;
-            }
-
-            char[] HWCE_indicators = "0000".ToCharArray(); // NB order in which we add flags NB.
-
-            if (!string.IsNullOrWhiteSpace(homePhone))
-            {
-                results.ContactRows.Add(new ContactRow { Phone = homePhone, Type = "home", Date = DateTime.Now.ToString() });
-                HWCE_indicators[0] = '1';
-            }
-            if (!string.IsNullOrWhiteSpace(workPhone))
-            {
-                results.ContactRows.Add(new ContactRow { Phone = workPhone, Type = "work", Date = DateTime.Now.ToString() });
-                HWCE_indicators[1] = '1';
-            }
-            if (!string.IsNullOrWhiteSpace(cellPhone))
-            {
-                results.ContactRows.Add(new ContactRow {  Phone = cellPhone, Type = "cell", Date = DateTime.Now.ToString() });
-                HWCE_indicators[2] = '1';
-            }
-            if (!string.IsNullOrWhiteSpace(email))
-            {
-                results.ContactRows.Add(new ContactRow { EmailAddress = email, Type = "email", Date = DateTime.Now.ToString() });
-                HWCE_indicators[3] = '1';
-            }
-
-            results.HWCE_indicator = new String(HWCE_indicators);
-            return results; 
-        }
-
-        private static string DetermineOwnerGender(string idOrCK)
+        public static string DetermineOwnerGender(string idNumber)
         {
             try
             {
-                if (!string.IsNullOrEmpty(idOrCK) && idOrCK.Length > 7)
+                if (!string.IsNullOrEmpty(idNumber) && idNumber.Length > 7)
                 {
-                    string G = idOrCK.Substring(6, 1);
+                    string G = idNumber.Substring(6, 1);
                     switch (G)
                     {
                         case "0":
@@ -1827,12 +1586,6 @@ namespace ProspectingProject
             return "";
         }
 
-        private static NetworkCredential GetCredentialsForUser()
-        {
-            return new NetworkCredential("GEM001", "gEm25m");
-        }
-
-
         public static List<ProspectingProperty> CreateSectionalTitle(NewProspectingEntity sectionalTitle)
         {
             // First determine whether the sectional scheme falls within the user's available suburbs by examining the first record.
@@ -1848,6 +1601,8 @@ namespace ProspectingProject
 
             using (var prospecting = new ProspectingDataContext())
             {
+                prospecting.CommandTimeout = 3 * 60;
+
                 int areaId = sectionalTitle.SeeffAreaId.HasValue ? sectionalTitle.SeeffAreaId.Value : prospecting.find_area_id(latLng.Lat, latLng.Lng, "R", null);
 
                 // Ensure that we are creating ALL units for this sectional title, not just one
@@ -1902,7 +1657,19 @@ namespace ProspectingProject
                     };
 
                     prospecting.prospecting_properties.InsertOnSubmit(newPropRecord);
-                    prospecting.SubmitChanges(); // Create the property first before adding contacts
+                    try
+                    {
+                        prospecting.SubmitChanges(); // Create the property first before adding contacts
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.Message.Contains("Cannot insert duplicate key in object"))
+                        {
+                            throw new Exception("Property already exists in the system.");
+                        }
+
+                        throw;
+                    }
 
                     foreach (var owner in unit.Owners)
                     {
