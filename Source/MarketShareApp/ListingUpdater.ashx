@@ -31,7 +31,7 @@ public class ListingUpdater : IHttpHandler {
 
     private void UpdatePropertyAddress(ListingUpdatableFields dataPacket)
     {
-        using (var ls_base = new LightStoneDataContext())
+        using (var ls_base = DataManager.DataContextRetriever.GetLSBaseDataContext())
         {
             var matchedListings = from listing in ls_base.base_datas where listing.property_id == dataPacket.propertyid select listing;
             foreach (var listing in matchedListings)
@@ -46,7 +46,7 @@ public class ListingUpdater : IHttpHandler {
 
     private void UpdateParentPropertyId(ListingUpdatableFields dataPacket)
     {
-        using (var ls_base = new LightStoneDataContext())
+        using (var ls_base = DataManager.DataContextRetriever.GetLSBaseDataContext())
         {
             var matchedListing = (from listing in ls_base.base_datas where listing.unique_id == dataPacket.uniqueid select listing).FirstOrDefault();
             if (matchedListing != null)
@@ -59,7 +59,7 @@ public class ListingUpdater : IHttpHandler {
 
     private void UpdateMarketShareAndAgency(ListingUpdatableFields dataPacket)
     {
-        using (var lsBase = new LightStoneDataContext())
+        using (var lsBase = DataManager.DataContextRetriever.GetLSBaseDataContext())
         {
             var matchedListing = (from listing in lsBase.base_datas
                                   where listing.unique_id.Equals(dataPacket.uniqueid)

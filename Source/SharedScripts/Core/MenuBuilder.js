@@ -193,26 +193,32 @@ function buildFilterItemsAndSummaryInfo() {
     var other = buildInputCheckbox("Other", "O_filter", "left", 2, 3, true, handleFilterItemClick);
     var pending = buildInputCheckbox("Pending", "P_filter", "left", 2, 3, true, handleFilterItemClick);
 
-    var _2011 = buildInputCheckbox("2011", "2011_filter", "left", 2, 2, true, handleFilterItemClick);
+    //var _2011 = buildInputCheckbox("2011", "2011_filter", "left", 2, 2, true, handleFilterItemClick);
     var _2012 = buildInputCheckbox("2012", "2012_filter", "left", 2, 2, true, handleFilterItemClick);
     var _2013 = buildInputCheckbox("2013", "2013_filter", "left", 2, 2, true, handleFilterItemClick);
     var _2014 = buildInputCheckbox("2014", "2014_filter", "left", 2, 2, true, handleFilterItemClick);
+    var _2015 = buildInputCheckbox("2015", "2015_filter", "left", 2, 2, true, handleFilterItemClick);
 
     var seeffCurrentForSale = buildInputCheckbox("Seeff for sale", "forsale_filter", "left", 2, 2, true, handleFilterItemClick);
     var seeffCurrentForRent = buildInputCheckbox("Seeff for rent", "forrent_filter", "left", 2, 2, true, handleFilterItemClick);
 
+    var withAgencyAssigned = buildInputCheckbox("With agency assigned", "withagencyassigned_filter", "left", 2, 2, true, handleFilterItemClick);
+    var withoutAgencyAssigned = buildInputCheckbox("Without agency assigned", "withoutagencyassigned_filter", "left", 2, 2, true, handleFilterItemClick);
+
     var filterOptionsHtml = "<div class='contentdiv' id='filteroptionsdiv'>" +                 
-                 "<div style='display:inline-block;border-right:1px solid #000;float:left;margin: 0px 30px;'>" + res[0].outerHTML + comm[0].outerHTML + agri[0].outerHTML + dev[0].outerHTML + other[0].outerHTML + pending[0].outerHTML + "</div>" +
-                 "<div style='display:inline-block;border-right:1px solid #000;float:left;margin: 0px 20px;'>" + _2011[0].outerHTML + _2012[0].outerHTML + _2013[0].outerHTML + _2014[0].outerHTML + "</div>" +
-                  "<div style='display:inline-block;float:left;border-right:1px solid #000;margin: 0px 20px;'>" + fh[0].outerHTML + ss[0].outerHTML + "</div>" +
-                  "<div style='display:inline-block;float:left;border-right:1px solid #000;margin: 0px 20px;'>" + seeffCurrentForSale[0].outerHTML + seeffCurrentForRent[0].outerHTML + "</div>" +
+                 "<div style='display:inline-block;border-right:1px solid #000;float:left;margin: 0px 10px;'>" + res[0].outerHTML + comm[0].outerHTML + agri[0].outerHTML + dev[0].outerHTML + other[0].outerHTML + pending[0].outerHTML + "</div>" +
+                 "<div style='display:inline-block;border-right:1px solid #000;float:left;margin: 0px 5px;'>" + _2012[0].outerHTML + _2013[0].outerHTML + _2014[0].outerHTML + _2015[0].outerHTML + "</div>" +
+                  "<div style='display:inline-block;float:left;border-right:1px solid #000;margin: 0px 5px;'>" + fh[0].outerHTML + ss[0].outerHTML + "</div>" +
+                  "<div style='display:inline-block;float:left;border-right:1px solid #000;margin: 0px 5px;'>" + seeffCurrentForSale[0].outerHTML + seeffCurrentForRent[0].outerHTML + "</div>" +
+                  "<div style='display:inline-block;float:left;border-right:1px solid #000;margin: 0px 5px;'>" + withAgencyAssigned[0].outerHTML + withoutAgencyAssigned[0].outerHTML + "</div>" +
                   "</div>";
 
     filterSets.push(["FH_filter", "SS_filter"]);
     filterSets.push(["R_filter", "C_filter", "A_filter", "D_filter", "O_filter", "P_filter"]);
-    filterSets.push(["2011_filter", "2012_filter", "2013_filter", "2014_filter"]);
+    filterSets.push(["2012_filter", "2013_filter", "2014_filter", "2015_filter"]);
     // The filter set below is handled differently to the rest. See filtering.js
     filterSets.push(["forsale_filter", "forrent_filter"]);
+    filterSets.push(["withagencyassigned_filter", "withoutagencyassigned_filter"]);
 
     return filterOptionsHtml + "<div style='float:left;'><hr />" + buildLicenseSummaryHtml() + "</div>";
 }
@@ -265,7 +271,7 @@ function buildSuburbsSelectionHtml() {
             // select both fated/unfated, and center the map
             var areaId = $(this).attr('id').replace('suburb', '');
 
-            loadDataForSuburb(areaId, true, true);
+            loadDataForSuburb(areaId, true, true, true);
             var suburb = getSuburbById(areaId);
             if (suburb) {
                 centreMap(suburb);
@@ -399,36 +405,148 @@ function getSortedAgencies(agencyIDs) {
 }
 
 function buildSearchMenuHtml() {
-    var html = $('<div style="font-family: Verdana;font-size: 12px;margin: 10px 10px;">\
-                  Enter one or more values in the fields below to search for matching properties. <br /><br />\
-                  Please note that your search results will only be relevant to your currently selected suburbs and filters.</div>');
-    html.append('<hr />');
+    var header = $('<div style="font-family: Verdana;font-size: 12px;margin: 10px 10px;">\
+                  Enter one or more values in the fields below to search for matching properties. <br />\
+                  Please note that the search results will be limited to the suburbs under your license.</div>');
+    header.append('<hr />');
     
-    var streetOrSSName = '<label>Name of street or sectional scheme</label><br /><input id="searchStreetOrSSName" type="text" style="width:100%;" />';
-    var streetOrUnitNo = '<label>Street or unit no. </label><input id="searchStreetOrUnitNo" type="text" style="width:50px;" />';
-    var sellerName = '<label>Name of last seller </label><br /><input id="searchSellerName" type="text" style="width:100%;" />';
-    var buyerName = '<label>Name of last buyer </label><br /><input id="searchBuyerName" type="text" style="width:100%;" />';
-    var titleDeed = '<label>Title deed </label><input id="searchTitleDeed" type="text" style="width:50px;" />';
-    var erfNo = '<label>ERF no. </label><input id="searchErfNo" type="text" style="width:50px;" />';
-    var propertyId = '<label>Property ID </label><input id="searchPropId" type="text" style="width:50px;" />';
+    var searchDiv = $("<div id='lightstoneSearchDiv' class='contentdiv' style='padding-right:10px;font-size:12px' />");
+    searchDiv.append("<label class='fieldAlignmentShortWidth' for='deedTownInput'>Deed Town</label>\
+                      <input type='text' name='deedTownInput' id='deedTownInput' size='60' ><p style='margin:3px;' />\
+                      <label class='fieldAlignmentShortWidth' for='suburbInput'>Suburb</label>\
+                      <input type='text' name='suburbInput' id='suburbInput' size='60'><p style='margin:3px;' />\
+                      <label class='fieldAlignmentShortWidth' for='streetNameInput'>Street Name</label>\
+                      <input type='text' name='streetNameInput' id='streetNameInput' size='60'><p style='margin:3px;' />\
+                      <label class='fieldAlignmentShortWidth' for='streetNoInput'>Street Number</label>\
+                      <input type='text' name='streetNoInput' id='streetNoInput' size='60' disabled><p style='margin:3px;' />\
+                      <label class='fieldAlignmentShortWidth' for='complexNameInput'>Complex Name</label>\
+                      <input type='text' name='complexNameInput' id='complexNameInput' size='60'><p style='margin:3px;' />\
+                      <label class='fieldAlignmentShortWidth' for='estateNameInput'>Estate Name</label>\
+                      <input type='text' name='estateNameInput' id='estateNameInput' size='60'><p style='margin:3px;' />\
+                      <label class='fieldAlignmentShortWidth' for='erfNoInput'>ERF Number</label>\
+                      <input type='text' name='erfNoInput' id='erfNoInput' size='30'><p style='margin:3px;' />\
+                      <label class='fieldAlignmentShortWidth' for='portionNoInput'>Portion Number</label>\
+                      <input type='text' name='portionNoInput' id='portionNoInputBox' size='30' disabled><p style='margin:3px;' />\
+                      <label class='fieldAlignmentShortWidth' for='propertyIdInput'>Property ID</label>\
+                      <input type='text' name='propertyIdInput' id='propertyIdInput' size='30'><p style='margin:3px;' />\
+                      <label class='fieldAlignmentShortWidth' for='titleDeedInput'>Title Deed</label>\
+                      <input type='text' name='titleDeedInput' id='titleDeedInput' size='30'><p style='margin:3px;' />\
+                      <hr />\
+                      <label class='fieldAlignmentShortWidth' for='buyerNameInput'>Name of buyer</label>\
+                      <input type='text' name='buyerNameInput' id='buyerNameInput' size='30'><p style='margin:3px;' />\
+                      <label class='fieldAlignmentShortWidth' for='sellerNameInput'>Name of seller</label>\
+                      <input type='text' name='sellerNameInput' id='sellerNameInput' size='30'><p style='margin:3px;' /><p/>\
+                      <input id='findMatches' value='Find matches' type='button' style='cursor:pointer;'></input>");
 
-    var findMatches = '<input id="findMatches" value="Find matches" type="button"></input>';
+    // Portion number only valid when erf no present
+    $('#contentarea').on('keyup', '#erfNoInput', function () {
+        var str = $(this).val();
+        if (str.length > 0) {
+            $('#portionNoInputBox').removeAttr("disabled");
+        } else {
+            $('#portionNoInputBox').val('');
+            $('#portionNoInputBox').attr('disabled', 'disabled');
+        }
+    });
+
+    // Street number only allowed when street name also given
+    $('#contentarea').on('keyup', '#streetNameInput', function () {
+        var str = $(this).val();
+        if (str.length > 0) {
+            $('#streetNoInput').removeAttr("disabled");
+        } else {
+            $('#streetNoInput').val('');
+            $('#streetNoInput').attr('disabled', 'disabled');
+        }
+    });
+
     menu.on('click', '#findMatches', initSearch);
 
-    var resetSearch = '<input id="resetSearch" value="Reset search" type="button"></input>';
-    menu.on('click', '#resetSearch', performResetSearch);
+    searchDiv.append("<p style='padding:10px;' />");
+    var searchResultsDiv = $("<div id='lightstoneResultsDiv' style='height:250px;overflow-y:auto;' />");
+    searchDiv.append(searchResultsDiv);
 
-    return html[0].outerHTML + '<div style="font-family: Verdana;font-size: 12px;margin: 10px 10px;">'
-            + streetOrSSName + '<p />'
-            + streetOrUnitNo + '<p />'
-            + sellerName + '<p />'
-            + buyerName + '<p />'
-            + titleDeed + '<p />'
-            + erfNo + '<p />'
-            + propertyId + '<p />'
-            + findMatches + '<p />'
-            + resetSearch + '<p />'
-            + '</div>';
+    return header[0].outerHTML + searchDiv[0].outerHTML;
+}
+
+function createSearchResults(results) {
+
+    var resultsDiv = $('#lightstoneResultsDiv');
+    resultsDiv.empty();
+
+    if (results.Count == 0) {
+        resultsDiv.append("No results found.");
+        return;
+    }
+
+    if (results.Count > 50) {
+        resultsDiv.append("More than 50 results were found. Please refine your search criteria and try again...");
+        return;
+    }
+
+    $.each(results.Data, function (idx, result) {
+
+        if (result.ss_fh == "SS") {
+            var ssId = "propid_" + result.property_id;
+            var resultDiv = $("<div id='" + ssId + "' style='border:1px solid;border-radius:3px;cursor:pointer;' />");
+            resultDiv.hover(function () { $(this).css('background-color', '#b0c4de'); }, function () { $(this).css('background-color', 'white'); });
+            resultDiv.click(function () {
+                openResultOnMap(result);
+            });
+
+            var resultContent = "Unit " + result.street_or_unit_no + " in " + result.property_address + " (Property ID: " + result.property_id + ")";                
+            resultDiv.append(resultContent);
+            resultsDiv.append(resultDiv);
+        }       
+        else if (result.ss_fh == "FH") { 
+            var fhId = "propid_" + result.property_id;
+            var resultDiv = $("<div id='" + fhId + "' style='border:1px solid;border-radius:3px;cursor:pointer;' />");
+            resultDiv.hover(function () { $(this).css('background-color', '#b0c4de'); }, function () { $(this).css('background-color', 'white'); });
+            resultDiv.click(function () {
+                openResultOnMap(result);
+            });
+
+            var resultContent = result.street_or_unit_no + " " + result.property_address + " (Property ID: " + result.property_id + ")";
+            resultDiv.append(resultContent);
+            resultsDiv.append(resultDiv);
+        }
+    });
+}
+
+function openResultOnMap(searchResult) {
+
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Finding property...</p>' });
+    // 'Click' the correct suburb
+    loadDataForSuburb(searchResult.seeff_area_id + '', true, true, false, function () {
+
+        $.unblockUI();
+
+        var suburb = getSuburbById(searchResult.seeff_area_id);
+
+        var target = $.grep(suburb.Listings, function (item) {
+            return item.PropertyId == searchResult.property_id;
+        })[0];
+        // trigger the marker click event.
+        openInfoWindow(target.Marker);
+        var pos = calcMapCenterWithOffset(target.LatLong.Lat, target.LatLong.Lng, -200, 0);
+        if (pos) {
+            map.setCenter(pos);
+        }
+        else {
+            map.setCenter(latLng);
+        }
+    });
+
+    //setTimeout(function () {
+    //    // Find the listing
+    //    var suburb = getSuburbById(searchResult.seeff_area_id);
+    //    // Find its marker
+    //    var target = $.grep(suburb.Listings, function (item) {
+    //        return item.PropertyId == searchResult.property_id;
+    //    })[0];
+    //    // trigger the marker click event.
+    //    google.maps.event.trigger(target.Marker, 'click');
+    //}, 1000);
 }
 
 function buildPropertyInfoHtml() {

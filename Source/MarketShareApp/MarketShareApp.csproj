@@ -45,6 +45,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Linq">
       <Private>False</Private>
     </Reference>
@@ -110,8 +114,12 @@
     <Content Include="Database scripts\ls_base\Stored Procedures\sp_load_new_lightstone_data_step_3.sql" />
     <Content Include="Database scripts\ls_base\Stored Procedures\sp_update_area_layer_tbl.sql" />
     <Content Include="ListingUpdater.ashx" />
+    <Content Include="NotAuthorised.aspx" />
     <Content Include="SuburbDataManager.ashx" />
+    <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\1.pubxml" />
     <None Include="Properties\PublishProfiles\Primary.pubxml" />
+    <Content Include="RequestHandler.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -736,19 +744,33 @@
       <DependentUpon>AppStartup.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="BaseDataRequestPacket.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="DomainTypes\SuburbInfo.cs" />
     <Compile Include="Logout.aspx.cs">
       <DependentUpon>Logout.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="NotAuthorised.aspx.cs">
+      <DependentUpon>NotAuthorised.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NotAuthorised.aspx.designer.cs">
+      <DependentUpon>NotAuthorised.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequestHandler.ashx.cs">
+      <DependentUpon>RequestHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="SamplePost.aspx.cs">
       <DependentUpon>SamplePost.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="SearchInputData.cs" />
+    <Compile Include="SearchResultsData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataManager\DataManager.csproj">
@@ -756,7 +778,6 @@
       <Name>DataManager</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

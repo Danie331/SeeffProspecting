@@ -149,7 +149,9 @@ namespace ProspectingProject
         private string LoadApplication()
         {
             var guid = Guid.Parse((string)HttpContext.Current.Session["user_guid"]);
-            UserDataResponsePacket user = ProspectingDomain.LoadUser(guid);                           
+            var sessionKey = Guid.Parse((string)HttpContext.Current.Session["session_key"]);
+
+            UserDataResponsePacket user = ProspectingDomain.LoadUser(guid, sessionKey);
             return ProspectingDomain.SerializeToJsonWithDefaults(user);
         }                         
 

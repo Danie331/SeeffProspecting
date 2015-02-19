@@ -11,5 +11,6 @@ namespace ProspectingProject
         public string AvailableSuburbs { get; set; }
         public string StaticProspectingData { get; set; }
         public decimal AvailableCredit { get; set; }
+        public bool Authenticated { get; set; }
     }
 }

@@ -5,24 +5,35 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Web;
 
 namespace SeeffProspectingAuthService
 {
     public class SeeffProspectingAuthService : ISeeffProspectingAuthService
     {
-        public ProspectingUserAuthPacket GetUserInfo(Guid userGuid)
+        public ProspectingUserAuthPacket AuthenticateAndGetUserInfo(Guid userGuid, Guid sessionKey)
         {
             using (var boss = new BossDataContext())
             {
-                var query = from user in boss.user_registrations
-                            where user.user_guid == userGuid.ToString()
-                            select new ProspectingUserAuthPacket
-                            {
-                                SuburbsList = user.prospecting_areas,
-                                AvailableCredit = user.prospecting_credits
-                            };
-                var userAuthPacket = (query).FirstOrDefault();
-                return userAuthPacket;
+                // We only need to authenticate in the live environment
+                if (!HttpContext.Current.IsDebuggingEnabled)
+                {
+                    if (boss.user_auth(userGuid.ToString(), sessionKey, "PROSPECTING") != 1)
+                    {
+                        return new ProspectingUserAuthPacket { Authenticated = false };
+                    }
+                }
+
+                var userRecord = (from user in boss.user_registrations
+                                  where user.user_guid == userGuid.ToString()
+                                  select new ProspectingUserAuthPacket
+                                  {
+                                      SuburbsList = user.prospecting_areas,
+                                      AvailableCredit = user.prospecting_credits,
+                                      Authenticated = true
+                                  }).FirstOrDefault();
+
+                return userRecord;
             }
         }
 

@@ -17,5 +17,8 @@ namespace SeeffProspectingAuthService
 
         [DataMember]
         public decimal AvailableCredit { get; set; }
+
+        [DataMember]
+        public bool Authenticated { get; set; }
     }
 }

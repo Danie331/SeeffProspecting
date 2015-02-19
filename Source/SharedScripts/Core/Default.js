@@ -459,7 +459,7 @@ function enableMarkerClustering(suburb, visibleMarkers) {
     suburb.MarkerClusterer = markerClusterer;
 }
 
-function initialiseAndDisplaySuburb(suburb, data, typeOfFating, showSeeffCurrentListings, searching) {
+function initialiseAndDisplaySuburb(suburb, data, typeOfFating, showSeeffCurrentListings, searching, showPopup) {
 
     if (data) {
         suburb.PolyCoords = data.PolyCoords;
@@ -495,18 +495,20 @@ function initialiseAndDisplaySuburb(suburb, data, typeOfFating, showSeeffCurrent
         suburb.VisibleMarkers = visibleMarkers;
 
         // Supress showing dialog popups if we have used the searching parameter - TODO: change this to 'undefined'...
-        if (searching !== true && searching !== false) {
-            var userHasUnfatedTransactions = suburbHasUnfatedListings(suburb);
-            if (userHasUnfatedTransactions) {
-                if (suburb.CanEdit) {
-                    showPopupUnfatedTransactions("popupSuburbUnfated");
+        if (showPopup) {
+            if (searching !== true && searching !== false) {
+                var userHasUnfatedTransactions = suburbHasUnfatedListings(suburb);
+                if (userHasUnfatedTransactions) {
+                    if (suburb.CanEdit) {
+                        showPopupUnfatedTransactions("popupSuburbUnfated");
+                    } else {
+                        showPopupAdminRequired();
+                    }
                 } else {
-                    showPopupAdminRequired();
-                }
-            } else {
-                // If this suburb has no unfated transactions BUT there are suburb(s) that are unfated, show a dialog
-                if (!suburbsInfo.CanFilter) {
-                    showPopupAllListingsFatedForSuburb();
+                    // If this suburb has no unfated transactions BUT there are suburb(s) that are unfated, show a dialog
+                    if (!suburbsInfo.CanFilter) {
+                        showPopupAllListingsFatedForSuburb();
+                    }
                 }
             }
         }
@@ -625,7 +627,7 @@ function getAgencyId(agencyName) {
 function handleSuburbItemSelect() {
     var checkbox = $(this);
     var areaId = checkbox.attr("id").replace('unfated', '').replace('fated', '').replace('seeffcurrentlistings', '');
-    loadDataForSuburb(areaId, false, true);
+    loadDataForSuburb(areaId, false, true, true);
 }
 
 function getTypeOfFatingToLoad(areaId) {
@@ -658,7 +660,7 @@ function mustLoadDataForSeeffCurrentListings(areaId) {
     return seeffCurrentListingsChecked;
 }
 
-function loadDataForSuburb(areaId, loadEverything, generateStats) {
+function loadDataForSuburb(areaId, loadEverything, generateStats, showPopup, callbackHandler) {
 
     // Get the status of the checked states for this particular row.
     // There are 3 possibilities: 1) Fated only, 2) Unfated only, 3) Both    
@@ -698,7 +700,7 @@ function loadDataForSuburb(areaId, loadEverything, generateStats) {
 
     // Load the suburb with given area id if any one of the checkboxes are selected.
     if (typeOfFating || mustLoadSeeffCurrentListings) {
-        loadSuburb(areaId, typeOfFating, mustLoadSeeffCurrentListings);
+        loadSuburb(areaId, typeOfFating, mustLoadSeeffCurrentListings, showPopup, callbackHandler);
     }
 }
 
@@ -1236,7 +1238,7 @@ function updateAgencyForListing(uniqueId, value) {
     });
 }
 
-function loadSuburb(suburbId, typeOfFating, showSeeffCurrentListings) {
+function loadSuburb(suburbId, typeOfFating, showSeeffCurrentListings, showPopup, callbackHandler) {
 
     var suburb = getSuburbById(suburbId);
     if (suburb == null) {
@@ -1251,9 +1253,13 @@ function loadSuburb(suburbId, typeOfFating, showSeeffCurrentListings) {
             data: suburbId,
             success: function (data, textStatus, jqXHR) {
                 if (textStatus == "success" && data.PolyCoords.length > 0) {
-                    initialiseAndDisplaySuburb(suburb, data, typeOfFating, showSeeffCurrentListings);
+                    initialiseAndDisplaySuburb(suburb, data, typeOfFating, showSeeffCurrentListings, undefined, true);
                     centreMap(suburb);
                     generateStatisticsMenu(true);
+
+                    if (callbackHandler) {
+                        callbackHandler();
+                    }
                 } else {
                     alert('No data found for this area on the map. Please contact support.');
                 }
@@ -1265,8 +1271,12 @@ function loadSuburb(suburbId, typeOfFating, showSeeffCurrentListings) {
             dataType: "json"
         });
     } else {
-        initialiseAndDisplaySuburb(suburb, null, typeOfFating, showSeeffCurrentListings);
+        initialiseAndDisplaySuburb(suburb, null, typeOfFating, showSeeffCurrentListings, undefined, showPopup);
         generateStatisticsMenu(true);
+
+        if (callbackHandler) {
+            callbackHandler();
+        }
     }
 }
 
@@ -1532,7 +1542,6 @@ function showManageAgenciesDialog() {
     }
 
     function showDialogRemoveAgencyWarning() {
-
         $("#warningAgencyAlreadyOnListing").dialog(
                 {
                     modal: true,

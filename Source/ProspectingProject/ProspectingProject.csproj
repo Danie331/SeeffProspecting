@@ -696,7 +696,6 @@
     <Content Include="Assets\capture_address.png" />
     <Content Include="Assets\contact.png" />
     <Content Include="Assets\dracore_email_lookup.png" />
-    <Content Include="Assets\dracore_phone_lookup.png" />
     <Content Include="Assets\email_icon.png" />
     <Content Include="Assets\fh_edit.png" />
     <Content Include="Assets\frm_edit.png" />
@@ -715,11 +714,13 @@
     <Content Include="Assets\ss_edit.png" />
     <Content Include="Assets\tps_info.png" />
     <Content Include="Assets\traceps_lookup.png" />
+    <Content Include="Assets\view_btn.png" />
     <Content Include="Database scripts\boss.sql" />
     <Content Include="Database scripts\seeff_prospecting.sql" />
     <Content Include="Database scripts\seeff_prospecting_data_takeon.sql" />
     <Content Include="Data\DBSettings.xml" />
     <Content Include="Default.aspx" />
+    <Content Include="NotAuthorised.aspx" />
     <Content Include="Scripts\3rdParty\OpenTip.css" />
     <Content Include="Scripts\3rdParty\OpenTip.js" />
     <Content Include="Scripts\3rdParty\tooltip.css" />
@@ -742,6 +743,7 @@
     </Content>
     <None Include="Properties\PublishProfiles\1.pubxml" />
     <None Include="Properties\PublishProfiles\2.pubxml" />
+    <None Include="Properties\PublishProfiles\3.pubxml" />
     <None Include="Properties\PublishProfiles\Seeff Server.pubxml" />
     <None Include="Properties\PublishProfiles\seeffprospecting - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\seeffprospecting - Web Deploy.pubxml" />
@@ -778,6 +780,13 @@
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NotAuthorised.aspx.cs">
+      <DependentUpon>NotAuthorised.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NotAuthorised.aspx.designer.cs">
+      <DependentUpon>NotAuthorised.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

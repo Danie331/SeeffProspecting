@@ -274,7 +274,7 @@ function buildContactDetailsHtml(contact) {
 
     var phoneNumbers = contact ? contact.PhoneNumbers : [];
     var emailAddresses = contact ? contact.EmailAddresses : [];
-    var canEdit = contact ? !contact.IsPOPIrestricted : true;
+    var canEdit = contact ? !contact.IsPOPIrestricted : false;
     contactDetailsWidget = new ContactDetailsEditorWidget('#contentarea', phoneNumbers, emailAddresses, handleSaveContactDetails, canEdit);
     return contactDetailsWidget.construct();
 }
@@ -759,11 +759,12 @@ function buildContactDashboard(contacts) {
         var hasPhoneNumber = contact.PhoneNumbers != null && contact.PhoneNumbers.length > 0;
         var hasEmailAddress = contact.EmailAddresses != null && contact.EmailAddresses.length > 0;
         if (hasPhoneNumber) {
-            phoneEmailIdicatorData.append($("<img src='Assets/phone_icon.png' style='display:inline-block;padding:2px;' title='Has contact phone number(s)' />"));
+            phoneEmailIdicatorData.append($("<img src='Assets/phone_icon.png' style='display:inline-block;padding:2px;float:left;' title='Has contact phone number(s)' />"));
         }
         if (hasEmailAddress) {
-            phoneEmailIdicatorData.append($("<img src='Assets/email_icon.png' style='display:inline-block;padding:2px;' title='Has contact email address(es)' />"));
+            phoneEmailIdicatorData.append($("<img src='Assets/email_icon.png' style='display:inline-block;padding:2px;float:left;' title='Has contact email address(es)' />"));
         }
+        phoneEmailIdicatorData.append($("<img src='Assets/view_btn.png' style='display:inline-block;padding:2px;float:right;' />"));
         tableRow.append(phoneEmailIdicatorData);
 
         //var personLookupBtnId = 'lookup_btn_' + contact.IdNumber;

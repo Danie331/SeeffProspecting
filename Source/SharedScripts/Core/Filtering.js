@@ -88,22 +88,77 @@ function applyFilter(markersToFilter, filter, isChecked) {
         case "O":
         case "P":
             return filterMarketShareType(markersToFilter, filter, isChecked);
-        case "2011":
+        //case "2011":
         case "2012":
         case "2013":
         case "2014":
+        case "2015":
             return filterYear(markersToFilter, filter, isChecked);
         case "Seeff":
         case "PGP":
         case "Dogan":
         case "OtherAgent":
             return filterAgency(markersToFilter, filter, isChecked);
+        case "withagencyassigned":
+            return filterAgencyAssigned(markersToFilter, filter, isChecked);
+        case "withoutagencyassigned":
+            return filterAgencyNotAssigned(markersToFilter, filter, isChecked);
         default: break;
     }
 }
 
 function isCurrentSeeffListing(listing) {
     return listing.IsCurrentSeeffListing == true;
+}
+
+function filterAgencyAssigned(markersToFilter, filter, isChecked) {
+
+    function anyListingsMeetFilterRequirement(listings) {
+        var matchingListings = $.grep(listings, function (listing) {
+            return listing.Agency != null && listing.Agency > -1;
+        });
+
+        return matchingListings.length > 0;
+    }
+
+    function noListingsMeetFilterRequirement(listings) {
+        var matchingListings = $.grep(listings, function (listing) {
+            return listing.Agency == null || listing.Agency == -1;
+        });
+
+        return matchingListings.length == listings.length;
+    }
+
+    var filtered = $.grep(markersToFilter, function (m) {
+        return isChecked ? anyListingsMeetFilterRequirement(m.Listings) : noListingsMeetFilterRequirement(m.Listings);
+    });
+
+    return filtered;
+}
+
+function filterAgencyNotAssigned(markersToFilter, filter, isChecked) {
+
+    function anyListingsMeetFilterRequirement(listings) {
+        var matchingListings = $.grep(listings, function (listing) {
+            return listing.Agency == null || listing.Agency == -1;
+        });
+
+        return matchingListings.length > 0;
+    }
+
+    function noListingsMeetFilterRequirement(listings) {
+        var matchingListings = $.grep(listings, function (listing) {
+            return listing.Agency != null && listing.Agency > -1;
+        });
+
+        return matchingListings.length == listings.length;
+    }
+
+    var filtered = $.grep(markersToFilter, function (m) {
+        return isChecked ? anyListingsMeetFilterRequirement(m.Listings) : noListingsMeetFilterRequirement(m.Listings);
+    });
+
+    return filtered;
 }
 
 function filterSSFH(markersToFilter, filter, isChecked) {

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using Newtonsoft.Json;
+using DataManager;
 
 public class Domain
 {
@@ -11,7 +12,7 @@ public class Domain
 
     public static List<GeoLocation> LoadPolyCoords(int suburbId, string resCommAgri = "R")
     {
-        using (var seeffDb = new SeeffDataContext())
+        using (var seeffDb = DataContextRetriever.GetSeeffDataContext())
         {
             return (from entry in seeffDb.kml_areas
                     where entry.area_id == suburbId && entry.area_type == resCommAgri.ToCharArray()[0]
@@ -101,7 +102,7 @@ public class Domain
 
     public static string GetAreaName(int areaId)
     {
-        using (var seeff = new SeeffDataContext())
+        using (var seeff = DataContextRetriever.GetSeeffDataContext())
         {
             return (from item in seeff.areas
                     where item.areaId == areaId
@@ -117,9 +118,20 @@ public class Domain
     public static List<LightstoneListing> LoadLightstoneListingsForSuburb(int suburbId)
     {
         var allListings = new List<LightstoneListing>();
-        using (var lsBase = new LightStoneDataContext())
+        using (var lsBase = DataContextRetriever.GetLSBaseDataContext())
         {
-            foreach (var listing in lsBase.base_datas.Where(i => i.seeff_area_id == suburbId))
+            var queryToRetrieveSuburbData = lsBase.base_datas.Where(i => i.seeff_area_id == suburbId).ToList();
+            queryToRetrieveSuburbData = queryToRetrieveSuburbData.Where(b =>
+                                                             {
+                                                                 if (b.iregdate != null)
+                                                                 {
+                                                                     int year = DateTime.ParseExact(b.iregdate, "yyyyMMdd", null).Year;
+                                                                     return year > 2011;
+                                                                 }
+                                                                 return false;
+                                                             }).ToList();
+
+            foreach (var listing in queryToRetrieveSuburbData)
             {
                 LightstoneListing item = new LightstoneListing();
                 item.PropertyId = listing.property_id;
@@ -158,7 +170,7 @@ public class Domain
     public static List<SeeffListing> LoadCurrentSeeffListings(int areaId)
     {
         var seeffListings = new List<SeeffListing>();
-        using (var seeff = new SeeffDataContext())
+        using (var seeff = DataContextRetriever.GetSeeffDataContext())
         {
             foreach (var seeffListing in seeff.searches.Where(item => item.fkAreaId == areaId))
             {
@@ -215,7 +227,7 @@ public class Domain
 
     public static List<int> LoadRelatedAreas(int areaId)
     {
-        using (var seeff = new SeeffDataContext())
+        using (var seeff = DataContextRetriever.GetSeeffDataContext())
         {
             return (from a in seeff.related_areas
                       where a.fkAreaId == areaId
@@ -225,7 +237,7 @@ public class Domain
 
     public static List<int?> LoadNeighboringAreas(int areaId)
     {
-        using (var seeff = new SeeffDataContext())
+        using (var seeff = DataContextRetriever.GetSeeffDataContext())
         {
             return  (from a in seeff.neighbouring_areas
                       where a.fkAreaId == areaId
@@ -235,7 +247,7 @@ public class Domain
 
     public static int? GetParentAreaId(int areaId)
     {
-        using (var seeff = new SeeffDataContext())
+        using (var seeff = DataContextRetriever.GetSeeffDataContext())
         {
             return seeff.areas.Where(a => a.areaId == areaId).Select(a => a.areaParentId).FirstOrDefault();
         }
@@ -243,7 +255,7 @@ public class Domain
 
     public static string LoadAllSavedPolygonTypes(int areaId)
     {
-        using (var ls_base = new LightStoneDataContext())
+        using (var ls_base = DataContextRetriever.GetLSBaseDataContext())
         {
             var areaTypes = from al in ls_base.area_layers where al.area_id == areaId select al.area_type;
             return string.Join(",", areaTypes);
@@ -252,7 +264,7 @@ public class Domain
 
     public static int? GetAreaTypeId(int areaId)
     {
-        using (var seeff = new SeeffDataContext())
+        using (var seeff = DataContextRetriever.GetSeeffDataContext())
         {
             return seeff.areas.Where(a => a.areaId == areaId).Select(ai => ai.fkAreaTypeId).FirstOrDefault();
         }
@@ -291,7 +303,7 @@ public class Domain
 
     public static int? FindSeeffAreaId(GeoLocation point)
     {
-        using (var ls_base = new LightStoneDataContext())
+        using (var ls_base = DataContextRetriever.GetLSBaseDataContext())
         {
             int? result = null;
             foreach (var provId in new[] { 2, 11, 12, 13, 14, 15, 16, 17, 18 })
@@ -308,7 +320,7 @@ public class Domain
 
     public static int? FindSeeffAreaId(int? lightstonePropertyId)
     {
-        using (var ls_base = new LightStoneDataContext())
+        using (var ls_base = DataContextRetriever.GetLSBaseDataContext())
         {
             return (from prop in ls_base.base_datas
                     where prop.property_id == lightstonePropertyId

@@ -12,7 +12,7 @@ namespace SeeffProspectingAuthService
     public interface ISeeffProspectingAuthService
     {
         [OperationContract]
-        ProspectingUserAuthPacket GetUserInfo(Guid userGuid);
+        ProspectingUserAuthPacket AuthenticateAndGetUserInfo(Guid userGuid, Guid sessionKey);
 
         [OperationContract]
         decimal DebitUserBalance(decimal amount, Guid userGuid);

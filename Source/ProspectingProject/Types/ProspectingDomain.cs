@@ -177,6 +177,11 @@ namespace ProspectingProject
 
         public static string LoadSuburbInfoForUser(string suburbsWithPermissions)
         {
+            if (string.IsNullOrWhiteSpace(suburbsWithPermissions))
+            {
+                return string.Empty;
+            }
+
             Regex regexSplitter = new Regex(@"\[(.*?)\]");
             var matches = regexSplitter.Matches(suburbsWithPermissions);
             if (matches.Count > 0)
@@ -535,17 +540,18 @@ namespace ProspectingProject
         /// *** Prospecting user authorisation web methods ***
         /// </summary>
 
-        public static UserDataResponsePacket LoadUser(Guid userGuid)
+        public static UserDataResponsePacket LoadUser(Guid userGuid, Guid sessionKey)
         {
             using (var authService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
-                var userAuthPacket = authService.GetUserInfo(userGuid);
+                var userAuthPacket = authService.AuthenticateAndGetUserInfo(userGuid, sessionKey);
                 return new UserDataResponsePacket
                 {
                     UserGuid = userGuid,
                     AvailableSuburbs = LoadSuburbInfoForUser(userAuthPacket.SuburbsList),
                     StaticProspectingData = SerialiseStaticProspectingData(),
-                    AvailableCredit = userAuthPacket.AvailableCredit
+                    AvailableCredit = userAuthPacket.AvailableCredit,
+                    Authenticated = userAuthPacket.Authenticated
                 };
             }
         }
@@ -1489,7 +1495,7 @@ namespace ProspectingProject
 
             if (idNumber.Contains("/") || idNumber.Contains("\\"))
             {
-                return idNumber;
+                return idNumber; // This is not a person's ID number
             }
             int nr;
             // Just birthday digits available
@@ -1505,7 +1511,18 @@ namespace ProspectingProject
                 {
                     surname = surname.Substring(0, 7);
                 }
-                return string.Concat(idNumber, surname);
+                
+                string result = string.Concat(idNumber, surname);
+                if (result.Length > 13)
+                {
+                    result = new string(result.Take(13).ToArray());
+                }
+                return result;
+            }
+
+            if (idNumber.Length > 13)
+            {
+                idNumber = new string(idNumber.Take(13).ToArray());
             }
             return idNumber;
         }

@@ -30,7 +30,7 @@ public class AgenciesDataManager : IHttpHandler {
     private int[] LoadAgenciesAvailableToSuburb(DataRequestPacket inputPacket)
     {
         // TODO: currently looking at a table in the boss database. The final table schema and location to be determined
-        using (var lsbase = new LightStoneDataContext())
+        using (var lsbase = DataManager.DataContextRetriever.GetLSBaseDataContext())
         {
             return (from agncySub in lsbase.agencies_user_suburbs
                    where agncySub.suburb_id == inputPacket.suburbID && agncySub.agency_id != null
@@ -40,7 +40,7 @@ public class AgenciesDataManager : IHttpHandler {
 
     private void SaveSelectedAgenciesForSuburb(DataRequestPacket inputPacket)
     {
-        using (var lsbase = new LightStoneDataContext())
+        using (var lsbase = DataManager.DataContextRetriever.GetLSBaseDataContext())
         {
             var allRecordsForExistingSuburb = from a in lsbase.agencies_user_suburbs
                                               where a.suburb_id == inputPacket.suburbID

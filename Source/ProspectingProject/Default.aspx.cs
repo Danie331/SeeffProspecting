@@ -17,8 +17,28 @@ public partial class Prospecting : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            string userGuid = HttpContext.Current.IsDebuggingEnabled ? Request.QueryString["user_guid"] : Request.Form["UserGuidField"];
-            Session["user_guid"] = userGuid;
+            if (HttpContext.Current.IsDebuggingEnabled)
+            {
+                Session["user_guid"] = Request.QueryString["user_guid"];
+                Session["session_key"] = Guid.NewGuid().ToString();
+            }
+            else
+            {
+                try
+                {
+                    string userGuidSessionKey = Request.Form["UserGuidField"]; // Expected form: "user guid:session key"
+
+                    string userGuid = userGuidSessionKey.Split(new[] { ':' })[0];
+                    string sessionKey = userGuidSessionKey.Split(new[] { ':' })[1];
+
+                    Session["user_guid"] = userGuid;
+                    Session["session_key"] = sessionKey;
+                }
+                catch
+                {
+                    Response.Redirect("NotAuthorised.aspx", true);
+                }
+            }
         }
     }
 }

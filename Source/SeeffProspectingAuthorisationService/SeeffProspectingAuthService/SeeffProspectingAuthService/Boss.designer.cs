@@ -72,6 +72,13 @@ namespace SeeffProspectingAuthService
 				return this.GetTable<user_registration>();
 			}
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.user_auth")]
+		public int user_auth([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string user_guid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="UniqueIdentifier")] System.Nullable<System.Guid> session_key, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string app)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), user_guid, session_key, app);
+			return ((int)(result.ReturnValue));
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.user_registration")]
@@ -200,6 +207,8 @@ namespace SeeffProspectingAuthService
 		
 		private bool _compliance_access;
 		
+		private System.Nullable<System.Guid> _session_key;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -324,6 +333,8 @@ namespace SeeffProspectingAuthService
     partial void Onprospecting_controlChanged();
     partial void Oncompliance_accessChanging(bool value);
     partial void Oncompliance_accessChanged();
+    partial void Onsession_keyChanging(System.Nullable<System.Guid> value);
+    partial void Onsession_keyChanged();
     #endregion
 		
 		public user_registration()
@@ -1527,6 +1538,26 @@ namespace SeeffProspectingAuthService
 					this._compliance_access = value;
 					this.SendPropertyChanged("compliance_access");
 					this.Oncompliance_accessChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_session_key", DbType="UniqueIdentifier")]
+		public System.Nullable<System.Guid> session_key
+		{
+			get
+			{
+				return this._session_key;
+			}
+			set
+			{
+				if ((this._session_key != value))
+				{
+					this.Onsession_keyChanging(value);
+					this.SendPropertyChanging();
+					this._session_key = value;
+					this.SendPropertyChanged("session_key");
+					this.Onsession_keyChanged();
 				}
 			}
 		}

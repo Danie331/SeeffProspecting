@@ -53,6 +53,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataContexts\DataContextRetriever.cs" />
     <Compile Include="DomainTypes\AreaType.cs" />
     <Compile Include="DomainTypes\Domain.cs" />
     <Compile Include="DomainTypes\GenericArea.cs" />
@@ -69,28 +71,18 @@
     <Compile Include="DomainTypes\LightstoneListing.cs" />
     <Compile Include="DomainTypes\SeeffListing.cs" />
     <Compile Include="JsonNetPropertyNameResolverForSerialization.cs" />
-    <Compile Include="Linq2Sql Classes\Boss.designer.cs">
+    <Compile Include="DataContexts\Boss.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Boss.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Linq2Sql Classes\Boss1.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Boss.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Linq2Sql Classes\LightStone.cs">
+    <Compile Include="DataContexts\LightStone.cs">
       <DependentUpon>LightStone.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Linq2Sql Classes\LightStone.designer.cs">
+    <Compile Include="DataContexts\LightStone.designer.cs">
       <DependentUpon>LightStone.cs</DependentUpon>
     </Compile>
-    <Compile Include="Linq2Sql Classes\Seeff.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Seeff.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Linq2Sql Classes\Seeff1.designer.cs">
+    <Compile Include="DataContexts\Seeff.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Seeff.dbml</DependentUpon>
@@ -113,15 +105,15 @@
       <SubType>Designer</SubType>
       <TransformOnBuild>true</TransformOnBuild>
     </None>
-    <None Include="Linq2Sql Classes\Boss.dbml">
+    <None Include="DataContexts\Boss.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>Boss1.designer.cs</LastGenOutput>
     </None>
-    <None Include="Linq2Sql Classes\LightStone.dbml">
+    <None Include="DataContexts\LightStone.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>LightStone1.designer.cs</LastGenOutput>
     </None>
-    <None Include="Linq2Sql Classes\Seeff.dbml">
+    <None Include="DataContexts\Seeff.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>Seeff1.designer.cs</LastGenOutput>
     </None>
@@ -131,7 +123,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Linq2Sql Classes\Boss.dbml.layout">
+    <None Include="DataContexts\Boss.dbml.layout">
       <DependentUpon>Boss.dbml</DependentUpon>
     </None>
   </ItemGroup>
@@ -139,12 +131,12 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Linq2Sql Classes\LightStone.dbml.layout">
+    <None Include="DataContexts\LightStone.dbml.layout">
       <DependentUpon>LightStone.dbml</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Linq2Sql Classes\Seeff.dbml.layout">
+    <None Include="DataContexts\Seeff.dbml.layout">
       <DependentUpon>Seeff.dbml</DependentUpon>
     </None>
   </ItemGroup>

@@ -56,7 +56,7 @@ public class AdminDataManager : IHttpHandler {
 
     private void UpdateCache()
     {
-        using (var seeff = new SeeffDataContext())
+        using (var seeff = DataManager.DataContextRetriever.GetSeeffDataContext())
         {
             var areasAreaTypes = (from a in seeff.areas
                                  join kml in seeff.kml_areas on a.areaId equals kml.area_id
@@ -103,7 +103,7 @@ public class AdminDataManager : IHttpHandler {
             if (isNewArea)
             {
                 // Get the next area id to use
-                using (var seeff = new SeeffDataContext())
+                using (var seeff = DataManager.DataContextRetriever.GetSeeffDataContext())
                 {
                     inputData.LocationID = seeff.areas.Max(a => a.areaId) + 1;
                 }
@@ -129,7 +129,7 @@ public class AdminDataManager : IHttpHandler {
         // TODO: the contents of this method must be done in a transaction as multiple tables are affected!  
         using (var transaction = new TransactionScope())
         {
-            using (var seeff = new SeeffDataContext())
+            using (var seeff = DataManager.DataContextRetriever.GetSeeffDataContext())
             {
             // Insert a record into the area table
             area newAreaRecord = new area
@@ -155,7 +155,7 @@ public class AdminDataManager : IHttpHandler {
 
                 using (var innerTran = new TransactionScope(TransactionScopeOption.Suppress))
                 {
-                    using (var ls_base = new LightStoneDataContext())
+                    using (var ls_base = DataManager.DataContextRetriever.GetLSBaseDataContext())
                     {
                         inputData.PolyCoords = Domain.MakePolygonValid(ls_base, inputData.PolyCoords);
                     }
@@ -184,7 +184,7 @@ public class AdminDataManager : IHttpHandler {
 
                 using (var innerTran = new TransactionScope(TransactionScopeOption.Suppress))
                 {
-                    using (var ls_base = new LightStoneDataContext())
+                    using (var ls_base = DataManager.DataContextRetriever.GetLSBaseDataContext())
                     {
                         int? provId = seeff.GetAreaPathMap(inputData.LocationID, 2);
                         foreach (var type in inputData.ResCommAgriItemArray)
@@ -218,7 +218,7 @@ public class AdminDataManager : IHttpHandler {
         // TODO: the contents of this method must be done in a transaction as multiple tables are affected!
         using (var transaction = new TransactionScope())
         {
-            using (var seeff = new SeeffDataContext())
+            using (var seeff = DataManager.DataContextRetriever.GetSeeffDataContext())
             {
                 var existingArea = seeff.areas.Where(a => a.areaId == inputData.LocationID).First();
 
@@ -249,7 +249,7 @@ public class AdminDataManager : IHttpHandler {
                 // Add the most up-to-date kml data
                 using (var innerTran = new TransactionScope(TransactionScopeOption.Suppress))
                 {
-                    using (var ls_base = new LightStoneDataContext())
+                    using (var ls_base = DataManager.DataContextRetriever.GetLSBaseDataContext())
                     {
                         inputData.PolyCoords = Domain.MakePolygonValid(ls_base, inputData.PolyCoords);
                     }
@@ -275,7 +275,7 @@ public class AdminDataManager : IHttpHandler {
 
                 using (var innerTran = new TransactionScope(TransactionScopeOption.Suppress))
                 {
-                    using (var ls_base = new LightStoneDataContext())
+                    using (var ls_base = DataManager.DataContextRetriever.GetLSBaseDataContext())
                     {
                         int? provId = seeff.GetAreaPathMap(inputData.LocationID, 2);
 
@@ -311,7 +311,7 @@ public class AdminDataManager : IHttpHandler {
 
     private void UpdateRelatedAreas(DataRequestPacket inputData)
     {
-        using (var seeff = new SeeffDataContext())
+        using (var seeff = DataManager.DataContextRetriever.GetSeeffDataContext())
         {
             // Delete the old/existing mappings
             var oldRelatedAreas = from a in seeff.related_areas
@@ -338,7 +338,7 @@ public class AdminDataManager : IHttpHandler {
 
     private void UpdateNeighboringAreas(DataRequestPacket inputData)
     {
-        using (var seeff = new SeeffDataContext())
+        using (var seeff = DataManager.DataContextRetriever.GetSeeffDataContext())
         {
             // Delete old/existing neighboring areas
             var oldNeightboringAreas = from a in seeff.neighbouring_areas
@@ -382,7 +382,7 @@ public class AdminDataManager : IHttpHandler {
 
     private ILocation TryFindAreaUnderLatLong(GeoLocation location)
     {
-        using (var lsbase = new LightStoneDataContext())
+        using (var lsbase = DataManager.DataContextRetriever.GetLSBaseDataContext())
         {
             int? result = null;
             foreach (var provId in new[] { 2, 11, 12, 13, 14, 15, 16, 17, 18 })
@@ -415,7 +415,7 @@ public class AdminDataManager : IHttpHandler {
 
     private void LoadAndCacheAreaTypes()
     {
-        using (var seeff = new SeeffDataContext())
+        using (var seeff = DataManager.DataContextRetriever.GetSeeffDataContext())
         {
             var areaTypes = from s in seeff.areaTypes
                             select new AreaType { AreaTypeName =  s.areaTypeName,  AreaTypeId = s.areaTypeId};

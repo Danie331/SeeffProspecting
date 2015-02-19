@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataManager;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -20,7 +21,7 @@ public partial class MarketShare : System.Web.UI.Page
 
             string userGuid = (string)Session["user_guid"];
 
-            using (var bossDb = new BossDataContext())
+            using (var bossDb = DataContextRetriever.GetBossDataContext())
             {
                 var user = (from ur in bossDb.user_registrations
                             where ur.user_guid.Equals(userGuid)
@@ -78,13 +79,13 @@ public partial class MarketShare : System.Web.UI.Page
                                  CanEdit = suburbSet[1].Replace("]", "") == "1"
                              };
 
-            using (var seeffDb = new SeeffDataContext())
+            using (var seeffDb = DataContextRetriever.GetSeeffDataContext())
             {
                 var seeffAreas = (from a in seeffDb.areas select new { a.areaId, a.areaName }).ToList();
-                var suburbsInfo = from a in seeffAreas
+                var suburbsInfo = (from a in seeffAreas
                                   join ss in suburbSets on a.areaId equals ss.AreaId    
                                   orderby a.areaName
-                                  select new
+                                  select new SuburbInfo
                                   {
                                       SuburbId = a.areaId,
                                       SuburbName = a.areaName,
@@ -94,7 +95,9 @@ public partial class MarketShare : System.Web.UI.Page
                                       FatedCount = GetTotalFatings(a.areaId, true),
                                       UnfatedCount = GetTotalFatings(a.areaId, false),
                                       SeeffCurrentListingCount = GetCountSeeffCurrentListings(a.areaId)
-                                  };
+                                  }).ToList();
+
+                Session["user_suburbs"] = suburbsInfo;
 
                 return new JavaScriptSerializer().Serialize(suburbsInfo);
             }
@@ -105,7 +108,7 @@ public partial class MarketShare : System.Web.UI.Page
 
     private int GetCountSeeffCurrentListings(int areaId)
     {
-        using (var seeff = new SeeffDataContext())
+        using (var seeff = DataContextRetriever.GetSeeffDataContext())
         {
             int count = 0;
             foreach (var seeffListing in seeff.searches.Where(item => item.fkAreaId == areaId))
@@ -123,7 +126,7 @@ public partial class MarketShare : System.Web.UI.Page
 
     private int? GetTotalFatings(int areaId, bool getFated)
     {
-        using (var ls_base = new LightStoneDataContext())
+        using (var ls_base = DataManager.DataContextRetriever.GetLSBaseDataContext())
         {
             var areaFatingRecord = ls_base.area_fatings.Where(af => af.area_id == areaId).FirstOrDefault();
             if (areaFatingRecord != null)
@@ -136,9 +139,10 @@ public partial class MarketShare : System.Web.UI.Page
     }
 
     private bool AllListingsFated(int areaId)
-    {            
-        using (var lsBase = new LightStoneDataContext())
+    {
+        using (var lsBase = DataManager.DataContextRetriever.GetLSBaseDataContext())
         {
+            lsBase.CommandTimeout = 2 * 60;
             var results = lsBase.base_datas.Where(a => a.seeff_area_id == areaId).All(a => a.fated.HasValue);
             return results;
         }
@@ -146,7 +150,7 @@ public partial class MarketShare : System.Web.UI.Page
 
     private string LoadAllAvailableAgencies()
     {
-        using (var lsbase = new LightStoneDataContext())
+        using (var lsbase = DataManager.DataContextRetriever.GetLSBaseDataContext())
         {
             var allAgencies = from agncy in lsbase.agencies
                               orderby agncy.agency_name

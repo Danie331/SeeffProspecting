@@ -23,6 +23,9 @@ namespace ProspectingProject.ProspectingUserAuthService {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool AuthenticatedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal AvailableCreditField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -38,6 +41,19 @@ namespace ProspectingProject.ProspectingUserAuthService {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Authenticated {
+            get {
+                return this.AuthenticatedField;
+            }
+            set {
+                if ((this.AuthenticatedField.Equals(value) != true)) {
+                    this.AuthenticatedField = value;
+                    this.RaisePropertyChanged("Authenticated");
+                }
             }
         }
         
@@ -94,11 +110,13 @@ namespace ProspectingProject.ProspectingUserAuthService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProspectingUserAuthService.ISeeffProspectingAuthService")]
     public interface ISeeffProspectingAuthService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/GetUserInfo", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/GetUserInfoResponse")]
-        ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket GetUserInfo(System.Guid userGuid);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfo", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfoRespons" +
+            "e")]
+        ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket AuthenticateAndGetUserInfo(System.Guid userGuid, System.Guid sessionKey);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/GetUserInfo", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/GetUserInfoResponse")]
-        System.Threading.Tasks.Task<ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket> GetUserInfoAsync(System.Guid userGuid);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfo", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfoRespons" +
+            "e")]
+        System.Threading.Tasks.Task<ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket> AuthenticateAndGetUserInfoAsync(System.Guid userGuid, System.Guid sessionKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/DebitUserBalance", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/DebitUserBalanceResponse")]
         decimal DebitUserBalance(decimal amount, System.Guid userGuid);
@@ -140,12 +158,12 @@ namespace ProspectingProject.ProspectingUserAuthService {
                 base(binding, remoteAddress) {
         }
         
-        public ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket GetUserInfo(System.Guid userGuid) {
-            return base.Channel.GetUserInfo(userGuid);
+        public ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket AuthenticateAndGetUserInfo(System.Guid userGuid, System.Guid sessionKey) {
+            return base.Channel.AuthenticateAndGetUserInfo(userGuid, sessionKey);
         }
         
-        public System.Threading.Tasks.Task<ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket> GetUserInfoAsync(System.Guid userGuid) {
-            return base.Channel.GetUserInfoAsync(userGuid);
+        public System.Threading.Tasks.Task<ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket> AuthenticateAndGetUserInfoAsync(System.Guid userGuid, System.Guid sessionKey) {
+            return base.Channel.AuthenticateAndGetUserInfoAsync(userGuid, sessionKey);
         }
         
         public decimal DebitUserBalance(decimal amount, System.Guid userGuid) {

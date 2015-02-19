@@ -7,11 +7,11 @@
       <xsd:import schemaLocation="http://localhost:63146/SeeffProspectingAuthService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/SeeffProspectingAuthService" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="ISeeffProspectingAuthService_GetUserInfo_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetUserInfo" />
+  <wsdl:message name="ISeeffProspectingAuthService_AuthenticateAndGetUserInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateAndGetUserInfo" />
   </wsdl:message>
-  <wsdl:message name="ISeeffProspectingAuthService_GetUserInfo_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetUserInfoResponse" />
+  <wsdl:message name="ISeeffProspectingAuthService_AuthenticateAndGetUserInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateAndGetUserInfoResponse" />
   </wsdl:message>
   <wsdl:message name="ISeeffProspectingAuthService_DebitUserBalance_InputMessage">
     <wsdl:part name="parameters" element="tns:DebitUserBalance" />
@@ -26,9 +26,9 @@
     <wsdl:part name="parameters" element="tns:CreditUserBalanceResponse" />
   </wsdl:message>
   <wsdl:portType name="ISeeffProspectingAuthService">
-    <wsdl:operation name="GetUserInfo">
-      <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/GetUserInfo" message="tns:ISeeffProspectingAuthService_GetUserInfo_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/GetUserInfoResponse" message="tns:ISeeffProspectingAuthService_GetUserInfo_OutputMessage" />
+    <wsdl:operation name="AuthenticateAndGetUserInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfo" message="tns:ISeeffProspectingAuthService_AuthenticateAndGetUserInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfoResponse" message="tns:ISeeffProspectingAuthService_AuthenticateAndGetUserInfo_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="DebitUserBalance">
       <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/DebitUserBalance" message="tns:ISeeffProspectingAuthService_DebitUserBalance_InputMessage" />
@@ -41,8 +41,8 @@
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ISeeffProspectingAuthService" type="tns:ISeeffProspectingAuthService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="GetUserInfo">
-      <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/GetUserInfo" style="document" />
+    <wsdl:operation name="AuthenticateAndGetUserInfo">
+      <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfo" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

@@ -6,12 +6,70 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function initSearch() {
-    
     // Validate that we have some data to search on..
     if (canSearch()) {
-        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Searching</p>' });
-        setTimeout(reloadSuburbsWithSearchOption,500);
+        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Searching...</p>' });
+        
+        var deedTown = $('#deedTownInput').val().trim();
+        var suburb = $('#suburbInput').val().trim();
+        var streetName = $('#streetNameInput').val().trim();
+        var streetNo = $('#streetNoInput').val().trim();
+        var complexName = $('#complexNameInput').val().trim();
+        var estateName = $('#estateNameInput').val().trim();
+        var erfNo = $('#erfNoInput').val().trim();
+        var portionNo = $('#portionNoInputBox').val().trim();
+        var propId = $('#propertyIdInput').val().trim();
+        var titleDeed = $('#titleDeedInput').val().trim();
+        var buyerName = $('#buyerNameInput').val().trim();
+        var sellerName = $('#sellerNameInput').val().trim();
+
+        var inputPackage = { Instruction: "perform_search",
+            DeedTown: deedTown, Suburb: suburb, StreetName: streetName,
+            StreetNumber: streetNo, ComplexName: complexName, EstateName: estateName,
+            ErfNo: erfNo, PortionNo: portionNo, PropertyId: propId,
+            TitleDeed: titleDeed, BuyerName: buyerName, SellerName: sellerName
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify(inputPackage),
+            success: function (results, textStatus, jqXHR) {
+                $.unblockUI();
+                if (textStatus == "success") {
+                    createSearchResults(results);
+                } else {
+                    alert('Could not perform search. Please try again or contact support if the problem persists.');
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.status);
+                alert(jqXHR.responseText);
+            },
+            dataType: "json"
+        });
     }
+    else {
+        $('#lightstoneResultsDiv').empty();
+    }
+}
+
+
+function canSearch() {
+
+    if ($('#deedTownInput').val().trim() != '') return true;
+    if ($('#suburbInput').val().trim() != '') return true;
+    if ($('#streetNameInput').val().trim() != '') return true;
+    if ($('#streetNoInput').val().trim() != '') return true;
+    if ($('#complexNameInput').val().trim() != '') return true;
+    if ($('#estateNameInput').val().trim() != '') return true;
+    if ($('#erfNoInput').val().trim() != '') return true;
+    if ($('#propertyIdInput').val().trim() != '') return true;
+    if ($('#titleDeedInput').val().trim() != '') return true;
+    if ($('#buyerNameInput').val().trim() != '') return true;
+    if ($('#sellerNameInput').val().trim() != '') return true;
+
+    return false;
 }
 
 function performResetSearch() {
@@ -33,20 +91,6 @@ function reloadSuburbsWithSearchOption() {
     }
 
     $.unblockUI(); // This should always be the last statement in this function.
-}
-
-
-function canSearch() {
-
-    if ($('#searchStreetOrSSName').val() != '') return true;
-    if ($('#searchStreetOrUnitNo').val() != '') return true;
-    if ($('#searchSellerName').val() != '') return true;
-    if ($('#searchBuyerName').val() != '') return true;
-    if ($('#searchTitleDeed').val() != '') return true;
-    if ($('#searchErfNo').val() != '') return true;
-    if ($('#searchPropId').val() != '') return true;
-
-    return false;
 }
 
 function resetSearchFieldsAndReloadSuburbs() {

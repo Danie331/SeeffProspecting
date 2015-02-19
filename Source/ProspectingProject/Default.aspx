@@ -78,6 +78,11 @@
                 success: function (data, textStatus, jqXHR) {
                     if (textStatus == "success") {
                         $('#loadingDiv').remove();
+
+                        if (!data.Authenticated) {
+                            window.location = "/NotAuthorised.aspx";
+                        }
+
                         $('#mainpanel').css('display', 'block');
 
                         availableCredit = data.AvailableCredit;
