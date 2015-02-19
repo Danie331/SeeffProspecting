@@ -23,33 +23,39 @@ namespace DataManager.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=learnit-dev;Initial Catalog=ls_base;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"Data Source=louise-pc;Initial Catalog=ls_base;Integrated Security=True\"")]
         public string ls_baseConnectionString {
             get {
                 return ((string)(this["ls_baseConnectionString"]));
             }
+            set {
+                this["ls_baseConnectionString"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=learnit-dev;Initial Catalog=boss;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"Data Source=louise-pc;Initial Catalog=boss;Integrated Security=True\"")]
         public string bossConnectionString {
             get {
                 return ((string)(this["bossConnectionString"]));
             }
+            set {
+                this["bossConnectionString"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=learnit-dev;Initial Catalog=seeff;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"Data Source=louise-pc;Initial Catalog=seeff;Integrated Security=True\"")]
         public string seeffConnectionString {
             get {
                 return ((string)(this["seeffConnectionString"]));
+            }
+            set {
+                this["seeffConnectionString"] = value;
             }
         }
     }
