@@ -68,7 +68,16 @@ namespace ProspectingProject
                     var prospectingEntities = CreateProspectingEntities(json);
                     context.Response.Write(prospectingEntities);
                     break;
+                case "update_prospected_flag":
+                    UpdateProspectedStatus(json);
+                    break;
             }
+        }
+
+        private void UpdateProspectedStatus(string json)
+        {
+            var prospectingPropertyStatus = ProspectingDomain.Deserialise<PropertyProspectedStatus>(json);
+            ProspectingDomain.MarkAsProspected(prospectingPropertyStatus.LightstonePropertyId, prospectingPropertyStatus.Prospected);
         }
 
         private string CreateProspectingEntities(string json)
@@ -120,6 +129,19 @@ namespace ProspectingProject
         {
             var contactDataPacket = ProspectingDomain.Deserialise<ContactDataPacket>(json);
             var contact = ProspectingDomain.SaveContactPerson(contactDataPacket);
+
+            int deletedContactDetailsCount = Convert.ToInt32(HttpContext.Current.Session["deleted_item_count"]);
+            if (deletedContactDetailsCount > 20)
+            {
+                UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+                if (!user.IsProspectingManager)
+                {
+                    contact.ContactIsCompromised = true;
+                    ProspectingDomain.SendWarningNotificationToManager(user);
+                    HttpContext.Current.Session["user_guid"] = null;
+                }
+            }
+
             return ProspectingDomain.SerializeToJsonWithDefaults(contact);
         }
 
@@ -152,6 +174,8 @@ namespace ProspectingProject
             var sessionKey = Guid.Parse((string)HttpContext.Current.Session["session_key"]);
 
             UserDataResponsePacket user = ProspectingDomain.LoadUser(guid, sessionKey);
+            HttpContext.Current.Session["user"] = user;
+            HttpContext.Current.Session["deleted_item_count"] = 0;
             return ProspectingDomain.SerializeToJsonWithDefaults(user);
         }                         
 

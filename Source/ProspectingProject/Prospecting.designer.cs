@@ -48,9 +48,6 @@ namespace ProspectingProject
     partial void Insertprospecting_contact_company(prospecting_contact_company instance);
     partial void Updateprospecting_contact_company(prospecting_contact_company instance);
     partial void Deleteprospecting_contact_company(prospecting_contact_company instance);
-    partial void Insertprospecting_contact_detail(prospecting_contact_detail instance);
-    partial void Updateprospecting_contact_detail(prospecting_contact_detail instance);
-    partial void Deleteprospecting_contact_detail(prospecting_contact_detail instance);
     partial void Insertprospecting_contact_detail_type(prospecting_contact_detail_type instance);
     partial void Updateprospecting_contact_detail_type(prospecting_contact_detail_type instance);
     partial void Deleteprospecting_contact_detail_type(prospecting_contact_detail_type instance);
@@ -87,6 +84,9 @@ namespace ProspectingProject
     partial void Insertservice_enquiry_log(service_enquiry_log instance);
     partial void Updateservice_enquiry_log(service_enquiry_log instance);
     partial void Deleteservice_enquiry_log(service_enquiry_log instance);
+    partial void Insertprospecting_contact_detail(prospecting_contact_detail instance);
+    partial void Updateprospecting_contact_detail(prospecting_contact_detail instance);
+    partial void Deleteprospecting_contact_detail(prospecting_contact_detail instance);
     #endregion
 		
 		public ProspectingDataContext() : 
@@ -164,14 +164,6 @@ namespace ProspectingProject
 			get
 			{
 				return this.GetTable<prospecting_contact_company>();
-			}
-		}
-		
-		public System.Data.Linq.Table<prospecting_contact_detail> prospecting_contact_details
-		{
-			get
-			{
-				return this.GetTable<prospecting_contact_detail>();
 			}
 		}
 		
@@ -268,6 +260,14 @@ namespace ProspectingProject
 			get
 			{
 				return this.GetTable<service_enquiry_log>();
+			}
+		}
+		
+		public System.Data.Linq.Table<prospecting_contact_detail> prospecting_contact_details
+		{
+			get
+			{
+				return this.GetTable<prospecting_contact_detail>();
 			}
 		}
 		
@@ -1469,335 +1469,6 @@ namespace ProspectingProject
 		{
 			this.SendPropertyChanging();
 			entity.prospecting_contact_company = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.prospecting_contact_detail")]
-	public partial class prospecting_contact_detail : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _prospecting_contact_detail_id;
-		
-		private int _contact_detail_type;
-		
-		private int _contact_person_id;
-		
-		private string _contact_detail;
-		
-		private System.Nullable<int> _intl_dialing_code_id;
-		
-		private System.Nullable<int> _eleventh_digit;
-		
-		private bool _is_primary_contact;
-		
-		private EntityRef<prospecting_area_dialing_code> _prospecting_area_dialing_code;
-		
-		private EntityRef<prospecting_contact_detail_type> _prospecting_contact_detail_type;
-		
-		private EntityRef<prospecting_contact_person> _prospecting_contact_person;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void Onprospecting_contact_detail_idChanging(int value);
-    partial void Onprospecting_contact_detail_idChanged();
-    partial void Oncontact_detail_typeChanging(int value);
-    partial void Oncontact_detail_typeChanged();
-    partial void Oncontact_person_idChanging(int value);
-    partial void Oncontact_person_idChanged();
-    partial void Oncontact_detailChanging(string value);
-    partial void Oncontact_detailChanged();
-    partial void Onintl_dialing_code_idChanging(System.Nullable<int> value);
-    partial void Onintl_dialing_code_idChanged();
-    partial void Oneleventh_digitChanging(System.Nullable<int> value);
-    partial void Oneleventh_digitChanged();
-    partial void Onis_primary_contactChanging(bool value);
-    partial void Onis_primary_contactChanged();
-    #endregion
-		
-		public prospecting_contact_detail()
-		{
-			this._prospecting_area_dialing_code = default(EntityRef<prospecting_area_dialing_code>);
-			this._prospecting_contact_detail_type = default(EntityRef<prospecting_contact_detail_type>);
-			this._prospecting_contact_person = default(EntityRef<prospecting_contact_person>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_contact_detail_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int prospecting_contact_detail_id
-		{
-			get
-			{
-				return this._prospecting_contact_detail_id;
-			}
-			set
-			{
-				if ((this._prospecting_contact_detail_id != value))
-				{
-					this.Onprospecting_contact_detail_idChanging(value);
-					this.SendPropertyChanging();
-					this._prospecting_contact_detail_id = value;
-					this.SendPropertyChanged("prospecting_contact_detail_id");
-					this.Onprospecting_contact_detail_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contact_detail_type", DbType="Int NOT NULL")]
-		public int contact_detail_type
-		{
-			get
-			{
-				return this._contact_detail_type;
-			}
-			set
-			{
-				if ((this._contact_detail_type != value))
-				{
-					if (this._prospecting_contact_detail_type.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Oncontact_detail_typeChanging(value);
-					this.SendPropertyChanging();
-					this._contact_detail_type = value;
-					this.SendPropertyChanged("contact_detail_type");
-					this.Oncontact_detail_typeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contact_person_id", DbType="Int NOT NULL")]
-		public int contact_person_id
-		{
-			get
-			{
-				return this._contact_person_id;
-			}
-			set
-			{
-				if ((this._contact_person_id != value))
-				{
-					if (this._prospecting_contact_person.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Oncontact_person_idChanging(value);
-					this.SendPropertyChanging();
-					this._contact_person_id = value;
-					this.SendPropertyChanged("contact_person_id");
-					this.Oncontact_person_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contact_detail", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
-		public string contact_detail
-		{
-			get
-			{
-				return this._contact_detail;
-			}
-			set
-			{
-				if ((this._contact_detail != value))
-				{
-					this.Oncontact_detailChanging(value);
-					this.SendPropertyChanging();
-					this._contact_detail = value;
-					this.SendPropertyChanged("contact_detail");
-					this.Oncontact_detailChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_intl_dialing_code_id", DbType="Int")]
-		public System.Nullable<int> intl_dialing_code_id
-		{
-			get
-			{
-				return this._intl_dialing_code_id;
-			}
-			set
-			{
-				if ((this._intl_dialing_code_id != value))
-				{
-					if (this._prospecting_area_dialing_code.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onintl_dialing_code_idChanging(value);
-					this.SendPropertyChanging();
-					this._intl_dialing_code_id = value;
-					this.SendPropertyChanged("intl_dialing_code_id");
-					this.Onintl_dialing_code_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_eleventh_digit", DbType="Int")]
-		public System.Nullable<int> eleventh_digit
-		{
-			get
-			{
-				return this._eleventh_digit;
-			}
-			set
-			{
-				if ((this._eleventh_digit != value))
-				{
-					this.Oneleventh_digitChanging(value);
-					this.SendPropertyChanging();
-					this._eleventh_digit = value;
-					this.SendPropertyChanged("eleventh_digit");
-					this.Oneleventh_digitChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_is_primary_contact", DbType="Bit NOT NULL")]
-		public bool is_primary_contact
-		{
-			get
-			{
-				return this._is_primary_contact;
-			}
-			set
-			{
-				if ((this._is_primary_contact != value))
-				{
-					this.Onis_primary_contactChanging(value);
-					this.SendPropertyChanging();
-					this._is_primary_contact = value;
-					this.SendPropertyChanged("is_primary_contact");
-					this.Onis_primary_contactChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_area_dialing_code_prospecting_contact_detail", Storage="_prospecting_area_dialing_code", ThisKey="intl_dialing_code_id", OtherKey="prospecting_area_dialing_code_id", IsForeignKey=true)]
-		public prospecting_area_dialing_code prospecting_area_dialing_code
-		{
-			get
-			{
-				return this._prospecting_area_dialing_code.Entity;
-			}
-			set
-			{
-				prospecting_area_dialing_code previousValue = this._prospecting_area_dialing_code.Entity;
-				if (((previousValue != value) 
-							|| (this._prospecting_area_dialing_code.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._prospecting_area_dialing_code.Entity = null;
-						previousValue.prospecting_contact_details.Remove(this);
-					}
-					this._prospecting_area_dialing_code.Entity = value;
-					if ((value != null))
-					{
-						value.prospecting_contact_details.Add(this);
-						this._intl_dialing_code_id = value.prospecting_area_dialing_code_id;
-					}
-					else
-					{
-						this._intl_dialing_code_id = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("prospecting_area_dialing_code");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_contact_detail_type_prospecting_contact_detail", Storage="_prospecting_contact_detail_type", ThisKey="contact_detail_type", OtherKey="contact_detail_type_id", IsForeignKey=true)]
-		public prospecting_contact_detail_type prospecting_contact_detail_type
-		{
-			get
-			{
-				return this._prospecting_contact_detail_type.Entity;
-			}
-			set
-			{
-				prospecting_contact_detail_type previousValue = this._prospecting_contact_detail_type.Entity;
-				if (((previousValue != value) 
-							|| (this._prospecting_contact_detail_type.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._prospecting_contact_detail_type.Entity = null;
-						previousValue.prospecting_contact_details.Remove(this);
-					}
-					this._prospecting_contact_detail_type.Entity = value;
-					if ((value != null))
-					{
-						value.prospecting_contact_details.Add(this);
-						this._contact_detail_type = value.contact_detail_type_id;
-					}
-					else
-					{
-						this._contact_detail_type = default(int);
-					}
-					this.SendPropertyChanged("prospecting_contact_detail_type");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_contact_person_prospecting_contact_detail", Storage="_prospecting_contact_person", ThisKey="contact_person_id", OtherKey="contact_person_id", IsForeignKey=true)]
-		public prospecting_contact_person prospecting_contact_person
-		{
-			get
-			{
-				return this._prospecting_contact_person.Entity;
-			}
-			set
-			{
-				prospecting_contact_person previousValue = this._prospecting_contact_person.Entity;
-				if (((previousValue != value) 
-							|| (this._prospecting_contact_person.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._prospecting_contact_person.Entity = null;
-						previousValue.prospecting_contact_details.Remove(this);
-					}
-					this._prospecting_contact_person.Entity = value;
-					if ((value != null))
-					{
-						value.prospecting_contact_details.Add(this);
-						this._contact_person_id = value.contact_person_id;
-					}
-					else
-					{
-						this._contact_person_id = default(int);
-					}
-					this.SendPropertyChanged("prospecting_contact_person");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
 		}
 	}
 	
@@ -4823,8 +4494,6 @@ namespace ProspectingProject
 		
 		private string _citizenship;
 		
-		private EntitySet<prospecting_contact_detail> _prospecting_contact_details;
-		
 		private EntitySet<prospecting_person_company_relationship> _prospecting_person_company_relationships;
 		
 		private EntitySet<prospecting_person_person_relationship> _prospecting_person_person_relationships;
@@ -4832,6 +4501,8 @@ namespace ProspectingProject
 		private EntitySet<prospecting_person_person_relationship> _prospecting_person_person_relationships1;
 		
 		private EntitySet<prospecting_person_property_relationship> _prospecting_person_property_relationships;
+		
+		private EntitySet<prospecting_contact_detail> _prospecting_contact_details;
 		
 		private EntityRef<prospecting_person_title> _prospecting_person_title;
 		
@@ -4895,11 +4566,11 @@ namespace ProspectingProject
 		
 		public prospecting_contact_person()
 		{
-			this._prospecting_contact_details = new EntitySet<prospecting_contact_detail>(new Action<prospecting_contact_detail>(this.attach_prospecting_contact_details), new Action<prospecting_contact_detail>(this.detach_prospecting_contact_details));
 			this._prospecting_person_company_relationships = new EntitySet<prospecting_person_company_relationship>(new Action<prospecting_person_company_relationship>(this.attach_prospecting_person_company_relationships), new Action<prospecting_person_company_relationship>(this.detach_prospecting_person_company_relationships));
 			this._prospecting_person_person_relationships = new EntitySet<prospecting_person_person_relationship>(new Action<prospecting_person_person_relationship>(this.attach_prospecting_person_person_relationships), new Action<prospecting_person_person_relationship>(this.detach_prospecting_person_person_relationships));
 			this._prospecting_person_person_relationships1 = new EntitySet<prospecting_person_person_relationship>(new Action<prospecting_person_person_relationship>(this.attach_prospecting_person_person_relationships1), new Action<prospecting_person_person_relationship>(this.detach_prospecting_person_person_relationships1));
 			this._prospecting_person_property_relationships = new EntitySet<prospecting_person_property_relationship>(new Action<prospecting_person_property_relationship>(this.attach_prospecting_person_property_relationships), new Action<prospecting_person_property_relationship>(this.detach_prospecting_person_property_relationships));
+			this._prospecting_contact_details = new EntitySet<prospecting_contact_detail>(new Action<prospecting_contact_detail>(this.attach_prospecting_contact_details), new Action<prospecting_contact_detail>(this.detach_prospecting_contact_details));
 			this._prospecting_person_title = default(EntityRef<prospecting_person_title>);
 			OnCreated();
 		}
@@ -5428,19 +5099,6 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_contact_person_prospecting_contact_detail", Storage="_prospecting_contact_details", ThisKey="contact_person_id", OtherKey="contact_person_id")]
-		public EntitySet<prospecting_contact_detail> prospecting_contact_details
-		{
-			get
-			{
-				return this._prospecting_contact_details;
-			}
-			set
-			{
-				this._prospecting_contact_details.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_contact_person_prospecting_person_company_relationship", Storage="_prospecting_person_company_relationships", ThisKey="contact_person_id", OtherKey="contact_person_id")]
 		public EntitySet<prospecting_person_company_relationship> prospecting_person_company_relationships
 		{
@@ -5490,6 +5148,19 @@ namespace ProspectingProject
 			set
 			{
 				this._prospecting_person_property_relationships.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_contact_person_prospecting_contact_detail", Storage="_prospecting_contact_details", ThisKey="contact_person_id", OtherKey="contact_person_id")]
+		public EntitySet<prospecting_contact_detail> prospecting_contact_details
+		{
+			get
+			{
+				return this._prospecting_contact_details;
+			}
+			set
+			{
+				this._prospecting_contact_details.Assign(value);
 			}
 		}
 		
@@ -5547,18 +5218,6 @@ namespace ProspectingProject
 			}
 		}
 		
-		private void attach_prospecting_contact_details(prospecting_contact_detail entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_contact_person = this;
-		}
-		
-		private void detach_prospecting_contact_details(prospecting_contact_detail entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_contact_person = null;
-		}
-		
 		private void attach_prospecting_person_company_relationships(prospecting_person_company_relationship entity)
 		{
 			this.SendPropertyChanging();
@@ -5602,6 +5261,18 @@ namespace ProspectingProject
 		}
 		
 		private void detach_prospecting_person_property_relationships(prospecting_person_property_relationship entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_contact_person = null;
+		}
+		
+		private void attach_prospecting_contact_details(prospecting_contact_detail entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_contact_person = this;
+		}
+		
+		private void detach_prospecting_contact_details(prospecting_contact_detail entity)
 		{
 			this.SendPropertyChanging();
 			entity.prospecting_contact_person = null;
@@ -5926,6 +5597,407 @@ namespace ProspectingProject
 						this._prospecting_property_id = default(int);
 					}
 					this.SendPropertyChanged("prospecting_property");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.prospecting_contact_detail")]
+	public partial class prospecting_contact_detail : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _prospecting_contact_detail_id;
+		
+		private int _contact_detail_type;
+		
+		private int _contact_person_id;
+		
+		private string _contact_detail;
+		
+		private System.Nullable<int> _intl_dialing_code_id;
+		
+		private System.Nullable<int> _eleventh_digit;
+		
+		private bool _is_primary_contact;
+		
+		private bool _deleted;
+		
+		private System.Nullable<System.Guid> _deleted_by;
+		
+		private System.Nullable<System.DateTime> _deleted_date;
+		
+		private EntityRef<prospecting_contact_detail_type> _prospecting_contact_detail_type;
+		
+		private EntityRef<prospecting_contact_person> _prospecting_contact_person;
+		
+		private EntityRef<prospecting_area_dialing_code> _prospecting_area_dialing_code;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onprospecting_contact_detail_idChanging(int value);
+    partial void Onprospecting_contact_detail_idChanged();
+    partial void Oncontact_detail_typeChanging(int value);
+    partial void Oncontact_detail_typeChanged();
+    partial void Oncontact_person_idChanging(int value);
+    partial void Oncontact_person_idChanged();
+    partial void Oncontact_detailChanging(string value);
+    partial void Oncontact_detailChanged();
+    partial void Onintl_dialing_code_idChanging(System.Nullable<int> value);
+    partial void Onintl_dialing_code_idChanged();
+    partial void Oneleventh_digitChanging(System.Nullable<int> value);
+    partial void Oneleventh_digitChanged();
+    partial void Onis_primary_contactChanging(bool value);
+    partial void Onis_primary_contactChanged();
+    partial void OndeletedChanging(bool value);
+    partial void OndeletedChanged();
+    partial void Ondeleted_byChanging(System.Nullable<System.Guid> value);
+    partial void Ondeleted_byChanged();
+    partial void Ondeleted_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Ondeleted_dateChanged();
+    #endregion
+		
+		public prospecting_contact_detail()
+		{
+			this._prospecting_contact_detail_type = default(EntityRef<prospecting_contact_detail_type>);
+			this._prospecting_contact_person = default(EntityRef<prospecting_contact_person>);
+			this._prospecting_area_dialing_code = default(EntityRef<prospecting_area_dialing_code>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_contact_detail_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int prospecting_contact_detail_id
+		{
+			get
+			{
+				return this._prospecting_contact_detail_id;
+			}
+			set
+			{
+				if ((this._prospecting_contact_detail_id != value))
+				{
+					this.Onprospecting_contact_detail_idChanging(value);
+					this.SendPropertyChanging();
+					this._prospecting_contact_detail_id = value;
+					this.SendPropertyChanged("prospecting_contact_detail_id");
+					this.Onprospecting_contact_detail_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contact_detail_type", DbType="Int NOT NULL")]
+		public int contact_detail_type
+		{
+			get
+			{
+				return this._contact_detail_type;
+			}
+			set
+			{
+				if ((this._contact_detail_type != value))
+				{
+					if (this._prospecting_contact_detail_type.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Oncontact_detail_typeChanging(value);
+					this.SendPropertyChanging();
+					this._contact_detail_type = value;
+					this.SendPropertyChanged("contact_detail_type");
+					this.Oncontact_detail_typeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contact_person_id", DbType="Int NOT NULL")]
+		public int contact_person_id
+		{
+			get
+			{
+				return this._contact_person_id;
+			}
+			set
+			{
+				if ((this._contact_person_id != value))
+				{
+					if (this._prospecting_contact_person.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Oncontact_person_idChanging(value);
+					this.SendPropertyChanging();
+					this._contact_person_id = value;
+					this.SendPropertyChanged("contact_person_id");
+					this.Oncontact_person_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contact_detail", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string contact_detail
+		{
+			get
+			{
+				return this._contact_detail;
+			}
+			set
+			{
+				if ((this._contact_detail != value))
+				{
+					this.Oncontact_detailChanging(value);
+					this.SendPropertyChanging();
+					this._contact_detail = value;
+					this.SendPropertyChanged("contact_detail");
+					this.Oncontact_detailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_intl_dialing_code_id", DbType="Int")]
+		public System.Nullable<int> intl_dialing_code_id
+		{
+			get
+			{
+				return this._intl_dialing_code_id;
+			}
+			set
+			{
+				if ((this._intl_dialing_code_id != value))
+				{
+					if (this._prospecting_area_dialing_code.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onintl_dialing_code_idChanging(value);
+					this.SendPropertyChanging();
+					this._intl_dialing_code_id = value;
+					this.SendPropertyChanged("intl_dialing_code_id");
+					this.Onintl_dialing_code_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_eleventh_digit", DbType="Int")]
+		public System.Nullable<int> eleventh_digit
+		{
+			get
+			{
+				return this._eleventh_digit;
+			}
+			set
+			{
+				if ((this._eleventh_digit != value))
+				{
+					this.Oneleventh_digitChanging(value);
+					this.SendPropertyChanging();
+					this._eleventh_digit = value;
+					this.SendPropertyChanged("eleventh_digit");
+					this.Oneleventh_digitChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_is_primary_contact", DbType="Bit NOT NULL")]
+		public bool is_primary_contact
+		{
+			get
+			{
+				return this._is_primary_contact;
+			}
+			set
+			{
+				if ((this._is_primary_contact != value))
+				{
+					this.Onis_primary_contactChanging(value);
+					this.SendPropertyChanging();
+					this._is_primary_contact = value;
+					this.SendPropertyChanged("is_primary_contact");
+					this.Onis_primary_contactChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_deleted", DbType="Bit NOT NULL")]
+		public bool deleted
+		{
+			get
+			{
+				return this._deleted;
+			}
+			set
+			{
+				if ((this._deleted != value))
+				{
+					this.OndeletedChanging(value);
+					this.SendPropertyChanging();
+					this._deleted = value;
+					this.SendPropertyChanged("deleted");
+					this.OndeletedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_deleted_by", DbType="UniqueIdentifier")]
+		public System.Nullable<System.Guid> deleted_by
+		{
+			get
+			{
+				return this._deleted_by;
+			}
+			set
+			{
+				if ((this._deleted_by != value))
+				{
+					this.Ondeleted_byChanging(value);
+					this.SendPropertyChanging();
+					this._deleted_by = value;
+					this.SendPropertyChanged("deleted_by");
+					this.Ondeleted_byChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_deleted_date", DbType="DateTime")]
+		public System.Nullable<System.DateTime> deleted_date
+		{
+			get
+			{
+				return this._deleted_date;
+			}
+			set
+			{
+				if ((this._deleted_date != value))
+				{
+					this.Ondeleted_dateChanging(value);
+					this.SendPropertyChanging();
+					this._deleted_date = value;
+					this.SendPropertyChanged("deleted_date");
+					this.Ondeleted_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_contact_detail_type_prospecting_contact_detail", Storage="_prospecting_contact_detail_type", ThisKey="contact_detail_type", OtherKey="contact_detail_type_id", IsForeignKey=true)]
+		public prospecting_contact_detail_type prospecting_contact_detail_type
+		{
+			get
+			{
+				return this._prospecting_contact_detail_type.Entity;
+			}
+			set
+			{
+				prospecting_contact_detail_type previousValue = this._prospecting_contact_detail_type.Entity;
+				if (((previousValue != value) 
+							|| (this._prospecting_contact_detail_type.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._prospecting_contact_detail_type.Entity = null;
+						previousValue.prospecting_contact_details.Remove(this);
+					}
+					this._prospecting_contact_detail_type.Entity = value;
+					if ((value != null))
+					{
+						value.prospecting_contact_details.Add(this);
+						this._contact_detail_type = value.contact_detail_type_id;
+					}
+					else
+					{
+						this._contact_detail_type = default(int);
+					}
+					this.SendPropertyChanged("prospecting_contact_detail_type");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_contact_person_prospecting_contact_detail", Storage="_prospecting_contact_person", ThisKey="contact_person_id", OtherKey="contact_person_id", IsForeignKey=true)]
+		public prospecting_contact_person prospecting_contact_person
+		{
+			get
+			{
+				return this._prospecting_contact_person.Entity;
+			}
+			set
+			{
+				prospecting_contact_person previousValue = this._prospecting_contact_person.Entity;
+				if (((previousValue != value) 
+							|| (this._prospecting_contact_person.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._prospecting_contact_person.Entity = null;
+						previousValue.prospecting_contact_details.Remove(this);
+					}
+					this._prospecting_contact_person.Entity = value;
+					if ((value != null))
+					{
+						value.prospecting_contact_details.Add(this);
+						this._contact_person_id = value.contact_person_id;
+					}
+					else
+					{
+						this._contact_person_id = default(int);
+					}
+					this.SendPropertyChanged("prospecting_contact_person");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_area_dialing_code_prospecting_contact_detail", Storage="_prospecting_area_dialing_code", ThisKey="intl_dialing_code_id", OtherKey="prospecting_area_dialing_code_id", IsForeignKey=true)]
+		public prospecting_area_dialing_code prospecting_area_dialing_code
+		{
+			get
+			{
+				return this._prospecting_area_dialing_code.Entity;
+			}
+			set
+			{
+				prospecting_area_dialing_code previousValue = this._prospecting_area_dialing_code.Entity;
+				if (((previousValue != value) 
+							|| (this._prospecting_area_dialing_code.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._prospecting_area_dialing_code.Entity = null;
+						previousValue.prospecting_contact_details.Remove(this);
+					}
+					this._prospecting_area_dialing_code.Entity = value;
+					if ((value != null))
+					{
+						value.prospecting_contact_details.Add(this);
+						this._intl_dialing_code_id = value.prospecting_area_dialing_code_id;
+					}
+					else
+					{
+						this._intl_dialing_code_id = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("prospecting_area_dialing_code");
 				}
 			}
 		}

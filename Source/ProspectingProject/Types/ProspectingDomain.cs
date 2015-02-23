@@ -12,6 +12,7 @@ using System.Web.Script.Serialization;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using ProspectingProject.Services;
+using System.Net.Mail;
 
 namespace ProspectingProject
 {
@@ -160,19 +161,6 @@ namespace ProspectingProject
                                  CompanyContacts = LoadCompanyContacts(pc.CK_number)
                              }).ToList();
             return companies;
-        }
-
-        private static bool DetermineIfAnyContactsHaveDetails(int prospectingPropertyId)
-        {
-            using (var prospectingDB = new ProspectingDataContext())
-            {
-                var contactsWithDetails = from cd in prospectingDB.prospecting_contact_details
-                                          join ppr in prospectingDB.prospecting_person_property_relationships
-                                          on cd.contact_person_id equals ppr.contact_person_id
-                                          where ppr.prospecting_property_id == prospectingPropertyId
-                                          select cd;
-                return contactsWithDetails.Count() > 0;
-            }
         }
 
         public static string LoadSuburbInfoForUser(string suburbsWithPermissions)
@@ -551,7 +539,17 @@ namespace ProspectingProject
                     AvailableSuburbs = LoadSuburbInfoForUser(userAuthPacket.SuburbsList),
                     StaticProspectingData = SerialiseStaticProspectingData(),
                     AvailableCredit = userAuthPacket.AvailableCredit,
-                    Authenticated = userAuthPacket.Authenticated
+                    Authenticated = userAuthPacket.Authenticated,
+                    UserName = userAuthPacket.UserName,
+                    UserSurname = userAuthPacket.UserSurname,
+                    IsProspectingManager = userAuthPacket.IsProspectingManager,
+                    EmailAddress = userAuthPacket.EmailAddress,
+                    ProspectingManager = new UserDataResponsePacket
+                    {
+                        IsProspectingManager = true,
+                        EmailAddress = userAuthPacket.ManagerDetails.First().EmailAddress,
+                        UserName = userAuthPacket.ManagerDetails.First().UserName
+                    }
                 };
             }
         }
@@ -685,6 +683,7 @@ namespace ProspectingProject
                             ProspectingStaticData.ContactPhoneTypes,
                             incomingContact.PhoneNumbers,
                             existingContactItems,
+                            incomingContact.IsPOPIrestricted,
                             prospecting);
                     }
                     if (incomingContact.EmailAddresses != null)
@@ -692,7 +691,9 @@ namespace ProspectingProject
                         UpdateContactDetails(incomingContact.ContactPersonId.Value,
                             ProspectingStaticData.ContactEmailTypes,
                             incomingContact.EmailAddresses,
-                            existingContactItems, prospecting);
+                            existingContactItems,
+                            incomingContact.IsPOPIrestricted,
+                            prospecting);
                     }
                 }
                 else
@@ -814,7 +815,7 @@ namespace ProspectingProject
         // TODO: investigate deleting records from contact details table and keep tabs on record counts coming in as new records are added/removed..
 
 
-        public static void UpdateContactDetails(int contactPersonId, List<KeyValuePair<int, string>> affectedContactTypes, IEnumerable<ProspectingContactDetail> incomingDetails, IEnumerable<prospecting_contact_detail> existingContactItems, ProspectingDataContext prospecting)
+        public static void UpdateContactDetails(int contactPersonId, List<KeyValuePair<int, string>> affectedContactTypes, IEnumerable<ProspectingContactDetail> incomingDetails, IEnumerable<prospecting_contact_detail> existingContactItems, bool isPOPIaction, ProspectingDataContext prospecting)
         {
             // Note on how this method must be handled:
             // Its important that if incomingDetails is null, we mustn't do anything, just return. 
@@ -828,13 +829,33 @@ namespace ProspectingProject
 
             List<int> affectedContactTypeIds = affectedContactTypes.Select(g => g.Key).ToList();
 
+            if (isPOPIaction)
+            {
+                var allItemsToDelete = from c in prospecting.prospecting_contact_details
+                                       where c.contact_person_id == contactPersonId
+                                       && affectedContactTypeIds.Contains(c.contact_detail_type)
+                                       select c;
+
+                prospecting.prospecting_contact_details.DeleteAllOnSubmit(allItemsToDelete);
+                return;
+            }
+
             // SCENARIO (2)
             if (incomingDetails.Count() == 0)
             {
-                prospecting.prospecting_contact_details.DeleteAllOnSubmit(from c in prospecting.prospecting_contact_details
-                                                                          where c.contact_person_id == contactPersonId
-                                                                          && affectedContactTypeIds.Contains(c.contact_detail_type)
-                                                                          select c);
+                var itemsToFlagDeleted = from c in prospecting.prospecting_contact_details
+                                         where c.contact_person_id == contactPersonId
+                                         && affectedContactTypeIds.Contains(c.contact_detail_type)
+                                         && !c.deleted
+                                         select c;
+
+                foreach (var item in itemsToFlagDeleted)
+                {
+                    item.deleted = true;
+                    item.deleted_by = Guid.Parse(HttpContext.Current.Session["user_guid"].ToString());
+                    item.deleted_date = DateTime.Now;
+                }
+                ManageDeletedContactDetailsForSession(itemsToFlagDeleted.Count());
                 return;
             }
 
@@ -885,11 +906,25 @@ namespace ProspectingProject
             }
 
             // Finally remove other contact details in the DB that were not affected:
-            prospecting.prospecting_contact_details.DeleteAllOnSubmit(from c in prospecting.prospecting_contact_details
-                                                                      where c.contact_person_id == contactPersonId
-                                                                      && affectedContactTypeIds.Contains(c.contact_detail_type) // contact item is either a phone or email
-                                                                      && !newContactIDs.Contains(c.prospecting_contact_detail_id) // not affected by new insert/update
-                                                                      select c);
+            var removedItemsToBeFlaggedForDelete = from c in prospecting.prospecting_contact_details
+                                                   where c.contact_person_id == contactPersonId
+                                                   && affectedContactTypeIds.Contains(c.contact_detail_type) // contact item is either a phone or email
+                                                   && !newContactIDs.Contains(c.prospecting_contact_detail_id) // not affected by new insert/update
+                                                   select c;
+            foreach (var item in removedItemsToBeFlaggedForDelete)
+            {
+                item.deleted = true;
+                item.deleted_by = Guid.Parse(HttpContext.Current.Session["user_guid"].ToString());
+                item.deleted_date = DateTime.Now;
+            }
+            ManageDeletedContactDetailsForSession(removedItemsToBeFlaggedForDelete.Count());
+        }
+
+        private static void ManageDeletedContactDetailsForSession(int numDeletedDetails)
+        {
+            int deletedContactDetails = Convert.ToInt32(HttpContext.Current.Session["deleted_item_count"]);
+            deletedContactDetails += numDeletedDetails;
+            HttpContext.Current.Session["deleted_item_count"] = deletedContactDetails;
         }
 
         public static List<NewProspectingEntity> FindMatchingProperties(SearchInputPacket searchInputValues)
@@ -1037,6 +1072,7 @@ namespace ProspectingProject
                         PhoneNumbers = (from det in prospecting.prospecting_contact_details
                                         where det.contact_person_id == existingContactWithDetail.contact_person_id
                                         && phoneTypeIds.Contains(det.contact_detail_type)
+                                        && !det.deleted
                                         select new ProspectingContactDetail
                                         {
                                             ItemId = det.prospecting_contact_detail_id.ToString(),
@@ -1052,6 +1088,7 @@ namespace ProspectingProject
                         EmailAddresses = (from det in prospecting.prospecting_contact_details
                                           where det.contact_person_id == existingContactWithDetail.contact_person_id
                                           && emailTypeIds.Contains(det.contact_detail_type)
+                                          && !det.deleted
                                           select new ProspectingContactDetail
                                           {
                                               ItemId = det.prospecting_contact_detail_id.ToString(),
@@ -1444,6 +1481,7 @@ namespace ProspectingProject
                                            PhoneNumbers = (from det in prospecting.prospecting_contact_details
                                                            where det.contact_person_id == cpr.contact_person_id
                                                            && phoneTypeIds.Contains(det.contact_detail_type)
+                                                           && !det.deleted
                                                            select new ProspectingContactDetail
                                                            {
                                                                ItemId = det.prospecting_contact_detail_id.ToString(),
@@ -1458,6 +1496,7 @@ namespace ProspectingProject
                                            EmailAddresses = (from det in prospecting.prospecting_contact_details
                                                              where det.contact_person_id == cpr.contact_person_id
                                                              && emailTypeIds.Contains(det.contact_detail_type)
+                                                             && !det.deleted
                                                              select new ProspectingContactDetail
                                                              {
                                                                  ItemId = det.prospecting_contact_detail_id.ToString(),
@@ -1799,6 +1838,76 @@ namespace ProspectingProject
             }
 
             return outputBundle;
+        }
+
+        internal static void MarkAsProspected(int lightstonePropertyId, bool prospected)
+        {
+            using (var prospectingDB = new ProspectingDataContext())
+            {
+                var prop = prospectingDB.prospecting_properties.First(pp => pp.lightstone_property_id == lightstonePropertyId);
+                prop.prospected = prospected;
+                prospectingDB.SubmitChanges();
+            }
+        }
+
+        internal static void SendWarningNotificationToManager(UserDataResponsePacket user)
+        {
+            UserDataResponsePacket manager = user.ProspectingManager;
+            string emailTemplate = string.Format(@"Hi {0}{1}{1}This is a system-generated email to notify you that a Prospecting user, {2},
+                                                 has removed contact information from one or more prospects in the system, and you are receiving this email
+                                                 as they have reached their threshold for the session.{1}
+                                                 This activity might be completely normal, however we would like to ensure that every user is using the system responsibly for its intended purpose.{1}{1}
+                                                 Kindly follow up with the user to ensure compliance with your Prospecting requirements.{1}{1}
+                                                 Kind regards,{1}
+                                                 Prospecting Support", manager.UserName, "<p />", user.UserName + " " + user.UserSurname);
+
+            if (!HttpContext.Current.IsDebuggingEnabled)
+            {
+                SendEmail(manager.EmailAddress, manager.UserName, "reports@seeff.com", "danie@learnit.co.za", "reports@seeff.com", "Prospecting system notification", emailTemplate);
+            }
+            else
+            {
+                SendEmail("danie@learnit.co.za", manager.UserName, "reports@seeff.com", "", "reports@seeff.com", "TEST EMAIL >>>>" + "Prospecting system notification", "TEST EMAIL >>>>" + emailTemplate);
+            }
+        }
+
+        private static void SendEmail(string toAddress, string displayName, string fromAddress, string ccAddress, string bccAddress, string subject, string body)
+        {
+            MailAddress from = new MailAddress(fromAddress, fromAddress, System.Text.Encoding.UTF8);
+            MailAddress to = new MailAddress(toAddress, displayName);
+            MailMessage message = new MailMessage(from, to);
+            if (!string.IsNullOrEmpty(ccAddress))
+            {
+                message.CC.Add(ccAddress);
+            }
+            if (!string.IsNullOrEmpty(bccAddress))
+            {
+                message.Bcc.Add(bccAddress);
+            }
+
+            message.SubjectEncoding = System.Text.Encoding.UTF8;
+            message.Subject = subject;
+
+            message.IsBodyHtml = true;
+            message.BodyEncoding = System.Text.Encoding.UTF8;
+            message.Body = body;
+
+            try
+            {
+                using (var smtpClient = new SmtpClient())
+                {
+                    smtpClient.EnableSsl = true;
+                    smtpClient.Credentials = new NetworkCredential("reports@seeff.com", "cvbiv76c6c");
+                    smtpClient.Host = "smtp2.macrolan.co.za";
+                    smtpClient.Port = 587;
+                    smtpClient.Timeout = 20000;
+                    smtpClient.Send(message);
+                }
+            }
+            catch
+            {
+                // Add logging code later.
+            }
         }
     }
 }

@@ -12,5 +12,11 @@ namespace ProspectingProject
         public string StaticProspectingData { get; set; }
         public decimal AvailableCredit { get; set; }
         public bool Authenticated { get; set; }
+        public string UserName { get; set; }
+        public string UserSurname { get; set; }
+        public bool IsProspectingManager { get; set; }
+        public string EmailAddress { get; set; }
+
+        public UserDataResponsePacket ProspectingManager { get; set; }
     }
 }

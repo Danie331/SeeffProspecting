@@ -109,7 +109,8 @@ function buildGeneralInfoHtml(contact) {
     if (contact && contact.IsPOPIrestricted) {
         checked = 'checked';
     }
-    html.append("<label class='fieldAlignRight' style='cursor:pointer;' title='Select this option to indicate that this person is no longer to be contacted'>POPI opt-out<input type='checkbox' name='popiCheckbox' id='popiCheckbox' style='cursor:pointer;' " + checked + "  /></label>");
+    var popiDisabledSetting = userIsProspectingManager ? '' : 'disabled';
+    html.append("<label class='fieldAlignRight' style='cursor:pointer;' title='Select this option to indicate that this person is no longer to be contacted'>POPI opt-out<input type='checkbox' name='popiCheckbox' id='popiCheckbox' style='cursor:pointer;' " + checked + " " + popiDisabledSetting + "  /></label>");
 
     html.append("<br />");
     html.append("<label class='fieldAlignment'>Title: </label>");
@@ -307,27 +308,30 @@ function handleSaveContactDetails(phoneNumbers, emailAddresses) {
             }
 
             determineIfDetailsAreAvailableForUse(phoneNumbers, emailAddresses, function (existingContact) {
-                if (existingContact == null) {
-                    saveContact(currentPersonContact, currentProperty, function (data) {
-                        // currentPersonContact.ContactPersonId = data.ContactPersonId;                
-                        currentPersonContact.PhoneNumbers = data.PhoneNumbers;
-                        currentPersonContact.EmailAddresses = data.EmailAddresses;
+                //if (existingContact == null) {
+                //    saveContact(currentPersonContact, currentProperty, function (data) {
+                //        // currentPersonContact.ContactPersonId = data.ContactPersonId;                
+                //        currentPersonContact.PhoneNumbers = data.PhoneNumbers;
+                //        currentPersonContact.EmailAddresses = data.EmailAddresses;
 
-                        contactDetailsWidget.resetItemArrays(currentPersonContact.PhoneNumbers, currentPersonContact.EmailAddresses);
-                        contactDetailsWidget.rebuildDivs(!currentPersonContact.IsPOPIrestricted);
-                        addOrUpdateContactToCurrentProperty(data);
+                //        contactDetailsWidget.resetItemArrays(currentPersonContact.PhoneNumbers, currentPersonContact.EmailAddresses);
+                //        contactDetailsWidget.rebuildDivs(!currentPersonContact.IsPOPIrestricted);
+                //        addOrUpdateContactToCurrentProperty(data);
 
-                        if (currentProperty != null) {
-                            var hasContactDetails = false;
-                            if (data.PhoneNumbers && data.PhoneNumbers.length > 0)
-                                hasContactDetails = true;
-                            if (data.EmailAddresses && data.EmailAddresses.length > 0)
-                                hasContactDetails = true;
+                //        if (currentProperty != null) {
+                //            var hasContactDetails = false;
+                //            if (data.PhoneNumbers && data.PhoneNumbers.length > 0)
+                //                hasContactDetails = true;
+                //            if (data.EmailAddresses && data.EmailAddresses.length > 0)
+                //                hasContactDetails = true;
 
-                            currentProperty.Prospected = hasContactDetails;
-                        }
-                    });
-                } else {
+                //            currentProperty.Prospected = hasContactDetails;
+                //        }
+                //    });
+                //} else {
+                //    alert('A contact with these details already exists. ');
+                //}
+                if (existingContact != null) {
                     alert('A contact with these details already exists. ');
                 }
             });
@@ -468,8 +472,8 @@ function handleSaveContactPerson(saveDetailsFunction) {
                 if (saveDetailsFunction) {
                     saveDetailsFunction();
                 }
-                setCurrentMarker(currentSuburb, currentProperty);
-                
+                updateProspectedStatus();
+                setCurrentMarker(currentSuburb, currentProperty);                               
             });
         }
         else {
@@ -481,11 +485,55 @@ function handleSaveContactPerson(saveDetailsFunction) {
                     showSavedSplashDialog('Contact Saved!');
                     addOrUpdateContactToCurrentProperty(data);
                     buildPersonContactMenu(currentProperty.Contacts, false);
+                    updateProspectedStatus();
                     setCurrentMarker(currentSuburb, currentProperty);
                 });
             });
         }
     });
+}
+
+function updateProspectedStatus(property) {
+
+    var targetProperty = currentProperty;
+    if (property) {
+        targetProperty = property;
+    }
+
+    if (targetProperty != null) {
+        
+        var hasContactDetails = false;
+        $.each(targetProperty.Contacts, function (idx, c) {
+            if (c.PhoneNumbers != null && c.PhoneNumbers.length > 0)
+                hasContactDetails = true;
+
+            if (c.EmailAddresses != null && c.EmailAddresses.length > 0)
+                hasContactDetails = true;
+        });
+        
+        targetProperty.Prospected = hasContactDetails;
+        if (targetProperty.Prospected) {
+            if (targetProperty.SS_FH == "FH") {
+                targetProperty.Marker.setIcon('Assets/marker_icons/prospecting/prospected.png');
+            } else {
+                changeBgColour(targetProperty.LightstonePropertyId, "#009900");
+            }
+        }
+        else {
+            if (targetProperty.SS_FH == "FH") {
+                targetProperty.Marker.setIcon('Assets/marker_icons/prospecting/unprospected.png');
+            } else {
+                changeBgColour(targetProperty.LightstonePropertyId, "#FBB917");
+            }
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify({ Instruction: 'update_prospected_flag', LightstonePropertyId: targetProperty.LightstonePropertyId, Prospected: targetProperty.Prospected }),
+            dataType: "json"
+        });
+    }
 }
 
 function validateCorrectnessOfPersonInfo() {

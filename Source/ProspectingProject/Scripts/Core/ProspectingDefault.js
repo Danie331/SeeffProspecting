@@ -318,6 +318,13 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCent
     }
 }
 
+function changeBgColour(id, colour) {
+    var id = "#unit" + id;
+    var row = $(id);
+    row.data('color', colour)
+    row.css('background-color', 'lightblue');
+}
+
 function setCurrentMarker(suburb, property) {
     $.ajax({
         type: "POST",
@@ -330,13 +337,6 @@ function setCurrentMarker(suburb, property) {
                     alert(data.ErrorMsg);
                 }
                 testpp = data;
-
-                function changeBgColour(id, colour) {
-                    var id = "#unit" + id;
-                    var row = $(id);
-                    row.data('color', colour)
-                    row.css('background-color', 'lightblue');
-                };
 
                 $.each(suburb.ProspectingProperties, function (idx, pp) {
                     if (pp.ProspectingPropertyId == testpp.ProspectingPropertyId) {
@@ -353,8 +353,8 @@ function setCurrentMarker(suburb, property) {
                                 pp.Marker.setIcon('Assets/marker_icons/prospecting/unprospected.png');
                             } else {
                                 changeBgColour(testpp.LightstonePropertyId, "#FBB917");
-                            };
-                        };
+                            }
+                        }
                     };
                     
                 });
@@ -387,7 +387,7 @@ function markerClick() {
                     alert(data.ErrorMsg);
                 }
 
-                marker.ProspectingProperty = data;
+                updateExistingPropertyFromProperty(marker.ProspectingProperty, data);
                 currentMarker = marker;
                 loadProspectingProperty(marker);
             } else {
@@ -404,17 +404,21 @@ function markerClick() {
 }
 
 function loadProspectingProperty(marker) {
+    currentMarker = marker;
     openInfoWindow(marker, function () {
         if (marker.ProspectingProperty.SS_FH == "SS" || marker.ProspectingProperty.SS_FH == "FS") {
             currentProperty = null;
         }
         else {
             currentProperty = marker.ProspectingProperty;
+            currentProperty.Marker = marker;
             updateOwnerDetailsEditor();
             updatePropertyNotesDiv();
             if (currentProperty.Contacts.length || currentProperty.ContactCompanies.length) {
                 showMenu("contactdetails");
             }
+
+            updateProspectedStatus();
         }
 
         updatePropertyInfoMenu();
@@ -506,7 +510,13 @@ function saveContact(contact, property, actionToExecuteAfterwards) {
         data: JSON.stringify(inputPacket),
         success: function (data, textStatus, jqXHR) {
             if (textStatus == "success") {
-                actionToExecuteAfterwards(data);
+
+                if (data.ContactIsCompromised) {
+                    showDialogUserDeletedDetailsWarning();
+                }
+                else {
+                    actionToExecuteAfterwards(data);
+                }
             }
         },
         error: function (textStatus, errorThrown) { },
@@ -952,13 +962,15 @@ function openSSUnitInfo(unit) {
                     alert(data.ErrorMsg);
                 }
 
-                unit = data;
+                updateExistingPropertyFromProperty(unit, data);
                 currentProperty = unit;
                 updateOwnerDetailsEditor();
                 updatePropertyNotesDiv();
                 if (currentProperty.Contacts && currentProperty.Contacts.length > 0) {
                     showMenu("contactdetails");
                 }
+
+                updateProspectedStatus();
 
             } else {
                 alert('Could not complete request.');
@@ -970,7 +982,33 @@ function openSSUnitInfo(unit) {
         },
         dataType: "json"
     });
+}
 
+// This function will update an object that already exists on the front-end with an incoming object's data - it does not change the existing reference.
+function updateExistingPropertyFromProperty(existingProp, newProp) {
+    existingProp.ProspectingPropertyId = newProp.ProspectingPropertyId;
+    existingProp.LatLng = newProp.LatLng;
+    existingProp.LightstonePropertyId = newProp.LightstonePropertyId;
+    existingProp.PropertyAddress = newProp.PropertyAddress;
+    existingProp.StreetOrUnitNo = newProp.StreetOrUnitNo;
+    existingProp.SeeffAreaId = newProp.SeeffAreaId;
+    existingProp.Contacts = newProp.Contacts;
+    existingProp.ContactCompanies = newProp.ContactCompanies;
+    existingProp.LightstoneIDOrCKNo = newProp.LightstoneIDOrCKNo;
+    existingProp.LightstoneRegDate = newProp.LightstoneRegDate;
+    existingProp.Comments = newProp.Comments;
+    existingProp.LastPurchPrice = newProp.LastPurchPrice;
+    existingProp.SS_FH = newProp.SS_FH;
+    existingProp.SSName = newProp.SSName;
+    existingProp.SSNumber = newProp.SSNumber;
+    existingProp.Unit = newProp.Unit;
+    existingProp.SS_ID = newProp.SS_ID;
+    existingProp.SSDoorNo = newProp.SSDoorNo;
+    existingProp.Prospected = newProp.Prospected;
+    existingProp.ErfNo = newProp.ErfNo;
+    existingProp.FarmName = newProp.FarmName;
+    existingProp.Portion = newProp.Portion;
+    existingProp.LightstoneSuburb = newProp.LightstoneSuburb;
 }
 
 function buildContentForInfoWindow(property) {
@@ -1241,6 +1279,24 @@ function showDialogExistingContactFound(contact, proceedAction) {
                    position: ['center', 'center']
                });
     }
+}
+
+function showDialogUserDeletedDetailsWarning() {
+    var div = $('#userIsCompromisedContent');
+    div.empty();
+    div.append("The system has detected that you are deleting contact details and have reached the limit for this session.");
+    div.append("<p/>");
+    div.append("As a safety precaution, you will be logged out. For any questions please contact support.");
+
+    $("#userIsCompromisedDialog").dialog(
+         {
+             modal: true,
+             closeOnEscape: false,
+             open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+             width: 'auto',
+             buttons: { "Proceed with log-off": function () { window.location = '/LogOut.aspx'; $(this).dialog("close"); }},
+             position: ['center', 'center']
+         });
 }
 
 function performLightstoneSearch() {

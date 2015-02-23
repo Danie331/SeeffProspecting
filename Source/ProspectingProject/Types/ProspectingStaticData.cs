@@ -109,6 +109,7 @@ namespace ProspectingProject
             PropertyContactPhoneNumberRetriever = CompiledQuery.Compile((ProspectingDataContext ctx, ProspectingContactPerson cp) => (from det in ctx.prospecting_contact_details
                                                                                                          where det.contact_person_id == cp.ContactPersonId
                                                                                                          && PhoneTypeIds.Contains(det.contact_detail_type)
+                                                                                                         && !det.deleted
                                                                                                          select new ProspectingContactDetail
                                                                                                          {
                                                                                                              ItemId = det.prospecting_contact_detail_id.ToString(),
@@ -124,6 +125,7 @@ namespace ProspectingProject
             PropertyContactEmailRetriever = CompiledQuery.Compile((ProspectingDataContext ctx, ProspectingContactPerson cp) => (from det in ctx.prospecting_contact_details
                                                                          where det.contact_person_id == cp.ContactPersonId
                                                                          && EmailTypeIds.Contains(det.contact_detail_type)
+                                                                         && !det.deleted
                                                                          select new ProspectingContactDetail
                                                                          {
                                                                              ItemId = det.prospecting_contact_detail_id.ToString(),

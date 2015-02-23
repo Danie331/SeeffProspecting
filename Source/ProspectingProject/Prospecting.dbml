@@ -60,20 +60,6 @@
       <Association Name="prospecting_contact_company_prospecting_person_company_relationship" Member="prospecting_person_company_relationships" ThisKey="contact_company_id" OtherKey="contact_company_id" Type="prospecting_person_company_relationship" />
     </Type>
   </Table>
-  <Table Name="dbo.prospecting_contact_detail" Member="prospecting_contact_details">
-    <Type Name="prospecting_contact_detail">
-      <Column Name="prospecting_contact_detail_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="contact_detail_type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="contact_person_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="contact_detail" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="intl_dialing_code_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="eleventh_digit" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="is_primary_contact" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="prospecting_area_dialing_code_prospecting_contact_detail" Member="prospecting_area_dialing_code" ThisKey="intl_dialing_code_id" OtherKey="prospecting_area_dialing_code_id" Type="prospecting_area_dialing_code" IsForeignKey="true" />
-      <Association Name="prospecting_contact_detail_type_prospecting_contact_detail" Member="prospecting_contact_detail_type" ThisKey="contact_detail_type" OtherKey="contact_detail_type_id" Type="prospecting_contact_detail_type" IsForeignKey="true" />
-      <Association Name="prospecting_contact_person_prospecting_contact_detail" Member="prospecting_contact_person" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_contact_person" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.prospecting_contact_detail_type" Member="prospecting_contact_detail_types">
     <Type Name="prospecting_contact_detail_type">
       <Column Name="contact_detail_type_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -241,11 +227,11 @@
       <Column Name="occupation" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="bureau_adverse_indicator" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="citizenship" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Association Name="prospecting_contact_person_prospecting_contact_detail" Member="prospecting_contact_details" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_contact_detail" />
       <Association Name="prospecting_contact_person_prospecting_person_company_relationship" Member="prospecting_person_company_relationships" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_person_company_relationship" />
       <Association Name="prospecting_contact_person_prospecting_person_person_relationship" Member="prospecting_person_person_relationships" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_person_person_relationship" />
       <Association Name="prospecting_contact_person_prospecting_person_person_relationship1" Member="prospecting_person_person_relationships1" ThisKey="contact_person_id" OtherKey="related_contacted_person_id" Type="prospecting_person_person_relationship" />
       <Association Name="prospecting_contact_person_prospecting_person_property_relationship" Member="prospecting_person_property_relationships" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_person_property_relationship" />
+      <Association Name="prospecting_contact_person_prospecting_contact_detail" Member="prospecting_contact_details" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_contact_detail" />
       <Association Name="prospecting_person_title_prospecting_contact_person" Member="prospecting_person_title" ThisKey="person_title" OtherKey="prospecting_person_title_id" Type="prospecting_person_title" IsForeignKey="true" />
     </Type>
   </Table>
@@ -263,6 +249,23 @@
       <Column Name="status_message" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
       <Column Name="exception" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="prospecting_property_service_enquiry_log" Member="prospecting_property" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_property" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.prospecting_contact_detail" Member="prospecting_contact_details">
+    <Type Name="prospecting_contact_detail">
+      <Column Name="prospecting_contact_detail_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="contact_detail_type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="contact_person_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="contact_detail" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="intl_dialing_code_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="eleventh_digit" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="is_primary_contact" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="deleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="deleted_by" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="deleted_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="prospecting_contact_detail_type_prospecting_contact_detail" Member="prospecting_contact_detail_type" ThisKey="contact_detail_type" OtherKey="contact_detail_type_id" Type="prospecting_contact_detail_type" IsForeignKey="true" />
+      <Association Name="prospecting_contact_person_prospecting_contact_detail" Member="prospecting_contact_person" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_contact_person" IsForeignKey="true" />
+      <Association Name="prospecting_area_dialing_code_prospecting_contact_detail" Member="prospecting_area_dialing_code" ThisKey="intl_dialing_code_id" OtherKey="prospecting_area_dialing_code_id" Type="prospecting_area_dialing_code" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.find_area_id" Method="find_area_id">

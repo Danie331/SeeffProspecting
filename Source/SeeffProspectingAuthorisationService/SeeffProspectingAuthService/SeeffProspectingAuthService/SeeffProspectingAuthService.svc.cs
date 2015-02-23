@@ -24,13 +24,20 @@ namespace SeeffProspectingAuthService
                     }
                 }
 
+                var userManager = GetProspectingManagerDetails(userGuid);
                 var userRecord = (from user in boss.user_registrations
                                   where user.user_guid == userGuid.ToString()
                                   select new ProspectingUserAuthPacket
                                   {
                                       SuburbsList = user.prospecting_areas,
                                       AvailableCredit = user.prospecting_credits,
-                                      Authenticated = true
+                                      UserName = user.user_preferred_name,
+                                      UserSurname = user.user_surname,
+                                      IsProspectingManager = user.prospecting_control,
+                                      EmailAddress = user.user_email_address,
+                                      Guid = user.user_guid,
+                                      Authenticated = true,
+                                      ManagerDetails = userManager
                                   }).FirstOrDefault();
 
                 return userRecord;
@@ -78,39 +85,27 @@ namespace SeeffProspectingAuthService
             }
         }
 
-        //public int TakeOneCredit(Guid userGuid)
-        //{
-        //    using (var boss = new BossDataContext())
-        //    {
-        //        var user = (from u in boss.user_registrations
-        //                    where u.user_guid == userGuid.ToString()
-        //                    select u).First();
-        //        if (user.prospecting_credits > 0)
-        //        {
-        //            user.prospecting_credits -= 1;
-        //        } 
-        //        else
-        //        {
-        //            return -1;
-        //        }
+        private List<ProspectingUserAuthPacket> GetProspectingManagerDetails(Guid userGuid)
+        {
+            using (var boss = new BossDataContext())
+            {
+                List<ProspectingUserAuthPacket> managerDetails = new List<ProspectingUserAuthPacket>();
 
-        //        boss.SubmitChanges();
-        //        return user.prospecting_credits;
-        //    }
-        //}
+                var details = boss.prospecting_controller(userGuid);
+                foreach (var detail in details)
+                {
+                    managerDetails.Add(new ProspectingUserAuthPacket
+                    {
+                        UserName = detail.user_preferred_name,
+                        UserSurname = detail.user_surname,
+                        EmailAddress = detail.user_email_address,
+                        IsProspectingManager = true,
+                        Guid = detail.user_guid
+                    });
+                }
 
-        //public int ReimburseOneCredit(Guid userGuid)
-        //{
-        //    using (var boss = new BossDataContext())
-        //    {
-        //        var user = (from u in boss.user_registrations
-        //                    where u.user_guid == userGuid.ToString()
-        //                    select u).First();
-        //        user.prospecting_credits += 1;
-        //        boss.SubmitChanges();
-        //        return user.prospecting_credits;
-        //    }
-        //}
-
+                return managerDetails;
+            }
+        }
     }
 }

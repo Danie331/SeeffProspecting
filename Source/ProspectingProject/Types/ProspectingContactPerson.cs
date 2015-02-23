@@ -70,5 +70,7 @@ namespace ProspectingProject
             ProspectingContactPerson cp = entity as ProspectingContactPerson;
             return cp != null ? string.Equals(this.IdNumber, cp.IdNumber) : false;
         }
+
+        public bool ContactIsCompromised { get; set; } // special
     }
 }

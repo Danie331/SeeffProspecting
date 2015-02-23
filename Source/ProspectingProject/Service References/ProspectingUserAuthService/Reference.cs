@@ -29,10 +29,25 @@ namespace ProspectingProject.ProspectingUserAuthService {
         private decimal AvailableCreditField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string EmailAddressField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string GuidField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsProspectingManagerField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket[] ManagerDetailsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SuburbsListField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string UserTypeField;
+        private string UserNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserSurnameField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -71,6 +86,58 @@ namespace ProspectingProject.ProspectingUserAuthService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public string EmailAddress {
+            get {
+                return this.EmailAddressField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EmailAddressField, value) != true)) {
+                    this.EmailAddressField = value;
+                    this.RaisePropertyChanged("EmailAddress");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Guid {
+            get {
+                return this.GuidField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.GuidField, value) != true)) {
+                    this.GuidField = value;
+                    this.RaisePropertyChanged("Guid");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsProspectingManager {
+            get {
+                return this.IsProspectingManagerField;
+            }
+            set {
+                if ((this.IsProspectingManagerField.Equals(value) != true)) {
+                    this.IsProspectingManagerField = value;
+                    this.RaisePropertyChanged("IsProspectingManager");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket[] ManagerDetails {
+            get {
+                return this.ManagerDetailsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ManagerDetailsField, value) != true)) {
+                    this.ManagerDetailsField = value;
+                    this.RaisePropertyChanged("ManagerDetails");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string SuburbsList {
             get {
                 return this.SuburbsListField;
@@ -84,14 +151,27 @@ namespace ProspectingProject.ProspectingUserAuthService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string UserType {
+        public string UserName {
             get {
-                return this.UserTypeField;
+                return this.UserNameField;
             }
             set {
-                if ((object.ReferenceEquals(this.UserTypeField, value) != true)) {
-                    this.UserTypeField = value;
-                    this.RaisePropertyChanged("UserType");
+                if ((object.ReferenceEquals(this.UserNameField, value) != true)) {
+                    this.UserNameField = value;
+                    this.RaisePropertyChanged("UserName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string UserSurname {
+            get {
+                return this.UserSurnameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserSurnameField, value) != true)) {
+                    this.UserSurnameField = value;
+                    this.RaisePropertyChanged("UserSurname");
                 }
             }
         }

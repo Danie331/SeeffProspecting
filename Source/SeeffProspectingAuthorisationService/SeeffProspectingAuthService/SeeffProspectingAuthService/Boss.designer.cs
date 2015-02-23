@@ -79,6 +79,12 @@ namespace SeeffProspectingAuthService
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), user_guid, session_key, app);
 			return ((int)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.prospecting_controller", IsComposable=true)]
+		public IQueryable<prospecting_controllerResult> prospecting_controller([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="UniqueIdentifier")] System.Nullable<System.Guid> user_guid)
+		{
+			return this.CreateMethodCallQuery<prospecting_controllerResult>(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), user_guid);
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.user_registration")]
@@ -1579,6 +1585,86 @@ namespace SeeffProspectingAuthService
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	public partial class prospecting_controllerResult
+	{
+		
+		private string _user_preferred_name;
+		
+		private string _user_surname;
+		
+		private string _user_email_address;
+		
+		private string _user_guid;
+		
+		public prospecting_controllerResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_preferred_name", DbType="VarChar(250)")]
+		public string user_preferred_name
+		{
+			get
+			{
+				return this._user_preferred_name;
+			}
+			set
+			{
+				if ((this._user_preferred_name != value))
+				{
+					this._user_preferred_name = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_surname", DbType="VarChar(250) NOT NULL", CanBeNull=false)]
+		public string user_surname
+		{
+			get
+			{
+				return this._user_surname;
+			}
+			set
+			{
+				if ((this._user_surname != value))
+				{
+					this._user_surname = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_email_address", DbType="VarChar(250)")]
+		public string user_email_address
+		{
+			get
+			{
+				return this._user_email_address;
+			}
+			set
+			{
+				if ((this._user_email_address != value))
+				{
+					this._user_email_address = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_guid", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string user_guid
+		{
+			get
+			{
+				return this._user_guid;
+			}
+			set
+			{
+				if ((this._user_guid != value))
+				{
+					this._user_guid = value;
+				}
 			}
 		}
 	}

@@ -10,9 +10,6 @@ namespace SeeffProspectingAuthService
     public class ProspectingUserAuthPacket
     {
         [DataMember]
-        public string UserType { get; set; }
-
-        [DataMember]
         public string SuburbsList { get; set; }
 
         [DataMember]
@@ -20,5 +17,23 @@ namespace SeeffProspectingAuthService
 
         [DataMember]
         public bool Authenticated { get; set; }
+
+        [DataMember]
+        public string UserName { get; set; }
+
+        [DataMember]
+        public string UserSurname { get; set; }
+
+        [DataMember]
+        public bool IsProspectingManager { get; set; }
+
+        [DataMember]
+        public string EmailAddress { get; set; }
+
+        [DataMember]
+        public string Guid { get; set; }
+
+        [DataMember]
+        public List<ProspectingUserAuthPacket> ManagerDetails { get; set; }
     }
 }

@@ -4,9 +4,20 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Authenticated" type="xs:boolean" />
       <xs:element minOccurs="0" name="AvailableCredit" type="xs:decimal" />
+      <xs:element minOccurs="0" name="EmailAddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Guid" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsProspectingManager" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ManagerDetails" nillable="true" type="tns:ArrayOfProspectingUserAuthPacket" />
       <xs:element minOccurs="0" name="SuburbsList" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="UserType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UserSurname" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProspectingUserAuthPacket" nillable="true" type="tns:ProspectingUserAuthPacket" />
+  <xs:complexType name="ArrayOfProspectingUserAuthPacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProspectingUserAuthPacket" nillable="true" type="tns:ProspectingUserAuthPacket" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProspectingUserAuthPacket" nillable="true" type="tns:ArrayOfProspectingUserAuthPacket" />
 </xs:schema>

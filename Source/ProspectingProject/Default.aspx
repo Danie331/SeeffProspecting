@@ -68,6 +68,9 @@
         // Entry point from google maps
         google.maps.event.addDomListener(window, 'load', initialize);
 
+        // Flag that indicates whether this is a Prospecting Manager - only PMs can flag contacts as POPI restricted etc.
+        var userIsProspectingManager;
+
         function initialize() {
             // Make ajax call to load from server 
             var inputPacket = { Instruction: "load_application" };
@@ -85,6 +88,7 @@
 
                         $('#mainpanel').css('display', 'block');
 
+                        userIsProspectingManager = data.IsProspectingManager;
                         availableCredit = data.AvailableCredit;
                         initializeMenuHtml();
                         loadSuburbsInfo(data);
@@ -166,6 +170,9 @@
         </div>
         <div id="existingContactFoundDialog" style="display:none;font-family:Verdana;font-size:12px;">
             <div id="existingContactContent"></div>
+        </div>
+        <div id="userIsCompromisedDialog" title="System warning" style="display:none;font-family:Verdana;font-size:12px;">
+            <div id="userIsCompromisedContent"></div>
         </div>
         <div id="errorDialog" title="Error Message" class="errorDialog"> 
             <label id="errorDialogText"></label>

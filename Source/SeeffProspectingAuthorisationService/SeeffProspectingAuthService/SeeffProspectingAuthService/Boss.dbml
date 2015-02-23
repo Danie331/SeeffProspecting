@@ -71,4 +71,13 @@
     <Parameter Name="app" Type="System.String" DbType="VarChar(50)" />
     <Return Type="System.Int32" />
   </Function>
+  <Function Name="dbo.prospecting_controller" Method="prospecting_controller" IsComposable="true">
+    <Parameter Name="user_guid" Type="System.Guid" DbType="UniqueIdentifier" />
+    <ElementType Name="prospecting_controllerResult">
+      <Column Name="user_preferred_name" Type="System.String" DbType="VarChar(250)" CanBeNull="true" />
+      <Column Name="user_surname" Type="System.String" DbType="VarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="user_email_address" Type="System.String" DbType="VarChar(250)" CanBeNull="true" />
+      <Column Name="user_guid" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
 </Database>

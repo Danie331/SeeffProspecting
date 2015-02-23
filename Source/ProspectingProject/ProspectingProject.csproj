@@ -720,6 +720,7 @@
     <Content Include="Database scripts\seeff_prospecting_data_takeon.sql" />
     <Content Include="Data\DBSettings.xml" />
     <Content Include="Default.aspx" />
+    <Content Include="LogOut.aspx" />
     <Content Include="NotAuthorised.aspx" />
     <Content Include="Scripts\3rdParty\OpenTip.css" />
     <Content Include="Scripts\3rdParty\OpenTip.js" />
@@ -781,6 +782,13 @@
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="LogOut.aspx.cs">
+      <DependentUpon>LogOut.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LogOut.aspx.designer.cs">
+      <DependentUpon>LogOut.aspx</DependentUpon>
+    </Compile>
     <Compile Include="NotAuthorised.aspx.cs">
       <DependentUpon>NotAuthorised.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -828,6 +836,7 @@
     <Compile Include="Types\IListing.cs" />
     <Compile Include="Types\ILocation.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\ContactRow.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\PropertyProspectedStatus.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\ProspectingEntityInputBundle.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\ProspectingEntityOutputBundle.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\ProspectingPropertyInputData.cs" />
