@@ -20,6 +20,28 @@
     text-align: left; 
 }
 
+.legendIconStyle {
+    display: inline-block;
+    width:15px;
+    vertical-align:middle;
+    padding-left:10px;
+}
+
+.legendCaptionTextStyle {
+    padding-left: 2px;
+    padding-top:2px;
+    font-family: Verdana;
+    font-size: 11px;
+    font-weight:800;
+}
+
+.legendTextStyle {
+    display: inline-block;
+    padding-left: 22px;
+    font-family: Verdana;
+    font-size: 11px;
+}
+
 table {
 	font-family: verdana,arial,sans-serif;
 	font-size:11px;

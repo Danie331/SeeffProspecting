@@ -72,6 +72,7 @@
         function initialize() {
 
             loadApplication();
+            adjustHtml();
 
             // For timeout
             setInterval(timerIncrement, 60000);
@@ -83,6 +84,13 @@
                 currentMousePos.x = e.clientX;
                 currentMousePos.y = e.clientY;
             });
+        }
+
+        function adjustHtml() {
+            $('#legend').width($('#menuitempanel').width());
+            $('#menuitempanel').resize(function () {
+                $('#legend').width($(this).width());
+            });            
         }
 
     </script>
@@ -98,9 +106,42 @@
                 <%--<img id='snappanelbutton' src="Assets/snap.png" style="float:right;cursor:pointer;" />--%><br />
                 <label style="font-family: Verdana; font-size: 12px; padding: 20px; color: #000070"><i>Works best in Google Chrome&#0153;</i></label>
             </div>
-            <div id="menuitempanel" class="ui-widget-content">
-                <!-- Create menu items -->
-            </div>
+            
+                <div id="menuitempanel" style="width:240px;" class="ui-widget-content">
+                    <!-- Create menu items -->
+                </div>
+                <div id="legend" class="ui-widget-content" style="position:absolute;bottom:5px;width:140px;">
+                    <div style="font-weight:800;padding:5px;text-align:center">Legend To Icons</div>
+                    <hr />
+                    <span class="legendCaptionTextStyle">Unfated entities</span>
+                    <div><img src="Assets/legend/FH_unfated.png" class='legendIconStyle' /><span class='legendTextStyle'>Unfated property</span></div>
+                    <div><img src="Assets/legend/SS_unfated.PNG" class='legendIconStyle' /><span class='legendTextStyle'>Complex with unfated units</span></div>
+                    <span class="legendCaptionTextStyle">Seeff deals</span>
+                    <div><img src="Assets/legend/seeff_FH_key.png" class='legendIconStyle' /><span class='legendTextStyle'>Free-hold sold by Seeff</span></div>
+                    <div><img src="Assets/legend/seeff_SS_key.PNG" class='legendIconStyle' /><span class='legendTextStyle'>Complex with only Seeff deals</span></div>
+                    <div><img src="Assets/legend/SS_seeff_and_non_seeff_sales.png" class='legendIconStyle' /><span class='legendTextStyle'>Complex with some Seeff deals</span></div>
+                    <div><img src="Assets/legend/seeff_comm_key.png" class='legendIconStyle' /><span class='legendTextStyle'>Commercial Seeff deal</span></div>
+                    <div><img src="Assets/legend/seeff_agri_key.png" class='legendIconStyle' /><span class='legendTextStyle'>Agri Seeff deal</span></div>
+                    <span class="legendCaptionTextStyle">Fated entities</span>
+                    <div><img src="Assets/legend/FH_key.png" class='legendIconStyle' /><span class='legendTextStyle'>Residential property</span></div>
+                    <div><img src="Assets/legend/SS_key.PNG" class='legendIconStyle' /><span class='legendTextStyle'>Complex (fully fated)</span></div>
+                    <div><img src="Assets/legend/comm_key.png" class='legendIconStyle' /><span class='legendTextStyle'>Commercial property</span></div>
+                    <div><img src="Assets/legend/agri_key.png" class='legendIconStyle' /><span class='legendTextStyle'>Agri property</span></div>
+                    <div><img src="Assets/legend/dev_key.png" class='legendIconStyle' /><span class='legendTextStyle'>Development</span></div>
+                    <div><img src="Assets/legend/FH_pending.png" class='legendIconStyle' /><span class='legendTextStyle'>Pending further research</span></div>
+                    <div><img src="Assets/legend/other_key.png" class='legendIconStyle' /><span class='legendTextStyle'>Other type of property</span></div>
+                    <span class="legendCaptionTextStyle">Seeff currently on market</span>
+                    <div><img src="Assets/legend/seeff_FH_buy.png" class='legendIconStyle' /><span class='legendTextStyle'>Free-hold to buy</span></div>
+                    <div><img src="Assets/legend/seeff_FH_rent.png" class='legendIconStyle' /><span class='legendTextStyle'>Free-hold to rent</span></div>
+                    <div><img src="Assets/legend/SS_to_buy.png" class='legendIconStyle' /><span class='legendTextStyle'>Unit to buy</span></div>
+                    <div><img src="Assets/legend/SS_to_rent.png" class='legendIconStyle' /><span class='legendTextStyle'>Unit to rent</span></div>
+                    <div><img src="Assets/legend/SS_to_rent_and_buy.png" class='legendIconStyle' /><span class='legendTextStyle'>Units to rent and buy</span></div>
+                    <div><img src="Assets/legend/seeff_comm_buy.png" class='legendIconStyle' /><span class='legendTextStyle'>Commercial property to buy</span></div>
+                    <div><img src="Assets/legend/seeff_comm_rent.png" class='legendIconStyle' /><span class='legendTextStyle'>Commercial property to rent</span></div>
+                    <div><img src="Assets/legend/seeff_agri_buy.png" class='legendIconStyle' /><span class='legendTextStyle'>Agri property to buy</span></div>
+                    <div><img src="Assets/legend/seeff_agri_rent.png" class='legendIconStyle' /><span class='legendTextStyle'>Agri property to rent</span></div>             
+                </div>
+            
             <div id="contentarea" class="scrollable">
                 <!-- Create menu item content here -->
             </div>
