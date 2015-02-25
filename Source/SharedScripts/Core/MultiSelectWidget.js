@@ -26,6 +26,7 @@ function MultiSelectWidget(anchorElementId,   // The id of the element that will
     this.buildDialogElement = function buildDialogHtml() {
         var dialogHtml =
                     '<div id="' + anchorElementId + '" class="multiSelectDialogDiv" title="' + titleDialog + '">' +
+                      '<label class="multiSelectCaptionsDiv">' + 'Move agencies from the left panel to the right panel to make them available to the suburbs under your license.' + '</label>' + '<p />' +
                       '<div class="multiSelectCaptionsDiv">' +
                       '<label class="multiSelectLeftPanelCaption">' + captionLeftPanel + '</label>'+
                       '<label class="multiSelectRightPanelCaption">' + captionRightPanel + '</label>' +
@@ -73,8 +74,8 @@ function MultiSelectWidget(anchorElementId,   // The id of the element that will
             modal: true,
             closeOnEscape: true,
             open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-            width: 600,
-            height: 480,
+            width: 700,
+            height: 540,
             resizable: false,
             buttons: { "Save changes": executeSave, "Close": function () { $(this).dialog("close"); } },
             position: ['center', 'center']

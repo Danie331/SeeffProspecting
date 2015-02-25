@@ -6,7 +6,7 @@ using System.Web.Script.Serialization;
 using System.Linq;
 using System.Collections.Generic;
 
-public class AgenciesDataManager : IHttpHandler {
+public class AgenciesDataManager : IHttpHandler, System.Web.SessionState.IRequiresSessionState {
     
     public void ProcessRequest (HttpContext context) 
     {
@@ -16,82 +16,120 @@ public class AgenciesDataManager : IHttpHandler {
         switch (requestPacket.instruction)
         {
             case "load":
-                var selectedAgencies = LoadAgenciesAvailableToSuburb(requestPacket);    
+                var selectedAgencies = LoadAgenciesAvailableToUserSuburbs(requestPacket);    
                 var serialiser = new JavaScriptSerializer();
                 context.Response.Write(serialiser.Serialize(selectedAgencies));            
                 break;
             case "save":
-                SaveSelectedAgenciesForSuburb(requestPacket);                
+                string results = SaveSelectedAgencies(requestPacket);
+                context.Response.Write(results);
                 break;
             default: break;
         }        
     }
 
-    private int[] LoadAgenciesAvailableToSuburb(DataRequestPacket inputPacket)
+    private int[] LoadAgenciesAvailableToUserSuburbs(DataRequestPacket inputPacket)
     {
         // TODO: currently looking at a table in the boss database. The final table schema and location to be determined
         using (var lsbase = DataManager.DataContextRetriever.GetLSBaseDataContext())
         {
-            return (from agncySub in lsbase.agencies_user_suburbs
-                   where agncySub.suburb_id == inputPacket.suburbID && agncySub.agency_id != null
-                   select agncySub.agency_id).Cast<int>().ToArray();
+            List<SuburbInfo> userSuburbs = HttpContext.Current.Session["user_suburbs"] as List<SuburbInfo>;
+            var suburbIds = userSuburbs.Select(s => s.SuburbId);
+            return (from b in lsbase.agencies_user_suburbs                    
+                   where b.suburb_id != null && suburbIds.Contains(b.suburb_id) && b.agency_id != null
+                   select b.agency_id.Value).Distinct().ToArray();
         }
     }
 
-    private void SaveSelectedAgenciesForSuburb(DataRequestPacket inputPacket)
+    private string SaveSelectedAgencies(DataRequestPacket inputPacket)
     {
+        MarketShareApp.SaveSelectedAgenciesResponsePacket results = new MarketShareApp.SaveSelectedAgenciesResponsePacket();
+        List<SuburbInfo> userSuburbs = HttpContext.Current.Session["user_suburbs"] as List<SuburbInfo>;
         using (var lsbase = DataManager.DataContextRetriever.GetLSBaseDataContext())
         {
-            var allRecordsForExistingSuburb = from a in lsbase.agencies_user_suburbs
-                                              where a.suburb_id == inputPacket.suburbID
-                                              select a;
-
-            if (allRecordsForExistingSuburb.Count() == 0)
+            // First find all distinct agencies allocated to transactions for this user's licence            
+            List<int> agencyIds = new List<int>();
+            foreach (var suburb in userSuburbs)
             {
-                // Insert records for this suburb because it doesn't yet exist
-                foreach (int id in inputPacket.selectedAgencies)
+                var agencyIdsForSuburb = from b in lsbase.base_datas
+                                         where b.seeff_area_id == suburb.SuburbId && b.agency_id != null
+                                         select b.agency_id.Value;
+                agencyIds.AddRange(agencyIdsForSuburb);
+            }
+            var agenciesToExclude = lsbase.agencies.Where(a => new[] { "Seeff", "Private sale", "Auction" }.Contains(a.agency_name)).Select(a => a.agency_id);
+            agencyIds = agencyIds.Except(agenciesToExclude).Distinct().ToList();
+
+            int mismatchCount = agencyIds.Except(inputPacket.selectedAgencies).Count();
+            if (mismatchCount != 0)
+            {
+                // If there are transactions in the database assigned an agency not in the input, then we cannot saved until the user has removed the dependency from the listing.
+                results.Saved = false;
+                return new JavaScriptSerializer().Serialize(results);
+            }
+            else
+            {                
+                var allRecordsForUserSuburbs = from a in lsbase.agencies_user_suburbs
+                                               where userSuburbs.Select(s => s.SuburbId).Contains(a.suburb_id)
+                                               select a;
+
+                if (allRecordsForUserSuburbs.Count() == 0)
                 {
-                    var newRecord = new agencies_user_suburb { suburb_id = inputPacket.suburbID, agency_id = id, updated_by = inputPacket.userGuid };
-                    lsbase.agencies_user_suburbs.InsertOnSubmit(newRecord);
+                    // Insert records for this suburb because it doesn't yet exist
+                    foreach (int id in inputPacket.selectedAgencies)
+                    {
+                        foreach (var suburb in userSuburbs)
+                        {
+                            var newRecord = new agencies_user_suburb { suburb_id = suburb.SuburbId, agency_id = id, updated_by = inputPacket.userGuid };
+                            lsbase.agencies_user_suburbs.InsertOnSubmit(newRecord);   
+                        }
+                    }
+
+                    lsbase.SubmitChanges();
+                    results.Saved = true;
+                    return new JavaScriptSerializer().Serialize(results);
                 }
 
-                lsbase.SubmitChanges();
-                return;
-            }
-
-            if (inputPacket.selectedAgencies == null || inputPacket.selectedAgencies.Length == 0)
-            {
-                foreach (var record in allRecordsForExistingSuburb)
+                if (inputPacket.selectedAgencies == null || inputPacket.selectedAgencies.Length == 0)
                 {
-                    // Firstly invalidate all records with a matching suburb id. We do this as opposed to deleting the records, for record keeping.
+                    foreach (var record in allRecordsForUserSuburbs)
+                    {
+                        // Firstly invalidate all records with a matching suburb id. We do this as opposed to deleting the records, for record keeping.
+                        record.agency_id = null;
+                        record.updated_by = inputPacket.userGuid;
+                    }
+                    lsbase.SubmitChanges();
+                    results.Saved = true;
+                    return new JavaScriptSerializer().Serialize(results);
+                }
+                // These records represent data already saved that must be invalidated because they no longer exist in the incoming data
+                var recordsThatMustBeInvalidated = from r in allRecordsForUserSuburbs
+                                                   where r.agency_id != null && !inputPacket.selectedAgencies.Contains((int)r.agency_id)
+                                                   select r;
+                foreach (var record in recordsThatMustBeInvalidated)
+                {
                     record.agency_id = null;
                     record.updated_by = inputPacket.userGuid;
                 }
                 lsbase.SubmitChanges();
-                return;
-            }
-            // These records represent data already saved that must be invalidated because they no longer exist in the incoming data
-            var recordsThatMustBeInvalidated = from r in allRecordsForExistingSuburb
-                                               where r.agency_id != null && !inputPacket.selectedAgencies.Contains((int)r.agency_id)
-                                               select r;
-            foreach (var record in recordsThatMustBeInvalidated)
-            {
-                record.agency_id = null;
-                record.updated_by = inputPacket.userGuid;
-            }
-            lsbase.SubmitChanges();
 
-            // Insert new records for an existing suburb, this will be an insert or update depending on whether agency_id is null
-            var newAgencyIdsForSuburb = inputPacket.selectedAgencies.Except((from a in allRecordsForExistingSuburb
-                                                                            where a.agency_id != null
-                                                                            select a.agency_id).Cast<int>());
-            foreach (var newId in newAgencyIdsForSuburb)
-            {
-                var newRecord = new agencies_user_suburb { suburb_id = inputPacket.suburbID, agency_id = newId, updated_by = inputPacket.userGuid };
-                lsbase.agencies_user_suburbs.InsertOnSubmit(newRecord);
-            }
-            lsbase.SubmitChanges();
-        }
+                // Insert new records
+                var newAgencyIdsForSuburb = inputPacket.selectedAgencies.Except((from a in allRecordsForUserSuburbs
+                                                                                 where a.agency_id != null
+                                                                                 select a.agency_id).Cast<int>());
+                foreach (var newId in newAgencyIdsForSuburb)
+                {
+                    foreach (var suburb in userSuburbs)
+                    {
+                        var newRecord = new agencies_user_suburb { suburb_id = suburb.SuburbId, agency_id = newId, updated_by = inputPacket.userGuid };
+                        lsbase.agencies_user_suburbs.InsertOnSubmit(newRecord);
+                    }
+                }
+                lsbase.SubmitChanges();
+
+                results.Saved = true;
+                return new JavaScriptSerializer().Serialize(results);
+            }                       
+        }       
     }
     
     /// <summary>
@@ -102,7 +140,7 @@ public class AgenciesDataManager : IHttpHandler {
         public string instruction;
         public int suburbID;
         public string userGuid;
-        public int[] selectedAgencies;        
+        public int[] selectedAgencies;
     }
 
     public bool IsReusable

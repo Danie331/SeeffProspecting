@@ -22,16 +22,17 @@
 {
     display: inline;
     float: right;
-    padding-right: 110px;
+    /*padding-right: 110px;*/
+    width: 200px;
 }
 
 .multiSelectLeftSelectorDiv
 {
     display: inline-block;
     position: relative;
-    left: 0;
+    float:left;
     vertical-align: top;
-    overflow: auto;
+    overflow: hidden;
     width: 200px;
     border: 1px silver solid;
 }
@@ -51,7 +52,7 @@ select.multiSelectLeftSelect
     width: auto;
     height: auto;
     padding: 10px;
-    left: 45%;
+    left: 46%;
     margin-top: 15%;
 }
 
@@ -60,7 +61,7 @@ select.multiSelectLeftSelect
     display: inline-block;
     position: relative;
     float: right;
-    overflow: auto;
+    overflow: hidden;
     width: 200px;
     border: 1px silver solid;
 }

@@ -122,6 +122,7 @@ function generateStatisticsMenu(canShow) {
     // Build some stats
     var totalListingsToCalculate = getTotalVisibleListings(true);
     var statistics = buildListingsByAgencyStatistics();
+    var grandTotal = 0;
     $.each(statistics, function (index, stat) {
 
         var statPerc = 0;
@@ -135,10 +136,16 @@ function generateStatisticsMenu(canShow) {
         tr.append(createTd(parseFloat(statPerc).toFixed(2) + " %"));
 
         tablePercentage.append(tr);
+        grandTotal += stat.Value;
     });
+    var totalTr = $("<tr />");
+    totalTr.append(createTd("GRAND TOTAL"));
+    totalTr.append(createTd(grandTotal));
+    tablePercentage.append(totalTr);
 
     statistics = buildTotalValueStatistics();
     var totalValueAllAgencies = getTotalMarketValueByAgency();
+    grandTotal = 0;
     $.each(statistics, function (index, stat) {
         var tr = $("<tr />");
         tr.append(createTd(stat.AgencyName));
@@ -146,10 +153,16 @@ function generateStatisticsMenu(canShow) {
         tr.append(createTd(parseFloat(stat.Value / totalValueAllAgencies * 100).toFixed(2) + " %"));
 
         tableValue.append(tr);
+        grandTotal += stat.Value / 1000;
     });
+    totalTr = $("<tr />");
+    totalTr.append(createTd("GRAND TOTAL"));
+    totalTr.append(createTd(formatRandValue(grandTotal) + "k"));
+    tableValue.append(totalTr);
 
     statistics = buildListingsByMarketShareTypes();
     var totalVisibleListings = getTotalVisibleListings(false);
+    grandTotal = 0;
     $.each(statistics, function (index, stat) {
         var tr = $("<tr />");
 
@@ -158,7 +171,12 @@ function generateStatisticsMenu(canShow) {
         tr.append(createTd(parseFloat(stat.Value / totalVisibleListings * 100).toFixed(2) + " %"));
 
         tableMarketshareTypes.append(tr);
+        grandTotal += stat.Value;
     });
+    totalTr = $("<tr />");
+    totalTr.append(createTd("GRAND TOTAL"));
+    totalTr.append(createTd(grandTotal));
+    tableMarketshareTypes.append(totalTr);
 }
 
 function showFilteringOptions(enableFilteringOptions) {

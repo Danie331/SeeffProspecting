@@ -1291,7 +1291,6 @@ function loadAgenciesForSuburb(actionAfterLoading) {
                 data: JSON.stringify({ instruction: 'load', suburbID: currentSuburb.SuburbId, userGuid: $('#user_guid').attr('value') }),
                 success: function (data, textStatus, jqXHR) {
                     if (textStatus == "success") {
-
                         currentSuburb.SelectedAgencies = data;
                         if (actionAfterLoading) {
                             actionAfterLoading();
@@ -1312,41 +1311,17 @@ function loadAgenciesForSuburb(actionAfterLoading) {
 }
 
 
-function saveAgenciesForSuburb(selectedAgencyIds) {
-    var currentSuburb = infowindow.Marker.Suburb;
+function saveAgencies(selectedAgencyIds, callbackFunction) {
     $.ajax({
         type: "POST",
         url: "AgenciesDataManager.ashx",
         data: JSON.stringify({
             instruction: 'save',
-            suburbID: currentSuburb.SuburbId,
             userGuid: $('#user_guid').attr('value'),
             selectedAgencies: selectedAgencyIds
         }),
-        success: function (data, textStatus, jqXHR) {
-            if (textStatus == "success") {
-
-                currentSuburb.SelectedAgencies = selectedAgencyIds;
-                // Must update the current selection in all dropdown boxes
-                updatePropertyInfoMenu(infowindow.Marker.Listings);
-
-                $('#agenciesSavedSplashScreen').dialog({
-                    show: 'fade',
-                    position: ['center', 'center'],
-                    hide: { effect: "fadeOut", duration: 500 },
-                    open: function (event, ui) {
-                        $('#agenciesSavedSplashScreen').siblings(".ui-dialog-titlebar").hide();
-                        setTimeout(function () {
-                            $('#agenciesSavedSplashScreen').dialog('close');
-                        }, 1000);
-                    }
-                });
-            } else {
-                alert('Could not save selected agencies at this time.');
-            }
-        },
         dataType: "json"
-    });
+    }).done(callbackFunction);
 }
 
 function updateListingLinkedParent(listing, propertyId) {
@@ -1497,25 +1472,46 @@ function showManageAgenciesDialog() {
         var agenciesForCurrentSuburb = getAgenciesFromIds(currentSuburb.SelectedAgencies);
         var agenciesLeftPanel = getAgenciesExcluding(allAgencies, agenciesForCurrentSuburb);
         var agenciesRightPanel = getAgenciesExcluding(agenciesForCurrentSuburb, []);
-        var selector = new MultiSelectWidget("agenciesMultiSelect", "Edit Agencies For Suburb", "Agencies", "Your selection", agenciesLeftPanel, agenciesRightPanel,
+        var selector = new MultiSelectWidget("agenciesMultiSelect", "Agency Selector", "All Agencies", "Selected Agencies", agenciesLeftPanel, agenciesRightPanel,
                                       function (item) { return item.agency_id; },
                                        function (item) { return item.agency_name; },
                                        function (leftSelection, rightSelection) {
-
-                                           if (canSaveSelectedAgencies(rightSelection)) {
-                                               var agencyIds = $.map(rightSelection, function (agencyObject) {
-                                                   return agencyObject.agency_id;
-                                               });
-                                               saveAgenciesForSuburb(agencyIds);
-                                           }
-                                           else {
-                                               showDialogRemoveAgencyWarning();
-                                           }
+                                           $("body").css("cursor", "progress");
+                                           var agencyIds = $.map(rightSelection, function (agencyObject) {
+                                               return agencyObject.agency_id;
+                                           });
+                                           saveAgencies(agencyIds, function (response) { // rem to exclude defaults
+                                               $("body").css("cursor", "default");
+                                               if (response.Saved) {
+                                                   showAgencySavedScreen();
+                                                   for (var s = 0; s < suburbsInfo.length; s++) {
+                                                       suburbsInfo[s].SelectedAgencies = agencyIds;
+                                                   }
+                                                   
+                                                   updatePropertyInfoMenu(infowindow.Marker.Listings);
+                                               } else {
+                                                   showDialogRemoveAgencyWarning();
+                                               }
+                                           });
                                        });
 
         var html = selector.buildDialogElement();
         $('body').append(html);
         selector.show();
+    }
+
+    function showAgencySavedScreen() {
+        $('#agenciesSavedSplashScreen').dialog({
+            show: 'fade',
+            position: ['center', 'center'],
+            hide: { effect: "fadeOut", duration: 500 },
+            open: function (event, ui) {
+                $('#agenciesSavedSplashScreen').siblings(".ui-dialog-titlebar").hide();
+                setTimeout(function () {
+                    $('#agenciesSavedSplashScreen').dialog('close');
+                }, 1000);
+            }
+        });
     }
 
     // In order to save the selected agencies for the suburb in question, one may not remove agencies that are currently listed against one or more listings.

@@ -794,6 +794,7 @@
       <DependentUpon>SamplePost.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="SaveSelectedAgenciesResponsePacket.cs" />
     <Compile Include="SearchInputData.cs" />
     <Compile Include="SearchResultsData.cs" />
   </ItemGroup>
