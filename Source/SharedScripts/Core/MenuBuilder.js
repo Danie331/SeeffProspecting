@@ -139,7 +139,7 @@ function generateStatisticsMenu(canShow) {
         grandTotal += stat.Value;
     });
     var totalTr = $("<tr />");
-    totalTr.append(createTd("GRAND TOTAL"));
+    totalTr.append(createTd("Total", "font-weight:800"));
     totalTr.append(createTd(grandTotal));
     tablePercentage.append(totalTr);
 
@@ -156,7 +156,7 @@ function generateStatisticsMenu(canShow) {
         grandTotal += stat.Value / 1000;
     });
     totalTr = $("<tr />");
-    totalTr.append(createTd("GRAND TOTAL"));
+    totalTr.append(createTd("Total", "font-weight:800"));
     totalTr.append(createTd(formatRandValue(grandTotal) + "k"));
     tableValue.append(totalTr);
 
@@ -174,7 +174,7 @@ function generateStatisticsMenu(canShow) {
         grandTotal += stat.Value;
     });
     totalTr = $("<tr />");
-    totalTr.append(createTd("GRAND TOTAL"));
+    totalTr.append(createTd("Total", "font-weight:800"));
     totalTr.append(createTd(grandTotal));
     tableMarketshareTypes.append(totalTr);
 }
@@ -572,8 +572,9 @@ function buildPropertyInfoHtml() {
     return html;
 }
 
-function createTd(content) {
-    return "<td>" + content + "</td>";
+function createTd(content, styles) {
+    var css = styles ? 'style="' + styles + '"' : '';
+    return "<td " + css + ">" + content + "</td>";
 }
 
 function updatePropertyInfoMenu(salesForListing) {
