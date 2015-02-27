@@ -479,7 +479,7 @@ function initialiseAndDisplaySuburb(suburb, data, typeOfFating, showSeeffCurrent
             infowindow.Marker = null;
         }
         suburb.Visible = true;
-        suburbsInfo.CanFilter = allVisibleSuburbsAreFated();        
+        suburbsInfo.CanFilter = true;        
         showFilteringOptions(suburbsInfo.CanFilter);
 
         updatePropertyInfoMenu([]);
@@ -503,11 +503,6 @@ function initialiseAndDisplaySuburb(suburb, data, typeOfFating, showSeeffCurrent
                         showPopupUnfatedTransactions("popupSuburbUnfated");
                     } else {
                         showPopupAdminRequired();
-                    }
-                } else {
-                    // If this suburb has no unfated transactions BUT there are suburb(s) that are unfated, show a dialog
-                    if (!suburbsInfo.CanFilter) {
-                        showPopupAllListingsFatedForSuburb();
                     }
                 }
             }
@@ -1187,20 +1182,19 @@ function updateMarketShareForListing(uniqueId, selectedValue) {
                 // Update the Ui 
                 updateSuburbStats(listing.Marker.Suburb);
                 if (listing.Marker) {
-                    listing.Marker.setIcon(getIconForMarker(listing.Marker));
+                    if (listing.SS_FH == "SS") {
+                        var iconPath = getIconForMarker(listing.Marker);
+                        var allMarkersForSS = getAllMarkersThatWillSpiderfy(listing);
+                        $.each(allMarkersForSS, function (idx, el) {
+                            el.setIcon(iconPath);
+                        });
+                    } else {
+                        listing.Marker.setIcon(getIconForMarker(listing.Marker));
+                    }
                 }
 
-                suburbsInfo.CanFilter = false;
-                if (allListingsFated() || allVisibleSuburbsAreFated()) {
-                    //showPopupAllListingsFated();
-                    suburbsInfo.CanFilter = true;
-                    showFilteringOptions(true);
-
-                    //clearSuburb(listing.Marker.Suburb);
-                    //var typeOfFating = getTypeOfFatingToLoad(listing.Marker.Suburb.SuburbId);
-                    //var mustShowSeeffCurrentListings = mustLoadDataForSeeffCurrentListings(listing.Marker.Suburb.SuburbId);
-                    //initialiseAndDisplaySuburb(listing.Marker.Suburb, null, typeOfFating, mustShowSeeffCurrentListings);
-                }
+                suburbsInfo.CanFilter = true;
+                showFilteringOptions(true);
 
                 generateStatisticsMenu(true);
             } else {
@@ -1389,40 +1383,40 @@ function findAndSaveGoogleAddressForListing(listing, actionToExecuteAfterwards) 
 
 function showPopupAllListingsFated() {
 
-    $("#popupAllListingsFated").dialog(
-            {
-                modal: true,
-                closeOnEscape: true,
-                open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-                width: 'auto',
-                buttons: { "Ok": function () { $(this).dialog("close"); } },
-                position: ['right', 'center']
-            });
+    //$("#popupAllListingsFated").dialog(
+    //        {
+    //            modal: true,
+    //            closeOnEscape: true,
+    //            open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+    //            width: 'auto',
+    //            buttons: { "Ok": function () { $(this).dialog("close"); } },
+    //            position: ['right', 'center']
+    //        });
 }
 
 function showPopupAllListingsFatedForSuburb() {
 
-    $("#popupAllListingsFatedForSuburbButNotOthers").dialog(
-            {
-                modal: true,
-                closeOnEscape: true,
-                open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-                width: 'auto',
-                buttons: { "Ok": function () { $(this).dialog("close"); } },
-                position: ['right', 'center']
-            });
+    //$("#popupAllListingsFatedForSuburbButNotOthers").dialog(
+    //        {
+    //            modal: true,
+    //            closeOnEscape: true,
+    //            open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+    //            width: 'auto',
+    //            buttons: { "Ok": function () { $(this).dialog("close"); } },
+    //            position: ['right', 'center']
+    //        });
 }
 
 function showPopupUnfatedTransactions(popupId) {
-    $("#" + popupId).dialog(
-            {
-                modal: true,
-                closeOnEscape: true,
-                open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-                width: 'auto',
-                buttons: { "Ok": function () { $(this).dialog("close"); } },
-                position: ['right', 'center']
-            });
+    //$("#" + popupId).dialog(
+    //        {
+    //            modal: true,
+    //            closeOnEscape: true,
+    //            open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+    //            width: 'auto',
+    //            buttons: { "Ok": function () { $(this).dialog("close"); } },
+    //            position: ['right', 'center']
+    //        });
 }
 
 function showPopupAdminRequired() {

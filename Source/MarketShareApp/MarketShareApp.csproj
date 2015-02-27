@@ -105,8 +105,15 @@
     <Content Include="..\SharedAssets\marker_icons\seeff\other\Other.psd">
       <Link>Assets\marker_icons\seeff\other\Other.psd</Link>
     </Content>
+    <Content Include="..\SharedScripts\Core\ContentExpanderWidget.js">
+      <Link>Scripts\Core\ContentExpanderWidget.js</Link>
+    </Content>
+    <Content Include="..\SharedScripts\StyleSheets\ContentExpanderWidgetStyles.css">
+      <Link>Scripts\StyleSheets\ContentExpanderWidgetStyles.css</Link>
+    </Content>
     <Content Include="AdminDataManager.ashx" />
     <Content Include="AgenciesDataManager.ashx" />
+    <Content Include="Assets\general_filter.png" />
     <Content Include="Assets\legend\2014.png" />
     <Content Include="Assets\legend\agri_key.png" />
     <Content Include="Assets\legend\comm_key.png" />
@@ -132,6 +139,9 @@
     <Content Include="Assets\legend\SS_to_rent.png" />
     <Content Include="Assets\legend\SS_to_rent_and_buy.png" />
     <Content Include="Assets\legend\SS_unfated.PNG" />
+    <Content Include="Assets\month_filter.png" />
+    <Content Include="Assets\price_filter.png" />
+    <Content Include="Assets\year_filter.png" />
     <Content Include="Database scripts\boss\Tables\user_registration.sql" />
     <Content Include="Database scripts\ls_base\Stored Procedures\sp_load_new_lightstone_data_step_1.sql" />
     <Content Include="Database scripts\ls_base\Stored Procedures\sp_load_new_lightstone_data_step_2_1.sql" />

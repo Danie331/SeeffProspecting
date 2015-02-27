@@ -49,6 +49,7 @@ function buildListingsByMarketShareTypes() {
                 // currently selected filter criteria. For purposes of this method, we should determine 
                 // only the listings that are relevant to the current filter and process only those. 
                 var relevantListings = getRelevantListingsForPropFilter(marker.Listings);
+
                 $.each(relevantListings, function (index, listing) {
 
                     var msType = listing.MarketShareType;
@@ -57,7 +58,7 @@ function buildListingsByMarketShareTypes() {
                     }
 
                     if (listing.IsCurrentSeeffListing) {
-                        msType = 'Seeff current';
+                        msType = 'Seeff on market';
                     }
 
                     switch (msType) {
@@ -118,7 +119,7 @@ function getRelevantListingsForPropFilter(listings) {
 
     return $.grep(listings, function (listing, idx) {
         var isRelevant = $.inArray(listing.MarketShareType, selectedMarketShareTypes) > -1 || listing.IsCurrentSeeffListing == true
-                                                || !listing.MarketShareType;
+                                                || !listing.MarketShareType || listing.MarketShareType == null;
         return isRelevant;
     });
 }
@@ -163,14 +164,14 @@ function getTotalVisibleListings(residentialOnly) {
         var suburb = suburbsInfo[idx];
         if (suburb.VisibleMarkers && suburb.VisibleMarkers.length > 0) {
             $.each(suburb.VisibleMarkers, function (index, marker) {
-
-                $.each(marker.Listings, function (idxm, listing) {
+                var relevantListings = getRelevantListingsForPropFilter(marker.Listings);
+                $.each(relevantListings, function (idxm, listing) {
 
                     if (residentialOnly) {
                         // Only include the listing IFF it's a residential listing AND it is not a child property (ie not linked to a parent)
                         if (listing.MarketShareType == 'R' && listing.ParentPropertyId == null) {
                             totalFilteredListings++;
-                        }
+                        } 
                     }
                     else {
                         totalFilteredListings++;

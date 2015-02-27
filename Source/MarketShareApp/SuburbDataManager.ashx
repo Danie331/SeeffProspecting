@@ -22,7 +22,7 @@ public class SuburbDataManager : IHttpHandler {
 
         // The Listings property expects only a List<IListing> so we need to upcast both lists here
         suburb.Listings = lightstoneListings.Cast<IListing>().Union(currentSeeffListings.Cast<IListing>()).ToList<IListing>();
-        suburb.Listings.AddRange(currentSeeffListings);
+        //suburb.Listings.AddRange(currentSeeffListings);
         suburb.LocationName = Domain.GetAreaName(suburbId);
         
         var serializer = new JavaScriptSerializer();

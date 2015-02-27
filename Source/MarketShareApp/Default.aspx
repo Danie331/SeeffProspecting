@@ -30,6 +30,7 @@
     <link href="Scripts/StyleSheets/Panel.css" rel="stylesheet" />
     <link href="Scripts/StyleSheets/MultiSelectWidget.css" rel="stylesheet" />
     <link href="Scripts/StyleSheets/AdminInterface.css" rel="stylesheet" />
+    <link href="Scripts/StyleSheets/ContentExpanderWidgetStyles.css" rel="stylesheet" />
 
     <%-- Core functionality / engine --%>
     <script src="Scripts/Core/Default.js"></script>
@@ -42,6 +43,7 @@
     <script src="Scripts/Core/Utils.js"></script>
     <script src="Scripts/Core/MultiSelectWidget.js"></script>
     <script src="Scripts/Core/Search.js"></script>
+    <script src="Scripts/Core/ContentExpanderWidget.js"></script>
 
     <script>
 
@@ -93,6 +95,10 @@
             });            
         }
 
+        $(function () {
+            $('#legend').toggle();
+        });
+
     </script>
 
 </head>
@@ -110,8 +116,8 @@
                 <div id="menuitempanel" style="width:240px;" class="ui-widget-content">
                     <!-- Create menu items -->
                 </div>
-                <div id="legend" class="ui-widget-content" style="position:absolute;bottom:5px;width:140px;">
-                    <div style="font-weight:800;padding:5px;text-align:center">Legend To Icons</div>
+                <div id="legend" class="ui-widget-content" style="position:absolute;bottom:5px;width:140px;display:none;">
+                    <div style="font-family:Verdana;font-weight:800;padding:5px;text-align:center;font-size:12px">Legend To Icons</div>
                     <hr />
                     <span class="legendCaptionTextStyle">Unfated entities</span>
                     <div><img src="Assets/legend/FH_unfated.png" class='legendIconStyle' /><span class='legendTextStyle'>Unfated property</span></div>

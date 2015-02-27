@@ -215,6 +215,12 @@ namespace SeeffProspectingAuthService
 		
 		private System.Nullable<System.Guid> _session_key;
 		
+		private System.Nullable<System.DateTime> _deleted_date;
+		
+		private System.Nullable<int> _deleted_by;
+		
+		private string _license_control;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -341,6 +347,12 @@ namespace SeeffProspectingAuthService
     partial void Oncompliance_accessChanged();
     partial void Onsession_keyChanging(System.Nullable<System.Guid> value);
     partial void Onsession_keyChanged();
+    partial void Ondeleted_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Ondeleted_dateChanged();
+    partial void Ondeleted_byChanging(System.Nullable<int> value);
+    partial void Ondeleted_byChanged();
+    partial void Onlicense_controlChanging(string value);
+    partial void Onlicense_controlChanged();
     #endregion
 		
 		public user_registration()
@@ -1564,6 +1576,66 @@ namespace SeeffProspectingAuthService
 					this._session_key = value;
 					this.SendPropertyChanged("session_key");
 					this.Onsession_keyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_deleted_date", DbType="DateTime")]
+		public System.Nullable<System.DateTime> deleted_date
+		{
+			get
+			{
+				return this._deleted_date;
+			}
+			set
+			{
+				if ((this._deleted_date != value))
+				{
+					this.Ondeleted_dateChanging(value);
+					this.SendPropertyChanging();
+					this._deleted_date = value;
+					this.SendPropertyChanged("deleted_date");
+					this.Ondeleted_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_deleted_by", DbType="Int")]
+		public System.Nullable<int> deleted_by
+		{
+			get
+			{
+				return this._deleted_by;
+			}
+			set
+			{
+				if ((this._deleted_by != value))
+				{
+					this.Ondeleted_byChanging(value);
+					this.SendPropertyChanging();
+					this._deleted_by = value;
+					this.SendPropertyChanged("deleted_by");
+					this.Ondeleted_byChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_license_control", DbType="VarChar(MAX)")]
+		public string license_control
+		{
+			get
+			{
+				return this._license_control;
+			}
+			set
+			{
+				if ((this._license_control != value))
+				{
+					this.Onlicense_controlChanging(value);
+					this.SendPropertyChanging();
+					this._license_control = value;
+					this.SendPropertyChanged("license_control");
+					this.Onlicense_controlChanged();
 				}
 			}
 		}

@@ -23,7 +23,7 @@ function createPropertyTypeStatistic(type, value) {
     return { PropertyType: type, Value: value };
 }
 
-function createMenuItem(itemName, itemId, itemContent) {
+function createMenuItem(itemName, itemId, itemContent, onClickFunction) {
 
     var itemContentDiv = $("<div id='" + itemId + "_content" + "' />");
     itemContentDiv.append(itemContent);
@@ -45,6 +45,10 @@ function createMenuItem(itemName, itemId, itemContent) {
         btn.parent().css('background-color', '#E0E0E0');
 
         showContentForItem($(this).attr("id"));
+
+        if (onClickFunction) {
+            onClickFunction();
+        }
     });
 
     div.append(button);

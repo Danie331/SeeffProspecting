@@ -31,7 +31,9 @@ function ContentExpanderWidget(containerElementId, contentExpanderItemArray, ele
             return div.find('.expanderItemHeader').attr('id') == itemId;
         })[0];
 
-        targetDiv.find('.expanderItemHeader').trigger('click');
+        if (targetDiv.find('.expanderItemContent').css('display') == 'none') {
+            targetDiv.find('.expanderItemHeader').trigger('click');
+        }
     };
 
     return this;

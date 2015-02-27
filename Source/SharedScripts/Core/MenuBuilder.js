@@ -1,4 +1,6 @@
 ﻿
+var expanderWidget = null;
+
 function buildOptionsForOrdinaryUser() {
 
     var canEditAtLeastOneSuburb = userCanEditAtLeastOneSuburb();
@@ -44,7 +46,11 @@ function showMenuForUser(userCanEdit, unfatedTransactions) {
     //adjustSuburbTableWidths();
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Filter / Summary", "filterandsummary", buildFilterItemsAndSummaryInfo());
+    menuItem = createMenuItem("Filter / Summary", "filterandsummary", buildFilterItemsAndSummaryInfo(), function () {
+        if (expanderWidget != null) {
+            expanderWidget.open('generalFilter');
+        }
+    });
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
@@ -100,7 +106,7 @@ function buildLicenseSummaryHtml() {
     licSummaryDiv.append("<br />");
     licSummaryDiv.append(tableValue);
 
-    return licSummaryDiv[0].outerHTML;
+    return licSummaryDiv;
 }
 
 function generateStatisticsMenu(canShow) {
@@ -131,7 +137,7 @@ function generateStatisticsMenu(canShow) {
         }
 
         var tr = $("<tr />");
-        tr.append(createTd(stat.AgencyName));
+        tr.append(createTd(stat.AgencyName, "text-align:left"));
         tr.append(createTd(stat.Value));
         tr.append(createTd(parseFloat(statPerc).toFixed(2) + " %"));
 
@@ -148,7 +154,7 @@ function generateStatisticsMenu(canShow) {
     grandTotal = 0;
     $.each(statistics, function (index, stat) {
         var tr = $("<tr />");
-        tr.append(createTd(stat.AgencyName));
+        tr.append(createTd(stat.AgencyName, "text-align:left"));
         tr.append(createTd(formatRandValue(stat.Value / 1000) + "k"));
         tr.append(createTd(parseFloat(stat.Value / totalValueAllAgencies * 100).toFixed(2) + " %"));
 
@@ -166,7 +172,7 @@ function generateStatisticsMenu(canShow) {
     $.each(statistics, function (index, stat) {
         var tr = $("<tr />");
 
-        tr.append(createTd(stat.PropertyType));
+        tr.append(createTd(stat.PropertyType, "text-align:left"));
         tr.append(createTd(stat.Value));
         tr.append(createTd(parseFloat(stat.Value / totalVisibleListings * 100).toFixed(2) + " %"));
 
@@ -202,34 +208,83 @@ function showMenu(activeItem) {
 // 
 // Filtering
 function buildFilterItemsAndSummaryInfo() {
-    var fh = buildInputCheckbox("FH", "FH_filter", "left", 2, 2, true, handleFilterItemClick);
-    var ss = buildInputCheckbox("SS", "SS_filter", "right", 2, 2, true, handleFilterItemClick);
-    var res = buildInputCheckbox("Res", "R_filter", "left", 2, 3, true, handleFilterItemClick);
-    var comm = buildInputCheckbox("Com", "C_filter", "left", 2, 3, true, handleFilterItemClick);
-    var agri = buildInputCheckbox("Agri", "A_filter", "left", 2, 3, true, handleFilterItemClick);
-    var dev = buildInputCheckbox("Dev", "D_filter", "left", 2, 3, true, handleFilterItemClick);
-    var other = buildInputCheckbox("Other", "O_filter", "left", 2, 3, true, handleFilterItemClick);
-    var pending = buildInputCheckbox("Pending", "P_filter", "left", 2, 3, true, handleFilterItemClick);
+    $('#generalFilter').empty();
+    var generalFilter = buildContentExpanderItem('generalFilter', 'Assets/general_filter.png', "General Filter Options", buildGeneralFilterHtml());
+    $('#yearFilter').empty();
+    var yearFilter = buildContentExpanderItem('yearFilter', 'Assets/year_filter.png', "Filter by Year", buildYearFilterHtml());
+    $('#monthFilter').empty();
+    var monthFilter = buildContentExpanderItem('monthFilter', 'Assets/month_filter.png', "Filter by Month", buildMonthFilterHtml());
+    $('#priceFilter').empty();
+    var priceFilter = buildContentExpanderItem('priceFilter', 'Assets/price_filter.png', "Filter by Price", buildPriceFilterHtml());
 
-    //var _2011 = buildInputCheckbox("2011", "2011_filter", "left", 2, 2, true, handleFilterItemClick);
-    var _2012 = buildInputCheckbox("2012", "2012_filter", "left", 2, 2, true, handleFilterItemClick);
-    var _2013 = buildInputCheckbox("2013", "2013_filter", "left", 2, 2, true, handleFilterItemClick);
-    var _2014 = buildInputCheckbox("2014", "2014_filter", "left", 2, 2, true, handleFilterItemClick);
-    var _2015 = buildInputCheckbox("2015", "2015_filter", "left", 2, 2, true, handleFilterItemClick);
+    expanderWidget = new ContentExpanderWidget('#contentarea', [generalFilter, yearFilter, monthFilter, priceFilter], "filterExpander");
+    var filterDiv = $("<div class='contentdiv' id='filteroptionsdiv' />");
+    filterDiv.empty();
+    filterDiv.append(expanderWidget.construct());
 
-    var seeffCurrentForSale = buildInputCheckbox("Seeff for sale", "forsale_filter", "left", 2, 2, true, handleFilterItemClick);
-    var seeffCurrentForRent = buildInputCheckbox("Seeff for rent", "forrent_filter", "left", 2, 2, true, handleFilterItemClick);
+    function buildGeneralFilterHtml() {
+        var div = $("<div />");
+        div.append(buildInputCheckbox("Residential", "R_filter", "left", 2, 3, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Commercial", "C_filter", "left", 2, 3, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Agricultural", "A_filter", "left", 2, 3, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Development", "D_filter", "left", 2, 3, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Other property type", "O_filter", "left", 2, 3, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Pending further research", "P_filter", "left", 2, 3, true, handleFilterItemClick));
+        div.append("<p />");
+        div.append(buildInputCheckbox("FH", "FH_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("SS", "SS_filter", "right", 2, 2, true, handleFilterItemClick));
+        div.append("<p />");
+        div.append(buildInputCheckbox("With agency assigned", "withagencyassigned_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Without agency assigned", "withoutagencyassigned_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append("<p />");
+        div.append(buildInputCheckbox("Seeff for sale", "forsale_filter", "left", 2, 2, false, handleFilterItemClick));
+        div.append(buildInputCheckbox("Seeff for rent", "forrent_filter", "left", 2, 2, false, handleFilterItemClick));
 
-    var withAgencyAssigned = buildInputCheckbox("With agency assigned", "withagencyassigned_filter", "left", 2, 2, true, handleFilterItemClick);
-    var withoutAgencyAssigned = buildInputCheckbox("Without agency assigned", "withoutagencyassigned_filter", "left", 2, 2, true, handleFilterItemClick);
+        return div;
+    }
+    function buildYearFilterHtml() {
+        var div = $("<div />");
+        //var _2011 = buildInputCheckbox("2011", "2011_filter", "left", 2, 2, true, handleFilterItemClick);
+        div.append(buildInputCheckbox("2012", "2012_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("2013", "2013_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("2014", "2014_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("2015", "2015_filter", "left", 2, 2, true, handleFilterItemClick));
 
-    var filterOptionsHtml = "<div class='contentdiv' id='filteroptionsdiv'>" +                 
-                 "<div style='display:inline-block;border-right:1px solid #000;float:left;margin: 0px 10px;'>" + res[0].outerHTML + comm[0].outerHTML + agri[0].outerHTML + dev[0].outerHTML + other[0].outerHTML + pending[0].outerHTML + "</div>" +
-                 "<div style='display:inline-block;border-right:1px solid #000;float:left;margin: 0px 5px;'>" + _2012[0].outerHTML + _2013[0].outerHTML + _2014[0].outerHTML + _2015[0].outerHTML + "</div>" +
-                  "<div style='display:inline-block;float:left;border-right:1px solid #000;margin: 0px 5px;'>" + fh[0].outerHTML + ss[0].outerHTML + "</div>" +
-                  "<div style='display:inline-block;float:left;border-right:1px solid #000;margin: 0px 5px;'>" + seeffCurrentForSale[0].outerHTML + seeffCurrentForRent[0].outerHTML + "</div>" +
-                  "<div style='display:inline-block;float:left;border-right:1px solid #000;margin: 0px 5px;'>" + withAgencyAssigned[0].outerHTML + withoutAgencyAssigned[0].outerHTML + "</div>" +
-                  "</div>";
+        return div;
+    }
+    function buildMonthFilterHtml() {
+        var div = $("<div />");
+        div.append(buildInputCheckbox("Jan", "jan_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Feb", "feb_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Mar", "mar_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Apr", "apr_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("May", "may_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Jun", "jun_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Jul", "jul_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Aug", "aug_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Sep", "sep_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Oct", "oct_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Nov", "nov_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("Dec", "dec_filter", "left", 2, 2, true, handleFilterItemClick));
+
+        return div;
+    }
+    function buildPriceFilterHtml() {
+        var div = $("<div />");
+        var from = $("<label for='priceFrom_filter'>From R</label><input type='text' id='priceFrom_filter' />");
+        var to = $("<label for='priceTo_filter'> To R</label><input type='text' id='priceTo_filter' />");
+        var go = $("<input type='button' value='Go' id='filterPriceBtn' style='margin:5px' />");
+        div.append(from);
+        div.append(to);
+        div.append(go);
+
+        $('#contentarea').on('click', "#filterPriceBtn", function () {
+            handleFilterItemClick();
+        });
+
+        return div;
+    }
+
 
     filterSets.push(["FH_filter", "SS_filter"]);
     filterSets.push(["R_filter", "C_filter", "A_filter", "D_filter", "O_filter", "P_filter"]);
@@ -237,8 +292,11 @@ function buildFilterItemsAndSummaryInfo() {
     // The filter set below is handled differently to the rest. See filtering.js
     filterSets.push(["forsale_filter", "forrent_filter"]);
     filterSets.push(["withagencyassigned_filter", "withoutagencyassigned_filter"]);
+    // NB the month filters MUST be added after the year filter - do not swop the order!
+    filterSets.push(["jan_filter", "feb_filter", "mar_filter", "apr_filter", "may_filter", "jun_filter", "jul_filter", "aug_filter", "sep_filter", "oct_filter", "nov_filter", "dec_filter"]);
 
-    return filterOptionsHtml + "<div style='float:left;'><hr />" + buildLicenseSummaryHtml() + "</div>";
+    var summaryDiv = $("<div style='float:left;'><hr /></div>").add(buildLicenseSummaryHtml());
+    return filterDiv.add(summaryDiv);
 }
 
 function buildSuburbSelectionHtml() {
