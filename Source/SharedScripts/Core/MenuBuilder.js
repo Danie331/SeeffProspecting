@@ -342,8 +342,11 @@ function buildSuburbsSelectionHtml() {
         var suburbIdString = "suburb" + suburbId;
         var suburbBtn = $("<a href='' id='" + suburbIdString + "'>" + suburbName + "</a>");
         $('#contentarea').on('click', '#' + suburbIdString, function (event) {
-
             event.preventDefault();
+
+            $('#forrent_filter').prop('checked', true);
+            $('#forsale_filter').prop('checked', true);
+
             // select both fated/unfated, and center the map
             var areaId = $(this).attr('id').replace('suburb', '');
 

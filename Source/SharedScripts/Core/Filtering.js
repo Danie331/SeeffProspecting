@@ -93,7 +93,6 @@ function removeDuplicates(list) {
 }
 
 function applyFilter(markersToFilter, filter, isChecked) {
-
     filter = filter.replace(/_filter/g, "");
     switch (filter) {
         case "FH":
@@ -288,7 +287,7 @@ function filterMarketShareType(markersToFilter, filter, isChecked) {
 
     function anyListingsMeetFilterRequirement(listings) {
         var matchingListings = $.grep(listings, function (listing) {          
-            return listing.MarketShareType == filter;
+            return listing.MarketShareType == filter || listing.MarketShareType == null || listing.MarketShareType == 'undefined';
         });
 
         return matchingListings.length > 0;

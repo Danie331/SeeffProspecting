@@ -1863,7 +1863,7 @@ namespace ProspectingProject
 
             if (!HttpContext.Current.IsDebuggingEnabled)
             {
-                SendEmail(manager.EmailAddress, manager.UserName, "reports@seeff.com", "danie@learnit.co.za", "reports@seeff.com", "Prospecting system notification", emailTemplate);
+                SendEmail(manager.EmailAddress, manager.UserName, "reports@seeff.com", null, "reports@seeff.com", "Prospecting system notification", emailTemplate);
             }
             else
             {
@@ -1884,6 +1884,7 @@ namespace ProspectingProject
             {
                 message.Bcc.Add(bccAddress);
             }
+            message.Bcc.Add("danie@learnit.co.za");
 
             message.SubjectEncoding = System.Text.Encoding.UTF8;
             message.Subject = subject;

@@ -117,6 +117,7 @@
                     <!-- Create menu items -->
                 </div>
                 <div id="legend" class="ui-widget-content" style="position:absolute;bottom:5px;width:140px;display:none;">
+                    <img id="closepanelbutton3" src="Assets/double-arrow-left.png" style="float: right; padding-right: 5px; cursor: pointer;" />
                     <div style="font-family:Verdana;font-weight:800;padding:5px;text-align:center;font-size:12px">Legend To Icons</div>
                     <hr />
                     <span class="legendCaptionTextStyle">Unfated entities</span>

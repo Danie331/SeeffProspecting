@@ -131,7 +131,7 @@ namespace ProspectingProject
             var contact = ProspectingDomain.SaveContactPerson(contactDataPacket);
 
             int deletedContactDetailsCount = Convert.ToInt32(HttpContext.Current.Session["deleted_item_count"]);
-            if (deletedContactDetailsCount > 20)
+            if (deletedContactDetailsCount > 40)
             {
                 UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
                 if (!user.IsProspectingManager)

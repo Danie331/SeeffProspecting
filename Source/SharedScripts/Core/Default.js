@@ -132,6 +132,28 @@ function togglePanel(actionAfterClosing) {
                 }
             })
     });
+
+    $('#closepanelbutton3').unbind('click').bind('click', function () {
+        $('#legend').css('min-width', '');
+        $('#legend').animate(
+            { width: 'toggle' },
+            {
+                duration: 500,
+                complete: function () {
+
+                    $('#legend').css('min-width', '45%');
+                    if (legendPanelOpen) {
+                        legendPanelOpen = false;
+                        //$('#openpanelbutton3').css('display', 'block');
+                    }
+                    //else {
+                    //    legendPanelOpen = true;
+                    //    $('#openpanelbutton3').css('display', 'none');
+                    //}
+                }
+            }
+        );
+    });
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -620,8 +642,14 @@ function getAgencyId(agencyName) {
 }
 
 function handleSuburbItemSelect() {
-    var checkbox = $(this);
+    var checkbox = $(this);    
     var areaId = checkbox.attr("id").replace('unfated', '').replace('fated', '').replace('seeffcurrentlistings', '');
+
+    if (checkbox.attr("id").indexOf("seeffcurrentlistings") > -1) {
+        $('#forrent_filter').prop('checked', true);
+        $('#forsale_filter').prop('checked', true);
+    }
+
     loadDataForSuburb(areaId, false, true, true);
 }
 
