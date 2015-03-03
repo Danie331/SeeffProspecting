@@ -114,6 +114,7 @@
     <Content Include="AdminDataManager.ashx" />
     <Content Include="AgenciesDataManager.ashx" />
     <Content Include="Assets\general_filter.png" />
+    <Content Include="Assets\legend.png" />
     <Content Include="Assets\legend\2014.png" />
     <Content Include="Assets\legend\agri_key.png" />
     <Content Include="Assets\legend\comm_key.png" />
