@@ -38,6 +38,7 @@ namespace ProspectingProject
         public string SSDoorNo { get; set; }
         public Boolean Prospected { get; set; }
         // Lightstone prop id for this unit?
+        public string SS_UNIQUE_IDENTIFIER { get; set; }
 
         public int? ErfNo { get; set; }
 

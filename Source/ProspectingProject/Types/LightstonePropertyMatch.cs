@@ -34,6 +34,7 @@ namespace ProspectingProject
         public string SS_UnitTo { get; set; }
         public string SS_FH { get; set; }
         public string SS_ID { get; set; }
+        public string SS_UNIQUE_IDENTIFIER { get; set; }
 
         // Farms
         public string FarmName { get; set; }

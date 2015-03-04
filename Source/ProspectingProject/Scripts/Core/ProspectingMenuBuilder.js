@@ -101,7 +101,7 @@ function createLightstoneSearchResultsDiv(results) {
 
         if (result.IsSectionalScheme) {
             var propMatches = result.PropertyMatches;
-            var ssId = propMatches[0].SSName + "_" + propMatches[0].SS_ID;
+            var ssId = propMatches[0].SS_UNIQUE_IDENTIFIER;
             var resultDiv = $("<div id='" + ssId + "' style='border:1px solid;border-radius:3px;cursor:pointer;' />");
             resultDiv.hover(function () { $(this).css('background-color', '#b0c4de'); }, function () { $(this).css('background-color', 'white'); });
             resultDiv.click(function () {

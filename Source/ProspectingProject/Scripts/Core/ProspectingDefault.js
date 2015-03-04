@@ -922,14 +922,9 @@ function buildInfoWindowContentForSS(unit) {
     // Backward compatability: if this identifer is not present then we must revert to using the SSName
     var ssUnits = [];
     ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
-        if (!pp.SS_ID) return false;
-        return pp.SS_ID == unit.SS_ID;
+        if (!pp.SS_UNIQUE_IDENTIFIER) return false;
+        return pp.SS_UNIQUE_IDENTIFIER == unit.SS_UNIQUE_IDENTIFIER;
     });
-    if (ssUnits.length == 0) { // backwards compatibility
-        ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
-            return pp.SSNumber == unit.SSNumber;
-        });
-    }
 
     $.each(ssUnits, function (i, u) {
         if (u.SS_FH == 'FS') u.Unit = 99999999;
@@ -1003,6 +998,7 @@ function updateExistingPropertyFromProperty(existingProp, newProp) {
     existingProp.SSNumber = newProp.SSNumber;
     existingProp.Unit = newProp.Unit;
     existingProp.SS_ID = newProp.SS_ID;
+    existingProp.SS_UNIQUE_IDENTIFIER = newProp.SS_UNIQUE_IDENTIFIER;
     existingProp.SSDoorNo = newProp.SSDoorNo;
     existingProp.Prospected = newProp.Prospected;
     existingProp.ErfNo = newProp.ErfNo;

@@ -14,6 +14,7 @@ namespace ProspectingProject
         public string ErrorMessage { get; set; }
 
         public string SS_ID { get; set; }
+        public string SS_UNIQUE_IDENTIFIER { get; set; }
 
         public int? SeeffAreaId { get; set; }
 
