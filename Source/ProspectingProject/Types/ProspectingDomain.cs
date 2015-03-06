@@ -1276,7 +1276,7 @@ namespace ProspectingProject
 
         private static string CreateSSUniqueId(LightstonePropertyMatch match)
         {
-            if (match.SS_FH == "SS")
+            if (match.SS_FH == "SS" || !string.IsNullOrEmpty(match.SSName) || !string.IsNullOrEmpty(match.SS_ID))
             {
                 string ssName = match.SSName.Replace(" ", "");
                 string lat = match.LatLng.Lat.ToString();
@@ -1329,10 +1329,25 @@ namespace ProspectingProject
             }
 
             // Sectional schemes
-            var ssUnits = matchesForSuburb.Where(ss => !string.IsNullOrEmpty(ss.SS_UNIQUE_IDENTIFIER));
+            var ssUnits = matchesForSuburb.Where(ss => !string.IsNullOrEmpty(ss.SS_ID));
             List<LightstonePropertyMatch> ssMatches = new List<LightstonePropertyMatch>(ssUnits);
             foreach (var ssUnitCollection in ssUnits.GroupBy(ss => ss.SS_ID))
             {
+                    var groupsByLatLng = ssUnitCollection.GroupBy(ss => ss.LatLng);
+                    if (groupsByLatLng.Count() > 1)
+                    {
+                        // Find the exceptional record
+                        var outcastGroup = groupsByLatLng.FirstOrDefault(gr => gr.Count() == 1);
+                        if (outcastGroup != null)
+                        {
+                            // Find a 'normal' unit and apply its lat/lng to the outcast
+                            var normalUnit = groupsByLatLng.FirstOrDefault(gr => gr.Count() > 1).First();
+                            var outcast = outcastGroup.First();
+                            outcast.LatLng = new GeoLocation { Lat = normalUnit.LatLng.Lat, Lng = normalUnit.LatLng.Lng };
+                            outcast.SS_UNIQUE_IDENTIFIER = CreateSSUniqueId(outcast); 
+                        }
+                    }
+
                 string erfNo = ssUnitCollection.First().ErfNo;
                 string ss_id = ssUnitCollection.Key;
                 var unitsToInclude = matchesForSuburb.Where(m => {

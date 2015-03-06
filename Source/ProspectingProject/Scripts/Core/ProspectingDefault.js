@@ -375,7 +375,7 @@ function markerClick() {
     closeInfoWindow();
     $('#propertyInfoDiv').css('display', 'none');
     var marker = $(this)[0];
-    
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Property Info...</p>' });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
@@ -946,6 +946,7 @@ function buildInfoWindowContentForSS(unit) {
 }
 
 function openSSUnitInfo(unit) {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Property Info...</p>' });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
