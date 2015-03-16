@@ -68,6 +68,13 @@
       <Column Name="license_control" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.license_branches" Member="license_branches">
+    <Type Name="license_branch">
+      <Column Name="license_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="branch_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="business_unit_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
   <Function Name="dbo.user_auth" Method="user_auth">
     <Parameter Name="user_guid" Type="System.String" DbType="VarChar(50)" />
     <Parameter Name="session_key" Type="System.Guid" DbType="UniqueIdentifier" />

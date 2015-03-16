@@ -20,6 +20,12 @@
     text-align: left; 
 }
 
+.fieldAlignmentExtraShortWidth {
+    display: inline-block;
+    width: 80px;
+    text-align: left; 
+}
+
 .legendIconStyle {
     display: inline-block;
     width:15px;

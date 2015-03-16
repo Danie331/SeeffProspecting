@@ -132,6 +132,17 @@ function buildGeneralInfoHtml(contact) {
     var companySelect = buildCompanySelectorCombo();
     html.append(companySelect);
 
+    // default to related to.
+    if (currentPersonContact) {
+        html.append("<br />");
+        var addActivityBtn = $("<button type='text' id='contactAddActivity' style='cursor:pointer;display:inline-block;vertical-align:middle'><img src='Assets/add_activity.png' style='display:inline-block;vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>Add Activity</label></button>");
+        html.append(addActivityBtn);
+        addActivityBtn.click(function (e) {
+            e.preventDefault();
+            handleAddActivityFromContact();
+        });
+    }
+
     html.append("<p />");
     var saveBtn = $("<input type='button' id='personGeneralSaveBtn' value='Save..' style='cursor:pointer;' />");
     html.append(saveBtn);
@@ -168,6 +179,7 @@ function buildGeneralInfoHtml(contact) {
             html.prepend("<label style='color:red;font-size:14px;'>This contact has opted out and may not be modified.</label><br />");
             html.find('input').attr('disabled', true);
             html.find('select').prop('disabled', true);
+            html.find('button').prop('disabled', true);
         }
     }
 
@@ -835,11 +847,15 @@ function buildContactDashboard(contacts) {
     container.append(addNewContactBtn);
     addNewContactBtn.click(function () {
         $('#contactsExpander').remove();
-        openExpanderWidget();
         currentPersonContact = null;
+        openExpanderWidget();
     });
 
     return container;
+}
+
+function handleAddActivityFromContact() {
+    loadExistingProspectAddActivity(currentProperty, { RelatedTo: currentPersonContact.ContactPersonId }, null);
 }
 
 function populateContactLookupInfo(infoPacket) {

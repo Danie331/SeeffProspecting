@@ -29,6 +29,9 @@ namespace ProspectingProject.ProspectingUserAuthService {
         private decimal AvailableCreditField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket[] BusinessUnitUsersField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string EmailAddressField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -81,6 +84,19 @@ namespace ProspectingProject.ProspectingUserAuthService {
                 if ((this.AvailableCreditField.Equals(value) != true)) {
                     this.AvailableCreditField = value;
                     this.RaisePropertyChanged("AvailableCredit");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket[] BusinessUnitUsers {
+            get {
+                return this.BusinessUnitUsersField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BusinessUnitUsersField, value) != true)) {
+                    this.BusinessUnitUsersField = value;
+                    this.RaisePropertyChanged("BusinessUnitUsers");
                 }
             }
         }

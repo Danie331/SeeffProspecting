@@ -25,6 +25,7 @@ namespace SeeffProspectingAuthService
                 }
 
                 var userManager = GetProspectingManagerDetails(userGuid);
+                var businessUnitUsers = GetBusinessUnitUsers(userGuid);
                 var userRecord = (from user in boss.user_registrations
                                   where user.user_guid == userGuid.ToString()
                                   select new ProspectingUserAuthPacket
@@ -37,7 +38,8 @@ namespace SeeffProspectingAuthService
                                       EmailAddress = user.user_email_address,
                                       Guid = user.user_guid,
                                       Authenticated = true,
-                                      ManagerDetails = userManager
+                                      ManagerDetails = userManager,
+                                      BusinessUnitUsers = businessUnitUsers
                                   }).FirstOrDefault();
 
                 return userRecord;
@@ -105,6 +107,37 @@ namespace SeeffProspectingAuthService
                 }
 
                 return managerDetails;
+            }
+        }
+
+        private List<ProspectingUserAuthPacket> GetBusinessUnitUsers(Guid userGuid)
+        {
+            using (var boss = new BossDataContext())
+            {
+                List<ProspectingUserAuthPacket> users = new List<ProspectingUserAuthPacket>();
+                var thisUser = boss.user_registrations.First(u => u.user_guid == userGuid.ToString());
+                List<int> branchIds = new List<int>();
+                var licenseBranch = boss.license_branches.First(bu => bu.branch_id == thisUser.branch_id);
+                if (licenseBranch.business_unit_id == null)
+                {
+                    // Get all Then get all the branch id's for license
+                    branchIds = boss.license_branches.Where(lb => lb.license_id == licenseBranch.license_id).Select(b => b.branch_id).ToList();
+                }
+                else
+                {
+                    branchIds = boss.license_branches.Where(lb => lb.business_unit_id == licenseBranch.business_unit_id).Select(b => b.branch_id).ToList();
+                }
+
+                users = (from ur in boss.user_registrations.Where(b => branchIds.Contains(b.branch_id))
+                                                           .Where(b => b.prospecting_areas != null)
+                         select new ProspectingUserAuthPacket
+                         {
+                             UserName = ur.user_preferred_name,
+                             UserSurname = ur.user_surname,
+                             Guid = ur.user_guid
+                         }).Distinct().ToList();
+
+                return users;
             }
         }
     }

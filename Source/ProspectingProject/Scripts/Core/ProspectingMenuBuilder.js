@@ -1,10 +1,14 @@
 ﻿var currentTracePSInfoPacket = null;
 var currentTracePSContactRows = null;
+var activityExpanderWidget = null;
+var activityTypes = null;
+var businessUnitUsers = null;
 
 // Overridden from MenuBuilder.js
-function fixElementHeightForIE(elementId) {
+function fixElementHeightForIE(elementId, percHeight) {
     var maxHeight = $(document).height();
-    var newValue = 0.9 * maxHeight - 100;
+    var percentage = percHeight ? percHeight : 0.9;
+    var newValue = percentage * maxHeight - 100;
     $('#' + elementId).css('height', newValue + 'px');
 }
 
@@ -18,8 +22,9 @@ function createProspectingMenu() {
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Property Notes", "propertynotes", buildPropertyNotesDiv());
+    menuItem = createMenuItem("Activity Report", "activityreport", buildActivityReport(), handleActivityReportClick);
     appendMenuItemContent(menuItem.MenuItemContent);
+    fixElementHeightForIE('contentactivityContainer', 0.8);
     menuItems.push(menuItem);
 
     menuItem = createMenuItem("Lightstone Search", "lightstonesearch", buildSearchMenu());
@@ -27,6 +32,22 @@ function createProspectingMenu() {
     menuItems.push(menuItem);
 
     showMenu("suburbselector");
+}
+
+function handleActivityReportClick() {
+    clearActivityReport();
+    if (currentProperty) {
+        loadExistingProspectAddActivity(currentProperty, null, function () {
+            activityExpanderWidget.open('activityContainer');
+            // Populate related-to
+            $('#relatedToSelect').empty();
+            $('#relatedToSelect').append($("<option />").val(-1).text(''));
+            $.each(currentProperty.Contacts, function (idx, el) {
+                $('#relatedToSelect').append($("<option />").val(el.ContactPersonId).text(el.Firstname + ' ' + el.Surname));
+            });
+            performActivityFiltering();
+        });
+    }
 }
 
 function buildSearchMenu() {
@@ -145,18 +166,226 @@ function createLightstoneSearchResultsDiv(results) {
     });
 }
 
-function buildPropertyNotesDiv(prospectingProperty) {
-    var notesDiv = $("<div id='propertyNotesDiv' class='contentdiv' style='padding-right:10px;display:none;' />");
-    notesDiv.append("Capture comments and notes about this property below:");
-    notesDiv.append("<p/>");    
-    notesDiv.append("<textarea id='propertyNotesCommentsTextArea' style='width:100%;' rows='32'></textarea>");
+function resetActivityFilters() {
+    $('#activityTypeSelect').val(-1);
+    $('#allocatedToSelect').val(-1);
+    $('#relatedToSelect').val(-1);
 
-    notesDiv.append("<p />");
-    var saveBtn = $("<input type='button' id='propertyNotesCommentsSaveBtn' value='Save..' />");
-    notesDiv.append(saveBtn);
-    saveBtn.click(function () { handleSavePropertyNotesComments(); });
+    $('#createdFromDate').val('');
+    $('#createdToDate').val('');
+    $('#followupFromDate').val('');
+    $('#followupToDate').val('');
+}
 
-    return notesDiv;
+function buildActivityReport(prospectingProperty) {
+
+    function buildActivityFilter() {
+        var filterDiv = $("<div />");
+        var activityTypeFilter = $("<label class='fieldAlignment'>Activity Type: </label><select id='activityTypeSelect' />");       
+        var allocatedToFilter = $("<label class='fieldAlignment'>Allocated To: </label><select id='allocatedToSelect' />");        
+        var relatedToFilter = $("<label class='fieldAlignment'>Related To: </label><select id='relatedToSelect' />");        
+
+        var createdDatesdiv = $("<div  />");
+        var createdfrom = $("<label class='fieldAlignment' for='createdFromDate'>Created From: </label><input type='text' id='createdFromDate' />");
+        var createdto = $("<label class='fieldAlignment' for='createdToDate'> To: </label><input type='text' id='createdToDate' />");
+        createdDatesdiv.append(createdfrom).append("<br />").append(createdto);
+        createdfrom.datepicker({ dateFormat: 'DD, d MM yy' });
+        createdto.datepicker({ dateFormat: 'DD, d MM yy' });
+        var createdDatesFilter = createdDatesdiv;
+
+        var followupDatesDiv = $("<div  />");
+        var followfrom = $("<label class='fieldAlignment' for='followupFromDate'>Follow-up Created From: </label><input type='text' id='followupFromDate' />");
+        var followupto = $("<label class='fieldAlignment' for='followupToDate'> To: </label><input type='text' id='followupToDate' />");
+        followupDatesDiv.append(followfrom).append("<br />").append(followupto);
+        followfrom.datepicker({ dateFormat: 'DD, d MM yy' });
+        followupto.datepicker({ dateFormat: 'DD, d MM yy' });
+        var followupDatesFilter = followupDatesDiv;
+
+        filterDiv.append(activityTypeFilter).append("<br />").append(allocatedToFilter).append("<br />").append(relatedToFilter).append("<p />").append(createdDatesdiv).append("<br />").append(followupDatesDiv);
+
+        activityTypeFilter.change(performActivityFiltering);
+        allocatedToFilter.change(performActivityFiltering);
+        relatedToFilter.change(performActivityFiltering);
+        createdfrom.change(performActivityFiltering);
+        createdto.change(performActivityFiltering);
+        followfrom.change(performActivityFiltering);
+        followupto.change(performActivityFiltering);
+
+        return filterDiv;
+    }
+
+    function buildActivityContainer() {
+        var activityFilterContent = $("<div id='activityContent' /> ");
+        return activityFilterContent;
+    }
+   
+    $('#activityFilter').empty();
+    var activityFilter = buildContentExpanderItem('activityFilter', '', "Activity Filter", buildActivityFilter());
+    $('#activityContainer').empty();
+    var activityContainer = buildContentExpanderItem('activityContainer', '', "Activity Report", buildActivityContainer());
+
+    activityExpanderWidget = new ContentExpanderWidget('#contentarea', [activityFilter, activityContainer], "activitiesExpander");
+    var activitiesOuterDiv = $("<div class='contentdiv' id='activitiesOuterDiv' />");
+    activitiesOuterDiv.empty();
+    activitiesOuterDiv.append(activityExpanderWidget.construct());
+    //activityExpanderWidget.setExpandable('activityContainer', false);
+
+    return activitiesOuterDiv;
+}
+
+// This function always targets the ActivityBundle of the current property
+function performActivityFiltering() {
+    $('#activitiesExpander').css('display', 'block');
+
+    if (activityTypes == null || businessUnitUsers == null) {
+        loadActivityLookupData(function (lookupData) {
+            activityTypes = lookupData.ActivityTypes;
+            businessUnitUsers = lookupData.BusinessUnitUsers;
+
+            // Populate activities
+            $('#activityTypeSelect').append($("<option />").val(-1).text(''));
+            $.each(activityTypes, function (idx, el) {
+                $('#activityTypeSelect').append($("<option />").val(el.Key).text(el.Value));
+            });
+
+            // Populate Allocated To
+            $('#allocatedToSelect').append($("<option />").val(-1).text(''));
+            $.each(businessUnitUsers, function (idx, el) {
+                $('#allocatedToSelect').append($("<option />").val(el.UserGuid).text(el.UserName + " " + el.UserSurname));
+            });
+        });
+    }
+
+    var activityTypeFilter = $('#activityTypeSelect').val();
+    var allocatedToFilter = $('#allocatedToSelect').val();
+    var relatedToFilter = $('#relatedToSelect').val();
+    var dateCreatedFrom = $('#createdFromDate').val();
+    var dateCreatedTo = $('#createdToDate').val();
+    var followupDateFrom = $('#followupFromDate').val();
+    var followupDateTo = $('#followupToDate').val();
+
+    var activities = currentProperty.ActivityBundle.Activities;
+    // Perform filtering
+    activities = $.grep(activities, function (act) {
+        var meetsCriteria = true;
+        if (activityTypeFilter != null && activityTypeFilter != -1) {
+            meetsCriteria = act.ActivityTypeId == activityTypeFilter;
+            if (!meetsCriteria) return false;
+        }
+
+        if (allocatedToFilter != null && allocatedToFilter != -1) {
+            meetsCriteria = act.AllocatedTo == allocatedToFilter;
+            if (!meetsCriteria) return false;
+        }
+
+        if (relatedToFilter != null && relatedToFilter != -1) {
+            meetsCriteria = act.ContactPersonId == relatedToFilter;
+            if (!meetsCriteria) return false;
+        }
+
+        if (dateCreatedFrom != null && dateCreatedFrom != '') {
+            meetsCriteria = new Date(act.CreatedDate) >= new Date(dateCreatedFrom);
+            if (!meetsCriteria) return false;
+        }
+
+        if (dateCreatedTo != null && dateCreatedTo != '') {
+            var d2 = new Date(dateCreatedTo);
+            meetsCriteria = new Date(act.CreatedDate) <= d2;
+            if (!meetsCriteria) return false;
+        }
+
+        if (followupDateFrom != null && followupDateFrom != '') {
+            meetsCriteria = new Date(act.FollowUpDate) >= new Date(followupDateFrom);
+            if (!meetsCriteria) return false;
+        }
+
+        if (followupDateTo != null && followupDateTo != '') {
+            meetsCriteria = new Date(act.FollowUpDate) <= new Date(followupDateTo);
+            if (!meetsCriteria) return false;
+        }
+
+        return meetsCriteria;
+    });
+
+    // Begin rendering
+    var activityReportContainer = $('#activityContent');
+    activityReportContainer.empty();
+    var addActivityBtn = $("<button type='text' id='addActivityFromActivityReport' style='cursor:pointer;display:inline-block;vertical-align:middle'><img src='Assets/add_activity.png' style='display:inline-block;vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>Add Activity</label></button>");
+    activityReportContainer.append(addActivityBtn);
+    addActivityBtn.click(function (e) {
+        e.preventDefault();
+        showDialogAddActivity({ ActivityTypes: activityTypes, BusinessUnitUsers: businessUnitUsers, PropertyContacts: currentProperty.Contacts }, null, function () {
+            loadExistingProspectAddActivity(currentProperty, null, function () {
+                activityExpanderWidget.open('activityContainer');
+                // Populate related-to
+                $('#relatedToSelect').empty();
+                $('#relatedToSelect').append($("<option />").val(-1).text(''));
+                $.each(currentProperty.Contacts, function (idx, el) {
+                    $('#relatedToSelect').append($("<option />").val(el.ContactPersonId).text(el.Firstname + ' ' + el.Surname));
+                });
+                performActivityFiltering();
+            });
+        });
+    });
+    activityReportContainer.append("<p />");
+
+    $.each(activities, function (idx, activity) {
+        var formattedActivity = buildActivityDisplayItem(activity);
+        activityReportContainer.append(formattedActivity);
+        activityReportContainer.append("<hr />");
+    });
+
+    function buildActivityDisplayItem(activity) {
+
+        function formatLabelValue(label, value) {
+            var container = $("<div style='padding:5px' />");
+            if (value == null) value = "n/a";
+
+            var isDate = new Date(value) !== "Invalid Date" && !isNaN(new Date(value)) ? true : false;
+            if (isDate) {
+                value = value.substring(0,10);
+            }
+            value = value.replace(/\n/g, '<br />');
+            
+            if (label !== '') label = label + ": ";
+            container.append(label).append(value);
+            return container[0].outerHTML;
+        }
+
+        var containerDiv = $("<div />");
+
+        var activityAndFollowupContainer = $("<div id='activityAndFollowupContainer' style='border: 1px solid white !important;background-color:#F0E68C;' />");
+        var activityType = $("<div style='width:50%;display:inline-block;float:left;'>" + formatLabelValue('Activity Type', activity.ActivityType) + " </div>");
+        var followupDate = $("<div style='width:50%;display:inline-block;'>" + formatLabelValue('Follow-up Date', activity.FollowUpDate) + " </div>");
+        activityAndFollowupContainer.append(activityType).append(followupDate);
+
+        var comment = $("<div style='display:block;background-color:#F0E68C;border: 1px solid white !important;'>" + formatLabelValue('', activity.Comment) + " </div>");
+
+        var createdDateCreatedByContainer = $("<div id='createdDateCreatedByContainer' style='border:1px solid white !important;background-color:#F0E68C;' />");
+        var createdDate = $("<div style='width:50%;display:inline-block;float:left;'>" + formatLabelValue('Created', activity.CreatedDate) + " </div>");
+        var createdBy = $("<div style='width:50%;display:inline-block;'>" + formatLabelValue('Created By', activity.CreatedBy) + " </div>");
+        createdDateCreatedByContainer.append(createdDate).append(createdBy);
+
+        var allocatedTo = $("<div style='display:block;background-color:#F0E68C;border:1px solid white;'>" + formatLabelValue('Allocated To', activity.AllocatedToName) + " </div>");
+
+        var contactPersonName = "n/a"; 
+        if (activity.ContactPersonId) {
+            var pp = $.grep(currentProperty.Contacts, function (pers) {
+                return pers.ContactPersonId == activity.ContactPersonId;
+            });
+
+            if (pp.length > 0) contactPersonName = pp[0].Firstname + ' ' + pp[0].Surname;
+        }
+        var relatedTo = $("<div style='display:block;background-color:#F0E68C;border:1px solid white;'>" + formatLabelValue('Related To', contactPersonName) + " </div>");
+
+        containerDiv.append(activityAndFollowupContainer);
+        containerDiv.append(comment);
+        containerDiv.append(createdDateCreatedByContainer);
+        containerDiv.append(allocatedTo);
+        containerDiv.append(relatedTo);
+
+        return containerDiv;
+    }
 }
 
 function buildContactDetailsDiv() {

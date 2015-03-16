@@ -35,5 +35,8 @@ namespace SeeffProspectingAuthService
 
         [DataMember]
         public List<ProspectingUserAuthPacket> ManagerDetails { get; set; }
+
+        [DataMember]
+        public List<ProspectingUserAuthPacket> BusinessUnitUsers { get; set; }
     }
 }

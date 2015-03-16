@@ -8,7 +8,7 @@
      <title>Seeff Prospecting</title>
 
     <%-- Jquery --%>
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="http://malsup.github.io/jquery.blockUI.js"></script>
@@ -162,6 +162,7 @@
         </div>        
         <div class="context-menu-map box menu-1"></div>
         <div class="context-menu-prospect box menu-1"></div>
+        <div class="context-menu-rightclick-property box menu-1"></div>
         <div id="itemSavedDialogSplash" style="display: none;">
             <span id="itemSavedSplashText">Changes saved!</span>
         </div>
@@ -174,6 +175,7 @@
         <div id="userIsCompromisedDialog" title="System warning" style="display:none;font-family:Verdana;font-size:12px;">
             <div id="userIsCompromisedContent"></div>
         </div>
+        <div id="addActivityDialog" title="Add Activity To Property" style="display:none;font-family:Verdana;font-size:12px;"></div>
         <div id="errorDialog" title="Error Message" class="errorDialog"> 
             <label id="errorDialogText"></label>
         </div>

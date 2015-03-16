@@ -93,6 +93,7 @@
 .context-menu-item.icon-save_changes { background-image: url(../../Assets/save_changes.png); }
 .context-menu-item.icon-remove_poly { background-image: url(../../Assets/remove_poly.png); }
 .context-menu-item.icon-lightstone {background-image: url(../../Assets/lightstone.png);}
+.context-menu-item.icon-add_activity {background-image: url(../../Assets/add_activity.png);}
 .context-menu-item.icon-google {background-image: url(../../Assets/google.png);}
 .context-menu-item.icon-capture {background-image: url(../../Assets/capture_address.png);}
 

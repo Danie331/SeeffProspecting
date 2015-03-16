@@ -73,6 +73,14 @@ namespace SeeffProspectingAuthService
 			}
 		}
 		
+		public System.Data.Linq.Table<license_branch> license_branches
+		{
+			get
+			{
+				return this.GetTable<license_branch>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.user_auth")]
 		public int user_auth([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string user_guid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="UniqueIdentifier")] System.Nullable<System.Guid> session_key, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string app)
 		{
@@ -1657,6 +1665,69 @@ namespace SeeffProspectingAuthService
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.license_branches")]
+	public partial class license_branch
+	{
+		
+		private int _license_id;
+		
+		private int _branch_id;
+		
+		private System.Nullable<int> _business_unit_id;
+		
+		public license_branch()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_license_id", DbType="Int NOT NULL")]
+		public int license_id
+		{
+			get
+			{
+				return this._license_id;
+			}
+			set
+			{
+				if ((this._license_id != value))
+				{
+					this._license_id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_branch_id", DbType="Int NOT NULL")]
+		public int branch_id
+		{
+			get
+			{
+				return this._branch_id;
+			}
+			set
+			{
+				if ((this._branch_id != value))
+				{
+					this._branch_id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_business_unit_id", DbType="Int")]
+		public System.Nullable<int> business_unit_id
+		{
+			get
+			{
+				return this._business_unit_id;
+			}
+			set
+			{
+				if ((this._business_unit_id != value))
+				{
+					this._business_unit_id = value;
+				}
 			}
 		}
 	}

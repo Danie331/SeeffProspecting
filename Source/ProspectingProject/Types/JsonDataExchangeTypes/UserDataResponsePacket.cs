@@ -18,5 +18,7 @@ namespace ProspectingProject
         public string EmailAddress { get; set; }
 
         public UserDataResponsePacket ProspectingManager { get; set; }
+
+        public List<UserDataResponsePacket> BusinessUnitUsers { get; set; }
     }
 }

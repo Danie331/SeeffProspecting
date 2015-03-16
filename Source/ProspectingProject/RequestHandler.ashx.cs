@@ -71,7 +71,26 @@ namespace ProspectingProject
                 case "update_prospected_flag":
                     UpdateProspectedStatus(json);
                     break;
+                case "save_activity":
+                    SaveActivity(json);
+                    break;
+                case "load_activity_lookup_data":
+                    var activityLookupData = GetActivityLookupData();
+                    context.Response.Write(activityLookupData);
+                    break;
             }
+        }
+
+        private string GetActivityLookupData()
+        {
+            var results = ProspectingDomain.GetActivityLookupData();
+            return ProspectingDomain.SerializeToJsonWithDefaults(results);
+        }
+
+        private void SaveActivity(string json)
+        {
+            ProspectingActivity act = ProspectingDomain.Deserialise<ProspectingActivity>(json);
+            ProspectingDomain.UpdateInsertActivity(act);
         }
 
         private void UpdateProspectedStatus(string json)

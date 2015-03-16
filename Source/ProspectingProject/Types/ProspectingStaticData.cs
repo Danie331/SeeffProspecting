@@ -21,6 +21,7 @@ namespace ProspectingProject
         public static List<KeyValuePair<int, string>> ContactPhoneTypes { get; set; }
         public static List<KeyValuePair<int, string>> IntlDialingCodes { get; set; }
         public static List<KeyValuePair<int, string>> PersonCompanyRelationshipTypes { get; set; }
+        public static List<KeyValuePair<int, string>> ActivityTypes { get; set; }
 
         public static IEnumerable<int> PhoneTypeIds { get; private set; }
         public static IEnumerable<int> EmailTypeIds { get; private set; }
@@ -39,6 +40,7 @@ namespace ProspectingProject
             LoadIntlDialingCodes();
             LoadCompanyPropertyRelationshipTypes();
             LoadPersonCompanyRelationshipTypes();
+            LoadActivityTypes();
 
             PhoneTypeIds = ProspectingStaticData.ContactPhoneTypes.Select(k => k.Key);
             EmailTypeIds = ProspectingStaticData.ContactEmailTypes.Select(k => k.Key);
@@ -137,6 +139,15 @@ namespace ProspectingProject
                                                                              IntDialingCode = det.intl_dialing_code_id,
                                                                              EleventhDigit = det.eleventh_digit
                                                                          }));
+        }
+
+        private static void LoadActivityTypes()
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                ActivityTypes = (from item in prospecting.activity_types
+                                 select new KeyValuePair<int, string>(item.activity_type_id, item.activity_name)).ToList();
+            }
         }
 
         private static void LoadPersonCompanyRelationshipTypes()

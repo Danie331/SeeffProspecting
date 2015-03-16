@@ -8,5 +8,7 @@ namespace ProspectingProject
     public class ProspectingPropertyId
     {
         public int LightstonePropertyId { get; set; }
+
+        public bool LoadActivities { get; set; }
     }
 }

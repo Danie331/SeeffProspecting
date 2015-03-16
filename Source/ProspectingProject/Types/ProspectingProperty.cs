@@ -49,6 +49,8 @@ namespace ProspectingProject
 
         public string CreateError { get; set; } // Holds information on whether there was a problem creating this prospect 
 
+        public ActivityBundle ActivityBundle { get; set; }
+
         public bool Equals(ProspectingProperty x, ProspectingProperty y)
         {
             if (x == null || y == null)

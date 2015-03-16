@@ -67,7 +67,7 @@ namespace ProspectingProject
             }
         }      
 
-        private static ProspectingProperty CreateProspectingProperty(ProspectingDataContext prospectingContext, prospecting_property prospectingRecord, bool loadContactsAndCompanies, bool loadOwnedProperties)
+        private static ProspectingProperty CreateProspectingProperty(ProspectingDataContext prospectingContext, prospecting_property prospectingRecord, bool loadContactsAndCompanies, bool loadOwnedProperties, bool loadActivities)
         {
             var latLng = new GeoLocation { Lat= prospectingRecord.latitude.Value, Lng = prospectingRecord.longitude.Value};
             ProspectingProperty prop = new ProspectingProperty
@@ -111,7 +111,59 @@ namespace ProspectingProject
                 prop.ContactCompanies = LoadContactCompanies(prospectingContext, prospectingRecord);
             }
 
+            if (loadActivities)
+            {
+                prop.ActivityBundle = LoadProspectingActivities(prospectingContext, prop.LightstonePropertyId);
+            }
+
             return prop;
+        }
+
+        private static ActivityBundle LoadProspectingActivities(ProspectingDataContext prospectingContext, int? lightstonePropertyId)
+        {
+            ActivityBundle activityBundle = new ActivityBundle();
+                        UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+            activityBundle.BusinessUnitUsers = user.BusinessUnitUsers;
+            activityBundle.ActivityTypes = ProspectingStaticData.ActivityTypes;
+
+            var allActivities = prospectingContext.activity_logs.Where(a => a.lightstone_property_id == lightstonePropertyId);
+            foreach (var activity in allActivities)
+            {
+                var createdByUser = user.BusinessUnitUsers.FirstOrDefault(b => b.UserGuid == activity.created_by);
+                string createdBy = createdByUser != null && createdByUser.UserGuid != Guid.Empty ? createdByUser.UserName + " " + createdByUser.UserSurname : "System";
+                var allocatedToUser = user.BusinessUnitUsers.FirstOrDefault(b => b.UserGuid == activity.allocated_to);
+                string allocatedToName = allocatedToUser != null ? allocatedToUser.UserName + " " + allocatedToUser.UserSurname : "n/a";
+                ProspectingActivity act = new ProspectingActivity
+                {
+                    ActivityLogId = activity.activity_log_id,
+                    LightstonePropertyId = activity.lightstone_property_id,
+                    FollowUpDate = activity.followup_date,
+                    AllocatedTo = activity.allocated_to,
+                    AllocatedToName = allocatedToName,
+                    ActivityTypeId = activity.activity_type_id,
+                    ActivityType = prospectingContext.activity_types.First(t => t.activity_type_id == activity.activity_type_id).activity_name,
+                    Comment = activity.comment,
+                    CreatedByGuid = activity.created_by,
+                    CreatedBy = createdBy,
+                    CreatedDate = activity.created_date,
+                    ContactPersonId = activity.contact_person_id,
+                    DeletedBy = activity.deleted_by,
+                    DeletedDate = activity.delete_date,
+                    Deleted = activity.deleted,
+                    ParentActivityId = activity.parent_activity_id,
+                    SmsTemplateId = activity.sms_template_id,
+                    SmsSent = activity.sms_sent,
+                    EmailTemplateId = activity.email_template_id,
+                    EmailSent = activity.email_sent,
+                    PhoneCall = activity.phone_call,
+                    Visit = activity.visit
+                };
+                activityBundle.Activities.Add(act);
+            }
+
+            activityBundle.Activities = activityBundle.Activities.OrderByDescending(o => o.CreatedDate).ToList();
+
+            return activityBundle;
         }
 
         private static ProspectingProperty LoadProspectingProperty(prospecting_property prospectingRecord, bool loadOwnedProperties)
@@ -315,7 +367,7 @@ namespace ProspectingProject
                 int areaId = recordToCreate.SeeffAreaId.HasValue ? recordToCreate.SeeffAreaId.Value : prospecting.find_area_id(standaloneUnit.LatLng.Lat, standaloneUnit.LatLng.Lng, "R", null);
                 var newPropRecord = new prospecting_property
                 {
-                    lightstone_property_id = standaloneUnit.LightstonePropId,
+                    lightstone_property_id = standaloneUnit.LightstonePropId.Value,
                     latitude = standaloneUnit.LatLng.Lat,
                     longitude = standaloneUnit.LatLng.Lng,
                     property_address = string.Concat(standaloneUnit.StreetName + ", " + standaloneUnit.Suburb + ", " + standaloneUnit.City),
@@ -370,7 +422,7 @@ namespace ProspectingProject
                     }
                 }
 
-                var property = CreateProspectingProperty(prospecting, newPropRecord, true, true);
+                var property = CreateProspectingProperty(prospecting, newPropRecord, true, true, false);
                 recordToCreate.SeeffAreaId = property.SeeffAreaId = areaId;
                 return property;
             }
@@ -552,7 +604,15 @@ namespace ProspectingProject
                         IsProspectingManager = true,
                         EmailAddress = userAuthPacket.ManagerDetails.First().EmailAddress,
                         UserName = userAuthPacket.ManagerDetails.First().UserName
-                    }
+                    },
+                    BusinessUnitUsers = new List<UserDataResponsePacket>(
+                        from bu in userAuthPacket.BusinessUnitUsers
+                        select new UserDataResponsePacket
+                        {
+                             UserGuid = Guid.Parse(bu.Guid),
+                             UserName = bu.UserName,
+                             UserSurname = bu.UserSurname
+                        })
                 };
             }
         }
@@ -969,7 +1029,7 @@ namespace ProspectingProject
                         }
                         using (var prospecting = new ProspectingDataContext())
                         {
-                            List<int?> existingLightstoneProps = prospecting.prospecting_properties.Select(p => p.lightstone_property_id).ToList();
+                            List<int> existingLightstoneProps = prospecting.prospecting_properties.Select(p => p.lightstone_property_id).ToList();
                             foreach (DataRow row in dataRowCollection)
                             {
                                 AddLightstonePropertyRow(row, matches, existingLightstoneProps);
@@ -1129,7 +1189,7 @@ namespace ProspectingProject
                 {
                     if (!prospectables.Any(p => p.LightstonePropertyId == prospectable.lightstone_property_id))
                     {
-                        ProspectingProperty prop = CreateProspectingProperty(prospectingDB, prospectable, false, false);
+                        ProspectingProperty prop = CreateProspectingProperty(prospectingDB, prospectable, false, false,false);
                         prospectables.Add(prop);
                     }
                 }
@@ -1182,7 +1242,7 @@ namespace ProspectingProject
                 {
                     using (var prospecting = new ProspectingDataContext())
                     {
-                        List<int?> existingLightstoneProps = prospecting.prospecting_properties.Select(p => p.lightstone_property_id).ToList();
+                        List<int> existingLightstoneProps = prospecting.prospecting_properties.Select(p => p.lightstone_property_id).ToList();
                         foreach (DataRow row in result.Tables[1].Rows)
                         {
                             AddLightstonePropertyRow(row, matches, existingLightstoneProps);
@@ -1208,7 +1268,7 @@ namespace ProspectingProject
             catch { return null; }
         }
 
-        private static void AddLightstonePropertyRow(DataRow row, List<LightstonePropertyMatch> matches, List<int?> existingLightstoneProperties)
+        private static void AddLightstonePropertyRow(DataRow row, List<LightstonePropertyMatch> matches, List<int> existingLightstoneProperties)
         {
             int lightstonePropId = Convert.ToInt32(row["PROP_ID"]);
             // Try find an item in the list with same prop id in order to add another Owner to prop.
@@ -1691,7 +1751,7 @@ namespace ProspectingProject
 
             using (var prospecting = new ProspectingDataContext())
             {
-                prospecting.CommandTimeout = 3 * 60;
+                prospecting.CommandTimeout = 4 * 60;
 
                 int areaId = sectionalTitle.SeeffAreaId.HasValue ? sectionalTitle.SeeffAreaId.Value : prospecting.find_area_id(latLng.Lat, latLng.Lng, "R", null);
 
@@ -1706,7 +1766,7 @@ namespace ProspectingProject
                     if (sectionalTitle.PropertyMatches.Count < result.Tables[1].Rows.Count)
                     {
                         List<LightstonePropertyMatch> matches = new List<LightstonePropertyMatch>();
-                        List<int?> existingLightstoneProps = prospecting.prospecting_properties.Select(p => p.lightstone_property_id).ToList();
+                        List<int> existingLightstoneProps = prospecting.prospecting_properties.Select(p => p.lightstone_property_id).ToList();
                         // This means we must create the sectional title from scratch
                         foreach (DataRow row in result.Tables[1].Rows)
                         {
@@ -1722,7 +1782,7 @@ namespace ProspectingProject
                 {
                     var newPropRecord = new prospecting_property
                     {
-                        lightstone_property_id = unit.LightstonePropId,// dataPacket.LightstoneId,
+                        lightstone_property_id = unit.LightstonePropId.Value,// dataPacket.LightstoneId,
                         latitude = unit.LatLng.Lat,// dataPacket.LatLng.Lat,
                         longitude = unit.LatLng.Lng,
                         property_address = string.Concat(unit.StreetName + ", " + unit.Suburb + ", " + unit.City),// dataPacket.PropertyAddress,
@@ -1776,7 +1836,7 @@ namespace ProspectingProject
                         }
                     }
 
-                    var property = CreateProspectingProperty(prospecting, newPropRecord, false, false);
+                    var property = CreateProspectingProperty(prospecting, newPropRecord, false, false, false);
                     sectionalTitle.SeeffAreaId = property.SeeffAreaId = areaId;
                     units.Add(property);
                 }
@@ -1792,7 +1852,8 @@ namespace ProspectingProject
                 int lightstoneId = dataPacket.LightstonePropertyId;
                 var propRecord = prospectingDB.prospecting_properties.First(pp => pp.lightstone_property_id == lightstoneId);
 
-                return CreateProspectingProperty(prospectingDB, propRecord, true, true);
+                ProspectingProperty property = CreateProspectingProperty(prospectingDB, propRecord, true, true, dataPacket.LoadActivities);
+                return property;
             }
         }
 
@@ -1944,6 +2005,52 @@ namespace ProspectingProject
             {
                 // Add logging code later.
             }
+        }
+
+        public static void UpdateInsertActivity(ProspectingActivity act)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                if (act.IsForInsert)
+                {
+                    var currentUser = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+                    activity_log activityRecord = new activity_log
+                    {
+                         lightstone_property_id = act.LightstonePropertyId,
+                         followup_date = act.FollowUpDate,
+                         allocated_to = act.AllocatedTo,
+                         activity_type_id = act.ActivityTypeId,
+                         comment = act.Comment,
+                         created_by = currentUser.UserGuid,
+                         created_date = DateTime.Now,
+                         contact_person_id = act.ContactPersonId
+                         // Add the rest later
+                    };
+                    prospecting.activity_logs.InsertOnSubmit(activityRecord);
+                }
+                else if (act.IsForUpdate)
+                {
+                    var activityForUpdate = prospecting.activity_logs.First(ac => ac.activity_log_id == act.ActivityLogId);
+                    activityForUpdate.followup_date = act.FollowUpDate;
+                    activityForUpdate.allocated_to = act.AllocatedTo;
+                    activityForUpdate.activity_type_id = act.ActivityTypeId;
+                    activityForUpdate.comment = act.Comment;
+                    activityForUpdate.contact_person_id = act.ContactPersonId;
+                    // Add the rest later
+                }
+                prospecting.SubmitChanges();
+            }
+        }
+
+        public static ActivityBundle GetActivityLookupData()
+        {
+            ActivityBundle activityBundle = new ActivityBundle();
+
+            UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+            activityBundle.BusinessUnitUsers = user.BusinessUnitUsers;
+            activityBundle.ActivityTypes = ProspectingStaticData.ActivityTypes;
+
+            return activityBundle;
         }
     }
 }

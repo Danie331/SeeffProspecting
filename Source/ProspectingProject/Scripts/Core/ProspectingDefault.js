@@ -21,6 +21,9 @@ var currentClickLatLng = null;
 // Stores a reference to the current suburb
 var currentSuburb = null;
 
+// Currently right-clicked marker
+var rightClickedProperty = null;
+
 function initEventHandlers() {
     $.contextMenu({
         selector: '.context-menu-prospect',
@@ -40,6 +43,30 @@ function initEventHandlers() {
             };
         }
     });
+
+    $.contextMenu({
+        selector: '.context-menu-rightclick-property',
+        build: function ($trigger, e) {
+            return {
+                callback: function (key, options) {
+                    switch (key) {
+                        case "Add Activity":
+                            handlePropertyRightClick();
+                            break;
+                    }
+                },
+                items: { "Add Activity": { name: "Add Activity", icon: "add_activity" } }
+            };
+        }
+    });
+}
+
+function handlePropertyRightClick() {
+    if (rightClickedProperty != null) {
+        loadExistingProspectAddActivity(rightClickedProperty, null, null);
+    }
+    
+    rightClickedProperty = null;
 }
 
 function showPopupAtLocation(loc, contentHtml) {
@@ -211,6 +238,7 @@ function createProspectingEntities(selectedEntities, callbackSuccess, callbackFa
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
+        timeout: 240000,
         data: JSON.stringify(inputData)
     })
         .done(function (data) {
@@ -329,7 +357,7 @@ function setCurrentMarker(suburb, property) {
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", LightstonePropertyId: property.LightstonePropertyId }),
+        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", LightstonePropertyId: property.LightstonePropertyId,LoadActivities: false }),
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
@@ -379,7 +407,7 @@ function markerClick() {
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", LightstonePropertyId: marker.ProspectingProperty.LightstonePropertyId }),
+        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", LightstonePropertyId: marker.ProspectingProperty.LightstonePropertyId, LoadActivities: false }),
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
@@ -400,7 +428,199 @@ function markerClick() {
         },
         dataType: "json"
     });
+}
 
+/// NB property input must either be FH or a unit of a SS
+function loadExistingProspectAddActivity(property, defaultSelection, callbackFunction) {
+    //closeInfoWindow();
+    $('#propertyInfoDiv').css('display', 'none');
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", LightstonePropertyId: property.LightstonePropertyId, LoadActivities: true }),
+        success: function (data, textStatus, jqXHR) {
+            $.unblockUI();
+            if (textStatus == "success" && data) {
+                if (data.ErrorMsg && data.ErrorMsg.length > 0) {
+                    alert(data.ErrorMsg);
+                }
+
+                var activityBundle = data.ActivityBundle;
+                activityBundle.PropertyContacts = data.Contacts;
+
+                updateExistingPropertyFromProperty(property, data);
+                currentMarker = property.Marker;
+                currentProperty = property;
+                updateOwnerDetailsEditor();
+                //updatePropertyInfoMenu();  // NB CHECK THIS
+
+                if (callbackFunction) {
+                    callbackFunction(activityBundle);
+                } else {
+                    if (currentProperty.SS_FH != 'SS' && currentProperty.SS_FH != 'FS') {
+                        openInfoWindow(property.Marker, function () {
+                            // openInfoWindow calls closeInfoWindow which resets a whole bunch of globals, so re-init them here
+                            currentProperty = property;
+                            currentMarker = property.Marker;
+                            updateOwnerDetailsEditor();
+
+                            if (currentProperty.Contacts.length || currentProperty.ContactCompanies.length) {
+                                showMenu("contactdetails");                                
+                            }
+                        });
+                    }
+
+                    if (defaultSelection && defaultSelection.RelatedTo != null) {
+                        currentPersonContact = $.grep(currentProperty.Contacts, function (c) {
+                            return c.ContactPersonId == defaultSelection.RelatedTo;
+                        })[0];
+                        openExpanderWidget(currentPersonContact);
+                    }
+                    showDialogAddActivity(activityBundle, defaultSelection);
+                }
+            } else {
+                alert('Could not complete request.');
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.status);
+            alert(jqXHR.responseText);
+        },
+        dataType: "json"
+    });
+}
+
+function showDialogAddActivity(inputPacket, defaultSelection, callback) {
+    var div = $('#addActivityDialog');
+    div.empty();
+    div.append("<p /><p />");
+    div.append("<label class='fieldAlignmentShortWidth' for='activityInput'>Activity</label>");
+    var activity = $("<select id='activityInput' style='width:300px;' /><p style='margin:6px;' />");
+    div.append(activity);
+    div.append("<label class='fieldAlignmentShortWidth' for='allocatedToInput'>Allocated To</label>");
+    var allocatedTo = $("<select id='allocatedToInput' style='width:300px;' /><p style='margin:6px;' />");
+    div.append(allocatedTo);
+    div.append("<label class='fieldAlignmentShortWidth' for='followupDateInput'>Follow-up Date</label>");
+    var followupDate = $("<input type='text' name='followupDateInput' id='followupDateInput' style='height:12px;font-size:12px;width:295px;' /><p style='margin:6px;' />");
+    div.append(followupDate);
+    followupDate.datepicker({ dateFormat: 'DD, d MM yy', minDate: 0 });
+    div.append("<label class='fieldAlignmentShortWidth' for='relatedToInput'>Related To</label>");
+    var relatedTo = $("<select id='relatedToInput' style='width:300px;' /><p style='margin:6px;' />");
+    div.append(relatedTo);
+    div.append("<label for='commentInput'>Comment</label><p />");
+    var comment = $("<textarea id='commentText' rows='8' style='width:98%;' />");
+    div.append(comment);
+
+    var buttonsDiv = $("<div style='float:right' />");
+    var saveButton = $("<input type='button' id='saveActivityBtn' value='Save and close' style='margin:5px;cursor:pointer' />");
+    buttonsDiv.append(saveButton);
+    div.append(buttonsDiv);
+
+    populateDropdowns();
+    setDefaults();
+    
+    div.dialog({
+        show: 'fade',
+        position: ['center', 'center'],
+        hide: { effect: "fadeOut", duration: 500 },
+        width: 'auto',
+        height: 'auto',
+        resizable: false,
+        open: function (event, ui) {
+            saveButton.click(function () {
+                if (validateInputs()) {
+                    saveActivity();
+                } else {
+                    alert('Please select an Activity type to save');
+                }
+            });
+        },
+        modal: true
+    });
+
+    function populateDropdowns() {
+
+        // Populate activities
+        $('#activityInput').append($("<option />").val(-1).text(''));
+        $.each(inputPacket.ActivityTypes, function (idx, el) {
+            $('#activityInput').append($("<option />").val(el.Key).text(el.Value));
+        });
+
+        // Populate Allocated To
+        $('#allocatedToInput').append($("<option />").val(-1).text(''));
+        $.each(inputPacket.BusinessUnitUsers, function (idx, el) {
+            $('#allocatedToInput').append($("<option />").val(el.UserGuid).text(el.UserName + " " + el.UserSurname));
+        });
+
+        // Populate related-to
+        $('#relatedToInput').append($("<option />").val(-1).text(''));
+        $.each(inputPacket.PropertyContacts, function (idx, el) {
+            $('#relatedToInput').append($("<option />").val(el.ContactPersonId).text(el.Firstname + ' ' + el.Surname));
+        });
+    }
+
+    function setDefaults() {
+        if (defaultSelection) {
+            if (defaultSelection.RelatedTo) {
+                $('#relatedToInput').val(defaultSelection.RelatedTo);
+            }
+        }
+    }
+
+    function validateInputs() {
+        var activityValue = activity.val();
+        return activityValue != null && activityValue != '-1';
+    }
+
+    function saveActivity() {
+        
+        var activityType = $('#activityInput').val();
+        var allocatedTo = $('#allocatedToInput').val();
+        var followupDate = $('#followupDateInput').val();
+        var relatedTo = $('#relatedToInput').val();
+        var comment = $('#commentText').val();
+
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify({
+                Instruction: "save_activity",
+                IsForInsert: true,
+                LightstonePropertyId: currentProperty.LightstonePropertyId,
+                ActivityTypeId: activityType,
+                AllocatedTo: allocatedTo != '-1' ? allocatedTo : null,
+                FollowupDate: followupDate != '' ? followupDate : null,
+                ContactPersonId: relatedTo != '-1' ? relatedTo : null,
+                Comment: comment != '' ? comment : null
+            }),
+            success: function (data, textStatus, jqXHR) {
+                $('#addActivityDialog').dialog('close');
+                if (callback) {
+                    callback();
+                }
+                showSavedSplashDialog("Activity Saved!"); // + test against SS
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.status);
+                alert(jqXHR.responseText);
+            },
+            dataType: "json"
+        });
+    }
+}
+
+function markerRightClick(event) {
+    // Find the marker underneath the click
+    var marker = $(this)[0];
+    rightClickedProperty = null;
+    if (marker.ProspectingProperty.SS_FH != 'SS' && marker.ProspectingProperty.SS_FH != 'FS') {
+        rightClickedProperty = marker.ProspectingProperty;
+
+        var clickLoc = new google.maps.LatLng(event.latLng.lat(), event.latLng.lng());
+        var point = fromLatLngToPoint(clickLoc, map);
+        $('.context-menu-rightclick-property').contextMenu({ x: point.x, y: point.y });
+    }
 }
 
 function loadProspectingProperty(marker) {
@@ -413,7 +633,7 @@ function loadProspectingProperty(marker) {
             currentProperty = marker.ProspectingProperty;
             currentProperty.Marker = marker;
             updateOwnerDetailsEditor();
-            updatePropertyNotesDiv();
+            //updatePropertyNotesDiv();
             if (currentProperty.Contacts.length || currentProperty.ContactCompanies.length) {
                 showMenu("contactdetails");
             }
@@ -524,21 +744,6 @@ function saveContact(contact, property, actionToExecuteAfterwards) {
     });
 }
 
-function handleSavePropertyNotesComments() {
-    if (currentProperty) {
-        var comments = $('#propertyNotesCommentsTextArea').val();
-        $.ajax({
-            type: "POST",
-            url: "RequestHandler.ashx",
-            data: JSON.stringify({ Instruction: 'save_property_notes', ProspectingPropertyId: currentProperty.ProspectingPropertyId, CommentsNotes: comments }),
-            dataType: "json",
-        }).done(function () {
-            currentProperty.Comments = comments;
-            showSavedSplashDialog('Comments Saved!');
-        });
-    }
-}
-
 function addOrUpdateContactToCurrentProperty(newContact) {
 
     var contactExists = $.grep(currentProperty.Contacts, function (c) {
@@ -600,14 +805,27 @@ function updateOwnerDetailsEditor() {
     }
 }
 
-function updatePropertyNotesDiv() {
-    var propNotesDiv = $('#propertyNotesDiv');
-    propNotesDiv.css('display', currentProperty ? 'block' : 'none');
-
-    if (currentProperty) {
-        var notesContent = currentProperty && currentProperty.Comments != null ? currentProperty.Comments : "Add notes for this property here.";
-        $('#propertyNotesCommentsTextArea').val(notesContent);
-    }
+function loadActivityLookupData(callback) {    
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: "load_activity_lookup_data" }),
+        success: function (data, textStatus, jqXHR) {
+            if (textStatus == "success" && data) {
+                if (callback) {
+                    callback(data);
+                }
+            }
+            else {
+                alert('Error retrieving activity lookup data.');
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.status);
+            alert(jqXHR.responseText);
+        },
+        dataType: "json"
+    });
 }
 
 function updateOwnerDetailsEditorWithBrandNewContact(infoPacket, contactRows) {
@@ -847,6 +1065,7 @@ function createMarkerForProperty(property) {
     marker.LightstonePropertyId = property.LightstonePropertyId;
     marker.ProspectingProperty = property;
     google.maps.event.addListener(marker, 'click', markerClick);
+    google.maps.event.addListener(marker, 'rightclick', markerRightClick);
 
     return marker;
 }
@@ -900,18 +1119,24 @@ function buildInfoWindowContentForSS(unit) {
             }
         });
 
-        $('body').unbind('click.' + id).on('click.' + id, '#' + id, function () {
-            // Reset all color2 attributes of all other rows
-            var row = $('#' + id);
-            $('.unittd').not(row).each(function (idx, val) {
-                var r = $(val);
-                r.data('color2', '');
-                var color = r.data('color');
-                r.css('background-color', color);
-            });
-            row.data('color2', 'lightblue');
+        $('body').unbind('mousedown.' + id).on('mousedown.' + id, '#' + id, function (e) {
+            if (e.which == 1) {
+                // Reset all color2 attributes of all other rows
+                var row = $('#' + id);
+                $('.unittd').not(row).each(function (idx, val) {
+                    var r = $(val);
+                    r.data('color2', '');
+                    var color = r.data('color');
+                    r.css('background-color', color);
+                });
+                row.data('color2', 'lightblue');
 
-            openSSUnitInfo(unit);
+                openSSUnitInfo(unit);
+            }
+            else if (e.which == 3) {
+                rightClickedProperty = unit;
+                $('.context-menu-rightclick-property').contextMenu({ x: e.pageX, y: e.pageY });
+            }
         });
 
         return tr;
@@ -950,7 +1175,7 @@ function openSSUnitInfo(unit) {
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", LightstonePropertyId: unit.LightstonePropertyId }),
+        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", LightstonePropertyId: unit.LightstonePropertyId, LoadActivities: false }),
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
@@ -961,7 +1186,7 @@ function openSSUnitInfo(unit) {
                 updateExistingPropertyFromProperty(unit, data);
                 currentProperty = unit;
                 updateOwnerDetailsEditor();
-                updatePropertyNotesDiv();
+                //updatePropertyNotesDiv();
                 if (currentProperty.Contacts && currentProperty.Contacts.length > 0) {
                     showMenu("contactdetails");
                 }
@@ -1006,6 +1231,7 @@ function updateExistingPropertyFromProperty(existingProp, newProp) {
     existingProp.FarmName = newProp.FarmName;
     existingProp.Portion = newProp.Portion;
     existingProp.LightstoneSuburb = newProp.LightstoneSuburb;
+    existingProp.ActivityBundle = newProp.ActivityBundle;
 }
 
 function buildContentForInfoWindow(property) {
@@ -1146,11 +1372,17 @@ function closeInfoWindow() {
         }
         updatePropertyInfoMenu();
         updateOwnerDetailsEditor();
-        updatePropertyNotesDiv();
+        clearActivityReport();
+        //updatePropertyNotesDiv();
 
         currentTracePSInfoPacket = null;
         currentTracePSContactRows = null;
     }
+}
+
+function clearActivityReport() {
+    $('#activitiesExpander').css('display', 'none');
+    resetActivityFilters();
 }
 
 function showSavedSplashDialog(text) {
