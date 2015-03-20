@@ -78,7 +78,27 @@ namespace ProspectingProject
                     var activityLookupData = GetActivityLookupData();
                     context.Response.Write(activityLookupData);
                     break;
+                case "load_followups":
+                    var followups = GetFollowUps();
+                    context.Response.Write(followups);
+                    break;
+                case "make_default_contact_detail":
+                    MakeDefaultContactDetail(json);
+                    break;
             }
+        }
+
+        private void MakeDefaultContactDetail(string json)
+        {
+            ProspectingContactDetail detail = ProspectingDomain.Deserialise<ProspectingContactDetail>(json);
+            ProspectingDomain.MakeDefaultContactDetail(detail.ItemId);
+        }
+
+        private string GetFollowUps()
+        {
+            UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+            var results = ProspectingDomain.LoadFollowups(user.UserGuid, user.BusinessUnitUsers);
+            return ProspectingDomain.SerializeToJsonWithDefaults(results);
         }
 
         private string GetActivityLookupData()

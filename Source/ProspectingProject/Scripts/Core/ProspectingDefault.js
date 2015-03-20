@@ -491,7 +491,38 @@ function loadExistingProspectAddActivity(property, defaultSelection, callbackFun
     });
 }
 
+function loadFollowups(callbackFn) {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: "load_followups" }),
+        success: function (data, textStatus, jqXHR) {
+            $.unblockUI();
+            if (textStatus == "success" && data) {
+                if (data.ErrorMsg && data.ErrorMsg.length > 0) {
+                    alert(data.ErrorMsg);
+                }
+
+                if (callbackFn) {
+                    callbackFn(data);
+                }
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.status);
+            alert(jqXHR.responseText);
+        },
+        dataType: "json"
+    });
+}
+
 function showDialogAddActivity(inputPacket, defaultSelection, callback) {
+    var parentActivityId = null;
+    var targetProperty = currentProperty;
+    var childActivity = false;
+    var parentActivityActivityType = null;
+
     var div = $('#addActivityDialog');
     div.empty();
     div.append("<p /><p />");
@@ -565,6 +596,18 @@ function showDialogAddActivity(inputPacket, defaultSelection, callback) {
             if (defaultSelection.RelatedTo) {
                 $('#relatedToInput').val(defaultSelection.RelatedTo);
             }
+            if (defaultSelection.Property) {
+                targetProperty = defaultSelection.Property;
+            }
+            if (defaultSelection.ParentActivityId) {
+                parentActivityId = defaultSelection.ParentActivityId;
+            }
+            if (defaultSelection.IsChildActivity) {
+                childActivity = true;
+            }
+            if (defaultSelection.ParentActivityActivityType) {
+                parentActivityActivityType = defaultSelection.ParentActivityActivityType;
+            }
         }
     }
 
@@ -581,19 +624,38 @@ function showDialogAddActivity(inputPacket, defaultSelection, callback) {
         var relatedTo = $('#relatedToInput').val();
         var comment = $('#commentText').val();
 
-        $.ajax({
-            type: "POST",
-            url: "RequestHandler.ashx",
-            data: JSON.stringify({
+        var inputPacket;
+        if (!childActivity) {
+            inputPacket = {
                 Instruction: "save_activity",
                 IsForInsert: true,
-                LightstonePropertyId: currentProperty.LightstonePropertyId,
+                LightstonePropertyId: targetProperty.LightstonePropertyId,
                 ActivityTypeId: activityType,
                 AllocatedTo: allocatedTo != '-1' ? allocatedTo : null,
                 FollowupDate: followupDate != '' ? followupDate : null,
                 ContactPersonId: relatedTo != '-1' ? relatedTo : null,
-                Comment: comment != '' ? comment : null
-            }),
+                Comment: comment != '' ? comment : null,
+                ParentActivityId: parentActivityId
+            };
+        } else {
+            inputPacket = {
+                Instruction: "save_activity",
+                IsForInsert: true,
+                LightstonePropertyId: targetProperty.LightstonePropertyId,
+                ActivityFollowupTypeId: activityType,
+                AllocatedTo: allocatedTo != '-1' ? allocatedTo : null,
+                FollowupDate: followupDate != '' ? followupDate : null,
+                ContactPersonId: relatedTo != '-1' ? relatedTo : null,
+                Comment: comment != '' ? comment : null,
+                ParentActivityId: parentActivityId,
+                ActivityTypeId: parentActivityActivityType,
+            };
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify(inputPacket),
             success: function (data, textStatus, jqXHR) {
                 $('#addActivityDialog').dialog('close');
                 if (callback) {
@@ -1373,6 +1435,7 @@ function closeInfoWindow() {
         updatePropertyInfoMenu();
         updateOwnerDetailsEditor();
         clearActivityReport();
+        resetFollowupFilters();
         //updatePropertyNotesDiv();
 
         currentTracePSInfoPacket = null;
@@ -1601,5 +1664,104 @@ function showSearchedPropertyOnMap(result) {
     }
     else {
         map.setCenter(latLng);
+    }
+}
+
+// Rem to set primary contact detail in DB using same logic on front-end
+function showDialogSelectPrimaryContactDetail(contactDetailArray, callbackFn) {
+    if (contactDetailArray.length > 0) {
+        var div = $('#selectPrimaryContactDetailDialog');
+        div.empty();
+        var testDetail = contactDetailArray[0].ContactItemType;
+        switch (testDetail) {
+            case 'PHONE':
+                buildDialogForPhoneNumbers();
+                break;
+            case 'EMAIL':
+                buildDialogForEmailAddresses();
+                break;
+            default: break;
+        }
+
+        var buttonsDiv = $("<div style='float:right' />");
+        var saveButton = $("<input type='button' id='savePrimaryContactBtn' value='Save and close' style='margin:5px;cursor:pointer' />");
+        buttonsDiv.append(saveButton);
+        div.append(buttonsDiv);
+
+        div.dialog({
+            show: 'fade',
+            position: ['center', 'center'],
+            hide: { effect: "fadeOut", duration: 500 },
+            width: 'auto',
+            height: 'auto',
+            resizable: false,
+            open: function (event, ui) {
+                saveButton.click(function () {
+                    if (validateInputs()) {
+                        var itemId = $('input[name=defaultItemName]:checked').attr("id");
+                        itemId = itemId.replace('_','');
+                        saveDefaultContactItem(itemId, callbackFn);
+                    } else {
+                        alert('Please select a primary contact detail');
+                    }
+                });
+            },
+            modal: true
+        });
+
+        function validateInputs() {
+            var selectedItem = $('input[name=defaultItemName]:checked').val();
+            return selectedItem ? true : false;
+        }
+    
+        function buildDialogForPhoneNumbers() {
+            div.append("Select a primary phone number for this contact:");
+            div.append("<p />");
+            
+            $.each(contactDetailArray, function (idx, item) {
+                var displayItem = buildItemRow(item);
+                div.append(displayItem);
+                div.append("<br />");
+            });
+
+            function buildItemRow(phoneNumberItem) {
+                var id = '_' + phoneNumberItem.ItemId;
+                return $("<input class='defaultItemClass' type='radio' id='" + id + "' name='defaultItemName' /><label for='" + id + "'>" + format10DigitPhoneNumber(phoneNumberItem.ItemContent) + "</label>");
+            }
+        }
+
+        function buildDialogForEmailAddresses() {
+            div.append("Select a primary email address for this contact:");
+            div.append("<p />");
+
+            $.each(contactDetailArray, function (idx, item) {
+                var displayItem = buildItemRow(item);
+                div.append(displayItem);
+                div.append("<br />");
+            });
+
+            function buildItemRow(emaiLAddressItem) {
+                var id = '_' + emaiLAddressItem.ItemId;
+                return $("<input class='defaultItemClass' type='radio' id='" + id + "' name='defaultItemName' /><label for='" + id + "'>" + emaiLAddressItem.ItemContent + "</label>");
+            }
+        }
+
+        function saveDefaultContactItem(itemId, callbackFn) {
+            $.ajax({
+                type: "POST",
+                url: "RequestHandler.ashx",
+                data: JSON.stringify({
+                    Instruction: 'make_default_contact_detail',
+                    ItemId: itemId
+                }),
+                dataType: "json",
+            }).done(function () {
+                div.dialog('close');
+                showSavedSplashDialog("Saved!");
+                if (callbackFn) {
+                    callbackFn(itemId);
+                }
+            });
+        }
     }
 }

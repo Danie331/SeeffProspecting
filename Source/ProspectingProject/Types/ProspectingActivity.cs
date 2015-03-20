@@ -53,5 +53,7 @@ namespace ProspectingProject
         public string CreatedBy { get; set; }
 
         public string AllocatedToName { get; set; }
+
+        public int? ActivityFollowupTypeId { get; set; }
     }
 }

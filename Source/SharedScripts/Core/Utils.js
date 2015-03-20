@@ -114,3 +114,16 @@ function errorHandler(ex) {
         position: ['right', 'center']
     });
 }
+
+function format10DigitPhoneNumber(phoneNumber) {
+    if (phoneNumber.length != 10) return phoneNumber;
+
+    var dialingCode = phoneNumber.substring(0, 3);
+    dialingCode = '(' + dialingCode + ')';
+
+    var areaCode = phoneNumber.substring(3, 6);
+    
+    var remainder = phoneNumber.substring(6, 10);
+
+    return dialingCode + ' ' + areaCode + ' ' + remainder;
+}

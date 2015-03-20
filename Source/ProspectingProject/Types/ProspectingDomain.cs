@@ -125,6 +125,7 @@ namespace ProspectingProject
                         UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
             activityBundle.BusinessUnitUsers = user.BusinessUnitUsers;
             activityBundle.ActivityTypes = ProspectingStaticData.ActivityTypes;
+            activityBundle.ActivityFollowupTypes = ProspectingStaticData.ActivityFollowupTypes;
 
             var allActivities = prospectingContext.activity_logs.Where(a => a.lightstone_property_id == lightstonePropertyId);
             foreach (var activity in allActivities)
@@ -339,6 +340,45 @@ namespace ProspectingProject
             // Combine 2 lists and return 
             contactsAssociatedWithProperties.AddRange(contactsAssociatedWithCompanies);
             return contactsAssociatedWithProperties;
+        }
+
+        private static ProspectingContactPerson LoadContactForFollowup(ProspectingDataContext prospecting, int? contactPersonId)
+        {
+            if (contactPersonId == null) return null;
+            var pcp = prospecting.prospecting_contact_persons.FirstOrDefault(p => p.contact_person_id == contactPersonId);
+            if (pcp != null)
+            {
+                var contactPerson = new ProspectingContactPerson
+                  {
+                      ContactPersonId = pcp.contact_person_id,
+                      PersonCompanyRelationshipType = null,
+                      Firstname = pcp.firstname,
+                      Surname = pcp.surname,
+                      IdNumber = pcp.id_number,
+                      Title = pcp.person_title,
+                      Gender = pcp.person_gender,
+                      Comments = pcp.comments_notes,
+                      IsPOPIrestricted = pcp.is_popi_restricted,
+                      AgeGroup = pcp.age_group,
+                      BureauAdverseIndicator = pcp.bureau_adverse_indicator,
+                      Citizenship = pcp.citizenship,
+                      DeceasedStatus = pcp.deceased_status,
+                      Directorship = pcp.directorship,
+                      Occupation = pcp.occupation,
+                      Employer = pcp.employer,
+                      PhysicalAddress = pcp.physical_address,
+                      HomeOwnership = pcp.home_ownership,
+                      MaritalStatus = pcp.marital_status,
+                      Location = pcp.location
+                  };
+
+                contactPerson.PhoneNumbers = ProspectingStaticData.PropertyContactPhoneNumberRetriever(prospecting, contactPerson).ToList();
+                contactPerson.EmailAddresses = ProspectingStaticData.PropertyContactEmailRetriever(prospecting, contactPerson).ToList();
+
+                return contactPerson;
+            }
+
+            return null;
         }
 
         public static List<KeyValuePair<int, int>> LoadPersonPropertyRelationships(ProspectingDataContext prospecting, int contactPersonId)
@@ -588,6 +628,14 @@ namespace ProspectingProject
             using (var authService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 var userAuthPacket = authService.AuthenticateAndGetUserInfo(userGuid, sessionKey);
+                var businessUnitUsers = new List<UserDataResponsePacket>(
+                        from bu in userAuthPacket.BusinessUnitUsers
+                        select new UserDataResponsePacket
+                        {
+                             UserGuid = Guid.Parse(bu.Guid),
+                             UserName = bu.UserName,
+                             UserSurname = bu.UserSurname
+                        });
                 return new UserDataResponsePacket
                 {
                     UserGuid = userGuid,
@@ -605,16 +653,75 @@ namespace ProspectingProject
                         EmailAddress = userAuthPacket.ManagerDetails.First().EmailAddress,
                         UserName = userAuthPacket.ManagerDetails.First().UserName
                     },
-                    BusinessUnitUsers = new List<UserDataResponsePacket>(
-                        from bu in userAuthPacket.BusinessUnitUsers
-                        select new UserDataResponsePacket
-                        {
-                             UserGuid = Guid.Parse(bu.Guid),
-                             UserName = bu.UserName,
-                             UserSurname = bu.UserSurname
-                        })
+                    BusinessUnitUsers = businessUnitUsers,
+                    FollowupActivities = LoadFollowups(userGuid, businessUnitUsers)
                 };
             }
+        }
+
+        public static List<FollowUpActivity> LoadFollowups(Guid userGuid, List<UserDataResponsePacket> businessUnitUsers)
+        {
+            //            Func<ProspectingDataContext, int?, int[], string> fetchPrimaryContactNo = (context, contactPersonId, contactTypes) =>
+            //{
+            //    if (!contactPersonId.HasValue) return null;
+            //    var primaryrecord = context.prospecting_contact_details.FirstOrDefault(s => s.contact_person_id == contactPersonId
+            //                                                                            && !s.deleted
+            //                                                                            && s.is_primary_contact
+            //                                                                            && contactTypes.Contains(s.contact_detail_type));
+
+            //    return primaryrecord != null ? primaryrecord.contact_detail : null;
+            //};
+
+            List<FollowUpActivity> followups = new List<FollowUpActivity>();
+            using (var prospecting = new ProspectingDataContext())
+            {                
+                IEnumerable<activity_log> activities = from act in prospecting.activity_logs 
+                                                       where act.allocated_to == userGuid && act.followup_date != null && act.followup_date <= DateTime.Now
+                                                       orderby act.followup_date 
+                                                       select act;
+
+                // Only load follow ups that do not have children
+                activities = activities.Where(a => !prospecting.activity_logs.Any(t => t.parent_activity_id == a.activity_log_id)).OrderByDescending(a => a.followup_date).ToList();
+                foreach (var act in activities)
+                {
+                    var createdByUser = businessUnitUsers.FirstOrDefault(b => b.UserGuid == act.created_by);
+                    string createdBy = createdByUser != null && createdByUser.UserGuid != Guid.Empty ? createdByUser.UserName + " " + createdByUser.UserSurname : "System";
+                    var propertyRecord = prospecting.prospecting_properties.First(pp => pp.lightstone_property_id == act.lightstone_property_id);
+                    string propAddress = propertyRecord.street_or_unit_no + " " + propertyRecord.property_address;
+
+                    var activityType = prospecting.activity_types.FirstOrDefault(t => t.activity_type_id == act.activity_type_id);
+                    string activityTypeName = "";
+                    if (activityType != null) 
+                    {
+                        activityTypeName = activityType.activity_name;
+                    }
+                    var activityFollowupType =prospecting.activity_followup_types.FirstOrDefault(t => t.activity_followup_type_id == act.activity_followup_type_id);
+                    string activityFollowupTypeName = "";
+                    if (activityFollowupType != null) {
+                        activityFollowupTypeName = activityFollowupType.activity_name;
+                    }
+                    var followup = new FollowUpActivity
+                                        {
+                                            ActivityLogId = act.activity_log_id,
+                                            ActivityTypeId = act.activity_type_id,
+                                            ActivityTypeName = activityTypeName,
+                                            FollowupActivityTypeName = activityFollowupTypeName,
+                                            Comment = act.comment,
+                                            CreatedBy = act.created_by,
+                                            CreatedByUsername = createdBy,
+                                            FollowupDate = act.followup_date,
+                                            LightstonePropertyId = act.lightstone_property_id,
+                                            ParentActivityId = act.parent_activity_id,
+                                            RelatedToContactPersonId = act.contact_person_id,
+                                            RelatedToContactPerson = LoadContactForFollowup(prospecting, act.contact_person_id),
+                                            ActivityFollowupTypeId = act.activity_followup_type_id,
+                                            PropertyAddress = propAddress
+                                        };
+                    followups.Add(followup);
+                }
+            }
+
+            return followups.OrderByDescending(s => s.FollowupDate).ToList();
         }
 
         // Must send back the contact id as well as all the phone + tel no's: update their guid's to null
@@ -2009,22 +2116,29 @@ namespace ProspectingProject
 
         public static void UpdateInsertActivity(ProspectingActivity act)
         {
+            var currentUser = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+            // If Allocated To is null, default it to the logged in user
+            if (!act.AllocatedTo.HasValue)
+            {
+                act.AllocatedTo = currentUser.UserGuid;
+            }
             using (var prospecting = new ProspectingDataContext())
             {
                 if (act.IsForInsert)
                 {
-                    var currentUser = HttpContext.Current.Session["user"] as UserDataResponsePacket;
                     activity_log activityRecord = new activity_log
                     {
-                         lightstone_property_id = act.LightstonePropertyId,
-                         followup_date = act.FollowUpDate,
-                         allocated_to = act.AllocatedTo,
-                         activity_type_id = act.ActivityTypeId,
-                         comment = act.Comment,
-                         created_by = currentUser.UserGuid,
-                         created_date = DateTime.Now,
-                         contact_person_id = act.ContactPersonId
-                         // Add the rest later
+                        lightstone_property_id = act.LightstonePropertyId,
+                        followup_date = act.FollowUpDate,
+                        allocated_to = act.AllocatedTo,
+                        activity_type_id = act.ActivityTypeId,
+                        comment = act.Comment,
+                        created_by = currentUser.UserGuid,
+                        created_date = DateTime.Now,
+                        contact_person_id = act.ContactPersonId,
+                        // Add the rest later
+                        parent_activity_id = act.ParentActivityId,
+                        activity_followup_type_id = act.ActivityFollowupTypeId
                     };
                     prospecting.activity_logs.InsertOnSubmit(activityRecord);
                 }
@@ -2037,6 +2151,8 @@ namespace ProspectingProject
                     activityForUpdate.comment = act.Comment;
                     activityForUpdate.contact_person_id = act.ContactPersonId;
                     // Add the rest later
+                    activityForUpdate.parent_activity_id = act.ParentActivityId;
+                    activityForUpdate.activity_followup_type_id = act.ActivityFollowupTypeId;
                 }
                 prospecting.SubmitChanges();
             }
@@ -2049,8 +2165,23 @@ namespace ProspectingProject
             UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
             activityBundle.BusinessUnitUsers = user.BusinessUnitUsers;
             activityBundle.ActivityTypes = ProspectingStaticData.ActivityTypes;
+            activityBundle.ActivityFollowupTypes = ProspectingStaticData.ActivityFollowupTypes;
 
             return activityBundle;
+        }
+
+        public static void MakeDefaultContactDetail(string itemId)
+        {
+            int contactDetailId = Convert.ToInt32(itemId);
+            using (var prospecting = new ProspectingDataContext())
+            {
+                var contactDetail = prospecting.prospecting_contact_details.FirstOrDefault(c => c.prospecting_contact_detail_id == contactDetailId);
+                if (contactDetail != null)
+                {
+                    contactDetail.is_primary_contact = true;
+                    prospecting.SubmitChanges();
+                }
+            }
         }
     }
 }

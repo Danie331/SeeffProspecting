@@ -20,5 +20,7 @@ namespace ProspectingProject
         public UserDataResponsePacket ProspectingManager { get; set; }
 
         public List<UserDataResponsePacket> BusinessUnitUsers { get; set; }
+
+        public List<FollowUpActivity> FollowupActivities { get; set; }
     }
 }

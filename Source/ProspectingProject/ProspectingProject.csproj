@@ -831,6 +831,7 @@
     <Compile Include="Services\TracePS\TracepsPhoneNumberLookup.cs" />
     <Compile Include="Services\TracePS\TracepsTestService.cs" />
     <Compile Include="Types\ActivityBundle.cs" />
+    <Compile Include="Types\FollowupActivity.cs" />
     <Compile Include="Types\IProspectingContactEntity.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\BaseDataRequestPacket.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\CompanyContactDataPacket.cs" />

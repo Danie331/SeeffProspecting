@@ -105,6 +105,9 @@
     <Content Include="..\SharedAssets\marker_icons\seeff\other\Other.psd">
       <Link>Assets\marker_icons\seeff\other\Other.psd</Link>
     </Content>
+    <Content Include="..\SharedAssets\seeff_logo.png">
+      <Link>Assets\seeff_logo.png</Link>
+    </Content>
     <Content Include="..\SharedScripts\Core\ContentExpanderWidget.js">
       <Link>Scripts\Core\ContentExpanderWidget.js</Link>
     </Content>
@@ -667,9 +670,6 @@
     </Content>
     <Content Include="..\SharedAssets\save_changes.png">
       <Link>Assets\save_changes.png</Link>
-    </Content>
-    <Content Include="..\SharedAssets\seeff_logo.png">
-      <Link>Assets\seeff_logo.png</Link>
     </Content>
     <Content Include="..\SharedAssets\snap.png">
       <Link>Assets\snap.png</Link>

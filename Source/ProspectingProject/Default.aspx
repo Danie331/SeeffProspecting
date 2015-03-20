@@ -94,7 +94,7 @@
                         loadSuburbsInfo(data);
                         initializeMap();
            
-                        createProspectingMenu();
+                        createProspectingMenu(data);
                         initEventHandlers();
 
                         prospectingContext = JSON.parse(data.StaticProspectingData);
@@ -157,7 +157,7 @@
         <div id="openpanelbutton" style="display: none;">
             <img id="closepanelbutton2" src="Assets/double-arrow-right.png" style="float: left;" />
         </div>
-        <div id="loadingDiv" style="display:inline-block;text-align:center;margin-left:45%;margin-top:25%;">
+        <div id="loadingDiv">
             <img src="Assets/loading.gif" />
         </div>        
         <div class="context-menu-map box menu-1"></div>
@@ -179,6 +179,7 @@
         <div id="errorDialog" title="Error Message" class="errorDialog"> 
             <label id="errorDialogText"></label>
         </div>
+        <div id="selectPrimaryContactDetailDialog" title="Select Primary Contact Detail" style="display:none;font-family:Verdana;font-size:12px;"></div>
     </form>
         <div id="googleMap"></div>
 </body>

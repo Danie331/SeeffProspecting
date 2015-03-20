@@ -143,10 +143,6 @@ text-align:left;
   margin-top:20px;
 }
 
-#loadingDiv 
-{
-}
-
 .input-box-warning {
     border: 1px solid red;
 }
@@ -158,4 +154,14 @@ text-align:left;
 .tablerowmouseover:hover {
      background-color: lightblue;
      cursor:pointer;
+}
+
+#loadingDiv {
+    position: absolute;
+    top: 50%;
+    left: 48%;
+    margin-top: -50px;
+    margin-left: -50px;
+    width: 100px;
+    height: 100px;
 }

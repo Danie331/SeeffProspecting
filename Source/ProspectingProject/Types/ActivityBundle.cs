@@ -11,9 +11,11 @@ namespace ProspectingProject
         {
             Activities = new List<ProspectingActivity>();
             BusinessUnitUsers = new List<UserDataResponsePacket>();
+            ActivityFollowupTypes = new List<KeyValuePair<int, string>>();
         }
         public List<ProspectingActivity> Activities { get; set; }
         public List<UserDataResponsePacket> BusinessUnitUsers { get; set; }
         public List<KeyValuePair<int, string>> ActivityTypes { get; set; }
+        public List<KeyValuePair<int, string>> ActivityFollowupTypes { get; set; }
     }
 }
