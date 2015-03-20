@@ -550,7 +550,18 @@ function showDialogAddActivity(inputPacket, defaultSelection, callback) {
 
     populateDropdowns();
     setDefaults();
+
+    activity.change(function () {
+        var text = $(this).children(':selected').text();
+        if (text == 'Closed for now') {
+            followupDate.val('');
+            followupDate.prop('disabled', true);
+        } else {
+            followupDate.prop('disabled', false);
+        }
+    });
     
+    var title = parentActivityActivityType != null ? 'Follow-up on property' : 'Add Activity To Property';
     div.dialog({
         show: 'fade',
         position: ['center', 'center'],
@@ -562,12 +573,11 @@ function showDialogAddActivity(inputPacket, defaultSelection, callback) {
             saveButton.click(function () {
                 if (validateInputs()) {
                     saveActivity();
-                } else {
-                    alert('Please select an Activity type to save');
                 }
             });
         },
-        modal: true
+        modal: true,
+        title: title
     });
 
     function populateDropdowns() {
@@ -613,7 +623,19 @@ function showDialogAddActivity(inputPacket, defaultSelection, callback) {
 
     function validateInputs() {
         var activityValue = activity.val();
-        return activityValue != null && activityValue != '-1';
+        if (activityValue == '-1') {
+            var activityElement = document.getElementById("activityInput");
+            tooltip.pop(activityElement, 'You must specify a type', { showDelay: 1, hideDelay: 100, calloutPosition: 0.5 });
+            return false;
+        }
+        var allocatedToValue = allocatedTo.val();
+        var followupDateValue = followupDate.val();
+        if (allocatedToValue != '-1' && followupDateValue == '') {
+            var followupDateElement = document.getElementById("followupDateInput");
+            tooltip.pop(followupDateElement, 'You must specify a follow-up date if you are allocating this to someone.', { showDelay: 1, hideDelay: 100, calloutPosition: 0.5, maxWidth: 200 });
+            return false;
+        }
+        return true;
     }
 
     function saveActivity() {

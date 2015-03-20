@@ -293,6 +293,9 @@ function handleActivityReportClick() {
     clearActivityReport();
     if (currentProperty) {
         loadExistingProspectAddActivity(currentProperty, null, function () {
+            $('#recentActivitiesDiv').css('display', 'none');
+            $('#activitiesOuterDiv').css('display', 'block');
+
             activityExpanderWidget.open('activityContainer');
             // Populate related-to
             $('#relatedToSelect').empty();
@@ -306,11 +309,35 @@ function handleActivityReportClick() {
             $('#activityNoSelect').append($("<option />").val(-1).text(''));
             if (currentProperty.ActivityBundle != null && currentProperty.ActivityBundle.Activities.length > 0) {
                 $.each(currentProperty.ActivityBundle.Activities, function (idx, el) {
-                    $('#activityNoSelect').append($("<option />").val(el.ActivityLogId).text(el.ActivityLogId));
+                    if (el.ParentActivityId == null) {
+                        $('#activityNoSelect').append($("<option />").val(el.ActivityLogId).text(el.ActivityLogId));
+                    }
                 });
             }
             performActivityFiltering();
         });
+    } else {        
+         $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Recent Activities...</p>' });
+         $.ajax({
+             type: "POST",
+             url: "RequestHandler.ashx",
+             data: JSON.stringify({ Instruction: "load_activities_for_user" }),
+             success: function (data, textStatus, jqXHR) {
+                 $.unblockUI();
+                 if (textStatus == "success" && data) {
+                     if (data.ErrorMsg && data.ErrorMsg.length > 0) {
+                         alert(data.ErrorMsg);
+                     }
+
+                     showRecentActivitiesForUser(data.Activities);
+                 }
+             },
+             error: function (jqXHR, textStatus, errorThrown) {
+                 alert(jqXHR.status);
+                 alert(jqXHR.responseText);
+             },
+             dataType: "json"
+         });
     }
 }
 
@@ -459,7 +486,7 @@ function resetFollowupFilters() {
     $('#followupActivityTypeSelect').val(-1);
 }
 
-function buildActivityReport(prospectingProperty) {
+function buildActivityReport() {
 
     function buildActivityFilter() {
         var filterDiv = $("<div />");
@@ -547,7 +574,34 @@ function populateFollowupFilters() {
     }
 }
 
-// This function always targets the ActivityBundle of the current property
+function showRecentActivitiesForUser(activities) {
+    $('#activitiesOuterDiv').css('display', 'none');
+    var recentActivitiesDiv = $('#recentActivitiesDiv');
+    if (recentActivitiesDiv.length) {
+        recentActivitiesDiv.empty();
+        recentActivitiesDiv.css('display', 'block');
+    } else {
+        recentActivitiesDiv = $("<div class='contentdiv' id='recentActivitiesDiv' />");
+        $('#activityreport_content').append(recentActivitiesDiv);
+    }
+
+    if (activities.length) {
+        activities.sort(function (a, b) { return new Date(b.CreatedDate) - new Date(a.CreatedDate); });
+                      
+        recentActivitiesDiv.append("Recent activities created by you:");
+        recentActivitiesDiv.append("<p />");
+        $.each(activities, function (idx, activity) {
+            var formattedActivity = buildActivityDisplayItem(activity);
+            recentActivitiesDiv.append(formattedActivity);
+            recentActivitiesDiv.append("<hr />");
+        });
+    }
+    else {
+        recentActivitiesDiv.append("You have no recent activities.");
+    }
+}
+
+    // This function always targets the ActivityBundle of the current property
 function performActivityFiltering() {
     $('#activitiesExpander').css('display', 'block');
 
@@ -574,11 +628,19 @@ function performActivityFiltering() {
 
     var activities = currentProperty.ActivityBundle.Activities;
     // Perform filtering
+    var parentActivityList = [];
+    // First order activities by ID in ascending order
+    activities.sort(function (a, b) {
+        return a.ActivityLogId - b.ActivityLogId;
+    });
     activities = $.grep(activities, function (act) {
         var meetsCriteria = true;
 
         if (actvityNoFilter != null && actvityNoFilter != -1) {
-            meetsCriteria = act.ActivityLogId == actvityNoFilter;
+            meetsCriteria = act.ActivityLogId == actvityNoFilter || act.ParentActivityId == actvityNoFilter || ($.inArray(act.ParentActivityId, parentActivityList) > -1);
+            if (meetsCriteria) {
+                parentActivityList.push(act.ActivityLogId);
+            }
             if (!meetsCriteria) return false;
         }
 
@@ -621,6 +683,9 @@ function performActivityFiltering() {
         return meetsCriteria;
     });
 
+    // Finally order by CreatedDate desc
+    activities.sort(function (a, b) { return new Date(b.CreatedDate) - new Date(a.CreatedDate); });
+
     // Begin rendering
     var activityReportContainer = $('#activityContent');
     activityReportContainer.empty();
@@ -628,7 +693,9 @@ function performActivityFiltering() {
     activityReportContainer.append(addActivityBtn);
     addActivityBtn.click(function (e) {
         e.preventDefault();
-        showDialogAddActivity({ ActivityTypes: activityTypes, BusinessUnitUsers: businessUnitUsers, PropertyContacts: currentProperty.Contacts }, null, function () {
+        showDialogAddActivity({
+            ActivityTypes: activityTypes, BusinessUnitUsers: businessUnitUsers, PropertyContacts: currentProperty.Contacts
+        }, null, function () {
             loadExistingProspectAddActivity(currentProperty, null, function () {
                 activityExpanderWidget.open('activityContainer');
                 // Populate related-to
@@ -649,69 +716,6 @@ function performActivityFiltering() {
         activityReportContainer.append("<hr />");
     });
 
-    function buildActivityDisplayItem(activity) {
-
-        function formatLabelValue(label, value) {
-            var container = $("<div style='padding:5px' />");
-            if (value == null) value = "n/a";
-
-            var isDate = new Date(value) !== "Invalid Date" && !isNaN(new Date(value)) ? true : false;
-            if (isDate) {
-                var datetime = value.split('T');
-                var dateportion = datetime[0];
-                var timeportion = datetime[1].substring(0, 5);
-                if (timeportion == '00:00') timeportion = '';
-                value = dateportion + " " + timeportion;
-            }
-            value = value.replace(/\n/g, '<br />');
-            
-            if (label !== '') label = label + ": ";
-            container.append(label).append(value);
-            return container[0].outerHTML;
-        }
-
-        var containerDiv = $("<div />");
-
-        var activityAndFollowupContainer = $("<div id='activityAndFollowupContainer' style='border: 1px solid white !important;background-color:#F0E68C;' />");
-        var activityType = $("<div style='width:50%;display:inline-block;float:left;'>" + formatLabelValue('Activity Type', activity.ActivityType) + " </div>");
-        var followupDate = $("<div style='width:50%;display:inline-block;'>" + formatLabelValue('Follow-up Date', activity.FollowUpDate) + " </div>");
-        activityAndFollowupContainer.append(activityType).append(followupDate);
-
-        if (activity.Comment == null) activity.Comment = '';
-        var parentActivityIndicator = '';
-        if (activity.ParentActivityId != null) {
-            parentActivityIndicator = "<br />" + "<label style='color:red'>Activity (" + activity.ActivityLogId + ") related to (" + activity.ParentActivityId + ")</label>";
-        } else {
-            // else this is parent activity
-            parentActivityIndicator = "<br />" + "<label style='color:red'>Activity (" + activity.ActivityLogId + ")</label>";
-        }
-        var comment = $("<div style='display:block;background-color:#F0E68C;border: 1px solid white !important;'>" + formatLabelValue('', activity.Comment + parentActivityIndicator) + " </div>");
-
-        var createdDateCreatedByContainer = $("<div id='createdDateCreatedByContainer' style='border:1px solid white !important;background-color:#F0E68C;' />");
-        var createdDate = $("<div style='width:50%;display:inline-block;float:left;'>" + formatLabelValue('Created', activity.CreatedDate) + " </div>");
-        var createdBy = $("<div style='width:50%;display:inline-block;'>" + formatLabelValue('Created By', activity.CreatedBy) + " </div>");
-        createdDateCreatedByContainer.append(createdDate).append(createdBy);
-
-        var allocatedTo = $("<div style='display:block;background-color:#F0E68C;border:1px solid white;'>" + formatLabelValue('Allocated To', activity.AllocatedToName) + " </div>");
-
-        var contactPersonName = "n/a"; 
-        if (activity.ContactPersonId) {
-            var pp = $.grep(currentProperty.Contacts, function (pers) {
-                return pers.ContactPersonId == activity.ContactPersonId;
-            });
-
-            if (pp.length > 0) contactPersonName = pp[0].Firstname + ' ' + pp[0].Surname;
-        }
-        var relatedTo = $("<div style='display:block;background-color:#F0E68C;border:1px solid white;'>" + formatLabelValue('Related To', contactPersonName) + " </div>");
-
-        containerDiv.append(activityAndFollowupContainer);
-        containerDiv.append(comment);
-        containerDiv.append(createdDateCreatedByContainer);
-        containerDiv.append(allocatedTo);
-        containerDiv.append(relatedTo);
-
-        return containerDiv;
-    }
 }
 
 function buildContactDetailsDiv() {
@@ -719,12 +723,70 @@ function buildContactDetailsDiv() {
     return contactDetailsDiv;
 }
 
-// Overridden from MenuBuilder.js
+function buildActivityDisplayItem(activity) {
+
+    function formatLabelValue(label, value) {
+        var container = $("<div style='padding:5px' />");
+        if (value == null) value = "n/a";
+
+        var isDate = new Date(value) !== "Invalid Date" && !isNaN(new Date(value)) ? true : false;
+        if (isDate) {
+            var datetime = value.split('T');
+            var dateportion = datetime[0];
+            var timeportion = datetime[1].substring(0, 5);
+            if (timeportion == '00:00') timeportion = '';
+            value = dateportion + " " + timeportion;
+        }
+        value = value.replace(/\n/g, '<br />');
+
+        if (label !== '') label = label + ": ";
+        container.append(label).append(value);
+        return container[0].outerHTML;
+    }
+
+    var containerDiv = $("<div />");
+
+    var activityAndFollowupContainer = $("<div id='activityAndFollowupContainer' style='border: 1px solid white !important;background-color:#F0E68C;' />");
+    var activityTypeName = activity.ActivityFollowupTypeId != null ? activity.ActivityFollowupTypeName : activity.ActivityType;
+    var activityType = $("<div style='width:50%;display:inline-block;float:left;'>" + formatLabelValue('Activity Type', activityTypeName) + " </div>");
+    var followupDate = $("<div style='width:50%;display:inline-block;'>" + formatLabelValue('Follow-up Date', activity.FollowUpDate) + " </div>");
+    activityAndFollowupContainer.append(activityType).append(followupDate);
+
+    if (activity.Comment == null) activity.Comment = '';
+    var parentActivityIndicator = '';
+    if (activity.ParentActivityId != null) {
+        parentActivityIndicator = "<br />" + "<label style='color:red'>Activity (" + activity.ActivityLogId + ") related to (" + activity.ParentActivityId + ")</label>";
+    } else {
+        // else this is parent activity
+        parentActivityIndicator = "<br />" + "<label style='color:red'>Activity (" + activity.ActivityLogId + ")</label>";
+    }
+    var comment = $("<div style='display:block;background-color:#F0E68C;border: 1px solid white !important;'>" + formatLabelValue('', activity.Comment + parentActivityIndicator) + " </div>");
+
+    var createdDateCreatedByContainer = $("<div id='createdDateCreatedByContainer' style='border:1px solid white !important;background-color:#F0E68C;' />");
+    var createdDate = $("<div style='width:50%;display:inline-block;float:left;'>" + formatLabelValue('Created', activity.CreatedDate) + " </div>");
+    var createdBy = $("<div style='width:50%;display:inline-block;'>" + formatLabelValue('Created By', activity.CreatedBy) + " </div>");
+    createdDateCreatedByContainer.append(createdDate).append(createdBy);
+
+    var allocatedTo = $("<div style='display:block;background-color:#F0E68C;border:1px solid white;'>" + formatLabelValue('Allocated To', activity.AllocatedToName) + " </div>");
+
+    var contactPersonName = activity.RelatedToContactPersonName ? activity.RelatedToContactPersonName : "n/a";
+    var relatedTo = $("<div style='display:block;background-color:#F0E68C;border:1px solid white;'>" + formatLabelValue('Related To', contactPersonName) + " </div>");
+
+    containerDiv.append(activityAndFollowupContainer);
+    containerDiv.append(comment);
+    containerDiv.append(createdDateCreatedByContainer);
+    containerDiv.append(allocatedTo);
+    containerDiv.append(relatedTo);
+
+    return containerDiv;
+}
+
+    // Overridden from MenuBuilder.js
 function buildSuburbsSummaryContent() {
     return "The following suburbs are available to you for prospecting.";
 }
 
-// Overridden from MenuBuilder.js
+    // Overridden from MenuBuilder.js
 function buildSuburbsSelectionHeaderHtml() {
     var tableHeader = $("<table class='prospectingSuburbsTbl' />");
     tableHeader.append("<tr><td id='th_suburb'>Suburb</td><td id='th_withdetails'>Prospected Properties</td></tr>");
@@ -732,7 +794,7 @@ function buildSuburbsSelectionHeaderHtml() {
     return tableHeader[0].outerHTML;
 }
 
-// Overridden from MenuBuilder.js
+    // Overridden from MenuBuilder.js
 function buildSuburbSelectionHtml() {
 
     var html = "<div id='suburbsInfoDiv' class='contentdiv'>"
@@ -745,7 +807,7 @@ function buildSuburbSelectionHtml() {
     return html;
 }
 
-// Overridden from MenuBuilder.js
+    // Overridden from MenuBuilder.js
 function buildSuburbsSelectionHtml() {
     var suburbsTbl = $("<table class='prospectingSuburbsContentTbl' />");
     for (var a = 0; a < suburbsInfo.length; a++) {
@@ -753,7 +815,7 @@ function buildSuburbsSelectionHtml() {
         var suburbId = suburbsInfo[a].SuburbId;
         var numPropsWithContactDetails = suburbsInfo[a].TotalFullyProspected;
         var tr = $("<tr id='" + "row" + suburbId + "' />");
-    
+
         var linkId = "suburbLink" + suburbId;
         var radioBtnId = 'suburbRadio' + suburbId;
         var suburbBtn = $("<input type='radio' name='suburbsSelect' id='" + radioBtnId + "'><a href='' id='" + linkId + "'>" + suburbName + "</a></input>");
@@ -776,13 +838,13 @@ function buildSuburbsSelectionHtml() {
         tr.append(tdSuburb);
         tr.append(tdPropertiesWithContactDetails);
         suburbsTbl.append(tr);
-    }   
+    }
 
     function suburbSelect(event, itemId) {
         for (var a = 0; a < suburbsInfo.length; a++) {
             clearSuburbBySuburbId(suburbsInfo[a].SuburbId);
         }
-        
+
         var areaId = itemId.replace('suburbLink', '').replace('suburbRadio', '');
         // Only check radio button if the Suburb link was clicked
         if (itemId.indexOf('suburbLink') > -1) {
@@ -796,18 +858,18 @@ function buildSuburbsSelectionHtml() {
     return suburbsTbl[0].outerHTML;
 }
 
-function updateSuburbSelectionStats(suburb) {
-    var totalPropsWithContacts = 0;
-    var totalPropsWithoutContactDetails = 0;
+    function updateSuburbSelectionStats(suburb) {
+        var totalPropsWithContacts = 0;
+        var totalPropsWithoutContactDetails = 0;
 
-    $.each(suburb.ProspectingProperties, function (idx, prop) {
-        var contacts = prop.Contacts ? prop.Contacts : [];
-        var hasDetails = false;
-        $.each(contacts, function (idx2, c) {
+        $.each(suburb.ProspectingProperties, function (idx, prop) {
+            var contacts = prop.Contacts ? prop.Contacts : [];
+            var hasDetails = false;
+            $.each(contacts, function (idx2, c) {
             if ((c.PhoneNumbers && c.PhoneNumbers.length > 0) || (c.EmailAddresses && c.EmailAddresses.length > 0)) {
                 hasDetails = true;
             }
-        });
+            });
 
         if (hasDetails) {
             totalPropsWithContacts++;
@@ -815,35 +877,35 @@ function updateSuburbSelectionStats(suburb) {
         else {
             totalPropsWithoutContactDetails++;
         }
-    });
+        });
 
-    var withDetailsLabel = $('#withDetailLabel' + suburb.SuburbId);
-    var withoutDetailsLabel = $('#withoutDetailsLabel' + suburb.SuburbId);
+    var withDetailsLabel = $('#withDetailLabel' +suburb.SuburbId);
+    var withoutDetailsLabel = $('#withoutDetailsLabel' +suburb.SuburbId);
 
     withDetailsLabel.text("(" + totalPropsWithContacts + ")");
     withoutDetailsLabel.text("(" + totalPropsWithoutContactDetails + ")");
 }
 
-function buildContactsResultsDiv(infoPacket) {
+    function buildContactsResultsDiv(infoPacket) {
 
-    currentTracePSInfoPacket = infoPacket;
-    currentTracePSContactRows = [];
-    // Check for an error first
-    if (infoPacket.ErrorMsg) {
-        $('#errLabel').css('display', 'block');
-        $('#errLabel').html(infoPacket.ErrorMsg);
-    }
-    else {
-        var div = $('#propertyContactResultsDiv');       
-        div.css('display', 'block');
-        $('#contactPersonNameLabel').text("Name: " + infoPacket.OwnerName);
-        $('#contactPersonSurnameLabel').text("Surname: " + infoPacket.OwnerSurname);
-        $('#contactIDorCKnoLabel').text("ID number: " + infoPacket.IdNumber);
+        currentTracePSInfoPacket = infoPacket;
+        currentTracePSContactRows =[];
+        // Check for an error first
+        if (infoPacket.ErrorMsg) {
+            $('#errLabel').css('display', 'block');
+            $('#errLabel').html(infoPacket.ErrorMsg);
+        }
+        else {
+            var div = $('#propertyContactResultsDiv');
+            div.css('display', 'block');
+            $('#contactPersonNameLabel').text("Name: " +infoPacket.OwnerName);
+            $('#contactPersonSurnameLabel').text("Surname: " +infoPacket.OwnerSurname);
+            $('#contactIDorCKnoLabel').text("ID number: " +infoPacket.IdNumber);
 
         var table = $('#propertyOwnerContactInfoTbl');
-        table.empty();
-        table.append("<tr><th>Contact no.</th><th>Type</th><th>Date</th><th>Use</th></tr>");
-        if (infoPacket.ContactRows && infoPacket.ContactRows.length > 0) {
+            table.empty();
+            table.append("<tr><th>Contact no.</th><th>Type</th><th>Date</th><th>Use</th></tr>");
+            if (infoPacket.ContactRows && infoPacket.ContactRows.length > 0) {
             $.each(infoPacket.ContactRows, function (index, row) {
                 var tr = $("<tr />");
                 tr.append("<td>" + row.Phone + "</td>");
@@ -851,24 +913,25 @@ function buildContactsResultsDiv(infoPacket) {
                 tr.append("<td>" + row.Date + "</td>");
 
                 row.RowId = index;
-                var checkbox = buildInputCheckbox("", "contactrow_" + index, "left", 2, 2, true, function () { });
+                var checkbox = buildInputCheckbox("", "contactrow_" +index, "left", 2, 2, true, function () { 
+            });
 
-                tr.append("<td>" + checkbox[0].outerHTML + "</td>");
+                tr.append("<td>" +checkbox[0].outerHTML + "</td>");
 
                 table.append(tr);
             });
         }
 
-        // Event handler and Go to Edit Person Details pane
-        var gotoEditOwnerDetailsBtn = $("<input type='button' id='gotoEditOwnerDetailsBtn' value='Create new contact..' />");
-        gotoEditOwnerDetailsBtn.unbind('click').bind('click', function () {            
+            // Event handler and Go to Edit Person Details pane
+            var gotoEditOwnerDetailsBtn = $("<input type='button' id='gotoEditOwnerDetailsBtn' value='Create new contact..' />");
+            gotoEditOwnerDetailsBtn.unbind('click').bind('click', function () {
             showMenu('contactdetails');
 
             currentTracePSContactRows = $.grep(currentTracePSInfoPacket.ContactRows, function (cr) {
-                return $('#contactrow_' + cr.RowId).is(':checked');
+                return $('#contactrow_' +cr.RowId).is(':checked');
             });
             updateOwnerDetailsEditorWithBrandNewContact(currentTracePSInfoPacket, currentTracePSContactRows);
-        });
+            });
         div.append('<p />');
         if (div.find('#gotoEditOwnerDetailsBtn').length == 0) {
             div.append(gotoEditOwnerDetailsBtn);
@@ -876,45 +939,45 @@ function buildContactsResultsDiv(infoPacket) {
     }
 }
 
-// Overridden
-// This function should display all info relating to properties, and allow user to select which info to use.
-function updatePropertyInfoMenu(infoPacket) {
-    $('#propertyInfoDiv').css('display', 'none');
-    $('#propertyContactResultsDiv').css('display', 'none');
-    $('#performEnquiryDiv').css('display', 'none');
-    $('#errLabel').css('display', 'none');
-    $('#lightstoneHistoryDiv').css('display', 'none');
-    $('#previousEnquiryLabel').css('display', 'none');
-
-    $('#knownIdTextbox').val('');
-    // Clear the menu if theres no marker currently selected
-    if (!currentMarker || !currentProperty) {
-        return;
-    }
-
-    //$('#previousEnquiryLabel').css('display', currentProperty.HasTracePSEnquiry ? 'block' : 'none');
-
-    //displayHistoryIfLightstoneListing();
-
-    // If there is no incoming info packet and the current marker doesn't have any cached info against it then enable the button to do the enquiry.
-    if (!infoPacket && !currentMarker.ContactInfoPacket) {
-        var enquiryDiv = $('#performEnquiryDiv');
-        enquiryDiv.css('display', 'block');
+    // Overridden
+    // This function should display all info relating to properties, and allow user to select which info to use.
+    function updatePropertyInfoMenu(infoPacket) {
+        $('#propertyInfoDiv').css('display', 'none');
         $('#propertyContactResultsDiv').css('display', 'none');
-        $('#propertyInfoDiv').css('display', 'block');
+        $('#performEnquiryDiv').css('display', 'none');
+        $('#errLabel').css('display', 'none');
+        $('#lightstoneHistoryDiv').css('display', 'none');
+        $('#previousEnquiryLabel').css('display', 'none');
 
-        return;
+        $('#knownIdTextbox').val('');
+        // Clear the menu if theres no marker currently selected
+        if (!currentMarker || !currentProperty) {
+            return;
     }
 
-    // If there is an incoming info packet, update the cached copy for the current marker
-    if (infoPacket) {
-        currentMarker.ContactInfoPacket = infoPacket;
-        $('#availableCreditLabel').text(availableCredit);
+        //$('#previousEnquiryLabel').css('display', currentProperty.HasTracePSEnquiry ? 'block' : 'none');
+
+        //displayHistoryIfLightstoneListing();
+
+        // If there is no incoming info packet and the current marker doesn't have any cached info against it then enable the button to do the enquiry.
+        if (!infoPacket && !currentMarker.ContactInfoPacket) {
+            var enquiryDiv = $('#performEnquiryDiv');
+            enquiryDiv.css('display', 'block');
+            $('#propertyContactResultsDiv').css('display', 'none');
+            $('#propertyInfoDiv').css('display', 'block');
+
+            return;
     }
 
-    // If there is no incoming info but there is a cached packet already stored in the current marker, use it
-    if (!infoPacket && currentMarker.ContactInfoPacket) {
-        infoPacket = currentMarker.ContactInfoPacket;
+        // If there is an incoming info packet, update the cached copy for the current marker
+        if (infoPacket) {
+            currentMarker.ContactInfoPacket = infoPacket;
+            $('#availableCreditLabel').text(availableCredit);
+    }
+
+        // If there is no incoming info but there is a cached packet already stored in the current marker, use it
+        if (!infoPacket && currentMarker.ContactInfoPacket) {
+            infoPacket = currentMarker.ContactInfoPacket;
     }
 
     if (infoPacket.OwnerName || infoPacket.ContactRows.length > 0) {

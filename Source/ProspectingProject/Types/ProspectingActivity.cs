@@ -55,5 +55,9 @@ namespace ProspectingProject
         public string AllocatedToName { get; set; }
 
         public int? ActivityFollowupTypeId { get; set; }
+
+        public string RelatedToContactPersonName { get; set; }
+
+        public string ActivityFollowupTypeName { get; set; }
     }
 }

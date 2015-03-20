@@ -122,18 +122,38 @@ namespace ProspectingProject
         private static ActivityBundle LoadProspectingActivities(ProspectingDataContext prospectingContext, int? lightstonePropertyId)
         {
             ActivityBundle activityBundle = new ActivityBundle();
-                        UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+            UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
             activityBundle.BusinessUnitUsers = user.BusinessUnitUsers;
             activityBundle.ActivityTypes = ProspectingStaticData.ActivityTypes;
             activityBundle.ActivityFollowupTypes = ProspectingStaticData.ActivityFollowupTypes;
 
-            var allActivities = prospectingContext.activity_logs.Where(a => a.lightstone_property_id == lightstonePropertyId);
-            foreach (var activity in allActivities)
+            IQueryable<activity_log> activities = null;
+            if (lightstonePropertyId.HasValue)
+            {
+                activities = prospectingContext.activity_logs.Where(a => a.lightstone_property_id == lightstonePropertyId);
+            }
+            else
+            {
+                activities = prospectingContext.activity_logs.Where(a => a.created_by == user.UserGuid).OrderByDescending(d => d.created_date).Take(50);
+            }
+            foreach (var activity in activities)
             {
                 var createdByUser = user.BusinessUnitUsers.FirstOrDefault(b => b.UserGuid == activity.created_by);
                 string createdBy = createdByUser != null && createdByUser.UserGuid != Guid.Empty ? createdByUser.UserName + " " + createdByUser.UserSurname : "System";
                 var allocatedToUser = user.BusinessUnitUsers.FirstOrDefault(b => b.UserGuid == activity.allocated_to);
                 string allocatedToName = allocatedToUser != null ? allocatedToUser.UserName + " " + allocatedToUser.UserSurname : "n/a";
+                string relatedToContactPersonName = null;
+                if (activity.contact_person_id != null)
+                {
+                    var relatedToContactPerson = prospectingContext.prospecting_contact_persons.First(pp => pp.contact_person_id == activity.contact_person_id);
+                    relatedToContactPersonName = relatedToContactPerson.firstname + " " + relatedToContactPerson.surname;
+                }
+                var activityFollowupType = prospectingContext.activity_followup_types.FirstOrDefault(t => t.activity_followup_type_id == activity.activity_followup_type_id);
+                    string activityFollowupTypeName = "";
+                    if (activityFollowupType != null) 
+                    {
+                        activityFollowupTypeName = activityFollowupType.activity_name;
+                    }
                 ProspectingActivity act = new ProspectingActivity
                 {
                     ActivityLogId = activity.activity_log_id,
@@ -157,7 +177,10 @@ namespace ProspectingProject
                     EmailTemplateId = activity.email_template_id,
                     EmailSent = activity.email_sent,
                     PhoneCall = activity.phone_call,
-                    Visit = activity.visit
+                    Visit = activity.visit,
+                    RelatedToContactPersonName = relatedToContactPersonName,
+                    ActivityFollowupTypeId = activity.activity_followup_type_id,
+                    ActivityFollowupTypeName = activityFollowupTypeName,
                 };
                 activityBundle.Activities.Add(act);
             }
@@ -2181,6 +2204,14 @@ namespace ProspectingProject
                     contactDetail.is_primary_contact = true;
                     prospecting.SubmitChanges();
                 }
+            }
+        }
+
+        public static ActivityBundle LoadUserActivities()
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                return LoadProspectingActivities(prospecting, null);
             }
         }
     }

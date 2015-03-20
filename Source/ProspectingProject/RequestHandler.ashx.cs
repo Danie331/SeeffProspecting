@@ -85,7 +85,17 @@ namespace ProspectingProject
                 case "make_default_contact_detail":
                     MakeDefaultContactDetail(json);
                     break;
+                case "load_activities_for_user":
+                    var activities = LoadActivitiesForUser(json);
+                    context.Response.Write(activities);
+                    break;
             }
+        }
+
+        private string LoadActivitiesForUser(string json)
+        {
+            var results = ProspectingDomain.LoadUserActivities();
+            return ProspectingDomain.SerializeToJsonWithDefaults(results);
         }
 
         private void MakeDefaultContactDetail(string json)
