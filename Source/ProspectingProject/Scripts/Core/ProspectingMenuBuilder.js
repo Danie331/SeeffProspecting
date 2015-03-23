@@ -222,7 +222,7 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
 
         var propertyAddress = $("<div style='display:block;background-color:#F0E68C;border: 1px solid white !important;'>" + formatLabelValue('', followup.PropertyAddress) + " </div>");
 
-        var feedbackItem = $("<div style='display:block;background-color:#F0E68C;border: 1px solid white !important;padding:1px'></div>");
+        var feedbackItem = $("<div style='display:block;background-color:white;border: 1px solid white !important;padding:1px'></div>");
         var feedbackLeftSpacer = $("<div style='width:50%;display:inline-block;'></div>");
         var feedbackRightSpacer = $("<div style='width:50%;display:inline-block;'></div>");
         var feedbackBtn = $("<button type='text' id='feedbackFollowupBtn' style='cursor:pointer;vertical-align:middle;float:right'><img src='Assets/add_activity.png' style='vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>Feedback</label></button>");
@@ -236,6 +236,31 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
                 });
 
                 performFollowupFiltering(sourceFollowups, jContainerElement);
+            });
+        });
+
+        // view property button
+        var viewPropertyBtn = $("<button type='text' id='viewPropertyFollowupBtn' style='cursor:pointer;vertical-align:middle;float:right;margin-right:2px'><img src='Assets/lightstone.png' style='vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>View Property</label></button>");
+        feedbackRightSpacer.append(viewPropertyBtn);
+        viewPropertyBtn.click(function (e) {
+            e.preventDefault();
+            // Find the suburb this property belongs to:
+            var targetSuburb = null;
+            targetSuburb = $.grep(suburbsInfo, function (sub) {
+                return sub.SuburbId == followup.SeeffAreaId;
+            })[0];
+
+            // Load the suburb
+            $('#suburbLink' + targetSuburb.SuburbId).trigger('click', function () {
+                var targetProperty = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+                    return pp.LightstonePropertyId == followup.LightstonePropertyId;
+                })[0];
+                var marker = targetProperty.Marker;
+                marker.ViewOnly = true;
+                try {
+                    new google.maps.event.trigger(marker, 'click');
+                } catch (e) { }
+                // Set current proeprty, what about SS?
             });
         });
 
@@ -772,11 +797,44 @@ function buildActivityDisplayItem(activity) {
     var contactPersonName = activity.RelatedToContactPersonName ? activity.RelatedToContactPersonName : "n/a";
     var relatedTo = $("<div style='display:block;background-color:#F0E68C;border:1px solid white;'>" + formatLabelValue('Related To', contactPersonName) + " </div>");
 
+    var viewPropertyContainer = $("<div style='display:block;background-color:white;border: 1px solid white !important;padding:1px'></div>");
+    var viewPropertyLeftSpacer = $("<div style='width:50%;display:inline-block;'></div>");
+    var viewPropertyRightSpacer = $("<div style='width:50%;display:inline-block;'></div>");
+    var viewPropertyBtn = $("<button type='text' id='viewPropertyBtn' style='cursor:pointer;vertical-align:middle;float:right'><img src='Assets/lightstone.png' style='vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>View Property</label></button>");
+    viewPropertyRightSpacer.append(viewPropertyBtn);
+    viewPropertyContainer.append(viewPropertyLeftSpacer).append(viewPropertyRightSpacer);
+    viewPropertyBtn.click(function (e) {
+        e.preventDefault();
+        // Find the suburb this property belongs to:
+        var targetSuburb = null;
+        targetSuburb = $.grep(suburbsInfo, function (sub) {
+            return sub.SuburbId == activity.SeeffAreaId;
+        })[0];
+
+        // Load the suburb
+        $('#suburbLink' + targetSuburb.SuburbId).trigger('click', function () {
+            var targetProperty = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+                return pp.LightstonePropertyId == activity.LightstonePropertyId;
+            })[0];
+            var marker = targetProperty.Marker;
+            marker.ViewOnly = true;
+            try {
+                new google.maps.event.trigger(marker, 'click');
+            } catch (e) {}
+            // Set current proeprty, what about SS?
+        });
+    });
+
     containerDiv.append(activityAndFollowupContainer);
     containerDiv.append(comment);
     containerDiv.append(createdDateCreatedByContainer);
-    containerDiv.append(allocatedTo);
+    if (activity.FollowUpDate != null && activity.CreatedByGuid != activity.AllocatedTo) {
+        containerDiv.append(allocatedTo);
+    } 
     containerDiv.append(relatedTo);
+    if (currentProperty == null) {
+        containerDiv.append(viewPropertyContainer);
+    }
 
     return containerDiv;
 }
@@ -819,8 +877,8 @@ function buildSuburbsSelectionHtml() {
         var linkId = "suburbLink" + suburbId;
         var radioBtnId = 'suburbRadio' + suburbId;
         var suburbBtn = $("<input type='radio' name='suburbsSelect' id='" + radioBtnId + "'><a href='' id='" + linkId + "'>" + suburbName + "</a></input>");
-        $('#contentarea').on('click', '#' + linkId, function (event) {
-            suburbSelect(event, $(this).attr('id'));
+        $('#contentarea').on('click', '#' + linkId, function (event, callbackFn) {
+            suburbSelect(event, $(this).attr('id'), callbackFn);
         });
 
         $('#contentarea').on('click', '#' + radioBtnId, function (event) {
@@ -840,7 +898,7 @@ function buildSuburbsSelectionHtml() {
         suburbsTbl.append(tr);
     }
 
-    function suburbSelect(event, itemId) {
+    function suburbSelect(event, itemId, callbackFn) {
         for (var a = 0; a < suburbsInfo.length; a++) {
             clearSuburbBySuburbId(suburbsInfo[a].SuburbId);
         }
@@ -852,7 +910,7 @@ function buildSuburbsSelectionHtml() {
             $('#suburbRadio' + areaId).prop('checked', true);
         }
 
-        loadSuburb(areaId, false);
+        loadSuburb(areaId, false, callbackFn, true);
     }
 
     return suburbsTbl[0].outerHTML;

@@ -718,9 +718,12 @@ function loadProspectingProperty(marker) {
             currentProperty.Marker = marker;
             updateOwnerDetailsEditor();
             //updatePropertyNotesDiv();
-            if (currentProperty.Contacts.length || currentProperty.ContactCompanies.length) {
-                showMenu("contactdetails");
+            if (!marker.ViewOnly) {
+                if (currentProperty.Contacts.length || currentProperty.ContactCompanies.length) {
+                    showMenu("contactdetails");
+                }
             }
+            marker.ViewOnly = false;
 
             updateProspectedStatus();
         }
@@ -1113,16 +1116,14 @@ function centreMap(suburb) {
         return;
     }
 
-    var center = null;
-    if (suburb.ProspectingProperties && suburb.ProspectingProperties.length > 0) {
-        center = new google.maps.LatLng(suburb.ProspectingProperties[0].LatLng.Lat, suburb.ProspectingProperties[0].LatLng.Lng);
+    map.setZoom(13);
+    var pos = calcMapCenterWithOffset(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng, -200, 0);
+    if (pos) {
+        map.setCenter(pos);
     }
     else {
-        center = new google.maps.LatLng(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng);
+        map.setCenter(new google.maps.LatLng(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng));
     }
-
-    map.setZoom(13);
-    map.setCenter(center);
 }
 
 function createMarkersForSuburb(suburb, showSeeffCurrentListings) {
@@ -1271,9 +1272,13 @@ function openSSUnitInfo(unit) {
                 currentProperty = unit;
                 updateOwnerDetailsEditor();
                 //updatePropertyNotesDiv();
-                if (currentProperty.Contacts && currentProperty.Contacts.length > 0) {
-                    showMenu("contactdetails");
+                var marker = unit.Marker;
+                if (!marker.ViewOnly) {
+                    if (currentProperty.Contacts && currentProperty.Contacts.length > 0) {
+                        showMenu("contactdetails");
+                    }
                 }
+                marker.ViewOnly = false;
 
                 updateProspectedStatus();
 

@@ -26,5 +26,7 @@ namespace ProspectingProject
         public string FollowupActivityTypeName { get; set; }
 
         public ProspectingContactPerson RelatedToContactPerson { get; set; }
+
+        public int? SeeffAreaId { get; set; }
     }
 }

@@ -149,11 +149,12 @@ namespace ProspectingProject
                     relatedToContactPersonName = relatedToContactPerson.firstname + " " + relatedToContactPerson.surname;
                 }
                 var activityFollowupType = prospectingContext.activity_followup_types.FirstOrDefault(t => t.activity_followup_type_id == activity.activity_followup_type_id);
-                    string activityFollowupTypeName = "";
-                    if (activityFollowupType != null) 
-                    {
-                        activityFollowupTypeName = activityFollowupType.activity_name;
-                    }
+               string activityFollowupTypeName = "";
+               if (activityFollowupType != null) 
+               {
+                   activityFollowupTypeName = activityFollowupType.activity_name;
+               }
+                int? seeffAreaId = prospectingContext.prospecting_properties.First(pp => pp.lightstone_property_id == activity.lightstone_property_id).seeff_area_id;
                 ProspectingActivity act = new ProspectingActivity
                 {
                     ActivityLogId = activity.activity_log_id,
@@ -181,6 +182,7 @@ namespace ProspectingProject
                     RelatedToContactPersonName = relatedToContactPersonName,
                     ActivityFollowupTypeId = activity.activity_followup_type_id,
                     ActivityFollowupTypeName = activityFollowupTypeName,
+                    SeeffAreaId = seeffAreaId
                 };
                 activityBundle.Activities.Add(act);
             }
@@ -723,6 +725,7 @@ namespace ProspectingProject
                     if (activityFollowupType != null) {
                         activityFollowupTypeName = activityFollowupType.activity_name;
                     }
+                    int? seeffAreaId = prospecting.prospecting_properties.First(pp => pp.lightstone_property_id == act.lightstone_property_id).seeff_area_id;
                     var followup = new FollowUpActivity
                                         {
                                             ActivityLogId = act.activity_log_id,
@@ -738,7 +741,8 @@ namespace ProspectingProject
                                             RelatedToContactPersonId = act.contact_person_id,
                                             RelatedToContactPerson = LoadContactForFollowup(prospecting, act.contact_person_id),
                                             ActivityFollowupTypeId = act.activity_followup_type_id,
-                                            PropertyAddress = propAddress
+                                            PropertyAddress = propAddress,
+                                            SeeffAreaId = seeffAreaId
                                         };
                     followups.Add(followup);
                 }
