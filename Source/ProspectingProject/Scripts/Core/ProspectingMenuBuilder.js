@@ -31,7 +31,7 @@ function createProspectingMenu(userData) {
     fixElementHeightForIE('contentactivityContainer', 0.8);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Followup", "followup", buildFollowupReport(userData.FollowupActivities), handleFollowupReportClick);
+    menuItem = createMenuItem("Follow-up", "followup", buildFollowupReport(userData.FollowupActivities), handleFollowupReportClick);
     appendMenuItemContent(menuItem.MenuItemContent);
     fixElementHeightForIE('contentfollowupContainer', 0.8);
     menuItems.push(menuItem);
@@ -251,14 +251,17 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
             })[0];
 
             // Load the suburb
+            globalZoomLevel = 20;
             $('#suburbLink' + targetSuburb.SuburbId).trigger('click', function () {
                 var targetProperty = $.grep(currentSuburb.ProspectingProperties, function (pp) {
                     return pp.LightstonePropertyId == followup.LightstonePropertyId;
                 })[0];
                 var marker = targetProperty.Marker;
-                marker.ViewOnly = true;
                 try {
-                    new google.maps.event.trigger(marker, 'click');
+                    centreMap(marker.Suburb, marker);
+                    new google.maps.event.trigger(marker, 'click', function () {
+                        debugger;
+                    });
                 } catch (e) { }
                 // Set current proeprty, what about SS?
             });
@@ -812,13 +815,14 @@ function buildActivityDisplayItem(activity) {
         })[0];
 
         // Load the suburb
+        globalZoomLevel = 20;
         $('#suburbLink' + targetSuburb.SuburbId).trigger('click', function () {
             var targetProperty = $.grep(currentSuburb.ProspectingProperties, function (pp) {
                 return pp.LightstonePropertyId == activity.LightstonePropertyId;
             })[0];
             var marker = targetProperty.Marker;
-            marker.ViewOnly = true;
             try {
+                centreMap(marker.Suburb, marker);
                 new google.maps.event.trigger(marker, 'click');
             } catch (e) {}
             // Set current proeprty, what about SS?
@@ -910,6 +914,10 @@ function buildSuburbsSelectionHtml() {
             $('#suburbRadio' + areaId).prop('checked', true);
         }
 
+        // Hack to reset global zoom level
+        if (!callbackFn) {
+            globalZoomLevel = 13;
+        }
         loadSuburb(areaId, false, callbackFn, true);
     }
 

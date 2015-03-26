@@ -89,7 +89,15 @@ namespace ProspectingProject
                     var activities = LoadActivitiesForUser(json);
                     context.Response.Write(activities);
                     break;
+                case "unlock_prospecting_record":
+                    UnlockCurrentProspectingRecord();
+                    break;
             }
+        }
+
+        private void UnlockCurrentProspectingRecord()
+        {
+            ProspectingDomain.UnlockCurrentProspectingRecord();
         }
 
         private string LoadActivitiesForUser(string json)

@@ -32,6 +32,8 @@ namespace ProspectingProject
         public static Func<ProspectingDataContext, ProspectingContactPerson, IQueryable<ProspectingContactDetail>> PropertyContactEmailRetriever { get; private set; }
         public static Func<ProspectingDataContext, prospecting_property, bool, IQueryable<ProspectingContactPerson>> PropertyCompanyContactsRetriever { get; private set; }
 
+        public static Guid? UserSessionGuid { get; set; }
+
         static ProspectingStaticData()
         {
             LoadContactDetailTypes();

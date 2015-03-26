@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style type="text/css" >
+        html, body, #googleMap {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-y: hidden;
+        }
+
+        #mapContainer {
+            width: 640px;
+            height: 480px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -260px;
+            margin-left: -320px;
+        }
+    </style>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="Scripts/CrossDomainRequestPlugin.js"></script>
+    <script src="Scripts/blockUi.js"></script>
+
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDWHlk3fmGm0oDsqVaoBM3_YocW5xPKtwA&libraries=drawing,geometry,places&sensor=true"></script>
+
+    <script>
+        var map;
+        var wsBaseUrl = '';
+
+        function initializeMap(defaultZoomAndLocation) {
+            map = new google.maps.Map(document.getElementById("googleMap"),
+                {
+                    zoom: 13,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    zoomControlOptions: {
+                        style: google.maps.ZoomControlStyle.DEFAULT,
+                        position: google.maps.ControlPosition.RIGHT_TOP
+                    },
+                    panControlOptions: {
+                        position: google.maps.ControlPosition.RIGHT_TOP
+                    }
+                });
+            defaultZoomAndLocation = { DefaultZoom: 5, DefaultLat: -29.683976, DefaultLng: 19.900560 };
+            if (defaultZoomAndLocation) {
+
+                var zoom = defaultZoomAndLocation.DefaultZoom;
+                var defaultLat = defaultZoomAndLocation.DefaultLat;
+                var defaultLng = defaultZoomAndLocation.DefaultLng;
+
+                // Set zoom here
+                map.setZoom(zoom);
+                var center = new google.maps.LatLng(defaultLat, defaultLng);
+                map.setCenter(center);
+            }
+        }
+
+        function handleMapClick(e) {
+            $('body').unbind('click');
+            $.blockUI({ message: "<h3 style='font-family:Verdana'>Just a moment...</h3>" });
+
+            var lat = e.latLng.lat();
+            var lng = e.latLng.lng();
+            // Get the area id
+            $.ajax({
+                url: wsBaseUrl + "/api/SeeffSpatialLookup/GetAreaIdAndLicenseId",
+                type: 'POST',
+                data: JSON.stringify({ Key: 'a2c48f98-14fb-425e-bbd2-312cfb89980c', Lat: lat, Lng: lng }),
+                contentType: "application/json; charset=utf-8"
+            }).success(function (dataObject) {
+                var msgHtml = 'SeeffAreaId: ' + dataObject.AreaId + '<br />' + 'LicenseId: ' + dataObject.LicenseId;
+                $.blockUI({ message: msgHtml, css: { cursor: 'default' } });
+
+                $('body').bind('click', function () {
+                    $.unblockUI();
+                });
+            }).error(function (a, b) {
+                debugger;
+            });
+        }
+
+        $(function () {
+            initializeMap({ DefaultZoom: 5, DefaultLat: -29.512027, DefaultLng: 21.578423 });
+            google.maps.event.addListener(map, 'click', function (e) {
+                handleMapClick(e);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="mapContainer">
+        Click a point on the map to get its SeeffAreaId and LicenseId:
+        <p></p>
+        <div id="googleMap"></div>
+    </div>
+</body>
+</html>

@@ -24,6 +24,9 @@ var currentSuburb = null;
 // Currently right-clicked marker
 var rightClickedProperty = null;
 
+// global zoom level variable
+var globalZoomLevel = 13;
+
 function initEventHandlers() {
     $.contextMenu({
         selector: '.context-menu-prospect',
@@ -180,7 +183,8 @@ function generateOutputFromLightstone(data) {
                     var dataObject = $.parseJSON(data);
                     if (dataObject.CreationErrorMsg) {
                         $.unblockUI();
-                        alert(dataObject.CreationErrorMsg);
+                        // reload suburb 
+                        handleCreateProspectsServerError(dataObject, selectedEntities);
                     }
                     else {
                         if (currentSuburb) {
@@ -221,6 +225,19 @@ function generateOutputFromLightstone(data) {
     }
 
     return div;
+}
+
+function handleCreateProspectsServerError(dataObject, createEntities) {
+    if (dataObject.CreationErrorMsg.indexOf('Property already exists in the system.') > -1) {      
+        if (dataObject.SeeffAreaId) {
+            alert('The property(ies) you are trying to create already exist in the system. Suburb will reload...');
+            var suburb = getSuburbById(dataObject.SeeffAreaId);
+            if (suburb) suburb.IsInitialised = false;
+            loadSuburb(dataObject.SeeffAreaId, false, null, false);
+        } else {
+            alert('The property you are trying to create already exists in the system. Please re-load the suburb.');
+        }
+    }
 }
 
 function createProspectingEntities(selectedEntities, callbackSuccess, callbackFail) {
@@ -305,7 +322,7 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCent
         suburb = newSuburb();
         suburb.SuburbId = suburbId;
     }
-    suburb.IsInitialised = false; // Adding this line in here to force obtaining the latest data from the database each load (this is important because the contacts for the property could be updated elsewhere and changes must reflect)
+    //suburb.IsInitialised = false; // Adding this line in here to force obtaining the latest data from the database each load (this is important because the contacts for the property could be updated elsewhere and changes must reflect)
 
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading ' + suburb.SuburbName + '...</p>' });
     if (!suburb.IsInitialised) {
@@ -316,12 +333,14 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCent
             success: function (data, textStatus, jqXHR) {
                 if (textStatus == "success" && data.PolyCoords.length > 0) {
                     initialiseAndDisplaySuburb(suburb, data, showSeeffCurrentListings);
-                    if (mustCentreMap !== false) {
-                        centreMap(suburb);
-                    }
+
                     $.unblockUI();
                     if (actionAfterLoad) {
                         actionAfterLoad();
+                    } else {
+                        if (mustCentreMap !== false) {
+                            centreMap(suburb);
+                        }
                     }
                 } else {
                     $.unblockUI();
@@ -336,12 +355,14 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCent
         });
     } else {
         initialiseAndDisplaySuburb(suburb, null, showSeeffCurrentListings);
-        if (mustCentreMap !== false) {
-            centreMap(suburb);
-        }
+
         $.unblockUI();
         if (actionAfterLoad) {
             actionAfterLoad();
+        } else {
+            if (mustCentreMap !== false) {
+                centreMap(suburb);
+            }
         }
     }
 }
@@ -399,7 +420,7 @@ function setCurrentMarker(suburb, property) {
     });
 }
 
-function markerClick() {
+function markerClick(e) {
     closeInfoWindow();
     $('#propertyInfoDiv').css('display', 'none');
     var marker = $(this)[0];
@@ -415,9 +436,13 @@ function markerClick() {
                     alert(data.ErrorMsg);
                 }
 
-                updateExistingPropertyFromProperty(marker.ProspectingProperty, data);
-                currentMarker = marker;
-                loadProspectingProperty(marker);
+                if (data.IsLockedByOtherUser == true) {
+                    warnUserRecordIsLocked(data);
+                } else {
+                    updateExistingPropertyFromProperty(marker.ProspectingProperty, data);
+                    currentMarker = marker;
+                    loadProspectingProperty(marker);
+                }
             } else {
                 alert('Could not complete request.');
             }
@@ -428,6 +453,17 @@ function markerClick() {
         },
         dataType: "json"
     });
+}
+
+function warnUserRecordIsLocked(propertyResult) {
+    var datetime = propertyResult.LockedDateTime.split('T');
+    var dateportion = datetime[0];
+    var timeportion = datetime[1].substring(0, 5);
+    if (timeportion == '00:00') timeportion = '';
+    propertyResult.LockedDateTime = dateportion + " @ " + timeportion;
+
+    var displayMsg = 'On ' + propertyResult.LockedDateTime + " " + propertyResult.LockedUsername + " locked this record. If you would like to work on the record please ask them to release it.";
+    alert(displayMsg);
 }
 
 /// NB property input must either be FH or a unit of a SS
@@ -718,12 +754,9 @@ function loadProspectingProperty(marker) {
             currentProperty.Marker = marker;
             updateOwnerDetailsEditor();
             //updatePropertyNotesDiv();
-            if (!marker.ViewOnly) {
-                if (currentProperty.Contacts.length || currentProperty.ContactCompanies.length) {
-                    showMenu("contactdetails");
-                }
+            if (currentProperty.Contacts.length || currentProperty.ContactCompanies.length) {
+                showMenu("contactdetails");
             }
-            marker.ViewOnly = false;
 
             updateProspectedStatus();
         }
@@ -1110,19 +1143,27 @@ function getAllMarkersThatWillSpiderfy(property) {
     return [];
 }
 
-function centreMap(suburb) {
+function centreMap(suburb, marker) {
 
     if (!suburb.IsInitialised) {
         return;
     }
 
-    map.setZoom(13);
-    var pos = calcMapCenterWithOffset(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng, -200, 0);
-    if (pos) {
-        map.setCenter(pos);
-    }
-    else {
-        map.setCenter(new google.maps.LatLng(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng));
+    map.setZoom(globalZoomLevel);
+    if (marker) {
+        var mapMarkerPos = calcMapCenterWithOffset(marker.getPosition().lat(), marker.getPosition().lng(), -200, 0);
+        if (!mapMarkerPos) {
+            mapMarkerPos = marker.position;
+        }
+        map.setCenter(mapMarkerPos);
+    } else {
+        var pos = calcMapCenterWithOffset(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng, -200, 0);
+        if (pos) {
+            map.setCenter(pos);
+        }
+        else {
+            map.setCenter(new google.maps.LatLng(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng));
+        }
     }
 }
 
@@ -1268,20 +1309,20 @@ function openSSUnitInfo(unit) {
                     alert(data.ErrorMsg);
                 }
 
-                updateExistingPropertyFromProperty(unit, data);
-                currentProperty = unit;
-                updateOwnerDetailsEditor();
-                //updatePropertyNotesDiv();
-                var marker = unit.Marker;
-                if (!marker.ViewOnly) {
+                if (data.IsLockedByOtherUser == true) {
+                    warnUserRecordIsLocked(data);
+                } else {
+                    updateExistingPropertyFromProperty(unit, data);
+                    currentProperty = unit;
+                    updateOwnerDetailsEditor();
+                    //updatePropertyNotesDiv();
+                    var marker = unit.Marker;
                     if (currentProperty.Contacts && currentProperty.Contacts.length > 0) {
                         showMenu("contactdetails");
                     }
+
+                    updateProspectedStatus();
                 }
-                marker.ViewOnly = false;
-
-                updateProspectedStatus();
-
             } else {
                 alert('Could not complete request.');
             }
@@ -1453,6 +1494,7 @@ function closeInfoWindow() {
         infowindow.close();
         infowindow = null;
         currentMarker = null;
+        unlockCurrentProperty();
         currentProperty = null;
         currentPersonContact = null;
         if (tempIndicatorMarker) {
@@ -1467,6 +1509,17 @@ function closeInfoWindow() {
 
         currentTracePSInfoPacket = null;
         currentTracePSContactRows = null;
+    }
+}
+
+function unlockCurrentProperty() {
+    if (currentProperty != null) {
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify({ Instruction: 'unlock_prospecting_record' }),
+            dataType: "json"
+        });
     }
 }
 

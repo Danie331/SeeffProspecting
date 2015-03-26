@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="seeff_spatial" Class="SeeffSpatialDbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=louise-pc;Initial Catalog=seeff_spatial;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="seeff_spatialConnectionString" Provider="System.Data.SqlClient" />
+  <Function Name="dbo.get_area_id" Method="get_area_id" IsComposable="true">
+    <Parameter Name="lat" Type="System.Double" DbType="Float" />
+    <Parameter Name="long" Type="System.Double" DbType="Float" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.get_license_id" Method="get_license_id" IsComposable="true">
+    <Parameter Name="lat" Type="System.Double" DbType="Float" />
+    <Parameter Name="long" Type="System.Double" DbType="Float" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

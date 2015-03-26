@@ -63,5 +63,11 @@ namespace ProspectingProject
         {
             return ProspectingPropertyId.HasValue ? ProspectingPropertyId.Value : -999999;
         }
+
+        public bool? IsLockedByOtherUser { get; set; }
+
+        public string LockedUsername { get; set; }
+
+        public DateTime? LockedDateTime { get; set; }
     }
 }

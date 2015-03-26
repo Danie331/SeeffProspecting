@@ -103,6 +103,11 @@
                 error: function (textStatus, errorThrown) { debugger;},
                 dataType: "json"
             });
+
+            // Handle the browser close event - cleanup
+            $(window).bind("beforeunload", function () {
+                unlockCurrentProperty();
+            });
         }
 
         function initializeMap(defaultZoomAndLocation) {

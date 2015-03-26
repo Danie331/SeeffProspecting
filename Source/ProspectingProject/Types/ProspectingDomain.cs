@@ -661,7 +661,8 @@ namespace ProspectingProject
                              UserName = bu.UserName,
                              UserSurname = bu.UserSurname
                         });
-                return new UserDataResponsePacket
+
+                var userPacket = new UserDataResponsePacket
                 {
                     UserGuid = userGuid,
                     AvailableSuburbs = LoadSuburbInfoForUser(userAuthPacket.SuburbsList),
@@ -681,6 +682,9 @@ namespace ProspectingProject
                     BusinessUnitUsers = businessUnitUsers,
                     FollowupActivities = LoadFollowups(userGuid, businessUnitUsers)
                 };
+
+                ProspectingStaticData.UserSessionGuid = userGuid; // in case the session expires, retain a handle to the guid.
+                return userPacket;
             }
         }
 
@@ -1981,13 +1985,52 @@ namespace ProspectingProject
 
         public static ProspectingProperty GetProspectingProperty(ProspectingPropertyId dataPacket)
         {
+            UnlockCurrentProspectingRecord();
+
             using (var prospectingDB = new ProspectingDataContext())
             {
                 int lightstoneId = dataPacket.LightstonePropertyId;
                 var propRecord = prospectingDB.prospecting_properties.First(pp => pp.lightstone_property_id == lightstoneId);
 
                 ProspectingProperty property = CreateProspectingProperty(prospectingDB, propRecord, true, true, dataPacket.LoadActivities);
+
+                var currentUser = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+                if (propRecord.locked_by_guid != null && propRecord.locked_by_guid != currentUser.UserGuid)
+                {
+                    property.IsLockedByOtherUser = true;
+                    var userWithLock = currentUser.BusinessUnitUsers.First(bu => bu.UserGuid == propRecord.locked_by_guid);
+                    property.LockedUsername = userWithLock.UserName + " " + userWithLock.UserSurname;
+                    property.LockedDateTime = propRecord.locked_datetime;
+                }
+                else
+                {
+                    // Lock the record as in-use by this user
+                    propRecord.locked_by_guid = currentUser.UserGuid;
+                    propRecord.locked_datetime = DateTime.Now;
+                    prospectingDB.SubmitChanges();
+                }
+
                 return property;
+            }
+        }
+
+        public static void UnlockCurrentProspectingRecord()
+        {
+            var currentUser = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+            Guid? userGuid = currentUser != null ? currentUser.UserGuid : ProspectingStaticData.UserSessionGuid;
+            if (userGuid.HasValue)
+            {
+                using (var prospectingDB = new ProspectingDataContext())
+                {
+                    var propertiesLockedByUser = prospectingDB.prospecting_properties.Where(pp => pp.locked_by_guid == userGuid);
+                    foreach (var pp in propertiesLockedByUser)
+                    {
+                        pp.locked_by_guid = null;
+                        pp.locked_datetime = null;
+                    }
+
+                    prospectingDB.SubmitChanges();
+                }
             }
         }
 
@@ -2035,7 +2078,8 @@ namespace ProspectingProject
         public static ProspectingEntityOutputBundle CreateNewProspectingEntities(ProspectingEntityInputBundle prospectingEntityBundle, List<NewProspectingEntity> searchResults)
         {
             ProspectingEntityOutputBundle outputBundle = new ProspectingEntityOutputBundle();
-
+            var firstResult = searchResults.FirstOrDefault();
+            outputBundle.SeeffAreaId = firstResult != null ? firstResult.SeeffAreaId : null;
             try
             {
                 // Create sectional titles
