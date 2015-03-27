@@ -331,4 +331,8 @@
     <Parameter Name="seeff_area_id" Type="System.Int32" DbType="Int" />
     <Return Type="System.Int32" />
   </Function>
+  <Function Name="dbo.prospected_propety_contact_count" Method="prospected_propety_contact_count" IsComposable="true">
+    <Parameter Name="prospecting_property_id" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
 </Database>

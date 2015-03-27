@@ -1,7 +1,0 @@
-<?xml version="1.0" standalone="yes"?>
-<dsSettings xmlns="http://tempuri.org/dsSettings.xsd">
-  <tblDBSettings>
-    <Environment>test</Environment>
-    <SQLInstanceName>learnit-dev</SQLInstanceName>
-  </tblDBSettings>
-</dsSettings>

@@ -17,7 +17,8 @@ public partial class Prospecting : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            if (HttpContext.Current.IsDebuggingEnabled)
+            bool debugFlag = Request.QueryString["debug"] != null;
+            if (HttpContext.Current.IsDebuggingEnabled || debugFlag)
             {
                 Session["user_guid"] = Request.QueryString["user_guid"];
                 Session["session_key"] = Guid.NewGuid().ToString();

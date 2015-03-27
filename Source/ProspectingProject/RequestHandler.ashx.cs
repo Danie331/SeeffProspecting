@@ -92,7 +92,17 @@ namespace ProspectingProject
                 case "unlock_prospecting_record":
                     UnlockCurrentProspectingRecord();
                     break;
+                case "find_area_id":
+                    int? seeffAreaId = FindAreaId(json);
+                    context.Response.Write(seeffAreaId);
+                    break;
             }
+        }
+
+        private int? FindAreaId(string json)
+        {
+            GeoLocation location = ProspectingDomain.Deserialise<GeoLocation>(json);
+            return ProspectingDomain.FindAreaId(location);
         }
 
         private void UnlockCurrentProspectingRecord()

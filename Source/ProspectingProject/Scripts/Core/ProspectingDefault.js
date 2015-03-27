@@ -201,6 +201,9 @@ function generateOutputFromLightstone(data) {
                                 })[0];
                                 
                                 currentProperty = targetProp;
+                                try {
+                                    centreMap(currentSuburb, currentProperty.Marker);
+                                } catch (e) { }
                                 new google.maps.event.trigger(currentProperty.Marker, 'click');
                             } else {
                                 currentProperty = null;
@@ -230,13 +233,18 @@ function generateOutputFromLightstone(data) {
 function handleCreateProspectsServerError(dataObject, createEntities) {
     if (dataObject.CreationErrorMsg.indexOf('Property already exists in the system.') > -1) {      
         if (dataObject.SeeffAreaId) {
-            alert('The property(ies) you are trying to create already exist in the system. Suburb will reload...');
+            alert('The property(ies) you are trying to create already exist in the system. Click OK to reload suburb...');
             var suburb = getSuburbById(dataObject.SeeffAreaId);
-            if (suburb) suburb.IsInitialised = false;
+            if (suburb) {
+                clearSuburbBySuburbId(suburb.SuburbId);
+                suburb.IsInitialised = false;
+            }
+            if (currentSuburb) {
+                clearSuburbBySuburbId(currentSuburb.SuburbId);
+                currentSuburb.IsInitialised = false;
+            }
             loadSuburb(dataObject.SeeffAreaId, false, null, false);
-        } else {
-            alert('The property you are trying to create already exists in the system. Please re-load the suburb.');
-        }
+        } 
     }
 }
 
@@ -1730,21 +1738,86 @@ function performLightstoneSearch() {
     }
 }
 
-function showSearchedPropertyOnMap(result) {  
-
-    var content = generateOutputFromLightstone([result]);
-    var firstResult = result.PropertyMatches[0];
-
-    var latLng = new google.maps.LatLng(firstResult.LatLng.Lat, firstResult.LatLng.Lng);
-    showPopupAtLocation(latLng, content);
-
-    var pos = calcMapCenterWithOffset(latLng.lat(), latLng.lng(), -200, 0);
-    if (pos) {
-        map.setCenter(pos);
+function showSearchedPropertyOnMap(result) { // test for ss (new and existing)
+    if (result.SeeffAreaId == null) {
+        // Find the seeff area id for this result
+        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Locating Area...</p>' });
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify({
+                Instruction: 'find_area_id',
+                Lat: result.PropertyMatches[0].LatLng.Lat,
+                Lng: result.PropertyMatches[0].LatLng.Lng
+            }),
+            dataType: "json",
+        }).done(function (data) {
+            $.unblockUI();
+           
+            if (handleLocatePropertyFromSearch(data, result)) {
+                result.SeeffAreaId = data;
+            }
+            else {
+                // We did not find a suburb belonging to this user.
+                var message;
+                if (data == -1) {
+                    message = 'Unable to find a Seeff area that contains this property';
+                }
+                else {
+                    message = 'This property falls outside your available suburbs. Seeff area ID = ' + data;
+                }
+                alert(message);
+            }
+        });
     }
     else {
-        map.setCenter(latLng);
+        handleLocatePropertyFromSearch(result.SeeffAreaId, result);
     }
+}
+
+function handleLocatePropertyFromSearch(seeffAreaId, searchResult) {
+    var containingSuburb = $.grep(suburbsInfo, function (sub) {
+        return sub.SuburbId == seeffAreaId;
+    })[0];
+
+    if (!containingSuburb) return null;
+
+    globalZoomLevel = 20;
+    $('#suburbLink' + containingSuburb.SuburbId).trigger('click', function () {
+        var targetProperty = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+            var matchFound = false;
+            $.each(searchResult.PropertyMatches, function (idx, m) {
+                if (m.LightstonePropId == pp.LightstonePropertyId) {
+                    matchFound = true;
+                }
+            });
+            return matchFound;
+        })[0];
+        if (targetProperty) { // a matching property already exists in the system
+            var marker = targetProperty.Marker;
+            try {
+                centreMap(marker.Suburb, marker);
+                new google.maps.event.trigger(marker, 'click');
+            } catch (e) { }
+        } else {
+            // This is an entirely new prospect
+            var content = generateOutputFromLightstone([searchResult]);
+            var firstResult = searchResult.PropertyMatches[0];
+
+            var latLng = new google.maps.LatLng(firstResult.LatLng.Lat, firstResult.LatLng.Lng);
+            showPopupAtLocation(latLng, content);
+
+            var pos = calcMapCenterWithOffset(latLng.lat(), latLng.lng(), -200, 0);
+            if (pos) {
+                map.setCenter(pos);
+            }
+            else {
+                map.setCenter(latLng);
+            }
+        }
+    });
+
+    return true;
 }
 
 // Rem to set primary contact detail in DB using same logic on front-end

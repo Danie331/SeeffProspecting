@@ -30,7 +30,7 @@ namespace SeeffSpatialApi
                 client = new HttpClient();
                 client.BaseAddress = new Uri("http://localhost:59658//"); // This is the web application's root server address
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                SpatialLatLng modelInput = new SpatialLatLng { Key = Guid.Parse("a2c48f98-14fb-425e-bbd2-312cfb89980c"), Lat = -33.0, Lng = 18.0 };
+                SpatialLatLng modelInput = new SpatialLatLng { Lat = -33.0, Lng = 18.0 };
                 MediaTypeFormatter jsonFormatter = new JsonMediaTypeFormatter();
                 HttpContent content = new ObjectContent<SpatialLatLng>(modelInput, jsonFormatter);
                 var resp = client.PostAsync("api/SeeffSpatialLookup/GetLicenseId", content).Result;

@@ -16,7 +16,7 @@ namespace SeeffSpatialApi.Controllers
     public class SeeffSpatialLookupController : ApiController
     {        
         [HttpGet]
-        public int? GetAreaId(Guid key, double lat, double lng)
+        public int? GetAreaId(double lat, double lng)
         {
             return InternalGetAreaId(lat, lng);
         }
@@ -28,7 +28,7 @@ namespace SeeffSpatialApi.Controllers
         }
 
         [HttpGet]
-        public int? GetLicenseId(Guid key, double lat, double lng)
+        public int? GetLicenseId(double lat, double lng)
         {
             return InternalGetLicenseId(lat, lng);
         }

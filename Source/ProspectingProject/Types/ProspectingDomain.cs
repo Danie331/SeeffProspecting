@@ -13,6 +13,9 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using ProspectingProject.Services;
 using System.Net.Mail;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Formatting;
 
 namespace ProspectingProject
 {
@@ -279,51 +282,21 @@ namespace ProspectingProject
 
         public static List<UserSuburb> GetAreaData(string areaIdList)
         {
-            //List<UserSuburb> suburbs = new List<UserSuburb>();
-            //var areas = areaIdList.Split(new[] { ',' }).Select(v => int.Parse(v));
-            //using (var context = new ProspectingDataContext())
-            //{
-            //    foreach (int areaId in areas)
-            //    {
-            //        string areaName = context.prospecting_areas.Where(a => a.prospecting_area_id == areaId).First().area_name;
-            //        int prospectedCount = context.prospecting_properties.Where(a => a.seeff_area_id == areaId).Count();
-
-            //        suburbs.Add(new UserSuburb { SuburbId = areaId, SuburbName = areaName, TotalFullyProspected = prospectedCount });
-            //    }
-
-            //    suburbs = suburbs.OrderBy(p => p.SuburbName).ToList();
-            //}
-
-            List<UserSuburb> lList = new List<UserSuburb>();
-
-            DataSet DS = null;
-            string SQL = null;
-            SeeffGlobal.clsData da = new SeeffGlobal.clsData();
-            SQL = "  SELECT        prospecting_area.prospecting_area_id, prospecting_area.area_name, COUNT(prospecting_property.prospecting_property_id) AS prospected";
-            SQL += " FROM            prospecting_area LEFT OUTER JOIN";
-            SQL += "                          prospecting_property ON prospecting_area.prospecting_area_id = prospecting_property.seeff_area_id";
-            SQL += " WHERE        (prospecting_area.prospecting_area_id IN (" + areaIdList + "))";
-            SQL += " GROUP BY prospecting_area.prospecting_area_id, prospecting_area.area_name";
-            SQL += " ORDER BY prospecting_area.area_name";
-            DS = da.CommandSQL(SQL, "boss.dbo.license", (int)(SeeffGlobal.clsData.App.prospecting), HttpContext.Current.Server.MapPath("/data") + @"\DBSettings.xml");
-            if (!string.IsNullOrEmpty(da.CommandSQLErrMsg))
+            using (var prospecting = new ProspectingDataContext())
             {
-                //Add error logging
-                string test = da.CommandSQLErrMsg;
-            }
-            else
-            {
-                foreach (DataRow dtRow in DS.Tables["boss.dbo.license"].Rows)
-                {
-                    var outUserSuburb = new UserSuburb {
-                        SuburbId = da.valInteger(dtRow, "prospecting_area_id"),
-                        SuburbName = da.valString(dtRow, "area_name"),
-                        TotalFullyProspected = da.valInteger(dtRow, "prospected")
-                    };
-                    lList.Add(outUserSuburb);
-                }
-            }
-            return lList; 
+                var areaIds = areaIdList.Split(new[] { ',' }).Select(id => Convert.ToInt32(id));
+                return (from n in prospecting.prospecting_areas
+                        join pp in prospecting.prospecting_properties on n.prospecting_area_id equals pp.seeff_area_id
+                        into sr
+                        from x in sr.DefaultIfEmpty()
+                        where areaIds.Contains(n.prospecting_area_id)
+                        select new UserSuburb
+                        {
+                            SuburbId = n.prospecting_area_id,
+                            SuburbName = n.area_name,
+                            TotalFullyProspected = sr.Select(p => p.prospecting_property_id).Count()
+                        }).Distinct().OrderBy(a => a.SuburbName).ToList();
+            }            
         } 
 
         public static string SerialiseStaticProspectingData()
@@ -467,7 +440,7 @@ namespace ProspectingProject
                 {
                     if (ex.Message.Contains("Cannot insert duplicate key in object"))
                     {
-                        throw new Exception("Property already exists in the system.");
+                        throw new DuplicatePropertyRecordException { ErrorMsg = "Property already exists in the system.", SeeffAreaId = areaId };
                     }
 
                     throw;
@@ -1954,7 +1927,7 @@ namespace ProspectingProject
                     {
                         if (ex.Message.Contains("Cannot insert duplicate key in object"))
                         {
-                            throw new Exception("Property already exists in the system.");
+                            throw new DuplicatePropertyRecordException { ErrorMsg = "Property already exists in the system.", SeeffAreaId = areaId };
                         }
 
                         throw;
@@ -2036,43 +2009,13 @@ namespace ProspectingProject
 
         public static void MarkAsProspected(int propertyId)
         {
-            DataSet DS = null;
-            string SQL = null;
-            SeeffGlobal.clsData da = new SeeffGlobal.clsData();
-            SQL = "  SELECT [dbo].[prospected_propety_contact_count] (" + propertyId + ") AS [contact_count] ";
-            DS = da.CommandSQL(SQL, "contact_count", (int)(SeeffGlobal.clsData.App.prospecting), HttpContext.Current.Server.MapPath("/data") + "/DBSettings.xml");
-            if (!string.IsNullOrEmpty(da.CommandSQLErrMsg))
+            using (var prospecting = new ProspectingDataContext())
             {
-                //Add error logging
-                string test = da.CommandSQLErrMsg;
-            }
-            else
-            {
-                foreach (DataRow dtRow in DS.Tables["contact_count"].Rows)
-                {
-                    string propertyHasContacts = "";
-                    if (da.valInteger(dtRow, "contact_count") == 0)
-                    { propertyHasContacts = "0"; }
-                    else
-                    { propertyHasContacts = "1"; };
-                    UpdateAsProspected(propertyId, propertyHasContacts);
-                }
-            }
-        }
-
-        public static void UpdateAsProspected(int propertyId, string propertyHasContacts)
-        {
-            string SQL = null;
-            SeeffGlobal.clsData da = new SeeffGlobal.clsData();
-            SQL = " UPDATE seeff_prospecting.dbo.prospecting_property ";
-            SQL += "   SET prospected = " + propertyHasContacts;
-            SQL += " WHERE prospecting_property_id = " + propertyId;
-            da.ExecSql(SQL, (int)(SeeffGlobal.clsData.App.prospecting), HttpContext.Current.Server.MapPath("/data") + "/DBSettings.xml");
-            if (!string.IsNullOrEmpty(da.CommandSQLErrMsg))
-            {
-                //Add error logging
-                string test = da.CommandSQLErrMsg;
-            }
+                int contactableContactCount = prospecting.prospected_propety_contact_count(propertyId).Value;
+                var targetProp = prospecting.prospecting_properties.First(pp => pp.prospecting_property_id == propertyId);
+                targetProp.prospected = contactableContactCount > 0;
+                prospecting.SubmitChanges();
+            }            
         }
 
         public static ProspectingEntityOutputBundle CreateNewProspectingEntities(ProspectingEntityInputBundle prospectingEntityBundle, List<NewProspectingEntity> searchResults)
@@ -2108,6 +2051,12 @@ namespace ProspectingProject
             catch (Exception e)
             {
                 outputBundle.CreationErrorMsg = e.Message;
+                var duplicateEx = e as DuplicatePropertyRecordException;
+                if (duplicateEx != null)
+                {
+                    outputBundle.CreationErrorMsg = duplicateEx.ErrorMsg;
+                    outputBundle.SeeffAreaId = duplicateEx.SeeffAreaId;
+                }
                 return outputBundle;
             }
 
@@ -2261,6 +2210,20 @@ namespace ProspectingProject
             {
                 return LoadProspectingActivities(prospecting, null);
             }
+        }
+
+        // NB. might need to remove occurrences of find_area_id that use the prospecting_area_layer tbl.
+        public static int? FindAreaId(GeoLocation location)
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://spatial.seeff.com//"); // This is the web application's root server address
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            MediaTypeFormatter jsonFormatter = new JsonMediaTypeFormatter();
+            HttpContent content = new ObjectContent<GeoLocation>(location, jsonFormatter);
+            var resp = client.PostAsync("api/SeeffSpatialLookup/GetAreaId", content).Result;
+            int? areaId = resp.Content.ReadAsAsync<int?>().Result;
+
+            return areaId;
         }
     }
 }

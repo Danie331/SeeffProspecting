@@ -317,6 +317,12 @@ namespace ProspectingProject
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), lat, lng, seeff_area_id);
 			return ((int)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.prospected_propety_contact_count", IsComposable=true)]
+		public System.Nullable<int> prospected_propety_contact_count([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> prospecting_property_id)
+		{
+			return ((System.Nullable<int>)(this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), prospecting_property_id).ReturnValue));
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.service_enquiry_log")]

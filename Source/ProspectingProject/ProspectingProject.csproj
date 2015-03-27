@@ -78,15 +78,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SeeffGlobal, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>3rdPartyDLLs\SeeffGlobal.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Spatial, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -720,7 +718,6 @@
     <Content Include="Database scripts\boss.sql" />
     <Content Include="Database scripts\seeff_prospecting.sql" />
     <Content Include="Database scripts\seeff_prospecting_data_takeon.sql" />
-    <Content Include="Data\DBSettings.xml" />
     <Content Include="Default.aspx" />
     <Content Include="LogOut.aspx" />
     <Content Include="NotAuthorised.aspx" />
@@ -784,6 +781,7 @@
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Exceptions\DuplicatePropertyRecordException.cs" />
     <Compile Include="LogOut.aspx.cs">
       <DependentUpon>LogOut.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
