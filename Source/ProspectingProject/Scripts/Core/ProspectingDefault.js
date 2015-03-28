@@ -202,7 +202,7 @@ function generateOutputFromLightstone(data) {
                                 
                                 currentProperty = targetProp;
                                 try {
-                                    centreMap(currentSuburb, currentProperty.Marker);
+                                    centreMap(currentSuburb, currentProperty.Marker, false);
                                 } catch (e) { }
                                 new google.maps.event.trigger(currentProperty.Marker, 'click');
                             } else {
@@ -347,7 +347,7 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCent
                         actionAfterLoad();
                     } else {
                         if (mustCentreMap !== false) {
-                            centreMap(suburb);
+                            centreMap(suburb, null, true);
                         }
                     }
                 } else {
@@ -369,7 +369,7 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCent
             actionAfterLoad();
         } else {
             if (mustCentreMap !== false) {
-                centreMap(suburb);
+                centreMap(suburb, null, true);
             }
         }
     }
@@ -1151,13 +1151,15 @@ function getAllMarkersThatWillSpiderfy(property) {
     return [];
 }
 
-function centreMap(suburb, marker) {
+function centreMap(suburb, marker, mustSetZoom) {
 
     if (!suburb.IsInitialised) {
         return;
     }
 
-    map.setZoom(globalZoomLevel);
+    if (mustSetZoom) {
+        map.setZoom(globalZoomLevel);
+    }
     if (marker) {
         var mapMarkerPos = calcMapCenterWithOffset(marker.getPosition().lat(), marker.getPosition().lng(), -200, 0);
         if (!mapMarkerPos) {
@@ -1768,7 +1770,7 @@ function showSearchedPropertyOnMap(result) { // test for ss (new and existing)
                 }
                 alert(message);
             }
-        });
+        }).fail(function (f) { alert(f.responseText); });
     }
     else {
         handleLocatePropertyFromSearch(result.SeeffAreaId, result);
@@ -1782,7 +1784,7 @@ function handleLocatePropertyFromSearch(seeffAreaId, searchResult) {
 
     if (!containingSuburb) return null;
 
-    globalZoomLevel = 20;
+    globalZoomLevel = 17;
     $('#suburbLink' + containingSuburb.SuburbId).trigger('click', function () {
         var targetProperty = $.grep(currentSuburb.ProspectingProperties, function (pp) {
             var matchFound = false;
@@ -1796,14 +1798,14 @@ function handleLocatePropertyFromSearch(seeffAreaId, searchResult) {
         if (targetProperty) { // a matching property already exists in the system
             var marker = targetProperty.Marker;
             try {
-                centreMap(marker.Suburb, marker);
+                centreMap(marker.Suburb, marker, true);
                 new google.maps.event.trigger(marker, 'click');
             } catch (e) { }
         } else {
             // This is an entirely new prospect
             var content = generateOutputFromLightstone([searchResult]);
             var firstResult = searchResult.PropertyMatches[0];
-
+            map.setZoom(globalZoomLevel);
             var latLng = new google.maps.LatLng(firstResult.LatLng.Lat, firstResult.LatLng.Lng);
             showPopupAtLocation(latLng, content);
 
@@ -1815,6 +1817,7 @@ function handleLocatePropertyFromSearch(seeffAreaId, searchResult) {
                 map.setCenter(latLng);
             }
         }
+        globalZoomLevel = 13;
     });
 
     return true;
