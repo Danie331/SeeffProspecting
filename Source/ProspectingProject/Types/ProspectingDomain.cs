@@ -1802,6 +1802,10 @@ namespace ProspectingProject
                 return null;
             // For now we check that there are a minimum of 10 digits contained in the number - must allow for: +27724707471, 0724707471, 072 470 7471 and 072-470-7471
             int numDigits = 0;
+            if (input.StartsWith("27") && input.Length == 11)
+            {
+                input = "0" + input.Remove(0, 2);
+            }
             numDigits = input.ToCharArray().Count(d => char.IsDigit(d));
             return numDigits >= 10 ? input : null;
         }

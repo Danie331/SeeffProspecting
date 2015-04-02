@@ -127,3 +127,15 @@ function format10DigitPhoneNumber(phoneNumber) {
 
     return dialingCode + ' ' + areaCode + ' ' + remainder;
 }
+
+function formatDate(date) {
+    return date.substring(0, 4) + "-" + date.substring(4, 6) + "-" + date.substring(6, 8);
+}
+
+function formatRandValue(value) {
+    if (value) {
+        return "R " + value.toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
+
+    return "n / a";
+}

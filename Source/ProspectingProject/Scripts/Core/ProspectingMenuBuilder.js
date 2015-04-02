@@ -1019,7 +1019,7 @@ function buildSuburbsSelectionHtml() {
         // Clear the menu if theres no marker currently selected
         if (!currentMarker || !currentProperty) {
             return;
-    }
+        }
 
         //$('#previousEnquiryLabel').css('display', currentProperty.HasTracePSEnquiry ? 'block' : 'none');
 
@@ -1033,25 +1033,80 @@ function buildSuburbsSelectionHtml() {
             $('#propertyInfoDiv').css('display', 'block');
 
             return;
-    }
+        }
 
         // If there is an incoming info packet, update the cached copy for the current marker
         if (infoPacket) {
             currentMarker.ContactInfoPacket = infoPacket;
             $('#availableCreditLabel').text(availableCredit);
-    }
+        }
 
         // If there is no incoming info but there is a cached packet already stored in the current marker, use it
         if (!infoPacket && currentMarker.ContactInfoPacket) {
             infoPacket = currentMarker.ContactInfoPacket;
+        }
+
+        if (infoPacket.OwnerName || infoPacket.ContactRows.length > 0) {
+            $('#performEnquiryDiv').css('display', 'none');
+        }
+        else {
+            $('#performEnquiryDiv').css('display', 'block');
+        }
+        buildContactsResultsDiv(infoPacket);
+        $('#propertyInfoDiv').css('display', 'block');
     }
 
-    if (infoPacket.OwnerName || infoPacket.ContactRows.length > 0) {
-        $('#performEnquiryDiv').css('display', 'none');
+    function showContentForItem(itemId) {
+
+        $.each(menuItems, function (index, item) {
+            var itemContentDiv = $('#' + item.MenuItemId + "_content");
+            itemContentDiv.css('display', 'none');
+        });
+
+        var menuItem = $.grep(menuItems, function (item, index) {
+            return item.MenuItemId == itemId;
+        })[0];
+
+        var itemContentDiv = $('#' + menuItem.MenuItemId + "_content");
+        itemContentDiv.css('display', 'block');
     }
-    else {
-        $('#performEnquiryDiv').css('display', 'block');
+
+
+    function appendMenuItemContent(itemContent) {
+
+        var contentArea = $('#contentarea');
+        contentArea.append(itemContent);
     }
-    buildContactsResultsDiv(infoPacket);
-    $('#propertyInfoDiv').css('display', 'block');
-}
+
+    function showMenu(activeItem) {
+        //menu.accordion({
+        //    active: activeItem,
+        //    collapsible: true,
+        //    heightStyle: "content"
+        //}).draggable({ handle: 'h3' });
+        $('#' + activeItem).trigger("click");
+    }
+
+    function clearMenuSelection() {
+
+        $.each(menuItems, function (index, item) {
+            //item.MenuItemDiv.find("img").remove();
+            item.MenuItemDiv.css('background-color', '');
+        });
+    }
+
+    function buildInputCheckbox(itemText, itemId, position, spacesBefore, spacesBetween, checked, clickHandler) {
+        var checkedOption = checked ? "checked" : "";
+
+        var ckb = $("<div>" + addNbsp(spacesBefore) + "<input style='cursor:pointer;' type='checkbox' name='checkbox' id='" + itemId + "' " + checkedOption + "/><label for='" + itemId + "'>" + itemText + addNbsp(spacesBetween) + "</label></div>");
+        menu.on("click", "#" + itemId, clickHandler);
+        return ckb;
+    }
+
+    function addNbsp(numberSpaces) {
+        var s = '';
+        for (var i = 0; i < numberSpaces; i++) {
+            s += "&nbsp;";
+        }
+        return s;
+    }

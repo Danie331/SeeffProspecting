@@ -61,3 +61,39 @@ function newPersonContact(firstname,
         Citizenship: citizenship
     };
 }
+
+function createMenuItem(itemName, itemId, itemContent, onClickFunction) {
+
+    var itemContentDiv = $("<div id='" + itemId + "_content" + "' />");
+    itemContentDiv.append(itemContent);
+    var item = { MenuItemName: itemName, MenuItemId: itemId, MenuItemContent: itemContentDiv, MenuItemDiv: null };
+
+    var menuItemPanel = $('#menuitempanel');
+
+    var div = $("<div id='itemdiv' style='padding:5px 5px 10px 10px;' />");
+    var button = $("<a href='' id='" + itemId + "'>" + itemName + "</a>");
+
+    // attach click handler to button
+    button.unbind('click').bind('click', function (event) {
+
+        event.preventDefault();
+        var btn = $(this);
+        clearMenuSelection();
+
+        //btn.append("<img src='Assets/tick.png' />");
+        btn.parent().css('background-color', '#E0E0E0');
+
+        showContentForItem($(this).attr("id"));
+
+        if (onClickFunction) {
+            onClickFunction();
+        }
+    });
+
+    div.append(button);
+    menuItemPanel.append(div);
+
+    item.MenuItemDiv = div;
+
+    return item;
+}

@@ -923,6 +923,19 @@ function clearSuburbBySuburbId(suburbId) {
     }
 }
 
+function getSuburbById(suburbId) {
+    if (suburbsInfo) {
+        var suburb = $.grep(suburbsInfo, function (s) {
+            return s.SuburbId == suburbId;
+        });
+
+        if (suburb[0]) {
+            return suburb[0];
+        }
+    }
+
+    return null;
+}
 
 function updateOwnerDetailsEditor() {
     var contactDetailsPane = $('#contactDetailsDiv');
@@ -1063,6 +1076,13 @@ function initialiseAndDisplaySuburb(suburb, data, showSeeffCurrentListings, sear
 
         currentSuburb = suburb;
     }
+}
+
+function enableMarkerClustering(suburb, visibleMarkers) {
+    var mcOptions = { maxZoom: 15, minimumClusterSize: 1 };
+    var markerClusterer = new MarkerClusterer(map, visibleMarkers, mcOptions);
+
+    suburb.MarkerClusterer = markerClusterer;
 }
 
 function drawPolygonForSuburb(suburb) {
@@ -1920,4 +1940,71 @@ function showDialogSelectPrimaryContactDetail(contactDetailArray, callbackFn) {
             });
         }
     }
+}
+
+function initializeMenuHtml() {
+
+    menu = $('#mainpanel');
+    $('#openpanelbutton').click(function () {
+        $('#openpanelbutton').css('display', 'none');
+        $('#closepanelbutton').trigger('click');
+    });
+
+    $('#snappanelbutton').click(function () {
+        menu.css({ 'left': '0', 'top': '0' });
+    });
+
+    togglePanel();
+
+    $("#menuitempanel").resizable();
+}
+
+function togglePanel(actionAfterClosing) {
+
+    $('#closepanelbutton').unbind('click').bind('click', function () {
+        $('#mainpanel').css('min-width', '');
+        $("#mainpanel").animate(
+            { width: 'toggle' },
+            {
+                duration: 500,
+                complete: function () {
+
+                    $('#mainpanel').css('min-width', '45%');
+                    if (slidePanelOpen) {
+                        slidePanelOpen = false;
+                        $('#openpanelbutton').css('display', 'block');
+                    }
+                    else {
+                        slidePanelOpen = true;
+                        $('#openpanelbutton').css('display', 'none');
+                    }
+
+                    if (actionAfterClosing) {
+                        actionAfterClosing();
+                    }
+                }
+            })
+    });
+
+    $('#closepanelbutton3').unbind('click').bind('click', function () {
+        $('#legend').css('min-width', '');
+        $('#legend').animate(
+            { width: 'toggle' },
+            {
+                duration: 500,
+                complete: function () {
+
+                    $('#legend').css('min-width', '45%');
+                    if (legendPanelOpen) {
+                        legendPanelOpen = false;
+                        //$('#openpanelbutton3').css('display', 'block');
+                    }
+                    //else {
+                    //    legendPanelOpen = true;
+                    //    $('#openpanelbutton3').css('display', 'none');
+                    //}
+                }
+            }
+        );
+    });
 }

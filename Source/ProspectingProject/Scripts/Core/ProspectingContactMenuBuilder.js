@@ -297,8 +297,13 @@ function handleSaveContactDetails(phoneNumbers, emailAddresses) {
     if (currentPersonContact) {
         currentPersonContact.PhoneNumbers = phoneNumbers;
         currentPersonContact.EmailAddresses = emailAddresses;
-        if (!validateCorrectnessOfInputs(phoneNumbers, emailAddresses)) {
-            alert('Some of the contact details you have specified are not valid.');
+        var invalidItemsArray = [];
+        if (!validateCorrectnessOfInputs(phoneNumbers, emailAddresses, invalidItemsArray)) {
+            var displayText = 'Some of the contact details you have specified are not valid:\n\n';
+            $.each(invalidItemsArray, function (idx, i) {
+                displayText += i + "\n";
+            });
+            alert(displayText);
             return;
         }
     }
@@ -314,8 +319,13 @@ function handleSaveContactDetails(phoneNumbers, emailAddresses) {
                 currentPersonContact.PhoneNumbers = [];
                 currentPersonContact.EmailAddresses = [];
             }
-            if (!validateCorrectnessOfInputs(phoneNumbers, emailAddresses)) {
-                alert('Some of the contact details you have specified are not valid.');
+            var invalidItemsArray = [];
+            if (!validateCorrectnessOfInputs(phoneNumbers, emailAddresses, invalidItemsArray)) {
+                var displayText = 'Some of the contact details you have specified are not valid:\n\n';
+                $.each(invalidItemsArray, function (idx, i) {
+                    displayText += i + "\n";
+                });
+                alert(displayText);
                 return;
             }
 
@@ -575,22 +585,34 @@ function savePersonInfo(continueWithAction) {
     });
 }
 
-function validateCorrectnessOfInputs(phoneNumbers, emailAddresses) {
+function validateCorrectnessOfInputs(phoneNumbers, emailAddresses, invalidItemsArray) {
 
     if (!currentPersonContact) return false;
 
     var isValid = true;
     if (phoneNumbers) {
         $.each(phoneNumbers, function (idx, item) {
-            if (!item.ItemType || item.ItemType == 'nothing') isValid = false;
-            if (!item.ItemContent || item.ItemContent.length == 0) isValid = false;
+            if (!item.ItemType || item.ItemType == 'nothing') {
+                isValid = false;
+                invalidItemsArray.push("You need to select a phone number 'type'.");
+            }
+            if (!item.ItemContent || item.ItemContent.length == 0 || item.ItemContent.length > 10) {
+                isValid = false;
+                invalidItemsArray.push("This phone number is not valid: " + item.ItemContent);
+            }
         });
     }
 
     if (emailAddresses) {
         $.each(emailAddresses, function (idx, item) {
-            if (!item.ItemType || item.ItemType == 'nothing') isValid = false;
-            if (!item.ItemContent || item.ItemContent.length == 0) isValid = false;
+            if (!item.ItemType || item.ItemType == 'nothing') {
+                isValid = false;
+                invalidItemsArray.push("You need to select an email 'type'.");
+            }
+            if (!item.ItemContent || item.ItemContent.length == 0) {
+                isValid = false;
+                invalidItemsArray.push("This email address is not valid: " + item.ItemContent);
+            }
         });
     }
 

@@ -628,9 +628,6 @@
     <Content Include="..\SharedAssets\unknown.png">
       <Link>Assets\unknown.png</Link>
     </Content>
-    <Content Include="..\SharedScripts\3rdParty\jquery.blockUI.js">
-      <Link>Scripts\3rdParty\jquery.blockUI.js</Link>
-    </Content>
     <Content Include="..\SharedScripts\3rdParty\jquery.contextMenu.js">
       <Link>Scripts\3rdParty\jquery.contextMenu.js</Link>
     </Content>
@@ -643,35 +640,11 @@
     <Content Include="..\SharedScripts\3rdParty\OverlappingMarkerSpiderfier.js">
       <Link>Scripts\3rdParty\OverlappingMarkerSpiderfier.js</Link>
     </Content>
-    <Content Include="..\SharedScripts\3rdParty\Purl.js">
-      <Link>Scripts\3rdParty\Purl.js</Link>
-    </Content>
     <Content Include="..\SharedScripts\Core\ContactDetailsEditorWidget.js">
       <Link>Scripts\Core\ContactDetailsEditorWidget.js</Link>
     </Content>
     <Content Include="..\SharedScripts\Core\ContentExpanderWidget.js">
       <Link>Scripts\Core\ContentExpanderWidget.js</Link>
-    </Content>
-    <Content Include="..\SharedScripts\Core\Default.js">
-      <Link>Scripts\Core\Default.js</Link>
-    </Content>
-    <Content Include="..\SharedScripts\Core\Filtering.js">
-      <Link>Scripts\Core\Filtering.js</Link>
-    </Content>
-    <Content Include="..\SharedScripts\Core\MenuBuilder.js">
-      <Link>Scripts\Core\MenuBuilder.js</Link>
-    </Content>
-    <Content Include="..\SharedScripts\Core\MultiSelectWidget.js">
-      <Link>Scripts\Core\MultiSelectWidget.js</Link>
-    </Content>
-    <Content Include="..\SharedScripts\Core\ObjectBuilder.js">
-      <Link>Scripts\Core\ObjectBuilder.js</Link>
-    </Content>
-    <Content Include="..\SharedScripts\Core\Search.js">
-      <Link>Scripts\Core\Search.js</Link>
-    </Content>
-    <Content Include="..\SharedScripts\Core\StatisticsGenerator.js">
-      <Link>Scripts\Core\StatisticsGenerator.js</Link>
     </Content>
     <Content Include="..\SharedScripts\Core\Utils.js">
       <Link>Scripts\Core\Utils.js</Link>
@@ -687,9 +660,6 @@
     </Content>
     <Content Include="..\SharedScripts\StyleSheets\jquery.contextMenu.css">
       <Link>Scripts\StyleSheets\jquery.contextMenu.css</Link>
-    </Content>
-    <Content Include="..\SharedScripts\StyleSheets\MultiSelectWidget.css">
-      <Link>Scripts\StyleSheets\MultiSelectWidget.css</Link>
     </Content>
     <Content Include="3rdPartyDLLs\SeeffGlobal.dll" />
     <Content Include="Assets\add_activity.png" />
@@ -723,11 +693,11 @@
     <Content Include="Default.aspx" />
     <Content Include="LogOut.aspx" />
     <Content Include="NotAuthorised.aspx" />
-    <Content Include="Scripts\3rdParty\OpenTip.css" />
+    <Content Include="Scripts\StyleSheets\OpenTip.css" />
     <Content Include="Scripts\3rdParty\OpenTip.js" />
-    <Content Include="Scripts\3rdParty\tooltip.css" />
+    <Content Include="Scripts\StyleSheets\tooltip.css" />
     <Content Include="Scripts\3rdParty\tooltip.js" />
-    <Content Include="Scripts\Core\ContextMenu.js" />
+    <Content Include="Scripts\Core\AppStart.js" />
     <Content Include="Scripts\Core\ProspectingContactMenuBuilder.js" />
     <Content Include="Scripts\Core\ProspectingDefault.js" />
     <Content Include="Properties\Settings.settings">
