@@ -826,7 +826,8 @@ function buildContactDashboard(contacts) {
             })[0];
 
             currentPersonContact = contactPerson;
-            openExpanderWidget(currentPersonContact);
+            $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Contact Details...</p>' });
+            window.setTimeout(function () { openExpanderWidget(currentPersonContact); $.unblockUI(); }, 150);
         });
 
         var nameData = $("<td />");
