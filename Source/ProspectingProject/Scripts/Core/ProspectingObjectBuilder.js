@@ -62,7 +62,7 @@ function newPersonContact(firstname,
     };
 }
 
-function createMenuItem(itemName, itemId, itemContent, onClickFunction) {
+function createMenuItem(itemName, itemId, itemContent, onClickFunction, itemCounter) {
 
     var itemContentDiv = $("<div id='" + itemId + "_content" + "' />");
     itemContentDiv.append(itemContent);
@@ -70,8 +70,14 @@ function createMenuItem(itemName, itemId, itemContent, onClickFunction) {
 
     var menuItemPanel = $('#menuitempanel');
 
-    var div = $("<div id='itemdiv' style='padding:5px 5px 10px 10px;' />");
-    var button = $("<a href='' id='" + itemId + "'>" + itemName + "</a>");
+    var div = $("<div id='itemdiv' style='padding:5px 5px 5px 5px;' />");
+
+    var button = null;
+    if (itemCounter != null) {
+        button = $("<a href='' id='" + itemId + "' style='vertical-align:middle;padding-right:20px'>" + itemName + "</a><span class='menu-item-counter' >" + itemCounter + "</span>");
+    } else {
+        button = $("<a href='' id='" + itemId + "'>" + itemName + "</a>");
+    }
 
     // attach click handler to button
     button.unbind('click').bind('click', function (event) {

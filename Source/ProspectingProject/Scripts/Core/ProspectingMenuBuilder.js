@@ -17,26 +17,26 @@ function fixElementHeightForIE(elementId, percHeight) {
 }
 
 function createProspectingMenu(userData) {
-    var menuItem = createMenuItem("Suburb Selection", "suburbselector", buildSuburbSelectionHtml());
+    var menuItem = createMenuItem("Suburb Selection", "suburbselector", buildSuburbSelectionHtml(), null, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     fixElementHeightForIE('suburbsDiv');
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Contact Details", "contactdetails", buildContactDetailsDiv());
+    menuItem = createMenuItem("Contact Details", "contactdetails", buildContactDetailsDiv(), null, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Activity Report", "activityreport", buildActivityReport(), handleActivityReportClick);
+    menuItem = createMenuItem("Activity Report", "activityreport", buildActivityReport(), handleActivityReportClick, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     fixElementHeightForIE('contentactivityContainer', 0.8);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Follow-up", "followup", buildFollowupReport(userData.FollowupActivities), handleFollowupReportClick);
+    menuItem = createMenuItem("Follow-up", "followup", buildFollowupReport(userData.FollowupActivities), handleFollowupReportClick, userData.FollowupActivities.length);
     appendMenuItemContent(menuItem.MenuItemContent);
     fixElementHeightForIE('contentfollowupContainer', 0.8);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Lightstone Search", "lightstonesearch", buildSearchMenu());
+    menuItem = createMenuItem("Lightstone Search", "lightstonesearch", buildSearchMenu(), null, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
@@ -48,7 +48,14 @@ function createProspectingMenu(userData) {
     }
 }
 
+function setFollowupMenuItemCount(value) {
+    var element = $('#followup').next();
+    element.text(value);
+}
+
 function buildFollowupReport(followups) {
+
+    setFollowupMenuItemCount(followups.length);
 
     globalFollowUps.length = 0;
     $.each(followups, function (idx, el) {
@@ -236,6 +243,7 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
                 });
 
                 performFollowupFiltering(sourceFollowups, jContainerElement);
+                setFollowupMenuItemCount(sourceFollowups.length);
             });
         });
 

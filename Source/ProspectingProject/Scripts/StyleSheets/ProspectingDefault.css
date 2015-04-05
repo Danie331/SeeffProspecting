@@ -165,3 +165,18 @@ text-align:left;
     width: 100px;
     height: 100px;
 }
+
+.menu-item-counter {
+    display: inline-block;
+    vertical-align:middle;
+    -moz-border-radius: 30px; /* or 50% */
+    border-radius: 30px; /* or 50% */
+
+    background-color: #955ba5;
+    color: white;
+    text-align: center;
+    font-size: 10px;
+    height: 17px;
+    width: 17px;
+    line-height: 17px;
+}
