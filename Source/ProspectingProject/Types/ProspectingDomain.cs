@@ -218,10 +218,10 @@ namespace ProspectingProject
                 SSDoorNo = prospectingRecord.ss_door_number,
                 LastPurchPrice = prospectingRecord.last_purch_price,
                 Prospected = Convert.ToBoolean(prospectingRecord.prospected),
-                  FarmName = prospectingRecord.farm_name,
-                   Portion = prospectingRecord.portion_no.HasValue ? prospectingRecord.portion_no.ToString() : null,
-                    LightstoneSuburb = prospectingRecord.lightstone_suburb,
-                    SS_UNIQUE_IDENTIFIER = prospectingRecord.ss_unique_identifier
+                FarmName = prospectingRecord.farm_name,
+                Portion = prospectingRecord.portion_no.HasValue ? prospectingRecord.portion_no.ToString() : null,
+                LightstoneSuburb = prospectingRecord.lightstone_suburb,
+                SS_UNIQUE_IDENTIFIER = prospectingRecord.ss_unique_identifier
             };
 
             return prop;

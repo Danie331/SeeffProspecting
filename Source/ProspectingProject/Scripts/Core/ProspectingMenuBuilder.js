@@ -151,7 +151,7 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
         var containerDiv = $("<div />");
 
         var itemTypeName = followup.FollowupActivityTypeName ? followup.FollowupActivityTypeName : followup.ActivityTypeName;
-        var followupDateActivityTypeContainer = $("<div id='followupDateActivityTypeContainer' style='border: 1px solid white !important;background-color:#F0E68C;' />");
+        var followupDateActivityTypeContainer = $("<div id='followupDateActivityTypeContainer' style='border: 1px solid white !important;background-color:#955ba5;color:#FFFFFF' />");
         var followupDate = $("<div style='width:50%;display:inline-block;float:left;'>" + formatLabelValue('Follow-up Date', followup.FollowupDate) + " </div>");
         var activityType = $("<div style='width:50%;display:inline-block;'>" + formatLabelValue('Activity Type', itemTypeName) + " </div>");
         followupDateActivityTypeContainer.append(followupDate).append(activityType);
@@ -450,14 +450,26 @@ function createLightstoneSearchResultsDiv(results) {
         return;
     }
 
+    var currentResultDiv = null;
     $.each(results, function (idx, result) {
 
         if (result.IsSectionalScheme) {
             var propMatches = result.PropertyMatches;
             var ssId = propMatches[0].SS_UNIQUE_IDENTIFIER;
             var resultDiv = $("<div id='" + ssId + "' style='border:1px solid;border-radius:3px;cursor:pointer;' />");
-            resultDiv.hover(function () { $(this).css('background-color', '#b0c4de'); }, function () { $(this).css('background-color', 'white'); });
+            resultDiv.hover(function () {
+                $(this).css('background-color', '#b0c4de');
+            }, function () {
+                if (!currentResultDiv || currentResultDiv.attr("id") != $(this).attr("id")) {
+                    $(this).css('background-color', 'white');
+                }
+            });
             resultDiv.click(function () {
+                if (currentResultDiv) {
+                    currentResultDiv.css('background-color', 'white');
+                }
+
+                currentResultDiv = $(this);
                 showSearchedPropertyOnMap(result);
             });
 
@@ -471,8 +483,18 @@ function createLightstoneSearchResultsDiv(results) {
             var frmPortion = result.PropertyMatches[0];
             var frmId = 'FRM_' + frmPortion.LightstonePropId;
             var resultDiv = $("<div id='" + frmId + "' style='border:1px solid;border-radius:3px;cursor:pointer;' />");
-            resultDiv.hover(function () { $(this).css('background-color', '#b0c4de'); }, function () { $(this).css('background-color', 'white'); });
+            resultDiv.hover(function () { $(this).css('background-color', '#b0c4de'); }, function () {
+                if (!currentResultDiv || currentResultDiv.attr("id") != $(this).attr("id")) {
+                    $(this).css('background-color', 'white');
+                }
+            });
             resultDiv.click(function () {
+                if (currentResultDiv) {
+                    currentResultDiv.css('background-color', 'white');
+                }
+
+                currentResultDiv = $(this);
+                //resultDiv.css('background-color', '#b0c4de');
                 showSearchedPropertyOnMap(result);
             });
 
@@ -485,8 +507,18 @@ function createLightstoneSearchResultsDiv(results) {
             var fhProperty = result.PropertyMatches[0];
             var fhId = "FH" + "_" + fhProperty.LightstonePropId;
             var resultDiv = $("<div id='" + fhId + "' style='border:1px solid;border-radius:3px;cursor:pointer;' />");
-            resultDiv.hover(function () { $(this).css('background-color', '#b0c4de'); }, function () { $(this).css('background-color', 'white'); });
+            resultDiv.hover(function () { $(this).css('background-color', '#b0c4de'); }, function () {
+                if (!currentResultDiv || currentResultDiv.attr("id") != $(this).attr("id")) {
+                    $(this).css('background-color', 'white');
+                }
+            });
             resultDiv.click(function () {
+                if (currentResultDiv) {
+                    currentResultDiv.css('background-color', 'white');
+                }
+
+                currentResultDiv = $(this);
+                //resultDiv.css('background-color', '#b0c4de');
                 showSearchedPropertyOnMap(result);
             });
 

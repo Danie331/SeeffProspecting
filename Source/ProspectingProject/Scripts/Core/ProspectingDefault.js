@@ -1238,27 +1238,34 @@ function buildInfoWindowContentForSS(unit) {
             return hasContactsWithDetails ? "#009900" : "#FBB917";
         }
 
-        var id = "unit" + unit.LightstonePropertyId;
-        var tr = $("<tr class='unitrow' />");
-        var color = getBGColourForRow(unit);
-        var bgcolor = "background-color:" + color;
-
-        var unitPropId = 'Property ID: ' + unit.LightstonePropertyId;
-        var unitRegDate = 'Reg date: ' + formatDate(unit.LightstoneRegDate);
-        var unitLastSalePrice = 'Last sale price: ' + formatRandValue(unit.LastPurchPrice);
-        var ssDoorNo = unit.SSDoorNo ? ' (Door no. ' + unit.SSDoorNo + ')' : '';
-        var unitContent = '';
-        if (unit.SS_FH == 'FS') {
-            unitContent = 'Property ID: ' + unit.LightstonePropertyId + '<br />' +
-                          'ERF no.: ' + unit.ErfNo;
-        } else {
-            unitContent = "Unit " + unit.Unit + ssDoorNo + '<br />' +
-                           unitPropId + '<br />' +
-                           unitRegDate + '<br />' +
-                           unitLastSalePrice;
+        function buildUnitContent(unit) {
+            var unitPropId = 'Property ID: ' + unit.LightstonePropertyId;
+            var unitRegDate = 'Reg date: ' + formatDate(unit.LightstoneRegDate);
+            var unitLastSalePrice = 'Last sale price: ' + formatRandValue(unit.LastPurchPrice);
+            var ssDoorNo = unit.SSDoorNo ? ' (Door no. ' + unit.SSDoorNo + ')' : '';
+            var unitContent = '';
+            if (unit.SS_FH == 'FS') {
+                unitContent = 'Property ID: ' + unit.LightstonePropertyId + '<br />' +
+                              'ERF no.: ' + unit.ErfNo;
+            } else {
+                unitContent = "Unit " + unit.Unit + ssDoorNo + '<br />' +
+                               unitPropId + '<br />' +
+                               unitRegDate + '<br />' +
+                               unitLastSalePrice;
+            }
+            if (unit.Contacts && unit.Contacts.length) {
+                $.each(unit.Contacts, function (idx, c) {
+                    unitContent = unitContent + '<br />' + c.Firstname + ' ' + c.Surname;
+                });
+            }
+            return unitContent;
         }
         
-        var td = tr.append($("<td id='" + id + "' class='unittd' data-color='" + color + "' style='cursor:pointer;width:150px;text-align:left;" + bgcolor + "' />").append(unitContent));
+        var tr = $("<tr class='unitrow' />");
+        var id = "unit" + unit.LightstonePropertyId;
+        var color = getBGColourForRow(unit);
+        var bgcolor = "background-color:" + color;
+        var td = tr.append($("<td id='" + id + "' class='unittd' data-color='" + color + "' style='cursor:pointer;width:200px;text-align:left;" + bgcolor + "' />").append(buildUnitContent(unit)));
 
         $('body').unbind('mouseover.' + id).on('mouseover.' + id, '#' + id, function () {
             var row = $('#' + id);
@@ -1287,7 +1294,7 @@ function buildInfoWindowContentForSS(unit) {
                 });
                 row.data('color2', 'lightblue');
 
-                openSSUnitInfo(unit);
+                openSSUnitInfo(unit, function () { row.empty(); row.append(buildUnitContent(unit)); });
             }
             else if (e.which == 3) {
                 rightClickedProperty = unit;
@@ -1314,7 +1321,7 @@ function buildInfoWindowContentForSS(unit) {
         return x.Unit - y.Unit;
     });
 
-    var tableOfUnits = $("<table id='ssUnitsTbl' class='info-window' style='display: block;max-height:250px;overflow-y:auto;width:200px;' />");
+    var tableOfUnits = $("<table id='ssUnitsTbl' class='info-window' style='display: block;max-height:300px;overflow-y:auto;width:250px;' />");
     tableOfUnits.empty();
 
     for (var i = 0; i < ssUnits.length; i++) {
@@ -1326,7 +1333,7 @@ function buildInfoWindowContentForSS(unit) {
     return tableOfUnits;
 }
 
-function openSSUnitInfo(unit) {
+function openSSUnitInfo(unit, callbackFn) {
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Property Info...</p>' });
     $.ajax({
         type: "POST",
@@ -1352,6 +1359,10 @@ function openSSUnitInfo(unit) {
                     }
 
                     updateProspectedStatus();
+
+                    if (callbackFn) {
+                        callbackFn();
+                    }
                 }
             } else {
                 alert('Could not complete request.');
