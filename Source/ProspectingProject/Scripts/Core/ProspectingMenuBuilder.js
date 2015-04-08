@@ -40,6 +40,12 @@ function createProspectingMenu(userData) {
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
+    if (prospectingContext.LoggedInUser == 'test' /*'72095a56-d66b-4ef5-babb-0de0a3843316'*/) {
+        menuItem = createMenuItem("SMS", "smsing", buildSMSMenu(), handleSMSMenuItemClick, null);
+        appendMenuItemContent(menuItem.MenuItemContent);
+        menuItems.push(menuItem);
+    }
+
     // If the user has followups, default to the followups screen instead of the suburb selection
     if (userData.FollowupActivities.length == 0) {
         showMenu("suburbselector");
@@ -117,12 +123,20 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
     }
 
     var followupTypeSelect = $('#followupActivityTypeSelect').val();
+    var followupTypeText = $('#followupActivityTypeSelect option:selected').text();
     // Perform filtering
     sourceFollowups = $.grep(sourceFollowups, function (fol) {
         var meetsCriteria = true;
 
         if (followupTypeSelect != null && followupTypeSelect != -1) {
-            meetsCriteria = fol.ActivityFollowupTypeId == followupTypeSelect;
+            if (fol.ActivityFollowupTypeId != null) {
+                meetsCriteria = fol.ActivityFollowupTypeId == followupTypeSelect;
+            } else {
+                // If the followup does not have a ActivityFollowUpTypeId then it is a parent activity, therefore the follow-up filters do not apply to
+                // this follow-up, the original activity filters apply. We need to look at the "text" property of the select box instead: this is a hack -> ultimately we need to share activity types and follow-up activity types in the DB
+                // TODO: fix this.
+                meetsCriteria = fol.ActivityTypeName == followupTypeText;
+            }
             if (!meetsCriteria) return false;
         }
 
@@ -703,6 +717,11 @@ function performActivityFiltering() {
     });
     activities = $.grep(activities, function (act) {
         var meetsCriteria = true;
+
+        // TODO:
+        if (act.ActivityFollowupTypeId != null && activityTypeFilter != -1) {
+            return false;
+        }
 
         if (actvityNoFilter != null && actvityNoFilter != -1) {
             meetsCriteria = act.ActivityLogId == actvityNoFilter || act.ParentActivityId == actvityNoFilter || ($.inArray(act.ParentActivityId, parentActivityList) > -1);

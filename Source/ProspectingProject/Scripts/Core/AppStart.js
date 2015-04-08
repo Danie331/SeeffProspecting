@@ -28,6 +28,9 @@ function initialize() {
 
                 $('#mainpanel').css('display', 'block');
 
+                prospectingContext = JSON.parse(data.StaticProspectingData);
+                prospectingContext.LoggedInUser = data.UserGuid;
+
                 userIsProspectingManager = data.IsProspectingManager;
                 availableCredit = data.AvailableCredit;
                 initializeMenuHtml();
@@ -36,8 +39,6 @@ function initialize() {
 
                 createProspectingMenu(data);
                 initEventHandlers();
-
-                prospectingContext = JSON.parse(data.StaticProspectingData);
             }
         },
         error: function (textStatus, errorThrown) { debugger; },

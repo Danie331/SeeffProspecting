@@ -49,6 +49,7 @@
     <script src="Scripts/Core/ProspectingContactMenuBuilder.js"></script>
     <script src="Scripts/Core/ContactDetailsEditorWidget.js"></script>
     <script src="Scripts/Core/ProspectingObjectBuilder.js"></script>
+    <script src="Scripts/Core/SMSing.js"></script>
     <script src="Scripts/Core/AppStart.js"></script>
      <%-- END_SECTION:CORE_SCRIPTS --%>
     <%-- END_SECTION:JAVASCRIPT --%>
@@ -103,6 +104,9 @@
             <label id="errorDialogText"></label>
         </div>
         <div id="selectPrimaryContactDetailDialog" title="Select Primary Contact Detail" style="display:none;font-family:Verdana;font-size:12px;"></div>
+        <div id="multiSelectMode" style="display: none; font-family: Verdana; font-size: xx-large; color: red">
+            You are in multi-select mode
+        </div>
     </form>
         <div id="googleMap"></div>
 </body>

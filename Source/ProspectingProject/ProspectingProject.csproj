@@ -674,9 +674,12 @@
     <Content Include="Assets\lightstone.png" />
     <Content Include="Assets\make_primary_contact.png" />
     <Content Include="Assets\marker_icons\prospecting\prospected.png" />
+    <Content Include="Assets\marker_icons\prospecting\prospected_bulk_select.png" />
+    <Content Include="Assets\marker_icons\prospecting\ss_unprospected_bulk_select.png" />
     <Content Include="Assets\marker_icons\prospecting\unprospected.png" />
     <Content Include="Assets\marker_icons\prospecting\ss_prospected.png" />
     <Content Include="Assets\marker_icons\prospecting\ss_unprospected.png" />
+    <Content Include="Assets\marker_icons\prospecting\unprospected_bulk_select.png" />
     <Content Include="Assets\notes.png" />
     <Content Include="Assets\person.png" />
     <Content Include="Assets\phone_icon.png" />
@@ -693,6 +696,7 @@
     <Content Include="Default.aspx" />
     <Content Include="LogOut.aspx" />
     <Content Include="NotAuthorised.aspx" />
+    <Content Include="Scripts\Core\SMSing.js" />
     <Content Include="Scripts\StyleSheets\OpenTip.css" />
     <Content Include="Scripts\3rdParty\OpenTip.js" />
     <Content Include="Scripts\StyleSheets\tooltip.css" />
