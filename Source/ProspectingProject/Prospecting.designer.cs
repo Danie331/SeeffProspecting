@@ -96,6 +96,9 @@ namespace ProspectingProject
     partial void Insertprospecting_property(prospecting_property instance);
     partial void Updateprospecting_property(prospecting_property instance);
     partial void Deleteprospecting_property(prospecting_property instance);
+    partial void Insertcommunications_log(communications_log instance);
+    partial void Updatecommunications_log(communications_log instance);
+    partial void Deletecommunications_log(communications_log instance);
     #endregion
 		
 		public ProspectingDataContext() : 
@@ -301,6 +304,14 @@ namespace ProspectingProject
 			get
 			{
 				return this.GetTable<prospecting_property>();
+			}
+		}
+		
+		public System.Data.Linq.Table<communications_log> communications_logs
+		{
+			get
+			{
+				return this.GetTable<communications_log>();
 			}
 		}
 		
@@ -2439,6 +2450,8 @@ namespace ProspectingProject
 		
 		private EntitySet<activity_log> _activity_logs;
 		
+		private EntitySet<communications_log> _communications_logs;
+		
 		private EntityRef<prospecting_person_title> _prospecting_person_title;
 		
     #region Extensibility Method Definitions
@@ -2507,6 +2520,7 @@ namespace ProspectingProject
 			this._prospecting_person_person_relationships1 = new EntitySet<prospecting_person_person_relationship>(new Action<prospecting_person_person_relationship>(this.attach_prospecting_person_person_relationships1), new Action<prospecting_person_person_relationship>(this.detach_prospecting_person_person_relationships1));
 			this._prospecting_person_property_relationships = new EntitySet<prospecting_person_property_relationship>(new Action<prospecting_person_property_relationship>(this.attach_prospecting_person_property_relationships), new Action<prospecting_person_property_relationship>(this.detach_prospecting_person_property_relationships));
 			this._activity_logs = new EntitySet<activity_log>(new Action<activity_log>(this.attach_activity_logs), new Action<activity_log>(this.detach_activity_logs));
+			this._communications_logs = new EntitySet<communications_log>(new Action<communications_log>(this.attach_communications_logs), new Action<communications_log>(this.detach_communications_logs));
 			this._prospecting_person_title = default(EntityRef<prospecting_person_title>);
 			OnCreated();
 		}
@@ -3113,6 +3127,19 @@ namespace ProspectingProject
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_contact_person_communications_log", Storage="_communications_logs", ThisKey="contact_person_id", OtherKey="target_contact_person_id")]
+		public EntitySet<communications_log> communications_logs
+		{
+			get
+			{
+				return this._communications_logs;
+			}
+			set
+			{
+				this._communications_logs.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_person_title_prospecting_contact_person", Storage="_prospecting_person_title", ThisKey="person_title", OtherKey="prospecting_person_title_id", IsForeignKey=true)]
 		public prospecting_person_title prospecting_person_title
 		{
@@ -3234,6 +3261,18 @@ namespace ProspectingProject
 		}
 		
 		private void detach_activity_logs(activity_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_contact_person = null;
+		}
+		
+		private void attach_communications_logs(communications_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_contact_person = this;
+		}
+		
+		private void detach_communications_logs(communications_log entity)
 		{
 			this.SendPropertyChanging();
 			entity.prospecting_contact_person = null;
@@ -5168,6 +5207,10 @@ namespace ProspectingProject
 		
 		private System.Nullable<int> _activity_followup_type_id;
 		
+		private EntitySet<communications_log> _communications_logs;
+		
+		private EntitySet<communications_log> _communications_logs1;
+		
 		private EntityRef<activity_type> _activity_type;
 		
 		private EntityRef<prospecting_contact_person> _prospecting_contact_person;
@@ -5224,6 +5267,8 @@ namespace ProspectingProject
 		
 		public activity_log()
 		{
+			this._communications_logs = new EntitySet<communications_log>(new Action<communications_log>(this.attach_communications_logs), new Action<communications_log>(this.detach_communications_logs));
+			this._communications_logs1 = new EntitySet<communications_log>(new Action<communications_log>(this.attach_communications_logs1), new Action<communications_log>(this.detach_communications_logs1));
 			this._activity_type = default(EntityRef<activity_type>);
 			this._prospecting_contact_person = default(EntityRef<prospecting_contact_person>);
 			this._activity_followup_type = default(EntityRef<activity_followup_type>);
@@ -5647,6 +5692,32 @@ namespace ProspectingProject
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="activity_log_communications_log", Storage="_communications_logs", ThisKey="activity_log_id", OtherKey="activity_id")]
+		public EntitySet<communications_log> communications_logs
+		{
+			get
+			{
+				return this._communications_logs;
+			}
+			set
+			{
+				this._communications_logs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="activity_log_communications_log1", Storage="_communications_logs1", ThisKey="activity_log_id", OtherKey="followup_activity_id")]
+		public EntitySet<communications_log> communications_logs1
+		{
+			get
+			{
+				return this._communications_logs1;
+			}
+			set
+			{
+				this._communications_logs1.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="activity_type_activity_log", Storage="_activity_type", ThisKey="activity_type_id", OtherKey="activity_type_id", IsForeignKey=true)]
 		public activity_type activity_type
 		{
@@ -5801,6 +5872,30 @@ namespace ProspectingProject
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_communications_logs(communications_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.activity_log = this;
+		}
+		
+		private void detach_communications_logs(communications_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.activity_log = null;
+		}
+		
+		private void attach_communications_logs1(communications_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.activity_log1 = this;
+		}
+		
+		private void detach_communications_logs1(communications_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.activity_log1 = null;
 		}
 	}
 	
@@ -6046,6 +6141,8 @@ namespace ProspectingProject
 		
 		private EntitySet<activity_log> _activity_logs;
 		
+		private EntitySet<communications_log> _communications_logs;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -6148,6 +6245,7 @@ namespace ProspectingProject
 			this._prospecting_company_property_relationships = new EntitySet<prospecting_company_property_relationship>(new Action<prospecting_company_property_relationship>(this.attach_prospecting_company_property_relationships), new Action<prospecting_company_property_relationship>(this.detach_prospecting_company_property_relationships));
 			this._prospecting_person_property_relationships = new EntitySet<prospecting_person_property_relationship>(new Action<prospecting_person_property_relationship>(this.attach_prospecting_person_property_relationships), new Action<prospecting_person_property_relationship>(this.detach_prospecting_person_property_relationships));
 			this._activity_logs = new EntitySet<activity_log>(new Action<activity_log>(this.attach_activity_logs), new Action<activity_log>(this.detach_activity_logs));
+			this._communications_logs = new EntitySet<communications_log>(new Action<communications_log>(this.attach_communications_logs), new Action<communications_log>(this.detach_communications_logs));
 			OnCreated();
 		}
 		
@@ -7103,6 +7201,19 @@ namespace ProspectingProject
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_communications_log", Storage="_communications_logs", ThisKey="lightstone_property_id", OtherKey="target_lightstone_property_id")]
+		public EntitySet<communications_log> communications_logs
+		{
+			get
+			{
+				return this._communications_logs;
+			}
+			set
+			{
+				this._communications_logs.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -7169,6 +7280,532 @@ namespace ProspectingProject
 		{
 			this.SendPropertyChanging();
 			entity.prospecting_property = null;
+		}
+		
+		private void attach_communications_logs(communications_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = this;
+		}
+		
+		private void detach_communications_logs(communications_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.communications_log")]
+	public partial class communications_log : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _communications_log_id;
+		
+		private string _communication_type;
+		
+		private System.Nullable<long> _activity_id;
+		
+		private System.Nullable<long> _followup_activity_id;
+		
+		private System.Guid _created_by_user;
+		
+		private System.DateTime _created_date;
+		
+		private System.Nullable<System.DateTime> _updated_date;
+		
+		private int _target_contact_person_id;
+		
+		private string _target_contact_detail;
+		
+		private int _target_lightstone_property_id;
+		
+		private string _sent_status;
+		
+		private string _sending_error;
+		
+		private string _msg_content_base64;
+		
+		private EntityRef<activity_log> _activity_log;
+		
+		private EntityRef<activity_log> _activity_log1;
+		
+		private EntityRef<prospecting_contact_person> _prospecting_contact_person;
+		
+		private EntityRef<prospecting_property> _prospecting_property;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Oncommunications_log_idChanging(int value);
+    partial void Oncommunications_log_idChanged();
+    partial void Oncommunication_typeChanging(string value);
+    partial void Oncommunication_typeChanged();
+    partial void Onactivity_idChanging(System.Nullable<long> value);
+    partial void Onactivity_idChanged();
+    partial void Onfollowup_activity_idChanging(System.Nullable<long> value);
+    partial void Onfollowup_activity_idChanged();
+    partial void Oncreated_by_userChanging(System.Guid value);
+    partial void Oncreated_by_userChanged();
+    partial void Oncreated_dateChanging(System.DateTime value);
+    partial void Oncreated_dateChanged();
+    partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_dateChanged();
+    partial void Ontarget_contact_person_idChanging(int value);
+    partial void Ontarget_contact_person_idChanged();
+    partial void Ontarget_contact_detailChanging(string value);
+    partial void Ontarget_contact_detailChanged();
+    partial void Ontarget_lightstone_property_idChanging(int value);
+    partial void Ontarget_lightstone_property_idChanged();
+    partial void Onsent_statusChanging(string value);
+    partial void Onsent_statusChanged();
+    partial void Onsending_errorChanging(string value);
+    partial void Onsending_errorChanged();
+    partial void Onmsg_content_base64Changing(string value);
+    partial void Onmsg_content_base64Changed();
+    #endregion
+		
+		public communications_log()
+		{
+			this._activity_log = default(EntityRef<activity_log>);
+			this._activity_log1 = default(EntityRef<activity_log>);
+			this._prospecting_contact_person = default(EntityRef<prospecting_contact_person>);
+			this._prospecting_property = default(EntityRef<prospecting_property>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_communications_log_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int communications_log_id
+		{
+			get
+			{
+				return this._communications_log_id;
+			}
+			set
+			{
+				if ((this._communications_log_id != value))
+				{
+					this.Oncommunications_log_idChanging(value);
+					this.SendPropertyChanging();
+					this._communications_log_id = value;
+					this.SendPropertyChanged("communications_log_id");
+					this.Oncommunications_log_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_communication_type", DbType="VarChar(15) NOT NULL", CanBeNull=false)]
+		public string communication_type
+		{
+			get
+			{
+				return this._communication_type;
+			}
+			set
+			{
+				if ((this._communication_type != value))
+				{
+					this.Oncommunication_typeChanging(value);
+					this.SendPropertyChanging();
+					this._communication_type = value;
+					this.SendPropertyChanged("communication_type");
+					this.Oncommunication_typeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_activity_id", DbType="BigInt")]
+		public System.Nullable<long> activity_id
+		{
+			get
+			{
+				return this._activity_id;
+			}
+			set
+			{
+				if ((this._activity_id != value))
+				{
+					if (this._activity_log.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onactivity_idChanging(value);
+					this.SendPropertyChanging();
+					this._activity_id = value;
+					this.SendPropertyChanged("activity_id");
+					this.Onactivity_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_followup_activity_id", DbType="BigInt")]
+		public System.Nullable<long> followup_activity_id
+		{
+			get
+			{
+				return this._followup_activity_id;
+			}
+			set
+			{
+				if ((this._followup_activity_id != value))
+				{
+					if (this._activity_log1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onfollowup_activity_idChanging(value);
+					this.SendPropertyChanging();
+					this._followup_activity_id = value;
+					this.SendPropertyChanged("followup_activity_id");
+					this.Onfollowup_activity_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_by_user", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid created_by_user
+		{
+			get
+			{
+				return this._created_by_user;
+			}
+			set
+			{
+				if ((this._created_by_user != value))
+				{
+					this.Oncreated_by_userChanging(value);
+					this.SendPropertyChanging();
+					this._created_by_user = value;
+					this.SendPropertyChanged("created_by_user");
+					this.Oncreated_by_userChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_date", DbType="DateTime NOT NULL")]
+		public System.DateTime created_date
+		{
+			get
+			{
+				return this._created_date;
+			}
+			set
+			{
+				if ((this._created_date != value))
+				{
+					this.Oncreated_dateChanging(value);
+					this.SendPropertyChanging();
+					this._created_date = value;
+					this.SendPropertyChanged("created_date");
+					this.Oncreated_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_date", DbType="DateTime")]
+		public System.Nullable<System.DateTime> updated_date
+		{
+			get
+			{
+				return this._updated_date;
+			}
+			set
+			{
+				if ((this._updated_date != value))
+				{
+					this.Onupdated_dateChanging(value);
+					this.SendPropertyChanging();
+					this._updated_date = value;
+					this.SendPropertyChanged("updated_date");
+					this.Onupdated_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_target_contact_person_id", DbType="Int NOT NULL")]
+		public int target_contact_person_id
+		{
+			get
+			{
+				return this._target_contact_person_id;
+			}
+			set
+			{
+				if ((this._target_contact_person_id != value))
+				{
+					if (this._prospecting_contact_person.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Ontarget_contact_person_idChanging(value);
+					this.SendPropertyChanging();
+					this._target_contact_person_id = value;
+					this.SendPropertyChanged("target_contact_person_id");
+					this.Ontarget_contact_person_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_target_contact_detail", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string target_contact_detail
+		{
+			get
+			{
+				return this._target_contact_detail;
+			}
+			set
+			{
+				if ((this._target_contact_detail != value))
+				{
+					this.Ontarget_contact_detailChanging(value);
+					this.SendPropertyChanging();
+					this._target_contact_detail = value;
+					this.SendPropertyChanged("target_contact_detail");
+					this.Ontarget_contact_detailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_target_lightstone_property_id", DbType="Int NOT NULL")]
+		public int target_lightstone_property_id
+		{
+			get
+			{
+				return this._target_lightstone_property_id;
+			}
+			set
+			{
+				if ((this._target_lightstone_property_id != value))
+				{
+					if (this._prospecting_property.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Ontarget_lightstone_property_idChanging(value);
+					this.SendPropertyChanging();
+					this._target_lightstone_property_id = value;
+					this.SendPropertyChanged("target_lightstone_property_id");
+					this.Ontarget_lightstone_property_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sent_status", DbType="VarChar(20) NOT NULL", CanBeNull=false)]
+		public string sent_status
+		{
+			get
+			{
+				return this._sent_status;
+			}
+			set
+			{
+				if ((this._sent_status != value))
+				{
+					this.Onsent_statusChanging(value);
+					this.SendPropertyChanging();
+					this._sent_status = value;
+					this.SendPropertyChanged("sent_status");
+					this.Onsent_statusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sending_error", DbType="VarChar(MAX)")]
+		public string sending_error
+		{
+			get
+			{
+				return this._sending_error;
+			}
+			set
+			{
+				if ((this._sending_error != value))
+				{
+					this.Onsending_errorChanging(value);
+					this.SendPropertyChanging();
+					this._sending_error = value;
+					this.SendPropertyChanged("sending_error");
+					this.Onsending_errorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_msg_content_base64", DbType="VarChar(MAX)")]
+		public string msg_content_base64
+		{
+			get
+			{
+				return this._msg_content_base64;
+			}
+			set
+			{
+				if ((this._msg_content_base64 != value))
+				{
+					this.Onmsg_content_base64Changing(value);
+					this.SendPropertyChanging();
+					this._msg_content_base64 = value;
+					this.SendPropertyChanged("msg_content_base64");
+					this.Onmsg_content_base64Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="activity_log_communications_log", Storage="_activity_log", ThisKey="activity_id", OtherKey="activity_log_id", IsForeignKey=true)]
+		public activity_log activity_log
+		{
+			get
+			{
+				return this._activity_log.Entity;
+			}
+			set
+			{
+				activity_log previousValue = this._activity_log.Entity;
+				if (((previousValue != value) 
+							|| (this._activity_log.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._activity_log.Entity = null;
+						previousValue.communications_logs.Remove(this);
+					}
+					this._activity_log.Entity = value;
+					if ((value != null))
+					{
+						value.communications_logs.Add(this);
+						this._activity_id = value.activity_log_id;
+					}
+					else
+					{
+						this._activity_id = default(Nullable<long>);
+					}
+					this.SendPropertyChanged("activity_log");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="activity_log_communications_log1", Storage="_activity_log1", ThisKey="followup_activity_id", OtherKey="activity_log_id", IsForeignKey=true)]
+		public activity_log activity_log1
+		{
+			get
+			{
+				return this._activity_log1.Entity;
+			}
+			set
+			{
+				activity_log previousValue = this._activity_log1.Entity;
+				if (((previousValue != value) 
+							|| (this._activity_log1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._activity_log1.Entity = null;
+						previousValue.communications_logs1.Remove(this);
+					}
+					this._activity_log1.Entity = value;
+					if ((value != null))
+					{
+						value.communications_logs1.Add(this);
+						this._followup_activity_id = value.activity_log_id;
+					}
+					else
+					{
+						this._followup_activity_id = default(Nullable<long>);
+					}
+					this.SendPropertyChanged("activity_log1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_contact_person_communications_log", Storage="_prospecting_contact_person", ThisKey="target_contact_person_id", OtherKey="contact_person_id", IsForeignKey=true)]
+		public prospecting_contact_person prospecting_contact_person
+		{
+			get
+			{
+				return this._prospecting_contact_person.Entity;
+			}
+			set
+			{
+				prospecting_contact_person previousValue = this._prospecting_contact_person.Entity;
+				if (((previousValue != value) 
+							|| (this._prospecting_contact_person.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._prospecting_contact_person.Entity = null;
+						previousValue.communications_logs.Remove(this);
+					}
+					this._prospecting_contact_person.Entity = value;
+					if ((value != null))
+					{
+						value.communications_logs.Add(this);
+						this._target_contact_person_id = value.contact_person_id;
+					}
+					else
+					{
+						this._target_contact_person_id = default(int);
+					}
+					this.SendPropertyChanged("prospecting_contact_person");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_communications_log", Storage="_prospecting_property", ThisKey="target_lightstone_property_id", OtherKey="lightstone_property_id", IsForeignKey=true)]
+		public prospecting_property prospecting_property
+		{
+			get
+			{
+				return this._prospecting_property.Entity;
+			}
+			set
+			{
+				prospecting_property previousValue = this._prospecting_property.Entity;
+				if (((previousValue != value) 
+							|| (this._prospecting_property.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._prospecting_property.Entity = null;
+						previousValue.communications_logs.Remove(this);
+					}
+					this._prospecting_property.Entity = value;
+					if ((value != null))
+					{
+						value.communications_logs.Add(this);
+						this._target_lightstone_property_id = value.lightstone_property_id;
+					}
+					else
+					{
+						this._target_lightstone_property_id = default(int);
+					}
+					this.SendPropertyChanged("prospecting_property");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

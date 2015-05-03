@@ -17,31 +17,31 @@ function fixElementHeightForIE(elementId, percHeight) {
 }
 
 function createProspectingMenu(userData) {
-    var menuItem = createMenuItem("Suburb Selection", "suburbselector", buildSuburbSelectionHtml(), null, null);
+    var menuItem = createMenuItem("Suburb Selection", "suburbselector", buildSuburbSelectionHtml(), function () { toggleMultiSelectMode(false); }, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     fixElementHeightForIE('suburbsDiv');
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Contact Details", "contactdetails", buildContactDetailsDiv(), null, null);
+    menuItem = createMenuItem("Contact Details", "contactdetails", buildContactDetailsDiv(), function () { toggleMultiSelectMode(false); }, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Activity Report", "activityreport", buildActivityReport(), handleActivityReportClick, null);
+    menuItem = createMenuItem("Activity Report", "activityreport", buildActivityReport(), function () { toggleMultiSelectMode(false); handleActivityReportClick(); }, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     fixElementHeightForIE('contentactivityContainer', 0.8);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Follow-up", "followup", buildFollowupReport(userData.FollowupActivities), handleFollowupReportClick, userData.FollowupActivities.length);
+    menuItem = createMenuItem("Follow-up", "followup", buildFollowupReport(userData.FollowupActivities), function () { toggleMultiSelectMode(false); handleFollowupReportClick(); }, userData.FollowupActivities.length);
     appendMenuItemContent(menuItem.MenuItemContent);
     fixElementHeightForIE('contentfollowupContainer', 0.8);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Lightstone Search", "lightstonesearch", buildSearchMenu(), null, null);
+    menuItem = createMenuItem("Lightstone Search", "lightstonesearch", buildSearchMenu(), function () { toggleMultiSelectMode(false); }, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
-    if (prospectingContext.LoggedInUser == 'test' /*'72095a56-d66b-4ef5-babb-0de0a3843316'*/) {
-        menuItem = createMenuItem("SMS", "smsing", buildSMSMenu(), handleSMSMenuItemClick, null);
+    if (prospectingContext.LoggedInUser == 'a2c48f98-14fb-425e-bbd2-312cfb89980c' || prospectingContext.LoggedInUser == '62a85a9d-be7a-4fad-b704-a55edb1d338f') {
+        menuItem = createMenuItem("Communication", "communication", buildCommunicationMenu(), handleSMSMenuItemClick, null);
         appendMenuItemContent(menuItem.MenuItemContent);
         menuItems.push(menuItem);
     }
@@ -280,7 +280,7 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
                 })[0];
                 var marker = targetProperty.Marker;
                 try {
-                    centreMap(marker.Suburb, marker);
+                    centreMap(marker.Suburb, marker, true);
                     new google.maps.event.trigger(marker, 'click', function () {
                         debugger;
                     });
@@ -881,7 +881,7 @@ function buildActivityDisplayItem(activity) {
             })[0];
             var marker = targetProperty.Marker;
             try {
-                centreMap(marker.Suburb, marker);
+                centreMap(marker.Suburb, marker, true);
                 new google.maps.event.trigger(marker, 'click');
             } catch (e) {}
             // Set current proeprty, what about SS?

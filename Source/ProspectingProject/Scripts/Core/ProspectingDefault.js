@@ -284,9 +284,10 @@ function fromLatLngToPoint(latLng, map) {
 
 function handleMapClick(event) {
     currentClickLatLng = new google.maps.LatLng(event.latLng.lat(), event.latLng.lng());
-
-    var point = fromLatLngToPoint(currentClickLatLng, map);
-    $('.context-menu-prospect').contextMenu({ x: point.x, y: point.y });
+    if (!multiSelectMode) {
+        var point = fromLatLngToPoint(currentClickLatLng, map);
+        $('.context-menu-prospect').contextMenu({ x: point.x, y: point.y });
+    }
 }
 
 function performPersonLookup(idNumber, lookupType) {
@@ -430,6 +431,17 @@ function setCurrentMarker(suburb, property) {
 
 function markerClick(e) {
     closeInfoWindow();
+
+    if (multiSelectMode) { // if we are in multi-select mode
+        var marker = $(this)[0];
+        if (marker.IsPartOfSelection) {
+            removeMarkersFromSelection(marker);
+        } else {
+            addMarkerToSelection(marker, true);
+        }
+        return;
+    }
+
     $('#propertyInfoDiv').css('display', 'none');
     var marker = $(this)[0];
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Property Info...</p>' });
@@ -739,6 +751,10 @@ function showDialogAddActivity(inputPacket, defaultSelection, callback) {
 }
 
 function markerRightClick(event) {
+    if (multiSelectMode) {
+        return;
+    }
+
     // Find the marker underneath the click
     var marker = $(this)[0];
     rightClickedProperty = null;
@@ -1106,9 +1122,13 @@ function drawPolygonForSuburb(suburb) {
     poly.Suburb = suburb;
 
     google.maps.event.addListener(poly, 'click', function (event) {
-        currentSuburb = poly.Suburb;
-        handleMapClick(event);
+        handleSuburbPolyClick(event, poly);
     });
+}
+
+function handleSuburbPolyClick(event, poly) {
+    currentSuburb = poly.Suburb;
+    handleMapClick(event);
 }
 
 function getIconForMarker(marker) {
@@ -1125,7 +1145,12 @@ function getIconForMarker(marker) {
     function buildPathToIcon(property) {        
         if (property.SS_FH == "SS" || property.SS_FH == "FS") {
             if (!marker.MarkerIsSpiderfied) {
-                return path += 'ss_unprospected.png';
+                if (!marker.IsPartOfSelection) {
+                    return path += 'ss_unprospected.png';
+                }
+                else {
+                    return path += 'ss_unprospected_bulk_select.png';
+                }
             }
         }       
         // Any other FH types
@@ -1136,9 +1161,18 @@ function getIconForMarker(marker) {
         if (property.ProspectingPropertyId) {
             if (property.Prospected) {
                 // Fully prospected
-                return 'prospected.png';
+                if (!marker.IsPartOfSelection) {
+                    return 'prospected.png';
+                } else {
+                    return 'prospected_bulk_select.png';
+                }
             }
-            return 'unprospected.png';
+
+            if (!marker.IsPartOfSelection) {
+                return 'unprospected.png';
+            } else {
+                return 'unprospected_bulk_select.png';
+            }
         }
 
         return 'unprospected.png';
@@ -1384,7 +1418,7 @@ function updateExistingPropertyFromProperty(existingProp, newProp) {
     existingProp.PropertyAddress = newProp.PropertyAddress;
     existingProp.StreetOrUnitNo = newProp.StreetOrUnitNo;
     existingProp.SeeffAreaId = newProp.SeeffAreaId;
-    existingProp.Contacts = newProp.Contacts;
+    updateContactsOnProperty(existingProp, newProp);
     existingProp.ContactCompanies = newProp.ContactCompanies;
     existingProp.LightstoneIDOrCKNo = newProp.LightstoneIDOrCKNo;
     existingProp.LightstoneRegDate = newProp.LightstoneRegDate;
@@ -1403,6 +1437,33 @@ function updateExistingPropertyFromProperty(existingProp, newProp) {
     existingProp.Portion = newProp.Portion;
     existingProp.LightstoneSuburb = newProp.LightstoneSuburb;
     existingProp.ActivityBundle = newProp.ActivityBundle;
+}
+
+function updateContactsOnProperty(existingProp, newProp) {
+    //existingProp.Contacts = newProp.Contacts;
+    if (existingProp.Contacts == null && newProp.Contacts != null) {
+        existingProp.Contacts = newProp.Contacts;
+    }
+    else {
+        if (existingProp.Contacts && newProp.Contacts) {
+            $.each(newProp.Contacts, function (idx, con) {
+                // Try find the existing contact and update it, otherwise add it
+                var existingContact = $.grep(existingProp.Contacts, function (ex) {
+                    return ex.ContactPersonId == con.ContactPersonId;
+                })[0];
+                if (existingContact) {
+                    updateExistingContactFromContact(existingContact, con);
+                } else {
+                    existingProp.Contacts.push(con);
+                }
+            });
+        }
+    }
+
+    function updateExistingContactFromContact(existingContact, newContact) {
+        existingContact.PhoneNumbers = newContact.PhoneNumbers;
+        existingContact.EmailAddresses = newContact.EmailAddresses;
+    }
 }
 
 function buildContentForInfoWindow(property) {

@@ -63,7 +63,7 @@ namespace ProspectingReleaseBuilder
             string _3rdPartyCSS = CombineFiles(ordering, false, ".css");
 
             // Delete the javascript and stylesheet source folder 
-            Directory.Delete(Path.Combine(BuildDefaults._publishTarget, BuildDefaults._publishScripts), true);
+            //Directory.Delete(Path.Combine(BuildDefaults._publishTarget, BuildDefaults._publishScripts), true);
             // Update the referencing file
             UpdateScriptReferences(_3rdpartyJavascript + coreJavascript, _3rdPartyCSS + coreCSS);
         }

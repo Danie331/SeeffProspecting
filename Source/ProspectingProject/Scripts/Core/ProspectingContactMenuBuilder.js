@@ -312,10 +312,7 @@ function handleSaveContactDetails(phoneNumbers, emailAddresses) {
 
         if (currentPersonContact) {
 
-            if (!currentPersonContact.IsPOPIrestricted) {
-                currentPersonContact.PhoneNumbers = phoneNumbers;
-                currentPersonContact.EmailAddresses = emailAddresses;
-            } else {
+            if (currentPersonContact.IsPOPIrestricted) {
                 currentPersonContact.PhoneNumbers = [];
                 currentPersonContact.EmailAddresses = [];
             }

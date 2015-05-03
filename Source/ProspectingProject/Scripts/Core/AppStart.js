@@ -49,6 +49,13 @@ function initialize() {
     $(window).bind("beforeunload", function () {
         unlockCurrentProperty();
     });
+
+    $(document).mouseup(function (e) {
+        var commMenu = $("#communicationMenu");
+        if (!commMenu.is(e.target)) {
+            commMenu.hide();
+        }
+    });
 }
 
 function initializeMap(defaultZoomAndLocation) {

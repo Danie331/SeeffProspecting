@@ -16,6 +16,11 @@
 
         <%-- Google maps API access (note server key) --%>
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDWHlk3fmGm0oDsqVaoBM3_YocW5xPKtwA&libraries=drawing,geometry,places&sensor=true"></script>
+    <script src="https://apis.google.com/js/client.js"></script>
+
+      <%-- UNMINIFIED --%> 
+    <script src="Scripts/3rdParty/ckeditor/ckeditor.js"></script>
+    <script src="Scripts/3rdParty/ckeditor/adapters/jquery.js"></script>
 
     <%-- BEGIN_SECTION:STYLESHEETS --%> 
      <%-- BEGIN_SECTION:3RD_PARTY_STYLESHEETS --%>
@@ -40,6 +45,8 @@
     <script src="Scripts/3rdParty/jquery.ui.position.js"></script>
     <script src="Scripts/3rdParty/tooltip.js"></script>
     <script src="Scripts/3rdParty/OpenTip.js"></script>
+    <script src="Scripts/3rdParty/mime-js/base64.js"></script>
+    <script src="Scripts/3rdParty/mime-js/mime-js.js"></script>
     <%-- END_SECTION:3RD_PARTY_SCRIPTS --%>
     <%-- BEGIN_SECTION:CORE_SCRIPTS --%>
     <script src="Scripts/Core/Utils.js"></script>
@@ -49,7 +56,8 @@
     <script src="Scripts/Core/ProspectingContactMenuBuilder.js"></script>
     <script src="Scripts/Core/ContactDetailsEditorWidget.js"></script>
     <script src="Scripts/Core/ProspectingObjectBuilder.js"></script>
-    <script src="Scripts/Core/SMSing.js"></script>
+    <script src="Scripts/Core/Communication.js"></script>
+    <script src="Scripts/Core/DrawingMultiSelect.js"></script>
     <script src="Scripts/Core/AppStart.js"></script>
      <%-- END_SECTION:CORE_SCRIPTS --%>
     <%-- END_SECTION:JAVASCRIPT --%>
@@ -106,6 +114,8 @@
         <div id="selectPrimaryContactDetailDialog" title="Select Primary Contact Detail" style="display:none;font-family:Verdana;font-size:12px;"></div>
         <div id="multiSelectMode" style="display: none; font-family: Verdana; font-size: xx-large; color: red">
             You are in multi-select mode
+        </div>
+        <div id="commSendMessageDialog" title="Send Message" class="errorDialog"> 
         </div>
     </form>
         <div id="googleMap"></div>

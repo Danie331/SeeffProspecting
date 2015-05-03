@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
+using System.Threading;
 using System.Web;
 
 namespace ProspectingProject
@@ -32,7 +33,7 @@ namespace ProspectingProject
         public static Func<ProspectingDataContext, ProspectingContactPerson, IQueryable<ProspectingContactDetail>> PropertyContactEmailRetriever { get; private set; }
         public static Func<ProspectingDataContext, prospecting_property, bool, IQueryable<ProspectingContactPerson>> PropertyCompanyContactsRetriever { get; private set; }
 
-        public static Guid? UserSessionGuid { get; set; }
+        public static Guid? UserSessionGuid { get; set; }     
 
         static ProspectingStaticData()
         {
@@ -149,7 +150,7 @@ namespace ProspectingProject
         {
             using (var prospecting = new ProspectingDataContext())
             {
-                ActivityTypes = (from item in prospecting.activity_types
+                ActivityTypes = (from item in prospecting.activity_types 
                                  where item.is_system_type.HasValue && !item.is_system_type.Value && item.active
                                  select new KeyValuePair<int, string>(item.activity_type_id, item.activity_name)).ToList();
             }
@@ -230,5 +231,6 @@ namespace ProspectingProject
             ContactEmailTypes = ContactDetailTypes.Where(i => i.Value.Contains("email")).ToList();
             ContactPhoneTypes = ContactDetailTypes.Where(i => !i.Value.Contains("email")).ToList();
         }
+
     }
 }

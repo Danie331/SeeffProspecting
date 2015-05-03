@@ -139,3 +139,11 @@ function formatRandValue(value) {
 
     return "n / a";
 }
+
+function replaceAll(string, find, replace) {
+    function escapeRegExp(string) {
+        return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    }
+
+    return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+}

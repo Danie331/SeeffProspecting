@@ -2138,7 +2138,7 @@ namespace ProspectingProject
             }
         }
 
-        public static void UpdateInsertActivity(ProspectingActivity act)
+        public static long UpdateInsertActivity(ProspectingActivity act)
         {
             var currentUser = HttpContext.Current.Session["user"] as UserDataResponsePacket;
             // If Allocated To is null, default it to the logged in user
@@ -2148,9 +2148,10 @@ namespace ProspectingProject
             }
             using (var prospecting = new ProspectingDataContext())
             {
+                activity_log activityRecord = null;
                 if (act.IsForInsert)
                 {
-                    activity_log activityRecord = new activity_log
+                    activityRecord = new activity_log
                     {
                         lightstone_property_id = act.LightstonePropertyId,
                         followup_date = act.FollowUpDate,
@@ -2168,17 +2169,18 @@ namespace ProspectingProject
                 }
                 else if (act.IsForUpdate)
                 {
-                    var activityForUpdate = prospecting.activity_logs.First(ac => ac.activity_log_id == act.ActivityLogId);
-                    activityForUpdate.followup_date = act.FollowUpDate;
-                    activityForUpdate.allocated_to = act.AllocatedTo;
-                    activityForUpdate.activity_type_id = act.ActivityTypeId;
-                    activityForUpdate.comment = act.Comment;
-                    activityForUpdate.contact_person_id = act.ContactPersonId;
+                    activityRecord = prospecting.activity_logs.First(ac => ac.activity_log_id == act.ActivityLogId);
+                    activityRecord.followup_date = act.FollowUpDate;
+                    activityRecord.allocated_to = act.AllocatedTo;
+                    activityRecord.activity_type_id = act.ActivityTypeId;
+                    activityRecord.comment = act.Comment;
+                    activityRecord.contact_person_id = act.ContactPersonId;
                     // Add the rest later
-                    activityForUpdate.parent_activity_id = act.ParentActivityId;
-                    activityForUpdate.activity_followup_type_id = act.ActivityFollowupTypeId;
+                    activityRecord.parent_activity_id = act.ParentActivityId;
+                    activityRecord.activity_followup_type_id = act.ActivityFollowupTypeId;
                 }
                 prospecting.SubmitChanges();
+                return activityRecord.activity_log_id;
             }
         }
 
@@ -2202,6 +2204,15 @@ namespace ProspectingProject
                 var contactDetail = prospecting.prospecting_contact_details.FirstOrDefault(c => c.prospecting_contact_detail_id == contactDetailId);
                 if (contactDetail != null)
                 {
+                    if (contactDetail.contact_detail_type == 3) // cell
+                    {
+                        // Remove the primary flag for all other cell no's for this contact
+                        var allCellNosForContact = prospecting.prospecting_contact_details.Where(c => c.contact_person_id == contactDetail.contact_person_id && c.contact_detail_type == 3);
+                        foreach (var detail in allCellNosForContact)
+                        {
+                            detail.is_primary_contact = false;
+                        }
+                    }
                     contactDetail.is_primary_contact = true;
                     prospecting.SubmitChanges();
                 }
@@ -2228,6 +2239,101 @@ namespace ProspectingProject
             int? areaId = resp.Content.ReadAsAsync<int?>().Result;
 
             return areaId;
+        }
+
+        public static string SendSMS(SmsInputPacket inputPacket)
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://sms.sancustelecom.com//"); // This is the web application's root server address
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+            var content = new FormUrlEncodedContent(new[] 
+            {
+                new KeyValuePair<string, string>("username", "SanAcc00006"),
+                new KeyValuePair<string, string>("password", "A78BfEPK"),
+                new KeyValuePair<string, string>("account", "SanAcc00006"),
+                new KeyValuePair<string, string>("batchid", "batch01"),
+                new KeyValuePair<string, string>("da", "27724707471"),
+                new KeyValuePair<string, string>("id", "123"),
+                new KeyValuePair<string, string>("ud", inputPacket.Message),
+            });
+            var result = client.PostAsync("/submit/batch/", content).Result;
+            string resultContent = result.Content.ReadAsStringAsync().Result;
+            return resultContent;
+        }
+
+        public static List<ProspectingProperty> LoadProperties(int[] inputProperties)
+        {
+            UnlockCurrentProspectingRecord();
+            List<ProspectingProperty> results = new List<ProspectingProperty>();
+            using (var prospectingDB = new ProspectingDataContext())
+            {
+                foreach (int lightstonePropertyId in inputProperties)
+                {
+                    var propRecord = prospectingDB.prospecting_properties.First(pp => pp.lightstone_property_id == lightstonePropertyId);
+                    ProspectingProperty propertyWithContacts = CreateProspectingProperty(prospectingDB, propRecord, true, false, false);
+                    results.Add(propertyWithContacts);
+                }
+            }
+            return results;
+        }
+
+        public static void SaveCommunicationRecord(CommunicationRecord commObject)
+        {
+            using (var prospectingContext = new ProspectingDataContext())
+            {
+                Action<long?> createCommunicationLogRecord = activityId =>
+                {
+                    var currentUser = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+                    communications_log record = new communications_log
+                    {
+                        activity_id = activityId,
+                        communication_type = "EMAIL",
+                        created_by_user = currentUser.UserGuid,
+                        created_date = DateTime.Now,
+                        target_contact_person_id = commObject.TargetContactPersonId,
+                        target_contact_detail = commObject.TargetContactDetail,
+                        target_lightstone_property_id = commObject.TargetLightstonePropId,
+                        sent_status = !string.IsNullOrEmpty(commObject.SendingError) ? "NOT SENT" : "SENT",
+                        sending_error = commObject.SendingError,
+                        msg_content_base64 = commObject.MessageBase64
+                    };
+
+                    prospectingContext.communications_logs.InsertOnSubmit(record);
+                    prospectingContext.SubmitChanges();
+                };
+
+                Func<string> buildCommentForCommunication = () =>
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("*** Email sent to contact person ***");
+                    sb.AppendLine(string.Format("An email was sent to {0} at {1}.", commObject.TargetContactDetail, DateTime.Now));
+                    sb.AppendLine(string.Format("Subject of the email: \"{0}\"", commObject.SubjectText));
+
+                    return sb.ToString();
+                };
+                // Determine if we should create an activity along with the communication_log entry
+                if (!string.IsNullOrEmpty(commObject.SendingError))
+                {
+                    // Means that an error occurred before (or while sending the message), so write an entry to the communication_log table and return
+                    createCommunicationLogRecord(null);
+                }
+                else
+                {
+                    // No error indicates the message was sent: but this does not necessarily mean it was received!
+                    // Interrogate the CommContext here to determine what type of activity to create for the record
+                    ProspectingActivity newEmailMessageActivity = new ProspectingActivity
+                    {
+                        ActivityTypeId = ProspectingStaticData.ActivityTypes.First(act => act.Value == "General").Key,
+                        Comment = buildCommentForCommunication(),
+                        ContactPersonId = commObject.TargetContactPersonId,
+                        EmailSent = true,
+                        IsForInsert = true,
+                        LightstonePropertyId = commObject.TargetLightstonePropId
+                    };
+                    long activityId = UpdateInsertActivity(newEmailMessageActivity);
+                    createCommunicationLogRecord(activityId);
+                }
+            }
         }
     }
 }

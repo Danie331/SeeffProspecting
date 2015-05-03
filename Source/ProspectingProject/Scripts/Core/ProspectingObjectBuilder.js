@@ -103,3 +103,7 @@ function createMenuItem(itemName, itemId, itemContent, onClickFunction, itemCoun
 
     return item;
 }
+
+function createCommunicationLogRecord(commContext, commType, targetContactPersonId, targetContactDetail, targetLightstonePropId, sentStatus, sendingError, msgContent, subjectText) {
+    return { CommContext: commContext, CommType: commType, TargetContactPersonId: targetContactPersonId, TargetContactDetail: targetContactDetail, TargetLightstonePropId: targetLightstonePropId, SentStatus: sentStatus, SendingError: sendingError, MessageBase64: msgContent, SubjectText: subjectText };
+}

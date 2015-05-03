@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.SessionState;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace ProspectingProject
 {
@@ -20,8 +21,18 @@ namespace ProspectingProject
     {
         public void ProcessRequest(HttpContext context)
         {
-            string json = context.Request.Form[0];
-            BaseDataRequestPacket request = ProspectingDomain.Deserialise<BaseDataRequestPacket>(json);
+            BaseDataRequestPacket request = null;
+            string json = string.Empty;
+            // This is a POST from an internal request
+            try
+            {
+                json = context.Request.Form[0];
+            }
+            catch
+            {
+                json = HttpUtility.UrlDecode(context.Request.Form[0]);
+            }
+            request = ProspectingDomain.Deserialise<BaseDataRequestPacket>(json);
             switch (request.Instruction)
             {
                 case "load_application":
@@ -96,7 +107,37 @@ namespace ProspectingProject
                     int? seeffAreaId = FindAreaId(json);
                     context.Response.Write(seeffAreaId);
                     break;
+                case "send_sms":
+                    var deliveryReport = SendSMS(json);
+                    context.Response.Write(deliveryReport);
+                    break;
+                case "load_properties":
+                    var properties = LoadProperties(json);
+                    context.Response.Write(properties);
+                    break;
+                case "save_communication":
+                    SaveCommunicationRecord(json);
+                    break;
             }
+        }
+
+        private void SaveCommunicationRecord(string json)
+        {
+            var commObject = ProspectingDomain.Deserialise<CommunicationRecord>(json);
+            ProspectingDomain.SaveCommunicationRecord(commObject);
+        }
+
+        private string LoadProperties(string json)
+        {
+            var inputProperties = ProspectingDomain.Deserialise<LightstonePropertyIDPacket>(json);
+            var results = ProspectingDomain.LoadProperties(inputProperties.LightstonePropertyIDs);
+            return ProspectingDomain.SerializeToJsonWithDefaults(new { Properties = results });
+        }
+
+        private string SendSMS(string json)
+        {
+            SmsInputPacket inputPacket = ProspectingDomain.Deserialise<SmsInputPacket>(json);
+            return ProspectingDomain.SendSMS(inputPacket);
         }
 
         private int? FindAreaId(string json)
