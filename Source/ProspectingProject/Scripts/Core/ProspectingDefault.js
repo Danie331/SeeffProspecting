@@ -1536,7 +1536,7 @@ function buildContentForInfoWindow(property, infowindow) {
     $('body').on('click', '#streetview_' + property.LightstonePropertyId, function () {
         var streetView = map.getStreetView();
         streetView.setPosition(new google.maps.LatLng(property.LatLng.Lat, property.LatLng.Lng));
-        map.bindTo("center", streetView, "position");
+        //map.bindTo("center", streetView, "position");
         var streetViewLayer = new google.maps.ImageMapType({
             getTileUrl: function (coord, zoom) {
                 return "http://www.google.com/cbk?output=overlay&zoom=" + zoom + "&x=" + coord.x + "&y=" + coord.y + "&cb_client=api";
