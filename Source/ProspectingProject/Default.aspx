@@ -47,6 +47,7 @@
     <script src="Scripts/3rdParty/OpenTip.js"></script>
     <script src="Scripts/3rdParty/mime-js/base64.js"></script>
     <script src="Scripts/3rdParty/mime-js/mime-js.js"></script>
+    <script src="Scripts/3rdParty/waitForImage.js"></script>
     <%-- END_SECTION:3RD_PARTY_SCRIPTS --%>
     <%-- BEGIN_SECTION:CORE_SCRIPTS --%>
     <script src="Scripts/Core/Utils.js"></script>

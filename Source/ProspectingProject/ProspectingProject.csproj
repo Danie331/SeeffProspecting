@@ -1011,6 +1011,7 @@
     <Content Include="Scripts\3rdParty\ckeditor\styles.js" />
     <Content Include="Scripts\3rdParty\mime-js\base64.js" />
     <Content Include="Scripts\3rdParty\mime-js\mime-js.js" />
+    <Content Include="Scripts\3rdParty\waitForImage.js" />
     <Content Include="Scripts\Core\DrawingMultiSelect.js" />
     <Content Include="Scripts\Core\Communication.js" />
     <Content Include="Scripts\StyleSheets\OpenTip.css" />

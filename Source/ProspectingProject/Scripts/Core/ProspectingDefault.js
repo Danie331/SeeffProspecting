@@ -1215,13 +1215,13 @@ function centreMap(suburb, marker, mustSetZoom) {
         map.setZoom(globalZoomLevel);
     }
     if (marker) {
-        var mapMarkerPos = calcMapCenterWithOffset(marker.getPosition().lat(), marker.getPosition().lng(), -200, 0);
+        var mapMarkerPos = calcMapCenterWithOffset(marker.getPosition().lat(), marker.getPosition().lng(), -350, 0);
         if (!mapMarkerPos) {
             mapMarkerPos = marker.position;
         }
         map.setCenter(mapMarkerPos);
     } else {
-        var pos = calcMapCenterWithOffset(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng, -200, 0);
+        var pos = calcMapCenterWithOffset(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng, -350, 0);
         if (pos) {
             map.setCenter(pos);
         }
@@ -1466,8 +1466,9 @@ function updateContactsOnProperty(existingProp, newProp) {
     }
 }
 
-function buildContentForInfoWindow(property) {
-    var div = $("<div class='info-window' />");   
+function buildContentForInfoWindow(property, infowindow) {
+    var outerDiv = $("<div id='infoWindowStandard' class='info-window' style='display:none;' />");
+    var div = $("<div style='float:right;display:inline-block;' />");
     // test for fh, test in chrome, mouille point, sort, fixed header
     if (property.SS_FH == 'SS' || property.SS_FH == 'FS') {
         var header = $("<label>" + property.SSName + "</label>");
@@ -1516,9 +1517,37 @@ function buildContentForInfoWindow(property) {
                 div.append("<br />");
             });
         }
-    }  
+    }
+
+    // SS, chrome,
+    var imgUrl = 'https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + property.LatLng.Lat + ',' + property.LatLng.Lng + '&fov=90&heading=235&pitch=10';
+    var imgElement = $("<img id='streetview_" + property.LightstonePropertyId + "' style='cursor:pointer' />").attr('src', imgUrl);
+    var streetViewDiv = $("<div style='padding-right:5px;float:left;display:inline-block;width:201px' />")
+                        .append($("<div><span style='font-size:10px'>(Click the image to go to StreetView)</span></div>"))
+                        .append(imgElement);
+
+    outerDiv.append(streetViewDiv).append(div);
+
+    $(imgElement).waitForImages(function () {
+        outerDiv.css('display', 'block');
+        infowindow.open(map);
+    });
+
+    $('body').on('click', '#streetview_' + property.LightstonePropertyId, function () {
+        var streetView = map.getStreetView();
+        streetView.setPosition(new google.maps.LatLng(property.LatLng.Lat, property.LatLng.Lng));
+        map.bindTo("center", streetView, "position");
+        var streetViewLayer = new google.maps.ImageMapType({
+            getTileUrl: function (coord, zoom) {
+                return "http://www.google.com/cbk?output=overlay&zoom=" + zoom + "&x=" + coord.x + "&y=" + coord.y + "&cb_client=api";
+            },
+            tileSize: new google.maps.Size(256, 256)
+        });
+        map.overlayMapTypes.insertAt(0, streetViewLayer);
+        streetView.setVisible(true);
+    });
    
-    return div[0].outerHTML;
+    return outerDiv[0].outerHTML;
 }
 
 function stripPropertyAddress(property) {
@@ -1535,9 +1564,9 @@ function openInfoWindow(marker, actionAfterOpening) {
 
     function createInfoWindowForMarker(marker) {
         infowindow = new google.maps.InfoWindow();
-        infowindow.setContent(buildContentForInfoWindow(marker.ProspectingProperty));
+        infowindow.setContent(buildContentForInfoWindow(marker.ProspectingProperty, infowindow));
         infowindow.setPosition(marker.getPosition());
-        infowindow.open(map);
+
         infowindow.Marker = marker;
 
         google.maps.event.addDomListener(infowindow, 'closeclick', function () {
@@ -1901,7 +1930,7 @@ function handleLocatePropertyFromSearch(seeffAreaId, searchResult) {
             var latLng = new google.maps.LatLng(firstResult.LatLng.Lat, firstResult.LatLng.Lng);
             showPopupAtLocation(latLng, content);
 
-            var pos = calcMapCenterWithOffset(latLng.lat(), latLng.lng(), -200, 0);
+            var pos = calcMapCenterWithOffset(latLng.lat(), latLng.lng(), -350, 0);
             if (pos) {
                 map.setCenter(pos);
             }
