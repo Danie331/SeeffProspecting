@@ -125,7 +125,7 @@ namespace ProspectingProject
         private static ActivityBundle LoadProspectingActivities(ProspectingDataContext prospectingContext, int? lightstonePropertyId)
         {
             ActivityBundle activityBundle = new ActivityBundle();
-            UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+            UserDataResponsePacket user = RequestHandler.GetUserSessionObject();
             activityBundle.BusinessUnitUsers = user.BusinessUnitUsers;
             activityBundle.ActivityTypes = ProspectingStaticData.ActivityTypes;
             activityBundle.ActivityFollowupTypes = ProspectingStaticData.ActivityFollowupTypes;
@@ -1172,21 +1172,6 @@ namespace ProspectingProject
             return false;
         }
 
-        public static void SavePropertyNotesComments(PropertyCommentsNotes propNotesContainer)
-        {
-            using (var prospecting = new ProspectingDataContext())
-            {
-                var prospectingProperty = (from prop in prospecting.prospecting_properties
-                                           where prop.prospecting_property_id == propNotesContainer.ProspectingPropertyId
-                                           select prop).FirstOrDefault();
-                if (prospectingProperty != null)
-                {
-                    prospectingProperty.comments = propNotesContainer.CommentsNotes;
-                }
-                prospecting.SubmitChanges();
-            }
-        }
-
         public static ProspectingContactPerson SearchForExistingContactWithDetails(ContactDetails contactDetails)
         {
             contactDetails.EmailAddresses = contactDetails.EmailAddresses.Select(s => s.ToLower()).ToList();
@@ -1971,7 +1956,7 @@ namespace ProspectingProject
 
                 ProspectingProperty property = CreateProspectingProperty(prospectingDB, propRecord, true, true, dataPacket.LoadActivities);
 
-                var currentUser = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+                var currentUser = RequestHandler.GetUserSessionObject();
                 if (propRecord.locked_by_guid != null && propRecord.locked_by_guid != currentUser.UserGuid)
                 {
                     property.IsLockedByOtherUser = true;
@@ -1993,7 +1978,7 @@ namespace ProspectingProject
 
         public static void UnlockCurrentProspectingRecord()
         {
-            var currentUser = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+            var currentUser = RequestHandler.GetUserSessionObject();
             Guid? userGuid = currentUser != null ? currentUser.UserGuid : ProspectingStaticData.UserSessionGuid;
             if (userGuid.HasValue)
             {
@@ -2140,7 +2125,7 @@ namespace ProspectingProject
 
         public static long UpdateInsertActivity(ProspectingActivity act)
         {
-            var currentUser = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+            var currentUser = RequestHandler.GetUserSessionObject();
             // If Allocated To is null, default it to the logged in user
             if (!act.AllocatedTo.HasValue)
             {
@@ -2188,7 +2173,7 @@ namespace ProspectingProject
         {
             ActivityBundle activityBundle = new ActivityBundle();
 
-            UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+            UserDataResponsePacket user = RequestHandler.GetUserSessionObject();
             activityBundle.BusinessUnitUsers = user.BusinessUnitUsers;
             activityBundle.ActivityTypes = ProspectingStaticData.ActivityTypes;
             activityBundle.ActivityFollowupTypes = ProspectingStaticData.ActivityFollowupTypes;
@@ -2283,7 +2268,7 @@ namespace ProspectingProject
             {
                 Action<long?> createCommunicationLogRecord = activityId =>
                 {
-                    var currentUser = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+                    var currentUser = RequestHandler.GetUserSessionObject();
                     communications_log record = new communications_log
                     {
                         activity_id = activityId,

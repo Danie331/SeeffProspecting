@@ -105,6 +105,10 @@ function buildLightstoneMatchesContent() {
         }),
         dataType: "json",
     }).done(function (matchesData) {
+        if (!handleResponseIfServerError(matchesData)) {
+            return;
+        }
+
         var content = generateOutputFromLightstone(matchesData);
         showPopupAtLocation(currentClickLatLng, content);
     });
@@ -267,6 +271,10 @@ function createProspectingEntities(selectedEntities, callbackSuccess, callbackFa
         data: JSON.stringify(inputData)
     })
         .done(function (data) {
+            if (!handleResponseIfServerError(data)) {
+                return;
+            }
+
             if (callbackSuccess) callbackSuccess(data);
         })
         .fail(function (data) {
@@ -300,6 +308,9 @@ function performPersonLookup(idNumber, lookupType) {
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
                 if (data.ErrorMsg && data.ErrorMsg.length > 0) {
                     alert(data.ErrorMsg);
                 }
@@ -340,15 +351,21 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCent
             url: "RequestHandler.ashx",
             data: JSON.stringify({ Instruction: "load_suburb", SuburbId: suburbId }),
             success: function (data, textStatus, jqXHR) {
-                if (textStatus == "success" && data.PolyCoords.length > 0) {
-                    initialiseAndDisplaySuburb(suburb, data, showSeeffCurrentListings);
+                if (textStatus == "success") {
+                    if (!handleResponseIfServerError(data)) {
+                        return;
+                    }
 
-                    $.unblockUI();
-                    if (actionAfterLoad) {
-                        actionAfterLoad();
-                    } else {
-                        if (mustCentreMap !== false) {
-                            centreMap(suburb, null, true);
+                    if (data.PolyCoords.length > 0) {
+                        initialiseAndDisplaySuburb(suburb, data, showSeeffCurrentListings);
+
+                        $.unblockUI();
+                        if (actionAfterLoad) {
+                            actionAfterLoad();
+                        } else {
+                            if (mustCentreMap !== false) {
+                                centreMap(suburb, null, true);
+                            }
                         }
                     }
                 } else {
@@ -391,6 +408,10 @@ function setCurrentMarker(suburb, property) {
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
+
                 if (data.ErrorMsg && data.ErrorMsg.length > 0) {
                     alert(data.ErrorMsg);
                 }
@@ -452,6 +473,10 @@ function markerClick(e) {
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
+
                 if (data.ErrorMsg && data.ErrorMsg.length > 0) {
                     alert(data.ErrorMsg);
                 }
@@ -498,6 +523,10 @@ function loadExistingProspectAddActivity(property, defaultSelection, callbackFun
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
+
                 if (data.ErrorMsg && data.ErrorMsg.length > 0) {
                     alert(data.ErrorMsg);
                 }
@@ -556,6 +585,10 @@ function loadFollowups(callbackFn) {
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
+
                 if (data.ErrorMsg && data.ErrorMsg.length > 0) {
                     alert(data.ErrorMsg);
                 }
@@ -735,6 +768,10 @@ function showDialogAddActivity(inputPacket, defaultSelection, callback) {
             url: "RequestHandler.ashx",
             data: JSON.stringify(inputPacket),
             success: function (data, textStatus, jqXHR) {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
+
                 $('#addActivityDialog').dialog('close');
                 if (callback) {
                     callback();
@@ -840,6 +877,10 @@ function updateProspectingRecord(record) {
                 if (!data) {
                     alert('Unable to update this property at this time.');
                 } else {
+                    if (!handleResponseIfServerError(data)) {
+                        return;
+                    }
+
                     if (record.SS_FH == "SS") {
                         currentProperty.SSDoorNo = record.SSDoorNo;
                     } else {
@@ -874,6 +915,9 @@ function saveContact(contact, property, actionToExecuteAfterwards) {
         data: JSON.stringify(inputPacket),
         success: function (data, textStatus, jqXHR) {
             if (textStatus == "success") {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
 
                 if (data.ContactIsCompromised) {
                     showDialogUserDeletedDetailsWarning();
@@ -969,6 +1013,10 @@ function loadActivityLookupData(callback) {
         data: JSON.stringify({ Instruction: "load_activity_lookup_data" }),
         success: function (data, textStatus, jqXHR) {
             if (textStatus == "success" && data) {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
+
                 if (callback) {
                     callback(data);
                 }
@@ -1376,6 +1424,10 @@ function openSSUnitInfo(unit, callbackFn) {
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
+
                 if (data.ErrorMsg && data.ErrorMsg.length > 0) {
                     alert(data.ErrorMsg);
                 }
@@ -1650,6 +1702,10 @@ function unlockCurrentProperty() {
             url: "RequestHandler.ashx",
             data: JSON.stringify({ Instruction: 'unlock_prospecting_record' }),
             dataType: "json"
+        }).done(function (data) {
+            if (!handleResponseIfServerError(data)) {
+                return;
+            }
         });
     }
 }
@@ -1852,6 +1908,10 @@ function performLightstoneSearch() {
                 dataType: "json",
             }).done(function (results) {
                 $.unblockUI();
+                if (!handleResponseIfServerError(results)) {
+                    return;
+                }
+
                 createLightstoneSearchResultsDiv(results);
             });
         }
@@ -1876,6 +1936,9 @@ function showSearchedPropertyOnMap(result) { // test for ss (new and existing)
             dataType: "json",
         }).done(function (data) {
             $.unblockUI();
+            if (!handleResponseIfServerError(data)) {
+                return;
+            }
            
             if (handleLocatePropertyFromSearch(data, result)) {
                 result.SeeffAreaId = data;
@@ -2032,7 +2095,11 @@ function showDialogSelectPrimaryContactDetail(contactDetailArray, callbackFn) {
                     ItemId: itemId
                 }),
                 dataType: "json",
-            }).done(function () {
+            }).done(function (data) {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
+
                 div.dialog('close');
                 showSavedSplashDialog("Saved!");
                 if (callbackFn) {
@@ -2108,4 +2175,24 @@ function togglePanel(actionAfterClosing) {
             }
         );
     });
+}
+
+function handleResponseIfServerError(responseObject) {
+    if (!responseObject)
+        return true;
+
+    if (responseObject.SessionExpired) {
+        window.location = "/NotAuthorised.aspx";
+        return false;
+    }
+
+    if (responseObject.ErrorMessage) {
+        $.unblockUI();
+        var errorMessage = 'An error occurred processing your request: ' + responseObject.ErrorMessage;
+        errorMessage += '\nIt is recommended that you close down Prospecting and please notify support.';
+        alert(errorMessage);
+        return false;
+    }
+
+    return true;
 }

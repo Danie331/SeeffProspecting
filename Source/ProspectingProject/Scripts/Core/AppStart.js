@@ -25,6 +25,9 @@ function initialize() {
                 if (!data.Authenticated) {
                     window.location = "/NotAuthorised.aspx";
                 }
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
 
                 $('#mainpanel').css('display', 'block');
 

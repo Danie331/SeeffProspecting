@@ -381,6 +381,10 @@ function determineIfDetailsAreAvailableForUse(phoneNumbers, emailAddresses, acti
             data: JSON.stringify({ Instruction: 'check_for_existing_contact', PhoneNumbers: phoneNumberContents, EmailAddresses: emailContents, IdNumber: currentPersonContact.IdNumber }),
             dataType: "json",
         }).done(function (data) {
+            if (!handleResponseIfServerError(data)) {
+                return;
+            }
+
             actionToRun(data);
         });
     } else {
@@ -551,6 +555,10 @@ function updateProspectedStatus(property) {
             url: "RequestHandler.ashx",
             data: JSON.stringify({ Instruction: 'update_prospected_flag', LightstonePropertyId: targetProperty.LightstonePropertyId, Prospected: targetProperty.Prospected }),
             dataType: "json"
+        }).done(function (data) {
+            if (!handleResponseIfServerError(data)) {
+                return;
+            }
         });
     }
 }
@@ -578,6 +586,10 @@ function savePersonInfo(continueWithAction) {
         data: JSON.stringify({ Instruction: 'check_for_existing_contact', PhoneNumbers: [], EmailAddresses: [], IdNumber: idNumber }),
         dataType: "json",
     }).done(function (data) {
+        if (!handleResponseIfServerError(data)) {
+            return;
+        }
+
         continueWithAction(data);
     });
 }

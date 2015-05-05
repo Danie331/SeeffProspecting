@@ -1086,6 +1086,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Exceptions\DuplicatePropertyRecordException.cs" />
+    <Compile Include="Exceptions\UserSessionExpiredException.cs" />
     <Compile Include="LogOut.aspx.cs">
       <DependentUpon>LogOut.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -33,91 +33,116 @@ namespace ProspectingProject
                 json = HttpUtility.UrlDecode(context.Request.Form[0]);
             }
             request = ProspectingDomain.Deserialise<BaseDataRequestPacket>(json);
-            switch (request.Instruction)
+            try
             {
-                case "load_application":
-                    var loadData = LoadApplication();
-                    context.Response.Write(loadData);
-                    break;
-                case "get_prop_owner_details":
-                    var ownerDetailsResults = LookupPersonDetails(json);
-                    context.Response.Write(ownerDetailsResults);
-                    break;
-                case "get_matching_addresses":
-                    var matchingAddressesFromLightstone = LoadMatchingLightstoneAddresses(json);
-                    context.Response.Write(matchingAddressesFromLightstone);
-                    break;
-                case "update_prospecting_property":
-                    var updatedProspectResult = UpdateProspectingProperty(json);
-                    context.Response.Write(updatedProspectResult);
-                    break;
-                case "save_contact":
-                    var newContact = SaveContact(json);
-                    context.Response.Write(newContact);
-                    break;
-                case "load_suburb":
-                    var suburb = LoadProspectingSuburb(json);
-                    context.Response.Write(suburb);
-                    break;
-                case "check_for_existing_contact":
-                    var existingContact = SearchForExistingContactWithDetails(json);
-                    context.Response.Write(existingContact);
-                    break;
-                case "save_property_notes":
-                    var success = SavePropertyNotesComments(json);
-                    context.Response.Write(success);
-                    break;
-                case "search_for_matches":
-                    var results = SearchForPropertiesWithMatchingDetails(json);
-                    context.Response.Write(results);
-                    break;
-                case "get_existing_prospecting_property":
-                    var existingProspect = GetProspectedProperty(json);
-                    context.Response.Write(existingProspect);
-                    break;
-                case "create_new_prospects":
-                    var prospectingEntities = CreateProspectingEntities(json);
-                    context.Response.Write(prospectingEntities);
-                    break;
-                case "update_prospected_flag":
-                    UpdateProspectedStatus(json);
-                    break;
-                case "save_activity":
-                    SaveActivity(json);
-                    break;
-                case "load_activity_lookup_data":
-                    var activityLookupData = GetActivityLookupData();
-                    context.Response.Write(activityLookupData);
-                    break;
-                case "load_followups":
-                    var followups = GetFollowUps();
-                    context.Response.Write(followups);
-                    break;
-                case "make_default_contact_detail":
-                    MakeDefaultContactDetail(json);
-                    break;
-                case "load_activities_for_user":
-                    var activities = LoadActivitiesForUser(json);
-                    context.Response.Write(activities);
-                    break;
-                case "unlock_prospecting_record":
-                    UnlockCurrentProspectingRecord();
-                    break;
-                case "find_area_id":
-                    int? seeffAreaId = FindAreaId(json);
-                    context.Response.Write(seeffAreaId);
-                    break;
-                case "send_sms":
-                    var deliveryReport = SendSMS(json);
-                    context.Response.Write(deliveryReport);
-                    break;
-                case "load_properties":
-                    var properties = LoadProperties(json);
-                    context.Response.Write(properties);
-                    break;
-                case "save_communication":
-                    SaveCommunicationRecord(json);
-                    break;
+                switch (request.Instruction)
+                {
+                    case "load_application":
+                        var loadData = LoadApplication();
+                        context.Response.Write(loadData);
+                        break;
+                    case "get_prop_owner_details":
+                        var ownerDetailsResults = LookupPersonDetails(json);
+                        context.Response.Write(ownerDetailsResults);
+                        break;
+                    case "get_matching_addresses":
+                        var matchingAddressesFromLightstone = LoadMatchingLightstoneAddresses(json);
+                        context.Response.Write(matchingAddressesFromLightstone);
+                        break;
+                    case "update_prospecting_property":
+                        var updatedProspectResult = UpdateProspectingProperty(json);
+                        context.Response.Write(updatedProspectResult);
+                        break;
+                    case "save_contact":
+                        var newContact = SaveContact(json);
+                        context.Response.Write(newContact);
+                        break;
+                    case "load_suburb":
+                        var suburb = LoadProspectingSuburb(json);
+                        context.Response.Write(suburb);
+                        break;
+                    case "check_for_existing_contact":
+                        var existingContact = SearchForExistingContactWithDetails(json);
+                        context.Response.Write(existingContact);
+                        break;
+                    case "search_for_matches":
+                        var results = SearchForPropertiesWithMatchingDetails(json);
+                        context.Response.Write(results);
+                        break;
+                    case "get_existing_prospecting_property":
+                        var existingProspect = GetProspectedProperty(json);
+                        context.Response.Write(existingProspect);
+                        break;
+                    case "create_new_prospects":
+                        var prospectingEntities = CreateProspectingEntities(json);
+                        context.Response.Write(prospectingEntities);
+                        break;
+                    case "update_prospected_flag":
+                        UpdateProspectedStatus(json);
+                        break;
+                    case "save_activity":
+                        SaveActivity(json);
+                        break;
+                    case "load_activity_lookup_data":
+                        var activityLookupData = GetActivityLookupData();
+                        context.Response.Write(activityLookupData);
+                        break;
+                    case "load_followups":
+                        var followups = GetFollowUps();
+                        context.Response.Write(followups);
+                        break;
+                    case "make_default_contact_detail":
+                        MakeDefaultContactDetail(json);
+                        break;
+                    case "load_activities_for_user":
+                        var activities = LoadActivitiesForUser(json);
+                        context.Response.Write(activities);
+                        break;
+                    case "unlock_prospecting_record":
+                        UnlockCurrentProspectingRecord();
+                        break;
+                    case "find_area_id":
+                        int? seeffAreaId = FindAreaId(json);
+                        context.Response.Write(seeffAreaId);
+                        break;
+                    case "load_properties":
+                        var properties = LoadProperties(json);
+                        context.Response.Write(properties);
+                        break;
+                    case "save_communication":
+                        SaveCommunicationRecord(json);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorJSON = string.Empty;
+                // Session Exception - handle on front-end
+                if (ex is UserSessionExpiredException)
+                {
+                    var sessionExpired = new { SessionExpired = true };
+                    errorJSON = ProspectingDomain.SerializeToJsonWithDefaults(sessionExpired);
+                    context.Response.Write(errorJSON);
+                }
+                else
+                {
+                    // Other excepion - log + display on front-end + contact support 
+                    using (var prospectingDb = new ProspectingDataContext())
+                    {
+                        var errorRec = new exception_log
+                        {
+                            friendly_error_msg = ex.Message,
+                            exception_string = ex.ToString(),
+                            user = GetUserSessionObject().UserGuid,
+                            date_time = DateTime.Now
+                        };
+                        prospectingDb.exception_logs.InsertOnSubmit(errorRec);
+                        prospectingDb.SubmitChanges();
+                    }
+                    var errorObject = new { ErrorMessage = ex.Message };
+                    errorJSON = ProspectingDomain.SerializeToJsonWithDefaults(errorObject);
+                    context.Response.Write(errorJSON);
+                }
             }
         }
 
@@ -165,7 +190,7 @@ namespace ProspectingProject
 
         private string GetFollowUps()
         {
-            UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+            UserDataResponsePacket user = GetUserSessionObject();
             var results = ProspectingDomain.LoadFollowups(user.UserGuid, user.BusinessUnitUsers);
             return ProspectingDomain.SerializeToJsonWithDefaults(results);
         }
@@ -212,13 +237,6 @@ namespace ProspectingProject
             return ProspectingDomain.SerializeToJsonWithDefaults(searchResults);
         }
 
-        private string SavePropertyNotesComments(string json)
-        {
-            var propNotesContainer = ProspectingDomain.Deserialise<PropertyCommentsNotes>(json);
-            ProspectingDomain.SavePropertyNotesComments(propNotesContainer);
-            return ProspectingDomain.SerializeToJsonWithDefaults("success");            
-        }
-
         private string SearchForExistingContactWithDetails(string json)
         {
             var contactDetails = ProspectingDomain.Deserialise<ContactDetails>(json);
@@ -241,7 +259,7 @@ namespace ProspectingProject
             int deletedContactDetailsCount = Convert.ToInt32(HttpContext.Current.Session["deleted_item_count"]);
             if (deletedContactDetailsCount > 40)
             {
-                UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+                UserDataResponsePacket user = GetUserSessionObject();
                 if (!user.IsProspectingManager)
                 {
                     contact.ContactIsCompromised = true;
@@ -285,7 +303,25 @@ namespace ProspectingProject
             HttpContext.Current.Session["user"] = user;
             HttpContext.Current.Session["deleted_item_count"] = 0;
             return ProspectingDomain.SerializeToJsonWithDefaults(user);
-        }                         
+        }
+
+        public static UserDataResponsePacket GetUserSessionObject()
+        {
+            try
+            {
+                UserDataResponsePacket user = HttpContext.Current.Session["user"] as UserDataResponsePacket;
+                if (user == null)
+                {
+                    throw new UserSessionExpiredException();
+                }
+
+                return user;
+            }
+            catch
+            {
+                throw new UserSessionExpiredException();
+            }
+        } 
 
         public bool IsReusable
         {

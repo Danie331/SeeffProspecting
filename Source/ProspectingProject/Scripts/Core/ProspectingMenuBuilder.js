@@ -317,6 +317,10 @@ function handleAddFollowupActivity(followup, callback) {
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
+
                 if (data.ErrorMsg && data.ErrorMsg.length > 0) {
                     alert(data.ErrorMsg);
                 }
@@ -375,6 +379,10 @@ function handleActivityReportClick() {
              success: function (data, textStatus, jqXHR) {
                  $.unblockUI();
                  if (textStatus == "success" && data) {
+                     if (!handleResponseIfServerError(data)) {
+                         return;
+                     }
+
                      if (data.ErrorMsg && data.ErrorMsg.length > 0) {
                          alert(data.ErrorMsg);
                      }

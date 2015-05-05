@@ -9,7 +9,7 @@
 <body>
     <form id="form1" runat="server">
     <div>
-          Your request cannot be authenticated, please contact support. <p />
+          Your request cannot be authenticated, or you have been logged out. <p />
           Click <a href="http://www.boss.seeff.com">here</a> to return to BOSS.
     </div>
     </form>

@@ -99,6 +99,9 @@ namespace ProspectingProject
     partial void Insertcommunications_log(communications_log instance);
     partial void Updatecommunications_log(communications_log instance);
     partial void Deletecommunications_log(communications_log instance);
+    partial void Insertexception_log(exception_log instance);
+    partial void Updateexception_log(exception_log instance);
+    partial void Deleteexception_log(exception_log instance);
     #endregion
 		
 		public ProspectingDataContext() : 
@@ -312,6 +315,14 @@ namespace ProspectingProject
 			get
 			{
 				return this.GetTable<communications_log>();
+			}
+		}
+		
+		public System.Data.Linq.Table<exception_log> exception_logs
+		{
+			get
+			{
+				return this.GetTable<exception_log>();
 			}
 		}
 		
@@ -7784,6 +7795,164 @@ namespace ProspectingProject
 						this._target_lightstone_property_id = default(int);
 					}
 					this.SendPropertyChanged("prospecting_property");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.exception_log")]
+	public partial class exception_log : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _exception_log_id;
+		
+		private string _friendly_error_msg;
+		
+		private string _exception_string;
+		
+		private System.Guid _user;
+		
+		private System.DateTime _date_time;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onexception_log_idChanging(int value);
+    partial void Onexception_log_idChanged();
+    partial void Onfriendly_error_msgChanging(string value);
+    partial void Onfriendly_error_msgChanged();
+    partial void Onexception_stringChanging(string value);
+    partial void Onexception_stringChanged();
+    partial void OnuserChanging(System.Guid value);
+    partial void OnuserChanged();
+    partial void Ondate_timeChanging(System.DateTime value);
+    partial void Ondate_timeChanged();
+    #endregion
+		
+		public exception_log()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_exception_log_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int exception_log_id
+		{
+			get
+			{
+				return this._exception_log_id;
+			}
+			set
+			{
+				if ((this._exception_log_id != value))
+				{
+					this.Onexception_log_idChanging(value);
+					this.SendPropertyChanging();
+					this._exception_log_id = value;
+					this.SendPropertyChanged("exception_log_id");
+					this.Onexception_log_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_friendly_error_msg", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string friendly_error_msg
+		{
+			get
+			{
+				return this._friendly_error_msg;
+			}
+			set
+			{
+				if ((this._friendly_error_msg != value))
+				{
+					this.Onfriendly_error_msgChanging(value);
+					this.SendPropertyChanging();
+					this._friendly_error_msg = value;
+					this.SendPropertyChanged("friendly_error_msg");
+					this.Onfriendly_error_msgChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_exception_string", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string exception_string
+		{
+			get
+			{
+				return this._exception_string;
+			}
+			set
+			{
+				if ((this._exception_string != value))
+				{
+					this.Onexception_stringChanging(value);
+					this.SendPropertyChanging();
+					this._exception_string = value;
+					this.SendPropertyChanged("exception_string");
+					this.Onexception_stringChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[user]", Storage="_user", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid user
+		{
+			get
+			{
+				return this._user;
+			}
+			set
+			{
+				if ((this._user != value))
+				{
+					this.OnuserChanging(value);
+					this.SendPropertyChanging();
+					this._user = value;
+					this.SendPropertyChanged("user");
+					this.OnuserChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date_time", DbType="DateTime NOT NULL")]
+		public System.DateTime date_time
+		{
+			get
+			{
+				return this._date_time;
+			}
+			set
+			{
+				if ((this._date_time != value))
+				{
+					this.Ondate_timeChanging(value);
+					this.SendPropertyChanging();
+					this._date_time = value;
+					this.SendPropertyChanged("date_time");
+					this.Ondate_timeChanged();
 				}
 			}
 		}

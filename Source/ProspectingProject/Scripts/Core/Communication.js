@@ -550,7 +550,11 @@ function handleMakeDefaultCellNo(itemId, callbackFn) {
             ItemId: itemId
         }),
         dataType: "json",
-    }).done(function () { 
+    }).done(function (data) {
+        if (!handleResponseIfServerError(data)) {
+            return;
+        }
+
         callbackFn();
     });
 }
@@ -564,7 +568,11 @@ function handleMakeDefaultEmailAddress(itemId, callbackFn) {
             ItemId: itemId
         }),
         dataType: "json",
-    }).done(function () {
+    }).done(function (data) {
+        if (!handleResponseIfServerError(data)) {
+            return;
+        }
+
         callbackFn();
     });
 }
@@ -757,6 +765,10 @@ function sendEmailMessage() {
                 SubjectText: commObject.SubjectText
             }),
             dataType: "json"
+        }).done(function (data) {
+            if (!handleResponseIfServerError(data)) {
+                return;
+            }
         });
     }
 
@@ -828,6 +840,10 @@ function getContactsFromSelectedMarkers(actionWhenDone) {
                 success: function (data, textStatus, jqXHR) {
                     $.unblockUI();
                     if (textStatus == "success" && data) {
+                        if (!handleResponseIfServerError(data)) {
+                            return;
+                        }
+
                         if (data.ErrorMsg && data.ErrorMsg.length > 0) {
                             alert(data.ErrorMsg);
                         }

@@ -247,6 +247,10 @@ function ContactDetailsEditorWidget(containerElementId, arrayOfPhoneNumberObject
                 data: JSON.stringify({ Instruction: 'check_for_existing_contact', PhoneNumbers: [value], EmailAddresses: [value], IdNumber: idNumber }),
                 dataType: "json",
             }).done(function (data) {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
+
                 action(data);
             });
         }
