@@ -732,6 +732,7 @@
     <Content Include="Assets\primary_contact.png" />
     <Content Include="Assets\remove_filter.png" />
     <Content Include="Assets\seeff_logo.png" />
+    <Content Include="Assets\set_signature_boss.png" />
     <Content Include="Assets\ss_edit.png" />
     <Content Include="Assets\tps_info.png" />
     <Content Include="Assets\traceps_lookup.png" />

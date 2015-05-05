@@ -75,6 +75,24 @@
       <Column Name="business_unit_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.user_signature" Member="user_signatures">
+    <Type Name="user_signature">
+      <Column Name="user_signature_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="registration_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="user_designation" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="google_plus" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="linkedin" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="facebook" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="twitter" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="pintrest" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="blog" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="flickr" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="my_page" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="youtube" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="seeff" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="signature_html" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
   <Function Name="dbo.user_auth" Method="user_auth">
     <Parameter Name="user_guid" Type="System.String" DbType="VarChar(50)" />
     <Parameter Name="session_key" Type="System.Guid" DbType="UniqueIdentifier" />

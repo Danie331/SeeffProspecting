@@ -140,5 +140,21 @@ namespace SeeffProspectingAuthService
                 return users;
             }
         }
+
+
+        public string RetrieveUserSignature(Guid userGuid)
+        {
+            using (var boss = new BossDataContext())
+            {
+                var userRegistrationRecord = boss.user_registrations.First(b => b.user_guid == userGuid.ToString());
+                var userSignatureRecord = boss.user_signatures.FirstOrDefault(s => s.registration_id == userRegistrationRecord.registration_id);
+                if (userSignatureRecord != null)
+                {
+                    return userSignatureRecord.signature_html;
+                }
+
+                return null;
+            }
+        }
     }
 }

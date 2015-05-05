@@ -234,11 +234,13 @@ function buildEmailContentContainer() {
     });
 
     var attachFilesDiv = $("<div style='display:none;padding-top:0' />");
+    var retrieveSignatureBtn = $("<input type='button' value='Insert signature' style='display:inline-block;margin-right:10px' />");
     var attachFileBtn = $("<input type='button' id='attachFilesBtn' style='display:inline-block;margin-right:10px' value='Attach..' />");
     var attachFileList = $("<div id='attachFilesList' style='display:inline-block;'  />");
     var attachFileOperation = $("<input id='attachFilesOp' type='file' name='attachFilesOp' style='display: none;' multiple />");
-    attachFilesDiv.append(attachFileBtn).append(attachFileList).append(attachFileOperation);
+    attachFilesDiv.append(retrieveSignatureBtn).append(attachFileBtn).append(attachFileList).append(attachFileOperation);
     attachFileBtn.click(handleShowFileUploadDialog);
+    retrieveSignatureBtn.click(handleRetrieveAndInsertSignature);
 
     return emailContainer.append("<br />").append(attachFilesDiv);
 }
@@ -1065,4 +1067,35 @@ function generateMessageForRecord(templateMsg, record) {
     templateMsg = replaceAll(templateMsg, '*surname*', toTitleCase(record.Surname));
     templateMsg = replaceAll(templateMsg, '*address*', toTitleCase(record.PropertyAddress));
     return templateMsg;
+}
+
+function handleRetrieveAndInsertSignature() {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Retrieving your signature from BOSS...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: 'retrieve_user_signature' }),
+        dataType: "json",
+    }).done(function (data) {
+        $.unblockUI();
+        if (!data) {
+            var dialogSetSignatureBOSS = $("<div title='No Signature Found' />")
+            .append("<span style='font-family:Verdana;font-size:12px'>To use this feature please set your signature under the BOSS Administration panel:</span>")
+            .append("<p />")
+            .append("<img src='Assets/set_signature_boss.png' style='display: block;margin-left: auto;margin-right: auto' />");
+
+            dialogSetSignatureBOSS.dialog(
+             {
+                 modal: true,
+                 closeOnEscape: true,
+                 //open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+                 width: 'auto',
+                 buttons: { "OK": function () { $(this).dialog("close"); } },
+                 position: ['center', 'center']
+             });
+        } else {
+            var existingInput = CKEDITOR.instances.emailMessageBody.getData();
+            CKEDITOR.instances.emailMessageBody.setData(existingInput + "<p />" + data);
+        }
+    });
 }

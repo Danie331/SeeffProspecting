@@ -660,6 +660,15 @@ namespace ProspectingProject
             }
         }
 
+        public static string RetrieveUserSignature()
+        {
+            using (var authService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
+            {
+                var user = RequestHandler.GetUserSessionObject();
+                return authService.RetrieveUserSignature(user.UserGuid);
+            }
+        }
+
         public static List<FollowUpActivity> LoadFollowups(Guid userGuid, List<UserDataResponsePacket> businessUnitUsers)
         {
             //            Func<ProspectingDataContext, int?, int[], string> fetchPrimaryContactNo = (context, contactPersonId, contactTypes) =>

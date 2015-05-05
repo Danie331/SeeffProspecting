@@ -225,6 +225,12 @@ namespace ProspectingProject.ProspectingUserAuthService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/CreditUserBalance", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/CreditUserBalanceResponse")]
         System.Threading.Tasks.Task<decimal> CreditUserBalanceAsync(decimal amount, System.Guid userGuid);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignature", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignatureResponse")]
+        string RetrieveUserSignature(System.Guid userGuid);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignature", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignatureResponse")]
+        System.Threading.Tasks.Task<string> RetrieveUserSignatureAsync(System.Guid userGuid);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -276,6 +282,14 @@ namespace ProspectingProject.ProspectingUserAuthService {
         
         public System.Threading.Tasks.Task<decimal> CreditUserBalanceAsync(decimal amount, System.Guid userGuid) {
             return base.Channel.CreditUserBalanceAsync(amount, userGuid);
+        }
+        
+        public string RetrieveUserSignature(System.Guid userGuid) {
+            return base.Channel.RetrieveUserSignature(userGuid);
+        }
+        
+        public System.Threading.Tasks.Task<string> RetrieveUserSignatureAsync(System.Guid userGuid) {
+            return base.Channel.RetrieveUserSignatureAsync(userGuid);
         }
     }
 }

@@ -19,5 +19,8 @@ namespace SeeffProspectingAuthService
 
         [OperationContract]
         decimal CreditUserBalance(decimal amount, Guid userGuid);
+
+        [OperationContract]
+        string RetrieveUserSignature(Guid userGuid);
     }
 }

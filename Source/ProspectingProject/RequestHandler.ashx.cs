@@ -117,6 +117,10 @@ namespace ProspectingProject
                     case "save_communication":
                         SaveCommunicationRecord(json);
                         break;
+                    case"retrieve_user_signature":
+                        string userSignature = RetrieveUserSignature();
+                        context.Response.Write(userSignature);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -149,6 +153,12 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string RetrieveUserSignature()
+        {
+            var sig = ProspectingDomain.RetrieveUserSignature();
+            return ProspectingDomain.SerializeToJsonWithDefaults(sig);
         }
 
         private void SaveCommunicationRecord(string json)

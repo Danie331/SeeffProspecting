@@ -25,6 +25,12 @@
   <wsdl:message name="ISeeffProspectingAuthService_CreditUserBalance_OutputMessage">
     <wsdl:part name="parameters" element="tns:CreditUserBalanceResponse" />
   </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_RetrieveUserSignature_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetrieveUserSignature" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_RetrieveUserSignature_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetrieveUserSignatureResponse" />
+  </wsdl:message>
   <wsdl:portType name="ISeeffProspectingAuthService">
     <wsdl:operation name="AuthenticateAndGetUserInfo">
       <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfo" message="tns:ISeeffProspectingAuthService_AuthenticateAndGetUserInfo_InputMessage" />
@@ -37,6 +43,10 @@
     <wsdl:operation name="CreditUserBalance">
       <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/CreditUserBalance" message="tns:ISeeffProspectingAuthService_CreditUserBalance_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/CreditUserBalanceResponse" message="tns:ISeeffProspectingAuthService_CreditUserBalance_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveUserSignature">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignature" message="tns:ISeeffProspectingAuthService_RetrieveUserSignature_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignatureResponse" message="tns:ISeeffProspectingAuthService_RetrieveUserSignature_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ISeeffProspectingAuthService" type="tns:ISeeffProspectingAuthService">
@@ -61,6 +71,15 @@
     </wsdl:operation>
     <wsdl:operation name="CreditUserBalance">
       <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/CreditUserBalance" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveUserSignature">
+      <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignature" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
