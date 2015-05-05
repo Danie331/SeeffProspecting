@@ -9,7 +9,7 @@
 <body>
     <form id="form1" runat="server">
     <div>
-          Your request cannot be authenticated, or you have been logged out. <p />
+          Your request cannot be authenticated, or you have been logged out because your session expired. <p />
           Click <a href="http://www.boss.seeff.com">here</a> to return to BOSS.
     </div>
     </form>

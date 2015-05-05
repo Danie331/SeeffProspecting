@@ -656,7 +656,6 @@ namespace ProspectingProject
                     FollowupActivities = LoadFollowups(userGuid, businessUnitUsers)
                 };
 
-                ProspectingStaticData.UserSessionGuid = userGuid; // in case the session expires, retain a handle to the guid.
                 return userPacket;
             }
         }
@@ -1979,12 +1978,9 @@ namespace ProspectingProject
         public static void UnlockCurrentProspectingRecord()
         {
             var currentUser = RequestHandler.GetUserSessionObject();
-            Guid? userGuid = currentUser != null ? currentUser.UserGuid : ProspectingStaticData.UserSessionGuid;
-            if (userGuid.HasValue)
-            {
                 using (var prospectingDB = new ProspectingDataContext())
                 {
-                    var propertiesLockedByUser = prospectingDB.prospecting_properties.Where(pp => pp.locked_by_guid == userGuid);
+                    var propertiesLockedByUser = prospectingDB.prospecting_properties.Where(pp => pp.locked_by_guid == currentUser.UserGuid);
                     foreach (var pp in propertiesLockedByUser)
                     {
                         pp.locked_by_guid = null;
@@ -1993,7 +1989,6 @@ namespace ProspectingProject
 
                     prospectingDB.SubmitChanges();
                 }
-            }
         }
 
         public static void MarkAsProspected(int propertyId)

@@ -35,12 +35,17 @@ namespace ProspectingProject
             request = ProspectingDomain.Deserialise<BaseDataRequestPacket>(json);
             try
             {
+                if (request.Instruction == "load_application")
+                {
+                    var loadData = LoadApplication();
+                    context.Response.Write(loadData);
+                    return;
+                }
+
+                // This line will ensure that the user has a valid session before continuing the request. 
+                GetUserSessionObject();
                 switch (request.Instruction)
                 {
-                    case "load_application":
-                        var loadData = LoadApplication();
-                        context.Response.Write(loadData);
-                        break;
                     case "get_prop_owner_details":
                         var ownerDetailsResults = LookupPersonDetails(json);
                         context.Response.Write(ownerDetailsResults);

@@ -1701,6 +1701,7 @@ function unlockCurrentProperty() {
             type: "POST",
             url: "RequestHandler.ashx",
             data: JSON.stringify({ Instruction: 'unlock_prospecting_record' }),
+            async:   false,
             dataType: "json"
         }).done(function (data) {
             if (!handleResponseIfServerError(data)) {
