@@ -716,6 +716,7 @@
     <Content Include="Assets\fh_edit.png" />
     <Content Include="Assets\frm_edit.png" />
     <Content Include="Assets\google.png" />
+    <Content Include="Assets\item_template.png" />
     <Content Include="Assets\lightstone.png" />
     <Content Include="Assets\make_primary_contact.png" />
     <Content Include="Assets\marker_icons\prospecting\prospected.png" />

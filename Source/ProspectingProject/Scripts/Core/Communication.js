@@ -70,40 +70,46 @@ function buildCommunicationMenuItems() {
     var separator = buildCommMenuItem("separator", "-----------------------------------------", null);
     menu.append(separator);
 
-    if (currentSuburb) {
-        var currentSubMenuItem = buildCommMenuItem("separator", currentSuburb.SuburbName, null);
-        menu.append(currentSubMenuItem);
+    //if (currentSuburb) {
+    //    var currentSubMenuItem = buildCommMenuItem("separator", currentSuburb.SuburbName, null);
+    //    menu.append(currentSubMenuItem);
 
-        var todaysBdaysSmsForSuburb = buildCommMenuItem("comm_menu_current_suburb_todays_birthdays_sms", buildTodaysBdaysSMS(), null);
-        menu.append(todaysBdaysSmsForSuburb);
+    //    var todaysBdaysSmsForSuburb = buildCommMenuItem("comm_menu_current_suburb_todays_birthdays_sms", buildTodaysBdaysSMS(), null);
+    //    menu.append(todaysBdaysSmsForSuburb);
 
-        var todaysBdaysEmailForSuburb = buildCommMenuItem("comm_menu_current_suburb_todays_birthdays_email", buildTodaysBdaysEmail(), null);
-        menu.append(todaysBdaysEmailForSuburb);
+    //    var todaysBdaysEmailForSuburb = buildCommMenuItem("comm_menu_current_suburb_todays_birthdays_email", buildTodaysBdaysEmail(), null);
+    //    menu.append(todaysBdaysEmailForSuburb);
 
-        var todaysAnniversarySMSForSuburb = buildCommMenuItem("comm_menu_current_suburb_todays_anniversary_sms", buildTodaysAnniversarySMS(), null);
-        menu.append(todaysAnniversarySMSForSuburb);
+    //    var todaysAnniversarySMSForSuburb = buildCommMenuItem("comm_menu_current_suburb_todays_anniversary_sms", buildTodaysAnniversarySMS(), null);
+    //    menu.append(todaysAnniversarySMSForSuburb);
 
-        var todaysAnniversaryEmailForSuburb = buildCommMenuItem("comm_menu_current_suburb_todays_anniversary_email", buildTodaysAnniversaryEmail(), null);
-        menu.append(todaysAnniversaryEmailForSuburb);
+    //    var todaysAnniversaryEmailForSuburb = buildCommMenuItem("comm_menu_current_suburb_todays_anniversary_email", buildTodaysAnniversaryEmail(), null);
+    //    menu.append(todaysAnniversaryEmailForSuburb);
 
-        var separator = buildCommMenuItem("separator", "-----------------------------------------", null);
-        menu.append(separator);
-    }
+    //    var separator = buildCommMenuItem("separator", "-----------------------------------------", null);
+    //    menu.append(separator);
+    //}
 
-    var allSuburbsMenuItem = buildCommMenuItem("separator", "All Suburbs", null);
-    menu.append(allSuburbsMenuItem);
+    //var allSuburbsMenuItem = buildCommMenuItem("separator", "All Suburbs", null);
+    //menu.append(allSuburbsMenuItem);
 
-    var todaysBdaysSms = buildCommMenuItem("comm_menu_todays_birthdays_sms", buildTodaysBdaysSMS(), null);
-    menu.append(todaysBdaysSms);
+    //var todaysBdaysSms = buildCommMenuItem("comm_menu_todays_birthdays_sms", buildTodaysBdaysSMS(), null);
+    //menu.append(todaysBdaysSms);
 
-    var todaysBdaysEmail = buildCommMenuItem("comm_menu_todays_birthdays_email", buildTodaysBdaysEmail(), null);
-    menu.append(todaysBdaysEmail);
+    //var todaysBdaysEmail = buildCommMenuItem("comm_menu_todays_birthdays_email", buildTodaysBdaysEmail(), null);
+    //menu.append(todaysBdaysEmail);
 
-    var todaysAnniversarySMS = buildCommMenuItem("comm_menu_todays_anniversary_sms", buildTodaysAnniversarySMS(), null);
-    menu.append(todaysAnniversarySMS);
+    //var todaysAnniversarySMS = buildCommMenuItem("comm_menu_todays_anniversary_sms", buildTodaysAnniversarySMS(), null);
+    //menu.append(todaysAnniversarySMS);
 
-    var todaysAnniversaryEmail = buildCommMenuItem("comm_menu_todays_anniversary_email", buildTodaysAnniversaryEmail(), null);
-    menu.append(todaysAnniversaryEmail);
+    //var todaysAnniversaryEmail = buildCommMenuItem("comm_menu_todays_anniversary_email", buildTodaysAnniversaryEmail(), null);
+    //menu.append(todaysAnniversaryEmail);
+    
+    var smsTemplate = buildCommMenuItem("comm_menu_sms_template", buildSMSTemplate(), null);
+    menu.append(smsTemplate);
+
+    var emailTemplate = buildCommMenuItem("comm_menu_email_template", buildEmailTemplate(), null);
+    menu.append(emailTemplate);
 }
 
 function buildCommMenuItem(identifier, itemContent, onClickFunction) {
@@ -141,6 +147,28 @@ function buildRemovePolyMenuItemContent() {
     var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Clear Polygons");
 
     return container.append(iconDiv).append(textDiv);
+}
+
+function buildSMSTemplate() {
+    var container = $("<div />");
+    var iconDiv = $("<div style='display:inline-block;float:left'/>");
+    iconDiv.append("<img src='Assets/comm_sms.png' />");
+    var iconDiv2 = $("<div style='display:inline-block;float:left;padding-left:5px'/>");
+    iconDiv2.append("<img src='Assets/item_template.png' />");
+    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("SMS Templates");
+
+    return container.append(iconDiv).append(iconDiv2).append(textDiv);
+}
+
+function buildEmailTemplate() {
+    var container = $("<div />");
+    var iconDiv = $("<div style='display:inline-block;float:left'/>");
+    iconDiv.append("<img src='Assets/comm_email.png' />");
+    var iconDiv2 = $("<div style='display:inline-block;float:left;padding-left:5px'/>");
+    iconDiv2.append("<img src='Assets/item_template.png' />");
+    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Email Templates");
+
+    return container.append(iconDiv).append(iconDiv2).append(textDiv);
 }
 
 function buildSMSMenuItemContent() {
