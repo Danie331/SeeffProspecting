@@ -134,6 +134,46 @@ function selectPropertiesInsidePolygon(polygon) {
     updateCommunicationsContacts();
 }
 
+function getMarkersInsidePolygons() {
+    var allMarkersInsidePolygons = [];
+    $.each(userPolygons, function (idx, poly) {
+        $.each(currentSuburb.ProspectingProperties, function (idx, pp) {
+            if (google.maps.geometry.poly.containsLocation(pp.Marker.position, poly)) {
+                if (allMarkersInsidePolygons.indexOf(pp.Marker) == -1 && pp.Marker.IsPartOfSelection) {
+                    allMarkersInsidePolygons.push(pp.Marker);
+                }
+            }
+        });
+    });
+
+    return allMarkersInsidePolygons;
+}
+
+function removePolygonsWithMarkers() {
+    var markersInPolys = getMarkersInsidePolygons();
+    $.each(markersInPolys, function (idx, marker) {
+        var targetMarker = $.grep(selectedMarkers, function (sm) {
+            return sm == marker;
+        })[0];
+
+        targetMarker.IsPartOfSelection = false;
+        targetMarker.setIcon(getIconForMarker(targetMarker));
+
+        selectedMarkers = $.grep(selectedMarkers, function (m) {
+            return m != marker;
+        });
+    });
+
+    if (userPolygons && userPolygons.length) {
+        $.each(userPolygons, function (idx, poly) {
+            poly.setMap(null);
+        });
+        userPolygons.length = 0;
+    }
+
+    updateCommunicationsContacts();
+}
+
 function toggleDrawingMode() {
     closeInfoWindow();
     drawingMode = !drawingMode;
@@ -151,7 +191,7 @@ function toggleDrawingMode() {
             google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
                 userPolygons.push(polygon);
                 selectPropertiesInsidePolygon(polygon);
-                //google.maps.event.addListener(polygon, 'click', function (event) {
+                //google.maps.event.addListener(polygon, 'rightclick', function (event) {
                 //    var point = fromLatLngToPoint(event.latLng, map);
                 //    $('.context-menu-polygon').contextMenu({ x: point.x, y: point.y });
                 //});

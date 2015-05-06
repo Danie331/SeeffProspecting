@@ -729,6 +729,7 @@
     <Content Include="Assets\person.png" />
     <Content Include="Assets\phone_icon.png" />
     <Content Include="Assets\poly_menu_item.png" />
+    <Content Include="Assets\poly_menu_remove.png" />
     <Content Include="Assets\primary_contact.png" />
     <Content Include="Assets\remove_filter.png" />
     <Content Include="Assets\seeff_logo.png" />

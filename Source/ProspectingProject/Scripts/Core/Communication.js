@@ -52,6 +52,11 @@ function buildCommunicationMenuItems() {
         var polygonMenuItem = buildCommMenuItem("comm_menu_polygon", buildPolyMenuItemContent(), handlePolyMenuItemClick);
         menu.append(polygonMenuItem);
 
+        if (userPolygons.length) {
+            var removeAllPolysMenuItem = buildCommMenuItem("comm_menu_remove_polygons", buildRemovePolyMenuItemContent(), handleRemovePolyMenuItemClick);
+            menu.append(removeAllPolysMenuItem);
+        }
+
         var separator = buildCommMenuItem("separator", "-----------------------------------------", null);
         menu.append(separator);
     }
@@ -125,6 +130,15 @@ function buildPolyMenuItemContent() {
     var iconDiv = $("<div style='display:inline-block;float:left'/>");
     iconDiv.append("<img src='Assets/poly_menu_item.png' />");
     var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Polygon");
+
+    return container.append(iconDiv).append(textDiv);
+}
+
+function buildRemovePolyMenuItemContent() {
+    var container = $("<div />");
+    var iconDiv = $("<div style='display:inline-block;float:left'/>");
+    iconDiv.append("<img src='Assets/poly_menu_remove.png' />");
+    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Clear Polygons");
 
     return container.append(iconDiv).append(textDiv);
 }
@@ -293,6 +307,10 @@ function handleShowFileUploadDialog() {
 // Menu item click handlers
 function handlePolyMenuItemClick() {
     toggleDrawingMode();
+}
+
+function handleRemovePolyMenuItemClick() {
+    removePolygonsWithMarkers();
 }
 
 function handleSMSMessageClick() {
