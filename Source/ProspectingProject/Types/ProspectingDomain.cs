@@ -626,6 +626,10 @@ namespace ProspectingProject
             using (var authService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 var userAuthPacket = authService.AuthenticateAndGetUserInfo(userGuid, sessionKey);
+                if (!userAuthPacket.Authenticated)
+                {
+                    throw new UserSessionExpiredException(); // This is not a true "expired session" but we can treat it as such.
+                }
                 var businessUnitUsers = new List<UserDataResponsePacket>(
                         from bu in userAuthPacket.BusinessUnitUsers
                         select new UserDataResponsePacket

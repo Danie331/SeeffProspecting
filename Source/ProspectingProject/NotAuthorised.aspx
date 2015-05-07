@@ -9,7 +9,7 @@
 <body>
     <form id="form1" runat="server">
     <div>
-          Your request cannot be authenticated, or you have been logged out because your session expired. <p />
+          Your request cannot be authenticated, or your session expired. If you refreshed your browser, please login to Prospecting again from BOSS. <p />
           Click <a href="http://www.boss.seeff.com">here</a> to return to BOSS.
     </div>
     </form>
