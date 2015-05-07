@@ -670,8 +670,15 @@ function handleCommEditBtnClick(contact) {
 
 function handleSendMessage() {
     if (communicationsMode == "EMAIL") {
-        handleAuthorization();
+        authorizeAndSendGmail();
     }
+    if (communicationsMode == "SMS") {
+        sendSMS();
+    }
+}
+
+function sendSMS() {
+
 }
 
 function validateMessage() {
@@ -691,11 +698,19 @@ function validateMessage() {
 
         return true;
     }
+    if (communicationsMode == "SMS") {
+        var smsBody = $("#smsMessageContainer").val().trim();
+        if (!smsBody) {
+            alert('Please add the message content');
+            return false;
+        }
+        return true;
+    }
 
     return false;
 }
 
-function handleAuthorization() {
+function authorizeAndSendGmail() {
    
     gapi.client.setApiKey('AIzaSyBCYyAhMO9Ia9thqz0LxXzzZL-Kk6b2bNs');
     handleAuth(true);
@@ -1042,7 +1057,7 @@ function handleCommSendBtnClick() {
         if (canSend) {
             var previewMsgBtn = $("<input type='button' value='Preview First Message' />");
             dialog.append(previewMsgBtn);
-            var previewDialog = createPreviewEmail();
+            var previewDialog = createPreviewMessage();
             dialog.append(previewDialog);
             previewMsgBtn.click(function () {
                 previewDialog.css('display', 'block');
@@ -1077,7 +1092,7 @@ function handleCommSendBtnClick() {
         }
 }
 
-function createPreviewEmail() {
+function createPreviewMessage() {
     var div = $("<div id='previewMsgDiv' style='display:none' />");
     var textarea = $("<textarea id='previewTextarea' style='width:100%;height:80px;' />");
     div.append(textarea);
@@ -1087,18 +1102,25 @@ function createPreviewEmail() {
     var contactId = $(commSelectedRows[0]).attr("id").replace('comm_row_', '');
     var firstRecord = getContactFromId(contactId);
 
-    var preview = generateMessageForRecord($("#emailMessageBody").val(), firstRecord);
+    if (communicationsMode == "EMAIL") {
+        var preview = generateMessageForRecord($("#emailMessageBody").val(), firstRecord);
 
-    var myToolbar = [{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] }, { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] }, { name: 'paragraph', items: ['NumberedList', 'BulletedList'] }, { name: 'links', items: ['Link', 'Unlink', 'Anchor'] }, {name: 'insert', items: [ 'Image', 'Flash', 'Table'] } ];
-    var config = { toolbar_mySimpleToolbar: myToolbar, toolbar: 'mySimpleToolbar' };
-    $(textarea).ckeditor(config, function () {
-        CKEDITOR.instances.previewTextarea.setReadOnly(true);
-    });
+        var myToolbar = [{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] }, { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] }, { name: 'paragraph', items: ['NumberedList', 'BulletedList'] }, { name: 'links', items: ['Link', 'Unlink', 'Anchor'] }, { name: 'insert', items: ['Image', 'Flash', 'Table'] }];
+        var config = { toolbar_mySimpleToolbar: myToolbar, toolbar: 'mySimpleToolbar' };
+        $(textarea).ckeditor(config, function () {
+            CKEDITOR.instances.previewTextarea.setReadOnly(true);
+        });
 
-    textarea.ckeditor(function (txtarea) {
-        CKEDITOR.instances.previewTextarea.setData(preview);
-        CKEDITOR.instances.previewTextarea.setReadOnly(true);
-    });
+        textarea.ckeditor(function (txtarea) {
+            CKEDITOR.instances.previewTextarea.setData(preview);
+            CKEDITOR.instances.previewTextarea.setReadOnly(true);
+        });
+    }
+    if (communicationsMode == "SMS") {
+        var previewText = generateMessageForRecord($("#smsMessageContainer").val(), firstRecord);
+        textarea.val(previewText);
+        textarea.attr('readonly', 'readonly');
+    }
 
     return div;
 }

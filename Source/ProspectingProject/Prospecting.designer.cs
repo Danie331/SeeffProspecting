@@ -7877,7 +7877,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_friendly_error_msg", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_friendly_error_msg", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
 		public string friendly_error_msg
 		{
 			get
