@@ -116,7 +116,7 @@
         <div id="multiSelectMode" style="display: none; font-family: Verdana; font-size: xx-large; color: red">
             You are in multi-select mode
         </div>
-        <div id="commSendMessageDialog" title="Send Message" class="errorDialog"> 
+        <div id="commSendMessageDialog" title="Preview & Send Message" class="errorDialog"> 
         </div>
     </form>
         <div id="googleMap"></div>

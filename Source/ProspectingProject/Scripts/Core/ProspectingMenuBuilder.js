@@ -36,6 +36,14 @@ function createProspectingMenu(userData) {
     fixElementHeightForIE('contentfollowupContainer', 0.8);
     menuItems.push(menuItem);
 
+
+    //var fcc = $('#contentfollowupContainer');
+    //fcc.unbind('scroll').bind('scroll', function (e) {
+    //    debugger;
+    //});
+    // Check this thing not rebinding each time, test chrome, test mouse wheel + click, 
+
+
     menuItem = createMenuItem("Lightstone Search", "lightstonesearch", buildSearchMenu(), function () { toggleMultiSelectMode(false); }, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
@@ -55,6 +63,9 @@ function createProspectingMenu(userData) {
 }
 
 function setFollowupMenuItemCount(value) {
+    if (value > 10) {
+        value = '10+';
+    }
     var element = $('#followup').next();
     element.text(value);
 }
@@ -95,7 +106,8 @@ function buildFollowupReport(followups) {
         $('#followupFilter').empty();
         var followupFilter = buildContentExpanderItem('followupFilter', '', "Follow-up Filter", buildFollowupFilter());
         $('#followupContainer').empty();
-        var followupContainer = buildContentExpanderItem('followupContainer', '', "Today's Follow-up", buildFollowupContainer());
+        var fcc = buildFollowupContainer();
+        var followupContainer = buildContentExpanderItem('followupContainer', '', "Today's Follow-up", fcc);
 
         followupExpanderWidget = new ContentExpanderWidget('#contentarea', [followupFilter, followupContainer], "followupExpander");
         var followupOuterDiv = $("<div class='contentdiv' id='followupOuterDiv' />");
@@ -1124,6 +1136,8 @@ function buildSuburbsSelectionHtml() {
     }
 
     function showContentForItem(itemId) {
+
+        if (!itemId) return;
 
         $.each(menuItems, function (index, item) {
             var itemContentDiv = $('#' + item.MenuItemId + "_content");

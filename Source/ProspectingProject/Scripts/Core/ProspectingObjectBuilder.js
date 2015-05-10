@@ -74,6 +74,9 @@ function createMenuItem(itemName, itemId, itemContent, onClickFunction, itemCoun
 
     var button = null;
     if (itemCounter != null) {
+        if (itemCounter > 10) {
+            itemCounter = '10+';
+        }
         button = $("<a href='' id='" + itemId + "' style='vertical-align:middle;padding-right:20px'>" + itemName + "</a><span class='menu-item-counter' >" + itemCounter + "</span>");
     } else {
         button = $("<a href='' id='" + itemId + "'>" + itemName + "</a>");

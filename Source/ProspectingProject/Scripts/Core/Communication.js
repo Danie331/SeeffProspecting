@@ -8,6 +8,8 @@ var defaultBodyText = "[Email body]<p />Use *title*, *name*, *surname* or *addre
 
 var uploadedFiles = [];
 
+var userEmailSignature = '';
+
 function buildCommunicationMenu() {
 
     var contentDiv = $("<div class='contentdiv' id='communicationsDiv' style='padding-right:10px' />");
@@ -22,7 +24,7 @@ function buildCommunicationMenu() {
 
     var bottomContainer = $("<div id='commBottomDiv' style='display:none' />");
     var costOfBatchLabel = $("<div id='commBatchCost' style='display:inline-block;float:left'>Cost of Batch: R <span></span></div>");
-    var sendButton = $("<div id='commSendMessage' style='display:inline-block;float:right'><input type='button' id='commSendMessageBtn' value='Send'  /></div>");
+    var sendButton = $("<div id='commSendMessage' style='display:inline-block;float:right'><input type='button' id='commSendMessageBtn' value='Preview'  /></div>");
     sendButton.click(handleCommSendBtnClick);
     bottomContainer.append(costOfBatchLabel).append(sendButton);
 
@@ -276,13 +278,11 @@ function buildEmailContentContainer() {
     });
 
     var attachFilesDiv = $("<div style='display:none;padding-top:0' />");
-    var retrieveSignatureBtn = $("<input type='button' value='Insert signature' style='display:inline-block;margin-right:10px' />");
     var attachFileBtn = $("<input type='button' id='attachFilesBtn' style='display:inline-block;margin-right:10px' value='Attach..' />");
     var attachFileList = $("<div id='attachFilesList' style='display:inline-block;'  />");
     var attachFileOperation = $("<input id='attachFilesOp' type='file' name='attachFilesOp' style='display: none;' multiple />");
-    attachFilesDiv.append(retrieveSignatureBtn).append(attachFileBtn).append(attachFileList).append(attachFileOperation);
+    attachFilesDiv.append(attachFileBtn).append(attachFileList).append(attachFileOperation);
     attachFileBtn.click(handleShowFileUploadDialog);
-    retrieveSignatureBtn.click(handleRetrieveAndInsertSignature);
 
     return emailContainer.append("<br />").append(attachFilesDiv);
 }
@@ -797,6 +797,8 @@ function sendEmailMessage() {
             contact.TargetEmailAddress = address;
             try {
                 var emailMsg = generateMessageForRecord($('#emailMessageBody').val(), contact);
+                emailMsg += '<br />' + userEmailSignature;
+
                 emailObject = generateEmailObjectBase64(subjectText, emailMsg, address);
                 contact.TargetEmailObject = emailObject;
                 executeGmailSendMessage(emailObject, function (gmailResult) { handleSendingComplete(gmailResult, row, contact); });
@@ -1054,46 +1056,47 @@ function handleCommSendBtnClick() {
         var dialog = $("#commSendMessageDialog");
         dialog.empty();
         dialog.append(statusMessage).append("<p />");
-        if (canSend) {
-            var previewMsgBtn = $("<input type='button' value='Preview First Message' />");
-            dialog.append(previewMsgBtn);
-            var previewDialog = createPreviewMessage();
-            dialog.append(previewDialog);
-            previewMsgBtn.click(function () {
-                previewDialog.css('display', 'block');
-                dialog.dialog({ position: ['center', 'center'] });
-                previewMsgBtn.css('display', 'none');
-            });
+        
+            var previewMsgLabel = $("<p>Preview of the first message:</p>");
+            dialog.append(previewMsgLabel);            
+            handleShowPreviewMsgWithSignature(function (canProceed, signatureData) {
+                var previewDialog = createPreviewMessage(signatureData, dialog);
+                dialog.append(previewDialog);
 
-            dialog.dialog(
-      {
-          modal: true,
-          closeOnEscape: true,
-          //open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-          width: '600',
-          buttons: {
-              "Send": function () {
-                  $(this).dialog("close");
-                  handleSendMessage();
-              }
-          },
-          position: ['center', 'center']
-      });
-        } else {
-            dialog.dialog(
-                 {
-                     modal: true,
-                     closeOnEscape: true,
-                     //open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-                     width: '600',
-                     buttons: { "OK": function () { $(this).dialog("close"); } },
-                     position: ['center', 'center']
-                 });
-        }
+                if (canSend && canProceed) {
+                    dialog.dialog(
+                          {
+                              modal: true,
+                              closeOnEscape: true,
+                              //open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+                              width: 'auto',
+                              height: 'auto',
+                              buttons: {
+                                  "Send": function () {
+                                      $(this).dialog("close");
+                                      userEmailSignature = signatureData;
+                                      handleSendMessage();
+                                  }
+                              },
+                              position: ['center', 'center']
+                          });
+                }
+                else {
+                    dialog.dialog(
+                                    {
+                                        modal: true,
+                                        closeOnEscape: true,
+                                        //open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+                                        width: '600',
+                                        buttons: { "OK": function () { $(this).dialog("close"); } },
+                                        position: ['center', 'center']
+                                    });
+                }
+            });                   
 }
 
-function createPreviewMessage() {
-    var div = $("<div id='previewMsgDiv' style='display:none' />");
+function createPreviewMessage(signatureData, dialog) {
+    var div = $("<div id='previewMsgDiv' />");
     var textarea = $("<textarea id='previewTextarea' style='width:100%;height:80px;' />");
     div.append(textarea);
 
@@ -1106,13 +1109,22 @@ function createPreviewMessage() {
         var preview = generateMessageForRecord($("#emailMessageBody").val(), firstRecord);
 
         var myToolbar = [{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] }, { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] }, { name: 'paragraph', items: ['NumberedList', 'BulletedList'] }, { name: 'links', items: ['Link', 'Unlink', 'Anchor'] }, { name: 'insert', items: ['Image', 'Flash', 'Table'] }];
-        var config = { toolbar_mySimpleToolbar: myToolbar, toolbar: 'mySimpleToolbar' };
+        var config = { toolbar_mySimpleToolbar: myToolbar, toolbar: 'mySimpleToolbar', allowedContent: true };
         $(textarea).ckeditor(config, function () {
             CKEDITOR.instances.previewTextarea.setReadOnly(true);
         });
 
         textarea.ckeditor(function (txtarea) {
-            CKEDITOR.instances.previewTextarea.setData(preview);
+            if (!signatureData) {
+                signatureData = "<span>Error: Your signature has not yet been set on BOSS</span>" +
+                                        "<br /><span>Please set your signature under the administration panel in BOSS:</span>" +
+                                        "<br /><span style='margin-left: 0 auto;margin-right: 0 auto'><img src='Assets/set_signature_boss.png' /></span>";
+                CKEDITOR.instances.previewTextarea.setData(signatureData);
+            }
+            else {
+                CKEDITOR.instances.previewTextarea.setData(preview + '<br />' + signatureData);
+            }
+            dialog.dialog({ position: ['center', 'center'] });
             CKEDITOR.instances.previewTextarea.setReadOnly(true);
         });
     }
@@ -1137,33 +1149,23 @@ function generateMessageForRecord(templateMsg, record) {
     return templateMsg;
 }
 
-function handleRetrieveAndInsertSignature() {
+function handleShowPreviewMsgWithSignature(callback) {
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Retrieving your signature from BOSS...</p>' });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
         data: JSON.stringify({ Instruction: 'retrieve_user_signature' }),
+        async: false,
         dataType: "json",
     }).done(function (data) {
         $.unblockUI();
+        var canSend = true;
+        var signatureData = null;
         if (!data) {
-            var dialogSetSignatureBOSS = $("<div title='No Signature Found' />")
-            .append("<span style='font-family:Verdana;font-size:12px'>To use this feature please set your signature under the BOSS Administration panel:</span>")
-            .append("<p />")
-            .append("<img src='Assets/set_signature_boss.png' style='display: block;margin-left: auto;margin-right: auto' />");
-
-            dialogSetSignatureBOSS.dialog(
-             {
-                 modal: true,
-                 closeOnEscape: true,
-                 //open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-                 width: 'auto',
-                 buttons: { "OK": function () { $(this).dialog("close"); } },
-                 position: ['center', 'center']
-             });
+            canSend = false;
         } else {
-            var existingInput = CKEDITOR.instances.emailMessageBody.getData();
-            CKEDITOR.instances.emailMessageBody.setData(existingInput + "<p />" + data);
+            signatureData = data;
         }
+        callback(canSend, signatureData);
     });
 }
