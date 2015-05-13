@@ -7,6 +7,7 @@ var businessUnitUsers = null;
 var activityFollowupTypes = null;
 var initialLoad = true;
 var globalFollowUps = [];
+var busyLoadingFollowups = false;
 
 // Overridden from MenuBuilder.js
 function fixElementHeightForIE(elementId, percHeight) {
@@ -31,16 +32,16 @@ function createProspectingMenu(userData) {
     fixElementHeightForIE('contentactivityContainer', 0.8);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Follow-up", "followup", buildFollowupReport(userData.FollowupActivities), function () { toggleMultiSelectMode(false); handleFollowupReportClick(); }, userData.FollowupActivities.length);
+    menuItem = createMenuItem("Follow-up", "followup", buildFollowupReport(userData.FollowupActivities), function () { toggleMultiSelectMode(false); handleFollowupReportClick(); }, userData.TotalFollowups);
     appendMenuItemContent(menuItem.MenuItemContent);
     fixElementHeightForIE('contentfollowupContainer', 0.8);
     menuItems.push(menuItem);
 
 
-    //var fcc = $('#contentfollowupContainer');
-    //fcc.unbind('scroll').bind('scroll', function (e) {
-    //    debugger;
-    //});
+    var fcc = $('#contentfollowupContainer');
+    fcc.unbind('scroll').bind('scroll', function (e) {
+        loadMoreFollowups();
+    });
     // Check this thing not rebinding each time, test chrome, test mouse wheel + click, 
 
 
@@ -62,26 +63,37 @@ function createProspectingMenu(userData) {
     }
 }
 
-function setFollowupMenuItemCount(value) {
-    if (value > 10) {
-        value = '10+';
+function loadMoreFollowups() {
+    if (!busyLoadingFollowups) {
+        busyLoadingFollowups = true;
+
+        loadFollowups(function (followups) {
+            buildFollowupReport(followups);
+            busyLoadingFollowups = false;
+        }, false);
     }
-    var element = $('#followup').next();
-    element.text(value);
 }
+
+//function setFollowupMenuItemCount(value) {
+//    if (value > 10) {
+//        value = '10+';
+//    }
+//    var element = $('#followup').next();
+//    element.text(value);
+//}
 
 function buildFollowupReport(followups) {
 
-    setFollowupMenuItemCount(followups.length);
+    //setFollowupMenuItemCount(globalFollowUps.length);
 
-    globalFollowUps.length = 0;
+    //globalFollowUps.length = 0;
     $.each(followups, function (idx, el) {
         globalFollowUps.push(el);
     });
 
     if ($('#followupContent').length) {
         // IF the div already exists (was created already), empty and repopulate it, other build the Ui from scratch
-        $('#followupContent').empty();
+        //$('#followupContent').empty();
         performFollowupFiltering(globalFollowUps, $('#followupContent'));
     } else {
 
@@ -137,7 +149,7 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
     var followupTypeSelect = $('#followupActivityTypeSelect').val();
     var followupTypeText = $('#followupActivityTypeSelect option:selected').text();
     // Perform filtering
-    sourceFollowups = $.grep(sourceFollowups, function (fol) {
+   var displayItems = $.grep(sourceFollowups, function (fol) {
         var meetsCriteria = true;
 
         if (followupTypeSelect != null && followupTypeSelect != -1) {
@@ -155,7 +167,7 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
         return meetsCriteria;
     });
 
-    $.each(sourceFollowups, function (idx, followup) {
+    $.each(displayItems, function (idx, followup) {
         var formattedItem = buildFollowupDisplayItem(followup);
         jContainerElement.append(formattedItem);
         jContainerElement.append("<hr />");
@@ -181,7 +193,8 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
             return container[0].outerHTML;
         }
 
-        var containerDiv = $("<div />");
+        var containerDiv = $("<div class='followup-item-container' />");
+        containerDiv.attr('id', 'followup_' + followup.ActivityLogId);
 
         var itemTypeName = followup.FollowupActivityTypeName ? followup.FollowupActivityTypeName : followup.ActivityTypeName;
         var followupDateActivityTypeContainer = $("<div id='followupDateActivityTypeContainer' style='border: 1px solid white !important;background-color:#955ba5;color:#FFFFFF' />");
@@ -264,12 +277,15 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
         feedbackBtn.click(function (e) {
             e.preventDefault();
             handleAddFollowupActivity(followup, function () {
-                sourceFollowups = $.grep(sourceFollowups, function (fol) {
-                    return fol != followup;
-                });
+                //sourceFollowups = $.grep(sourceFollowups, function (fol) {
+                //    return fol != followup;
+                //});
+
+                var index = sourceFollowups.indexOf(followup);
+                sourceFollowups.splice(index, 1);
 
                 performFollowupFiltering(sourceFollowups, jContainerElement);
-                setFollowupMenuItemCount(sourceFollowups.length);
+                //setFollowupMenuItemCount(sourceFollowups.length);
             });
         });
 
@@ -418,7 +434,7 @@ function handleFollowupReportClick() {
         if (!initialLoad) { // because followups are already loaded before startup
             loadFollowups(function (followups) {
                 buildFollowupReport(followups);
-            });
+            }, true);
         }
     }
     initialLoad = false;

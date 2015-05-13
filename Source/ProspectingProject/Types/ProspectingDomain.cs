@@ -639,6 +639,7 @@ namespace ProspectingProject
                              UserSurname = bu.UserSurname
                         });
 
+                var followupBundle = LoadFollowups(userGuid, businessUnitUsers, new List<long>());
                 var userPacket = new UserDataResponsePacket
                 {
                     UserGuid = userGuid,
@@ -657,7 +658,8 @@ namespace ProspectingProject
                         UserName = userAuthPacket.ManagerDetails.First().UserName
                     },
                     BusinessUnitUsers = businessUnitUsers,
-                    FollowupActivities = LoadFollowups(userGuid, businessUnitUsers)
+                    FollowupActivities =followupBundle.Followups,
+                    TotalFollowups = followupBundle.TotalCount
                 };
 
                 return userPacket;
@@ -673,19 +675,9 @@ namespace ProspectingProject
             }
         }
 
-        public static List<FollowUpActivity> LoadFollowups(Guid userGuid, List<UserDataResponsePacket> businessUnitUsers)
+        public static FollowupBundle LoadFollowups(Guid userGuid, List<UserDataResponsePacket> businessUnitUsers, List<long> loadedFollowupActivities)
         {
-            //            Func<ProspectingDataContext, int?, int[], string> fetchPrimaryContactNo = (context, contactPersonId, contactTypes) =>
-            //{
-            //    if (!contactPersonId.HasValue) return null;
-            //    var primaryrecord = context.prospecting_contact_details.FirstOrDefault(s => s.contact_person_id == contactPersonId
-            //                                                                            && !s.deleted
-            //                                                                            && s.is_primary_contact
-            //                                                                            && contactTypes.Contains(s.contact_detail_type));
-
-            //    return primaryrecord != null ? primaryrecord.contact_detail : null;
-            //};
-
+            FollowupBundle fb = new FollowupBundle();
             List<FollowUpActivity> followups = new List<FollowUpActivity>();
             using (var prospecting = new ProspectingDataContext())
             {                
@@ -694,8 +686,18 @@ namespace ProspectingProject
                                                        orderby act.followup_date 
                                                        select act;
 
+                List<long?> parentIds = prospecting.activity_logs.Where(a => a.parent_activity_id != null).Select(a => a.parent_activity_id).ToList();
+                activities = activities.Where(a => !parentIds.Contains(a.activity_log_id));
+
                 // Only load follow ups that do not have children
-                activities = activities.Where(a => !prospecting.activity_logs.Any(t => t.parent_activity_id == a.activity_log_id)).OrderByDescending(a => a.followup_date).ToList();
+      //Where(a => !prospecting.activity_logs.Any(t => t.parent_activity_id == a.activity_log_id));
+                fb.TotalCount = activities.Count();
+
+                // Exclude followups that have already been loaded
+                activities = activities.Where(a => !loadedFollowupActivities.Contains(a.activity_log_id));
+
+                // Only ever load 10 max items at a time
+                activities = activities.Take(10);
                 foreach (var act in activities)
                 {
                     var createdByUser = businessUnitUsers.FirstOrDefault(b => b.UserGuid == act.created_by);
@@ -737,7 +739,8 @@ namespace ProspectingProject
                 }
             }
 
-            return followups.OrderByDescending(s => s.FollowupDate).ToList();
+            fb.Followups = followups.OrderByDescending(s => s.FollowupDate).ToList();
+            return fb;
         }
 
         // Must send back the contact id as well as all the phone + tel no's: update their guid's to null

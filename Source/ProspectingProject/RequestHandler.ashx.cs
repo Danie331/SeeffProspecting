@@ -93,7 +93,7 @@ namespace ProspectingProject
                         context.Response.Write(activityLookupData);
                         break;
                     case "load_followups":
-                        var followups = GetFollowUps();
+                        var followups = GetFollowUps(json);
                         context.Response.Write(followups);
                         break;
                     case "make_default_contact_detail":
@@ -203,10 +203,11 @@ namespace ProspectingProject
             ProspectingDomain.MakeDefaultContactDetail(detail.ItemId);
         }
 
-        private string GetFollowUps()
+        private string GetFollowUps(string json)
         {
             UserDataResponsePacket user = GetUserSessionObject();
-            var results = ProspectingDomain.LoadFollowups(user.UserGuid, user.BusinessUnitUsers);
+            ExistingFollowups existingItems = ProspectingDomain.Deserialise<ExistingFollowups>(json);
+            var results = ProspectingDomain.LoadFollowups(user.UserGuid, user.BusinessUnitUsers, existingItems.ExistingFollowupItems).Followups;
             return ProspectingDomain.SerializeToJsonWithDefaults(results);
         }
 

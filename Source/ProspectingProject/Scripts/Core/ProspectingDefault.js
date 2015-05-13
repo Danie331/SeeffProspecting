@@ -576,12 +576,21 @@ function loadExistingProspectAddActivity(property, defaultSelection, callbackFun
     });
 }
 
-function loadFollowups(callbackFn) {
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading...</p>' });
+function loadFollowups(callbackFn, mustBlockUI) {
+    if (mustBlockUI) {
+        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading...</p>' });
+    }
+
+    var existingFollowups = [];
+    $('.followup-item-container').each(function (idx, fu) {
+        var id = $(fu).attr('id');
+        var activityLogId = id.replace('followup_','');
+        existingFollowups.push(activityLogId);
+    });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "load_followups" }),
+        data: JSON.stringify({ Instruction: "load_followups", ExistingFollowupItems: existingFollowups }),
         success: function (data, textStatus, jqXHR) {
             $.unblockUI();
             if (textStatus == "success" && data) {
