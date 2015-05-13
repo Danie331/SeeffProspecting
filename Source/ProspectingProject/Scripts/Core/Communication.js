@@ -413,7 +413,7 @@ function buildContactsBody(contacts) {
 
     var uniqueItems = [];
     $.each(contacts, function (idx, c) {
-        var rowId = c.ContactPersonId;
+        var rowId = c.ContactPersonId; // TODO: This actually causes a bug when the same person owns multiple selected properties. Fix by creating a key using ContactPersonId + LightstoneId
         var tr = $("<tr id='comm_row_" + rowId + "' ></tr>");
 
         var contactDetailContent, contactDetailTitle = '', actionStatus = 'Ready';
@@ -583,7 +583,7 @@ function buildContactsBody(contacts) {
 
         editBtn.click(function (e) {
             e.preventDefault();
-            handleCommEditBtnClick(c);
+            handleCommEditBtnClick(c, tr);
         });
     });
     commContactsTable.append(body);
@@ -625,13 +625,72 @@ function handleMakeDefaultEmailAddress(itemId, callbackFn) {
     });
 }
 
-function handleCommEditBtnClick(contact) {
-    var dialogHandle = $("<div title='Edit Contact Name & Surname' style='display:none;font-family:Verdana;font-size:12px;'></div>");
+function handleCommEditBtnClick(contact, row) {
+    var dialogHandle = $("<div title='Edit Contact|Property Details' style='display:none;font-family:Verdana;font-size:12px;'></div>");
     dialogHandle.empty();
+    var title = $("<label class='fieldAlignmentExtraShortWidth'>Title:</label>");
+    var titleCombo = buildContactTitle();
     var firstname = $("<label class='fieldAlignmentExtraShortWidth'>First name:</label><input type='text' id='commContactFirstnameEdit' name='commContactFirstnameEdit' size='35' value='" + contact.Firstname + "' />");
     var surname = $("<label class='fieldAlignmentExtraShortWidth'>Surname:</label><input type='text' id='commContactSurnameEdit' name='commContactSurnameEdit' size='35' value='" + contact.Surname + "' />");
-    var convertToTitleCase = $("<input type='button' value='Convert to Title Case' />");
-    dialogHandle.append(firstname).append("<br />").append(surname).append("<p />").append(convertToTitleCase);
+    var property = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+        return pp.LightstonePropertyId == contact.TargetLightstonePropertyId;
+    })[0];
+    var streetNo = $("<label class='fieldAlignmentExtraShortWidth'>Street no.:</label><input type='text' id='commContactStreetNoEdit' name='commContactStreetNoEdit' size='5' value='" + property.StreetOrUnitNo + "' />");
+    var streetAddressLbl = $("<label class='fieldAlignmentExtraShortWidth'>Street Address:</label>");
+    var streetAddress = $("<input type='text' id='commContactStreetAddressEdit' name='commContactStreetAddressEdit' value='" + property.PropertyAddress + "' size='35' />");
+    var convertToTitleCase = $("<input type='button' value='Convert names to Title Case' />");
+
+    var ssDoor = null;
+    if (property.SS_FH == 'SS' || property.SS_FH == 'FS') {
+        var ssNameLbl = $("<label> (" + property.SSName + ")</label>");
+        var ssDoorLbl = $("<label class='fieldAlignmentExtraShortWidth'>SS Door no.:</label>");
+        var doorNo = property.SSDoorNo != null ? property.SSDoorNo : '';
+        ssDoor = $("<input type='text' id='commContactSSDoorEdit' name='commContactSSDoorEdit' size='5' value='" + doorNo + "' />");
+
+        dialogHandle.append(title)
+            .append(titleCombo)
+            .append("<br />")
+            .append(firstname)
+            .append("<br />")
+            .append(surname)
+            .append("<p />")
+            .append(ssDoorLbl)
+            .append(ssDoor)
+            .append(ssNameLbl)
+            .append("<p />")
+            .append(convertToTitleCase);
+    } else {
+        dialogHandle.append(title)
+            .append(titleCombo)
+            .append("<br />")
+            .append(firstname)
+            .append("<br />")
+            .append(surname)
+            .append("<p />")
+            .append(streetNo)
+            .append("<br />")
+            .append(streetAddressLbl)
+            .append(streetAddress)
+            .append("<p />")
+            .append(convertToTitleCase);
+    }
+
+    function buildContactTitle() {
+        //<input type='text' id='commContactTitleEdit' name='commContactTitleEdit' /> test SS, test address updates in grid
+        var comboBox = $("<select id='commContactTitleEdit' name='commContactTitleEdit' />");
+        if (!contact.Title) {
+            comboBox.append("<option value='' />");
+        }
+        $.each(prospectingContext.ContactPersonTitle, function (idx, item) {
+            comboBox.append("<option value='" + item.Key + "'>" + item.Value + "</option>");
+        });
+        //select rigth one + change event.
+        if (contact.Title) {
+            comboBox.val(contact.Title);
+        }
+
+        return comboBox;
+    }
 
     convertToTitleCase.click(function () {
         var firstnameInput = firstname.next();
@@ -643,6 +702,10 @@ function handleCommEditBtnClick(contact) {
         var surnameText = surnameInput.val();
         surnameText = toTitleCase(surnameText);
         surnameInput.val(surnameText);
+
+        var streetAddressNew = streetAddress.val();
+        streetAddressNew = toTitleCase(streetAddressNew);
+        streetAddress.val(streetAddressNew);
     });
     dialogHandle.dialog(
   {
@@ -650,19 +713,59 @@ function handleCommEditBtnClick(contact) {
       closeOnEscape: true,
       //open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
       width: 'auto',
-      buttons: { "Save and close": function () { handleSaveContactNameChange(); $(this).dialog("close"); } },
+      buttons: { "Save and close": function () { handleSaveChanges(); $(this).dialog("close"); } },
       position: ['center', 'center']
   });
 
-    function handleSaveContactNameChange() {
+    function handleSaveChanges() {
+        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Saving Changes...</p>' });
+        // Name + surname
         var newFirstnameText = firstname.next().val();
         var newSurnameText = surname.next().val();
-        if (newFirstnameText.trim() && newSurnameText.trim()) {
-            contact.Firstname = newFirstnameText.trim();
-            contact.Surname = newSurnameText.trim();
+        // Title
+        var newTitle = titleCombo.val();
+        // Property address
+        var newStreetNo = streetNo.next().val();
+        var newStreetAddress = streetAddress.val();
+        // SS door no
+        var newSSDoorNo = ssDoor != null ? ssDoor.val() : null;
+    
+        if (newFirstnameText.trim() && newSurnameText.trim() && newStreetNo.trim() && newStreetAddress.trim()) {
+
+            var allPersonContacts = [];
+            $.each(currentSuburb.ProspectingProperties, function (idx1, pp) {
+                if (pp.Contacts) {
+                    $.each(pp.Contacts, function (idx2, pc) {
+                        if (pc.ContactPersonId == contact.ContactPersonId) {
+                            allPersonContacts.push(pc);
+                        }
+                    });
+                }
+            });
+
+            $.each(allPersonContacts, function (idx, cc) {
+                cc.Firstname = newFirstnameText.trim();
+                cc.Surname = newSurnameText.trim();
+                cc.Title = newTitle;
+            });
+
             var prospectingPropId = contact.TargetCommPropertyId;
+            var propertyDetailsInputPacket = {
+                PropertyAddress: newStreetAddress,
+                StreetOrUnitNo: newStreetNo,
+                SSDoorNo: newSSDoorNo,
+                SS_FH: property.SS_FH,
+                ProspectingPropertyId: prospectingPropId
+            };
+
             saveContact(contact, { ProspectingPropertyId: prospectingPropId }, function () {
-                showSavedSplashDialog('Contact Saved!');
+                updateProspectingRecord(propertyDetailsInputPacket, property, function () {
+
+                    contact.PropertyAddress = getFormattedAddress(property);
+
+                    var addressTD = row.find('#comm_address_' + contact.ContactPersonId);
+                    addressTD.empty().append(contact.PropertyAddress);
+                });
             });
         }
     }
@@ -682,9 +785,99 @@ function sendSMS() {
 }
 
 function validateMessage() {
+    // Validate person title (only if used in the message)
+    function validateTitleIfPresent(msgBody) {
+        var containsRecordsWithoutTitle = false;
+        if (msgBody.indexOf('*title*') > -1) {
+            var commSelectedRows = $('#commContactsTable tr.rowSelected');
+            $.each(commSelectedRows, function (idx, row) {
+                var contactId = $(row).attr("id").replace('comm_row_', '');
+                var contact = getContactFromId(contactId);
+                if (!contact.Title) {
+                    containsRecordsWithoutTitle = true;
+                }
+            });
+            if (containsRecordsWithoutTitle) {
+                alert("One or more of your selected rows do not have a person title set. Please set a title for each of the selected contact people. (Hint: You can use the 'Edit' link in the last column to do this)");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function validateAddressIsValid(msgBody) {
+        var containsRecordsWithInvalidAddress = false;
+        if (msgBody.indexOf('*address*') > -1) {
+            var commSelectedRows = $('#commContactsTable tr.rowSelected');
+            $.each(commSelectedRows, function (idx, row) {
+                var contactId = $(row).attr("id").replace('comm_row_', '');
+                var contact = getContactFromId(contactId);
+                if (contact.PropertyAddress.indexOf('n/a') == 0) {
+                    containsRecordsWithInvalidAddress = true;
+                }
+            });
+            if (containsRecordsWithInvalidAddress) {
+                alert("One or more of your selected rows do not have a valid street number for the address. Please provide a street number for each address. (Hint: You can use the 'Edit' link in the last column to do this)");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function validateNoRowsSelected() {
+        var commSelectedRows = $('#commContactsTable tr.rowSelected');
+        if (!commSelectedRows.length) {
+            alert('No rows selected.');
+            return false;
+        }
+        return true;
+    }
+
+    function validateRequiresDefaultContactDetails() {
+        var commSelectedRows = $('#commContactsTable tr.rowSelected');
+        if (commSelectedRows.length) {
+            var hasRowsWithoutDefault = false;
+            commSelectedRows.each(function (idx, row) {
+                if ($(row).hasClass('noDefault')) hasRowsWithoutDefault = true;
+            });
+            if (hasRowsWithoutDefault) {
+                var emailOrSms = communicationsMode == "SMS" ? ' cellphone number' : ' email address';
+                alert('One or more selected rows require a default contact ' + emailOrSms + '. Please ensure each contact row has a default assigned.');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function validateInsufficientCredit() {
+        if (costOfBatch > availableCredit) {
+            alert('The total cost of the items selected (R ' + costOfBatch + ') exceeds your available Prospecting credit (R ' + availableCredit + '). Either refine your selection or request additional Prospecting credit.');
+            return false;
+        }
+
+        return true;
+    }
+
     if (communicationsMode == "EMAIL") {
         var emailSubject = $('#emailSubject').val().trim();
         var emailBody = $('#emailMessageBody').val().trim();
+
+        if (!validateNoRowsSelected()) {
+            return false;
+        }
+
+        if (!validateRequiresDefaultContactDetails()) {
+            return false;
+        }
+
+        if (!validateTitleIfPresent(emailBody)) {
+            return false;
+        }
+
+        if (!validateAddressIsValid(emailBody)) {
+            return false;
+        }
 
         if (emailSubject == '' || emailSubject == defaultSubjectText) {
             alert('Please add a subject line.');
@@ -700,6 +893,27 @@ function validateMessage() {
     }
     if (communicationsMode == "SMS") {
         var smsBody = $("#smsMessageContainer").val().trim();
+
+        if (!validateNoRowsSelected()) {
+            return false;
+        }
+
+        if (!validateRequiresDefaultContactDetails()) {
+            return false;
+        }
+
+        if (!validateInsufficientCredit()) {
+            return false;
+        }
+
+        if (!validateTitleIfPresent(smsBody)) {
+            return false;
+        }
+
+        if (!validateAddressIsValid(smsBody)) {
+            return false;
+        }
+
         if (!smsBody) {
             alert('Please add the message content');
             return false;
@@ -962,16 +1176,6 @@ function getContactsFromSelectedMarkers(actionWhenDone) {
 
     function getContactsFromSelection(selectedProperties) {
 
-        function getFormattedAddress(property) {
-            if (property.SS_FH == "SS" || property.SS_FH == "FS") {
-                var doorNr = '';
-                if (property.SSDoorNo) doorNr = "(Door no.: " + property.SSDoorNo + ")";
-                return "Unit " + property.Unit + " " + doorNr + " " + property.SSName;
-            } else {
-                return property.StreetOrUnitNo + " " + property.PropertyAddress;
-            }
-        }
-
         function hasCellphoneNumber(contact) {
             var hasCell = false;
             if (contact.PhoneNumbers && contact.PhoneNumbers.length) {
@@ -1021,41 +1225,32 @@ function getContactsFromSelectedMarkers(actionWhenDone) {
     }
 }
 
+function getFormattedAddress(property) {
+    if (property.SS_FH == "SS" || property.SS_FH == "FS") {
+        var doorNr = '';
+        if (property.SSDoorNo) doorNr = "(Door no.: " + property.SSDoorNo + ")";
+        return "Unit " + property.Unit + " " + doorNr + " " + property.SSName;
+    } else {
+        return property.StreetOrUnitNo + " " + property.PropertyAddress;
+    }
+}
+
 function handleCommSendBtnClick() {
 
     if (!validateMessage()) {
         return;
     }
-    var statusMessage = '', canSend = false;
-    if (costOfBatch > availableCredit) {
-        statusMessage = 'The total cost of the items selected (R ' + costOfBatch + ') exceeds your available Prospecting credit (R ' + availableCredit + '). Either refine your selection or request' /
-                        ' additional Prospecting credit.';
-    }
 
     var commSelectedRows = $('#commContactsTable tr.rowSelected');
-    if (commSelectedRows.length) {
-        var hasRowsWithoutDefault = false;
-        commSelectedRows.each(function (idx, row) {
-            if ($(row).hasClass('noDefault')) hasRowsWithoutDefault = true;
-        });
-        if (hasRowsWithoutDefault) {
-            var emailOrSms = communicationsMode == "SMS" ? ' cellphone number' : ' email address';
-            statusMessage += '\nOne or more selected rows require a default contact ' + emailOrSms + '.<br />Please ensure each contact row has a default assigned.';
-        } else {
-            canSend = true;
-            statusMessage += '\nReady to send communication to ' + commSelectedRows.length + ' contact row(s)';
-            if (communicationsMode == "EMAIL") {
-                statusMessage += '<p />Please note that you may receive a popup-screen requesting you to log in to your Seeff mail account,\
+    var readyStatus = '\nReady to send communication to ' + commSelectedRows.length + ' contact row(s)';
+    if (communicationsMode == "EMAIL") {
+        readyStatus += '<p />Please note that you may receive a popup-screen requesting you to log in to your Seeff mail account,\
                                  this will allow Prospecting to send email from your account. <br />Please ensure that your browser is set to allow for pop-ups.';
-            }
-        }
-    } else {
-        statusMessage += '\nNo rows selected.';
     }
     
         var dialog = $("#commSendMessageDialog");
         dialog.empty();
-        dialog.append(statusMessage).append("<p />");
+        dialog.append(readyStatus).append("<p />");
         
             var previewMsgLabel = $("<p>Preview of the first message:</p>");
             dialog.append(previewMsgLabel);            
@@ -1063,7 +1258,7 @@ function handleCommSendBtnClick() {
                 var previewDialog = createPreviewMessage(signatureData, dialog);
                 dialog.append(previewDialog);
 
-                if (canSend && canProceed) {
+                if (canProceed) {
                     dialog.dialog(
                           {
                               modal: true,

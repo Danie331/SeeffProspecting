@@ -855,7 +855,7 @@ function linkAndShowExistingOwners(property) {
     }
 }
 
-function updateProspectingRecord(record) {
+function updateProspectingRecord(record, property, callbackFn) {
 
     var inputPacket = {
         Instruction: "update_prospecting_property",
@@ -865,6 +865,10 @@ function updateProspectingRecord(record) {
         SS_FH: record.SS_FH,
         ProspectingPropertyId: record.ProspectingPropertyId
     };
+
+    if (!property) {
+        property = currentProperty;
+    }
 
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Updating address...</p>' });
     $.ajax({
@@ -882,10 +886,14 @@ function updateProspectingRecord(record) {
                     }
 
                     if (record.SS_FH == "SS") {
-                        currentProperty.SSDoorNo = record.SSDoorNo;
+                        property.SSDoorNo = record.SSDoorNo;
                     } else {
-                        currentProperty.PropertyAddress = record.PropertyAddress;
-                        currentProperty.StreetOrUnitNo = record.StreetOrUnitNo;
+                        property.PropertyAddress = record.PropertyAddress;
+                        property.StreetOrUnitNo = record.StreetOrUnitNo;
+                    }
+
+                    if (callbackFn) {
+                        callbackFn();
                     }
                     //alert('Address details updated successfully.');
                     showSavedSplashDialog('Details updated!');
@@ -1606,7 +1614,12 @@ function stripPropertyAddress(property) {
     var streetOrUnitNo = property.StreetOrUnitNo;
     var streetPortion = property.PropertyAddress.split(',')[0].trim();
     var suburbPortion = property.PropertyAddress.split(',')[1].trim();
-    var townPortion = property.PropertyAddress.split(',')[2].trim();
+    var townPortion = '';
+    try {
+        townPortion = property.PropertyAddress.split(',')[2].trim();
+    } catch (e) {
+        townPortion = suburbPortion;
+    }
 
     return { StreetOrUnitNo: streetOrUnitNo, StreetName: streetPortion, Suburb: suburbPortion, CityTown: townPortion };
 }
