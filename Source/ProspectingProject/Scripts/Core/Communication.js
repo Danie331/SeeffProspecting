@@ -23,7 +23,7 @@ function buildCommunicationMenu() {
     var getInfoLabel = $("<label id='commGetInfoLabel' style='display:none'></label>");
 
     var bottomContainer = $("<div id='commBottomDiv' style='display:none' />");
-    var costOfBatchLabel = $("<div id='commBatchCost' style='display:inline-block;float:left'>Cost of Batch: R <span></span></div>");
+    var costOfBatchLabel = $("<div id='commBatchCost' style='display:inline-block;float:left'><span id='commCostOfBatch'></span></div>");
     var sendButton = $("<div id='commSendMessage' style='display:inline-block;float:right'><input type='button' id='commSendMessageBtn' value='Preview'  /></div>");
     sendButton.click(handleCommSendBtnClick);
     bottomContainer.append(costOfBatchLabel).append(sendButton);
@@ -241,9 +241,15 @@ function buildSMSContentContainer() {
     msgDiv.append(introText);
 
     msgDiv.focus(function () {
+        if (msgDiv.val() != introText)
+            return;
+
         msgDiv.empty();
         msgDiv.css('color', 'black');
     });
+
+    msgDiv.keyup(updateCostOfBatchSMS);
+    //msgDiv.change(updateCostOfBatchSMS);
 
     return msgDiv;
 }
@@ -368,6 +374,8 @@ function updateCommunicationsContacts() {
     commGetInfoLabel.css('display', 'none');
     var commBottomDiv = $("#commBottomDiv");
     commBottomDiv.css('display', 'none');
+    var commCostOfBatch = $('#commCostOfBatch');
+    commCostOfBatch.css('display', 'none');
 
     var contactsContainer = $("#contactablesContentContainer");
     if (currentSuburb && communicationsMode != null && selectedMarkers.length) {
@@ -375,6 +383,10 @@ function updateCommunicationsContacts() {
             if (contacts.length) {
                 contactsContainer.css('display', 'block');
                 buildContactsBody(contacts);
+
+                if (communicationsMode == "SMS") {
+                    updateCostOfBatchSMS();
+                }
                 commBottomDiv.css('display', 'block');
             } else {
                 contactsContainer.css('display', 'none');
@@ -391,6 +403,25 @@ function updateCommunicationsContacts() {
     else {
         contactsContainer.css('display', 'none');
     }
+}
+
+function updateCostOfBatchSMS() {
+
+    var smsCost = prospectingContext.SMSCost * 100;
+    var smsLen = prospectingContext.SMSLength;
+
+    var commSelectedRows = $('#commContactsTable tr.rowSelected').length;
+    var numChars = $("#smsMessageContainer").val().trim().length;
+    var c1 = numChars / smsLen;
+    var c2 = Math.ceil(c1);
+    var calc = c2 * smsCost * commSelectedRows;
+
+    var labelContainer = $("<div style='font-size:12px' />").append("Cost of batch (R " + smsCost + " per " + smsLen + " characters): R " + (calc / 100));
+    
+    var commCostOfBatch = $('#commCostOfBatch');
+    commCostOfBatch.empty();
+    commCostOfBatch.append(labelContainer);
+    commCostOfBatch.css('display', 'block');
 }
 
 function getContactFromId(contactPersonId) {
@@ -578,6 +609,10 @@ function buildContactsBody(contacts) {
                 }
 
                 tr.addClass('rowSelected');
+            }
+
+            if (communicationsMode == "SMS") {
+                updateCostOfBatchSMS();
             }
         });
 
@@ -781,7 +816,51 @@ function handleSendMessage() {
 }
 
 function sendSMS() {
+    var recipients = [];
+    var commSelectedRows = $('#commContactsTable tr.rowSelected');
+    $.each(commSelectedRows, function (idx, row) {
+        var contactId = $(row).attr("id").replace('comm_row_', '');
+        var contact = getContactFromId(contactId);
+        contact.SendError = null;
 
+        recipients.push({
+            ContactpersonId: contactId,
+            ProspectingPropertyId: contact.TargetCommPropertyId,
+            TargetCellNo: getDefaultCellNo(contact),
+            Message: generateMessageForRecord($("#smsMessageContainer").val().trim(), contact)
+        });
+    });
+
+
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Sending SMS to recipients...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: "send_sms", TargetRecipients: recipients }),
+        dataType: "json"
+    }).done(function (data) {
+        $.unblockUI();
+        if (!handleResponseIfServerError(data)) {
+            return;
+        }
+        // Rem to do the same stuff as for email. Reply|Followup. Billing backend+front-end. Logging etc.
+    });
+}
+
+function getDefaultCellNo(contact) {
+    var defaultCell;
+    var allCellNos = $.grep(contact.PhoneNumbers, function (cell) {
+        return cell.ItemType == cellphoneItemId;
+    });
+    if (allCellNos.length == 1) {
+        defaultCell = allCellNos[0];
+    } else {
+        defaultCell = $.grep(allCellNos, function (cell) {
+            return cell.IsPrimary == true;
+        })[0];
+    }
+
+    return defaultCell.ItemContent;
 }
 
 function validateMessage() {
@@ -1254,7 +1333,7 @@ function handleCommSendBtnClick() {
         
             var previewMsgLabel = $("<p>Preview of the first message:</p>");
             dialog.append(previewMsgLabel);            
-            handleShowPreviewMsgWithSignature(function (canProceed, signatureData) {
+            handleShowMessagePreview(function (canProceed, signatureData) {
                 var previewDialog = createPreviewMessage(signatureData, dialog);
                 dialog.append(previewDialog);
 
@@ -1344,23 +1423,28 @@ function generateMessageForRecord(templateMsg, record) {
     return templateMsg;
 }
 
-function handleShowPreviewMsgWithSignature(callback) {
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Retrieving your signature from BOSS...</p>' });
-    $.ajax({
-        type: "POST",
-        url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: 'retrieve_user_signature' }),
-        async: false,
-        dataType: "json",
-    }).done(function (data) {
-        $.unblockUI();
-        var canSend = true;
-        var signatureData = null;
-        if (!data) {
-            canSend = false;
-        } else {
-            signatureData = data;
-        }
-        callback(canSend, signatureData);
-    });
+function handleShowMessagePreview(callback) {
+    if (communicationsMode == "EMAIL") {
+        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Retrieving your signature from BOSS...</p>' });
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify({ Instruction: 'retrieve_user_signature' }),
+            async: false,
+            dataType: "json",
+        }).done(function (data) {
+            $.unblockUI();
+            var canSend = true;
+            var signatureData = null;
+            if (!data) {
+                canSend = false;
+            } else {
+                signatureData = data;
+            }
+            callback(canSend, signatureData);
+        });
+    }
+    if (communicationsMode == "SMS") {
+        callback(true, null);
+    }
 }

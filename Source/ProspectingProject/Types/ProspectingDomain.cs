@@ -310,7 +310,9 @@ namespace ProspectingProject
                 ContactEmailTypes = ProspectingStaticData.ContactEmailTypes,
                 ContactPhoneTypes = ProspectingStaticData.ContactPhoneTypes,
                 IntlDialingCodes = ProspectingStaticData.IntlDialingCodes,
-                PersonCompanyRelationshipTypes = ProspectingStaticData.PersonCompanyRelationshipTypes
+                PersonCompanyRelationshipTypes = ProspectingStaticData.PersonCompanyRelationshipTypes,
+                SMSCost = ProspectingStaticData.SMSCost,
+                SMSLength = ProspectingStaticData.SMSLength
             };
 
             return ProspectingDomain.SerializeToJsonWithDefaults(a);
@@ -2240,21 +2242,50 @@ namespace ProspectingProject
         public static string SendSMS(SmsInputPacket inputPacket)
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://sms.sancustelecom.com//"); // This is the web application's root server address
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
-            var content = new FormUrlEncodedContent(new[] 
+            client.BaseAddress = new Uri("http://client.sancustelecom.com/"); // This is the web application's root server address
+            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+            XDocument doc = new XDocument();
+            //doc.Root.Add();
+            var root = new XElement("SmsQueue");
+            var accountElement = new XElement("Account");
+            var user = new XElement("User");
+            user.Value = "SanAcc00006";
+            accountElement.Add(user);
+            var password = new XElement("Password");
+            password.Value = "A78BfEPK";
+            accountElement.Add(password);
+            root.Add(accountElement);
+            var messageDataElement = new XElement("MessageData");
+            var senderId = new XElement("SenderId");
+            senderId.Value = "438292";
+            messageDataElement.Add(senderId);
+            var dataCoding = new XElement("DataCoding");
+            dataCoding.Value = "0";
+            messageDataElement.Add(dataCoding);
+            root.Add(messageDataElement);
+            var messagesElement = new XElement("Messages");
+
+            foreach (var item in inputPacket.TargetRecipients)
             {
-                new KeyValuePair<string, string>("username", "SanAcc00006"),
-                new KeyValuePair<string, string>("password", "A78BfEPK"),
-                new KeyValuePair<string, string>("account", "SanAcc00006"),
-                new KeyValuePair<string, string>("batchid", "batch01"),
-                new KeyValuePair<string, string>("da", "27724707471"),
-                new KeyValuePair<string, string>("id", "123"),
-                new KeyValuePair<string, string>("ud", inputPacket.Message),
-            });
-            var result = client.PostAsync("/submit/batch/", content).Result;
-            string resultContent = result.Content.ReadAsStringAsync().Result;
-            return resultContent;
+                var messageElement = new XElement("Message");
+                var number = new XElement("Number");
+                number.Value = item.TargetCellNo;
+                var text = new XElement("Text");
+                text.Value = item.Message;
+
+                messageElement.Add(number);
+                messageElement.Add(text);
+
+                messagesElement.Add(messageElement);
+            }
+            root.Add(messagesElement);
+            doc.Add(root);
+
+            var postData = doc.ToString();
+            var httpContent = new StringContent(postData, Encoding.UTF8, "application/xml");
+            var response = client.PostAsync("/Rest/Messaging.svc/mtsms?data=", httpContent).Result;
+
+            return "";
         }
 
         public static List<ProspectingProperty> LoadProperties(int[] inputProperties)

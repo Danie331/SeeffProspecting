@@ -452,6 +452,7 @@ function setCurrentMarker(suburb, property) {
 
 function markerClick(e) {
     closeInfoWindow();
+    closeTransientInfoWindow(this);
 
     if (multiSelectMode) { // if we are in multi-select mode
         var marker = $(this)[0];
@@ -1321,8 +1322,23 @@ function createMarkerForProperty(property) {
     marker.ProspectingProperty = property;
     google.maps.event.addListener(marker, 'click', markerClick);
     google.maps.event.addListener(marker, 'rightclick', markerRightClick);
+    google.maps.event.addListener(marker, 'mouseover', function () {
+        if (this != currentMarker && !this.TransientInfoWindow) {
+            showTransientInfoWindowOnHover(this);
+        }
+    });
+    google.maps.event.addListener(marker, 'mouseout', function () {
+        closeTransientInfoWindow(this);
+    });
 
     return marker;
+}
+
+function closeTransientInfoWindow(marker) {
+    if (marker.TransientInfoWindow) {
+        marker.TransientInfoWindow.close();
+        marker.TransientInfoWindow = null;
+    }
 }
 
 function buildInfoWindowContentForSS(unit) {
@@ -1535,7 +1551,7 @@ function updateContactsOnProperty(existingProp, newProp) {
     }
 }
 
-function buildContentForInfoWindow(property, infowindow) {
+function buildContentForInfoWindow(property, infowindow, showStreetView) {
     var outerDiv = $("<div id='infoWindowStandard' class='info-window' style='display:none;' />");
     var div = $("<div style='float:right;display:inline-block;' />");
     // test for fh, test in chrome, mouille point, sort, fixed header
@@ -1553,9 +1569,11 @@ function buildContentForInfoWindow(property, infowindow) {
         }
         div.append(address);
 
-        var contacts = "Number of contacts captured: " + property.Contacts.length;
-        div.append("<br />");
-        div.append(contacts);
+        if (property.Contacts) {
+            var contacts = "Number of contacts captured: " + property.Contacts.length;
+            div.append("<br />");
+            div.append(contacts);
+        }
         div.append("<br />");
         div.append("Property ID: " + property.LightstonePropertyId);
         if (property.LightstoneRegDate) {
@@ -1570,51 +1588,59 @@ function buildContentForInfoWindow(property, infowindow) {
         div.append("Last sale price: " + (property.LastPurchPrice ? formatRandValue(property.LastPurchPrice) : "n/a"));
 
         // Append the owner info
-        div.append("<br />");
-        div.append("Property Contacts:");
-        div.append("<br />");
-        if (property.Contacts.length) {
-            $.each(property.Contacts, function (idx, c) {
+        if (property.Contacts) {
+            div.append("<br />");
+            div.append("Property Contacts:");
+            div.append("<br />");
+            if (property.Contacts.length) {
+                $.each(property.Contacts, function (idx, c) {
 
-                div.append(c.Firstname + " " + c.Surname + " (ID Number:" + c.IdNumber + ")");
-                div.append("<br />");
-            });
+                    div.append(c.Firstname + " " + c.Surname + " (ID Number:" + c.IdNumber + ")");
+                    div.append("<br />");
+                });
+            }
         }
-        if (property.ContactCompanies.length) {
-            $.each(property.ContactCompanies, function (idx, c) {
-                div.append(c.CompanyName + " (" + c.CKNumber + ")");
-                div.append("<br />");
-            });
+        if (property.ContactCompanies) {
+            if (property.ContactCompanies.length) {
+                $.each(property.ContactCompanies, function (idx, c) {
+                    div.append(c.CompanyName + " (" + c.CKNumber + ")");
+                    div.append("<br />");
+                });
+            }
         }
     }
 
     // SS, chrome,
-    var imgUrl = 'https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + property.LatLng.Lat + ',' + property.LatLng.Lng + '&fov=90&heading=235&pitch=10';
-    var imgElement = $("<img id='streetview_" + property.LightstonePropertyId + "' style='cursor:pointer' />").attr('src', imgUrl);
-    var streetViewDiv = $("<div style='padding-right:5px;float:left;display:inline-block;width:201px' />")
-                        .append($("<div><span style='font-size:10px'>(Click the image to go to StreetView)</span></div>"))
-                        .append(imgElement);
+    if (showStreetView) {
+        var imgUrl = 'https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + property.LatLng.Lat + ',' + property.LatLng.Lng + '&fov=90&heading=235&pitch=10';
+        var imgElement = $("<img id='streetview_" + property.LightstonePropertyId + "' style='cursor:pointer' />").attr('src', imgUrl);
+        var streetViewDiv = $("<div style='padding-right:5px;float:left;display:inline-block;width:201px' />")
+                            .append($("<div><span style='font-size:10px'>(Click the image to go to StreetView)</span></div>"))
+                            .append(imgElement);
+        outerDiv.append(streetViewDiv).append(div);
 
-    outerDiv.append(streetViewDiv).append(div);
-
-    $(imgElement).waitForImages(function () {
-        outerDiv.css('display', 'block');
-        infowindow.open(map);
-    });
-
-    $('body').on('click', '#streetview_' + property.LightstonePropertyId, function () {
-        var streetView = map.getStreetView();
-        streetView.setPosition(new google.maps.LatLng(property.LatLng.Lat, property.LatLng.Lng));
-        //map.bindTo("center", streetView, "position");
-        var streetViewLayer = new google.maps.ImageMapType({
-            getTileUrl: function (coord, zoom) {
-                return "http://www.google.com/cbk?output=overlay&zoom=" + zoom + "&x=" + coord.x + "&y=" + coord.y + "&cb_client=api";
-            },
-            tileSize: new google.maps.Size(256, 256)
+        $(imgElement).waitForImages(function () {
+            outerDiv.css('display', 'block');
+            infowindow.open(map);
         });
-        map.overlayMapTypes.insertAt(0, streetViewLayer);
-        streetView.setVisible(true);
-    });
+
+        $('body').on('click', '#streetview_' + property.LightstonePropertyId, function () {
+            var streetView = map.getStreetView();
+            streetView.setPosition(new google.maps.LatLng(property.LatLng.Lat, property.LatLng.Lng));
+            //map.bindTo("center", streetView, "position");
+            var streetViewLayer = new google.maps.ImageMapType({
+                getTileUrl: function (coord, zoom) {
+                    return "http://www.google.com/cbk?output=overlay&zoom=" + zoom + "&x=" + coord.x + "&y=" + coord.y + "&cb_client=api";
+                },
+                tileSize: new google.maps.Size(256, 256)
+            });
+            map.overlayMapTypes.insertAt(0, streetViewLayer);
+            streetView.setVisible(true);
+        });
+    } else {
+        outerDiv.append(div);
+        outerDiv.css('display', 'block');
+    }
    
     return outerDiv[0].outerHTML;
 }
@@ -1633,14 +1659,25 @@ function stripPropertyAddress(property) {
     return { StreetOrUnitNo: streetOrUnitNo, StreetName: streetPortion, Suburb: suburbPortion, CityTown: townPortion };
 }
 
+function showTransientInfoWindowOnHover(marker) {
+    var pp = marker.ProspectingProperty;
+    var y_offset = pp.SS_FH == "FH" ? -21 : -30;
+    var tempInfowindow = new google.maps.InfoWindow({ pixelOffset: new google.maps.Size(0, y_offset), disableAutoPan: true });
+    tempInfowindow.setContent(buildContentForInfoWindow(marker.ProspectingProperty, tempInfowindow, false));
+    tempInfowindow.setPosition(marker.getPosition());
+    marker.TransientInfoWindow = tempInfowindow;
+
+    tempInfowindow.open(map);
+}
+
 function openInfoWindow(marker, actionAfterOpening) {
     closeInfoWindow();
 
     function createInfoWindowForMarker(marker) {
         infowindow = new google.maps.InfoWindow();
-        infowindow.setContent(buildContentForInfoWindow(marker.ProspectingProperty, infowindow));
+        infowindow.setContent(buildContentForInfoWindow(marker.ProspectingProperty, infowindow, true));
         infowindow.setPosition(marker.getPosition());
-
+        
         infowindow.Marker = marker;
 
         google.maps.event.addDomListener(infowindow, 'closeclick', function () {

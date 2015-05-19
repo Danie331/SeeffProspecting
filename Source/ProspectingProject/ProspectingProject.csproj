@@ -1159,6 +1159,7 @@
     <Compile Include="Types\JsonDataExchangeTypes\PropertyCommentsNotes.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\SearchInputPacket.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\SmsInputPacket.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\SmsRecipient.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\UserDataResponsePacket.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\UserSuburb.cs" />
     <Compile Include="Types\JsonNetPropertyNameResolverForSerialization.cs" />

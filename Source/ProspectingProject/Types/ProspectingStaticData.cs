@@ -13,6 +13,9 @@ namespace ProspectingProject
         public const string DracoreEmailEnquiryRequest = "DRACORE_EMAIL";
         public const string TracePSEnquiryRequest = "TRACEPS";
 
+        public const decimal SMSCost = 0.19m;
+        public const int SMSLength = 160;
+
         public static List<KeyValuePair<int, string>> ContactDetailTypes {get; set;}
         public static List<KeyValuePair<int, string>> PersonPropertyRelationshipTypes { get; set; }
         public static List<KeyValuePair<int, string>> CompanyPropertyRelationshipTypes { get; set; }

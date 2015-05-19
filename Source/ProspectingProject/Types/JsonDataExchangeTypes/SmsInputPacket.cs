@@ -7,7 +7,6 @@ namespace ProspectingProject
 {
     public class SmsInputPacket
     {
-        public string Message { get; set; }
-        public List<string> TargetRecipients { get; set; }
+        public List<SmsRecipient> TargetRecipients { get; set; }
     }
 }

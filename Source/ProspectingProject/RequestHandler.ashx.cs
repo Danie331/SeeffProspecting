@@ -121,6 +121,10 @@ namespace ProspectingProject
                         string userSignature = RetrieveUserSignature();
                         context.Response.Write(userSignature);
                         break;
+                    case "send_sms":
+                        string response = SendSMS(json);
+                        context.Response.Write(response);
+                        break;
                 }
             }
             catch (Exception ex)

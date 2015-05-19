@@ -286,6 +286,10 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
 
                 performFollowupFiltering(sourceFollowups, jContainerElement);
                 //setFollowupMenuItemCount(sourceFollowups.length);
+
+                if (sourceFollowups.length == 0) {
+                    loadMoreFollowups();
+                }
             });
         });
 
