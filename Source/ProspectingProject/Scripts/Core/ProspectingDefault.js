@@ -1323,13 +1323,19 @@ function createMarkerForProperty(property) {
     google.maps.event.addListener(marker, 'click', markerClick);
     google.maps.event.addListener(marker, 'rightclick', markerRightClick);
     google.maps.event.addListener(marker, 'mouseover', function () {
-        if (this != currentMarker && !this.TransientInfoWindow) {
-            showTransientInfoWindowOnHover(this);
-        }
+       
+        var that = this;
+        clearTimeout(this.timer);
+        this.timer = setTimeout(function () {
+            if (that != currentMarker && !that.TransientInfoWindow) {
+                showTransientInfoWindowOnHover(that);
+            }
+        }, 300);
+        google.maps.event.addListenerOnce(this, 'mouseout', function () { clearTimeout(this.timer); closeTransientInfoWindow(this); });
     });
-    google.maps.event.addListener(marker, 'mouseout', function () {
-        closeTransientInfoWindow(this);
-    });
+    //google.maps.event.addListener(marker, 'mouseout', function () {
+    //    closeTransientInfoWindow(this);
+    //});
 
     return marker;
 }
@@ -1573,7 +1579,7 @@ function buildContentForInfoWindow(property, infowindow, showStreetView) {
             var contacts = "Number of contacts captured: " + property.Contacts.length;
             div.append("<br />");
             div.append(contacts);
-        }
+        } 
         div.append("<br />");
         div.append("Property ID: " + property.LightstonePropertyId);
         if (property.LightstoneRegDate) {
@@ -1599,6 +1605,10 @@ function buildContentForInfoWindow(property, infowindow, showStreetView) {
                     div.append("<br />");
                 });
             }
+        }
+        else {
+            div.append("<br />");
+            div.append("(Click to retrieve contacts)");
         }
         if (property.ContactCompanies) {
             if (property.ContactCompanies.length) {

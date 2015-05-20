@@ -260,26 +260,63 @@ function buildEmailContentContainer() {
     var subjectLine = $("<input type='text' id='emailSubject' style='width:100%;color:lightgray;border:1px solid gray' />");
     subjectLine.val(defaultSubjectText);
     subjectLine.focus(function () {
-        if (subjectLine.val() != defaultSubjectText)
+        if (subjectLine.val() != defaultSubjectText) {
             return;
+        }
         subjectLine.val('');
         subjectLine.css('color', 'black');
+    });
+
+    subjectLine.keyup(function () {
+        var val = $(this).val();
+        if (val == '') {
+            subjectLine.css('border', '1px solid red');
+        }
+        else {
+            subjectLine.css('border', '1px solid black');
+            tooltip.hide();
+        }
     });
 
     var body = $("<textarea id='emailMessageBody' name='emailMessageBody' style='width:100%;height:120px;padding-bottom:1px' />");
     emailContainer.append(subjectLine).append("<p />").append(body);
 
-    var editor = body.ckeditor(function (textarea) {
+    var myToolbar = [
+        //{ name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'DocProps', 'Preview', 'Print', '-', 'Templates'] },
+        { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+        { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt'] },
+        //{ name: 'forms', items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'] },
+        //'/',
+        { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'/*, 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'*/] },
+        { name: 'paragraph', items: ['NumberedList', /*'BulletedList', '-', */'Outdent', 'Indent', '-', /*'Blockquote', 'CreateDiv', '-', */'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'/*, '-', 'BidiLtr', 'BidiRtl'*/]},
+        { name: 'links', items: ['Link'/*, 'Unlink', 'Anchor'*/] },
+        { name: 'insert', items: ['Image', /*'Flash', */'Table'/*, 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'*/] },
+        //'/',
+        { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+        //{ name: 'colors', items: ['TextColor'/*, 'BGColor'*/] },
+        { name: 'tools', items: ['Maximize', 'ShowBlocks'/*, '-', 'About'*/] },
+    ];
+    var config = { toolbar_defaultToolbar: myToolbar, toolbar: 'defaultToolbar', allowedContent: true };
+    var editor = body.ckeditor(config, function (textarea) {
         $(body).val(defaultBodyText);
-
         attachFilesDiv.css('display', 'block');
     });
-
+           
+    //var focusManager = new CKEDITOR.focusManager(CKEDITOR.instances.emailMessageBody);
     var firstFocus = false;
-    CKEDITOR.instances.emailMessageBody.on('focus', function () {
+    CKEDITOR.instances.emailMessageBody.on('focus', function (evt) {
         if (!firstFocus) {
             firstFocus = true;
             $(body).val('');
+    }
+
+        if (subjectLine.val() == '' || subjectLine.val() == defaultSubjectText) {
+            subjectLine.css('border', '1px solid red');
+            //CKEDITOR.instances.emailMessageBody.focusManager.blur();
+            evt.editor.focusManager.blur(true);
+            subjectLine.focus();
+            var subjectLineElement = document.getElementById('emailSubject');
+            tooltip.pop(subjectLineElement, 'Please enter a subject...', { showDelay: 1, hideDelay: 100, calloutPosition: 0.5 });
         }
     });
 
@@ -1382,7 +1419,7 @@ function createPreviewMessage(signatureData, dialog) {
     if (communicationsMode == "EMAIL") {
         var preview = generateMessageForRecord($("#emailMessageBody").val(), firstRecord);
 
-        var myToolbar = [{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] }, { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] }, { name: 'paragraph', items: ['NumberedList', 'BulletedList'] }, { name: 'links', items: ['Link', 'Unlink', 'Anchor'] }, { name: 'insert', items: ['Image', 'Flash', 'Table'] }];
+        var myToolbar = [{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] }, { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] }, { name: 'paragraph', items: ['NumberedList', 'BulletedList'] }, { name: 'links', items: ['Link', 'Unlink', 'Anchor'] }, { name: 'insert', items: ['Image', 'Flash', 'Table'] } ];
         var config = { toolbar_mySimpleToolbar: myToolbar, toolbar: 'mySimpleToolbar', allowedContent: true };
         $(textarea).ckeditor(config, function () {
             CKEDITOR.instances.previewTextarea.setReadOnly(true);
