@@ -634,7 +634,15 @@ function buildContactsBody(contacts) {
             rowIsSelected = '';
         }
 
-        var isSelectedCell = $("<td class='commTableRow30' id='comm_selected_" + rowId + "' ></td>").append($("<input type='checkbox' id='comm_selected_checkbox_" + rowId + "' name='comm_selected_checkbox_" + rowId + "' value='' " + rowIsSelected + " />"));
+        var checkboxDisabled = '';
+        if (c.SMSOptout && communicationsMode == "SMS") {
+            checkboxDisabled = 'disabled';
+        }
+        if (c.EmailOptout && communicationsMode == "EMAIL") {
+            checkboxDisabled = 'disabled';
+        }
+
+        var isSelectedCell = $("<td class='commTableRow30' id='comm_selected_" + rowId + "' ></td>").append($("<input type='checkbox' id='comm_selected_checkbox_" + rowId + "' name='comm_selected_checkbox_" + rowId + "' value='' " + rowIsSelected + " " + checkboxDisabled + " />"));
         var name = $("<td class='commTableRow' id='comm_firstname_" + rowId + "' title='" + c.Firstname + "' ></td>").append(toTitleCase(c.Firstname));
         var surname = $("<td class='commTableRow' id='comm_surname_" + rowId + "' title='" + c.Surname + "' ></td>").append(toTitleCase(c.Surname));
         var address = $("<td class='commTableRow120' id='comm_address_" + rowId + "' title='" + c.PropertyAddress + "' ></td>").append(c.PropertyAddress); // change for SS (unit no) + ordering
@@ -648,13 +656,6 @@ function buildContactsBody(contacts) {
 
         if (rowIsSelected == 'checked') {
             tr.addClass('rowSelected');
-        }
-
-        if (c.SMSOptout && communicationsMode == "SMS") {
-            isSelectedCell.first().prop("disabled", true);
-        }
-        if (c.EmailOptout && communicationsMode == "EMAIL") {
-            isSelectedCell.first().prop("disabled", true);
         }
 
         // Event handlers 
