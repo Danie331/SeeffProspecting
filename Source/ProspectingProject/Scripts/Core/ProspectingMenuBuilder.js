@@ -49,7 +49,9 @@ function createProspectingMenu(userData) {
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
+    ///// NB.:: REM TO ADJUST THESE SAME PERMISSIONS FOR POPI BOX TOO.
     if (prospectingContext.LoggedInUser == 'a2c48f98-14fb-425e-bbd2-312cfb89980c' || prospectingContext.LoggedInUser == '62a85a9d-be7a-4fad-b704-a55edb1d338f') {
+        ///// NB.:: REM TO ADJUST THESE SAME PERMISSIONS FOR POPI BOX TOO.
         menuItem = createMenuItem("Communication", "communication", buildCommunicationMenu(), handleSMSMenuItemClick, null);
         appendMenuItemContent(menuItem.MenuItemContent);
         menuItems.push(menuItem);

@@ -42,6 +42,9 @@ namespace ProspectingProject
         public string BureauAdverseIndicator { get; set; }
         public string Citizenship { get; set; }
 
+        public bool EmailOptout { get; set; }
+        public bool SMSOptout { get; set; }
+
         public IEnumerable<ProspectingContactDetail> PhoneNumbers { get; set; }
         public IEnumerable<ProspectingContactDetail> EmailAddresses { get; set; }
 

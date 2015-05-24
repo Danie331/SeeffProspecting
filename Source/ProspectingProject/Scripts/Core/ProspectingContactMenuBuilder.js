@@ -98,20 +98,39 @@ function buildExpanderWidget(contact) {
 }
 
 function buildGeneralInfoHtml(contact) {
-
     $('#contactPersonHeaderDiv').remove();
     var html = $("<div id='contactPersonHeaderDiv' />");
-    html.append("<label class='fieldAlignment'>Gender: </label>");
-    html.append(buildPersonGenderCombo());
 
-    // POPI opt-out box
+    // POPI opt-out box(es)
+    var optoutDiv = $("<div></div>");
+    var optoutFieldset = $("<fieldset style='border:1px solid gray'></fieldset>");
+    optoutFieldset.append("<legend style='padding: 0.2em 0.5em; border:1px solid gray; color:gray;font-size:90%;'>Communication</legend>");
     var checked = '';
     if (contact && contact.IsPOPIrestricted) {
         checked = 'checked';
     }
     var popiDisabledSetting = userIsProspectingManager ? '' : 'disabled';
-    html.append("<label class='fieldAlignRight' style='cursor:pointer;' title='Select this option to indicate that this person is no longer to be contacted'>POPI opt-out<input type='checkbox' name='popiCheckbox' id='popiCheckbox' style='cursor:pointer;' " + checked + " " + popiDisabledSetting + "  /></label>");
+    optoutFieldset.append("<label style='cursor:pointer;vertical-align:middle' title='Select this option to indicate that this person is no longer to be contacted'>POPI opt-out<input type='checkbox' name='popiCheckbox' id='popiCheckbox' style='cursor:pointer;vertical-align:middle;margin-right:20px' " + checked + " " + popiDisabledSetting + "  /></label>");
+    if (prospectingContext.LoggedInUser == 'a2c48f98-14fb-425e-bbd2-312cfb89980c' || prospectingContext.LoggedInUser == '62a85a9d-be7a-4fad-b704-a55edb1d338f') { // check if POPi still works
+        var emailChecked = '', emailDisabledOption = '';
+        if (contact && contact.EmailOptout) {
+            emailChecked = 'checked';
+            emailDisabledOption = 'disabled';
+        }
+        optoutFieldset.append("<label style='cursor:pointer;vertical-align:middle' title='Select this option to indicate that this person is not to be contacted by email'>Opt-out from email<input type='checkbox' name='emailOptoutCheckbox' id='emailOptoutCheckbox' style='cursor:pointer;vertical-align:middle;margin-right:20px' " + emailChecked + " " + emailDisabledOption + "  /></label>");
+        var smsChecked = '', smsDisabledOption = '';
+        if (contact && contact.SMSOptout) {
+            smsChecked = 'checked';
+            smsDisabledOption = 'disabled';
+        }
+        optoutFieldset.append("<label style='cursor:pointer;vertical-align:middle' title='Select this option to indicate that this person is not to be contacted by SMS'>Opt-out from SMS<input type='checkbox' name='smsOptoutCheckbox' id='smsOptoutCheckbox' style='cursor:pointer;vertical-align:middle;margin-right:20px' " + smsChecked + " " + smsDisabledOption + "  /></label>");
+    }
+    optoutDiv.append(optoutFieldset);
+    html.append(optoutDiv);
 
+    html.append("<br />");
+    html.append("<label class='fieldAlignment'>Gender: </label>");
+    html.append(buildPersonGenderCombo());
     html.append("<br />");
     html.append("<label class='fieldAlignment'>Title: </label>");
     html.append(buildPersonTitleCombo());
@@ -441,6 +460,8 @@ function handleSaveContactPerson(saveDetailsFunction) {
             }
             //var relType = $('#relTypesSelect').children(":selected").attr('value');
             var gender = $('#genderCheckbox').children(":selected").attr('value');
+            var emailOptout = $('#emailOptoutCheckbox').is(':checked');
+            var smsOptout = $('#smsOptoutCheckbox').is(':checked');
             // Test for existing or new contact
             if (currentPersonContact) {   // existing..
                 currentPersonContact.Title = title;
@@ -449,6 +470,9 @@ function handleSaveContactPerson(saveDetailsFunction) {
                 currentPersonContact.Fullname = firstname + ' ' + surname;
                 currentPersonContact.IdNumber = idNo;
                 currentPersonContact.IsPOPIrestricted = popiOptionSelected;
+
+                currentPersonContact.EmailOptout = emailOptout;
+                currentPersonContact.SMSOptout = smsOptout;
 
                 if (propertyRelationship) {
                     // Search for an existing relationship with property, if found modify its value
@@ -476,10 +500,10 @@ function handleSaveContactPerson(saveDetailsFunction) {
             else {
                 // Must be a new contact
                 if (propertyRelationship) {
-                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, propertyRelationship, null, null, popiOptionSelected, gender, null, null);
+                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, propertyRelationship, null, null, popiOptionSelected, gender, null, null, emailOptout, smsOptout);
                 }
                 else if (companyRelationship) {
-                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, null, null, null, popiOptionSelected, gender, companyRelationship, contactCompanyId);
+                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, null, null, null, popiOptionSelected, gender, companyRelationship, contactCompanyId, emailOptout, smsOptout);
                 }
             }
             saveContact(currentPersonContact, currentProperty, function (data) {

@@ -136,6 +136,9 @@ var tooltip = function (z) {
             }
         },
         e: function (i, d, h, f) {
+            if (!k) {
+                k = {};
+            }
             for (var a = [], g = h - d, c = Math.ceil((k.duration || 9) / 15), e, b = 1; b <= c; b++) {
                 e = d + f.c(b / c) * g;
                 a.push(e)

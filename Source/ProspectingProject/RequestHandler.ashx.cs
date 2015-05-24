@@ -35,6 +35,7 @@ namespace ProspectingProject
             request = ProspectingDomain.Deserialise<BaseDataRequestPacket>(json);
             try
             {
+                // This handles the authorisation request
                 if (request.Instruction == "load_application")
                 {
                     var loadData = LoadApplication();
@@ -42,7 +43,14 @@ namespace ProspectingProject
                     return;
                 }
 
-                // This line will ensure that the user has a valid session before continuing the request. 
+                // This handles un-authenticated requests, ie public requests
+                if (request.Instruction == "contact_optout")
+                {
+                    VerifyOptoutContact(json);
+                    return;
+                }
+
+                // This line will ensure that the user has a valid session before making any of the following requests - none should be publicly accessible. 
                 GetUserSessionObject();
                 switch (request.Instruction)
                 {
@@ -156,6 +164,19 @@ namespace ProspectingProject
                     errorJSON = ProspectingDomain.SerializeToJsonWithDefaults(errorObject);
                     context.Response.Write(errorJSON);
                 }
+            }
+        }
+
+        private void VerifyOptoutContact(string json)
+        {
+            try
+            {
+                var request = ProspectingDomain.Deserialise<ContactOptoutRequest>(json);
+                ProspectingDomain.VerifyOptoutContact(request);
+            }
+            catch
+            {
+                // We should not worry about errors that may occur here, because this method can be invoked from a public location and out-of-session.
             }
         }
 

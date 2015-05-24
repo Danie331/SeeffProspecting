@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Opt-out from receiving communications</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="Scripts/3rdParty/CrossDomainRequestPlugin.js"></script>
+
+    <script>
+        $(function () {
+            $('#close').click(function () {
+                window.open('', '_self', '');
+                window.close();
+            });
+
+            var params = getUrlVars();
+            if (params.length) {
+                var contactDetail = params["email"];
+                var contactPersonId = params["contactid"]; 
+                if (contactDetail && contactPersonId) {
+                    $('#optoutYes').click(function () {
+                        $('#optoutYes').val('Please wait...');
+
+                        $.ajax({
+                            type: "POST",
+                            url: "http://prospecting.seeff.com/RequestHandler.ashx",
+                            data: JSON.stringify({
+                                Instruction: 'contact_optout',
+                                ContactPersonId: contactPersonId,
+                                ContactDetail: contactDetail,
+                                OptoutFromWhat: 'email'
+                            }),
+                            //dataType: "json",
+                        }).done(function () {
+                            $('#youHaveOptedOut').css('display', 'block');
+                            $('#optoutYes').css('display', 'none');
+                            $('#heading').css('display', 'none');
+                        });
+                    });                    
+                }
+            }
+        });
+
+        function getUrlVars() {
+            var vars = [], hash;
+            try {
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for (var i = 0; i < hashes.length; i++) {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+            }
+            catch (e) { }
+            return vars;
+        }
+    </script>
+</head>
+<body>
+    <div style="margin-left:auto;margin-right:auto;width:500px;">
+        <p id="heading" style="font-family:Verdana">Would you like to opt-out from receiving these emails?</p>
+        <input type="button" id="optoutYes" value="Yes" style="margin-right:15px" />
+        <span id="youHaveOptedOut" style="display:none;color:red;font-family:Verdana">Your email address has been unsubscribed.</span>
+        <input type="button" id="close" value="Close this window" />
+    </div>
+</body>
+</html>

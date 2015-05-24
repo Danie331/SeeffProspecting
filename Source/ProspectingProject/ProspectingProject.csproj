@@ -879,6 +879,7 @@
     <Content Include="Scripts\3rdParty\ckeditor\plugins\about\dialogs\hidpi\logo_ckeditor.png" />
     <Content Include="Scripts\3rdParty\ckeditor\plugins\about\dialogs\logo_ckeditor.png" />
     <Content Include="Scripts\3rdParty\ckeditor\plugins\clipboard\dialogs\paste.js" />
+    <Content Include="Scripts\3rdParty\ckeditor\plugins\custom\plugin.js" />
     <Content Include="Scripts\3rdParty\ckeditor\plugins\dialog\dialogDefinition.js" />
     <Content Include="Scripts\3rdParty\ckeditor\plugins\icons.png" />
     <Content Include="Scripts\3rdParty\ckeditor\plugins\icons_hidpi.png" />
@@ -1012,6 +1013,7 @@
     <Content Include="Scripts\3rdParty\ckeditor\skins\moono\images\lock.png" />
     <Content Include="Scripts\3rdParty\ckeditor\skins\moono\images\refresh.png" />
     <Content Include="Scripts\3rdParty\ckeditor\styles.js" />
+    <Content Include="Scripts\3rdParty\CrossDomainRequestPlugin.js" />
     <Content Include="Scripts\3rdParty\mime-js\base64.js" />
     <Content Include="Scripts\3rdParty\mime-js\mime-js.js" />
     <Content Include="Scripts\3rdParty\waitForImage.js" />
@@ -1079,6 +1081,7 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="UnsubscribeCommunication.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1146,6 +1149,7 @@
     <Compile Include="Types\GeoLocation.cs" />
     <Compile Include="Types\IListing.cs" />
     <Compile Include="Types\ILocation.cs" />
+    <Compile Include="Types\JsonDataExchangeTypes\ContactOptoutRequest.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\ContactRow.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\ExistingFollowupItems.cs" />
     <Compile Include="Types\JsonDataExchangeTypes\FollowupBundle.cs" />

@@ -10,6 +10,8 @@ var uploadedFiles = [];
 
 var userEmailSignature = '';
 
+var smsOptOut = " -Reply STOP to opt-out.";
+
 function buildCommunicationMenu() {
 
     var contentDiv = $("<div class='contentdiv' id='communicationsDiv' style='padding-right:10px' />");
@@ -137,7 +139,7 @@ function buildPolyMenuItemContent() {
     var container = $("<div />");
     var iconDiv = $("<div style='display:inline-block;float:left'/>");
     iconDiv.append("<img src='Assets/poly_menu_item.png' />");
-    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Polygon");
+    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Shape");
 
     return container.append(iconDiv).append(textDiv);
 }
@@ -146,7 +148,7 @@ function buildRemovePolyMenuItemContent() {
     var container = $("<div />");
     var iconDiv = $("<div style='display:inline-block;float:left'/>");
     iconDiv.append("<img src='Assets/poly_menu_remove.png' />");
-    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Clear Polygons");
+    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Remove Shapes");
 
     return container.append(iconDiv).append(textDiv);
 }
@@ -281,23 +283,23 @@ function buildEmailContentContainer() {
     var body = $("<textarea id='emailMessageBody' name='emailMessageBody' style='width:100%;height:120px;padding-bottom:1px' />");
     emailContainer.append(subjectLine).append("<p />").append(body);
 
-    var myToolbar = [
-        //{ name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'DocProps', 'Preview', 'Print', '-', 'Templates'] },
-        { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
-        { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt'] },
-        //{ name: 'forms', items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'] },
-        //'/',
-        { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'/*, 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'*/] },
-        { name: 'paragraph', items: ['NumberedList', /*'BulletedList', '-', */'Outdent', 'Indent', '-', /*'Blockquote', 'CreateDiv', '-', */'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'/*, '-', 'BidiLtr', 'BidiRtl'*/]},
-        { name: 'links', items: ['Link'/*, 'Unlink', 'Anchor'*/] },
-        { name: 'insert', items: ['Image', /*'Flash', */'Table'/*, 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'*/] },
-        //'/',
-        { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
-        //{ name: 'colors', items: ['TextColor'/*, 'BGColor'*/] },
-        { name: 'tools', items: ['Maximize', 'ShowBlocks'/*, '-', 'About'*/] },
-    ];
-    var config = { toolbar_defaultToolbar: myToolbar, toolbar: 'defaultToolbar', allowedContent: true };
-    var editor = body.ckeditor(config, function (textarea) {
+    //var myToolbar = [
+    //    //{ name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'DocProps', 'Preview', 'Print', '-', 'Templates'] },
+    //    { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+    //    { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt'] },
+    //    //{ name: 'forms', items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'] },
+    //    //'/',
+    //    { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'/*, 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'*/] },
+    //    { name: 'paragraph', items: ['NumberedList', /*'BulletedList', '-', */'Outdent', 'Indent', '-', /*'Blockquote', 'CreateDiv', '-', */'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'/*, '-', 'BidiLtr', 'BidiRtl'*/]},
+    //    { name: 'links', items: ['Link'/*, 'Unlink', 'Anchor'*/] },
+    //    { name: 'insert', items: ['Image', /*'Flash', */'Table'/*, 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'*/] },
+    //    //'/',
+    //    { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+    //    //{ name: 'colors', items: ['TextColor'/*, 'BGColor'*/] },
+    //    { name: 'tools', items: ['Maximize', 'ShowBlocks'/*, '-', 'About'*/, 'custom'] },
+    //];
+    //var config = { toolbar_defaultToolbar: myToolbar, toolbar: 'defaultToolbar', allowedContent: true };
+    var editor = body.ckeditor(/*config,*/ function (textarea) {
         $(body).val(defaultBodyText);
         attachFilesDiv.css('display', 'block');
     });
@@ -316,7 +318,9 @@ function buildEmailContentContainer() {
             evt.editor.focusManager.blur(true);
             subjectLine.focus();
             var subjectLineElement = document.getElementById('emailSubject');
-            tooltip.pop(subjectLineElement, 'Please enter a subject...', { showDelay: 1, hideDelay: 100, calloutPosition: 0.5 });
+            try {
+                tooltip.pop(subjectLineElement, 'Please enter a subject...', { showDelay: 1, hideDelay: 100, calloutPosition: 0.5 });
+            } catch (e) { }
         }
     });
 
@@ -448,12 +452,12 @@ function updateCostOfBatchSMS() {
     var smsLen = prospectingContext.SMSLength;
 
     var commSelectedRows = $('#commContactsTable tr.rowSelected').length;
-    var numChars = $("#smsMessageContainer").val().trim().length;
+    var numChars = $("#smsMessageContainer").val().trim().length + smsOptOut.length;
     var c1 = numChars / smsLen;
     var c2 = Math.ceil(c1);
     var calc = c2 * smsCost * commSelectedRows;
 
-    var labelContainer = $("<div style='font-size:12px' />").append("Cost of batch (R " + smsCost + " per " + smsLen + " characters): R " + (calc / 100));
+    var labelContainer = $("<div style='font-size:12px' />").append("Cost of batch (R " + prospectingContext.SMSCost + " per " + smsLen + " characters): R " + (calc / 100));
     
     var commCostOfBatch = $('#commCostOfBatch');
     commCostOfBatch.empty();
@@ -485,13 +489,19 @@ function buildContactsBody(contacts) {
         var tr = $("<tr id='comm_row_" + rowId + "' ></tr>");
 
         var contactDetailContent, contactDetailTitle = '', actionStatus = 'Ready';
+        var rowIsSelected = 'checked';
         if (c.EmailSent) {
             actionStatus = 'Sent';
         }
         if (c.SendError) {
             actionStatus = 'Error';
         }
-        var rowIsSelected = 'checked';
+        if (c.SMSOptout && communicationsMode == "SMS") {
+            actionStatus = 'Opt-out';
+        }
+        if (c.EmailOptout && communicationsMode == "EMAIL") {
+            actionStatus = 'Opt-out';
+        }
         if (communicationsMode == "SMS") {
             // Find a cell nr marked as the default
             var defaultCell;
@@ -617,6 +627,13 @@ function buildContactsBody(contacts) {
                 tr.css('background-color', '#FFEB99');
             }
         }
+        if (c.SMSOptout && communicationsMode == "SMS") {
+            rowIsSelected = '';
+        }
+        if (c.EmailOptout && communicationsMode == "EMAIL") {
+            rowIsSelected = '';
+        }
+
         var isSelectedCell = $("<td class='commTableRow30' id='comm_selected_" + rowId + "' ></td>").append($("<input type='checkbox' id='comm_selected_checkbox_" + rowId + "' name='comm_selected_checkbox_" + rowId + "' value='' " + rowIsSelected + " />"));
         var name = $("<td class='commTableRow' id='comm_firstname_" + rowId + "' title='" + c.Firstname + "' ></td>").append(toTitleCase(c.Firstname));
         var surname = $("<td class='commTableRow' id='comm_surname_" + rowId + "' title='" + c.Surname + "' ></td>").append(toTitleCase(c.Surname));
@@ -631,6 +648,13 @@ function buildContactsBody(contacts) {
 
         if (rowIsSelected == 'checked') {
             tr.addClass('rowSelected');
+        }
+
+        if (c.SMSOptout && communicationsMode == "SMS") {
+            isSelectedCell.first().prop("disabled", true);
+        }
+        if (c.EmailOptout && communicationsMode == "EMAIL") {
+            isSelectedCell.first().prop("disabled", true);
         }
 
         // Event handlers 
@@ -860,11 +884,12 @@ function sendSMS() {
         var contact = getContactFromId(contactId);
         contact.SendError = null;
 
+        var message = generateMessageForRecord($("#smsMessageContainer").val().trim(), contact) + createUnSubscribeOption();
         recipients.push({
             ContactpersonId: contactId,
             ProspectingPropertyId: contact.TargetCommPropertyId,
             TargetCellNo: getDefaultCellNo(contact),
-            Message: generateMessageForRecord($("#smsMessageContainer").val().trim(), contact)
+            Message: message
         });
     });
 
@@ -1127,7 +1152,7 @@ function sendEmailMessage() {
             contact.TargetEmailAddress = address;
             try {
                 var emailMsg = generateMessageForRecord($('#emailMessageBody').val(), contact);
-                emailMsg += '<br />' + userEmailSignature;
+                emailMsg += '<br />' + userEmailSignature + '<p />' + createUnSubscribeOption(contact);
 
                 emailObject = generateEmailObjectBase64(subjectText, emailMsg, address);
                 contact.TargetEmailObject = emailObject;
@@ -1406,6 +1431,18 @@ function handleCommSendBtnClick() {
             });                   
 }
 
+function createUnSubscribeOption(contact) {
+    if (communicationsMode == "SMS") {
+        return smsOptOut;
+    }
+    if (communicationsMode == "EMAIL") {
+        var email = getDefaulEmailAddress(contact);
+        var link = 'http://prospecting.seeff.com/UnsubscribeCommunication.html?email=' + email + '&contactid=' + contact.ContactPersonId;
+        var unsubscribeOption = "<br /><br /><br /><a href='" + link + "' target='_blank'>Unsubscribe</a>";
+        return unsubscribeOption;
+    }
+}
+
 function createPreviewMessage(signatureData, dialog) {
     var div = $("<div id='previewMsgDiv' />");
     var textarea = $("<textarea id='previewTextarea' style='width:100%;height:80px;' />");
@@ -1433,7 +1470,7 @@ function createPreviewMessage(signatureData, dialog) {
                 CKEDITOR.instances.previewTextarea.setData(signatureData);
             }
             else {
-                CKEDITOR.instances.previewTextarea.setData(preview + '<br />' + signatureData);
+                CKEDITOR.instances.previewTextarea.setData(preview + '<br />' + signatureData + '<p />' + createUnSubscribeOption(firstRecord));
             }
             dialog.dialog({ position: ['center', 'center'] });
             CKEDITOR.instances.previewTextarea.setReadOnly(true);
@@ -1441,7 +1478,7 @@ function createPreviewMessage(signatureData, dialog) {
     }
     if (communicationsMode == "SMS") {
         var previewText = generateMessageForRecord($("#smsMessageContainer").val(), firstRecord);
-        textarea.val(previewText);
+        textarea.val(previewText + createUnSubscribeOption());
         textarea.attr('readonly', 'readonly');
     }
 

@@ -14,16 +14,17 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'links' },
 		{ name: 'insert' },
-		{ name: 'forms' },
-		{ name: 'tools' },
-		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
-		{ name: 'others' },
-		'/',
-		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+		//{ name: 'forms' },
+		//{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
+		//{ name: 'others' },
+		//'/',
+		{ name: 'basicstyles', groups: [ 'basicstyles'/*, 'cleanup'*/ ] },
 		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
 		{ name: 'styles' },
-		{ name: 'colors' },
-		{ name: 'about' }
+        		{ name: 'tools' },
+                { name: 'InsertTag' }
+		//{ name: 'colors' },
+		//{ name: 'about' }
 	];
 
 	// Remove some buttons provided by the standard plugins, which are
@@ -36,5 +37,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 
-	config.extraPlugins = 'imagepaste';
+	config.extraPlugins = 'custom';
+
+	config.enterMode = CKEDITOR.ENTER_BR;
 };

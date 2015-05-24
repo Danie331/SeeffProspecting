@@ -27,7 +27,9 @@ function newPersonContact(firstname,
                             employer,
                             occupation ,
                             bureauAdverseIndicator,
-                            citizenship) {
+                            citizenship,
+                            emailOptout,
+                            smsOptout) {
 
     var personPropertyRelationships = [];
     if (propRelationshipType != null) {
@@ -58,7 +60,9 @@ function newPersonContact(firstname,
         Employer: employer,
         Occupation: occupation,
         BureauAdverseIndicator: bureauAdverseIndicator,
-        Citizenship: citizenship
+        Citizenship: citizenship,
+        EmailOptout: emailOptout,
+        SMSOptout: smsOptout
     };
 }
 

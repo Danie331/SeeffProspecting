@@ -369,7 +369,9 @@ namespace ProspectingProject
                       PhysicalAddress = pcp.physical_address,
                       HomeOwnership = pcp.home_ownership,
                       MaritalStatus = pcp.marital_status,
-                      Location = pcp.location
+                      Location = pcp.location,
+                       EmailOptout = pcp.optout_emails,
+                       SMSOptout = pcp.optout_sms
                   };
 
                 contactPerson.PhoneNumbers = ProspectingStaticData.PropertyContactPhoneNumberRetriever(prospecting, contactPerson).ToList();
@@ -780,6 +782,9 @@ namespace ProspectingProject
                    contact.bureau_adverse_indicator = incomingContact.BureauAdverseIndicator;
                    contact.citizenship = incomingContact.Citizenship;
 
+                    contact.optout_emails = incomingContact.EmailOptout;
+                    contact.optout_sms = incomingContact.SMSOptout;
+
                     if (dataPacket.ContactCompanyId.HasValue)
                     {
                         // This contact has a relationship with a company as opposed to a property
@@ -946,6 +951,8 @@ namespace ProspectingProject
                             bureau_adverse_indicator = incomingContact.BureauAdverseIndicator,
                             citizenship = incomingContact.Citizenship,
                             is_popi_restricted = incomingContact.IsPOPIrestricted,
+                            optout_emails = incomingContact.EmailOptout,
+                            optout_sms = incomingContact.SMSOptout,
                         };
                         prospecting.prospecting_contact_persons.InsertOnSubmit(newContact);
                         prospecting.SubmitChanges();
@@ -1244,6 +1251,9 @@ namespace ProspectingProject
                         Occupation = existingContactWithDetail.occupation,
                         BureauAdverseIndicator = existingContactWithDetail.bureau_adverse_indicator,
                         Citizenship = existingContactWithDetail.citizenship,
+
+                         EmailOptout = existingContactWithDetail.optout_emails,
+                         SMSOptout = existingContactWithDetail.optout_sms,
 
                         PhoneNumbers = (from det in prospecting.prospecting_contact_details
                                         where det.contact_person_id == existingContactWithDetail.contact_person_id
@@ -1682,6 +1692,9 @@ namespace ProspectingProject
                                            Gender = cc.person_gender,
                                            Comments = cc.comments_notes,
                                            IsPOPIrestricted = cc.is_popi_restricted,
+
+                                           EmailOptout = cc.optout_emails,
+                                           SMSOptout = cc.optout_sms,
 
                                            // In due course may need to add the Dracore fields here
 
@@ -2360,6 +2373,36 @@ namespace ProspectingProject
                     long activityId = UpdateInsertActivity(newEmailMessageActivity);
                     createCommunicationLogRecord(activityId);
                 }
+            }
+        }
+
+        public static void VerifyOptoutContact(ContactOptoutRequest request)
+        {
+            using (var prospectingContext = new ProspectingDataContext())
+            {
+                // To verify this request we need to compare the ContactPersonId and ContactDetail in the request to a valid contact person in the database
+
+                var contactPersons = from cd in prospectingContext.prospecting_contact_details
+                                     where cd.contact_detail == request.ContactDetail
+                                     select cd.prospecting_contact_person;
+                var contactPersonIDs = contactPersons.Select(cp => cp.contact_person_id);
+
+                if (contactPersonIDs.Any(c => c == request.ContactPersonId))
+                {
+                    foreach (var contactPerson in contactPersons)
+                    {
+                        switch (request.OptoutFromWhat)
+                        {
+                            case "email":
+                                contactPerson.optout_emails = true;
+                                break;
+                            case "sms":
+                                contactPerson.optout_sms = true;
+                                break;
+                        }
+                    }
+                    prospectingContext.SubmitChanges();
+                }                
             }
         }
     }

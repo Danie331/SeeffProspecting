@@ -67,6 +67,8 @@ namespace ProspectingProject
                                                                                                                                                             Comments = pcp.comments_notes,
                                                                                                                                                             IsPOPIrestricted = pcp.is_popi_restricted,
                                                                                                                                                             PropertiesOwned = loadOwnedProperties ? ProspectingDomain.LoadPropertiesOwnedByThisContact(pcp.id_number, ctx) : null,
+                                                                                                                                                            EmailOptout = pcp.optout_emails,
+                                                                                                                                                            SMSOptout = pcp.optout_sms,
 
                                                                                                                                                             // Dracore fields
                                                                                                                                                             AgeGroup = pcp.age_group,
@@ -99,6 +101,8 @@ namespace ProspectingProject
                                                 Comments = pcp.comments_notes,
                                                 IsPOPIrestricted = pcp.is_popi_restricted,
                                                 PropertiesOwned = loadOwnedProperties ? ProspectingDomain.LoadPropertiesOwnedByThisContact(pcp.id_number, ctx) : null,
+                                                EmailOptout = pcp.optout_emails,
+                                                SMSOptout = pcp.optout_sms,
 
                                                 // Dracore fields
                                                 AgeGroup = pcp.age_group,
