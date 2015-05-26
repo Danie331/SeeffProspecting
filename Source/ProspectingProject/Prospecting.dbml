@@ -190,6 +190,7 @@
       <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="is_system_type" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="activity_type_activity_log" Member="activity_logs" ThisKey="activity_type_id" OtherKey="activity_type_id" Type="activity_log" />
+      <Association Name="activity_type_system_communication_template" Member="system_communication_templates" ThisKey="activity_type_id" OtherKey="activity_type_id" Type="system_communication_template" />
     </Type>
   </Table>
   <Table Name="dbo.activity_log" Member="activity_logs">
@@ -352,6 +353,29 @@
       <Association Name="prospecting_contact_person_activity_log" Member="activity_logs" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="activity_log" />
       <Association Name="prospecting_contact_person_communications_log" Member="communications_logs" ThisKey="contact_person_id" OtherKey="target_contact_person_id" Type="communications_log" />
       <Association Name="prospecting_person_title_prospecting_contact_person" Member="prospecting_person_title" ThisKey="person_title" OtherKey="prospecting_person_title_id" Type="prospecting_person_title" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.user_communication_template" Member="user_communication_templates">
+    <Type Name="user_communication_template">
+      <Column Name="user_communication_template_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="created_by" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="created_date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="updated_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="template_content" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="template_name" Type="System.String" DbType="VarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="communication_type" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="deleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.system_communication_template" Member="system_communication_templates">
+    <Type Name="system_communication_template">
+      <Column Name="system_communication_template_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="activity_type_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="template_content" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="template_name" Type="System.String" DbType="VarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="communication_type" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="activity_type_system_communication_template" Member="activity_type" ThisKey="activity_type_id" OtherKey="activity_type_id" Type="activity_type" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.find_area_id" Method="find_area_id">

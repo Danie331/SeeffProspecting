@@ -35,7 +35,7 @@ namespace ProspectingProject
             _results.EnquirySuccessful = true;
             _results.IdNumber = _inputData.LightstoneIDOrCKNo;
             // Check #1: Check if the ID number is valid, ie 13 digits and convertible to a long.
-            if (!ProspectingDomain.IsValidIDNumber(_results.IdNumber))
+            if (!ProspectingCore.IsValidIDNumber(_results.IdNumber))
             {
                 _results.EnquirySuccessful = false;
                 _results.ErrorMsg = "Invalid ID number specified.";
@@ -83,7 +83,7 @@ namespace ProspectingProject
             _results.OwnerSurname = purgeField(dracoreResult.SURNAME);
             _results.DeceasedStatus = purgeField(dracoreResult.DECEASED_STATUS);
             _results.Citizenship = purgeField(dracoreResult.CITIZENSHIP);
-            _results.OwnerGender = ProspectingDomain.DetermineOwnerGender(_results.IdNumber);
+            _results.OwnerGender = ProspectingCore.DetermineOwnerGender(_results.IdNumber);
             _results.AgeGroup = purgeField(dracoreResult.AGE_GROUP);
             _results.Location = purgeField(dracoreResult.LOCATION);
             _results.MaritalStatus = purgeField(dracoreResult.MARITAL_STATUS1);
@@ -92,9 +92,9 @@ namespace ProspectingProject
             _results.PhysicalAddress = purgeField(dracoreResult.PHYSICALADDR1);
 
             // Add the contact rows
-            string cellPhone = ProspectingDomain.GetContactNumber(dracoreResult.CELL_1);
-            string homePhone = ProspectingDomain.GetContactNumber(dracoreResult.HOME_1);
-            string workPhone = ProspectingDomain.GetContactNumber(dracoreResult.WORK_1);
+            string cellPhone = ProspectingCore.GetContactNumber(dracoreResult.CELL_1);
+            string homePhone = ProspectingCore.GetContactNumber(dracoreResult.HOME_1);
+            string workPhone = ProspectingCore.GetContactNumber(dracoreResult.WORK_1);
 
             // Business rule: we do not pay if the record does not contain any contact information, we must therefore fail the enquiry
             if (new[] { cellPhone, homePhone, workPhone }.All(item => string.IsNullOrWhiteSpace(item)))

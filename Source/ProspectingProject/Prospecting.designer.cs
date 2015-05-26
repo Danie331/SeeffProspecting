@@ -102,6 +102,12 @@ namespace ProspectingProject
     partial void Insertprospecting_contact_person(prospecting_contact_person instance);
     partial void Updateprospecting_contact_person(prospecting_contact_person instance);
     partial void Deleteprospecting_contact_person(prospecting_contact_person instance);
+    partial void Insertuser_communication_template(user_communication_template instance);
+    partial void Updateuser_communication_template(user_communication_template instance);
+    partial void Deleteuser_communication_template(user_communication_template instance);
+    partial void Insertsystem_communication_template(system_communication_template instance);
+    partial void Updatesystem_communication_template(system_communication_template instance);
+    partial void Deletesystem_communication_template(system_communication_template instance);
     #endregion
 		
 		public ProspectingDataContext() : 
@@ -323,6 +329,22 @@ namespace ProspectingProject
 			get
 			{
 				return this.GetTable<prospecting_contact_person>();
+			}
+		}
+		
+		public System.Data.Linq.Table<user_communication_template> user_communication_templates
+		{
+			get
+			{
+				return this.GetTable<user_communication_template>();
+			}
+		}
+		
+		public System.Data.Linq.Table<system_communication_template> system_communication_templates
+		{
+			get
+			{
+				return this.GetTable<system_communication_template>();
 			}
 		}
 		
@@ -4127,6 +4149,8 @@ namespace ProspectingProject
 		
 		private EntitySet<activity_log> _activity_logs;
 		
+		private EntitySet<system_communication_template> _system_communication_templates;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -4144,6 +4168,7 @@ namespace ProspectingProject
 		public activity_type()
 		{
 			this._activity_logs = new EntitySet<activity_log>(new Action<activity_log>(this.attach_activity_logs), new Action<activity_log>(this.detach_activity_logs));
+			this._system_communication_templates = new EntitySet<system_communication_template>(new Action<system_communication_template>(this.attach_system_communication_templates), new Action<system_communication_template>(this.detach_system_communication_templates));
 			OnCreated();
 		}
 		
@@ -4240,6 +4265,19 @@ namespace ProspectingProject
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="activity_type_system_communication_template", Storage="_system_communication_templates", ThisKey="activity_type_id", OtherKey="activity_type_id")]
+		public EntitySet<system_communication_template> system_communication_templates
+		{
+			get
+			{
+				return this._system_communication_templates;
+			}
+			set
+			{
+				this._system_communication_templates.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -4267,6 +4305,18 @@ namespace ProspectingProject
 		}
 		
 		private void detach_activity_logs(activity_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.activity_type = null;
+		}
+		
+		private void attach_system_communication_templates(system_communication_template entity)
+		{
+			this.SendPropertyChanging();
+			entity.activity_type = this;
+		}
+		
+		private void detach_system_communication_templates(system_communication_template entity)
 		{
 			this.SendPropertyChanging();
 			entity.activity_type = null;
@@ -8023,6 +8073,459 @@ namespace ProspectingProject
 		{
 			this.SendPropertyChanging();
 			entity.prospecting_contact_person = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.user_communication_template")]
+	public partial class user_communication_template : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _user_communication_template_id;
+		
+		private System.Guid _created_by;
+		
+		private System.DateTime _created_date;
+		
+		private System.Nullable<System.DateTime> _updated_date;
+		
+		private string _template_content;
+		
+		private string _template_name;
+		
+		private string _communication_type;
+		
+		private bool _deleted;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onuser_communication_template_idChanging(int value);
+    partial void Onuser_communication_template_idChanged();
+    partial void Oncreated_byChanging(System.Guid value);
+    partial void Oncreated_byChanged();
+    partial void Oncreated_dateChanging(System.DateTime value);
+    partial void Oncreated_dateChanged();
+    partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_dateChanged();
+    partial void Ontemplate_contentChanging(string value);
+    partial void Ontemplate_contentChanged();
+    partial void Ontemplate_nameChanging(string value);
+    partial void Ontemplate_nameChanged();
+    partial void Oncommunication_typeChanging(string value);
+    partial void Oncommunication_typeChanged();
+    partial void OndeletedChanging(bool value);
+    partial void OndeletedChanged();
+    #endregion
+		
+		public user_communication_template()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_communication_template_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int user_communication_template_id
+		{
+			get
+			{
+				return this._user_communication_template_id;
+			}
+			set
+			{
+				if ((this._user_communication_template_id != value))
+				{
+					this.Onuser_communication_template_idChanging(value);
+					this.SendPropertyChanging();
+					this._user_communication_template_id = value;
+					this.SendPropertyChanged("user_communication_template_id");
+					this.Onuser_communication_template_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_by", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid created_by
+		{
+			get
+			{
+				return this._created_by;
+			}
+			set
+			{
+				if ((this._created_by != value))
+				{
+					this.Oncreated_byChanging(value);
+					this.SendPropertyChanging();
+					this._created_by = value;
+					this.SendPropertyChanged("created_by");
+					this.Oncreated_byChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_date", DbType="DateTime NOT NULL")]
+		public System.DateTime created_date
+		{
+			get
+			{
+				return this._created_date;
+			}
+			set
+			{
+				if ((this._created_date != value))
+				{
+					this.Oncreated_dateChanging(value);
+					this.SendPropertyChanging();
+					this._created_date = value;
+					this.SendPropertyChanged("created_date");
+					this.Oncreated_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_date", DbType="DateTime")]
+		public System.Nullable<System.DateTime> updated_date
+		{
+			get
+			{
+				return this._updated_date;
+			}
+			set
+			{
+				if ((this._updated_date != value))
+				{
+					this.Onupdated_dateChanging(value);
+					this.SendPropertyChanging();
+					this._updated_date = value;
+					this.SendPropertyChanged("updated_date");
+					this.Onupdated_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_template_content", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string template_content
+		{
+			get
+			{
+				return this._template_content;
+			}
+			set
+			{
+				if ((this._template_content != value))
+				{
+					this.Ontemplate_contentChanging(value);
+					this.SendPropertyChanging();
+					this._template_content = value;
+					this.SendPropertyChanged("template_content");
+					this.Ontemplate_contentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_template_name", DbType="VarChar(1000) NOT NULL", CanBeNull=false)]
+		public string template_name
+		{
+			get
+			{
+				return this._template_name;
+			}
+			set
+			{
+				if ((this._template_name != value))
+				{
+					this.Ontemplate_nameChanging(value);
+					this.SendPropertyChanging();
+					this._template_name = value;
+					this.SendPropertyChanged("template_name");
+					this.Ontemplate_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_communication_type", DbType="VarChar(5) NOT NULL", CanBeNull=false)]
+		public string communication_type
+		{
+			get
+			{
+				return this._communication_type;
+			}
+			set
+			{
+				if ((this._communication_type != value))
+				{
+					this.Oncommunication_typeChanging(value);
+					this.SendPropertyChanging();
+					this._communication_type = value;
+					this.SendPropertyChanged("communication_type");
+					this.Oncommunication_typeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_deleted", DbType="Bit NOT NULL")]
+		public bool deleted
+		{
+			get
+			{
+				return this._deleted;
+			}
+			set
+			{
+				if ((this._deleted != value))
+				{
+					this.OndeletedChanging(value);
+					this.SendPropertyChanging();
+					this._deleted = value;
+					this.SendPropertyChanged("deleted");
+					this.OndeletedChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.system_communication_template")]
+	public partial class system_communication_template : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _system_communication_template_id;
+		
+		private int _activity_type_id;
+		
+		private string _template_content;
+		
+		private string _template_name;
+		
+		private string _communication_type;
+		
+		private bool _active;
+		
+		private EntityRef<activity_type> _activity_type;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onsystem_communication_template_idChanging(int value);
+    partial void Onsystem_communication_template_idChanged();
+    partial void Onactivity_type_idChanging(int value);
+    partial void Onactivity_type_idChanged();
+    partial void Ontemplate_contentChanging(string value);
+    partial void Ontemplate_contentChanged();
+    partial void Ontemplate_nameChanging(string value);
+    partial void Ontemplate_nameChanged();
+    partial void Oncommunication_typeChanging(string value);
+    partial void Oncommunication_typeChanged();
+    partial void OnactiveChanging(bool value);
+    partial void OnactiveChanged();
+    #endregion
+		
+		public system_communication_template()
+		{
+			this._activity_type = default(EntityRef<activity_type>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_system_communication_template_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int system_communication_template_id
+		{
+			get
+			{
+				return this._system_communication_template_id;
+			}
+			set
+			{
+				if ((this._system_communication_template_id != value))
+				{
+					this.Onsystem_communication_template_idChanging(value);
+					this.SendPropertyChanging();
+					this._system_communication_template_id = value;
+					this.SendPropertyChanged("system_communication_template_id");
+					this.Onsystem_communication_template_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_activity_type_id", DbType="Int NOT NULL")]
+		public int activity_type_id
+		{
+			get
+			{
+				return this._activity_type_id;
+			}
+			set
+			{
+				if ((this._activity_type_id != value))
+				{
+					if (this._activity_type.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onactivity_type_idChanging(value);
+					this.SendPropertyChanging();
+					this._activity_type_id = value;
+					this.SendPropertyChanged("activity_type_id");
+					this.Onactivity_type_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_template_content", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string template_content
+		{
+			get
+			{
+				return this._template_content;
+			}
+			set
+			{
+				if ((this._template_content != value))
+				{
+					this.Ontemplate_contentChanging(value);
+					this.SendPropertyChanging();
+					this._template_content = value;
+					this.SendPropertyChanged("template_content");
+					this.Ontemplate_contentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_template_name", DbType="VarChar(1000) NOT NULL", CanBeNull=false)]
+		public string template_name
+		{
+			get
+			{
+				return this._template_name;
+			}
+			set
+			{
+				if ((this._template_name != value))
+				{
+					this.Ontemplate_nameChanging(value);
+					this.SendPropertyChanging();
+					this._template_name = value;
+					this.SendPropertyChanged("template_name");
+					this.Ontemplate_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_communication_type", DbType="VarChar(5) NOT NULL", CanBeNull=false)]
+		public string communication_type
+		{
+			get
+			{
+				return this._communication_type;
+			}
+			set
+			{
+				if ((this._communication_type != value))
+				{
+					this.Oncommunication_typeChanging(value);
+					this.SendPropertyChanging();
+					this._communication_type = value;
+					this.SendPropertyChanged("communication_type");
+					this.Oncommunication_typeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_active", DbType="Bit NOT NULL")]
+		public bool active
+		{
+			get
+			{
+				return this._active;
+			}
+			set
+			{
+				if ((this._active != value))
+				{
+					this.OnactiveChanging(value);
+					this.SendPropertyChanging();
+					this._active = value;
+					this.SendPropertyChanged("active");
+					this.OnactiveChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="activity_type_system_communication_template", Storage="_activity_type", ThisKey="activity_type_id", OtherKey="activity_type_id", IsForeignKey=true)]
+		public activity_type activity_type
+		{
+			get
+			{
+				return this._activity_type.Entity;
+			}
+			set
+			{
+				activity_type previousValue = this._activity_type.Entity;
+				if (((previousValue != value) 
+							|| (this._activity_type.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._activity_type.Entity = null;
+						previousValue.system_communication_templates.Remove(this);
+					}
+					this._activity_type.Entity = value;
+					if ((value != null))
+					{
+						value.system_communication_templates.Add(this);
+						this._activity_type_id = value.activity_type_id;
+					}
+					else
+					{
+						this._activity_type_id = default(int);
+					}
+					this.SendPropertyChanged("activity_type");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

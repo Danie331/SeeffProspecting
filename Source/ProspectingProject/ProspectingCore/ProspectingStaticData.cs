@@ -57,7 +57,7 @@ namespace ProspectingProject
                                                                                                                                                         select new ProspectingContactPerson
                                                                                                                                                         {
                                                                                                                                                             ContactPersonId = ppr.contact_person_id,
-                                                                                                                                                            PersonPropertyRelationships = ProspectingDomain.LoadPersonPropertyRelationships(ctx, ppr.contact_person_id),// ppr.relationship_to_property,
+                                                                                                                                                            PersonPropertyRelationships = ProspectingCore.LoadPersonPropertyRelationships(ctx, ppr.contact_person_id),// ppr.relationship_to_property,
                                                                                                                                                             PersonCompanyRelationshipType = null,
                                                                                                                                                             Firstname = pcp.firstname,
                                                                                                                                                             Surname = pcp.surname,
@@ -66,7 +66,7 @@ namespace ProspectingProject
                                                                                                                                                             Gender = pcp.person_gender,
                                                                                                                                                             Comments = pcp.comments_notes,
                                                                                                                                                             IsPOPIrestricted = pcp.is_popi_restricted,
-                                                                                                                                                            PropertiesOwned = loadOwnedProperties ? ProspectingDomain.LoadPropertiesOwnedByThisContact(pcp.id_number, ctx) : null,
+                                                                                                                                                            PropertiesOwned = loadOwnedProperties ? ProspectingCore.LoadPropertiesOwnedByThisContact(pcp.id_number, ctx) : null,
                                                                                                                                                             EmailOptout = pcp.optout_emails,
                                                                                                                                                             SMSOptout = pcp.optout_sms,
 
@@ -100,7 +100,7 @@ namespace ProspectingProject
                                                 Gender = pcp.person_gender,
                                                 Comments = pcp.comments_notes,
                                                 IsPOPIrestricted = pcp.is_popi_restricted,
-                                                PropertiesOwned = loadOwnedProperties ? ProspectingDomain.LoadPropertiesOwnedByThisContact(pcp.id_number, ctx) : null,
+                                                PropertiesOwned = loadOwnedProperties ? ProspectingCore.LoadPropertiesOwnedByThisContact(pcp.id_number, ctx) : null,
                                                 EmailOptout = pcp.optout_emails,
                                                 SMSOptout = pcp.optout_sms,
 

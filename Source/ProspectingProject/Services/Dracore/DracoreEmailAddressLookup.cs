@@ -35,7 +35,7 @@ namespace ProspectingProject
             _results.EnquirySuccessful = true;
             _results.IdNumber = _inputData.LightstoneIDOrCKNo;
             // Check #1: Check if the ID number is valid, ie 13 digits and convertible to a long.
-            if (!ProspectingDomain.IsValidIDNumber(_results.IdNumber))
+            if (!ProspectingCore.IsValidIDNumber(_results.IdNumber))
             {
                 _results.EnquirySuccessful = false;
                 _results.ErrorMsg = "Invalid ID number specified.";
@@ -70,7 +70,7 @@ namespace ProspectingProject
             }
 
             // Now process the results
-            _results.OwnerGender = ProspectingDomain.DetermineOwnerGender(_results.IdNumber);
+            _results.OwnerGender = ProspectingCore.DetermineOwnerGender(_results.IdNumber);
 
             // Add the contact rows
             string email = dracoreResult.EMAIL_1;

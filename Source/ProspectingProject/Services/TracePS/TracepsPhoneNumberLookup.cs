@@ -26,7 +26,7 @@ namespace ProspectingProject
         {
             _results = results;
             _results.IdNumber = _inputData.LightstoneIDOrCKNo;
-            _results.OwnerGender = ProspectingDomain.DetermineOwnerGender(_inputData.LightstoneIDOrCKNo);
+            _results.OwnerGender = ProspectingCore.DetermineOwnerGender(_inputData.LightstoneIDOrCKNo);
             _results.LookupType = ProspectingStaticData.TracePSEnquiryRequest;
         }
 
@@ -43,7 +43,7 @@ namespace ProspectingProject
             _results.EnquirySuccessful = true;
             _results.IdNumber = _inputData.LightstoneIDOrCKNo;
             // Check #1: Check if the ID number is valid, ie 13 digits and convertible to a long.
-            if (!ProspectingDomain.IsValidIDNumber(_results.IdNumber))
+            if (!ProspectingCore.IsValidIDNumber(_results.IdNumber))
             {
                 _results.EnquirySuccessful = false;
                 _results.ErrorMsg = "Invalid ID number specified.";

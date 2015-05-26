@@ -32,7 +32,7 @@ namespace ProspectingProject
             {
                 json = HttpUtility.UrlDecode(context.Request.Form[0]);
             }
-            request = ProspectingDomain.Deserialise<BaseDataRequestPacket>(json);
+            request = ProspectingCore.Deserialise<BaseDataRequestPacket>(json);
             try
             {
                 // This handles the authorisation request
@@ -142,7 +142,7 @@ namespace ProspectingProject
                 if (ex is UserSessionExpiredException)
                 {
                     var sessionExpired = new { SessionExpired = true };
-                    errorJSON = ProspectingDomain.SerializeToJsonWithDefaults(sessionExpired);
+                    errorJSON = ProspectingCore.SerializeToJsonWithDefaults(sessionExpired);
                     context.Response.Write(errorJSON);
                 }
                 else
@@ -161,7 +161,7 @@ namespace ProspectingProject
                         prospectingDb.SubmitChanges();
                     }
                     var errorObject = new { ErrorMessage = ex.Message };
-                    errorJSON = ProspectingDomain.SerializeToJsonWithDefaults(errorObject);
+                    errorJSON = ProspectingCore.SerializeToJsonWithDefaults(errorObject);
                     context.Response.Write(errorJSON);
                 }
             }
@@ -171,8 +171,8 @@ namespace ProspectingProject
         {
             try
             {
-                var request = ProspectingDomain.Deserialise<ContactOptoutRequest>(json);
-                ProspectingDomain.VerifyOptoutContact(request);
+                var request = ProspectingCore.Deserialise<ContactOptoutRequest>(json);
+                ProspectingCore.VerifyOptoutContact(request);
             }
             catch
             {
@@ -182,120 +182,120 @@ namespace ProspectingProject
 
         private string RetrieveUserSignature()
         {
-            var sig = ProspectingDomain.RetrieveUserSignature();
-            return ProspectingDomain.SerializeToJsonWithDefaults(sig);
+            var sig = ProspectingCore.RetrieveUserSignature();
+            return ProspectingCore.SerializeToJsonWithDefaults(sig);
         }
 
         private void SaveCommunicationRecord(string json)
         {
-            var commObject = ProspectingDomain.Deserialise<CommunicationRecord>(json);
-            ProspectingDomain.SaveCommunicationRecord(commObject);
+            var commObject = ProspectingCore.Deserialise<CommunicationRecord>(json);
+            ProspectingCore.SaveCommunicationRecord(commObject);
         }
 
         private string LoadProperties(string json)
         {
-            var inputProperties = ProspectingDomain.Deserialise<LightstonePropertyIDPacket>(json);
-            var results = ProspectingDomain.LoadProperties(inputProperties.LightstonePropertyIDs);
-            return ProspectingDomain.SerializeToJsonWithDefaults(new { Properties = results });
+            var inputProperties = ProspectingCore.Deserialise<LightstonePropertyIDPacket>(json);
+            var results = ProspectingCore.LoadProperties(inputProperties.LightstonePropertyIDs);
+            return ProspectingCore.SerializeToJsonWithDefaults(new { Properties = results });
         }
 
         private string SendSMS(string json)
         {
-            SmsInputPacket inputPacket = ProspectingDomain.Deserialise<SmsInputPacket>(json);
-            return ProspectingDomain.SendSMS(inputPacket);
+            SmsInputPacket inputPacket = ProspectingCore.Deserialise<SmsInputPacket>(json);
+            return ProspectingCore.SendSMS(inputPacket);
         }
 
         private int? FindAreaId(string json)
         {
-            GeoLocation location = ProspectingDomain.Deserialise<GeoLocation>(json);
-            return ProspectingDomain.FindAreaId(location);
+            GeoLocation location = ProspectingCore.Deserialise<GeoLocation>(json);
+            return ProspectingCore.FindAreaId(location);
         }
 
         private void UnlockCurrentProspectingRecord()
         {
-            ProspectingDomain.UnlockCurrentProspectingRecord();
+            ProspectingCore.UnlockCurrentProspectingRecord();
         }
 
         private string LoadActivitiesForUser(string json)
         {
-            var results = ProspectingDomain.LoadUserActivities();
-            return ProspectingDomain.SerializeToJsonWithDefaults(results);
+            var results = ProspectingCore.LoadUserActivities();
+            return ProspectingCore.SerializeToJsonWithDefaults(results);
         }
 
         private void MakeDefaultContactDetail(string json)
         {
-            ProspectingContactDetail detail = ProspectingDomain.Deserialise<ProspectingContactDetail>(json);
-            ProspectingDomain.MakeDefaultContactDetail(detail.ItemId);
+            ProspectingContactDetail detail = ProspectingCore.Deserialise<ProspectingContactDetail>(json);
+            ProspectingCore.MakeDefaultContactDetail(detail.ItemId);
         }
 
         private string GetFollowUps(string json)
         {
             UserDataResponsePacket user = GetUserSessionObject();
-            ExistingFollowups existingItems = ProspectingDomain.Deserialise<ExistingFollowups>(json);
-            var results = ProspectingDomain.LoadFollowups(user.UserGuid, user.BusinessUnitUsers, existingItems.ExistingFollowupItems).Followups;
-            return ProspectingDomain.SerializeToJsonWithDefaults(results);
+            ExistingFollowups existingItems = ProspectingCore.Deserialise<ExistingFollowups>(json);
+            var results = ProspectingCore.LoadFollowups(user.UserGuid, user.BusinessUnitUsers, existingItems.ExistingFollowupItems).Followups;
+            return ProspectingCore.SerializeToJsonWithDefaults(results);
         }
 
         private string GetActivityLookupData()
         {
-            var results = ProspectingDomain.GetActivityLookupData();
-            return ProspectingDomain.SerializeToJsonWithDefaults(results);
+            var results = ProspectingCore.GetActivityLookupData();
+            return ProspectingCore.SerializeToJsonWithDefaults(results);
         }
 
         private void SaveActivity(string json)
         {
-            ProspectingActivity act = ProspectingDomain.Deserialise<ProspectingActivity>(json);
-            ProspectingDomain.UpdateInsertActivity(act);
+            ProspectingActivity act = ProspectingCore.Deserialise<ProspectingActivity>(json);
+            ProspectingCore.UpdateInsertActivity(act);
         }
 
         private void UpdateProspectedStatus(string json)
         {
-            var prospectingPropertyStatus = ProspectingDomain.Deserialise<PropertyProspectedStatus>(json);
-            ProspectingDomain.MarkAsProspected(prospectingPropertyStatus.LightstonePropertyId, prospectingPropertyStatus.Prospected);
+            var prospectingPropertyStatus = ProspectingCore.Deserialise<PropertyProspectedStatus>(json);
+            ProspectingCore.MarkAsProspected(prospectingPropertyStatus.LightstonePropertyId, prospectingPropertyStatus.Prospected);
         }
 
         private string CreateProspectingEntities(string json)
         {
-            var prospectingEntityBundle = ProspectingDomain.Deserialise<ProspectingEntityInputBundle>(json);
+            var prospectingEntityBundle = ProspectingCore.Deserialise<ProspectingEntityInputBundle>(json);
             List<NewProspectingEntity> searchResults = (List<NewProspectingEntity>)HttpContext.Current.Session["ProspectingEntities"];
-            var results = ProspectingDomain.CreateNewProspectingEntities(prospectingEntityBundle, searchResults);
-            return ProspectingDomain.SerializeToJsonWithDefaults(results);
+            var results = ProspectingCore.CreateNewProspectingEntities(prospectingEntityBundle, searchResults);
+            return ProspectingCore.SerializeToJsonWithDefaults(results);
         }
 
         private string GetProspectedProperty(string json)
         {
-            var propertyId = ProspectingDomain.Deserialise<ProspectingPropertyId>(json);
-            ProspectingProperty Prop = ProspectingDomain.GetProspectingProperty(propertyId);
-            return ProspectingDomain.SerializeToJsonWithDefaults(Prop);
+            var propertyId = ProspectingCore.Deserialise<ProspectingPropertyId>(json);
+            ProspectingProperty Prop = ProspectingCore.GetProspectingProperty(propertyId);
+            return ProspectingCore.SerializeToJsonWithDefaults(Prop);
         }
 
         private string SearchForPropertiesWithMatchingDetails(string json)
         {
-            var searchInputValues = ProspectingDomain.Deserialise<SearchInputPacket>(json);
-            var searchResults = ProspectingDomain.FindMatchingProperties(searchInputValues);
+            var searchInputValues = ProspectingCore.Deserialise<SearchInputPacket>(json);
+            var searchResults = ProspectingCore.FindMatchingProperties(searchInputValues);
             HttpContext.Current.Session["ProspectingEntities"] = null;
             HttpContext.Current.Session["ProspectingEntities"] = searchResults;
-            return ProspectingDomain.SerializeToJsonWithDefaults(searchResults);
+            return ProspectingCore.SerializeToJsonWithDefaults(searchResults);
         }
 
         private string SearchForExistingContactWithDetails(string json)
         {
-            var contactDetails = ProspectingDomain.Deserialise<ContactDetails>(json);
-            ProspectingContactPerson contactPerson = ProspectingDomain.SearchForExistingContactWithDetails(contactDetails);
-            return ProspectingDomain.SerializeToJsonWithDefaults(contactPerson);     
+            var contactDetails = ProspectingCore.Deserialise<ContactDetails>(json);
+            ProspectingContactPerson contactPerson = ProspectingCore.SearchForExistingContactWithDetails(contactDetails);
+            return ProspectingCore.SerializeToJsonWithDefaults(contactPerson);     
         }
 
         private string LoadProspectingSuburb(string json)
         {
-            var suburbDataRequest = ProspectingDomain.Deserialise<SuburbDataRequestPacket>(json);
-            ProspectingSuburb suburb = ProspectingDomain.LoadProspectingSuburb(suburbDataRequest);           
-            return ProspectingDomain.SerializeToJsonWithDefaults(suburb);
+            var suburbDataRequest = ProspectingCore.Deserialise<SuburbDataRequestPacket>(json);
+            ProspectingSuburb suburb = ProspectingCore.LoadProspectingSuburb(suburbDataRequest);           
+            return ProspectingCore.SerializeToJsonWithDefaults(suburb);
         }
 
         private string SaveContact(string json)
         {
-            var contactDataPacket = ProspectingDomain.Deserialise<ContactDataPacket>(json);
-            var contact = ProspectingDomain.SaveContactPerson(contactDataPacket);
+            var contactDataPacket = ProspectingCore.Deserialise<ContactDataPacket>(json);
+            var contact = ProspectingCore.SaveContactPerson(contactDataPacket);
 
             int deletedContactDetailsCount = Convert.ToInt32(HttpContext.Current.Session["deleted_item_count"]);
             if (deletedContactDetailsCount > 40)
@@ -304,35 +304,35 @@ namespace ProspectingProject
                 if (!user.IsProspectingManager)
                 {
                     contact.ContactIsCompromised = true;
-                    ProspectingDomain.SendWarningNotificationToManager(user);
+                    ProspectingCore.SendWarningNotificationToManager(user);
                     HttpContext.Current.Session["user_guid"] = null;
                 }
             }
 
-            return ProspectingDomain.SerializeToJsonWithDefaults(contact);
+            return ProspectingCore.SerializeToJsonWithDefaults(contact);
         }
 
         private string UpdateProspectingProperty(string json)
         {
-            ProspectingInputData dataPacket = ProspectingDomain.Deserialise<ProspectingInputData>(json);            
-            ProspectingDomain.UpdateProspectingRecord(dataPacket);
-            return ProspectingDomain.SerializeToJsonWithDefaults("success");
+            ProspectingInputData dataPacket = ProspectingCore.Deserialise<ProspectingInputData>(json);            
+            ProspectingCore.UpdateProspectingRecord(dataPacket);
+            return ProspectingCore.SerializeToJsonWithDefaults("success");
         }
 
         private string LoadMatchingLightstoneAddresses(string json)
         {
-            ProspectingInputData dataPacket = ProspectingDomain.Deserialise<ProspectingInputData>(json);
-            var matches = ProspectingDomain.GetMatchingAddresses(dataPacket);
+            ProspectingInputData dataPacket = ProspectingCore.Deserialise<ProspectingInputData>(json);
+            var matches = ProspectingCore.GetMatchingAddresses(dataPacket);
             HttpContext.Current.Session["ProspectingEntities"] = null;
             HttpContext.Current.Session["ProspectingEntities"] = matches;
-            return ProspectingDomain.SerializeToJsonWithDefaults(matches);
+            return ProspectingCore.SerializeToJsonWithDefaults(matches);
         }
 
         private string LookupPersonDetails(string json)
         {
-            ProspectingInputData dataPacket = ProspectingDomain.Deserialise<ProspectingInputData>(json);
-            PersonEnquiryResponsePacket results = ProspectingDomain.PerformLookup(dataPacket);
-            return ProspectingDomain.SerializeToJsonWithDefaults(results);            
+            ProspectingInputData dataPacket = ProspectingCore.Deserialise<ProspectingInputData>(json);
+            PersonEnquiryResponsePacket results = ProspectingCore.PerformLookup(dataPacket);
+            return ProspectingCore.SerializeToJsonWithDefaults(results);            
         }
 
         private string LoadApplication()
@@ -340,10 +340,10 @@ namespace ProspectingProject
             var guid = Guid.Parse((string)HttpContext.Current.Session["user_guid"]);
             var sessionKey = Guid.Parse((string)HttpContext.Current.Session["session_key"]);
 
-            UserDataResponsePacket user = ProspectingDomain.LoadUser(guid, sessionKey);
+            UserDataResponsePacket user = ProspectingCore.LoadUser(guid, sessionKey);
             HttpContext.Current.Session["user"] = user;
             HttpContext.Current.Session["deleted_item_count"] = 0;
-            return ProspectingDomain.SerializeToJsonWithDefaults(user);
+            return ProspectingCore.SerializeToJsonWithDefaults(user);
         }
 
         public static UserDataResponsePacket GetUserSessionObject()

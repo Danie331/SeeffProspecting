@@ -24,7 +24,7 @@ namespace ProspectingProject
     /// It is the only class that should handle the .dbml data context objects directly.
     /// Do not inherit off this type.
     /// </summary>
-    public sealed class ProspectingDomain
+    public sealed partial class ProspectingCore
     {        
         public static List<ProspectingProperty> CreateProspectableProperties(int seeffAreaId)
         {
@@ -315,7 +315,7 @@ namespace ProspectingProject
                 SMSLength = ProspectingStaticData.SMSLength
             };
 
-            return ProspectingDomain.SerializeToJsonWithDefaults(a);
+            return ProspectingCore.SerializeToJsonWithDefaults(a);
         }
 
 
@@ -1327,9 +1327,9 @@ namespace ProspectingProject
             ProspectingSuburb suburb = new ProspectingSuburb();
             suburb.LocationID = suburbDataRequest.SuburbId;
 
-            suburb.PolyCoords = ProspectingDomain.LoadPolyCoords(suburbDataRequest.SuburbId);
-            suburb.ProspectingProperties = ProspectingDomain.CreateProspectableProperties(suburbDataRequest.SuburbId);
-            suburb.LocationName = ProspectingDomain.GetAreaName(suburbDataRequest.SuburbId);
+            suburb.PolyCoords = ProspectingCore.LoadPolyCoords(suburbDataRequest.SuburbId);
+            suburb.ProspectingProperties = ProspectingCore.CreateProspectableProperties(suburbDataRequest.SuburbId);
+            suburb.LocationName = ProspectingCore.GetAreaName(suburbDataRequest.SuburbId);
 
             return suburb;
         }

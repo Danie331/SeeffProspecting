@@ -1118,6 +1118,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Prospecting.dbml</DependentUpon>
     </Compile>
+    <Compile Include="ProspectingCore\CommunicationTemplates.cs" />
     <Compile Include="RequestHandler.ashx.cs">
       <DependentUpon>RequestHandler.ashx</DependentUpon>
     </Compile>
@@ -1142,44 +1143,44 @@
     <Compile Include="Types\ActivityBundle.cs" />
     <Compile Include="Types\FollowupActivity.cs" />
     <Compile Include="Types\IProspectingContactEntity.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\BaseDataRequestPacket.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\CommunicationRecord.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\CompanyContactDataPacket.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\ContactDataPacket.cs" />
+    <Compile Include="Types\BaseDataRequestPacket.cs" />
+    <Compile Include="Types\CommunicationRecord.cs" />
+    <Compile Include="Types\CompanyContactDataPacket.cs" />
+    <Compile Include="Types\ContactDataPacket.cs" />
     <Compile Include="Types\GeoLocation.cs" />
     <Compile Include="Types\IListing.cs" />
     <Compile Include="Types\ILocation.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\ContactOptoutRequest.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\ContactRow.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\ExistingFollowupItems.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\FollowupBundle.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\LightstonePropertyIDPacket.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\PropertyProspectedStatus.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\ProspectingEntityInputBundle.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\ProspectingEntityOutputBundle.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\ProspectingPropertyInputData.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\DefaultProspectingDataResponsePacket.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\ContactDetails.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\PropertyCommentsNotes.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\SearchInputPacket.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\SmsInputPacket.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\SmsRecipient.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\UserDataResponsePacket.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\UserSuburb.cs" />
+    <Compile Include="Types\ContactOptoutRequest.cs" />
+    <Compile Include="Types\ContactRow.cs" />
+    <Compile Include="Types\ExistingFollowupItems.cs" />
+    <Compile Include="Types\FollowupBundle.cs" />
+    <Compile Include="Types\LightstonePropertyIDPacket.cs" />
+    <Compile Include="Types\PropertyProspectedStatus.cs" />
+    <Compile Include="Types\ProspectingEntityInputBundle.cs" />
+    <Compile Include="Types\ProspectingEntityOutputBundle.cs" />
+    <Compile Include="Types\ProspectingPropertyInputData.cs" />
+    <Compile Include="Types\DefaultProspectingDataResponsePacket.cs" />
+    <Compile Include="Types\ContactDetails.cs" />
+    <Compile Include="Types\PropertyCommentsNotes.cs" />
+    <Compile Include="Types\SearchInputPacket.cs" />
+    <Compile Include="Types\SmsInputPacket.cs" />
+    <Compile Include="Types\SmsRecipient.cs" />
+    <Compile Include="Types\UserDataResponsePacket.cs" />
+    <Compile Include="Types\UserSuburb.cs" />
     <Compile Include="Types\JsonNetPropertyNameResolverForSerialization.cs" />
     <Compile Include="Types\LightstonePropertyMatch.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\PropertySearchResults.cs" />
+    <Compile Include="Types\PropertySearchResults.cs" />
     <Compile Include="Types\NewProspectingLocation.cs" />
     <Compile Include="Types\ProspectingActivity.cs" />
     <Compile Include="Types\ProspectingContactCompany.cs" />
     <Compile Include="Types\ProspectingContactDetail.cs" />
-    <Compile Include="Types\ProspectingDomain.cs" />
+    <Compile Include="ProspectingCore\ProspectingDomain_TEMP.cs" />
     <Compile Include="Types\ProspectingProperty.cs" />
     <Compile Include="Types\ProspectingContactPerson.cs" />
     <Compile Include="Types\ProspectingPropertyId.cs" />
-    <Compile Include="Types\ProspectingStaticData.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\ProspectingSuburb.cs" />
-    <Compile Include="Types\JsonDataExchangeTypes\SuburbDataRequestPacket.cs" />
+    <Compile Include="ProspectingCore\ProspectingStaticData.cs" />
+    <Compile Include="Types\ProspectingSuburb.cs" />
+    <Compile Include="Types\SuburbDataRequestPacket.cs" />
     <Compile Include="Web References\lightstoneSeeffService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
