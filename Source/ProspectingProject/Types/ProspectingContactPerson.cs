@@ -45,6 +45,8 @@ namespace ProspectingProject
         public bool EmailOptout { get; set; }
         public bool SMSOptout { get; set; }
 
+        public int? TargetLightstonePropertyIdForComms { get; set; }
+
         public IEnumerable<ProspectingContactDetail> PhoneNumbers { get; set; }
         public IEnumerable<ProspectingContactDetail> EmailAddresses { get; set; }
 

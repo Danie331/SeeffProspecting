@@ -111,7 +111,7 @@ function buildGeneralInfoHtml(contact) {
     }
     var popiDisabledSetting = userIsProspectingManager ? '' : 'disabled';
     optoutFieldset.append("<label style='cursor:pointer;vertical-align:middle' title='Select this option to indicate that this person is no longer to be contacted'>POPI opt-out<input type='checkbox' name='popiCheckbox' id='popiCheckbox' style='cursor:pointer;vertical-align:middle;margin-right:20px' " + checked + " " + popiDisabledSetting + "  /></label>");
-    if (prospectingContext.LoggedInUser == 'a2c48f98-14fb-425e-bbd2-312cfb89980c' || prospectingContext.LoggedInUser == '62a85a9d-be7a-4fad-b704-a55edb1d338f') { // check if POPi still works
+    if (prospectingContext.UserHasCommAccess) { // check if POPi still works
         var emailChecked = '', emailDisabledOption = '';
         if (contact && contact.EmailOptout) {
             emailChecked = 'checked';
@@ -789,7 +789,7 @@ function buildContactDashboard(contacts) {
     var availableCreditLabel = $("<label id='availableCreditLabel' style='color: red;' />");
     container.append("Available Prospecting amount: R ");
     container.append(availableCreditLabel);
-    availableCreditLabel.text(availableCredit);
+    availableCreditLabel.text(availableCredit.toFixed(2));
 
     container.append("<br />");
     //container.append("ID number of contact person: <input type='text' id='knownIdTextbox' style='padding:2px;' />&nbsp;");

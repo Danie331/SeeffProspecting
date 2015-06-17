@@ -27,7 +27,7 @@ namespace ProspectingProject
             _results = results;
             _results.IdNumber = _inputData.LightstoneIDOrCKNo;
             _results.OwnerGender = ProspectingCore.DetermineOwnerGender(_inputData.LightstoneIDOrCKNo);
-            _results.LookupType = ProspectingStaticData.TracePSEnquiryRequest;
+            _results.LookupType = ProspectingLookupData.TracePSEnquiryRequest;
         }
 
         public decimal DeductEnquiryCost()

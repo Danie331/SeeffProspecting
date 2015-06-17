@@ -7,7 +7,7 @@ using System.Web;
 
 namespace ProspectingProject
 {
-    public class ProspectingStaticData
+    public class ProspectingLookupData
     {
         public const string DracorePhoneEnquiryRequest = "DRACORE_PHONE";
         public const string DracoreEmailEnquiryRequest = "DRACORE_EMAIL";
@@ -26,7 +26,9 @@ namespace ProspectingProject
         public static List<KeyValuePair<int, string>> IntlDialingCodes { get; set; }
         public static List<KeyValuePair<int, string>> PersonCompanyRelationshipTypes { get; set; }
         public static List<KeyValuePair<int, string>> ActivityTypes { get; set; }
+        public static List<KeyValuePair<int, string>> SystemActivityTypes { get; set; }
         public static List<KeyValuePair<int, string>> ActivityFollowupTypes { get; set; }
+        public static List<KeyValuePair<int, string>> CommunicationStatusTypes { get; set; }
 
         public static IEnumerable<int> PhoneTypeIds { get; private set; }
         public static IEnumerable<int> EmailTypeIds { get; private set; }
@@ -36,7 +38,7 @@ namespace ProspectingProject
         public static Func<ProspectingDataContext, ProspectingContactPerson, IQueryable<ProspectingContactDetail>> PropertyContactEmailRetriever { get; private set; }
         public static Func<ProspectingDataContext, prospecting_property, bool, IQueryable<ProspectingContactPerson>> PropertyCompanyContactsRetriever { get; private set; }  
 
-        static ProspectingStaticData()
+        static ProspectingLookupData()
         {
             LoadContactDetailTypes();
             LoadPersonPropertyRelationshipTypes();
@@ -46,10 +48,12 @@ namespace ProspectingProject
             LoadCompanyPropertyRelationshipTypes();
             LoadPersonCompanyRelationshipTypes();
             LoadActivityTypes();
+            LoadSystemActivityTypes();
             LoadActivityFollowupTypes();
+            LoadCommunicationStatusTypes();
 
-            PhoneTypeIds = ProspectingStaticData.ContactPhoneTypes.Select(k => k.Key);
-            EmailTypeIds = ProspectingStaticData.ContactEmailTypes.Select(k => k.Key);
+            PhoneTypeIds = ProspectingLookupData.ContactPhoneTypes.Select(k => k.Key);
+            EmailTypeIds = ProspectingLookupData.ContactEmailTypes.Select(k => k.Key);
 
             PropertyContactsRetriever = CompiledQuery.Compile((ProspectingDataContext ctx, prospecting_property property, bool loadOwnedProperties) => (from ppr in ctx.prospecting_person_property_relationships
                                                                                                                                                         join pcp in ctx.prospecting_contact_persons on ppr.contact_person_id equals pcp.contact_person_id
@@ -149,6 +153,25 @@ namespace ProspectingProject
                                                                              IntDialingCode = det.intl_dialing_code_id,
                                                                              EleventhDigit = det.eleventh_digit
                                                                          }));
+        }
+
+        private static void LoadSystemActivityTypes()
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                SystemActivityTypes = (from item in prospecting.activity_types
+                                 where item.is_system_type.HasValue && item.is_system_type == true && item.active
+                                 select new KeyValuePair<int, string>(item.activity_type_id, item.activity_name)).ToList();
+            }
+        }
+
+        private static void LoadCommunicationStatusTypes()
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                CommunicationStatusTypes = (from item in prospecting.communications_status
+                                            select new KeyValuePair<int, string>(item.communications_status_id, item.status_desc)).ToList();
+            }
         }
 
         private static void LoadActivityTypes()

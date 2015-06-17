@@ -318,7 +318,7 @@ function performPersonLookup(idNumber, lookupType) {
                 if (data.WalletBalance != null) {
                     // If the AvailableTracePsCredits is not null, then update the availableCredit variable
                     availableCredit = data.WalletBalance;
-                    $('#availableCreditLabel').text(availableCredit);
+                    $('#availableCreditLabel').text(availableCredit.toFixed(2));
                 }
                 if (data.EnquirySuccessful) {
                     populateContactLookupInfo(data);
@@ -455,6 +455,12 @@ function markerClick(e) {
     closeTransientInfoWindow(this);
 
     if (multiSelectMode) { // if we are in multi-select mode
+
+        if (!commCustomSelectionEnabled) {
+            showDialogCommCustomSelectionDisabled();
+            return;
+        }
+
         var marker = $(this)[0];
         if (marker.IsPartOfSelection) {
             removeMarkersFromSelection(marker);

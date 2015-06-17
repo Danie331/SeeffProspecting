@@ -33,6 +33,7 @@ function initialize() {
 
                 prospectingContext = JSON.parse(data.StaticProspectingData);
                 prospectingContext.LoggedInUser = data.UserGuid;
+                prospectingContext.UserHasCommAccess = data.HasCommAccess;
 
                 userIsProspectingManager = data.IsProspectingManager;
                 availableCredit = data.AvailableCredit;
@@ -57,6 +58,11 @@ function initialize() {
         var commMenu = $("#communicationMenu");
         if (!commMenu.is(e.target)) {
             commMenu.hide();
+        }
+
+        var templatesMenu = $("#templatesMenu");
+        if (!templatesMenu.is(e.target)) {
+            templatesMenu.hide();
         }
     });
 }

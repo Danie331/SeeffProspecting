@@ -127,8 +127,8 @@ namespace ProspectingProject
             ActivityBundle activityBundle = new ActivityBundle();
             UserDataResponsePacket user = RequestHandler.GetUserSessionObject();
             activityBundle.BusinessUnitUsers = user.BusinessUnitUsers;
-            activityBundle.ActivityTypes = ProspectingStaticData.ActivityTypes;
-            activityBundle.ActivityFollowupTypes = ProspectingStaticData.ActivityFollowupTypes;
+            activityBundle.ActivityTypes = ProspectingLookupData.ActivityTypes;
+            activityBundle.ActivityFollowupTypes = ProspectingLookupData.ActivityFollowupTypes;
 
             IQueryable<activity_log> activities = null;
             if (lightstonePropertyId.HasValue)
@@ -303,16 +303,16 @@ namespace ProspectingProject
         {
             var a = new
             {
-                ContactDetailTypes = ProspectingStaticData.ContactDetailTypes,
-                PersonPropertyRelationshipTypes = ProspectingStaticData.PersonPropertyRelationshipTypes,
-                ContactPersonTitle = ProspectingStaticData.ContactPersonTitle,
-                PersonPersonRelationshipTypes = ProspectingStaticData.PersonPersonRelationshipTypes,
-                ContactEmailTypes = ProspectingStaticData.ContactEmailTypes,
-                ContactPhoneTypes = ProspectingStaticData.ContactPhoneTypes,
-                IntlDialingCodes = ProspectingStaticData.IntlDialingCodes,
-                PersonCompanyRelationshipTypes = ProspectingStaticData.PersonCompanyRelationshipTypes,
-                SMSCost = ProspectingStaticData.SMSCost,
-                SMSLength = ProspectingStaticData.SMSLength
+                ContactDetailTypes = ProspectingLookupData.ContactDetailTypes,
+                PersonPropertyRelationshipTypes = ProspectingLookupData.PersonPropertyRelationshipTypes,
+                ContactPersonTitle = ProspectingLookupData.ContactPersonTitle,
+                PersonPersonRelationshipTypes = ProspectingLookupData.PersonPersonRelationshipTypes,
+                ContactEmailTypes = ProspectingLookupData.ContactEmailTypes,
+                ContactPhoneTypes = ProspectingLookupData.ContactPhoneTypes,
+                IntlDialingCodes = ProspectingLookupData.IntlDialingCodes,
+                PersonCompanyRelationshipTypes = ProspectingLookupData.PersonCompanyRelationshipTypes,
+                SMSCost = ProspectingLookupData.SMSCost,
+                SMSLength = ProspectingLookupData.SMSLength
             };
 
             return ProspectingCore.SerializeToJsonWithDefaults(a);
@@ -321,20 +321,20 @@ namespace ProspectingProject
 
         public static List<ProspectingContactPerson> LoadContacts(ProspectingDataContext prospecting, prospecting_property property, bool loadOwnedProperties)
         {
-            List<ProspectingContactPerson> contactsAssociatedWithProperties = ProspectingStaticData.PropertyContactsRetriever(prospecting, property, loadOwnedProperties).ToList();
-            List<ProspectingContactPerson> contactsAssociatedWithCompanies = ProspectingStaticData.PropertyCompanyContactsRetriever(prospecting, property, loadOwnedProperties).ToList();
+            List<ProspectingContactPerson> contactsAssociatedWithProperties = ProspectingLookupData.PropertyContactsRetriever(prospecting, property, loadOwnedProperties).ToList();
+            List<ProspectingContactPerson> contactsAssociatedWithCompanies = ProspectingLookupData.PropertyCompanyContactsRetriever(prospecting, property, loadOwnedProperties).ToList();
 
             foreach (var cp in contactsAssociatedWithProperties)
             {
-                cp.PhoneNumbers = ProspectingStaticData.PropertyContactPhoneNumberRetriever(prospecting, cp).ToList();
-                cp.EmailAddresses = ProspectingStaticData.PropertyContactEmailRetriever(prospecting, cp).ToList();
+                cp.PhoneNumbers = ProspectingLookupData.PropertyContactPhoneNumberRetriever(prospecting, cp).ToList();
+                cp.EmailAddresses = ProspectingLookupData.PropertyContactEmailRetriever(prospecting, cp).ToList();
             }
 
 
             foreach (var cp in contactsAssociatedWithCompanies)
             {
-                cp.PhoneNumbers = ProspectingStaticData.PropertyContactPhoneNumberRetriever(prospecting, cp).ToList();
-                cp.EmailAddresses = ProspectingStaticData.PropertyContactEmailRetriever(prospecting, cp).ToList();
+                cp.PhoneNumbers = ProspectingLookupData.PropertyContactPhoneNumberRetriever(prospecting, cp).ToList();
+                cp.EmailAddresses = ProspectingLookupData.PropertyContactEmailRetriever(prospecting, cp).ToList();
             }
 
             // Combine 2 lists and return 
@@ -374,8 +374,8 @@ namespace ProspectingProject
                        SMSOptout = pcp.optout_sms
                   };
 
-                contactPerson.PhoneNumbers = ProspectingStaticData.PropertyContactPhoneNumberRetriever(prospecting, contactPerson).ToList();
-                contactPerson.EmailAddresses = ProspectingStaticData.PropertyContactEmailRetriever(prospecting, contactPerson).ToList();
+                contactPerson.PhoneNumbers = ProspectingLookupData.PropertyContactPhoneNumberRetriever(prospecting, contactPerson).ToList();
+                contactPerson.EmailAddresses = ProspectingLookupData.PropertyContactEmailRetriever(prospecting, contactPerson).ToList();
 
                 return contactPerson;
             }
@@ -496,7 +496,7 @@ namespace ProspectingProject
                         {
                             contact_company_id = companyWithExistingCKNumber.contact_company_id,
                             prospecting_property_id = contactCompanyDataPacket.ProspectingPropertyId.Value,
-                            relationship_to_property = ProspectingStaticData.CompanyPropertyRelationshipTypes.First(s => s.Value == "Owner").Key,
+                            relationship_to_property = ProspectingLookupData.CompanyPropertyRelationshipTypes.First(s => s.Value == "Owner").Key,
                             created_date = DateTime.Now
                         };
                         prospecting.prospecting_company_property_relationships.InsertOnSubmit(companyPropertyRelationship);
@@ -524,7 +524,7 @@ namespace ProspectingProject
                     {
                         contact_company_id = newContactCompany.contact_company_id,
                         prospecting_property_id = contactCompanyDataPacket.ProspectingPropertyId.Value,
-                        relationship_to_property = ProspectingStaticData.CompanyPropertyRelationshipTypes.First(s => s.Value == "Owner").Key,
+                        relationship_to_property = ProspectingLookupData.CompanyPropertyRelationshipTypes.First(s => s.Value == "Owner").Key,
                         created_date = DateTime.Now
                     };
                     prospecting.prospecting_company_property_relationships.InsertOnSubmit(propertyCompanyRelationship);
@@ -662,8 +662,9 @@ namespace ProspectingProject
                         UserName = userAuthPacket.ManagerDetails.First().UserName
                     },
                     BusinessUnitUsers = businessUnitUsers,
-                    FollowupActivities =followupBundle.Followups,
-                    TotalFollowups = followupBundle.TotalCount
+                    FollowupActivities = followupBundle.Followups,
+                    TotalFollowups = followupBundle.TotalCount,
+                    HasCommAccess = userAuthPacket.CommunicationEnabled.Value
                 };
 
                 return userPacket;
@@ -832,7 +833,7 @@ namespace ProspectingProject
                         if (incomingContact.PersonPropertyRelationships == null || incomingContact.PersonPropertyRelationships.Count == 0)
                         {
                             // TODO: this line makes an incorrect assumption: that the existing contact linked to the new property is an "owner". Fix this.
-                            incomingContact.PersonPropertyRelationships = new List<KeyValuePair<int, int>> { new KeyValuePair<int, int>(dataPacket.ProspectingPropertyId.Value,ProspectingStaticData.PersonPropertyRelationshipTypes.First().Key) };
+                            incomingContact.PersonPropertyRelationships = new List<KeyValuePair<int, int>> { new KeyValuePair<int, int>(dataPacket.ProspectingPropertyId.Value,ProspectingLookupData.PersonPropertyRelationshipTypes.First().Key) };
                         }
                         // If a relationship already exists against this property just update it. TODO
                         if (personPropertyRelation != null)
@@ -876,7 +877,7 @@ namespace ProspectingProject
                     if (incomingContact.PhoneNumbers != null)
                     {
                         UpdateContactDetails(incomingContact.ContactPersonId.Value,
-                            ProspectingStaticData.ContactPhoneTypes,
+                            ProspectingLookupData.ContactPhoneTypes,
                             incomingContact.PhoneNumbers,
                             existingContactItems,
                             incomingContact.IsPOPIrestricted,
@@ -885,7 +886,7 @@ namespace ProspectingProject
                     if (incomingContact.EmailAddresses != null)
                     {
                         UpdateContactDetails(incomingContact.ContactPersonId.Value,
-                            ProspectingStaticData.ContactEmailTypes,
+                            ProspectingLookupData.ContactEmailTypes,
                             incomingContact.EmailAddresses,
                             existingContactItems,
                             incomingContact.IsPOPIrestricted,
@@ -1003,7 +1004,7 @@ namespace ProspectingProject
 
             if (rel == 0)
             {
-                rel = ProspectingStaticData.PersonPropertyRelationshipTypes.First(s => s.Value == "Owner").Key;
+                rel = ProspectingLookupData.PersonPropertyRelationshipTypes.First(s => s.Value == "Owner").Key;
             }
 
             return rel;
@@ -1225,8 +1226,8 @@ namespace ProspectingProject
 
                 if (existingContactWithDetail != null)
                 {
-                    var phoneTypeIds = ProspectingStaticData.ContactPhoneTypes.Select(k => k.Key);
-                    var emailTypeIds = ProspectingStaticData.ContactEmailTypes.Select(k => k.Key);
+                    var phoneTypeIds = ProspectingLookupData.ContactPhoneTypes.Select(k => k.Key);
+                    var emailTypeIds = ProspectingLookupData.ContactEmailTypes.Select(k => k.Key);
                     ProspectingContactPerson person = new ProspectingContactPerson
                     {
                         Firstname = existingContactWithDetail.firstname,
@@ -1674,8 +1675,8 @@ namespace ProspectingProject
         {
             using (var prospecting = new ProspectingDataContext())
             {
-                var phoneTypeIds = ProspectingStaticData.ContactPhoneTypes.Select(k => k.Key);
-                var emailTypeIds = ProspectingStaticData.ContactEmailTypes.Select(k => k.Key);
+                var phoneTypeIds = ProspectingLookupData.ContactPhoneTypes.Select(k => k.Key);
+                var emailTypeIds = ProspectingLookupData.ContactEmailTypes.Select(k => k.Key);
                 var companyContacts = (from c in prospecting.prospecting_contact_companies
                                        join cpr in prospecting.prospecting_person_company_relationships on c.contact_company_id equals cpr.contact_company_id
                                        join cc in prospecting.prospecting_contact_persons on cpr.contact_person_id equals cc.contact_person_id
@@ -2201,8 +2202,8 @@ namespace ProspectingProject
 
             UserDataResponsePacket user = RequestHandler.GetUserSessionObject();
             activityBundle.BusinessUnitUsers = user.BusinessUnitUsers;
-            activityBundle.ActivityTypes = ProspectingStaticData.ActivityTypes;
-            activityBundle.ActivityFollowupTypes = ProspectingStaticData.ActivityFollowupTypes;
+            activityBundle.ActivityTypes = ProspectingLookupData.ActivityTypes;
+            activityBundle.ActivityFollowupTypes = ProspectingLookupData.ActivityFollowupTypes;
 
             return activityBundle;
         }
@@ -2317,92 +2318,22 @@ namespace ProspectingProject
             return results;
         }
 
-        public static void SaveCommunicationRecord(CommunicationRecord commObject)
+        public static string GetFormattedAddress(int lightstonePropertyId)
         {
             using (var prospectingContext = new ProspectingDataContext())
             {
-                Action<long?> createCommunicationLogRecord = activityId =>
+                var property = prospectingContext.prospecting_properties.First(pp => pp.lightstone_property_id == lightstonePropertyId);
+                if (property.ss_fh == "SS" || property.ss_fh == "FS")
                 {
-                    var currentUser = RequestHandler.GetUserSessionObject();
-                    communications_log record = new communications_log
+                    if (!string.IsNullOrEmpty(property.ss_door_number))
                     {
-                        activity_id = activityId,
-                        communication_type = "EMAIL",
-                        created_by_user = currentUser.UserGuid,
-                        created_date = DateTime.Now,
-                        target_contact_person_id = commObject.TargetContactPersonId,
-                        target_contact_detail = commObject.TargetContactDetail,
-                        target_lightstone_property_id = commObject.TargetLightstonePropId,
-                        sent_status = !string.IsNullOrEmpty(commObject.SendingError) ? "NOT SENT" : "SENT",
-                        sending_error = commObject.SendingError,
-                        msg_content_base64 = commObject.MessageBase64
-                    };
-
-                    prospectingContext.communications_logs.InsertOnSubmit(record);
-                    prospectingContext.SubmitChanges();
-                };
-
-                Func<string> buildCommentForCommunication = () =>
-                {
-                    StringBuilder sb = new StringBuilder();
-                    sb.AppendLine("*** Email sent to contact person ***");
-                    sb.AppendLine(string.Format("An email was sent to {0} at {1}.", commObject.TargetContactDetail, DateTime.Now));
-                    sb.AppendLine(string.Format("Subject of the email: \"{0}\"", commObject.SubjectText));
-
-                    return sb.ToString();
-                };
-                // Determine if we should create an activity along with the communication_log entry
-                if (!string.IsNullOrEmpty(commObject.SendingError))
-                {
-                    // Means that an error occurred before (or while sending the message), so write an entry to the communication_log table and return
-                    createCommunicationLogRecord(null);
-                }
-                else
-                {
-                    // No error indicates the message was sent: but this does not necessarily mean it was received!
-                    // Interrogate the CommContext here to determine what type of activity to create for the record
-                    ProspectingActivity newEmailMessageActivity = new ProspectingActivity
-                    {
-                        ActivityTypeId = ProspectingStaticData.ActivityTypes.First(act => act.Value == "General").Key,
-                        Comment = buildCommentForCommunication(),
-                        ContactPersonId = commObject.TargetContactPersonId,
-                        EmailSent = true,
-                        IsForInsert = true,
-                        LightstonePropertyId = commObject.TargetLightstonePropId
-                    };
-                    long activityId = UpdateInsertActivity(newEmailMessageActivity);
-                    createCommunicationLogRecord(activityId);
-                }
-            }
-        }
-
-        public static void VerifyOptoutContact(ContactOptoutRequest request)
-        {
-            using (var prospectingContext = new ProspectingDataContext())
-            {
-                // To verify this request we need to compare the ContactPersonId and ContactDetail in the request to a valid contact person in the database
-
-                var contactPersons = from cd in prospectingContext.prospecting_contact_details
-                                     where cd.contact_detail == request.ContactDetail
-                                     select cd.prospecting_contact_person;
-                var contactPersonIDs = contactPersons.Select(cp => cp.contact_person_id);
-
-                if (contactPersonIDs.Any(c => c == request.ContactPersonId))
-                {
-                    foreach (var contactPerson in contactPersons)
-                    {
-                        switch (request.OptoutFromWhat)
-                        {
-                            case "email":
-                                contactPerson.optout_emails = true;
-                                break;
-                            case "sms":
-                                contactPerson.optout_sms = true;
-                                break;
-                        }
+                        return "Unit " + property.unit + " (Door no.: " + property.ss_door_number + ")" + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.ss_name.ToLower()).Replace("Ss ", "SS ");
                     }
-                    prospectingContext.SubmitChanges();
-                }                
+
+                    return "Unit " + property.unit + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.ss_name.ToLower()).Replace("Ss ", "SS ");
+                 }
+
+                return property.street_or_unit_no + " " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.property_address.ToLower());
             }
         }
     }

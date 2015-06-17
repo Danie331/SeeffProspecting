@@ -11,7 +11,6 @@
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    <script src="http://malsup.github.io/jquery.blockUI.js"></script>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 
         <%-- Google maps API access (note server key) --%>
@@ -45,9 +44,8 @@
     <script src="Scripts/3rdParty/jquery.ui.position.js"></script>
     <script src="Scripts/3rdParty/tooltip.js"></script>
     <script src="Scripts/3rdParty/OpenTip.js"></script>
-    <script src="Scripts/3rdParty/mime-js/base64.js"></script>
-    <script src="Scripts/3rdParty/mime-js/mime-js.js"></script>
     <script src="Scripts/3rdParty/waitForImage.js"></script>
+    <script src="Scripts/3rdParty/jqueryBlockUI.js"></script>
     <%-- END_SECTION:3RD_PARTY_SCRIPTS --%>
     <%-- BEGIN_SECTION:CORE_SCRIPTS --%>
     <script src="Scripts/Core/Utils.js"></script>
@@ -57,6 +55,7 @@
     <script src="Scripts/Core/ProspectingContactMenuBuilder.js"></script>
     <script src="Scripts/Core/ContactDetailsEditorWidget.js"></script>
     <script src="Scripts/Core/ProspectingObjectBuilder.js"></script>
+    <script src="Scripts/Core/CommunicationTemplates.js"></script>
     <script src="Scripts/Core/Communication.js"></script>
     <script src="Scripts/Core/DrawingMultiSelect.js"></script>
     <script src="Scripts/Core/AppStart.js"></script>
@@ -114,9 +113,9 @@
         </div>
         <div id="selectPrimaryContactDetailDialog" title="Select Primary Contact Detail" style="display:none;font-family:Verdana;font-size:12px;"></div>
         <div id="multiSelectMode" style="display: none; font-family: Verdana; font-size: xx-large; color: red">
-            You are in multi-select mode
+            You are in communications mode
         </div>
-        <div id="commSendMessageDialog" title="Preview & Send Message" class="errorDialog"> 
+        <div id="commSendMessageDialog" title="Preview Message" class="errorDialog"> 
         </div>
     </form>
         <div id="googleMap"></div>

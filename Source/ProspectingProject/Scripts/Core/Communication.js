@@ -4,13 +4,20 @@ var cellphoneItemId;
 var costOfBatch = 0;
 
 var defaultSubjectText = 'Subject';
-var defaultBodyText = "[Email body]<p />Use *title*, *name*, *surname* or *address* as placeholders for contact's information.";
+var defaultBodyText = "[Email body]<p />Use the 'Symbols' drop-down to insert placeholder information.";
+var emailBodyInitialised = false;
 
 var uploadedFiles = [];
 
 var userEmailSignature = '';
 
 var smsOptOut = " -Reply STOP to opt-out.";
+
+var specialActivityTemplates = ['Birthday', '5 Year Anniversary', '7 Year Anniversary'];
+
+var selectedTemplateActivityTypeId = null;
+
+var commCustomSelectionEnabled = true;
 
 function buildCommunicationMenu() {
 
@@ -19,7 +26,7 @@ function buildCommunicationMenu() {
     communicationBtn.click(handleCommBtnClick);
     var menu = $("<div id='communicationMenu' />");
 
-    var remainingCreditLabel = $("<div id='commRemainingCredit' style='display:inline-block;float:right'>Available Credit: R <span>" + availableCredit + "</span></div>");
+    var remainingCreditLabel = $("<div id='commRemainingCredit' style='display:inline-block;float:right'>Available Credit: R <span id='commCreditValue'>" + availableCredit + "</span></div>");
     var messageContentContainer = $("<div id='messageContentContainer' />");
     var contactablesContentContainer = buildContactablesTable();
     var getInfoLabel = $("<label id='commGetInfoLabel' style='display:none'></label>");
@@ -30,7 +37,22 @@ function buildCommunicationMenu() {
     sendButton.click(handleCommSendBtnClick);
     bottomContainer.append(costOfBatchLabel).append(sendButton);
 
-    contentDiv.append(communicationBtn).append(menu).append(remainingCreditLabel).append("<p />").append(messageContentContainer).append("<p />").append(contactablesContentContainer).append(getInfoLabel).append("<p style='height:5px' />").append(bottomContainer);
+    var templatesDiv = $("<div id='templateOptionsDiv' style='display:none;width:100%' />");
+    var templatesBtn = $("<input type='button' id='templatesBtn' value='Templates' />");
+    var templatesMenu = $("<div id='templatesMenu' />");
+    templatesBtn.click(handleTemplatesBtnClick);
+
+
+    //var relationshipSelect = $("<select id='relTypesSelect' />");
+    //relationshipSelect.append("<option value=''></option>");
+    //$.each(prospectingContext.PersonPropertyRelationshipTypes, function (idx, rel) {
+    //    var option = $("<option data-type='propertyRelationship' value='pr" + rel.Key + "'>" + rel.Value + "</option>");
+    //    relationshipSelect.append(option);
+    //});
+    var templateItemOptionsDiv = buildTemplateItemOptionsDiv();
+    templatesDiv.append(templatesBtn).append(templatesMenu).append(templateItemOptionsDiv);
+
+    contentDiv.append(communicationBtn).append(menu).append(remainingCreditLabel).append("<p />").append(templatesDiv).append("<p />").append(messageContentContainer).append("<p />").append(contactablesContentContainer).append(getInfoLabel).append("<p style='height:5px' />").append(bottomContainer);
 
     var multiSelectSticker = $("#multiSelectMode");
     var mapControl = map.controls[google.maps.ControlPosition.TOP_RIGHT];
@@ -46,6 +68,77 @@ function buildCommunicationMenu() {
 
     cellphoneItemId = getProspectingPhoneTypeId('cell');
     return contentDiv; 
+}
+
+function buildTemplateItemOptionsDiv(option) {
+    var templateItemOptionsDiv = $("#templateItemOptionsDiv");
+    if (templateItemOptionsDiv.length) {
+        templateItemOptionsDiv.empty();
+        templateItemOptionsDiv.css('display','inline-block');
+    }
+    else {
+        templateItemOptionsDiv = $("<div id='templateItemOptionsDiv' style='display:none;' />");
+    }
+
+    var templateSelectionDropdown = $("<select id='templateSelector' style='margin-left:5px;width:200px' />");
+    var deleteTemplateBtn = '';
+    if (option == 'my_template') {
+        deleteTemplateBtn = $("<input type='button' id='deleteTemplateBtn' value='Delete' style='margin-left:2px;margin-right:5px;display:none' />");
+    }
+    var suburbSelectorDiv = $("<div style='display:inline-block' />");
+    var currentSuburbSelector = $("<input type='radio' name='templateSuburbOption' id='commCurrentSuburbRadioBtn' value='unchecked'>Current Suburb</input>");
+    var allSuburbSelector = $("<input type='radio' name='templateSuburbOption' id='commAllSuburbsRadioBtn' value='unchecked' style='margin-left:5px;'>All Suburbs</input>");
+    suburbSelectorDiv.append(currentSuburbSelector).append(allSuburbSelector);
+    currentSuburbSelector.click(function () {
+        allSuburbSelector.attr('value', 'unchecked');
+        if ($(this).attr('value') == 'unchecked' && currentSuburb != null) {
+            $(this).attr('value', 'checked');
+            commCustomSelectionEnabled = false;
+            removeMarkersFromSelection();
+            $("#commGetInfoLabel").css('display', 'block').text("The communication will be sent to all contacts in your current suburb, who have a default contact value");
+            $("#commBottomDiv").css('display', 'block');
+        } else {
+            $(this).attr('value', 'unchecked');
+            $(this).prop('checked', false);
+            commCustomSelectionEnabled = true;
+            $("#commGetInfoLabel").text("");
+            $("#commBottomDiv").css('display', 'none');
+        }
+    });
+    allSuburbSelector.click(function () {
+        currentSuburbSelector.attr('value', 'unchecked');
+        if ($(this).attr('value') == 'unchecked') {
+            $(this).attr('value', 'checked');
+            commCustomSelectionEnabled = false;
+            removeMarkersFromSelection();
+            $("#commGetInfoLabel").css('display', 'block').text("The communication will be sent to all contacts across all your available suburbs, who have a default contact value");
+            $("#commBottomDiv").css('display', 'block');
+        } else {
+            $(this).attr('value', 'unchecked');
+            $(this).prop('checked', false);
+            commCustomSelectionEnabled = true;
+            $("#commGetInfoLabel").text("");
+            $("#commBottomDiv").css('display', 'none');
+        }
+    });
+
+    templateItemOptionsDiv.append(templateSelectionDropdown).append(deleteTemplateBtn).append(suburbSelectorDiv);
+   
+    return templateItemOptionsDiv;
+}
+
+function buildTemplateItems() {
+    var templatesMenu = $("#templatesMenu");
+    templatesMenu.empty();
+
+    var myTemplates = buildCommMenuItem("template_menu_mytemplates", buildMyTemplatesItemContent(), handleMyTemplatesItemClick);
+    templatesMenu.append(myTemplates);
+    var standardTemplates = buildCommMenuItem("template_menu_standardtemplates", buildStandardTemplatesItemContent(), handleStandardTemplatesItemClick);
+    templatesMenu.append(standardTemplates);
+    if (communicationsMode == 'EMAIL') {
+        var newsletterTemplate = buildCommMenuItem("template_menu_newslettertemplate", buildNewsletterTemplateItemContent(), handleNewsletterTemplateItemClick);
+        templatesMenu.append(newsletterTemplate);
+    }
 }
 
 function buildCommunicationMenuItems() {
@@ -71,8 +164,6 @@ function buildCommunicationMenuItems() {
     var emailMessage = buildCommMenuItem("comm_menu_email", buildEmailMenuItemContent(), handleEmailMessageClick);
     menu.append(emailMessage);
 
-    var separator = buildCommMenuItem("separator", "-----------------------------------------", null);
-    menu.append(separator);
 
     //if (currentSuburb) {
     //    var currentSubMenuItem = buildCommMenuItem("separator", currentSuburb.SuburbName, null);
@@ -109,11 +200,21 @@ function buildCommunicationMenuItems() {
     //var todaysAnniversaryEmail = buildCommMenuItem("comm_menu_todays_anniversary_email", buildTodaysAnniversaryEmail(), null);
     //menu.append(todaysAnniversaryEmail);
     
-    var smsTemplate = buildCommMenuItem("comm_menu_sms_template", buildSMSTemplate(), null);
-    menu.append(smsTemplate);
+    if (communicationsMode == "SMS") {
+        var separator = buildCommMenuItem("separator", "-----------------------------------------", null);
+        menu.append(separator);
 
-    var emailTemplate = buildCommMenuItem("comm_menu_email_template", buildEmailTemplate(), null);
-    menu.append(emailTemplate);
+        var smsTemplate = buildCommMenuItem("comm_menu_sms_template", buildSMSTemplate(), handleSMSTemplateBtnClick);
+        menu.append(smsTemplate);
+    }
+
+    if (communicationsMode == "EMAIL") {
+        var separator = buildCommMenuItem("separator", "-----------------------------------------", null);
+        menu.append(separator);
+
+        var emailTemplate = buildCommMenuItem("comm_menu_email_template", buildEmailTemplate(), handleEmailTemplateBtnClick);
+        menu.append(emailTemplate);
+    }
 }
 
 function buildCommMenuItem(identifier, itemContent, onClickFunction) {
@@ -133,6 +234,43 @@ function handleCommBtnClick() {
     var menu = $('#communicationMenu');
     menu.append(buildCommunicationMenuItems());
     menu.css({'display': 'block', 'top': position.top, 'left': (position.left + width)});
+}
+
+function handleTemplatesBtnClick() {
+    var templatesBtn = $("#templatesBtn");
+    var width = parseInt(templatesBtn.css('width').replace('px', ''));
+    var position = templatesBtn.position();
+
+    var templatesMenu = $('#templatesMenu');
+    templatesMenu.append(buildTemplateItems());
+    templatesMenu.css({ 'display': 'block', 'top': position.top, 'left': (position.left + width) });
+}
+
+function buildMyTemplatesItemContent() {
+    var container = $("<div />");
+    var iconDiv = $("<div style='display:inline-block;float:left'/>");
+    iconDiv.append("<img src='Assets/my_templates.png' />");
+    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("My Templates");
+
+    return container.append(iconDiv).append(textDiv);
+}
+
+function buildStandardTemplatesItemContent() {
+    var container = $("<div />");
+    var iconDiv = $("<div style='display:inline-block;float:left'/>");
+    iconDiv.append("<img src='Assets/standard_templates.png' />");
+    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Standard Templates");
+
+    return container.append(iconDiv).append(textDiv);
+}
+
+function buildNewsletterTemplateItemContent() {
+    var container = $("<div />");
+    var iconDiv = $("<div style='display:inline-block;float:left'/>");
+    iconDiv.append("<img src='Assets/newsletter_template.png' />");
+    var textDiv = $("<div style='display:inline-block;padding-left:22px;padding-right:10px' />").append("Newsletter Template");
+
+    return container.append(iconDiv).append(textDiv);
 }
 
 function buildPolyMenuItemContent() {
@@ -259,14 +397,13 @@ function buildSMSContentContainer() {
 function buildEmailContentContainer() {
     var emailContainer = $("<div />");
 
-    var subjectLine = $("<input type='text' id='emailSubject' style='width:100%;color:lightgray;border:1px solid gray' />");
+    var subjectLine = $("<input type='text' id='emailSubject' style='width:100%;border:1px solid gray' />");
     subjectLine.val(defaultSubjectText);
     subjectLine.focus(function () {
         if (subjectLine.val() != defaultSubjectText) {
             return;
         }
         subjectLine.val('');
-        subjectLine.css('color', 'black');
     });
 
     subjectLine.keyup(function () {
@@ -275,14 +412,14 @@ function buildEmailContentContainer() {
             subjectLine.css('border', '1px solid red');
         }
         else {
-            subjectLine.css('border', '1px solid black');
+            subjectLine.css('border', '1px solid gray');
             tooltip.hide();
         }
     });
 
     var body = $("<textarea id='emailMessageBody' name='emailMessageBody' style='width:100%;height:120px;padding-bottom:1px' />");
     emailContainer.append(subjectLine).append("<p />").append(body);
-
+    emailBodyInitialised = false;
     //var myToolbar = [
     //    //{ name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'DocProps', 'Preview', 'Print', '-', 'Templates'] },
     //    { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
@@ -301,16 +438,17 @@ function buildEmailContentContainer() {
     //var config = { toolbar_defaultToolbar: myToolbar, toolbar: 'defaultToolbar', allowedContent: true };
     var editor = body.ckeditor(/*config,*/ function (textarea) {
         $(body).val(defaultBodyText);
-        attachFilesDiv.css('display', 'block');
+        //attachFilesDiv.css('display', 'inline-block');
+        //saveAsTemplateBtn.css('display', 'block');
     });
            
     //var focusManager = new CKEDITOR.focusManager(CKEDITOR.instances.emailMessageBody);
-    var firstFocus = false;
     CKEDITOR.instances.emailMessageBody.on('focus', function (evt) {
-        if (!firstFocus) {
-            firstFocus = true;
+
+        if (!emailBodyInitialised) {
+            emailBodyInitialised = true;
             $(body).val('');
-    }
+        }
 
         if (subjectLine.val() == '' || subjectLine.val() == defaultSubjectText) {
             subjectLine.css('border', '1px solid red');
@@ -324,14 +462,54 @@ function buildEmailContentContainer() {
         }
     });
 
-    var attachFilesDiv = $("<div style='display:none;padding-top:0' />");
+    var saveAsTemplateBtn = $("<input type='button' id='saveAsTemplateBtn' style='margin-right:5px;' value='Save As Template' />");
+
+    var attachFilesDiv = $("<div style='display:inline-block;padding-top:0' />");
     var attachFileBtn = $("<input type='button' id='attachFilesBtn' style='display:inline-block;margin-right:10px' value='Attach..' />");
     var attachFileList = $("<div id='attachFilesList' style='display:inline-block;'  />");
     var attachFileOperation = $("<input id='attachFilesOp' type='file' name='attachFilesOp' style='display: none;' multiple />");
     attachFilesDiv.append(attachFileBtn).append(attachFileList).append(attachFileOperation);
     attachFileBtn.click(handleShowFileUploadDialog);
 
-    return emailContainer.append("<br />").append(attachFilesDiv);
+    emailContainer.append("<br />").append(saveAsTemplateBtn).append(attachFilesDiv);
+
+    saveAsTemplateBtn.click(function () {
+        var validationErrorMsg = '';
+        if (communicationsMode == "EMAIL") {
+            var emailSubject = $('#emailSubject').val().trim();
+            var emailBody = $('#emailMessageBody').val().trim();
+            if (emailBody == '' || emailSubject == '' || emailSubject == 'Subject') {
+                validationErrorMsg = "Please supply a valid subject and body for the email before saving the template.";
+            }
+        }
+        if (communicationsMode == "SMS") {
+            throw new exception(); // Must supply input box for template name
+            var smsBody = $("#smsMessageContainer").val().trim();
+            if (smsBody == '') {
+                validationErrorMsg = 'Please supply message content before saving the template.';
+            }
+        }
+
+        if (validationErrorMsg != '') {
+            alert(validationErrorMsg);
+            return;
+        }
+        var dialogHandle = $("<div title='Save Content As Template' style='display:none;font-family:Verdana;font-size:12px;'></div>");
+        dialogHandle.empty();
+        dialogHandle.append("<div>This message will be saved as a template message for future re-use.<br /> \
+                                 The subject text will be used as the template name.<br /><br /> Please note that any existing templates with the same name will be overwritten.</div>");
+
+        dialogHandle.dialog(
+          {
+              modal: true,
+              closeOnEscape: true,
+              width: 'auto',
+              buttons: { "Save and close": function () { saveUserTemplate(); $(this).dialog("close"); } },
+              position: ['center', 'center']
+          });
+    });
+
+    return emailContainer;
 }
 
 function handleShowFileUploadDialog() {
@@ -379,8 +557,128 @@ function handleShowFileUploadDialog() {
     }
 }
 
+function handleMyTemplatesItemClick() {
+    removeMarkersFromSelection();
+    commCustomSelectionEnabled = true;
+    buildTemplateItemOptionsDiv('my_template');
+    loadTemplates('get_user_template_list', null, function (results) {
+        $('#templateSelector').append("<option value='-1'>--- My Templates ---</option>");
+        $.each(results, function (idx, result) {
+            $('#templateSelector').append("<option value='" + idx + "'>" + result.TemplateName + "</option>");
+        });
+    });
+    $('#templateSelector').unbind('change').bind('change', function () {
+        var selectedIndex = $('#templateSelector').val();
+        if (selectedIndex > -1) {
+            var templateName = $('#templateSelector option:selected').text();
+            loadTemplates('get_user_template', templateName, function (result) {
+                populateTemplateContent(result);
+            });
+
+            $('#deleteTemplateBtn').css('display', 'inline-block');
+        } else {
+            populateTemplateContent({ TemplateName: "", TemplateContent: "", TemplateActivityTypeId: null });
+
+            $('#deleteTemplateBtn').css('display', 'none');
+        }
+    });
+
+    $('#deleteTemplateBtn').unbind('click').bind('click', function () {
+        var templateName = $('#templateSelector option:selected').text();
+        deleteTemplate(templateName, function () {
+            // splash screen and update UI
+            populateTemplateContent({ TemplateName: "", TemplateContent: "", TemplateActivityTypeId: null });
+            //buildTemplateItemOptionsDiv('my_template');
+            handleMyTemplatesItemClick();
+        });
+    });
+}
+
+function handleStandardTemplatesItemClick() {
+    removeMarkersFromSelection();
+    commCustomSelectionEnabled = true;
+    buildTemplateItemOptionsDiv();
+    loadTemplates('get_system_template_list', null, function (results) {
+        $('#templateSelector').append("<option value='-1'>--- Standard Templates ---</option>");
+        $.each(results, function (idx, result) {
+            $('#templateSelector').append("<option value='" + idx + "'>" + result.TemplateName + "</option>");
+        });
+    });
+    $('#templateSelector').unbind('change').bind('change', function () {
+        var selectedIndex = $('#templateSelector').val();
+        if (selectedIndex > -1) {
+            var templateName = $('#templateSelector option:selected').text();
+            loadTemplates('get_system_template', templateName, function (result) {
+                populateTemplateContent(result);
+                if (specialActivityTemplates.indexOf(result.ActivityName) > -1) {
+                    showDialogSpecialTemplateSelected();
+                }
+            });
+        } else {
+            populateTemplateContent({ TemplateName: "", TemplateContent: "", TemplateActivityTypeId: null });
+        }
+    });
+}
+
+function currentOrAllSuburbsSelected() {
+    var currentSub = $('#commCurrentSuburbRadioBtn').is(':checked');
+    var allSubs =  $('#commAllSuburbsRadioBtn').is(':checked');
+    return currentSub == true || allSubs == true;
+}
+
+function showDialogSpecialTemplateSelected() {
+    if (currentOrAllSuburbsSelected()) {
+        return; // Either option is selected.
+    }
+
+    var specialActivityTemplateDiv = $("<div title='Special Template' style='font-family:Verdana;font-size:12px;' />");
+    specialActivityTemplateDiv.empty().append("<span>Please note that this type of template applies only to contact people who meet certain criteria \
+                                                    and therefore should be used in conjunction with the 'Current Suburb' or 'All Suburbs' options.</span>");
+
+    specialActivityTemplateDiv.dialog(
+  {
+      modal: true,
+      closeOnEscape: true,
+      width: '400',
+      buttons: { "Ok": function () { $(this).dialog("close"); removeMarkersFromSelection(); } },
+      position: ['center', 'center']
+  });
+}
+
+function handleNewsletterTemplateItemClick() {
+    removeMarkersFromSelection();
+    commCustomSelectionEnabled = true;
+    buildTemplateItemOptionsDiv();
+    var date = toTitleCase(getMonthName()) + ' ' + new Date().getFullYear();
+    $('#templateSelector').empty().append("<option value='-1'>Newsletter - " + date + "</option>");
+
+    loadTemplates('get_newsletter', null, function (result) {
+        populateTemplateContent(result);
+    });
+}
+
+function populateTemplateContent(templateItem) {
+    selectedTemplateActivityTypeId = templateItem.TemplateActivityTypeId;
+    if (communicationsMode == "EMAIL") {
+        $('#emailSubject').val(templateItem.TemplateName);
+        var txt = document.createElement("textarea");
+        txt.innerHTML = templateItem.TemplateContent;
+
+        CKEDITOR.instances.emailMessageBody.setData(txt.value);
+        emailBodyInitialised = true;
+    }
+    if (communicationsMode == "SMS") {
+
+    }
+}
+
 // Menu item click handlers
 function handlePolyMenuItemClick() {
+    if (!commCustomSelectionEnabled) {
+        showDialogCommCustomSelectionDisabled();
+        return;
+    }
+
     toggleDrawingMode();
 }
 
@@ -388,22 +686,38 @@ function handleRemovePolyMenuItemClick() {
     removePolygonsWithMarkers();
 }
 
+function handleEmailTemplateBtnClick() {
+    $("#templateOptionsDiv").css('display', 'block');
+}
+
+function handleSMSTemplateBtnClick() {
+    $("#templateOptionsDiv").css('display', 'block');
+}
+
 function handleSMSMessageClick() {
     communicationsMode = "SMS";
     var container = $("#messageContentContainer");
     container.empty();
+    var templateContainer = $("#templateItemOptionsDiv");
+    templateContainer.empty();
     container.append(buildSMSContentContainer());
 
     updateCommunicationsContacts();
+
+    commCustomSelectionEnabled = true;
 }
 
 function handleEmailMessageClick() {
     communicationsMode = "EMAIL";
     var container = $("#messageContentContainer");
     container.empty();
+    var templateContainer = $("#templateItemOptionsDiv");
+    templateContainer.empty();
     container.append(buildEmailContentContainer());
 
     updateCommunicationsContacts();
+
+    commCustomSelectionEnabled = true;
 }
 
 function handleSMSMenuItemClick() {
@@ -423,7 +737,7 @@ function updateCommunicationsContacts() {
         getContactsFromSelectedMarkers(function (contacts) {
             if (contacts.length) {
                 contactsContainer.css('display', 'block');
-                buildContactsBody(contacts);
+                buildContactsBody(contacts, true);
 
                 if (communicationsMode == "SMS") {
                     updateCostOfBatchSMS();
@@ -442,6 +756,8 @@ function updateCommunicationsContacts() {
         }); //display a message saying "please select contacts with an email" or  "mobile number". NB also CHECK for AND USE only cell numbers
     }
     else {
+        var commContactsTable = $("#commContactsTable");
+        commContactsTable.find("tr").remove();
         contactsContainer.css('display', 'none');
     }
 }
@@ -478,7 +794,7 @@ function getContactFromId(contactPersonId) {
     return result;
 }
 
-function buildContactsBody(contacts) {
+function buildContactsBody(contacts, selectCells) {
     var commContactsTable = $("#commContactsTable");
     commContactsTable.find("tr").remove();
     var body = $("<tbody></tbody>");
@@ -490,11 +806,14 @@ function buildContactsBody(contacts) {
 
         var contactDetailContent, contactDetailTitle = '', actionStatus = 'Ready';
         var rowIsSelected = 'checked';
-        if (c.EmailSent) {
-            actionStatus = 'Sent';
+        if (c.EmailSubmitted) {
+            actionStatus = 'Submitted';
         }
         if (c.SendError) {
             actionStatus = 'Error';
+        }
+        if (c.IsPOPIrestricted) {
+            actionStatus = 'Opt-out';
         }
         if (c.SMSOptout && communicationsMode == "SMS") {
             actionStatus = 'Opt-out';
@@ -580,7 +899,7 @@ function buildContactsBody(contacts) {
                 rowIsSelected = uniqueItems.indexOf(defaultEmail.ItemContent) > -1 ? '' : 'checked';
                 uniqueItems.push(defaultEmail.ItemContent);
 
-                if (c.EmailSent) {
+                if (c.EmailSubmitted) {
                     rowIsSelected = '';
                     tr.css('background-color', 'lightgreen');
                 }
@@ -631,6 +950,12 @@ function buildContactsBody(contacts) {
             rowIsSelected = '';
         }
         if (c.EmailOptout && communicationsMode == "EMAIL") {
+            rowIsSelected = '';
+        }
+        if (c.IsPOPIrestricted) {
+            rowIsSelected = '';
+        }
+        if (!selectCells) {
             rowIsSelected = '';
         }
 
@@ -868,9 +1193,9 @@ function handleCommEditBtnClick(contact, row) {
     }
 }
 
-function handleSendMessage() {
+function handleSendMessage(callbackFn) {
     if (communicationsMode == "EMAIL") {
-        authorizeAndSendGmail();
+        submitEmails(callbackFn);
     }
     if (communicationsMode == "SMS") {
         sendSMS();
@@ -1005,6 +1330,20 @@ function validateMessage() {
         var emailSubject = $('#emailSubject').val().trim();
         var emailBody = $('#emailMessageBody').val().trim();
 
+        if (emailSubject == '' || emailSubject == defaultSubjectText) {
+            alert('Please add a subject line.');
+            return false;
+        }
+
+        if (emailBody == '' || emailBody == defaultBodyText) {
+            alert('Please add a message body.');
+            return false;
+        }
+
+        if (currentOrAllSuburbsSelected()) {
+            return true;
+        }
+
         if (!validateNoRowsSelected()) {
             return false;
         }
@@ -1021,20 +1360,19 @@ function validateMessage() {
             return false;
         }
 
-        if (emailSubject == '' || emailSubject == defaultSubjectText) {
-            alert('Please add a subject line.');
-            return false;
-        }
-
-        if (emailBody == '' || emailBody == defaultBodyText) {
-            alert('Please add a message body.');
-            return false;
-        }
-
         return true;
     }
     if (communicationsMode == "SMS") {
         var smsBody = $("#smsMessageContainer").val().trim();
+
+        if (!smsBody) {
+            alert('Please add the message content');
+            return false;
+        }
+
+        if (currentOrAllSuburbsSelected()) {
+            return true;
+        }
 
         if (!validateNoRowsSelected()) {
             return false;
@@ -1056,186 +1394,79 @@ function validateMessage() {
             return false;
         }
 
-        if (!smsBody) {
-            alert('Please add the message content');
-            return false;
-        }
         return true;
     }
 
     return false;
 }
 
-function authorizeAndSendGmail() {
-   
-    gapi.client.setApiKey('AIzaSyBCYyAhMO9Ia9thqz0LxXzzZL-Kk6b2bNs');
-    handleAuth(true);
-
-    function handleAuthResult(authResult) {
-        if (authResult['status']['signed_in']) {
-            sendEmailMessage();
-        } else if (authResult['error'] == "immediate_failed") {
-            handleAuth(false);
-        }
-    }
-
-    function handleAuth(promptUser) {
-        window.setTimeout(function () {
-            gapi.auth.authorize({ client_id: '196629217199-q1r0dbt6brmk86v7anme6t6rvuksn5ip.apps.googleusercontent.com', scope: 'https://www.googleapis.com/auth/gmail.compose', immediate: promptUser }, handleAuthResult);
-        }, 1000);
-    }
-}
-
-function generateEmailObjectBase64(subjectLine, emailBody, address) {
-    var cids = [];
-    emailBody = convertInlineImages(emailBody, cids);
-    var email = {
-        "to": address,
-        "subject": subjectLine,
-        "from": "me",
-        "body": emailBody,
-        "cids": cids,
-        "attaches": uploadedFiles
-    };
-    email = createMimeMessage(email);
-
-    var base64EncodedEmail = btoa(email).replace(/\//g, '_').replace(/\+/g, '-');
-
-    return base64EncodedEmail;
-}
-
-function convertInlineImages(body, cids) {
-    var re = /<img[^>]*src=[\'\"]?data:image\/[^>]*>/g;
-    var matches = re.exec(body);
-    if (matches) {
-        for (var i = 0; i < matches.length; i++) {
-            var match = matches[i];
-            body = convertInlineImage(body, match, cids);
-            return convertInlineImages(body, cids);
-        }
-    }
-
-    function convertInlineImage(body, match, cids) {
-        var typeStartIndex = match.indexOf(':');
-        var typeEndIndex = match.indexOf(';');
-        var type = match.substring(typeStartIndex+1, typeEndIndex);
-
-        var name = generateUniqueID();
-
-        var base64Start = match.indexOf('base64,');
-        var base64 = match.substring(base64Start + 7, match.length).replace('" />', '');
-
-        cids.push({ type: type, name: name, base64: base64 });
-
-        body = body.replace(match, '<img src="cid:' + name + '" />');
-        return body;
-    }
-
-    return body;
-}
-
-function sendEmailMessage() {
+function submitEmails(callbackFn) {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Processing. Please wait...</p>' });
 
     var commSelectedRows = $('#commContactsTable tr.rowSelected');
-    var completedRows = [];
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Sending email to recipients...</p>' });
-    gapi.client.load('gmail', 'v1', function () {
-
-        $.each(commSelectedRows, function (idx, row) {
-            var contactId = $(row).attr("id").replace('comm_row_','');
-            var contact = getContactFromId(contactId);
-            contact.SendError = null;
-
-            var subjectText = $('#emailSubject').val();
-            contact.TargetEmailSubjectText = subjectText;
-            var emailObject = null;
-            var address = getDefaulEmailAddress(contact);
-            contact.TargetEmailAddress = address;
-            try {
-                var emailMsg = generateMessageForRecord($('#emailMessageBody').val(), contact);
-                emailMsg += '<br />' + userEmailSignature + '<p />' + createUnSubscribeOption(contact);
-
-                emailObject = generateEmailObjectBase64(subjectText, emailMsg, address);
-                contact.TargetEmailObject = emailObject;
-                executeGmailSendMessage(emailObject, function (gmailResult) { handleSendingComplete(gmailResult, row, contact); });
-            } catch (e) {
-                contact.SendError = e.stack;
-                contact.EmailSent = false;
-                var commErrorObject = createCommunicationLogRecord('GENERAL', 'EMAIL', contactId, address, contact.TargetLightstonePropertyId, 'NOT SENT', encodeURIComponent(e.stack), emailObject, subjectText);
-                saveCommunication(commErrorObject);
-                completedRows.push(row);
-
-                handleSendingAllRowsComplete();
-            }
-        });
+    var recipients = [];
+    $.each(commSelectedRows, function (idx, row) {
+        var contactId = $(row).attr("id").replace('comm_row_', '');
+        var contact = getContactFromId(contactId);
+        recipients.push(contact);
     });
 
-    function saveCommunication(commObject) {
-        $.ajax({
-            type: "POST",
-            url: "RequestHandler.ashx",
-            data: JSON.stringify({
-                Instruction: "save_communication", CommContext: commObject.CommContext,
-                CommType: commObject.CommType,
-                TargetContactPersonId: commObject.TargetContactPersonId,
-                TargetContactDetail: commObject.TargetContactDetail,
-                TargetLightstonePropId: commObject.TargetLightstonePropId,
-                SentStatus: commObject.SentStatus,
-                SendingError: commObject.SendingError,
-                MessageBase64: encodeURIComponent(commObject.MessageBase64),
-                SubjectText: commObject.SubjectText
-            }),
-            dataType: "json"
-        }).done(function (data) {
-            if (!handleResponseIfServerError(data)) {
-                return;
-            }
-        });
-    }
+    var emailBodyRaw = encodeURIComponent(b64EncodeUnicode($('#emailMessageBody').val() + '<br />' + userEmailSignature));
+    var emailSubjectRaw = encodeURIComponent(b64EncodeUnicode($('#emailSubject').val()));
+    var batchNameRaw = encodeURIComponent(b64EncodeUnicode($('#batchFriendlyName').val()));
+    var emailRequestPacket =
+        {
+            Instruction: 'send_emails',
+            Recipients: recipients,
+            EmailBodyHTMLRaw: emailBodyRaw,
+            EmailSubjectRaw: emailSubjectRaw,
+            ContactsInCurrentSuburb: $('#commCurrentSuburbRadioBtn').is(':checked'),
+            CurrentSuburbId: currentSuburb != null ? currentSuburb.SuburbId : null,
+            ContactsInAllMySuburbs: $('#commAllSuburbsRadioBtn').is(':checked'),
+            NameOfBatch: batchNameRaw,
+            TemplateActivityTypeId: selectedTemplateActivityTypeId
+        };
 
-    function executeGmailSendMessage(emailObject, callback) {
-        var request = gapi.client.gmail.users.messages.send({
-            auth: 'OAuth2Client',
-            userId: "me",
-            raw: emailObject,
-        });
-        request.execute(callback);
-    }
-
-    function handleSendingAllRowsComplete() {
-        if (completedRows.length == commSelectedRows.length) {
-            // Update the back-end: log each record result in a table + create an activity for each
-
-            // UI update
-            var contacts = [];
-            var commAllRows = $('#commContactsTable > tbody > tr');
-            $.each(commAllRows, function (idx, row) {
-                var contactId = $(row).attr("id").replace('comm_row_', '');
-                var contact = getContactFromId(contactId);
-
-                contacts.push(contact);
-            });
-            buildContactsBody(contacts);
-            $.unblockUI();
-        }
-    }
-
-    function handleSendingComplete(gmailResult, row, contact) {
-        if (gmailResult.labelIds.indexOf('SENT') > -1) {
-            contact.EmailSent = true;
-            var commObject = createCommunicationLogRecord('GENERAL', 'EMAIL', contact.ContactPersonId, contact.TargetEmailAddress, contact.TargetLightstonePropertyId, 'SENT', null, contact.TargetEmailObject, contact.TargetEmailSubjectText);
-            saveCommunication(commObject);
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify(emailRequestPacket),
+        dataType: "json"
+    }).done(function (response) {
+        $.unblockUI();
+        if (response.SuccessfullySubmitted) {
+            var submissionSuccessDialog = $("<div id='submissionSuccessDialog' title='Communication Batch Received' style='font-family:Verdana;font-size:12px;' />");
+                submissionSuccessDialog.empty().append("Thank you, your request has been successfully received and enqueued for processing.");
+                submissionSuccessDialog.dialog(
+                                    {
+                                        modal: true,
+                                        closeOnEscape: true,
+                                        width: '400',
+                                        height: '200',
+                                        buttons: { "Ok": function () { $(this).dialog("close"); } },
+                                        position: ['center', 'center']
+                                    });
+                if (!currentOrAllSuburbsSelected() && recipients.length) {
+                    var contacts = [];
+                    var commAllRows = $('#commContactsTable > tbody > tr');
+                    $.each(commAllRows, function (idx, row) {
+                        var contactId = $(row).attr("id").replace('comm_row_', '');
+                        var contact = getContactFromId(contactId);
+                        if ($(row).hasClass('rowSelected')) {
+                            contact.EmailSubmitted = true;
+                        }
+                        contacts.push(contact);
+                    });
+                    buildContactsBody(contacts, false);
+                }
+                if (callbackFn) {
+                    callbackFn();
+                }
         } else {
-            contact.EmailSent = false;
-            contact.SendError = gmailResult.join();
-            var commErrorObject = createCommunicationLogRecord('GENERAL', 'EMAIL', contact.ContactPersonId, contact.TargetEmailAddress, contact.TargetLightstonePropertyId, 'NOT SENT', gmailResult.join(), contact.TargetEmailObject, contact.TargetEmailSubjectText);
-            saveCommunication(commErrorObject);
+            alert("An error occurred submitting your request. Please contact support. Details of the error: " + response.ErrorMessage);
+            return;
         }
-        completedRows.push(row);
-
-        // When sending is complete
-        handleSendingAllRowsComplete();
-    }
+    });
 }
 
 function getDefaulEmailAddress(contact) {
@@ -1338,6 +1569,7 @@ function getContactsFromSelectedMarkers(actionWhenDone) {
                             contact.TargetCommPropertyId = pp.ProspectingPropertyId;
                             contact.PropertyAddress = getFormattedAddress(pp);
                             contact.TargetLightstonePropertyId = pp.LightstonePropertyId;
+                            contact.TargetLightstonePropertyIdForComms = pp.LightstonePropertyId;
 
                             selectedContacts.push(contact);
                         }
@@ -1354,6 +1586,7 @@ function getContactsFromSelectedMarkers(actionWhenDone) {
                             contact.TargetCommPropertyId = pp.ProspectingPropertyId;
                             contact.PropertyAddress = getFormattedAddress(pp);
                             contact.TargetLightstonePropertyId = pp.LightstonePropertyId;
+                            contact.TargetLightstonePropertyIdForComms = pp.LightstonePropertyId;
 
                             selectedContacts.push(contact);
                         }
@@ -1378,41 +1611,76 @@ function getFormattedAddress(property) {
 }
 
 function handleCommSendBtnClick() {
+    costOfBatch = 0;
 
     if (!validateMessage()) {
         return;
     }
 
-    var commSelectedRows = $('#commContactsTable tr.rowSelected');
-    var readyStatus = '\nReady to send communication to ' + commSelectedRows.length + ' contact row(s)';
-    if (communicationsMode == "EMAIL") {
-        readyStatus += '<p />Please note that you may receive a popup-screen requesting you to log in to your Seeff mail account,\
-                                 this will allow Prospecting to send email from your account. <br />Please ensure that your browser is set to allow for pop-ups.';
+    var readyStatus = '';
+    if (currentOrAllSuburbsSelected()) {
+        if ($('#commCurrentSuburbRadioBtn').is(':checked')) {
+            readyStatus = '\nReady to send communication to the relevant contact persons in ' + currentSuburb.SuburbName + '.' +
+                          '\nPlease note that only contacts with a default email address or cellphone number will be targeted.';
+        }
+        if ($('#commAllSuburbsRadioBtn').is(':checked')) {
+            readyStatus = '\nReady to send communication to the relevant contact persons in all your available suburbs.' +
+                          '\nPlease note that only contacts with a default email address or cellphone number will be targeted.';
+        }
+    } else {
+        var commSelectedRows = $('#commContactsTable tr.rowSelected');
+        readyStatus = '\nReady to send communication to ' + commSelectedRows.length + ' contact rows.';
     }
+
+    var batchNameDiv = $("<div style='display:inline-block' />").append("<span>Specify a name for this batch (optional):</span>")
+                        .append("<input type='text' style='width:300px' id='batchFriendlyName' />");
     
         var dialog = $("#commSendMessageDialog");
         dialog.empty();
-        dialog.append(readyStatus).append("<p />");
+        dialog.append(readyStatus).append('<p />').append(batchNameDiv).append("<p />");
         
-            var previewMsgLabel = $("<p>Preview of the first message:</p>");
+            var previewMsgLabel = $("<p>Sample message:</p>");
             dialog.append(previewMsgLabel);            
             handleShowMessagePreview(function (canProceed, signatureData) {
                 var previewDialog = createPreviewMessage(signatureData, dialog);
                 dialog.append(previewDialog);
-
                 if (canProceed) {
                     dialog.dialog(
                           {
                               modal: true,
                               closeOnEscape: true,
                               //open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-                              width: 'auto',
-                              height: 'auto',
+                              width: '800',
+                              height: '600',
                               buttons: {
-                                  "Send": function () {
-                                      $(this).dialog("close");
-                                      userEmailSignature = signatureData;
-                                      handleSendMessage();
+                                  "Calculate Cost": function() {
+                                      calculateCostOfBatch();
+                                  },
+                                  "Send Message": function () {
+                                      // calc cost here anyway to determine whether they have enough credit
+                                      if (!costOfBatch) {
+                                          calculateCostOfBatch(function () {
+                                              dialog.dialog("close");
+                                              userEmailSignature = signatureData;
+                                              handleSendMessage(function () {
+                                                  availableCredit -= costOfBatch;
+                                                  $('#availableCreditLabel').text(availableCredit.toFixed(2));
+                                                  $('#commCreditValue').text(availableCredit.toFixed(2));
+                                              });
+                                          });
+                                      } else {
+                                          if (availableCredit > costOfBatch) {
+                                              $(this).dialog("close");
+                                              userEmailSignature = signatureData;
+                                              handleSendMessage(function () {
+                                                  availableCredit -= costOfBatch;
+                                                  $('#availableCreditLabel').text(availableCredit.toFixed(2));
+                                                  $('#commCreditValue').text(availableCredit.toFixed(2));
+                                              });
+                                          } else {
+                                              alert('You have insufficient credit to perform this operation');
+                                          }
+                                      }                                          
                                   }
                               },
                               position: ['center', 'center']
@@ -1425,6 +1693,7 @@ function handleCommSendBtnClick() {
                                         closeOnEscape: true,
                                         //open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
                                         width: '600',
+                                        height: '450',
                                         buttons: { "OK": function () { $(this).dialog("close"); } },
                                         position: ['center', 'center']
                                     });
@@ -1432,27 +1701,88 @@ function handleCommSendBtnClick() {
             });                   
 }
 
+function calculateCostOfBatch(callbackFn) {
+    if (communicationsMode == "EMAIL") {
+        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Calculating Cost. Please wait...</p>' });
+        var recipientCount = 0;
+        var currentSuburbId = null;
+        var targetAllUserSuburbs = false;
+        if (currentOrAllSuburbsSelected()) {
+            // we are targetting the current or all user suburbs
+            if ($('#commCurrentSuburbRadioBtn').is(':checked')) {
+                currentSuburbId = currentSuburb.SuburbId;
+            }
+            if ($('#commAllSuburbsRadioBtn').is(':checked')) {
+                targetAllUserSuburbs = true;
+            }
+        } else {
+            // we are targetting a batch of recipients
+            recipientCount = $('#commContactsTable tr.rowSelected').length;
+        }
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify({ Instruction: "comm_calculate_cost_of_batch", CommunicationType: communicationsMode, RecipientCount: recipientCount, CurrentSuburb: currentSuburbId, TargetAllUserSuburbs: targetAllUserSuburbs }),
+            dataType: "json"
+        }).done(function (result) {
+            $.unblockUI();
+            costOfBatch = (result.UnitCost * result.NumberOfUnits) / 100;
+            var costResultsDialog = $("<div title='Calculation Results' style='font-family:Verdana;font-size:12px;' />").empty()
+                                    .append("Available Prospecting credit: R " + availableCredit.toFixed(2))
+                                    .append("<br />")
+                                    .append("Unit cost per email: R " + result.UnitCost / 100)
+                                    .append("<br />")
+                                    .append("Number of emails: " + result.NumberOfUnits)
+                                    .append("<br />")
+                                    .append("Cost of batch: R " + costOfBatch);
+
+            var buttonText = "Ok";
+            if (callbackFn) {
+                buttonText = "Ok - Send Message";
+            }
+            costResultsDialog.dialog(
+              {
+                  modal: true,
+                  closeOnEscape: true,
+                  width: '400',
+                  buttons: [{
+                      text: buttonText,
+                      click: function () {
+                          $(this).dialog("close");
+                          if (callbackFn) {
+                              if (availableCredit > costOfBatch) {
+                                  callbackFn();
+                              } else {
+                                  alert('You have insufficient credit to perform this operation');
+                              }
+                          }
+                      }
+                  }],
+                  position: ['center', 'center']
+              });
+        });
+    }
+}
+
 function createUnSubscribeOption(contact) {
     if (communicationsMode == "SMS") {
         return smsOptOut;
-    }
-    if (communicationsMode == "EMAIL") {
-        var email = getDefaulEmailAddress(contact);
-        var link = 'http://prospecting.seeff.com/UnsubscribeCommunication.html?email=' + email + '&contactid=' + contact.ContactPersonId;
-        var unsubscribeOption = "<br /><br /><br /><a href='" + link + "' target='_blank'>Unsubscribe</a>";
-        return unsubscribeOption;
     }
 }
 
 function createPreviewMessage(signatureData, dialog) {
     var div = $("<div id='previewMsgDiv' />");
-    var textarea = $("<textarea id='previewTextarea' style='width:100%;height:80px;' />");
+    var textarea = $("<textarea id='previewTextarea' style='width:100%;' />");
     div.append(textarea);
 
-    var commSelectedRows = $('#commContactsTable tr.rowSelected');
-
-    var contactId = $(commSelectedRows[0]).attr("id").replace('comm_row_', '');
-    var firstRecord = getContactFromId(contactId);
+    var firstRecord = null;
+    if (currentOrAllSuburbsSelected()) {
+        firstRecord = { ContactPersonId: 1, Title: 1, Firstname: 'John', Surname: 'Doe', PropertyAddress: '22 Smith Street, Constantia', EmailAddresses: [{IsPrimary: true, ItemContent:'john.doe@somedomain.com'}] };
+    } else {
+        var commSelectedRows = $('#commContactsTable tr.rowSelected');
+        var contactId = $(commSelectedRows[0]).attr("id").replace('comm_row_', '');
+        firstRecord = getContactFromId(contactId);
+    }
 
     if (communicationsMode == "EMAIL") {
         var preview = generateMessageForRecord($("#emailMessageBody").val(), firstRecord);
@@ -1471,10 +1801,11 @@ function createPreviewMessage(signatureData, dialog) {
                 CKEDITOR.instances.previewTextarea.setData(signatureData);
             }
             else {
-                CKEDITOR.instances.previewTextarea.setData(preview + '<br />' + signatureData + '<p />' + createUnSubscribeOption(firstRecord));
+                CKEDITOR.instances.previewTextarea.setData(preview + '<br />' + signatureData);
             }
             dialog.dialog({ position: ['center', 'center'] });
             CKEDITOR.instances.previewTextarea.setReadOnly(true);
+            CKEDITOR.instances.previewTextarea.resize('100%', '800');
         });
     }
     if (communicationsMode == "SMS") {
@@ -1522,4 +1853,19 @@ function handleShowMessagePreview(callback) {
     if (communicationsMode == "SMS") {
         callback(true, null);
     }
+}
+
+function showDialogCommCustomSelectionDisabled() {
+    var customSelectionDisabledDiv = $("<div title='Custom Selection Disabled' style='font-family:Verdana;font-size:12px;' />");
+    customSelectionDisabledDiv.empty().append("<span>Custom selection mode is disabled because you have selected either the \
+                                                    'Current Suburb' or 'All Suburbs' option.</span>");
+
+    customSelectionDisabledDiv.dialog(
+  {
+      modal: true,
+      closeOnEscape: true,
+      width: '400',
+      buttons: { "Ok": function () { $(this).dialog("close"); } },
+      position: ['center', 'center']
+  });
 }

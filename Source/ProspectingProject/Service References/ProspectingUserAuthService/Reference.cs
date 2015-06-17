@@ -32,6 +32,9 @@ namespace ProspectingProject.ProspectingUserAuthService {
         private ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket[] BusinessUnitUsersField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<bool> CommunicationEnabledField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string EmailAddressField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -97,6 +100,19 @@ namespace ProspectingProject.ProspectingUserAuthService {
                 if ((object.ReferenceEquals(this.BusinessUnitUsersField, value) != true)) {
                     this.BusinessUnitUsersField = value;
                     this.RaisePropertyChanged("BusinessUnitUsers");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<bool> CommunicationEnabled {
+            get {
+                return this.CommunicationEnabledField;
+            }
+            set {
+                if ((this.CommunicationEnabledField.Equals(value) != true)) {
+                    this.CommunicationEnabledField = value;
+                    this.RaisePropertyChanged("CommunicationEnabled");
                 }
             }
         }

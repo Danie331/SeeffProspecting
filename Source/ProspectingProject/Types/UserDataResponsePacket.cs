@@ -16,6 +16,7 @@ namespace ProspectingProject
         public string UserSurname { get; set; }
         public bool IsProspectingManager { get; set; }
         public string EmailAddress { get; set; }
+        public bool HasCommAccess { get; set; }
 
         public UserDataResponsePacket ProspectingManager { get; set; }
 
@@ -24,5 +25,10 @@ namespace ProspectingProject
         public List<FollowUpActivity> FollowupActivities { get; set; }
 
         public int TotalFollowups { get; set; }
+
+        public string Fullname
+        {
+            get { return UserName + " " + UserSurname; }
+        }
     }
 }

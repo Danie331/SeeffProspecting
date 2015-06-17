@@ -39,7 +39,8 @@ namespace SeeffProspectingAuthService
                                       Guid = user.user_guid,
                                       Authenticated = true,
                                       ManagerDetails = userManager,
-                                      BusinessUnitUsers = businessUnitUsers
+                                      BusinessUnitUsers = businessUnitUsers,
+                                      CommunicationEnabled = user.prospecting_communication
                                   }).FirstOrDefault();
 
                 return userRecord;

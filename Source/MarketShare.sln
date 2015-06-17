@@ -331,9 +331,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeeffSpatialApi", "SeeffSpa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProspectingReleaseBuilder", "ProspectingReleaseBuilder\ProspectingReleaseBuilder.csproj", "{7483D572-618A-4A9D-9311-72BDB3E1340F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProspectingTaskScheduler", "ProspectingTaskScheduler\ProspectingTaskScheduler.csproj", "{71927360-25E0-4990-9CD9-E91562C7249E}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://learnitsource.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -378,6 +380,9 @@ Global
 		SccProjectUniqueName12 = ProspectingReleaseBuilder\\ProspectingReleaseBuilder.csproj
 		SccProjectName12 = ProspectingReleaseBuilder
 		SccLocalPath12 = ProspectingReleaseBuilder
+		SccProjectUniqueName13 = ProspectingTaskScheduler\\ProspectingTaskScheduler.csproj
+		SccProjectName13 = ProspectingTaskScheduler
+		SccLocalPath13 = ProspectingTaskScheduler
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -432,6 +437,10 @@ Global
 		{7483D572-618A-4A9D-9311-72BDB3E1340F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7483D572-618A-4A9D-9311-72BDB3E1340F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7483D572-618A-4A9D-9311-72BDB3E1340F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71927360-25E0-4990-9CD9-E91562C7249E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71927360-25E0-4990-9CD9-E91562C7249E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71927360-25E0-4990-9CD9-E91562C7249E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71927360-25E0-4990-9CD9-E91562C7249E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

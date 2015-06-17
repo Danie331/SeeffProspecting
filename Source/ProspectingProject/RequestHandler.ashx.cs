@@ -43,13 +43,6 @@ namespace ProspectingProject
                     return;
                 }
 
-                // This handles un-authenticated requests, ie public requests
-                if (request.Instruction == "contact_optout")
-                {
-                    VerifyOptoutContact(json);
-                    return;
-                }
-
                 // This line will ensure that the user has a valid session before making any of the following requests - none should be publicly accessible. 
                 GetUserSessionObject();
                 switch (request.Instruction)
@@ -122,9 +115,6 @@ namespace ProspectingProject
                         var properties = LoadProperties(json);
                         context.Response.Write(properties);
                         break;
-                    case "save_communication":
-                        SaveCommunicationRecord(json);
-                        break;
                     case"retrieve_user_signature":
                         string userSignature = RetrieveUserSignature();
                         context.Response.Write(userSignature);
@@ -132,6 +122,32 @@ namespace ProspectingProject
                     case "send_sms":
                         string response = SendSMS(json);
                         context.Response.Write(response);
+                        break;
+                    case "send_emails":
+                        var status = SendEmails(json);
+                        context.Response.Write(status);
+                        break;
+                    case "get_template":
+                        string template = GetTemplate(json);
+                        context.Response.Write(template);
+                        break;
+                    case "add_update_template":
+                        AddOrUpdateTemplate(json);
+                        break;
+                    case "delete_template":
+                        DeleteTemplate(json);
+                        break;
+                    case "get_user_template_list":
+                        string userTemplates = GetUserTemplates(json);
+                        context.Response.Write(userTemplates);
+                        break;
+                    case "get_system_template_list":
+                        string sysTemplates = GetSystemTemplates(json);
+                        context.Response.Write(sysTemplates);
+                        break;
+                    case "comm_calculate_cost_of_batch":
+                        string result = CalculateCostOfCommunicationBatch(json);
+                        context.Response.Write(result);
                         break;
                 }
             }
@@ -167,29 +183,58 @@ namespace ProspectingProject
             }
         }
 
-        private void VerifyOptoutContact(string json)
+        private string CalculateCostOfCommunicationBatch(string json)
         {
-            try
-            {
-                var request = ProspectingCore.Deserialise<ContactOptoutRequest>(json);
-                ProspectingCore.VerifyOptoutContact(request);
-            }
-            catch
-            {
-                // We should not worry about errors that may occur here, because this method can be invoked from a public location and out-of-session.
-            }
+            var userSuburbs = (List<UserSuburb>)HttpContext.Current.Session["user_suburbs"];
+            var inputParameters = ProspectingCore.Deserialise<CommBatchParameters>(json);
+            var calculationResult = ProspectingCore.CalculateCostOfBatch(inputParameters, userSuburbs);
+            return ProspectingCore.SerializeToJsonWithDefaults(calculationResult);
+        }
+
+        private string SendEmails(string json)
+        {
+            var emailBatch = ProspectingCore.Deserialise<EmailBatch>(json);
+            var status = ProspectingCore.SubmitEmailBatch(emailBatch);
+            return ProspectingCore.SerializeToJsonWithDefaults(status);
+        }
+
+        private string GetSystemTemplates(string json)
+        {
+            var templateRequest = ProspectingCore.Deserialise<CommTemplateRequest>(json);
+            var results = ProspectingCore.GetListOfSystemTemplates(templateRequest);
+            return ProspectingCore.SerializeToJsonWithDefaults(results);
+        }
+
+        private string GetUserTemplates(string json)
+        {
+            var templateRequest = ProspectingCore.Deserialise<CommTemplateRequest>(json);
+            var results = ProspectingCore.GetListOfUserTemplates(templateRequest);
+            return ProspectingCore.SerializeToJsonWithDefaults(results);
+        }
+
+        private void DeleteTemplate(string json)
+        {
+            var templateRequest = ProspectingCore.Deserialise<CommTemplateRequest>(json);
+            ProspectingCore.DeleteTemplate(templateRequest);
+        }
+
+        private void AddOrUpdateTemplate(string json)
+        {
+            var templateRequest = ProspectingCore.Deserialise<CommTemplateRequest>(json);
+            ProspectingCore.AddOrUpdateTemplate(templateRequest);
+        }
+
+        private string GetTemplate(string json)
+        {
+            var templateRequest = ProspectingCore.Deserialise<CommTemplateRequest>(json);
+            var result = ProspectingCore.GetTemplate(templateRequest);
+            return ProspectingCore.SerializeToJsonWithDefaults(result);
         }
 
         private string RetrieveUserSignature()
         {
             var sig = ProspectingCore.RetrieveUserSignature();
             return ProspectingCore.SerializeToJsonWithDefaults(sig);
-        }
-
-        private void SaveCommunicationRecord(string json)
-        {
-            var commObject = ProspectingCore.Deserialise<CommunicationRecord>(json);
-            ProspectingCore.SaveCommunicationRecord(commObject);
         }
 
         private string LoadProperties(string json)

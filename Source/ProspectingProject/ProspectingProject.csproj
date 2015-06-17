@@ -104,9 +104,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WindowsAzure.Storage.4.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq">
@@ -702,7 +702,6 @@
     <Content Include="..\SharedScripts\StyleSheets\jquery.contextMenu.css">
       <Link>Scripts\StyleSheets\jquery.contextMenu.css</Link>
     </Content>
-    <Content Include="3rdPartyDLLs\SeeffGlobal.dll" />
     <Content Include="Assets\add_activity.png" />
     <Content Include="Assets\bin.png" />
     <Content Include="Assets\capture_address.png" />
@@ -726,6 +725,8 @@
     <Content Include="Assets\marker_icons\prospecting\ss_prospected.png" />
     <Content Include="Assets\marker_icons\prospecting\ss_unprospected.png" />
     <Content Include="Assets\marker_icons\prospecting\unprospected_bulk_select.png" />
+    <Content Include="Assets\my_templates.png" />
+    <Content Include="Assets\newsletter_template.png" />
     <Content Include="Assets\notes.png" />
     <Content Include="Assets\person.png" />
     <Content Include="Assets\phone_icon.png" />
@@ -736,6 +737,7 @@
     <Content Include="Assets\seeff_logo.png" />
     <Content Include="Assets\set_signature_boss.png" />
     <Content Include="Assets\ss_edit.png" />
+    <Content Include="Assets\standard_templates.png" />
     <Content Include="Assets\tps_info.png" />
     <Content Include="Assets\traceps_lookup.png" />
     <Content Include="Assets\view_btn.png" />
@@ -1014,9 +1016,9 @@
     <Content Include="Scripts\3rdParty\ckeditor\skins\moono\images\refresh.png" />
     <Content Include="Scripts\3rdParty\ckeditor\styles.js" />
     <Content Include="Scripts\3rdParty\CrossDomainRequestPlugin.js" />
-    <Content Include="Scripts\3rdParty\mime-js\base64.js" />
-    <Content Include="Scripts\3rdParty\mime-js\mime-js.js" />
+    <Content Include="Scripts\3rdParty\jqueryBlockUI.js" />
     <Content Include="Scripts\3rdParty\waitForImage.js" />
+    <Content Include="Scripts\Core\CommunicationTemplates.js" />
     <Content Include="Scripts\Core\DrawingMultiSelect.js" />
     <Content Include="Scripts\Core\Communication.js" />
     <Content Include="Scripts\StyleSheets\OpenTip.css" />
@@ -1118,7 +1120,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Prospecting.dbml</DependentUpon>
     </Compile>
-    <Compile Include="ProspectingCore\CommunicationTemplates.cs" />
+    <Compile Include="ProspectingCore\Communication\CommunicationCore.cs" />
+    <Compile Include="ProspectingCore\Communication\CommunicationTemplates.cs" />
+    <Compile Include="ProspectingCore\Communication\EmailAddressComparer.cs" />
+    <Compile Include="ProspectingCore\Communication\EmailRecipient.cs" />
     <Compile Include="RequestHandler.ashx.cs">
       <DependentUpon>RequestHandler.ashx</DependentUpon>
     </Compile>
@@ -1141,6 +1146,11 @@
     <Compile Include="Services\TracePS\TracepsPhoneNumberLookup.cs" />
     <Compile Include="Services\TracePS\TracepsTestService.cs" />
     <Compile Include="Types\ActivityBundle.cs" />
+    <Compile Include="Types\CommBatchParameters.cs" />
+    <Compile Include="Types\CommTemplateRequest.cs" />
+    <Compile Include="Types\CommunicationBatchStatus.cs" />
+    <Compile Include="Types\CommunicationTemplate.cs" />
+    <Compile Include="Types\EmailBatch.cs" />
     <Compile Include="Types\FollowupActivity.cs" />
     <Compile Include="Types\IProspectingContactEntity.cs" />
     <Compile Include="Types\BaseDataRequestPacket.cs" />
@@ -1150,7 +1160,6 @@
     <Compile Include="Types\GeoLocation.cs" />
     <Compile Include="Types\IListing.cs" />
     <Compile Include="Types\ILocation.cs" />
-    <Compile Include="Types\ContactOptoutRequest.cs" />
     <Compile Include="Types\ContactRow.cs" />
     <Compile Include="Types\ExistingFollowupItems.cs" />
     <Compile Include="Types\FollowupBundle.cs" />
@@ -1178,7 +1187,7 @@
     <Compile Include="Types\ProspectingProperty.cs" />
     <Compile Include="Types\ProspectingContactPerson.cs" />
     <Compile Include="Types\ProspectingPropertyId.cs" />
-    <Compile Include="ProspectingCore\ProspectingStaticData.cs" />
+    <Compile Include="ProspectingCore\ProspectingLookupData.cs" />
     <Compile Include="Types\ProspectingSuburb.cs" />
     <Compile Include="Types\SuburbDataRequestPacket.cs" />
     <Compile Include="Web References\lightstoneSeeffService\Reference.cs">

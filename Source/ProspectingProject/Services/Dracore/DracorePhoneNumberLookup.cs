@@ -75,7 +75,7 @@ namespace ProspectingProject
             string title = purgeField(dracoreResult.TITLE);
             if (!string.IsNullOrWhiteSpace(title))
             {
-                var kvp = ProspectingStaticData.ContactPersonTitle.FirstOrDefault(l => l.Value.ToUpper() == title.ToUpper());
+                var kvp = ProspectingLookupData.ContactPersonTitle.FirstOrDefault(l => l.Value.ToUpper() == title.ToUpper());
                 title = kvp.Key > 0 ? kvp.Key.ToString() : null;
             }
             _results.Title = title;
@@ -174,7 +174,7 @@ namespace ProspectingProject
         {
             _results = results;
             _results.IdNumber = _inputData.LightstoneIDOrCKNo;
-            _results.LookupType = ProspectingStaticData.DracorePhoneEnquiryRequest;
+            _results.LookupType = ProspectingLookupData.DracorePhoneEnquiryRequest;
         }
     }
 }

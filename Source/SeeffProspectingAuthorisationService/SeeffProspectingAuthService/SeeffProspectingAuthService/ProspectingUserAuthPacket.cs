@@ -38,5 +38,8 @@ namespace SeeffProspectingAuthService
 
         [DataMember]
         public List<ProspectingUserAuthPacket> BusinessUnitUsers { get; set; }
+
+        [DataMember]
+        public bool? CommunicationEnabled { get; set; }
     }
 }

@@ -135,7 +135,7 @@ namespace ProspectingProject
         {
             _results = results;
             _results.IdNumber = _inputData.LightstoneIDOrCKNo;
-            _results.LookupType = ProspectingStaticData.DracoreEmailEnquiryRequest;
+            _results.LookupType = ProspectingLookupData.DracoreEmailEnquiryRequest;
         }
     }
 }

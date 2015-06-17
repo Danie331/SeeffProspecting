@@ -1,5 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="boss" Class="BossDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=louise-pc;Initial Catalog=boss;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="bossConnectionString2" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.license_branches" Member="license_branches">
+    <Type Name="license_branch">
+      <Column Name="license_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="branch_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="business_unit_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.user_signature" Member="user_signatures">
+    <Type Name="user_signature">
+      <Column Name="user_signature_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="registration_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="user_designation" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="google_plus" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="linkedin" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="facebook" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="twitter" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="pintrest" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="blog" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="flickr" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="my_page" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="youtube" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="seeff" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="signature_html" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.user_registration" Member="user_registrations">
     <Type Name="user_registration">
       <Column Name="registration_id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -66,31 +91,7 @@
       <Column Name="deleted_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="deleted_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="license_control" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.license_branches" Member="license_branches">
-    <Type Name="license_branch">
-      <Column Name="license_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="branch_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="business_unit_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.user_signature" Member="user_signatures">
-    <Type Name="user_signature">
-      <Column Name="user_signature_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="registration_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="user_designation" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="google_plus" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="linkedin" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="facebook" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="twitter" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="pintrest" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="blog" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="flickr" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="my_page" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="youtube" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="seeff" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="signature_html" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="prospecting_communication" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.user_auth" Method="user_auth">

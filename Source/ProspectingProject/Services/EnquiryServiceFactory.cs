@@ -15,17 +15,17 @@ namespace ProspectingProject
 
             switch (lookupType)
             {
-                case ProspectingStaticData.DracorePhoneEnquiryRequest: 
+                case ProspectingLookupData.DracorePhoneEnquiryRequest: 
                 {
                     IDracoreService dracoreService = GetDracoreService();
                     return new DracorePhoneNumberLookup(dracoreService, inputData);
                 }
-                case ProspectingStaticData.DracoreEmailEnquiryRequest:
+                case ProspectingLookupData.DracoreEmailEnquiryRequest:
                 {
                     IDracoreService dracoreService = GetDracoreService();
                     return new DracoreEmailAddressLookup(dracoreService, inputData);
                 }
-                case ProspectingStaticData.TracePSEnquiryRequest:
+                case ProspectingLookupData.TracePSEnquiryRequest:
                 {
                     ITracepsService tpsService = GetTracePsService();
                     return new TracepsPhoneNumberLookup(tpsService, inputData);

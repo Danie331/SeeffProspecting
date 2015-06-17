@@ -65,14 +65,6 @@ namespace SeeffProspectingAuthService
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<user_registration> user_registrations
-		{
-			get
-			{
-				return this.GetTable<user_registration>();
-			}
-		}
-		
 		public System.Data.Linq.Table<license_branch> license_branches
 		{
 			get
@@ -89,6 +81,14 @@ namespace SeeffProspectingAuthService
 			}
 		}
 		
+		public System.Data.Linq.Table<user_registration> user_registrations
+		{
+			get
+			{
+				return this.GetTable<user_registration>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.user_auth")]
 		public int user_auth([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string user_guid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="UniqueIdentifier")] System.Nullable<System.Guid> session_key, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string app)
 		{
@@ -100,6 +100,330 @@ namespace SeeffProspectingAuthService
 		public IQueryable<prospecting_controllerResult> prospecting_controller([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="UniqueIdentifier")] System.Nullable<System.Guid> user_guid)
 		{
 			return this.CreateMethodCallQuery<prospecting_controllerResult>(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), user_guid);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.license_branches")]
+	public partial class license_branch
+	{
+		
+		private int _license_id;
+		
+		private int _branch_id;
+		
+		private System.Nullable<int> _business_unit_id;
+		
+		public license_branch()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_license_id", DbType="Int NOT NULL")]
+		public int license_id
+		{
+			get
+			{
+				return this._license_id;
+			}
+			set
+			{
+				if ((this._license_id != value))
+				{
+					this._license_id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_branch_id", DbType="Int NOT NULL")]
+		public int branch_id
+		{
+			get
+			{
+				return this._branch_id;
+			}
+			set
+			{
+				if ((this._branch_id != value))
+				{
+					this._branch_id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_business_unit_id", DbType="Int")]
+		public System.Nullable<int> business_unit_id
+		{
+			get
+			{
+				return this._business_unit_id;
+			}
+			set
+			{
+				if ((this._business_unit_id != value))
+				{
+					this._business_unit_id = value;
+				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.user_signature")]
+	public partial class user_signature
+	{
+		
+		private int _user_signature_id;
+		
+		private int _registration_id;
+		
+		private string _user_designation;
+		
+		private string _google_plus;
+		
+		private string _linkedin;
+		
+		private string _facebook;
+		
+		private string _twitter;
+		
+		private string _pintrest;
+		
+		private string _blog;
+		
+		private string _flickr;
+		
+		private string _my_page;
+		
+		private string _youtube;
+		
+		private string _seeff;
+		
+		private string _signature_html;
+		
+		public user_signature()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_signature_id", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
+		public int user_signature_id
+		{
+			get
+			{
+				return this._user_signature_id;
+			}
+			set
+			{
+				if ((this._user_signature_id != value))
+				{
+					this._user_signature_id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_registration_id", DbType="Int NOT NULL")]
+		public int registration_id
+		{
+			get
+			{
+				return this._registration_id;
+			}
+			set
+			{
+				if ((this._registration_id != value))
+				{
+					this._registration_id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_designation", DbType="VarChar(500)")]
+		public string user_designation
+		{
+			get
+			{
+				return this._user_designation;
+			}
+			set
+			{
+				if ((this._user_designation != value))
+				{
+					this._user_designation = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_google_plus", DbType="VarChar(500)")]
+		public string google_plus
+		{
+			get
+			{
+				return this._google_plus;
+			}
+			set
+			{
+				if ((this._google_plus != value))
+				{
+					this._google_plus = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_linkedin", DbType="VarChar(500)")]
+		public string linkedin
+		{
+			get
+			{
+				return this._linkedin;
+			}
+			set
+			{
+				if ((this._linkedin != value))
+				{
+					this._linkedin = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_facebook", DbType="VarChar(500)")]
+		public string facebook
+		{
+			get
+			{
+				return this._facebook;
+			}
+			set
+			{
+				if ((this._facebook != value))
+				{
+					this._facebook = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_twitter", DbType="VarChar(500)")]
+		public string twitter
+		{
+			get
+			{
+				return this._twitter;
+			}
+			set
+			{
+				if ((this._twitter != value))
+				{
+					this._twitter = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pintrest", DbType="VarChar(500)")]
+		public string pintrest
+		{
+			get
+			{
+				return this._pintrest;
+			}
+			set
+			{
+				if ((this._pintrest != value))
+				{
+					this._pintrest = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_blog", DbType="VarChar(500)")]
+		public string blog
+		{
+			get
+			{
+				return this._blog;
+			}
+			set
+			{
+				if ((this._blog != value))
+				{
+					this._blog = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_flickr", DbType="VarChar(500)")]
+		public string flickr
+		{
+			get
+			{
+				return this._flickr;
+			}
+			set
+			{
+				if ((this._flickr != value))
+				{
+					this._flickr = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_my_page", DbType="VarChar(500)")]
+		public string my_page
+		{
+			get
+			{
+				return this._my_page;
+			}
+			set
+			{
+				if ((this._my_page != value))
+				{
+					this._my_page = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_youtube", DbType="VarChar(500)")]
+		public string youtube
+		{
+			get
+			{
+				return this._youtube;
+			}
+			set
+			{
+				if ((this._youtube != value))
+				{
+					this._youtube = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_seeff", DbType="VarChar(500)")]
+		public string seeff
+		{
+			get
+			{
+				return this._seeff;
+			}
+			set
+			{
+				if ((this._seeff != value))
+				{
+					this._seeff = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_signature_html", DbType="VarChar(MAX)")]
+		public string signature_html
+		{
+			get
+			{
+				return this._signature_html;
+			}
+			set
+			{
+				if ((this._signature_html != value))
+				{
+					this._signature_html = value;
+				}
+			}
 		}
 	}
 	
@@ -237,6 +561,8 @@ namespace SeeffProspectingAuthService
 		
 		private string _license_control;
 		
+		private System.Nullable<bool> _prospecting_communication;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -369,6 +695,8 @@ namespace SeeffProspectingAuthService
     partial void Ondeleted_byChanged();
     partial void Onlicense_controlChanging(string value);
     partial void Onlicense_controlChanged();
+    partial void Onprospecting_communicationChanging(System.Nullable<bool> value);
+    partial void Onprospecting_communicationChanged();
     #endregion
 		
 		public user_registration()
@@ -1656,6 +1984,26 @@ namespace SeeffProspectingAuthService
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_communication", DbType="Bit")]
+		public System.Nullable<bool> prospecting_communication
+		{
+			get
+			{
+				return this._prospecting_communication;
+			}
+			set
+			{
+				if ((this._prospecting_communication != value))
+				{
+					this.Onprospecting_communicationChanging(value);
+					this.SendPropertyChanging();
+					this._prospecting_communication = value;
+					this.SendPropertyChanged("prospecting_communication");
+					this.Onprospecting_communicationChanged();
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -1673,330 +2021,6 @@ namespace SeeffProspectingAuthService
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.license_branches")]
-	public partial class license_branch
-	{
-		
-		private int _license_id;
-		
-		private int _branch_id;
-		
-		private System.Nullable<int> _business_unit_id;
-		
-		public license_branch()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_license_id", DbType="Int NOT NULL")]
-		public int license_id
-		{
-			get
-			{
-				return this._license_id;
-			}
-			set
-			{
-				if ((this._license_id != value))
-				{
-					this._license_id = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_branch_id", DbType="Int NOT NULL")]
-		public int branch_id
-		{
-			get
-			{
-				return this._branch_id;
-			}
-			set
-			{
-				if ((this._branch_id != value))
-				{
-					this._branch_id = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_business_unit_id", DbType="Int")]
-		public System.Nullable<int> business_unit_id
-		{
-			get
-			{
-				return this._business_unit_id;
-			}
-			set
-			{
-				if ((this._business_unit_id != value))
-				{
-					this._business_unit_id = value;
-				}
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.user_signature")]
-	public partial class user_signature
-	{
-		
-		private int _user_signature_id;
-		
-		private int _registration_id;
-		
-		private string _user_designation;
-		
-		private string _google_plus;
-		
-		private string _linkedin;
-		
-		private string _facebook;
-		
-		private string _twitter;
-		
-		private string _pintrest;
-		
-		private string _blog;
-		
-		private string _flickr;
-		
-		private string _my_page;
-		
-		private string _youtube;
-		
-		private string _seeff;
-		
-		private string _signature_html;
-		
-		public user_signature()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_signature_id", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
-		public int user_signature_id
-		{
-			get
-			{
-				return this._user_signature_id;
-			}
-			set
-			{
-				if ((this._user_signature_id != value))
-				{
-					this._user_signature_id = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_registration_id", DbType="Int NOT NULL")]
-		public int registration_id
-		{
-			get
-			{
-				return this._registration_id;
-			}
-			set
-			{
-				if ((this._registration_id != value))
-				{
-					this._registration_id = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_designation", DbType="VarChar(500)")]
-		public string user_designation
-		{
-			get
-			{
-				return this._user_designation;
-			}
-			set
-			{
-				if ((this._user_designation != value))
-				{
-					this._user_designation = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_google_plus", DbType="VarChar(500)")]
-		public string google_plus
-		{
-			get
-			{
-				return this._google_plus;
-			}
-			set
-			{
-				if ((this._google_plus != value))
-				{
-					this._google_plus = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_linkedin", DbType="VarChar(500)")]
-		public string linkedin
-		{
-			get
-			{
-				return this._linkedin;
-			}
-			set
-			{
-				if ((this._linkedin != value))
-				{
-					this._linkedin = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_facebook", DbType="VarChar(500)")]
-		public string facebook
-		{
-			get
-			{
-				return this._facebook;
-			}
-			set
-			{
-				if ((this._facebook != value))
-				{
-					this._facebook = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_twitter", DbType="VarChar(500)")]
-		public string twitter
-		{
-			get
-			{
-				return this._twitter;
-			}
-			set
-			{
-				if ((this._twitter != value))
-				{
-					this._twitter = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pintrest", DbType="VarChar(500)")]
-		public string pintrest
-		{
-			get
-			{
-				return this._pintrest;
-			}
-			set
-			{
-				if ((this._pintrest != value))
-				{
-					this._pintrest = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_blog", DbType="VarChar(500)")]
-		public string blog
-		{
-			get
-			{
-				return this._blog;
-			}
-			set
-			{
-				if ((this._blog != value))
-				{
-					this._blog = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_flickr", DbType="VarChar(500)")]
-		public string flickr
-		{
-			get
-			{
-				return this._flickr;
-			}
-			set
-			{
-				if ((this._flickr != value))
-				{
-					this._flickr = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_my_page", DbType="VarChar(500)")]
-		public string my_page
-		{
-			get
-			{
-				return this._my_page;
-			}
-			set
-			{
-				if ((this._my_page != value))
-				{
-					this._my_page = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_youtube", DbType="VarChar(500)")]
-		public string youtube
-		{
-			get
-			{
-				return this._youtube;
-			}
-			set
-			{
-				if ((this._youtube != value))
-				{
-					this._youtube = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_seeff", DbType="VarChar(500)")]
-		public string seeff
-		{
-			get
-			{
-				return this._seeff;
-			}
-			set
-			{
-				if ((this._seeff != value))
-				{
-					this._seeff = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_signature_html", DbType="VarChar(MAX)")]
-		public string signature_html
-		{
-			get
-			{
-				return this._signature_html;
-			}
-			set
-			{
-				if ((this._signature_html != value))
-				{
-					this._signature_html = value;
-				}
 			}
 		}
 	}
