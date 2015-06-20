@@ -145,7 +145,7 @@ namespace ProspectingProject
                         string sysTemplates = GetSystemTemplates(json);
                         context.Response.Write(sysTemplates);
                         break;
-                    case "comm_calculate_cost_of_batch":
+                    case "calculate_cost_email_batch":
                         string result = CalculateCostOfCommunicationBatch(json);
                         context.Response.Write(result);
                         break;
@@ -185,9 +185,8 @@ namespace ProspectingProject
 
         private string CalculateCostOfCommunicationBatch(string json)
         {
-            var userSuburbs = (List<UserSuburb>)HttpContext.Current.Session["user_suburbs"];
-            var inputParameters = ProspectingCore.Deserialise<CommBatchParameters>(json);
-            var calculationResult = ProspectingCore.CalculateCostOfBatch(inputParameters, userSuburbs);
+            var batch = ProspectingCore.Deserialise<EmailBatch>(json);
+            var calculationResult = ProspectingCore.CalculateCostOfBatch(batch);
             return ProspectingCore.SerializeToJsonWithDefaults(calculationResult);
         }
 

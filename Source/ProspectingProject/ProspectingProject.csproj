@@ -1122,7 +1122,7 @@
     </Compile>
     <Compile Include="ProspectingCore\Communication\CommunicationCore.cs" />
     <Compile Include="ProspectingCore\Communication\CommunicationTemplates.cs" />
-    <Compile Include="ProspectingCore\Communication\EmailAddressComparer.cs" />
+    <Compile Include="ProspectingCore\Communication\ContactPersonEmailComparer.cs" />
     <Compile Include="ProspectingCore\Communication\EmailRecipient.cs" />
     <Compile Include="RequestHandler.ashx.cs">
       <DependentUpon>RequestHandler.ashx</DependentUpon>
@@ -1146,10 +1146,11 @@
     <Compile Include="Services\TracePS\TracepsPhoneNumberLookup.cs" />
     <Compile Include="Services\TracePS\TracepsTestService.cs" />
     <Compile Include="Types\ActivityBundle.cs" />
-    <Compile Include="Types\CommBatchParameters.cs" />
     <Compile Include="Types\CommTemplateRequest.cs" />
     <Compile Include="Types\CommunicationBatchStatus.cs" />
     <Compile Include="Types\CommunicationTemplate.cs" />
+    <Compile Include="Types\CostOfBatch.cs" />
+    <Compile Include="Types\EmailAttachment.cs" />
     <Compile Include="Types\EmailBatch.cs" />
     <Compile Include="Types\FollowupActivity.cs" />
     <Compile Include="Types\IProspectingContactEntity.cs" />

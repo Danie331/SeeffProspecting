@@ -173,3 +173,11 @@ function b64EncodeUnicode(str) {
         return String.fromCharCode('0x' + p1);
     }));
 }
+
+function getUserSuburbsList() {
+    var suburbsIdList = [];
+    $.each(suburbsInfo, function (idx, sub) {
+        suburbsIdList.push(sub.SuburbId);
+    });
+    return suburbsIdList;
+}

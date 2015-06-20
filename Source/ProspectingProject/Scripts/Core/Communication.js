@@ -32,10 +32,9 @@ function buildCommunicationMenu() {
     var getInfoLabel = $("<label id='commGetInfoLabel' style='display:none'></label>");
 
     var bottomContainer = $("<div id='commBottomDiv' style='display:none' />");
-    var costOfBatchLabel = $("<div id='commBatchCost' style='display:inline-block;float:left'><span id='commCostOfBatch'></span></div>");
     var sendButton = $("<div id='commSendMessage' style='display:inline-block;float:right'><input type='button' id='commSendMessageBtn' value='Preview'  /></div>");
     sendButton.click(handleCommSendBtnClick);
-    bottomContainer.append(costOfBatchLabel).append(sendButton);
+    bottomContainer.append(sendButton);
 
     var templatesDiv = $("<div id='templateOptionsDiv' style='display:none;width:100%' />");
     var templatesBtn = $("<input type='button' id='templatesBtn' value='Templates' />");
@@ -52,7 +51,7 @@ function buildCommunicationMenu() {
     var templateItemOptionsDiv = buildTemplateItemOptionsDiv();
     templatesDiv.append(templatesBtn).append(templatesMenu).append(templateItemOptionsDiv);
 
-    contentDiv.append(communicationBtn).append(menu).append(remainingCreditLabel).append("<p />").append(templatesDiv).append("<p />").append(messageContentContainer).append("<p />").append(contactablesContentContainer).append(getInfoLabel).append("<p style='height:5px' />").append(bottomContainer);
+    contentDiv.append(communicationBtn).append(menu).append(remainingCreditLabel).append("<p />").append(templatesDiv).append("<p />").append(messageContentContainer).append("<p />").append(contactablesContentContainer).append(getInfoLabel).append("<br />").append(bottomContainer).append("<p style='padding-bottom:10px' />");
 
     var multiSelectSticker = $("#multiSelectMode");
     var mapControl = map.controls[google.maps.ControlPosition.TOP_RIGHT];
@@ -87,8 +86,10 @@ function buildTemplateItemOptionsDiv(option) {
     }
     var suburbSelectorDiv = $("<div style='display:inline-block' />");
     var currentSuburbSelector = $("<input type='radio' name='templateSuburbOption' id='commCurrentSuburbRadioBtn' value='unchecked'>Current Suburb</input>");
-    var allSuburbSelector = $("<input type='radio' name='templateSuburbOption' id='commAllSuburbsRadioBtn' value='unchecked' style='margin-left:5px;'>All Suburbs</input>");
-    suburbSelectorDiv.append(currentSuburbSelector).append(allSuburbSelector);
+    var commCurrentSuburbRadioBtnContainer = $("<div id='commCurrentSuburbRadioBtnContainer' style='margin-left:5px;display:inline-block' />").append(currentSuburbSelector);
+    var allSuburbSelector = $("<input type='radio' name='templateSuburbOption' id='commAllSuburbsRadioBtn' value='unchecked' ><label>All Suburbs</label></input>");
+    var allSuburbsOptionContainer = $("<div id='allSuburbsOptionContainer' style='margin-left:5px;display:inline-block' />").append(allSuburbSelector);
+    suburbSelectorDiv.append(commCurrentSuburbRadioBtnContainer).append(allSuburbsOptionContainer);
     currentSuburbSelector.click(function () {
         allSuburbSelector.attr('value', 'unchecked');
         if ($(this).attr('value') == 'unchecked' && currentSuburb != null) {
@@ -158,8 +159,8 @@ function buildCommunicationMenuItems() {
         menu.append(separator);
     }
 
-    var smsMessage = buildCommMenuItem("comm_menu_sms", buildSMSMenuItemContent(), handleSMSMessageClick);
-    menu.append(smsMessage);
+    //var smsMessage = buildCommMenuItem("comm_menu_sms", buildSMSMenuItemContent(), handleSMSMessageClick);
+    //menu.append(smsMessage);
 
     var emailMessage = buildCommMenuItem("comm_menu_email", buildEmailMenuItemContent(), handleEmailMessageClick);
     menu.append(emailMessage);
@@ -467,7 +468,7 @@ function buildEmailContentContainer() {
     var attachFilesDiv = $("<div style='display:inline-block;padding-top:0' />");
     var attachFileBtn = $("<input type='button' id='attachFilesBtn' style='display:inline-block;margin-right:10px' value='Attach..' />");
     var attachFileList = $("<div id='attachFilesList' style='display:inline-block;'  />");
-    var attachFileOperation = $("<input id='attachFilesOp' type='file' name='attachFilesOp' style='display: none;' multiple />");
+    var attachFileOperation = $("<input id='attachFilesOp' type='file' name='attachFilesOp' style='display: none;' />");
     attachFilesDiv.append(attachFileBtn).append(attachFileList).append(attachFileOperation);
     attachFileBtn.click(handleShowFileUploadDialog);
 
@@ -513,6 +514,12 @@ function buildEmailContentContainer() {
 }
 
 function handleShowFileUploadDialog() {
+    
+    if (uploadedFiles.length == 1) {
+        alert('You currently restricted to only one attachment per message.');
+        return;
+    }
+
     $('#attachFilesOp').unbind('change').bind('change', handleGetFiles);
     $('#attachFilesOp').trigger('click');
 
@@ -547,9 +554,13 @@ function handleShowFileUploadDialog() {
         cancelIconBtn.click(function () {
             var itemId = fileUploadItem.attr("id");
             // Remove item from array
-            uploadedFiles = $.grep(uploadedFiles, function (f) {
-                return f.fileId != itemId;
+            var index = -1;
+            $.each(uploadedFiles, function (idx, el) {
+                if (el.fileId == itemId) {
+                    index = idx;
+                }
             });
+            uploadedFiles.splice(index, 1);
             fileUploadItem.remove();
         });
 
@@ -611,7 +622,11 @@ function handleStandardTemplatesItemClick() {
             loadTemplates('get_system_template', templateName, function (result) {
                 populateTemplateContent(result);
                 if (specialActivityTemplates.indexOf(result.ActivityName) > -1) {
+                        $("#commAllSuburbsRadioBtn").trigger('click');
+                    $('#commCurrentSuburbRadioBtnContainer').hide();
                     showDialogSpecialTemplateSelected();
+                } else {
+                    $('#commCurrentSuburbRadioBtnContainer').show();
                 }
             });
         } else {
@@ -627,13 +642,12 @@ function currentOrAllSuburbsSelected() {
 }
 
 function showDialogSpecialTemplateSelected() {
-    if (currentOrAllSuburbsSelected()) {
-        return; // Either option is selected.
-    }
+    //if (currentOrAllSuburbsSelected()) {
+    //    return; // Either option is selected.
+    //}
 
     var specialActivityTemplateDiv = $("<div title='Special Template' style='font-family:Verdana;font-size:12px;' />");
-    specialActivityTemplateDiv.empty().append("<span>Please note that this type of template applies only to contact people who meet certain criteria \
-                                                    and therefore should be used in conjunction with the 'Current Suburb' or 'All Suburbs' options.</span>");
+    specialActivityTemplateDiv.empty().append("<span>Please note that this type of template applies specifically to the 'All Suburbs' option.</span>");
 
     specialActivityTemplateDiv.dialog(
   {
@@ -695,6 +709,7 @@ function handleSMSTemplateBtnClick() {
 }
 
 function handleSMSMessageClick() {
+    uploadedFiles.length = 0;
     communicationsMode = "SMS";
     var container = $("#messageContentContainer");
     container.empty();
@@ -708,6 +723,7 @@ function handleSMSMessageClick() {
 }
 
 function handleEmailMessageClick() {
+    uploadedFiles.length = 0;
     communicationsMode = "EMAIL";
     var container = $("#messageContentContainer");
     container.empty();
@@ -720,7 +736,7 @@ function handleEmailMessageClick() {
     commCustomSelectionEnabled = true;
 }
 
-function handleSMSMenuItemClick() {
+function handleEnableComms() {
     toggleMultiSelectMode(true);
 }
 
@@ -756,6 +772,9 @@ function updateCommunicationsContacts() {
         }); //display a message saying "please select contacts with an email" or  "mobile number". NB also CHECK for AND USE only cell numbers
     }
     else {
+        if (currentOrAllSuburbsSelected()) {
+            commBottomDiv.css('display', 'block');
+        }
         var commContactsTable = $("#commContactsTable");
         commContactsTable.find("tr").remove();
         contactsContainer.css('display', 'none');
@@ -1400,6 +1419,17 @@ function validateMessage() {
     return false;
 }
 
+function getContactDetailFromContactRow(contactId) {
+    var value = '';
+    var itemContent = $('#comm_contactdetail_' + contactId);
+    if (itemContent.children(":first").is('select')) {
+        value = itemContent.children(":first").find(":selected").text();
+    } else {
+        value = itemContent.text();
+    }
+    return value;
+}
+
 function submitEmails(callbackFn) {
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Processing. Please wait...</p>' });
 
@@ -1408,23 +1438,37 @@ function submitEmails(callbackFn) {
     $.each(commSelectedRows, function (idx, row) {
         var contactId = $(row).attr("id").replace('comm_row_', '');
         var contact = getContactFromId(contactId);
+
+        var email = getContactDetailFromContactRow(contactId);
+        contact.TargetContactEmailAddress = email;
+        //contact.ContactPersonId = ;
+        //contact.IdNumber = ;
+        //contact.TargetLightstonePropertyIdForComms = ;
+        //contact.Firstname = ;
+        //contact.Surname = ;
         recipients.push(contact);
     });
 
     var emailBodyRaw = encodeURIComponent(b64EncodeUnicode($('#emailMessageBody').val() + '<br />' + userEmailSignature));
     var emailSubjectRaw = encodeURIComponent(b64EncodeUnicode($('#emailSubject').val()));
     var batchNameRaw = encodeURIComponent(b64EncodeUnicode($('#batchFriendlyName').val()));
+    var attachments = [];
+    if (uploadedFiles.length) {
+        attachments.push({ name: uploadedFiles[0].name, type: uploadedFiles[0].type, base64: encodeURIComponent(uploadedFiles[0].base64) });
+    }
     var emailRequestPacket =
         {
             Instruction: 'send_emails',
             Recipients: recipients,
             EmailBodyHTMLRaw: emailBodyRaw,
             EmailSubjectRaw: emailSubjectRaw,
-            ContactsInCurrentSuburb: $('#commCurrentSuburbRadioBtn').is(':checked'),
+            TargetCurrentSuburb: $('#commCurrentSuburbRadioBtn').is(':checked'),
+            TargetAllMySuburbs: $('#commAllSuburbsRadioBtn').is(':checked'),
             CurrentSuburbId: currentSuburb != null ? currentSuburb.SuburbId : null,
-            ContactsInAllMySuburbs: $('#commAllSuburbsRadioBtn').is(':checked'),
             NameOfBatch: batchNameRaw,
-            TemplateActivityTypeId: selectedTemplateActivityTypeId
+            TemplateActivityTypeId: selectedTemplateActivityTypeId,
+            UserSuburbIds: getUserSuburbsList(suburbsInfo),
+            Attachments: attachments
         };
 
     $.ajax({
@@ -1664,7 +1708,6 @@ function handleCommSendBtnClick() {
                                               userEmailSignature = signatureData;
                                               handleSendMessage(function () {
                                                   availableCredit -= costOfBatch;
-                                                  $('#availableCreditLabel').text(availableCredit.toFixed(2));
                                                   $('#commCreditValue').text(availableCredit.toFixed(2));
                                               });
                                           });
@@ -1674,7 +1717,6 @@ function handleCommSendBtnClick() {
                                               userEmailSignature = signatureData;
                                               handleSendMessage(function () {
                                                   availableCredit -= costOfBatch;
-                                                  $('#availableCreditLabel').text(availableCredit.toFixed(2));
                                                   $('#commCreditValue').text(availableCredit.toFixed(2));
                                               });
                                           } else {
@@ -1704,7 +1746,7 @@ function handleCommSendBtnClick() {
 function calculateCostOfBatch(callbackFn) {
     if (communicationsMode == "EMAIL") {
         $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Calculating Cost. Please wait...</p>' });
-        var recipientCount = 0;
+        var recipients = [];
         var currentSuburbId = null;
         var targetAllUserSuburbs = false;
         if (currentOrAllSuburbsSelected()) {
@@ -1717,24 +1759,44 @@ function calculateCostOfBatch(callbackFn) {
             }
         } else {
             // we are targetting a batch of recipients
-            recipientCount = $('#commContactsTable tr.rowSelected').length;
+            var commSelectedRows = $('#commContactsTable tr.rowSelected');
+            $.each(commSelectedRows, function (idx, row) {
+                var contactId = $(row).attr("id").replace('comm_row_', '');
+                var contact = getContactFromId(contactId);
+                var email = $('#comm_default_email_select_' + contactId);
+                contact.TargetContactEmailAddress = email.val();
+                //contact.ContactPersonId = ;
+                //contact.IdNumber = ;
+                //contact.TargetLightstonePropertyIdForComms = ;
+                //contact.Firstname = ;
+                //contact.Surname = ;
+                recipients.push(contact);
+            });
         }
         $.ajax({
             type: "POST",
             url: "RequestHandler.ashx",
-            data: JSON.stringify({ Instruction: "comm_calculate_cost_of_batch", CommunicationType: communicationsMode, RecipientCount: recipientCount, CurrentSuburb: currentSuburbId, TargetAllUserSuburbs: targetAllUserSuburbs }),
+            data: JSON.stringify({
+                Instruction: "calculate_cost_email_batch",
+                Recipients: recipients,
+                TargetCurrentSuburb: currentSuburbId != null ? true : false,
+                TargetAllMySuburbs: targetAllUserSuburbs,
+                CurrentSuburbId: currentSuburbId,
+                TemplateActivityTypeId: selectedTemplateActivityTypeId,
+                UserSuburbIds: getUserSuburbsList(suburbsInfo)
+            }),
             dataType: "json"
         }).done(function (result) {
             $.unblockUI();
-            costOfBatch = (result.UnitCost * result.NumberOfUnits) / 100;
+            costOfBatch = result.TotalCost;
             var costResultsDialog = $("<div title='Calculation Results' style='font-family:Verdana;font-size:12px;' />").empty()
                                     .append("Available Prospecting credit: R " + availableCredit.toFixed(2))
                                     .append("<br />")
-                                    .append("Unit cost per email: R " + result.UnitCost / 100)
+                                    .append("Unit cost per email: R " + result.UnitCost)
                                     .append("<br />")
                                     .append("Number of emails: " + result.NumberOfUnits)
                                     .append("<br />")
-                                    .append("Cost of batch: R " + costOfBatch);
+                                    .append("Cost of batch: R " + result.TotalCost.toFixed(2));
 
             var buttonText = "Ok";
             if (callbackFn) {
@@ -1750,7 +1812,7 @@ function calculateCostOfBatch(callbackFn) {
                       click: function () {
                           $(this).dialog("close");
                           if (callbackFn) {
-                              if (availableCredit > costOfBatch) {
+                              if (availableCredit > result.TotalCost) {
                                   callbackFn();
                               } else {
                                   alert('You have insufficient credit to perform this operation');

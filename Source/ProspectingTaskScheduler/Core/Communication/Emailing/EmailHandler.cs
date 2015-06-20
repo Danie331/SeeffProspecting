@@ -75,6 +75,9 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                     emailItem.updated_datetime = DateTime.Now;
                     emailItem.email_body_or_link_id = null;
                     emailItem.email_subject_or_link_id = null;
+                    emailItem.attachment1_content = null;
+                    emailItem.attachment1_name = null;
+                    emailItem.attachment1_type = null;
 
                     return;
                 }
@@ -85,6 +88,9 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                 emailItem.status = emailFailedStatus;
                 emailItem.email_body_or_link_id = null;
                 emailItem.email_subject_or_link_id = null;
+                emailItem.attachment1_content = null;
+                emailItem.attachment1_name = null;
+                emailItem.attachment1_type = null;
                 emailItem.error_msg = sendingResult.ErrorMessage;
             }
 
@@ -149,13 +155,16 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                 {
                     var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
                     string contactFullname = titlecaser.ToTitleCase(pendingItem.prospecting_contact_person.firstname.ToLower()) + " " + titlecaser.ToTitleCase(pendingItem.prospecting_contact_person.surname.ToLower());
-
+                    
                     MandrillMessageBuilder builder = new MandrillMessageBuilder(pendingItem.email_body_or_link_id,
                         pendingItem.email_subject_or_link_id,
                         pendingItem.created_by_user_email_address,
                         pendingItem.created_by_user_name,
                         pendingItem.target_email_address,
-                        contactFullname);
+                        contactFullname,
+                        pendingItem.attachment1_name,
+                        pendingItem.attachment1_type,
+                        pendingItem.attachment1_content);
 
                     var req = builder.BuildMandrillSendRequest();
                     string json = Newtonsoft.Json.JsonConvert.SerializeObject(req);

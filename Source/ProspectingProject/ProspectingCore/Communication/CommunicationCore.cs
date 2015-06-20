@@ -21,15 +21,9 @@ namespace ProspectingProject
                 data = Convert.FromBase64String(batch.NameOfBatch);
                 batch.NameOfBatch = Encoding.UTF8.GetString(data);
 
-                var userSuburbs = (List<UserSuburb>)HttpContext.Current.Session["user_suburbs"];
-                var prospectingUser = RequestHandler.GetUserSessionObject();
-
-                System.Threading.Tasks.Task.Factory.StartNew(() =>
-                {
-                    DebitUserBalance(batch, prospectingUser.UserGuid, userSuburbs);
-                    var emailRecipients = GetRecipientsFromBatch(batch, userSuburbs);
-                    EnqueueBatch(emailRecipients, batch, prospectingUser);
-                });
+                var emailRecipients = GetRecipientsFromBatch(batch);
+                EnqueueBatch(emailRecipients, batch);
+                DebitUserBalance(emailRecipients.Count);
 
                 return new CommunicationBatchStatus { SuccessfullySubmitted = true };
             }
@@ -55,33 +49,23 @@ namespace ProspectingProject
             }
         }
 
-        private static void DebitUserBalance(EmailBatch batch, Guid userGuid, List<UserSuburb> userSuburbs)
+        private static void DebitUserBalance(int count)
         {
-            CommBatchParameters cost = new CommBatchParameters
-            {
-                CommunicationType = "EMAIL",
-                RecipientCount = batch.Recipients != null ? batch.Recipients.Count : 0,
-                CurrentSuburb = batch.CurrentSuburbId,
-                TargetAllUserSuburbs = batch.ContactsInAllMySuburbs.HasValue ? batch.ContactsInAllMySuburbs.Value : false
-            };
-
-            var result = CalculateCostOfBatch(cost, userSuburbs);
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
-                prospectingAuthService.DebitUserBalance(result.TotalCost, userGuid);
+                decimal cost = (decimal)count * 0.01M;
+
+                var prospectingUser = RequestHandler.GetUserSessionObject();
+                prospectingAuthService.DebitUserBalance(cost, prospectingUser.UserGuid);
             }
         }
 
-        private static List<EmailRecipient> GetRecipientsFromBatch(EmailBatch batch, List<UserSuburb> userSuburbs)
+        private static List<EmailRecipient> GetRecipientsFromBatch(EmailBatch batch)
         {
-            var contacts = batch.Recipients;
-            if (contacts != null && contacts.Count > 0)
-            {
-                return CreateMailRecipients(contacts, batch);
-            }
+            var contacts = GetTargetContactPersons(batch);
+            var recipients = CreateMailRecipients(contacts, batch);
 
-            // TODO: If we specified to send email to all contacts in the current suburb/ALL suburbs :: remember to de-select multi-select mode (and the selection) and also warn the user about the rules that will be used by the system when selecting the target contact detail.
-            return CreateMailRecipientsForTargetSuburbs(batch, userSuburbs);
+            return recipients;
         }
 
         /// <summary>
@@ -89,95 +73,34 @@ namespace ProspectingProject
         /// </summary>
         private static List<EmailRecipient> CreateMailRecipients(List<ProspectingContactPerson> contacts, EmailBatch batch)
         {
-            contacts = FilterContactsForTemplateType(contacts, batch.TemplateActivityTypeId);
-
             List<EmailRecipient> recipients = new List<EmailRecipient>();
-            using (var prospectingContext = new ProspectingDataContext())
+            // Note: The ProspectingContactPerson's in the batch come from the front-end and ARE NOT populated with data.
+            // The contact record from the front-end holds only the information needed to identify the target contact person and lightstone property.
+            foreach (var contact in contacts)
             {
-                // Note: The ProspectingContactPerson's in the batch come from the front-end and ARE NOT populated with data.
-                // The contact record from the front-end holds only the information needed to identify the target contact person and lightstone property.
-                foreach (var contact in contacts)
-                {
-                    var contactRecord = prospectingContext.prospecting_contact_persons.First(c => c.contact_person_id == contact.ContactPersonId);
-                    string targetEmailAddress = GetDefaultEmailAddress(prospectingContext, contact); // TAKE NOTE: contactRecord != contact
-                    string emailBody = CreateEmailBody(batch.EmailBodyHTMLRaw, contactRecord, contact.TargetLightstonePropertyIdForComms.Value, targetEmailAddress); // TAKE NOTE: contactRecord != contact
-                    string emailSubject = CreateEmailSubject(batch.EmailSubjectRaw);
+                string targetEmailAddress = contact.TargetContactEmailAddress;
+                string emailBody = CreateEmailBody(batch.EmailBodyHTMLRaw, contact); // TAKE NOTE: contactRecord != contact
+                string emailSubject = CreateEmailSubject(batch.EmailSubjectRaw);
 
-                    var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
-                    EmailRecipient recipient = new EmailRecipient
-                    {
-                        ContactPersonId = contactRecord.contact_person_id,
-                        EmailBody = emailBody,
-                        EmailSubject = emailSubject,
-                        ToEmailAddress = targetEmailAddress,
-                        TargetLightstonePropertyId = contact.TargetLightstonePropertyIdForComms.Value, // Must be present in this context.
-                        Fullname = titlecaser.ToTitleCase(contactRecord.firstname.ToLower()) + " " + titlecaser.ToTitleCase(contactRecord.surname.ToLower())
-                    };
-                    recipients.Add(recipient);
-                }
+                var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
+                EmailRecipient recipient = new EmailRecipient
+                {
+                    ContactPersonId = contact.ContactPersonId.Value,
+                    EmailBody = emailBody,
+                    EmailSubject = emailSubject,
+                    ToEmailAddress = targetEmailAddress,
+                    TargetLightstonePropertyId = contact.TargetLightstonePropertyIdForComms.Value, // Must be present in this context.
+                    Fullname = titlecaser.ToTitleCase(contact.Firstname.ToLower()) + " " + titlecaser.ToTitleCase(contact.Surname.ToLower())
+                };
+                recipients.Add(recipient);
             }
 
-            return recipients.Distinct(new EmailAddressComparer()).ToList();
+            return recipients;
         }
 
-        private static List<EmailRecipient> CreateMailRecipientsForTargetSuburbs(EmailBatch batch, List<UserSuburb> userSuburbs)
+        private static void EnqueueBatch(List<EmailRecipient> emailRecipients, EmailBatch batch)
         {
-            List<EmailRecipient> recipients = new List<EmailRecipient>();
-            using (var prospectingContext = new ProspectingDataContext())
-            {
-                List<int> targetSuburbs = new List<int>();
-                if (batch.ContactsInCurrentSuburb.HasValue && batch.ContactsInCurrentSuburb.Value /*== true*/)
-                {
-                    targetSuburbs.Add(batch.CurrentSuburbId.Value);
-                }
-                else if (batch.ContactsInAllMySuburbs.HasValue && batch.ContactsInAllMySuburbs.Value /* == true */)
-                {                    
-                    targetSuburbs.AddRange(userSuburbs.Select(us => us.SuburbId));
-                }
-                var propertiesInSuburbs = prospectingContext.prospecting_properties.Where(pp => targetSuburbs.Contains(pp.seeff_area_id.Value));
-                List<ProspectingContactPerson> allContacts = new List<ProspectingContactPerson>();
-                int totalProps = propertiesInSuburbs.Count();
-                int counter = 1;
-                foreach (var property in propertiesInSuburbs)
-                {
-                    var percComplete = ((decimal)counter / (decimal)totalProps) * 100.0M;
-                    counter++;
-                    if (property.prospected == null || !property.prospected.Value)
-                    {
-                        continue;
-                    }
-                    var directContacts = ProspectingLookupData.PropertyContactsRetriever(prospectingContext, property, false).ToList();
-                    var companyContacts = ProspectingLookupData.PropertyCompanyContactsRetriever(prospectingContext, property, false).ToList();
-                    var allContactsForProperty = directContacts.Union(companyContacts).Distinct().ToList();
-                    foreach (var contact in allContactsForProperty)
-                    {
-                        // Check if he has a default email address.
-                        var emailAddresses = ProspectingLookupData.PropertyContactEmailRetriever(prospectingContext, contact).ToList();
-                        if (!emailAddresses.Any())
-                        {
-                            continue;
-                        }
-                        var defaultEmailAddress = emailAddresses.FirstOrDefault(em => em.IsPrimary.HasValue && em.IsPrimary == true);
-                        if (defaultEmailAddress == null) 
-                        {
-                            continue;
-                        }
-                        if (contact.EmailOptout || contact.IsPOPIrestricted)
-                        {
-                            continue;
-                        }
-
-                        contact.TargetLightstonePropertyIdForComms = property.lightstone_property_id;
-                        allContacts.Add(contact);
-                    }
-                }
-
-                return CreateMailRecipients(allContacts, batch);
-            }
-        }
-
-        private static void EnqueueBatch(List<EmailRecipient> emailRecipients, EmailBatch batch, UserDataResponsePacket prospectingUser)
-        {
+            var prospectingUser = RequestHandler.GetUserSessionObject();
             using (var prospecting = new ProspectingDataContext())
             {
                 Guid batchId = Guid.NewGuid();
@@ -208,6 +131,12 @@ namespace ProspectingProject
                         email_body_or_link_id = recipient.EmailBody,
                         email_subject_or_link_id = recipient.EmailSubject, 
                     };
+                    if (batch.Attachments.Count > 0)
+                    {
+                        record.attachment1_name = batch.Attachments[0].name;
+                        record.attachment1_type = batch.Attachments[0].type;
+                        record.attachment1_content = batch.Attachments[0].base64;
+                    }
                     prospecting.email_communications_logs.InsertOnSubmit(record);
                 }
                 prospecting.SubmitChanges();
@@ -219,37 +148,25 @@ namespace ProspectingProject
             return subjectText;
         }
 
-        private static string GetDefaultEmailAddress(ProspectingDataContext ctx, ProspectingContactPerson contact)
-        {
-            var emailAddresses = ProspectingLookupData.PropertyContactEmailRetriever(ctx, contact).ToList();
-            var primaryDefaultEmail = emailAddresses.FirstOrDefault(em => em.IsPrimary == true);
-            if (primaryDefaultEmail != null)
-            {
-                return primaryDefaultEmail.ItemContent;
-            }
-
-            return emailAddresses.First().ItemContent;
-        }
-
-        private static string CreateEmailBody(string rawBody, prospecting_contact_person personRecordFromDB, int lightstonePropertyID, string emailAddress)
+        private static string CreateEmailBody(string rawBody, ProspectingContactPerson contact)
         {
             var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
 
             string personTitle = "";
-            if (personRecordFromDB.person_title.HasValue)
+            if (contact.Title.HasValue)
             {
-                personTitle = ProspectingLookupData.ContactPersonTitle.First(cpt => cpt.Key == personRecordFromDB.person_title).Value;
+                personTitle = ProspectingLookupData.ContactPersonTitle.First(cpt => cpt.Key == contact.Title.Value).Value;
             }
-            string name = titlecaser.ToTitleCase(personRecordFromDB.firstname.ToLower());
-            string surname = titlecaser.ToTitleCase(personRecordFromDB.surname.ToLower());
-            string address = ProspectingCore.GetFormattedAddress(lightstonePropertyID);
+            string name = titlecaser.ToTitleCase(contact.Firstname.ToLower());
+            string surname = titlecaser.ToTitleCase(contact.Surname.ToLower());
+            string address = ProspectingCore.GetFormattedAddress(contact.TargetLightstonePropertyIdForComms.Value);
 
             rawBody = rawBody.Replace("*title*", personTitle)
                              .Replace("*name*", name)
                              .Replace("*surname*", surname)
                              .Replace("*address*", address);
 
-            var link = "http://154.70.214.213/ProspectingTaskScheduler/api/Email/Optout?contactPersonId=" + personRecordFromDB.contact_person_id + "&contactDetail=" + emailAddress;
+            var link = "http://154.70.214.213/ProspectingTaskScheduler/api/Email/Optout?contactPersonId=" + contact.ContactPersonId + "&contactDetail=" + contact.TargetContactEmailAddress;
             string optoutLink = "<p /><a href='" + link + "' target='_blank'>Unsubscribe</a>";
 
             return rawBody + optoutLink;
@@ -333,62 +250,87 @@ namespace ProspectingProject
             }
         }
 
-        public static CommBatchParameters CalculateCostOfBatch(CommBatchParameters inputParams, List<UserSuburb> userSuburbs)
+        private static List<ProspectingContactPerson> GetTargetContactPersons(EmailBatch batch)
         {
-            if (inputParams.CommunicationType == "EMAIL")
+            List<ProspectingContactPerson> contacts = new List<ProspectingContactPerson>();
+            using (var prospecting = new ProspectingDataContext())
             {
-                var costResults = new CommBatchParameters { UnitCost = 1 };
-                if (inputParams.RecipientCount > 0)
-                {                    
-                    costResults.NumberOfUnits = inputParams.RecipientCount;
-                }
-                else if (inputParams.TargetAllUserSuburbs)
+                if (batch.Recipients.Count > 0)
                 {
-                    costResults.NumberOfUnits = GetTargetEmailCountForUserSuburbs(userSuburbs);
-                }
-                else if (inputParams.CurrentSuburb.HasValue && inputParams.CurrentSuburb > 0)
-                {
-                    costResults.NumberOfUnits = GetTargetEmailsSuburb(inputParams.CurrentSuburb.Value).Count;
+                    return batch.Recipients; // make sure the front-end populates these with all required values
                 }
 
-                return costResults;
+                if (batch.TargetAllMySuburbs)
+                {
+                    var targetContacts = GetTargetContactPersonsForSuburb(batch.UserSuburbIds.ToArray());
+                    contacts.AddRange(targetContacts);
+                }
+
+                if (batch.TargetCurrentSuburb)
+                {
+                    var targetContacts = GetTargetContactPersonsForSuburb(new [] {batch.CurrentSuburbId.Value});
+                    contacts.AddRange(targetContacts);
+                }
+
+                contacts = contacts.Distinct(new ContactPersonEmailComparer()).ToList();
+                contacts = FilterContactsForTemplateType(contacts, batch.TemplateActivityTypeId);
+
+                return contacts;
             }
-            return new CommBatchParameters();
         }
 
-        private static List<string> GetTargetEmailsSuburb(int suburbId)
+        private static List<ProspectingContactPerson> GetTargetContactPersonsForSuburb(int[] suburbIDs)
         {
             using (var prospecting = new ProspectingDataContext())
             {
+                var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
                 var propertyOwnerContacts = from pp in prospecting.prospecting_properties
-                            join pr in prospecting.prospecting_person_property_relationships on pp.prospecting_property_id equals pr.prospecting_property_id
-                            join cp in prospecting.prospecting_contact_persons on pr.contact_person_id equals cp.contact_person_id
-                            join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
-                            where ProspectingLookupData.EmailTypeIds.Contains(cd.contact_detail_type) && cd.is_primary_contact && !cd.deleted
-                            && pp.seeff_area_id == suburbId && pp.prospected == true && !cp.optout_emails && !cp.is_popi_restricted
-                            select cd.contact_detail;
+                                            join pr in prospecting.prospecting_person_property_relationships on pp.prospecting_property_id equals pr.prospecting_property_id
+                                            join cp in prospecting.prospecting_contact_persons on pr.contact_person_id equals cp.contact_person_id
+                                            join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
+                                            where ProspectingLookupData.EmailTypeIds.Contains(cd.contact_detail_type) && cd.is_primary_contact && !cd.deleted
+                                            && suburbIDs.Contains(pp.seeff_area_id.Value) && pp.prospected == true && !cp.optout_emails && !cp.is_popi_restricted
+                                            select new ProspectingContactPerson 
+                                            { 
+                                                ContactPersonId = cp.contact_person_id,
+                                                Title = cp.person_title,
+                                                Firstname = cp.firstname,
+                                                Surname = cp.surname,
+                                                IdNumber = cp.id_number,
+                                                TargetLightstonePropertyIdForComms = pp.lightstone_property_id, 
+                                                TargetContactEmailAddress = cd.contact_detail
+                                            };
 
                 var propertyCompanyContacts = from pp in prospecting.prospecting_properties
-                            join cpr in prospecting.prospecting_company_property_relationships on pp.prospecting_property_id equals cpr.prospecting_property_id
-                            join pcr in prospecting.prospecting_person_company_relationships on cpr.contact_company_id equals pcr.contact_company_id
-                            join cp in prospecting.prospecting_contact_persons on pcr.contact_person_id equals cp.contact_person_id
-                            join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
-                            where ProspectingLookupData.EmailTypeIds.Contains(cd.contact_detail_type) && cd.is_primary_contact && !cd.deleted
-                            && pp.seeff_area_id == suburbId && pp.prospected == true && !cp.optout_emails && !cp.is_popi_restricted
-                            select cd.contact_detail;
+                                              join cpr in prospecting.prospecting_company_property_relationships on pp.prospecting_property_id equals cpr.prospecting_property_id
+                                              join pcr in prospecting.prospecting_person_company_relationships on cpr.contact_company_id equals pcr.contact_company_id
+                                              join cp in prospecting.prospecting_contact_persons on pcr.contact_person_id equals cp.contact_person_id
+                                              join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
+                                              where ProspectingLookupData.EmailTypeIds.Contains(cd.contact_detail_type) && cd.is_primary_contact && !cd.deleted
+                                              && suburbIDs.Contains(pp.seeff_area_id.Value) && pp.prospected == true && !cp.optout_emails && !cp.is_popi_restricted
+                                              select new ProspectingContactPerson
+                                              {
+                                                  ContactPersonId = cp.contact_person_id,
+                                                  Title = cp.person_title,
+                                                  Firstname = cp.firstname,
+                                                  Surname = cp.surname,
+                                                  IdNumber = cp.id_number,
+                                                  TargetLightstonePropertyIdForComms = pp.lightstone_property_id,
+                                                  TargetContactEmailAddress = cd.contact_detail
+                                              };
 
-                return propertyOwnerContacts.Union(propertyCompanyContacts).Distinct().ToList();
+                return propertyOwnerContacts.Union(propertyCompanyContacts).ToList(); 
             }
         }
 
-        private static int GetTargetEmailCountForUserSuburbs(List<UserSuburb> userSuburbs)        
+        public static CostOfBatch CalculateCostOfBatch(EmailBatch batch)
         {
-            List<string> results = new List<string>();
-            foreach (var suburb in userSuburbs)
+            var targetContacts = GetTargetContactPersons(batch);
+            return new CostOfBatch
             {
-                results.AddRange(GetTargetEmailsSuburb(suburb.SuburbId));
-            }
-            return results.Distinct().Count();
+                UnitCost = 0.01M,
+                NumberOfUnits = targetContacts.Count
+            };
         }
     }
 }

@@ -50,7 +50,7 @@ function createProspectingMenu(userData) {
     menuItems.push(menuItem);
 
     if (prospectingContext.UserHasCommAccess) {
-        menuItem = createMenuItem("Communication", "communication", buildCommunicationMenu(), handleSMSMenuItemClick, null);
+        menuItem = createMenuItem("Communication", "communication", buildCommunicationMenu(), handleEnableComms, null);
         appendMenuItemContent(menuItem.MenuItemContent);
         menuItems.push(menuItem);
     }
