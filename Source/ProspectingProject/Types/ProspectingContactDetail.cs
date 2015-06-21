@@ -14,6 +14,7 @@ namespace ProspectingProject
         public string ItemId { get; set; }
         public string ContactItemType { get; set; }
         public int? IntDialingCode { get; set; }
+        public int? IntDialingCodePrefix { get; set; }
 
         public int? ItemType { get; set; }
         public string ItemContent { get; set; }

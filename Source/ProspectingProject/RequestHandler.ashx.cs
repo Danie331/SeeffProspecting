@@ -119,12 +119,12 @@ namespace ProspectingProject
                         string userSignature = RetrieveUserSignature();
                         context.Response.Write(userSignature);
                         break;
-                    case "send_sms":
-                        string response = SendSMS(json);
+                    case "submit_sms":
+                        string response = SubmitSMSBatch(json);
                         context.Response.Write(response);
                         break;
-                    case "send_emails":
-                        var status = SendEmails(json);
+                    case "submit_emails":
+                        var status = SubmitEmailBatch(json);
                         context.Response.Write(status);
                         break;
                     case "get_template":
@@ -146,7 +146,11 @@ namespace ProspectingProject
                         context.Response.Write(sysTemplates);
                         break;
                     case "calculate_cost_email_batch":
-                        string result = CalculateCostOfCommunicationBatch(json);
+                        string result = CalculateCostOfEmailBatch(json);
+                        context.Response.Write(result);
+                        break;
+                    case "calculate_cost_sms_batch":
+                         result = CalculateCostOfSmsBatch(json);
                         context.Response.Write(result);
                         break;
                 }
@@ -183,14 +187,21 @@ namespace ProspectingProject
             }
         }
 
-        private string CalculateCostOfCommunicationBatch(string json)
+        private string CalculateCostOfSmsBatch(string json)
         {
-            var batch = ProspectingCore.Deserialise<EmailBatch>(json);
-            var calculationResult = ProspectingCore.CalculateCostOfBatch(batch);
+            var batch = ProspectingCore.Deserialise<SmsBatch>(json);
+            var calculationResult = ProspectingCore.CalculateCostOfSmsBatch(batch);
             return ProspectingCore.SerializeToJsonWithDefaults(calculationResult);
         }
 
-        private string SendEmails(string json)
+        private string CalculateCostOfEmailBatch(string json)
+        {
+            var batch = ProspectingCore.Deserialise<EmailBatch>(json);
+            var calculationResult = ProspectingCore.CalculateCostOfEmailBatch(batch);
+            return ProspectingCore.SerializeToJsonWithDefaults(calculationResult);
+        }
+
+        private string SubmitEmailBatch(string json)
         {
             var emailBatch = ProspectingCore.Deserialise<EmailBatch>(json);
             var status = ProspectingCore.SubmitEmailBatch(emailBatch);
@@ -243,10 +254,11 @@ namespace ProspectingProject
             return ProspectingCore.SerializeToJsonWithDefaults(new { Properties = results });
         }
 
-        private string SendSMS(string json)
+        private string SubmitSMSBatch(string json)
         {
-            SmsInputPacket inputPacket = ProspectingCore.Deserialise<SmsInputPacket>(json);
-            return ProspectingCore.SendSMS(inputPacket);
+            var smsBatch = ProspectingCore.Deserialise<SmsBatch>(json);
+            var status = ProspectingCore.SubmitSMSBatch(smsBatch);
+            return ProspectingCore.SerializeToJsonWithDefaults(status);
         }
 
         private int? FindAreaId(string json)

@@ -32,6 +32,7 @@ namespace ProspectingProject
 
         public static IEnumerable<int> PhoneTypeIds { get; private set; }
         public static IEnumerable<int> EmailTypeIds { get; private set; }
+        public static int CellPhoneTypeId { get; private set; }
 
         public static Func<ProspectingDataContext, prospecting_property, bool, IQueryable<ProspectingContactPerson>> PropertyContactsRetriever { get; private set; }
         public static Func<ProspectingDataContext, ProspectingContactPerson, IQueryable<ProspectingContactDetail>> PropertyContactPhoneNumberRetriever { get; private set; }
@@ -135,6 +136,7 @@ namespace ProspectingProject
                                                                                                              ItemType = det.contact_detail_type,
                                                                                                              IsValid = true,
                                                                                                              IntDialingCode = det.intl_dialing_code_id,
+                                                                                                              IntDialingCodePrefix = det.prospecting_area_dialing_code.dialing_code_id,
                                                                                                              EleventhDigit = det.eleventh_digit
                                                                                                          }));
 
@@ -254,10 +256,12 @@ namespace ProspectingProject
             {
                 ContactDetailTypes = (from item in prospecting.prospecting_contact_detail_types
                                 select new KeyValuePair<int, string>(item.contact_detail_type_id, item.type_desc)).ToList();
-            }
 
-            ContactEmailTypes = ContactDetailTypes.Where(i => i.Value.Contains("email")).ToList();
-            ContactPhoneTypes = ContactDetailTypes.Where(i => !i.Value.Contains("email")).ToList();
+                ContactEmailTypes = ContactDetailTypes.Where(i => i.Value.Contains("email")).ToList();
+                ContactPhoneTypes = ContactDetailTypes.Where(i => !i.Value.Contains("email")).ToList();
+
+                CellPhoneTypeId = ContactDetailTypes.First(s => s.Value == "cell").Key;
+            }
         }
 
     }

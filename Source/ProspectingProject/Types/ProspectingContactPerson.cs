@@ -79,5 +79,6 @@ namespace ProspectingProject
         public bool ContactIsCompromised { get; set; } // special
 
         public string TargetContactEmailAddress { get; set; }
+        public string TargetContactCellphoneNumber { get; set; }
     }
 }

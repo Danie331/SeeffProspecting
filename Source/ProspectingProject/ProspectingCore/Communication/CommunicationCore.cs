@@ -23,7 +23,7 @@ namespace ProspectingProject
 
                 var emailRecipients = GetRecipientsFromBatch(batch);
                 EnqueueBatch(emailRecipients, batch);
-                DebitUserBalance(emailRecipients.Count);
+                DebitUserBalanceForEmailBatch(emailRecipients.Count);
 
                 return new CommunicationBatchStatus { SuccessfullySubmitted = true };
             }
@@ -49,7 +49,7 @@ namespace ProspectingProject
             }
         }
 
-        private static void DebitUserBalance(int count)
+        private static void DebitUserBalanceForEmailBatch(int count)
         {
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
@@ -62,10 +62,136 @@ namespace ProspectingProject
 
         private static List<EmailRecipient> GetRecipientsFromBatch(EmailBatch batch)
         {
-            var contacts = GetTargetContactPersons(batch);
+            var contacts = GetEmailTargetContactPersons(batch);
             var recipients = CreateMailRecipients(contacts, batch);
-
             return recipients;
+        }
+
+        private static List<SmsRecipient> GetRecipientsFromBatch(SmsBatch batch)
+        {
+            var contacts = GetSmsTargetContactPersons(batch);
+            var recipients = CreateSmsRecipients(contacts, batch);
+            return recipients;
+        }
+
+        private static List<SmsRecipient> CreateSmsRecipients(List<ProspectingContactPerson> contacts, SmsBatch batch)
+        {
+            List<SmsRecipient> recipients = new List<SmsRecipient>();
+            foreach (var contact in contacts)
+            {
+                string messageBody = CreateSmsMessage(batch.SmsBodyRaw, contact);
+
+                var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
+                SmsRecipient recipient = new SmsRecipient
+                {
+                    ContactPersonId = contact.ContactPersonId.Value,
+                    SMSMessage = messageBody,
+                    QualifiedCellNumber = contact.TargetContactCellphoneNumber,
+                    TargetLightstonePropertyId = contact.TargetLightstonePropertyIdForComms.Value,
+                    Fullname = titlecaser.ToTitleCase(contact.Firstname.ToLower()) + " " + titlecaser.ToTitleCase(contact.Surname.ToLower())
+                };
+                recipients.Add(recipient);
+            }
+            return recipients;
+        }
+
+        private static string CreateSmsMessage(string rawMessageBody, ProspectingContactPerson contact)
+        {
+            var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
+
+            string personTitle = "";
+            if (contact.Title.HasValue)
+            {
+                personTitle = ProspectingLookupData.ContactPersonTitle.First(cpt => cpt.Key == contact.Title.Value).Value;
+            }
+            string name = titlecaser.ToTitleCase(contact.Firstname.ToLower());
+            string surname = titlecaser.ToTitleCase(contact.Surname.ToLower());
+            string address = ProspectingCore.GetFormattedAddress(contact.TargetLightstonePropertyIdForComms.Value);
+
+            rawMessageBody = rawMessageBody.Replace("*title*", personTitle)
+                             .Replace("*name*", name)
+                             .Replace("*surname*", surname)
+                             .Replace("*address*", address);
+
+            return rawMessageBody;
+        }
+
+        private static List<ProspectingContactPerson> GetSmsTargetContactPersons(SmsBatch batch)
+        {
+            List<ProspectingContactPerson> contacts = new List<ProspectingContactPerson>();
+            using (var prospecting = new ProspectingDataContext())
+            {
+                if (batch.Recipients.Count > 0)
+                {
+                    foreach (var contact in batch.Recipients)
+                    {
+                        var contactRecord = prospecting.prospecting_contact_persons.First(cp => cp.contact_person_id == contact.ContactPersonId);
+                        var contactDetail = contactRecord.prospecting_contact_details.First(cd => cd.contact_detail == contact.TargetContactCellphoneNumber);
+                        contact.TargetContactCellphoneNumber = contactDetail.prospecting_area_dialing_code.dialing_code_id + contact.TargetContactCellphoneNumber.Remove(0, 1);
+                    }
+                    return batch.Recipients; // make sure the front-end populates these with all required values
+                }
+
+                if (batch.TargetAllMySuburbs)
+                {
+                    var targetContacts = GetSmsTargetContactPersons(batch.UserSuburbIds.ToArray());
+                    contacts.AddRange(targetContacts);
+                }
+
+                if (batch.TargetCurrentSuburb)
+                {
+                    var targetContacts = GetSmsTargetContactPersons(new[] { batch.CurrentSuburbId.Value });
+                    contacts.AddRange(targetContacts);
+                }
+
+                contacts = contacts.Distinct(new ContactPersonSmsComparer()).ToList();
+                contacts = FilterContactsForTemplateType(contacts, batch.TemplateActivityTypeId);
+
+                return contacts;
+            }
+        }
+
+        private static List<ProspectingContactPerson> GetSmsTargetContactPersons(int[] suburbIDs)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                var propertyOwnerContacts = from pp in prospecting.prospecting_properties
+                                            join pr in prospecting.prospecting_person_property_relationships on pp.prospecting_property_id equals pr.prospecting_property_id
+                                            join cp in prospecting.prospecting_contact_persons on pr.contact_person_id equals cp.contact_person_id
+                                            join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
+                                            where cd.contact_detail_type == ProspectingLookupData.CellPhoneTypeId && cd.is_primary_contact && !cd.deleted
+                                            && suburbIDs.Contains(pp.seeff_area_id.Value) && pp.prospected == true && !cp.optout_sms && !cp.is_popi_restricted
+                                            select new ProspectingContactPerson
+                                            {
+                                                ContactPersonId = cp.contact_person_id,
+                                                Title = cp.person_title,
+                                                Firstname = cp.firstname,
+                                                Surname = cp.surname,
+                                                IdNumber = cp.id_number,
+                                                TargetLightstonePropertyIdForComms = pp.lightstone_property_id,
+                                                TargetContactCellphoneNumber = cd.prospecting_area_dialing_code.dialing_code_id + cd.contact_detail.Remove(0,1)
+                                            };
+
+                var propertyCompanyContacts = from pp in prospecting.prospecting_properties
+                                              join cpr in prospecting.prospecting_company_property_relationships on pp.prospecting_property_id equals cpr.prospecting_property_id
+                                              join pcr in prospecting.prospecting_person_company_relationships on cpr.contact_company_id equals pcr.contact_company_id
+                                              join cp in prospecting.prospecting_contact_persons on pcr.contact_person_id equals cp.contact_person_id
+                                              join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
+                                              where cd.contact_detail_type == ProspectingLookupData.CellPhoneTypeId && cd.is_primary_contact && !cd.deleted
+                                              && suburbIDs.Contains(pp.seeff_area_id.Value) && pp.prospected == true && !cp.optout_sms && !cp.is_popi_restricted
+                                              select new ProspectingContactPerson
+                                              {
+                                                  ContactPersonId = cp.contact_person_id,
+                                                  Title = cp.person_title,
+                                                  Firstname = cp.firstname,
+                                                  Surname = cp.surname,
+                                                  IdNumber = cp.id_number,
+                                                  TargetLightstonePropertyIdForComms = pp.lightstone_property_id,
+                                                  TargetContactCellphoneNumber = cd.prospecting_area_dialing_code.dialing_code_id + cd.contact_detail.Remove(0, 1)
+                                              };
+
+                return propertyOwnerContacts.Union(propertyCompanyContacts).ToList();
+            }
         }
 
         /// <summary>
@@ -138,6 +264,42 @@ namespace ProspectingProject
                         record.attachment1_content = batch.Attachments[0].base64;
                     }
                     prospecting.email_communications_logs.InsertOnSubmit(record);
+                }
+                prospecting.SubmitChanges();
+            }
+        }
+
+        private static void EnqueueBatch(List<SmsRecipient> recipients, SmsBatch batch)
+        {
+            var prospectingUser = RequestHandler.GetUserSessionObject();
+            using (var prospecting = new ProspectingDataContext())
+            {
+                Guid batchId = Guid.NewGuid();
+                var createdDatetime = DateTime.Now;
+                var status = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "PENDING_SUBMIT_TO_API").Key;
+                if (!batch.TemplateActivityTypeId.HasValue)
+                {
+                    batch.TemplateActivityTypeId = ProspectingLookupData.ActivityTypes.First(act => act.Value == "General").Key;
+                }
+                foreach (var recipient in recipients)
+                {
+                    var contactRecord = prospecting.prospecting_contact_persons.First(c => c.contact_person_id == recipient.ContactPersonId);
+                    sms_communications_log record = new sms_communications_log
+                    {
+                        batch_id = batchId,
+                        batch_friendly_name = batch.NameOfBatch,
+                        batch_activity_type_id = batch.TemplateActivityTypeId.Value,
+                        activity_log_id = null,
+                        followup_activity_id = null,
+                        created_by_user_guid = prospectingUser.UserGuid,
+                        created_datetime = createdDatetime,
+                        target_contact_person_id = recipient.ContactPersonId,
+                        target_cellphone_no = recipient.QualifiedCellNumber,
+                        target_lightstone_property_id = recipient.TargetLightstonePropertyId,
+                        status = status,
+                        msg_body_or_link_id = recipient.SMSMessage
+                    };
+                    prospecting.sms_communications_logs.InsertOnSubmit(record);
                 }
                 prospecting.SubmitChanges();
             }
@@ -250,7 +412,7 @@ namespace ProspectingProject
             }
         }
 
-        private static List<ProspectingContactPerson> GetTargetContactPersons(EmailBatch batch)
+        private static List<ProspectingContactPerson> GetEmailTargetContactPersons(EmailBatch batch)
         {
             List<ProspectingContactPerson> contacts = new List<ProspectingContactPerson>();
             using (var prospecting = new ProspectingDataContext())
@@ -262,13 +424,13 @@ namespace ProspectingProject
 
                 if (batch.TargetAllMySuburbs)
                 {
-                    var targetContacts = GetTargetContactPersonsForSuburb(batch.UserSuburbIds.ToArray());
+                    var targetContacts = GetEmailTargetContactPersons(batch.UserSuburbIds.ToArray());
                     contacts.AddRange(targetContacts);
                 }
 
                 if (batch.TargetCurrentSuburb)
                 {
-                    var targetContacts = GetTargetContactPersonsForSuburb(new [] {batch.CurrentSuburbId.Value});
+                    var targetContacts = GetEmailTargetContactPersons(new [] {batch.CurrentSuburbId.Value});
                     contacts.AddRange(targetContacts);
                 }
 
@@ -279,7 +441,7 @@ namespace ProspectingProject
             }
         }
 
-        private static List<ProspectingContactPerson> GetTargetContactPersonsForSuburb(int[] suburbIDs)
+        private static List<ProspectingContactPerson> GetEmailTargetContactPersons(int[] suburbIDs)
         {
             using (var prospecting = new ProspectingDataContext())
             {
@@ -323,14 +485,93 @@ namespace ProspectingProject
             }
         }
 
-        public static CostOfBatch CalculateCostOfBatch(EmailBatch batch)
+        public static CostOfBatch CalculateCostOfEmailBatch(EmailBatch batch)
         {
-            var targetContacts = GetTargetContactPersons(batch);
+            var targetContacts = GetEmailTargetContactPersons(batch);
             return new CostOfBatch
             {
                 UnitCost = 0.01M,
                 NumberOfUnits = targetContacts.Count
             };
+        }
+
+        public static CostOfBatch CalculateCostOfSmsBatch(SmsBatch batch)
+        {
+            var recipients = GetRecipientsFromBatch(batch);
+            int totalUnits = 0;
+            foreach (var recipient in recipients)
+            {
+                var numberUnits = Math.Ceiling((decimal)recipient.SMSMessage.Length / 160.0M);
+                totalUnits += (int)numberUnits;
+            }
+            return new CostOfBatch
+            {
+                UnitCost = 0.19M,
+                NumberOfUnits = totalUnits
+            };
+        }
+
+        private static CostOfBatch CalculateCostOfSmsBatch(List<SmsRecipient> recipients)
+        {
+             int totalUnits = 0;
+            foreach (var recipient in recipients)
+            {
+                var numberUnits = Math.Ceiling((decimal)recipient.SMSMessage.Length / 160.0M);
+                totalUnits += (int)numberUnits;
+            }
+            return new CostOfBatch
+            {
+                UnitCost = 0.19M,
+                NumberOfUnits = totalUnits
+            };
+        }
+
+        public static CommunicationBatchStatus SubmitSMSBatch(SmsBatch batch)
+        {
+            try
+            {
+                byte[] data = Convert.FromBase64String(batch.SmsBodyRaw);
+                batch.SmsBodyRaw = Encoding.UTF8.GetString(data);
+
+                data = Convert.FromBase64String(batch.NameOfBatch);
+                batch.NameOfBatch = Encoding.UTF8.GetString(data);
+
+                var smsRecipients = GetRecipientsFromBatch(batch);
+                EnqueueBatch(smsRecipients, batch);
+                var batchCost = CalculateCostOfSmsBatch(smsRecipients);
+                DebitUserBalanceForSmsBatch(batchCost.TotalCost);
+
+                return new CommunicationBatchStatus { SuccessfullySubmitted = true };
+            }
+            catch (Exception ex)
+            {
+                using (var prospectingDb = new ProspectingDataContext())
+                {
+                    var errorRec = new exception_log
+                    {
+                        friendly_error_msg = ex.Message,
+                        exception_string = ex.ToString(),
+                        user = RequestHandler.GetUserSessionObject().UserGuid,
+                        date_time = DateTime.Now
+                    };
+                    prospectingDb.exception_logs.InsertOnSubmit(errorRec);
+                    prospectingDb.SubmitChanges();
+                }
+                return new CommunicationBatchStatus
+                {
+                    SuccessfullySubmitted = false,
+                    ErrorMessage = ex.Message
+                };
+            }
+        }
+
+        private static void DebitUserBalanceForSmsBatch(decimal cost)
+        {
+            using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
+            {            
+                var prospectingUser = RequestHandler.GetUserSessionObject();
+                prospectingAuthService.DebitUserBalance(cost, prospectingUser.UserGuid);
+            }
         }
     }
 }

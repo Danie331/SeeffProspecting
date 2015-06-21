@@ -159,8 +159,8 @@ function buildCommunicationMenuItems() {
         menu.append(separator);
     }
 
-    //var smsMessage = buildCommMenuItem("comm_menu_sms", buildSMSMenuItemContent(), handleSMSMessageClick);
-    //menu.append(smsMessage);
+    var smsMessage = buildCommMenuItem("comm_menu_sms", buildSMSMenuItemContent(), handleSMSMessageClick);
+    menu.append(smsMessage);
 
     var emailMessage = buildCommMenuItem("comm_menu_email", buildEmailMenuItemContent(), handleEmailMessageClick);
     menu.append(emailMessage);
@@ -828,6 +828,9 @@ function buildContactsBody(contacts, selectCells) {
         if (c.EmailSubmitted) {
             actionStatus = 'Submitted';
         }
+        if (c.SmsSubmitted) {
+            actionStatus = 'Submitted';
+        }
         if (c.SendError) {
             actionStatus = 'Error';
         }
@@ -859,6 +862,14 @@ function buildContactsBody(contacts, selectCells) {
 
                 rowIsSelected = uniqueItems.indexOf(defaultCell.ItemContent) > -1 ? '' : 'checked';
                 uniqueItems.push(defaultCell.ItemContent);
+
+                if (c.SmsSubmitted) {
+                    rowIsSelected = '';
+                    tr.css('background-color', 'lightgreen');
+                }
+                if (c.SendError) {
+                    tr.css('background-color', '#CC0000');
+                }
             } else {
                 tr.addClass('noDefault');
                 var cellSelectCombo = $("<select id='comm_default_cell_select_" + rowId + "' style='width:95%' />");
@@ -1217,40 +1228,75 @@ function handleSendMessage(callbackFn) {
         submitEmails(callbackFn);
     }
     if (communicationsMode == "SMS") {
-        sendSMS();
+        submitSMS(callbackFn);
     }
 }
 
-function sendSMS() {
-    var recipients = [];
+function submitSMS(callbackFn) {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Processing. Please wait...</p>' });
     var commSelectedRows = $('#commContactsTable tr.rowSelected');
+    var recipients = [];
     $.each(commSelectedRows, function (idx, row) {
         var contactId = $(row).attr("id").replace('comm_row_', '');
         var contact = getContactFromId(contactId);
-        contact.SendError = null;
-
-        var message = generateMessageForRecord($("#smsMessageContainer").val().trim(), contact) + createUnSubscribeOption();
-        recipients.push({
-            ContactpersonId: contactId,
-            ProspectingPropertyId: contact.TargetCommPropertyId,
-            TargetCellNo: getDefaultCellNo(contact),
-            Message: message
-        });
+        var cell = getContactDetailFromContactRow(contactId);
+        contact.TargetContactCellphoneNumber = cell;
+        recipients.push(contact);
     });
 
+    var batchNameRaw = encodeURIComponent(b64EncodeUnicode($('#batchFriendlyName').val()));
+    var smsRequestPacket =
+        {
+            Instruction: 'submit_sms',
+            Recipients: recipients,
+            TargetCurrentSuburb: $('#commCurrentSuburbRadioBtn').is(':checked'),
+            TargetAllMySuburbs: $('#commAllSuburbsRadioBtn').is(':checked'),
+            CurrentSuburbId: currentSuburb != null ? currentSuburb.SuburbId : null,
+            NameOfBatch: batchNameRaw,
+            TemplateActivityTypeId: selectedTemplateActivityTypeId,
+            UserSuburbIds: getUserSuburbsList(suburbsInfo),
+            SmsBodyRaw: encodeURIComponent(b64EncodeUnicode($("#smsMessageContainer").val()))
+        };
 
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Sending SMS to recipients...</p>' });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "send_sms", TargetRecipients: recipients }),
+        data: JSON.stringify(smsRequestPacket),
         dataType: "json"
-    }).done(function (data) {
+    }).done(function (response) {
         $.unblockUI();
-        if (!handleResponseIfServerError(data)) {
+        if (response.SuccessfullySubmitted) {
+            var submissionSuccessDialog = $("<div id='submissionSuccessDialog' title='Communication Batch Received' style='font-family:Verdana;font-size:12px;' />");
+            submissionSuccessDialog.empty().append("Thank you, your request has been successfully received and enqueued for processing.");
+            submissionSuccessDialog.dialog(
+                                {
+                                    modal: true,
+                                    closeOnEscape: true,
+                                    width: '400',
+                                    height: '200',
+                                    buttons: { "Ok": function () { $(this).dialog("close"); } },
+                                    position: ['center', 'center']
+                                });
+            if (!currentOrAllSuburbsSelected() && recipients.length) {
+                var contacts = [];
+                var commAllRows = $('#commContactsTable > tbody > tr');
+                $.each(commAllRows, function (idx, row) {
+                    var contactId = $(row).attr("id").replace('comm_row_', '');
+                    var contact = getContactFromId(contactId);
+                    if ($(row).hasClass('rowSelected')) {
+                        contact.SmsSubmitted = true;
+                    }
+                    contacts.push(contact);
+                });
+                buildContactsBody(contacts, false);
+            }
+            if (callbackFn) {
+                callbackFn();
+            }
+        } else {
+            alert("An error occurred submitting your request. Please contact support. Details of the error: " + response.ErrorMessage);
             return;
         }
-        // Rem to do the same stuff as for email. Reply|Followup. Billing backend+front-end. Logging etc.
     });
 }
 
@@ -1438,14 +1484,8 @@ function submitEmails(callbackFn) {
     $.each(commSelectedRows, function (idx, row) {
         var contactId = $(row).attr("id").replace('comm_row_', '');
         var contact = getContactFromId(contactId);
-
         var email = getContactDetailFromContactRow(contactId);
         contact.TargetContactEmailAddress = email;
-        //contact.ContactPersonId = ;
-        //contact.IdNumber = ;
-        //contact.TargetLightstonePropertyIdForComms = ;
-        //contact.Firstname = ;
-        //contact.Surname = ;
         recipients.push(contact);
     });
 
@@ -1458,7 +1498,7 @@ function submitEmails(callbackFn) {
     }
     var emailRequestPacket =
         {
-            Instruction: 'send_emails',
+            Instruction: 'submit_emails',
             Recipients: recipients,
             EmailBodyHTMLRaw: emailBodyRaw,
             EmailSubjectRaw: emailSubjectRaw,
@@ -1744,11 +1784,11 @@ function handleCommSendBtnClick() {
 }
 
 function calculateCostOfBatch(callbackFn) {
-    if (communicationsMode == "EMAIL") {
         $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Calculating Cost. Please wait...</p>' });
         var recipients = [];
         var currentSuburbId = null;
         var targetAllUserSuburbs = false;
+        var smsBody = null;
         if (currentOrAllSuburbsSelected()) {
             // we are targetting the current or all user suburbs
             if ($('#commCurrentSuburbRadioBtn').is(':checked')) {
@@ -1760,43 +1800,71 @@ function calculateCostOfBatch(callbackFn) {
         } else {
             // we are targetting a batch of recipients
             var commSelectedRows = $('#commContactsTable tr.rowSelected');
-            $.each(commSelectedRows, function (idx, row) {
-                var contactId = $(row).attr("id").replace('comm_row_', '');
-                var contact = getContactFromId(contactId);
-                var email = $('#comm_default_email_select_' + contactId);
-                contact.TargetContactEmailAddress = email.val();
-                //contact.ContactPersonId = ;
-                //contact.IdNumber = ;
-                //contact.TargetLightstonePropertyIdForComms = ;
-                //contact.Firstname = ;
-                //contact.Surname = ;
-                recipients.push(contact);
-            });
+            if (communicationsMode == "EMAIL") {
+                $.each(commSelectedRows, function (idx, row) {
+                    var contactId = $(row).attr("id").replace('comm_row_', '');
+                    var contact = getContactFromId(contactId);
+                    var email = $('#comm_default_email_select_' + contactId); 
+                    contact.TargetContactEmailAddress = email.val();  // TODO: make this right at some point.
+                    recipients.push(contact);
+                });
+            }
+            if (communicationsMode == "SMS") {
+                $.each(commSelectedRows, function (idx, row) {
+                    var contactId = $(row).attr("id").replace('comm_row_', '');
+                    var contact = getContactFromId(contactId);
+                    var cell = getContactDetailFromContactRow(contactId);
+                    contact.TargetContactCellphoneNumber = cell;
+                    recipients.push(contact);
+                });
+            }            
+        }
+        var instruction = null;
+        if (communicationsMode == "EMAIL") {
+            instruction = "calculate_cost_email_batch";
+        }
+        if (communicationsMode == "SMS") {
+            instruction = "calculate_cost_sms_batch";
+            smsBody = $("#smsMessageContainer").val();
         }
         $.ajax({
             type: "POST",
             url: "RequestHandler.ashx",
             data: JSON.stringify({
-                Instruction: "calculate_cost_email_batch",
+                Instruction: instruction,
                 Recipients: recipients,
                 TargetCurrentSuburb: currentSuburbId != null ? true : false,
                 TargetAllMySuburbs: targetAllUserSuburbs,
                 CurrentSuburbId: currentSuburbId,
                 TemplateActivityTypeId: selectedTemplateActivityTypeId,
-                UserSuburbIds: getUserSuburbsList(suburbsInfo)
+                UserSuburbIds: getUserSuburbsList(suburbsInfo),
+                SmsBodyRaw: smsBody
             }),
             dataType: "json"
         }).done(function (result) {
             $.unblockUI();
             costOfBatch = result.TotalCost;
-            var costResultsDialog = $("<div title='Calculation Results' style='font-family:Verdana;font-size:12px;' />").empty()
-                                    .append("Available Prospecting credit: R " + availableCredit.toFixed(2))
-                                    .append("<br />")
-                                    .append("Unit cost per email: R " + result.UnitCost)
-                                    .append("<br />")
-                                    .append("Number of emails: " + result.NumberOfUnits)
-                                    .append("<br />")
-                                    .append("Cost of batch: R " + result.TotalCost.toFixed(2));
+            var costResultsDialog = null;
+            if (communicationsMode == "EMAIL") {
+             costResultsDialog = $("<div title='Calculation Results' style='font-family:Verdana;font-size:12px;' />").empty()
+                                        .append("Available Prospecting credit: R " + availableCredit.toFixed(2))
+                                        .append("<br />")
+                                        .append("Unit cost per email: R " + result.UnitCost)
+                                        .append("<br />")
+                                        .append("Number of emails: " + result.NumberOfUnits)
+                                        .append("<br />")
+                                        .append("Cost of batch: R " + result.TotalCost.toFixed(2));
+            }
+            if (communicationsMode == "SMS") {
+                costResultsDialog = $("<div title='Calculation Results' style='font-family:Verdana;font-size:12px;' />").empty()
+                                        .append("Available Prospecting credit: R " + availableCredit.toFixed(2))
+                                        .append("<br />")
+                                        .append("Unit cost per 160 characters: R " + result.UnitCost)
+                                        .append("<br />")
+                                        .append("Number of messages (160 characters per message): " + result.NumberOfUnits)
+                                        .append("<br />")
+                                        .append("Cost of batch: R " + result.TotalCost.toFixed(2));
+            }
 
             var buttonText = "Ok";
             if (callbackFn) {
@@ -1823,7 +1891,6 @@ function calculateCostOfBatch(callbackFn) {
                   position: ['center', 'center']
               });
         });
-    }
 }
 
 function createUnSubscribeOption(contact) {
@@ -1834,7 +1901,7 @@ function createUnSubscribeOption(contact) {
 
 function createPreviewMessage(signatureData, dialog) {
     var div = $("<div id='previewMsgDiv' />");
-    var textarea = $("<textarea id='previewTextarea' style='width:100%;' />");
+    var textarea = $("<textarea id='previewTextarea' style='width:100%;height:160px' />");
     div.append(textarea);
 
     var firstRecord = null;
