@@ -13,9 +13,7 @@ namespace ProspectingTaskScheduler.Controllers
         public void Optout(int contactPersonId, string contactDetail)
         {
             using (var prospectingContext = new ProspectingDataContext())
-            {
-                // To verify this request we need to compare the ContactPersonId and ContactDetail in the request to a valid contact person in the database
-
+            {     
                 var contactPersons = from cd in prospectingContext.prospecting_contact_details
                                      where cd.contact_detail == contactDetail
                                      select cd.prospecting_contact_person;

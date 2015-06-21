@@ -3,7 +3,7 @@
 <head>
     <title>Opt-out from receiving communications</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="Scripts/3rdParty/CrossDomainRequestPlugin.js"></script>
+    <!--<script src="Scripts/3rdParty/CrossDomainRequestPlugin.js"></script>-->
 
     <script>
         $(function () {
@@ -19,17 +19,9 @@
                 if (contactDetail && contactPersonId) {
                     $('#optoutYes').click(function () {
                         $('#optoutYes').val('Please wait...');
-
                         $.ajax({
-                            type: "POST",
-                            url: "http://prospecting.seeff.com/RequestHandler.ashx",
-                            data: JSON.stringify({
-                                Instruction: 'contact_optout',
-                                ContactPersonId: contactPersonId,
-                                ContactDetail: contactDetail,
-                                OptoutFromWhat: 'email'
-                            }),
-                            //dataType: "json",
+                            type: "GET",
+                            url: "http://154.70.214.213/ProspectingTaskScheduler/api/Email/Optout?contactPersonId=" + contactPersonId + "&contactDetail=" + contactDetail
                         }).done(function () {
                             $('#youHaveOptedOut').css('display', 'block');
                             $('#optoutYes').css('display', 'none');

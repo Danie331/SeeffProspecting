@@ -166,7 +166,7 @@ namespace ProspectingProject
                              .Replace("*surname*", surname)
                              .Replace("*address*", address);
 
-            var link = "http://154.70.214.213/ProspectingTaskScheduler/api/Email/Optout?contactPersonId=" + contact.ContactPersonId + "&contactDetail=" + contact.TargetContactEmailAddress;
+            var link = "http://154.70.214.213/ProspectingTaskScheduler/UnsubscribeEmail.html?email=" + contact.TargetContactEmailAddress + "&contactid=" + contact.ContactPersonId;
             string optoutLink = "<p /><a href='" + link + "' target='_blank'>Unsubscribe</a>";
 
             return rawBody + optoutLink;

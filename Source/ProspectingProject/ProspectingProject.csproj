@@ -1083,7 +1083,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="UnsubscribeCommunication.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
