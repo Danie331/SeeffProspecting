@@ -396,7 +396,7 @@ namespace ProspectingProject
                     {
                         int lightstonePropertyId = contact.TargetLightstonePropertyIdForComms.Value;
                         var propertingProperty = prospecting.prospecting_properties.First(pp => pp.lightstone_property_id == lightstonePropertyId);
-                        if (!string.IsNullOrEmpty(propertingProperty.lightstone_reg_date))
+                        if (!string.IsNullOrEmpty(propertingProperty.lightstone_reg_date) && propertingProperty.lightstone_reg_date.Length == 8)
                         {
                             var regDate = DateTime.ParseExact(propertingProperty.lightstone_reg_date, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
                             var testDate = regDate.AddYears(years).Date;

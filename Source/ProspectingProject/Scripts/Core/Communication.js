@@ -572,6 +572,7 @@ function handleMyTemplatesItemClick() {
     removeMarkersFromSelection();
     commCustomSelectionEnabled = true;
     buildTemplateItemOptionsDiv('my_template');
+    $('#allSuburbsOptionContainer').hide();
     loadTemplates('get_user_template_list', null, function (results) {
         $('#templateSelector').append("<option value='-1'>--- My Templates ---</option>");
         $.each(results, function (idx, result) {
@@ -609,6 +610,7 @@ function handleStandardTemplatesItemClick() {
     removeMarkersFromSelection();
     commCustomSelectionEnabled = true;
     buildTemplateItemOptionsDiv();
+    $('#allSuburbsOptionContainer').hide();
     loadTemplates('get_system_template_list', null, function (results) {
         $('#templateSelector').append("<option value='-1'>--- Standard Templates ---</option>");
         $.each(results, function (idx, result) {
@@ -622,14 +624,17 @@ function handleStandardTemplatesItemClick() {
             loadTemplates('get_system_template', templateName, function (result) {
                 populateTemplateContent(result);
                 if (specialActivityTemplates.indexOf(result.ActivityName) > -1) {
+                    $('#allSuburbsOptionContainer').show();
                         $("#commAllSuburbsRadioBtn").trigger('click');
                     $('#commCurrentSuburbRadioBtnContainer').hide();
                     showDialogSpecialTemplateSelected();
                 } else {
+                    $('#allSuburbsOptionContainer').hide();
                     $('#commCurrentSuburbRadioBtnContainer').show();
                 }
             });
         } else {
+            $('#allSuburbsOptionContainer').hide();
             populateTemplateContent({ TemplateName: "", TemplateContent: "", TemplateActivityTypeId: null });
         }
     });
@@ -663,6 +668,7 @@ function handleNewsletterTemplateItemClick() {
     removeMarkersFromSelection();
     commCustomSelectionEnabled = true;
     buildTemplateItemOptionsDiv();
+    $('#allSuburbsOptionContainer').hide();
     var date = toTitleCase(getMonthName()) + ' ' + new Date().getFullYear();
     $('#templateSelector').empty().append("<option value='-1'>Newsletter - " + date + "</option>");
 
