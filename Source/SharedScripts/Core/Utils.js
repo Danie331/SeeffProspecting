@@ -181,3 +181,7 @@ function getUserSuburbsList() {
     });
     return suburbsIdList;
 }
+
+function formatPropertyAddressTitleCase(ssName) {
+    return toTitleCase(ssName).replace('Ss ', 'SS ');
+}

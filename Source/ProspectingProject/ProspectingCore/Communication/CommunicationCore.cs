@@ -398,13 +398,16 @@ namespace ProspectingProject
                         var propertingProperty = prospecting.prospecting_properties.First(pp => pp.lightstone_property_id == lightstonePropertyId);
                         if (!string.IsNullOrEmpty(propertingProperty.lightstone_reg_date) && propertingProperty.lightstone_reg_date.Length == 8)
                         {
-                            var regDate = DateTime.ParseExact(propertingProperty.lightstone_reg_date, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
-                            var testDate = regDate.AddYears(years).Date;
-                            var todaysDate = DateTime.Today;
-                            if (testDate == todaysDate)
+                            DateTime regDate;
+                            if (DateTime.TryParseExact(propertingProperty.lightstone_reg_date, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out regDate))
                             {
-                                filteredContacts.Add(contact);
-                            }
+                                var testDate = regDate.AddYears(years).Date;
+                                var todaysDate = DateTime.Today;
+                                if (testDate == todaysDate)
+                                {
+                                    filteredContacts.Add(contact);
+                                }
+                            }                        
                         }
                     }
                 }

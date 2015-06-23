@@ -1021,6 +1021,7 @@
     <Content Include="Scripts\Core\CommunicationTemplates.js" />
     <Content Include="Scripts\Core\DrawingMultiSelect.js" />
     <Content Include="Scripts\Core\Communication.js" />
+    <Content Include="Scripts\Core\Extensions.js" />
     <Content Include="Scripts\StyleSheets\OpenTip.css" />
     <Content Include="Scripts\3rdParty\OpenTip.js" />
     <Content Include="Scripts\StyleSheets\tooltip.css" />

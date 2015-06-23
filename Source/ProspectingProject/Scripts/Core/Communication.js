@@ -377,8 +377,17 @@ function buildTodaysAnniversaryEmail() {
 }
 
 function buildSMSContentContainer() {
-    var msgDiv = $("<textarea id='smsMessageContainer' style='border: 1px solid gray;width:100%;height:80px;color:lightgray' />");
-    var introText = "Use *title*, *name*, *surname* or *address* as placeholders for contact's information.";
+    var contentContainer = $("<div />");
+
+    var symbolsDropdown = $("<select id='smsSymbolsDropdown' />")
+                            .append($("<option value='-1'>--- Symbols ---</option>"))
+                            .append($("<option value='*title*'>Person title</option>"))
+                            .append($("<option value='*name*'>Person name</option>"))
+                            .append($("<option value='*surname*'>Person surname</option>"))
+                            .append($("<option value='*address*'>Property address</option>"));
+   
+    var msgDiv = $("<textarea id='smsMessageContainer' style='border: 1px solid gray;width:100%;height:80px;color:lightgray;' />");
+    var introText = "Use the 'Symbols' drop-down to insert placeholder information.";
     msgDiv.append(introText);
 
     msgDiv.focus(function () {
@@ -391,8 +400,29 @@ function buildSMSContentContainer() {
 
     msgDiv.keyup(updateCostOfBatchSMS);
     //msgDiv.change(updateCostOfBatchSMS);
+    symbolsDropdown.change(function () {
+        if (msgDiv.val() == introText) {
+            msgDiv.empty();
+            msgDiv.css('color', 'black');
+        }
+        var option = $(this).val();
+        if (option != '-1') {
+            var position = msgDiv.getCursorPosition();
+            var content = msgDiv.val();
+            var newContent = content.substr(0, position) + option + content.substr(position);
+            msgDiv.val(newContent);
+        }
+    });
 
-    return msgDiv;
+    var saveAsTemplateBtn = $("<input type='button' id='saveAsTemplateBtn' style='margin-right:5px;' value='Save As Template' />");
+
+    contentContainer.append(symbolsDropdown).append("<br />").append(msgDiv).append("<br />").append(saveAsTemplateBtn);
+
+    saveAsTemplateBtn.click(function () {
+        showSaveAsTemplateDialog();
+    });
+
+    return contentContainer;
 }
 
 function buildEmailContentContainer() {
@@ -475,42 +505,74 @@ function buildEmailContentContainer() {
     emailContainer.append("<br />").append(saveAsTemplateBtn).append(attachFilesDiv);
 
     saveAsTemplateBtn.click(function () {
-        var validationErrorMsg = '';
-        if (communicationsMode == "EMAIL") {
-            var emailSubject = $('#emailSubject').val().trim();
-            var emailBody = $('#emailMessageBody').val().trim();
-            if (emailBody == '' || emailSubject == '' || emailSubject == 'Subject') {
-                validationErrorMsg = "Please supply a valid subject and body for the email before saving the template.";
-            }
-        }
-        if (communicationsMode == "SMS") {
-            throw new exception(); // Must supply input box for template name
-            var smsBody = $("#smsMessageContainer").val().trim();
-            if (smsBody == '') {
-                validationErrorMsg = 'Please supply message content before saving the template.';
-            }
-        }
-
-        if (validationErrorMsg != '') {
-            alert(validationErrorMsg);
-            return;
-        }
-        var dialogHandle = $("<div title='Save Content As Template' style='display:none;font-family:Verdana;font-size:12px;'></div>");
-        dialogHandle.empty();
-        dialogHandle.append("<div>This message will be saved as a template message for future re-use.<br /> \
-                                 The subject text will be used as the template name.<br /><br /> Please note that any existing templates with the same name will be overwritten.</div>");
-
-        dialogHandle.dialog(
-          {
-              modal: true,
-              closeOnEscape: true,
-              width: 'auto',
-              buttons: { "Save and close": function () { saveUserTemplate(); $(this).dialog("close"); } },
-              position: ['center', 'center']
-          });
+        showSaveAsTemplateDialog();
     });
 
     return emailContainer;
+}
+
+function showSaveAsTemplateDialog() {
+    var validationErrorMsg = '';
+    if (communicationsMode == "EMAIL") {
+        var emailSubject = $('#emailSubject').val().trim();
+        var emailBody = $('#emailMessageBody').val().trim();
+        if (emailBody == '' || emailSubject == '' || emailSubject == 'Subject') {
+            validationErrorMsg = "Please supply a valid subject and body for the email before saving the template.";
+        }
+    }
+    if (communicationsMode == "SMS") {
+        var smsBody = $("#smsMessageContainer").val().trim();
+        if (smsBody == '') {
+            validationErrorMsg = 'Please supply message content before saving the template.';
+        }
+    }
+
+    if (validationErrorMsg != '') {
+        alert(validationErrorMsg);
+        return;
+    }
+    var dialogHandle = $("<div title='Save Content As Template' style='display:none;font-family:Verdana;font-size:12px;'></div>");
+    dialogHandle.empty();
+    var dialogContent = '';
+    if (communicationsMode == "EMAIL") {
+        dialogContent = "<div>This message will be saved as a template message for future re-use.<br /> \
+                                 The subject text will be used as the template name.<br /><br /> Please note that any existing template with the same name will be overwritten.</div>";
+    }
+    var smsTemplateName = $("<input type='text' id='smsTemplateName' style='width:200px' value='' />");
+    if (communicationsMode == "SMS") {
+        dialogContent = $("<div />")
+                        .append("This message will be saved as a template message for future re-use.")
+                        .append("<p />")
+                        .append("Please enter a name for this template: ")
+                        .append(smsTemplateName)
+                        .append("<p />")
+                        .append("Note: Any existing template with the same name will be overwritten.");
+    }
+    dialogHandle.append(dialogContent);
+
+    dialogHandle.dialog(
+      {
+          modal: true,
+          closeOnEscape: true,
+          width: 'auto',
+          open: function () {
+              smsTemplateName.val('');
+          },
+          buttons: {
+              "Save and close": function () {
+                  if (communicationsMode == "SMS") {
+                      var templateName = smsTemplateName.val();
+                      if (!templateName) {
+                          alert('You must specify a name for the template.');
+                          return;
+                      }
+                  }
+                  saveUserTemplate(smsTemplateName.val());
+                  $(this).dialog("close");
+              }
+          },
+          position: ['center', 'center']
+      });
 }
 
 function handleShowFileUploadDialog() {
@@ -688,7 +750,10 @@ function populateTemplateContent(templateItem) {
         emailBodyInitialised = true;
     }
     if (communicationsMode == "SMS") {
-
+        var txt = document.createElement("textarea");
+        txt.innerHTML = templateItem.TemplateContent;
+        $("#smsMessageContainer").css('color', 'black');
+        $("#smsMessageContainer").val(txt.value);
     }
 }
 
@@ -1100,7 +1165,7 @@ function handleCommEditBtnClick(contact, row) {
 
     var ssDoor = null;
     if (property.SS_FH == 'SS' || property.SS_FH == 'FS') {
-        var ssNameLbl = $("<label> (" + property.SSName + ")</label>");
+        var ssNameLbl = $("<label> (" + formatPropertyAddressTitleCase(property.SSName) + ")</label>");
         var ssDoorLbl = $("<label class='fieldAlignmentExtraShortWidth'>SS Door no.:</label>");
         var doorNo = property.SSDoorNo != null ? property.SSDoorNo : '';
         ssDoor = $("<input type='text' id='commContactSSDoorEdit' name='commContactSSDoorEdit' size='5' value='" + doorNo + "' />");
@@ -1694,9 +1759,9 @@ function getFormattedAddress(property) {
     if (property.SS_FH == "SS" || property.SS_FH == "FS") {
         var doorNr = '';
         if (property.SSDoorNo) doorNr = "(Door no.: " + property.SSDoorNo + ")";
-        return "Unit " + property.Unit + " " + doorNr + " " + property.SSName;
+        return "Unit " + property.Unit + " " + doorNr + " " + formatPropertyAddressTitleCase(property.SSName);
     } else {
-        return property.StreetOrUnitNo + " " + property.PropertyAddress;
+        return property.StreetOrUnitNo + " " + toTitleCase(property.PropertyAddress);
     }
 }
 
@@ -1960,7 +2025,9 @@ function generateMessageForRecord(templateMsg, record) {
     templateMsg = replaceAll(templateMsg, '*title*', titleText);
     templateMsg = replaceAll(templateMsg, '*name*', toTitleCase(record.Firstname));
     templateMsg = replaceAll(templateMsg, '*surname*', toTitleCase(record.Surname));
-    templateMsg = replaceAll(templateMsg, '*address*', toTitleCase(record.PropertyAddress));
+
+    var propertyAddress = formatPropertyAddressTitleCase(record.PropertyAddress);
+    templateMsg = replaceAll(templateMsg, '*address*', propertyAddress);
     return templateMsg;
 }
 

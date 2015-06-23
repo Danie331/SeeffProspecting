@@ -20,6 +20,7 @@
       <%-- UNMINIFIED --%> 
     <script src="Scripts/3rdParty/ckeditor/ckeditor.js"></script>
     <script src="Scripts/3rdParty/ckeditor/adapters/jquery.js"></script>
+    <script src="Scripts/Core/Extensions.js"></script>
 
     <%-- BEGIN_SECTION:STYLESHEETS --%> 
      <%-- BEGIN_SECTION:3RD_PARTY_STYLESHEETS --%>

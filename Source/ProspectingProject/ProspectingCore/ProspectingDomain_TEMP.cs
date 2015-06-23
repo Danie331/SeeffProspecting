@@ -2280,10 +2280,10 @@ namespace ProspectingProject
                 {
                     if (!string.IsNullOrEmpty(property.ss_door_number))
                     {
-                        return "Unit " + property.unit + " (Door no.: " + property.ss_door_number + ")" + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.ss_name.ToLower()).Replace("Ss ", "SS ");
+                        return "Unit " + property.unit + " (Door no.: " + property.ss_door_number + ") " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.ss_name.ToLower()).Replace("Ss ", "SS ");
                     }
 
-                    return "Unit " + property.unit + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.ss_name.ToLower()).Replace("Ss ", "SS ");
+                    return "Unit " + property.unit + " " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.ss_name.ToLower()).Replace("Ss ", "SS ");
                  }
 
                 return property.street_or_unit_no + " " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.property_address.ToLower());

@@ -56,23 +56,32 @@ function loadTemplates(templateType, templateName, callbackFn) {
     }
 }
 
-function saveUserTemplate() {
+function saveUserTemplate(templateName) {
+
+    var payload = { Instruction: 'add_update_template', CommunicationType: communicationsMode };
     if (communicationsMode == "EMAIL") {
         var emailSubject = $('#emailSubject').val().trim();
         var emailBody = $('#emailMessageBody').val().trim();
         emailBody = encodeURIComponent(btoa(emailBody));
-        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Saving Template...</p>' });
-        $.ajax({
-            type: "POST",
-            url: "RequestHandler.ashx",
-            data: JSON.stringify({ Instruction: 'add_update_template', CommunicationType: communicationsMode, TemplateName: emailSubject, TemplateContent: emailBody }),
-            dataType: "json",
-        }).done(function (data) {
-            $.unblockUI();
-            showSavedSplashDialog('Template saved!');
-        });
+
+        payload.TemplateName = emailSubject;
+        payload.TemplateContent = emailBody;
     }
-    // Implement for SMS
+    if (communicationsMode == "SMS") {
+        payload.TemplateName = templateName;
+        var smsBody = $("#smsMessageContainer").val().trim();
+        payload.TemplateContent = encodeURIComponent(btoa(smsBody));
+    }
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Saving Template...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify(payload),
+        dataType: "json",
+    }).done(function (data) {
+        $.unblockUI();
+        showSavedSplashDialog('Template saved!');
+    });
 }
 
 function deleteTemplate(templateName, callbackFn) {
