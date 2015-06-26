@@ -131,6 +131,7 @@
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillSendRequest.cs" />
     <Compile Include="Core\Communication\SMSing\SMSBatchResult.cs" />
     <Compile Include="Core\Communication\SMSing\SMSHandler.cs" />
+    <Compile Include="Core\Housekeeping\CleanupLockedPropertyRecords.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

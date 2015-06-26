@@ -8,6 +8,7 @@ using Hangfire.Dashboard;
 using System.Configuration;
 using ProspectingTaskScheduler.Core.Communication.Emailing;
 using ProspectingTaskScheduler.Core.Communication.SMSing;
+using ProspectingTaskScheduler.Core.Housekeeping;
 
 [assembly: OwinStartup(typeof(ProspectingTaskScheduler.App_Start.Startup))]
 
@@ -37,6 +38,9 @@ namespace ProspectingTaskScheduler.App_Start
             RecurringJob.AddOrUpdate("Updating delivery statuses", () => SMSHandler.UpdateDeliveryStatuses(), Cron.Minutely); // change to daily.
 
             // Public URL which they will call with replies
+
+            // Housekeeping tasks
+            RecurringJob.AddOrUpdate("Resetting yesterdays locked properties", () => CleanupLockedPropertyRecords.ResetYesterdaysLockedRecords(), Cron.Daily(1));
         }
     }
 }

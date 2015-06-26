@@ -93,39 +93,57 @@ function buildTemplateItemOptionsDiv(option) {
     currentSuburbSelector.click(function () {
         allSuburbSelector.attr('value', 'unchecked');
         if ($(this).attr('value') == 'unchecked' && currentSuburb != null) {
-            $(this).attr('value', 'checked');
-            commCustomSelectionEnabled = false;
-            removeMarkersFromSelection();
-            $("#commGetInfoLabel").css('display', 'block').text("The communication will be sent to all contacts in your current suburb, who have a default contact value");
-            $("#commBottomDiv").css('display', 'block');
+            selectCurrentSuburbRadioBtn();
         } else {
-            $(this).attr('value', 'unchecked');
-            $(this).prop('checked', false);
-            commCustomSelectionEnabled = true;
-            $("#commGetInfoLabel").text("");
-            $("#commBottomDiv").css('display', 'none');
+            deselectCurrentSuburbRadioBtn();
         }
     });
     allSuburbSelector.click(function () {
         currentSuburbSelector.attr('value', 'unchecked');
         if ($(this).attr('value') == 'unchecked') {
-            $(this).attr('value', 'checked');
-            commCustomSelectionEnabled = false;
-            removeMarkersFromSelection();
-            $("#commGetInfoLabel").css('display', 'block').text("The communication will be sent to all contacts across all your available suburbs, who have a default contact value");
-            $("#commBottomDiv").css('display', 'block');
+            selectAllSuburbsRadioBtn();
         } else {
-            $(this).attr('value', 'unchecked');
-            $(this).prop('checked', false);
-            commCustomSelectionEnabled = true;
-            $("#commGetInfoLabel").text("");
-            $("#commBottomDiv").css('display', 'none');
+            deselectAllSuburbsRadioBtn();
         }
     });
 
     templateItemOptionsDiv.append(templateSelectionDropdown).append(deleteTemplateBtn).append(suburbSelectorDiv);
    
     return templateItemOptionsDiv;
+}
+
+function selectAllSuburbsRadioBtn() {
+    $('#commAllSuburbsRadioBtn').attr('value', 'checked');
+    $('#commAllSuburbsRadioBtn').prop('checked', true);
+    commCustomSelectionEnabled = false;
+    removeMarkersFromSelection();
+    $("#commGetInfoLabel").css('display', 'block').text("The communication will be sent to all contacts across all your available suburbs, who have a default contact value");
+    $("#commBottomDiv").css('display', 'block');
+}
+
+function deselectAllSuburbsRadioBtn() {
+    $('#commAllSuburbsRadioBtn').attr('value', 'unchecked');
+    $('#commAllSuburbsRadioBtn').prop('checked', false);
+    commCustomSelectionEnabled = true;
+    $("#commGetInfoLabel").text("");
+    $("#commBottomDiv").css('display', 'none');
+}
+
+function selectCurrentSuburbRadioBtn() {
+    $('#commCurrentSuburbRadioBtn').attr('value', 'checked');
+    $('#commCurrentSuburbRadioBtn').prop('checked', true);
+    commCustomSelectionEnabled = false;
+    removeMarkersFromSelection();
+    $("#commGetInfoLabel").css('display', 'block').text("The communication will be sent to all contacts in your current suburb, who have a default contact value");
+    $("#commBottomDiv").css('display', 'block');
+}
+
+function deselectCurrentSuburbRadioBtn() {
+    $('#commCurrentSuburbRadioBtn').attr('value', 'unchecked');
+    $('#commCurrentSuburbRadioBtn').prop('checked', false);
+    commCustomSelectionEnabled = true;
+    $("#commGetInfoLabel").text("");
+    $("#commBottomDiv").css('display', 'none');
 }
 
 function buildTemplateItems() {
@@ -687,16 +705,29 @@ function handleStandardTemplatesItemClick() {
                 populateTemplateContent(result);
                 if (specialActivityTemplates.indexOf(result.ActivityName) > -1) {
                     $('#allSuburbsOptionContainer').show();
-                        $("#commAllSuburbsRadioBtn").trigger('click');
+                    selectAllSuburbsRadioBtn();
                     $('#commCurrentSuburbRadioBtnContainer').hide();
                     showDialogSpecialTemplateSelected();
                 } else {
+                    var checkedVal = $('#commAllSuburbsRadioBtn').attr('value');
+                    if (checkedVal == 'checked') {
+                        deselectAllSuburbsRadioBtn();
+                    }
                     $('#allSuburbsOptionContainer').hide();
                     $('#commCurrentSuburbRadioBtnContainer').show();
                 }
             });
         } else {
+            var checkedVal = $('#commAllSuburbsRadioBtn').attr('value');
+            if (checkedVal == 'checked') {
+                deselectAllSuburbsRadioBtn();
+            }
+            checkedVal = $('#commCurrentSuburbRadioBtn').attr('value');
+            if (checkedVal == 'checked') {
+                deselectCurrentSuburbRadioBtn();
+            }
             $('#allSuburbsOptionContainer').hide();
+            $('#commCurrentSuburbRadioBtnContainer').hide();
             populateTemplateContent({ TemplateName: "", TemplateContent: "", TemplateActivityTypeId: null });
         }
     });
