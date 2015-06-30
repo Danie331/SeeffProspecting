@@ -31,16 +31,7 @@ namespace ProspectingTaskScheduler.App_Start
 
         private void SetupJobs()
         {
-            RecurringJob.AddOrUpdate("Sending Emails", () => EmailHandler.SendEmails(), Cron.Minutely);
-            RecurringJob.AddOrUpdate("Sending SMS's", () => SMSHandler.SendSMS(), Cron.Minutely);
-
-            // Job: Query statuses of SMS's sent
-            RecurringJob.AddOrUpdate("Updating delivery statuses", () => SMSHandler.UpdateDeliveryStatuses(), Cron.Minutely); // change to daily.
-
-            // Public URL which they will call with replies
-
-            // Housekeeping tasks
-            RecurringJob.AddOrUpdate("Resetting yesterdays locked properties", () => CleanupLockedPropertyRecords.ResetYesterdaysLockedRecords(), Cron.Daily(1));
+            HangfireBootstrapper.EnqueueJobs();
         }
     }
 }
