@@ -2364,7 +2364,7 @@ namespace ProspectingProject
 
         private static string FormatSalePrice(decimal? purchPrice)
         {
-            return purchPrice != null ? String.Format("{0:C0}", purchPrice.Value) : "";
+            return purchPrice != null ? String.Format(new CultureInfo("en-ZA"), "{0:C0}", purchPrice.Value) : "";
         }
 
         private static string FormatRegDate(string regDate)
