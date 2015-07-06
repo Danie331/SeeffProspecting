@@ -2305,7 +2305,7 @@ namespace ProspectingProject
             allPropertyContacts.Distinct();
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("This property's ownership has changed.");
+            sb.AppendLine(GetFormattedAddress(propertyRecord.lightstone_property_id));
             if (!string.IsNullOrWhiteSpace(propertyRecord.lightstone_reg_date))
             {
                 sb.AppendLine("Previous reg. date on record: " + FormatRegDate(propertyRecord.lightstone_reg_date));
