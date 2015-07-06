@@ -2306,8 +2306,16 @@ namespace ProspectingProject
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("This property's ownership has changed.");
-            sb.AppendLine("Details of the previous owners:");
+            if (!string.IsNullOrWhiteSpace(propertyRecord.lightstone_reg_date))
+            {
+                sb.AppendLine("Previous reg. date on record: " + FormatRegDate(propertyRecord.lightstone_reg_date));
+            }
+            if (propertyRecord.last_purch_price != null)
+            {
+                sb.AppendLine("Previous sale price on record: " + FormatSalePrice(propertyRecord.last_purch_price));
+            }
             sb.AppendLine();
+            sb.AppendLine("Details of the previous owner(s):");
             if (allPropertyContacts.Count > 0)
             {
                 foreach (var contact in allPropertyContacts)
@@ -2352,6 +2360,22 @@ namespace ProspectingProject
             };
             prospecting.activity_logs.InsertOnSubmit(activityRecord);
             prospecting.SubmitChanges();
+        }
+
+        private static string FormatSalePrice(decimal? purchPrice)
+        {
+            return purchPrice != null ? String.Format("{0:C0}", purchPrice.Value) : "";
+        }
+
+        private static string FormatRegDate(string regDate)
+        {
+            long result;
+            if (!string.IsNullOrWhiteSpace(regDate) && regDate.Length == 8 && long.TryParse(regDate, out result))
+            {
+                return regDate.Substring(0, 4) + "-" + regDate.Substring(4, 2) + "-" + regDate.Substring(6, 2);
+            }
+
+            return regDate;
         }
 
         public static ProspectingProperty UpdatePropertyOwnership(ProspectingPropertyId property)
