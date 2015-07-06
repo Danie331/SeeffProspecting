@@ -153,6 +153,10 @@ namespace ProspectingProject
                          result = CalculateCostOfSmsBatch(json);
                         context.Response.Write(result);
                         break;
+                    case "update_property_ownership":
+                        string updatedProperty = UpdatePropertyOwnership(json);
+                        context.Response.Write(updatedProperty);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -185,6 +189,13 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string UpdatePropertyOwnership(string json)
+        {
+            var property = ProspectingCore.Deserialise<ProspectingPropertyId>(json);
+            var updatedProperty = ProspectingCore.UpdatePropertyOwnership(property);
+            return ProspectingCore.SerializeToJsonWithDefaults(updatedProperty);
         }
 
         private string CalculateCostOfSmsBatch(string json)

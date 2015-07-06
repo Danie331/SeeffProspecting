@@ -10,5 +10,6 @@ namespace ProspectingProject
         public int SuburbId { get; set; }
         public string SuburbName { get; set; }
         public int TotalFullyProspected { get; set; }
+        public int PropertiesRequireAttention { get; set; }
     }
 }

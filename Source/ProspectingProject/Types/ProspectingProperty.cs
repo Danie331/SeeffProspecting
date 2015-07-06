@@ -69,5 +69,7 @@ namespace ProspectingProject
         public string LockedUsername { get; set; }
 
         public DateTime? LockedDateTime { get; set; }
+
+        public string LatestRegDateForUpdate { get; set; }
     }
 }

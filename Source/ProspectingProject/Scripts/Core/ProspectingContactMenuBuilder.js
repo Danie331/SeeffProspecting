@@ -559,20 +559,21 @@ function updateProspectedStatus(property) {
         });
         
         targetProperty.Prospected = hasContactDetails;
-        if (targetProperty.Prospected) {
-            if (targetProperty.SS_FH == "FH") {
-                targetProperty.Marker.setIcon('Assets/marker_icons/prospecting/prospected.png');
-            } else {
-                changeBgColour(targetProperty.LightstonePropertyId, "#009900");
-            }
-        }
-        else {
-            if (targetProperty.SS_FH == "FH") {
-                targetProperty.Marker.setIcon('Assets/marker_icons/prospecting/unprospected.png');
-            } else {
-                changeBgColour(targetProperty.LightstonePropertyId, "#FBB917");
-            }
-        }
+        targetProperty.Marker.setIcon(getIconForMarker(targetProperty.Marker));
+        //if (targetProperty.Prospected) {
+        //    if (targetProperty.SS_FH == "FH") {
+        //        targetProperty.Marker.setIcon('Assets/marker_icons/prospecting/prospected.png');
+        //    } else {
+        //        changeBgColour(targetProperty.LightstonePropertyId, "#009900");
+        //    }
+        //}
+        //else {
+        //    if (targetProperty.SS_FH == "FH") {
+        //        targetProperty.Marker.setIcon('Assets/marker_icons/prospecting/unprospected.png');
+        //    } else {
+        //        changeBgColour(targetProperty.LightstonePropertyId, "#FBB917");
+        //    }
+        //}
 
         $.ajax({
             type: "POST",

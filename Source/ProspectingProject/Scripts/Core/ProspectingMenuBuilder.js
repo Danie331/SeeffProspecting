@@ -950,7 +950,7 @@ function buildSuburbsSummaryContent() {
     // Overridden from MenuBuilder.js
 function buildSuburbsSelectionHeaderHtml() {
     var tableHeader = $("<table class='prospectingSuburbsTbl' />");
-    tableHeader.append("<tr><td id='th_suburb'>Suburb</td><td id='th_withdetails'>Prospected Properties</td></tr>");
+    tableHeader.append("<tr><td id='th_suburb'>Suburb</td><td id='th_withdetails'>Prospected</td><td id='th_requiresattention'>Requires Attention</td></tr>");
 
     return tableHeader[0].outerHTML;
 }
@@ -975,6 +975,7 @@ function buildSuburbsSelectionHtml() {
         var suburbName = suburbsInfo[a].SuburbName;
         var suburbId = suburbsInfo[a].SuburbId;
         var numPropsWithContactDetails = suburbsInfo[a].TotalFullyProspected;
+        var requireAttention = suburbsInfo[a].PropertiesRequireAttention;
         var tr = $("<tr id='" + "row" + suburbId + "' />");
 
         var linkId = "suburbLink" + suburbId;
@@ -996,8 +997,19 @@ function buildSuburbsSelectionHtml() {
         var propertiesWithContactDetailsCnt = $("<label id='" + withDetailsId + "'>(" + numPropsWithContactDetails + ")</label>");
         tdPropertiesWithContactDetails.append(propertiesWithContactDetailsCnt);
 
+        var tdPropertiesRequireAttention = $("<td style='padding:0px;text-align:center;' />");
+        var requireAttentionDisplayValue;
+        if (requireAttention > 0) {
+            requireAttentionDisplayValue = $("<label style='color:red'>" + requireAttention + "</label>");
+        } else {
+            requireAttentionDisplayValue = $("<label>-</label>");
+        }
+        tdPropertiesRequireAttention.append(requireAttentionDisplayValue);
+
         tr.append(tdSuburb);
         tr.append(tdPropertiesWithContactDetails);
+        tr.append(tdPropertiesRequireAttention);
+
         suburbsTbl.append(tr);
     }
 

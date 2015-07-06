@@ -96,7 +96,8 @@ namespace ProspectingProject
                 FarmName = prospectingRecord.farm_name,
                 Portion = prospectingRecord.portion_no != null ? prospectingRecord.portion_no.ToString() : "n/a",
                  LightstoneSuburb = prospectingRecord.lightstone_suburb,
-                  SS_UNIQUE_IDENTIFIER = prospectingRecord.ss_unique_identifier
+                  SS_UNIQUE_IDENTIFIER = prospectingRecord.ss_unique_identifier,
+                   LatestRegDateForUpdate = prospectingRecord.latest_reg_date
             };
 
             switch (prospectingRecord.ss_fh)
@@ -221,7 +222,8 @@ namespace ProspectingProject
                 FarmName = prospectingRecord.farm_name,
                 Portion = prospectingRecord.portion_no.HasValue ? prospectingRecord.portion_no.ToString() : null,
                 LightstoneSuburb = prospectingRecord.lightstone_suburb,
-                SS_UNIQUE_IDENTIFIER = prospectingRecord.ss_unique_identifier
+                SS_UNIQUE_IDENTIFIER = prospectingRecord.ss_unique_identifier,
+                 LatestRegDateForUpdate = prospectingRecord.latest_reg_date
             };
 
             return prop;
@@ -294,7 +296,8 @@ namespace ProspectingProject
                         {
                             SuburbId = n.prospecting_area_id,
                             SuburbName = n.area_name,
-                            TotalFullyProspected = sr.Select(p => p.prospecting_property_id).Count()
+                            TotalFullyProspected = sr.Select(p => p.prospecting_property_id).Count(),
+                            PropertiesRequireAttention = sr.Where(p => p.latest_reg_date != null).Count()
                         }).Distinct().OrderBy(a => a.SuburbName).ToList();
             }            
         } 
@@ -1667,6 +1670,7 @@ namespace ProspectingProject
                                       SSDoorNo = pp.ss_door_number,
                                       LastPurchPrice = pp.last_purch_price,
                                        SS_UNIQUE_IDENTIFIER = pp.ss_unique_identifier,
+                                        LatestRegDateForUpdate = pp.latest_reg_date
                                   }).ToList();
                 return properties;
             }
@@ -2288,6 +2292,112 @@ namespace ProspectingProject
 
                 return property.street_or_unit_no + " " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.property_address.ToLower());
             }
+        }
+
+        private static void CreateActivityForPropertyChangeOfOwnership(ProspectingDataContext prospecting, prospecting_property propertyRecord)
+        {
+            List<ProspectingContactPerson> allPropertyContacts = new List<ProspectingContactPerson>();
+
+            var propertyContacts = ProspectingLookupData.PropertyContactsRetriever(prospecting, propertyRecord, false).ToList();
+            var propertyCompanyContacts = ProspectingLookupData.PropertyCompanyContactsRetriever(prospecting, propertyRecord, false).ToList();
+            allPropertyContacts.AddRange(propertyContacts);
+            allPropertyContacts.AddRange(propertyCompanyContacts);
+            allPropertyContacts.Distinct();
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("This property's ownership has changed.");
+            sb.AppendLine("Details of the previous owners:");
+            sb.AppendLine();
+            if (allPropertyContacts.Count > 0)
+            {
+                foreach (var contact in allPropertyContacts)
+                {
+                    string contactLine = contact.Fullname + " ID:" + contact.IdNumber;
+                    var phoneNumbers = ProspectingLookupData.PropertyContactPhoneNumberRetriever(prospecting, contact);
+                    var primaryPhoneNumber = phoneNumbers.FirstOrDefault(ph => ph.IsPrimary == true);
+                    if (primaryPhoneNumber != null)
+                    {
+                        contactLine += " | PH: " + primaryPhoneNumber.ItemContent;
+                    }
+
+                    var emails = ProspectingLookupData.PropertyContactEmailRetriever(prospecting, contact);
+                    var primaryEmail = emails.FirstOrDefault(em => em.IsPrimary == true);
+                    if (primaryEmail != null)
+                    {
+                        contactLine += " | EMAIL: " + primaryEmail.ItemContent;
+                    }
+
+                    sb.AppendLine(contactLine);
+                }
+            }
+            else
+            {
+                sb.AppendLine("No previous contact people associated with this property.");
+            }
+
+            var activityType = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "Change Of Ownership").Key;
+            var activityRecord = new activity_log
+            {
+                lightstone_property_id = propertyRecord.lightstone_property_id,
+                followup_date = null,
+                allocated_to = null,
+                activity_type_id = activityType,
+                comment = sb.ToString(),
+                created_by = RequestHandler.GetUserSessionObject().UserGuid,
+                created_date = DateTime.Now,
+                contact_person_id = null,
+                // Add the rest later
+                parent_activity_id = null,
+                activity_followup_type_id = null                 
+            };
+            prospecting.activity_logs.InsertOnSubmit(activityRecord);
+            prospecting.SubmitChanges();
+        }
+
+        public static ProspectingProperty UpdatePropertyOwnership(ProspectingPropertyId property)
+        {
+            LightstonePropertyMatch propertyMatch = null;
+            prospecting_property propertyRecord = null;
+            using (var prospecting = new ProspectingDataContext())
+            {
+                // Find and delete existing relationships between this property and contacts and companies (if any)
+                propertyRecord = prospecting.prospecting_properties.First(pp => pp.lightstone_property_id == property.LightstonePropertyId);
+
+                CreateActivityForPropertyChangeOfOwnership(prospecting, propertyRecord);
+
+                prospecting.prospecting_company_property_relationships.DeleteAllOnSubmit(propertyRecord.prospecting_company_property_relationships);
+                prospecting.prospecting_person_property_relationships.DeleteAllOnSubmit(propertyRecord.prospecting_person_property_relationships);
+                prospecting.SubmitChanges();
+
+                // Re-prospect
+                var searchResult = FindMatchingProperties(new SearchInputPacket { PropertyID = property.LightstonePropertyId.ToString() }).First();
+                propertyMatch = searchResult.PropertyMatches[0];
+                propertyRecord.updated_date = DateTime.Now;
+                propertyRecord.last_purch_price = !string.IsNullOrEmpty(propertyMatch.PurchPrice) ? decimal.Parse(propertyMatch.PurchPrice, CultureInfo.InvariantCulture) : (decimal?)null;
+                propertyRecord.lightstone_reg_date = propertyMatch.RegDate;
+                propertyRecord.latest_reg_date = null;
+                prospecting.SubmitChanges();
+            }
+
+                foreach (var owner in propertyMatch.Owners)
+                {
+                    if (owner.ContactEntityType == ContactEntityType.NaturalPerson)
+                    {
+                        var newContact = new ContactDataPacket { ContactPerson = (ProspectingContactPerson)owner, ProspectingPropertyId = propertyRecord.prospecting_property_id, ContactCompanyId = null };
+                        SaveContactPerson(newContact);
+                    }
+                    if (owner.ContactEntityType == ContactEntityType.JuristicEntity)
+                    {
+                        var newContact = new CompanyContactDataPacket { ContactCompany = (ProspectingContactCompany)owner, ProspectingPropertyId = propertyRecord.prospecting_property_id };
+                        SaveContactCompany(newContact);
+                    }
+                }
+
+                using (var prospecting = new ProspectingDataContext())
+                {
+                    var updatedProperty = CreateProspectingProperty(prospecting, propertyRecord, true, true, false);
+                    return updatedProperty;
+                }
         }
     }
 }

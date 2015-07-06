@@ -47,16 +47,24 @@ function addMarkerToSelection(marker, mustTriggerUpdate) {
             return pp.SS_UNIQUE_IDENTIFIER == property.SS_UNIQUE_IDENTIFIER;
         });
 
-        $.each(ssUnits, function (idx, u) {
-            flagMarkerSelected(u.Marker, true);
-            u.Marker.setIcon(getIconForMarker(u.Marker));
-            if (selectedMarkers.indexOf(u.Marker) == -1) {
-                selectedMarkers.push(u.Marker);
+        var requiresOwnerUpdates = false;
+        $.each(ssUnits, function (idx, unit) {
+            if (unit.LatestRegDateForUpdate) {
+                requiresOwnerUpdates = true;
             }
         });
+        if (!requiresOwnerUpdates) {
+            $.each(ssUnits, function (idx, u) {
+                flagMarkerSelected(u.Marker, true);
+                u.Marker.setIcon(getIconForMarker(u.Marker));
+                if (selectedMarkers.indexOf(u.Marker) == -1) {
+                    selectedMarkers.push(u.Marker);
+                }
+            });
+        }        
     }
     else {
-        if (marker.ProspectingProperty.Prospected) {
+        if (marker.ProspectingProperty.Prospected && marker.ProspectingProperty.LatestRegDateForUpdate == null) {
             flagMarkerSelected(marker, true);
             marker.setIcon(getIconForMarker(marker));
             if (selectedMarkers.indexOf(marker) == -1) {

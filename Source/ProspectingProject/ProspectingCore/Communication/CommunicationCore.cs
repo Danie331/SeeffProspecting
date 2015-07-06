@@ -160,7 +160,7 @@ namespace ProspectingProject
                                             join cp in prospecting.prospecting_contact_persons on pr.contact_person_id equals cp.contact_person_id
                                             join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
                                             where cd.contact_detail_type == ProspectingLookupData.CellPhoneTypeId && cd.is_primary_contact && !cd.deleted
-                                            && suburbIDs.Contains(pp.seeff_area_id.Value) && pp.prospected == true && !cp.optout_sms && !cp.is_popi_restricted
+                                            && suburbIDs.Contains(pp.seeff_area_id.Value) && pp.prospected == true && pp.latest_reg_date == null && !cp.optout_sms && !cp.is_popi_restricted
                                             select new ProspectingContactPerson
                                             {
                                                 ContactPersonId = cp.contact_person_id,
@@ -178,7 +178,7 @@ namespace ProspectingProject
                                               join cp in prospecting.prospecting_contact_persons on pcr.contact_person_id equals cp.contact_person_id
                                               join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
                                               where cd.contact_detail_type == ProspectingLookupData.CellPhoneTypeId && cd.is_primary_contact && !cd.deleted
-                                              && suburbIDs.Contains(pp.seeff_area_id.Value) && pp.prospected == true && !cp.optout_sms && !cp.is_popi_restricted
+                                              && suburbIDs.Contains(pp.seeff_area_id.Value) && pp.prospected == true && pp.latest_reg_date == null && !cp.optout_sms && !cp.is_popi_restricted
                                               select new ProspectingContactPerson
                                               {
                                                   ContactPersonId = cp.contact_person_id,
@@ -454,7 +454,7 @@ namespace ProspectingProject
                                             join cp in prospecting.prospecting_contact_persons on pr.contact_person_id equals cp.contact_person_id
                                             join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
                                             where ProspectingLookupData.EmailTypeIds.Contains(cd.contact_detail_type) && cd.is_primary_contact && !cd.deleted
-                                            && suburbIDs.Contains(pp.seeff_area_id.Value) && pp.prospected == true && !cp.optout_emails && !cp.is_popi_restricted
+                                            && suburbIDs.Contains(pp.seeff_area_id.Value) && pp.prospected == true && pp.latest_reg_date == null && !cp.optout_emails && !cp.is_popi_restricted
                                             select new ProspectingContactPerson 
                                             { 
                                                 ContactPersonId = cp.contact_person_id,
@@ -472,7 +472,7 @@ namespace ProspectingProject
                                               join cp in prospecting.prospecting_contact_persons on pcr.contact_person_id equals cp.contact_person_id
                                               join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
                                               where ProspectingLookupData.EmailTypeIds.Contains(cd.contact_detail_type) && cd.is_primary_contact && !cd.deleted
-                                              && suburbIDs.Contains(pp.seeff_area_id.Value) && pp.prospected == true && !cp.optout_emails && !cp.is_popi_restricted
+                                              && suburbIDs.Contains(pp.seeff_area_id.Value) && pp.prospected == true && pp.latest_reg_date == null && !cp.optout_emails && !cp.is_popi_restricted
                                               select new ProspectingContactPerson
                                               {
                                                   ContactPersonId = cp.contact_person_id,
@@ -575,6 +575,6 @@ namespace ProspectingProject
                 var prospectingUser = RequestHandler.GetUserSessionObject();
                 prospectingAuthService.DebitUserBalance(cost, prospectingUser.UserGuid);
             }
-        }
+        }       
     }
 }

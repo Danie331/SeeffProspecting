@@ -420,22 +420,22 @@ function setCurrentMarker(suburb, property) {
                 $.each(suburb.ProspectingProperties, function (idx, pp) {
                     if (pp.ProspectingPropertyId == testpp.ProspectingPropertyId) {
                         pp.Prospected = testpp.Prospected;
-                        if (testpp.Prospected) {
-                            if (pp.SS_FH == "FH") {
-                                pp.Marker.setIcon('Assets/marker_icons/prospecting/prospected.png');
-                            } else {
-                                changeBgColour(testpp.LightstonePropertyId, "#009900");
-                            };
-                        }
-                        else {
-                            if (pp.SS_FH == "FH") {
-                                pp.Marker.setIcon('Assets/marker_icons/prospecting/unprospected.png');
-                            } else {
-                                changeBgColour(testpp.LightstonePropertyId, "#FBB917");
-                            }
-                        }
-                    };
-                    
+                        pp.Marker.setIcon(getIconForMarker(pp.Marker));
+                        //if (testpp.Prospected) {
+                        //    if (pp.SS_FH == "FH") {
+                        //        pp.Marker.setIcon('Assets/marker_icons/prospecting/prospected.png');
+                        //    } else {
+                        //        changeBgColour(testpp.LightstonePropertyId, "#009900");
+                        //    };
+                        //}
+                        //else {
+                        //    if (pp.SS_FH == "FH") {
+                        //        pp.Marker.setIcon('Assets/marker_icons/prospecting/unprospected.png');
+                        //    } else {
+                        //        changeBgColour(testpp.LightstonePropertyId, "#FBB917");
+                        //    }
+                        //}
+                    }                    
                 });
 
             } else {
@@ -450,7 +450,57 @@ function setCurrentMarker(suburb, property) {
     });
 }
 
-function markerClick(e) {
+function showChangeOfOwnershipDialog(freeholdOrSS, proceedCallback, cancelCallback) {
+    var div = $("<div id='ownershipChangeDialog' title='Change Of Ownership' style='font-family:Verdana;font-size:12px;' />").empty();
+    if (freeholdOrSS == 'FH') {        
+            div.append("The ownership of this property has changed and the current information on record is stale. ")
+            .append("Please update this property with the latest data from Lightstone. The existing contacts will be replaced by the new owners, however an activity will be created for the property containing details of the previous owners and their default contact information, should you wish to revert to that information at a later point in time.");
+
+        div.dialog(
+                {
+                    modal: true,
+                    closeOnEscape: false,
+                    width: '550',
+                    buttons: {
+                        "Update ownership": function () { $(this).dialog("close"); proceedCallback(); },
+                        "Continue to property": function () { $(this).dialog("close"); cancelCallback(); }
+                    },
+                    position: ['center', 'center']
+                });
+    }
+    if (freeholdOrSS == 'SS') {
+        div.append("The ownership of one or more units in this sectional title has changed.<br />")
+        .append("It is recommended that you update the affected units with the latest data from Lightstone. <br />")
+        .append("The affected units will appear highlighted in red.");
+
+        div.dialog(
+                {
+                    modal: true,
+                    closeOnEscape: false,
+                    width: 'auto',
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); proceedCallback(); }
+                    },
+                    position: ['center', 'center']
+                });
+    }
+}
+
+function updateOwnershipOfProperty(marker, callbackFn) {
+    var property = marker.ProspectingProperty;
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Updating Property...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: "update_property_ownership", LightstonePropertyId: property.LightstonePropertyId }),
+        dataType: "json"
+    }).done(function () {
+        $.unblockUI();
+        callbackFn(marker);
+    });
+}
+
+function markerClick() {
     closeInfoWindow();
     closeTransientInfoWindow(this);
 
@@ -472,6 +522,40 @@ function markerClick(e) {
 
     $('#propertyInfoDiv').css('display', 'none');
     var marker = $(this)[0];
+    var prop = marker.ProspectingProperty;
+    if (prop.SS_FH == 'SS' || prop.SS_FH == 'FS') {
+        // SS
+        var ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+            if (!pp.SS_UNIQUE_IDENTIFIER) return false;
+            return pp.SS_UNIQUE_IDENTIFIER == prop.SS_UNIQUE_IDENTIFIER;
+        });
+        var requiresOwnerUpdates = false;
+        $.each(ssUnits, function (idx, unit) {
+            if (unit.LatestRegDateForUpdate) {
+                requiresOwnerUpdates = true;
+            }
+        });
+        if (requiresOwnerUpdates) {
+            showChangeOfOwnershipDialog('SS', function () { loadExistingProspectingProperty(marker); }, function () { });
+        } else {
+            loadExistingProspectingProperty(marker);
+        }
+    } else { // FH
+        if (marker.ProspectingProperty.LatestRegDateForUpdate) {
+            showChangeOfOwnershipDialog('FH', function () {
+                updateOwnershipOfProperty(marker, function (marker) {
+                    marker.ProspectingProperty.Contacts = null;
+                    loadExistingProspectingProperty(marker);
+                    marker.setIcon(getIconForMarker(marker));
+                });
+            }, function () { loadExistingProspectingProperty(marker); });
+        } else {
+            loadExistingProspectingProperty(marker);
+        }
+    }        
+}
+
+function loadExistingProspectingProperty(marker) {
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Property Info...</p>' });
     $.ajax({
         type: "POST",
@@ -812,8 +896,12 @@ function markerRightClick(event) {
     var marker = $(this)[0];
     rightClickedProperty = null;
     if (marker.ProspectingProperty.SS_FH != 'SS' && marker.ProspectingProperty.SS_FH != 'FS') {
-        rightClickedProperty = marker.ProspectingProperty;
+        if (marker.ProspectingProperty.LatestRegDateForUpdate) {
+            // Disable right click if this property's ownership needs to be updated
+            return;
+        }
 
+        rightClickedProperty = marker.ProspectingProperty;
         var clickLoc = new google.maps.LatLng(event.latLng.lat(), event.latLng.lng());
         var point = fromLatLngToPoint(clickLoc, map);
         $('.context-menu-rightclick-property').contextMenu({ x: point.x, y: point.y });
@@ -1149,6 +1237,7 @@ function initialiseAndDisplaySuburb(suburb, data, showSeeffCurrentListings, sear
         suburb.Visible = true;
 
         updatePropertyInfoMenu();
+        currentSuburb = suburb;
         createMarkersForSuburb(suburb, showSeeffCurrentListings);
         var visibleMarkers = suburb.Markers;
 
@@ -1161,8 +1250,6 @@ function initialiseAndDisplaySuburb(suburb, data, showSeeffCurrentListings, sear
         suburb.VisibleMarkers = visibleMarkers;
 
         drawPolygonForSuburb(suburb);
-
-        currentSuburb = suburb;
     }
 }
 
@@ -1218,6 +1305,29 @@ function getIconForMarker(marker) {
         if (property.SS_FH == "SS" || property.SS_FH == "FS") {
             if (!marker.MarkerIsSpiderfied) {
                 if (!marker.IsPartOfSelection) {
+                    if (property.Prospected) {
+                        changeBgColour(property.LightstonePropertyId, "#009900");
+                    } else {
+                        changeBgColour(property.LightstonePropertyId, "#FBB917");
+                    }
+                    if (property.LatestRegDateForUpdate) {
+                        changeBgColour(property.LightstonePropertyId, "#FF0000");
+                    }
+                    if (currentSuburb) {
+                        var ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+                            if (!pp.SS_UNIQUE_IDENTIFIER) return false;
+                            return pp.SS_UNIQUE_IDENTIFIER == property.SS_UNIQUE_IDENTIFIER;
+                        });
+                        var requiresOwnerUpdates = false;
+                        $.each(ssUnits, function (idx, unit) {
+                            if (unit.LatestRegDateForUpdate) {
+                                requiresOwnerUpdates = true;
+                            }
+                        });
+                        if (requiresOwnerUpdates) {
+                            return path += 'ss_attention_required.png';
+                        }
+                    }
                     return path += 'ss_unprospected.png';
                 }
                 else {
@@ -1234,6 +1344,9 @@ function getIconForMarker(marker) {
             if (property.Prospected) {
                 // Fully prospected
                 if (!marker.IsPartOfSelection) {
+                    if (property.LatestRegDateForUpdate) {
+                        return 'prospected_attention_required.png';
+                    }
                     return 'prospected.png';
                 } else {
                     return 'prospected_bulk_select.png';
@@ -1241,6 +1354,9 @@ function getIconForMarker(marker) {
             }
 
             if (!marker.IsPartOfSelection) {
+                if (property.LatestRegDateForUpdate) {
+                    return 'unprospected_attention_required.png';
+                }
                 return 'unprospected.png';
             } else {
                 return 'unprospected_bulk_select.png';
@@ -1358,6 +1474,9 @@ function buildInfoWindowContentForSS(unit) {
     function buildUnitContentRow(unit) {
 
         function getBGColourForRow(unit) {
+            if (unit.LatestRegDateForUpdate) {
+                return "#FF0000";
+            }
             var hasContactsWithDetails = false;
             if (unit.Prospected) {
                 hasContactsWithDetails = true;
@@ -1421,7 +1540,13 @@ function buildInfoWindowContentForSS(unit) {
                 });
                 row.data('color2', 'lightblue');
 
-                openSSUnitInfo(unit, function () { row.empty(); row.append(buildUnitContent(unit)); });
+                openSSUnitInfo(unit, function () {
+                    row.empty();
+                    row.append(buildUnitContent(unit));
+
+                    // Update the icon for the SS
+                    unit.Marker.setIcon(getIconForMarker(unit.Marker));
+                });
             }
             else if (e.which == 3) {
                 rightClickedProperty = unit;
@@ -1460,7 +1585,7 @@ function buildInfoWindowContentForSS(unit) {
     return tableOfUnits;
 }
 
-function openSSUnitInfo(unit, callbackFn) {
+function loadExistingSSUnit(unit, callbackFn) {
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Property Info...</p>' });
     $.ajax({
         type: "POST",
@@ -1483,8 +1608,6 @@ function openSSUnitInfo(unit, callbackFn) {
                     updateExistingPropertyFromProperty(unit, data);
                     currentProperty = unit;
                     updateOwnerDetailsEditor();
-                    //updatePropertyNotesDiv();
-                    var marker = unit.Marker;
                     if (currentProperty.Contacts && currentProperty.Contacts.length > 0) {
                         showMenu("contactdetails");
                     }
@@ -1505,6 +1628,21 @@ function openSSUnitInfo(unit, callbackFn) {
         },
         dataType: "json"
     });
+}
+
+function openSSUnitInfo(unit, callbackFn) {
+
+    if (unit.LatestRegDateForUpdate) {
+        showChangeOfOwnershipDialog('FH', function () {
+            updateOwnershipOfProperty(unit.Marker, function () {
+                unit.Contacts = null;
+                loadExistingSSUnit(unit, callbackFn);
+            });
+        },
+        function () { loadExistingSSUnit(unit, callbackFn); });
+    } else {
+        loadExistingSSUnit(unit, callbackFn);
+    }    
 }
 
 // This function will update an object that already exists on the front-end with an incoming object's data - it does not change the existing reference.
@@ -1534,6 +1672,7 @@ function updateExistingPropertyFromProperty(existingProp, newProp) {
     existingProp.Portion = newProp.Portion;
     existingProp.LightstoneSuburb = newProp.LightstoneSuburb;
     existingProp.ActivityBundle = newProp.ActivityBundle;
+    existingProp.LatestRegDateForUpdate = newProp.LatestRegDateForUpdate;
 }
 
 function updateContactsOnProperty(existingProp, newProp) {
