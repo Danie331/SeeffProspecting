@@ -13,8 +13,9 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing.Mandrill
         private string _attachment1Name;
         private string _attachment1Type;
         private string _attachment1Content;
+        private int? _userBusinessUnitID;
 
-        public MandrillMessageBuilder (string html, string subject, string fromEmail, string fromName, string toEmail, string toName, string attachment1Name, string attachment1Type, string attachment1Content)
+        public MandrillMessageBuilder (string html, string subject, string fromEmail, string fromName, string toEmail, string toName, string attachment1Name, string attachment1Type, string attachment1Content, int? userBusinessUnitID)
         {
             _html = html;
             _subject = subject;
@@ -25,6 +26,7 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing.Mandrill
             _attachment1Name = attachment1Name;
             _attachment1Type = attachment1Type;
             _attachment1Content = attachment1Content;
+            _userBusinessUnitID = userBusinessUnitID;
         }
 
         public MandrillSendRequest BuildMandrillSendRequest()
@@ -46,6 +48,10 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing.Mandrill
             message.from_email = _fromEmail;
             message.from_name = _fromName;
             message.to = BuildTo();
+            if (_userBusinessUnitID.HasValue && _userBusinessUnitID == 10)
+            {
+                message.bcc_address = _fromEmail;
+            }
             if (!string.IsNullOrEmpty(_attachment1Name))
             {
                 message.attachments = new List<MandrillAttachment>();

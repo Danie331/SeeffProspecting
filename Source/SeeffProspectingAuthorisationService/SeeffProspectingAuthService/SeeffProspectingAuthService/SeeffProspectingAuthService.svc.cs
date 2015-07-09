@@ -25,6 +25,7 @@ namespace SeeffProspectingAuthService
                 }
 
                 var userManager = GetProspectingManagerDetails(userGuid);
+                int? businessUnitID = GetBusinessUnitID(userGuid);
                 var businessUnitUsers = GetBusinessUnitUsers(userGuid);
                 var userRecord = (from user in boss.user_registrations
                                   where user.user_guid == userGuid.ToString()
@@ -40,10 +41,21 @@ namespace SeeffProspectingAuthService
                                       Authenticated = true,
                                       ManagerDetails = userManager,
                                       BusinessUnitUsers = businessUnitUsers,
-                                      CommunicationEnabled = user.prospecting_communication
+                                      CommunicationEnabled = user.prospecting_communication,
+                                      BusinessUnitID = businessUnitID,
                                   }).FirstOrDefault();
 
                 return userRecord;
+            }
+        }
+
+        private int? GetBusinessUnitID(Guid userGuid)
+        {
+            using (var boss = new BossDataContext())
+            {
+                var thisUser = boss.user_registrations.First(u => u.user_guid == userGuid.ToString());
+                var licenseBranch = boss.license_branches.First(bu => bu.branch_id == thisUser.branch_id);
+                return licenseBranch.business_unit_id;
             }
         }
 

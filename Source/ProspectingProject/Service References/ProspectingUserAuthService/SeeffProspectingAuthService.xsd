@@ -4,6 +4,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Authenticated" type="xs:boolean" />
       <xs:element minOccurs="0" name="AvailableCredit" type="xs:decimal" />
+      <xs:element minOccurs="0" name="BusinessUnitID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="BusinessUnitUsers" nillable="true" type="tns:ArrayOfProspectingUserAuthPacket" />
       <xs:element minOccurs="0" name="CommunicationEnabled" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="EmailAddress" nillable="true" type="xs:string" />

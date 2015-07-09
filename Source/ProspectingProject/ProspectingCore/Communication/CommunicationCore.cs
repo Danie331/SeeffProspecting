@@ -255,7 +255,8 @@ namespace ProspectingProject
                         target_lightstone_property_id = recipient.TargetLightstonePropertyId,
                         status = status,
                         email_body_or_link_id = recipient.EmailBody,
-                        email_subject_or_link_id = recipient.EmailSubject, 
+                        email_subject_or_link_id = recipient.EmailSubject,
+                        user_business_unit_id = prospectingUser.BusinessUnitID
                     };
                     if (batch.Attachments.Count > 0)
                     {
@@ -321,6 +322,10 @@ namespace ProspectingProject
             }
             string name = titlecaser.ToTitleCase(contact.Firstname.ToLower());
             string surname = titlecaser.ToTitleCase(contact.Surname.ToLower());
+            if (!contact.TargetLightstonePropertyIdForComms.HasValue)
+            {
+                throw new Exception("It appears that the Lightstone Property ID of one or more communication records is not set. Restart Prospecting and try again. If the problem persists please notify support. Record ID: " + contact.ContactPersonId);
+            }
             string address = ProspectingCore.GetFormattedAddress(contact.TargetLightstonePropertyIdForComms.Value);
 
             rawBody = rawBody.Replace("*title*", personTitle)

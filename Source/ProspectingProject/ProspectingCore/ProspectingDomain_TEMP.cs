@@ -667,7 +667,8 @@ namespace ProspectingProject
                     BusinessUnitUsers = businessUnitUsers,
                     FollowupActivities = followupBundle.Followups,
                     TotalFollowups = followupBundle.TotalCount,
-                    HasCommAccess = userAuthPacket.CommunicationEnabled.Value
+                    HasCommAccess = userAuthPacket.CommunicationEnabled.Value,
+                      BusinessUnitID = userAuthPacket.BusinessUnitID
                 };
 
                 return userPacket;

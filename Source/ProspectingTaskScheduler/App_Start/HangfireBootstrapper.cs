@@ -72,6 +72,8 @@ namespace ProspectingTaskScheduler.App_Start
 
             // Housekeeping tasks
             RecurringJob.AddOrUpdate("Resetting yesterdays locked properties", () => CleanupLockedPropertyRecords.ResetYesterdaysLockedRecords(), Cron.Daily(1));
+
+            RecurringJob.AddOrUpdate("IIS app pool up and running", () => StatusNotifier.SendNotificationEmail(), Cron.Daily(7));
         }
     }
 }

@@ -17,6 +17,7 @@ namespace ProspectingProject
         public bool IsProspectingManager { get; set; }
         public string EmailAddress { get; set; }
         public bool HasCommAccess { get; set; }
+        public int? BusinessUnitID { get; set; }
 
         public UserDataResponsePacket ProspectingManager { get; set; }
 

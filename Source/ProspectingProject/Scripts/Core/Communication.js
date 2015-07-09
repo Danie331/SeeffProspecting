@@ -60,7 +60,7 @@ function buildCommunicationMenu() {
     function buildContactablesTable() {
         var container = $("<div id='contactablesContentContainer' />");
         container.append($("<table id='commContactsTableHeader' class='commTable' ></table>")
-                         .append("<thead><tr class='commTableHeader'><th class='commTableRow30'>&nbsp;</th><th class='commTableRow'>Name</th><th class='commTableRow'>Surname</th><th class='commTableRow120'>Address</th><th class='commTableRow'>Contact</th><th class='commTableRow'>Action</th><th class='commTableRow'>&nbsp;</th></tr></thead>"))
+                         .append("<thead><tr class='commTableHeader'><th class='commTableRow30'>&nbsp;</th><th class='commTableRow'>Fullname</th><th class='commTableRow120'>Address</th><th class='commTableRow'>Contact</th><th class='commTableRow'>Action</th><th class='commTableRow'>&nbsp;</th></tr></thead>"))
                          .append($("<div style='overflow:auto;max-height:310px;'><table id='commContactsTable' class='commTable' ></table></div>"));
         return container;
     }
@@ -1114,15 +1114,14 @@ function buildContactsBody(contacts, selectCells) {
         }
 
         var isSelectedCell = $("<td class='commTableRow30' id='comm_selected_" + rowId + "' ></td>").append($("<input type='checkbox' id='comm_selected_checkbox_" + rowId + "' name='comm_selected_checkbox_" + rowId + "' value='' " + rowIsSelected + " " + checkboxDisabled + " />"));
-        var name = $("<td class='commTableRow' id='comm_firstname_" + rowId + "' title='" + c.Firstname + "' ></td>").append(toTitleCase(c.Firstname));
-        var surname = $("<td class='commTableRow' id='comm_surname_" + rowId + "' title='" + c.Surname + "' ></td>").append(toTitleCase(c.Surname));
+        var name = $("<td class='commTableRow' id='comm_fullname_" + rowId + "' title='" + c.Firstname + ' ' + c.Surname + "' ></td>").append(toTitleCase(c.Firstname) + ' ' + toTitleCase(c.Surname));
         var address = $("<td class='commTableRow120' id='comm_address_" + rowId + "' title='" + c.PropertyAddress + "' ></td>").append(c.PropertyAddress); // change for SS (unit no) + ordering
         var contact = $("<td class='commTableRow' id='comm_contactdetail_" + rowId + "' title='" + contactDetailTitle + "' ></td>").append(contactDetailContent); // change
         var action = $("<td class='commTableRow' id='comm_action_" + rowId + "' ></td>").append(actionStatus);
         var editBtn = $("<a href='' id='comm_edit_contact_" + rowId + "' style='text-decoration:underline!important;'>Edit</a>");
         var edit = $("<td class='commTableRow' id='comm_edit_" + rowId + "' ></td>").append(editBtn);
 
-        tr.append(isSelectedCell).append(name).append(surname).append(address).append(contact).append(action).append(edit);
+        tr.append(isSelectedCell).append(name).append(address).append(contact).append(action).append(edit);
         body.append(tr);
 
         if (rowIsSelected == 'checked') {
@@ -1602,7 +1601,9 @@ function submitEmails(callbackFn) {
         var contact = getContactFromId(contactId);
         var email = getContactDetailFromContactRow(contactId);
         contact.TargetContactEmailAddress = email;
-        recipients.push(contact);
+        if (contact.TargetLightstonePropertyIdForComms) {
+            recipients.push(contact);
+        }
     });
 
     var emailBodyRaw = encodeURIComponent(b64EncodeUnicode($('#emailMessageBody').val() + '<br />' + userEmailSignature));

@@ -164,7 +164,8 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                         contactFullname,
                         pendingItem.attachment1_name,
                         pendingItem.attachment1_type,
-                        pendingItem.attachment1_content);
+                        pendingItem.attachment1_content,
+                        pendingItem.user_business_unit_id);
 
                     var req = builder.BuildMandrillSendRequest();
                     string json = Newtonsoft.Json.JsonConvert.SerializeObject(req);

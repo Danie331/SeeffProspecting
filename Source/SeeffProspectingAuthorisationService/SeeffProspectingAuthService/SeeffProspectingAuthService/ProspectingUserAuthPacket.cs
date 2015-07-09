@@ -41,5 +41,8 @@ namespace SeeffProspectingAuthService
 
         [DataMember]
         public bool? CommunicationEnabled { get; set; }
+
+        [DataMember]
+        public int? BusinessUnitID { get; set; }
     }
 }
