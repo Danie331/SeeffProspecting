@@ -2396,6 +2396,17 @@ namespace ProspectingProject
         {
             LightstonePropertyMatch propertyMatch = null;
             prospecting_property propertyRecord = null;
+
+            var searchResult = FindMatchingProperties(new SearchInputPacket { PropertyID = property.LightstonePropertyId.ToString() }).FirstOrDefault();
+            if (searchResult == null)
+            {
+                searchResult = FindMatchingProperties(new SearchInputPacket { PropertyID = property.LightstonePropertyId.ToString() }).FirstOrDefault();
+                if (searchResult == null)
+                {
+                    //throw new Exception("Error updating property record, FindMatchingProperties returns null for this Lightstone Property ID: " + property.LightstonePropertyId);
+                    return false;
+                }
+            }
             using (var prospecting = new ProspectingDataContext())
             {
                 // Find and delete existing relationships between this property and contacts and companies (if any)
@@ -2414,15 +2425,6 @@ namespace ProspectingProject
                 prospecting.SubmitChanges();
 
                 // Re-prospect
-                var searchResult = FindMatchingProperties(new SearchInputPacket { PropertyID = property.LightstonePropertyId.ToString() }).FirstOrDefault();
-                if (searchResult == null)
-                {
-                    searchResult = FindMatchingProperties(new SearchInputPacket { PropertyID = property.LightstonePropertyId.ToString() }).FirstOrDefault();
-                    if (searchResult == null)
-                    {
-                        throw new Exception("Error updating property record, FindMatchingProperties returns null for this Lightstone Property ID: " + property.LightstonePropertyId);
-                    }
-                }
                 propertyMatch = searchResult.PropertyMatches[0];
                 propertyRecord.updated_date = DateTime.Now;
                 propertyRecord.last_purch_price = !string.IsNullOrEmpty(propertyMatch.PurchPrice) ? decimal.Parse(propertyMatch.PurchPrice, CultureInfo.InvariantCulture) : (decimal?)null;

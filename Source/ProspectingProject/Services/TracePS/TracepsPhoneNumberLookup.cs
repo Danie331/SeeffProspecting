@@ -151,7 +151,19 @@ namespace ProspectingProject
                 {
                     statusMessage = statusMessage.Substring(0, 255);
                 }
-                string idNumber = _results.IdNumber != null ? _results.IdNumber.Substring(0, 13) : "";
+                string idNumber = "";
+                if (!string.IsNullOrWhiteSpace(_results.IdNumber))
+                {
+                    if (_results.IdNumber.Length > 13)
+                    {
+                        idNumber = _results.IdNumber.Substring(0, 13);
+                    }
+                    else
+                    {
+                        idNumber = _results.IdNumber;
+                    }
+                }
+
                 string exceptionMessage = _exception != null ? _exception.ToString() : null;
                 service_enquiry_log logEntry = new service_enquiry_log
                 {

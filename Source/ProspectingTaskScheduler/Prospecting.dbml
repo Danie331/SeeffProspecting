@@ -46,6 +46,7 @@
       <Association Name="activity_log_sms_communications_log1" Member="sms_communications_logs1" ThisKey="activity_log_id" OtherKey="followup_activity_id" Type="sms_communications_log" />
       <Association Name="activity_log_email_communications_log" Member="email_communications_logs" ThisKey="activity_log_id" OtherKey="activity_log_id" Type="email_communications_log" />
       <Association Name="activity_log_email_communications_log1" Member="email_communications_logs1" ThisKey="activity_log_id" OtherKey="followup_activity_id" Type="email_communications_log" />
+      <Association Name="activity_log_property_valuation" Member="property_valuations" ThisKey="activity_log_id" OtherKey="activity_log_id" Type="property_valuation" />
       <Association Name="activity_followup_type_activity_log" Member="activity_followup_type" ThisKey="activity_followup_type_id" OtherKey="activity_followup_type_id" Type="activity_followup_type" IsForeignKey="true" />
       <Association Name="activity_type_activity_log" Member="activity_type" ThisKey="activity_type_id" OtherKey="activity_type_id" Type="activity_type" IsForeignKey="true" />
       <Association Name="prospecting_contact_person_activity_log" Member="prospecting_contact_person" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_contact_person" IsForeignKey="true" />
@@ -398,6 +399,7 @@
       <Association Name="prospecting_property_service_enquiry_log" Member="service_enquiry_logs" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="service_enquiry_log" />
       <Association Name="prospecting_property_sms_communications_log" Member="sms_communications_logs" ThisKey="lightstone_property_id" OtherKey="target_lightstone_property_id" Type="sms_communications_log" />
       <Association Name="prospecting_property_email_communications_log" Member="email_communications_logs" ThisKey="lightstone_property_id" OtherKey="target_lightstone_property_id" Type="email_communications_log" />
+      <Association Name="prospecting_property_property_valuation" Member="property_valuations" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="property_valuation" />
     </Type>
   </Table>
   <Table Name="dbo.email_communications_log" Member="email_communications_logs">
@@ -430,6 +432,24 @@
       <Association Name="communications_status_email_communications_log" Member="communications_status" ThisKey="status" OtherKey="communications_status_id" Type="communications_status" IsForeignKey="true" />
       <Association Name="prospecting_contact_person_email_communications_log" Member="prospecting_contact_person" ThisKey="target_contact_person_id" OtherKey="contact_person_id" Type="prospecting_contact_person" IsForeignKey="true" />
       <Association Name="prospecting_property_email_communications_log" Member="prospecting_property" ThisKey="target_lightstone_property_id" OtherKey="lightstone_property_id" Type="prospecting_property" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.property_valuation" Member="property_valuations">
+    <Type Name="property_valuation">
+      <Column Name="property_valuation_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="prospecting_property_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="created_date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="updated_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="created_by_user_guid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="activity_log_id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="value_estimate" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="date_valued" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="current_value" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="deleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="date_deleted" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="deleted_by" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="activity_log_property_valuation" Member="activity_log" ThisKey="activity_log_id" OtherKey="activity_log_id" Type="activity_log" IsForeignKey="true" />
+      <Association Name="prospecting_property_property_valuation" Member="prospecting_property" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_property" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

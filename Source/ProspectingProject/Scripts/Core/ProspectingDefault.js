@@ -497,7 +497,7 @@ function updateOwnershipOfProperty(marker, callbackFn) {
     }).done(function (data) {
         $.unblockUI();
         if (data == false) {
-            alert("It appears that this property has already been updated by another user!");
+            alert("The system is unable to update the ownership of this property at this point in time because it has already been updated by another user or the Lightstone service is unavailable. Please try again later.");
         }
         callbackFn(marker);
     });

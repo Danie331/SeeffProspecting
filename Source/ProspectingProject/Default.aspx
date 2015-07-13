@@ -58,6 +58,7 @@
     <script src="Scripts/Core/ProspectingObjectBuilder.js"></script>
     <script src="Scripts/Core/CommunicationTemplates.js"></script>
     <script src="Scripts/Core/Communication.js"></script>
+    <script src="Scripts/Core/PropertyInformation.js"></script>
     <script src="Scripts/Core/DrawingMultiSelect.js"></script>
     <script src="Scripts/Core/AppStart.js"></script>
      <%-- END_SECTION:CORE_SCRIPTS --%>
@@ -78,7 +79,7 @@
                 <img src="Assets/seeff_logo.png" style="float: left;" />
                 <img id="closepanelbutton" src="Assets/double-arrow-left.png" style="float: right; padding-right: 5px; cursor: pointer;" />
                 <%--<img id='snappanelbutton' src="Assets/snap.png" style="float:right;cursor:pointer;" />--%><br />
-                <label style="font-family: Verdana; font-size: 12px; padding: 20px; color: #000070"><i>Works best in Google Chrome&#0153;</i></label>
+                <label style="font-family: Verdana; font-size: 12px; padding: 20px; color: #000070"><i>Works best in Google Chrome</i></label>
             </div>
             <div id="menuitempanel" class="ui-widget-content">
                 <!-- Create menu items -->
