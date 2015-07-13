@@ -227,6 +227,7 @@ namespace ProspectingProject
         private static void EnqueueBatch(List<EmailRecipient> emailRecipients, EmailBatch batch)
         {
             var prospectingUser = RequestHandler.GetUserSessionObject();
+            int? businessUnitID = prospectingUser.BusinessUnitID;
             using (var prospecting = new ProspectingDataContext())
             {
                 Guid batchId = Guid.NewGuid();
@@ -256,7 +257,7 @@ namespace ProspectingProject
                         status = status,
                         email_body_or_link_id = recipient.EmailBody,
                         email_subject_or_link_id = recipient.EmailSubject,
-                        user_business_unit_id = prospectingUser.BusinessUnitID
+                        user_business_unit_id = businessUnitID
                     };
                     if (batch.Attachments.Count > 0)
                     {
@@ -264,6 +265,7 @@ namespace ProspectingProject
                         record.attachment1_type = batch.Attachments[0].type;
                         record.attachment1_content = batch.Attachments[0].base64;
                     }
+                    businessUnitID = null;
                     prospecting.email_communications_logs.InsertOnSubmit(record);
                 }
                 prospecting.SubmitChanges();

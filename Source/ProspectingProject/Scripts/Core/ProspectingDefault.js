@@ -488,14 +488,17 @@ function showChangeOfOwnershipDialog(freeholdOrSS, proceedCallback, cancelCallba
 
 function updateOwnershipOfProperty(marker, callbackFn) {
     var property = marker.ProspectingProperty;
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Updating Property...</p>' });
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Updating Property Ownership...</p>' });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
         data: JSON.stringify({ Instruction: "update_property_ownership", LightstonePropertyId: property.LightstonePropertyId }),
         dataType: "json"
-    }).done(function () {
+    }).done(function (data) {
         $.unblockUI();
+        if (data == false) {
+            alert("It appears that this property has already been updated by another user!");
+        }
         callbackFn(marker);
     });
 }

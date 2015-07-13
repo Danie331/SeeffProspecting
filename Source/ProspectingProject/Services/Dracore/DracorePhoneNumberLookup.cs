@@ -148,6 +148,11 @@ namespace ProspectingProject
             {
                 bool successful = _results.EnquirySuccessful;
                 string statusMessage = successful ? "OK" : _results.ErrorMsg;
+                if (statusMessage.Length > 255)
+                {
+                    statusMessage = statusMessage.Substring(0, 255);
+                }
+                string idNumber = _results.IdNumber != null ? _results.IdNumber.Substring(0, 13) : "";
                 string exceptionMessage = _exception != null ? _exception.ToString() : null;
                 service_enquiry_log logEntry = new service_enquiry_log
                 {
@@ -155,7 +160,7 @@ namespace ProspectingProject
                     user = _userGuid,
                     date_of_enquiry = DateTime.Now,
                     successful = successful,
-                    id_number = _results.IdNumber,
+                    id_number = idNumber,
                     HWCE_indicator = _results.HWCE_indicator,
                     //
                     service_type_name = _results.LookupType,

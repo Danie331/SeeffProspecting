@@ -372,8 +372,8 @@
       <Column Name="parking_bays" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="pool" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="staff_accomodation" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="created_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="updated_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="created_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="updated_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="created_by" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
       <Column Name="lightstone_id_or_ck_no" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
       <Column Name="lightstone_reg_date" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
@@ -390,7 +390,7 @@
       <Column Name="lightstone_suburb" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="ss_unique_identifier" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="locked_by_guid" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Column Name="locked_datetime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="locked_datetime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="latest_reg_date" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
       <Association Name="prospecting_property_service_enquiry_log" Member="service_enquiry_logs" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="service_enquiry_log" />
       <Association Name="prospecting_property_prospecting_company_property_relationship" Member="prospecting_company_property_relationships" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_company_property_relationship" />

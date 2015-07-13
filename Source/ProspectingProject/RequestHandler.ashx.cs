@@ -194,8 +194,8 @@ namespace ProspectingProject
         private string UpdatePropertyOwnership(string json)
         {
             var property = ProspectingCore.Deserialise<ProspectingPropertyId>(json);
-            var updatedProperty = ProspectingCore.UpdatePropertyOwnership(property);
-            return ProspectingCore.SerializeToJsonWithDefaults(updatedProperty);
+            bool updated = ProspectingCore.UpdatePropertyOwnership(property);
+            return ProspectingCore.SerializeToJsonWithDefaults(updated);
         }
 
         private string CalculateCostOfSmsBatch(string json)

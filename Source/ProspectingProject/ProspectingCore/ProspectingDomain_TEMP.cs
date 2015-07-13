@@ -16,6 +16,7 @@ using System.Net.Mail;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Formatting;
+using System.Data.Linq;
 
 namespace ProspectingProject
 {
@@ -1176,8 +1177,13 @@ namespace ProspectingProject
                             }
                         }
                     }
+                    else
+                    {
+
+                    }
                 }
-                catch { /* Do nothing here, an empty set will be returned to front-end */ }
+                catch 
+                { /* Do nothing here, an empty set will be returned to front-end */ }
             }
 
             List<NewProspectingEntity> prospectingEntities = GenerateOutputForProspectingEntity(matches, null);
@@ -2007,7 +2013,11 @@ namespace ProspectingProject
                     // Lock the record as in-use by this user
                     propRecord.locked_by_guid = currentUser.UserGuid;
                     propRecord.locked_datetime = DateTime.Now;
-                    prospectingDB.SubmitChanges();
+                    try
+                    {
+                        prospectingDB.SubmitChanges();
+                    }
+                    catch (ChangeConflictException) { }
                 }
 
                 return property;
@@ -2024,9 +2034,12 @@ namespace ProspectingProject
                     {
                         pp.locked_by_guid = null;
                         pp.locked_datetime = null;
+                        try
+                        {
+                            prospectingDB.SubmitChanges();
+                        }
+                        catch (ChangeConflictException) { }
                     }
-
-                    prospectingDB.SubmitChanges();
                 }
         }
 
@@ -2379,7 +2392,7 @@ namespace ProspectingProject
             return regDate;
         }
 
-        public static ProspectingProperty UpdatePropertyOwnership(ProspectingPropertyId property)
+        public static bool UpdatePropertyOwnership(ProspectingPropertyId property)
         {
             LightstonePropertyMatch propertyMatch = null;
             prospecting_property propertyRecord = null;
@@ -2388,6 +2401,12 @@ namespace ProspectingProject
                 // Find and delete existing relationships between this property and contacts and companies (if any)
                 propertyRecord = prospecting.prospecting_properties.First(pp => pp.lightstone_property_id == property.LightstonePropertyId);
 
+                // Verify that the record has not already been updated in another session
+                if (propertyRecord.latest_reg_date == null)
+                {
+                    return false;
+                }
+
                 CreateActivityForPropertyChangeOfOwnership(prospecting, propertyRecord);
 
                 prospecting.prospecting_company_property_relationships.DeleteAllOnSubmit(propertyRecord.prospecting_company_property_relationships);
@@ -2395,7 +2414,15 @@ namespace ProspectingProject
                 prospecting.SubmitChanges();
 
                 // Re-prospect
-                var searchResult = FindMatchingProperties(new SearchInputPacket { PropertyID = property.LightstonePropertyId.ToString() }).First();
+                var searchResult = FindMatchingProperties(new SearchInputPacket { PropertyID = property.LightstonePropertyId.ToString() }).FirstOrDefault();
+                if (searchResult == null)
+                {
+                    searchResult = FindMatchingProperties(new SearchInputPacket { PropertyID = property.LightstonePropertyId.ToString() }).FirstOrDefault();
+                    if (searchResult == null)
+                    {
+                        throw new Exception("Error updating property record, FindMatchingProperties returns null for this Lightstone Property ID: " + property.LightstonePropertyId);
+                    }
+                }
                 propertyMatch = searchResult.PropertyMatches[0];
                 propertyRecord.updated_date = DateTime.Now;
                 propertyRecord.last_purch_price = !string.IsNullOrEmpty(propertyMatch.PurchPrice) ? decimal.Parse(propertyMatch.PurchPrice, CultureInfo.InvariantCulture) : (decimal?)null;
@@ -2418,11 +2445,7 @@ namespace ProspectingProject
                     }
                 }
 
-                using (var prospecting = new ProspectingDataContext())
-                {
-                    var updatedProperty = CreateProspectingProperty(prospecting, propertyRecord, true, true, false);
-                    return updatedProperty;
-                }
+                return true;
         }
     }
 }
