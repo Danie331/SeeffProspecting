@@ -142,9 +142,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Prospecting.dbml</DependentUpon>
     </Compile>
-    <Compile Include="TestHandler.ashx.cs">
-      <DependentUpon>TestHandler.ashx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -154,7 +151,6 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Properties\PublishProfiles\1.pubxml" />
-    <Content Include="TestHandler.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

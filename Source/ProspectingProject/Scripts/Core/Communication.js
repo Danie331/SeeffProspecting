@@ -11,7 +11,7 @@ var uploadedFiles = [];
 
 var userEmailSignature = '';
 
-var smsOptOut = " -Reply STOP to opt-out.";
+var smsOptOut = " -Reply STOP to opt-out";
 
 var specialActivityTemplates = ['Birthday', '5 Year Anniversary', '7 Year Anniversary'];
 

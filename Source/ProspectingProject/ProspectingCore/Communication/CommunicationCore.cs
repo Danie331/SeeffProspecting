@@ -113,7 +113,7 @@ namespace ProspectingProject
                              .Replace("*surname*", surname)
                              .Replace("*address*", address);
 
-            return rawMessageBody;
+            return rawMessageBody + " -Reply STOP to opt-out";
         }
 
         private static List<ProspectingContactPerson> GetSmsTargetContactPersons(SmsBatch batch)
@@ -129,7 +129,7 @@ namespace ProspectingProject
                         var contactDetail = contactRecord.prospecting_contact_details.First(cd => cd.contact_detail == contact.TargetContactCellphoneNumber);
                         contact.TargetContactCellphoneNumber = contactDetail.prospecting_area_dialing_code.dialing_code_id + contact.TargetContactCellphoneNumber.Remove(0, 1);
                     }
-                    return batch.Recipients; // make sure the front-end populates these with all required values
+                    return batch.Recipients.Distinct(new ContactPersonSmsComparer()).ToList(); // make sure the front-end populates these with all required values
                 }
 
                 if (batch.TargetAllMySuburbs)
@@ -429,7 +429,7 @@ namespace ProspectingProject
             {
                 if (batch.Recipients.Count > 0)
                 {
-                    return batch.Recipients; // make sure the front-end populates these with all required values
+                    return batch.Recipients.Distinct(new ContactPersonEmailComparer()).ToList(); // make sure the front-end populates these with all required values
                 }
 
                 if (batch.TargetAllMySuburbs)
