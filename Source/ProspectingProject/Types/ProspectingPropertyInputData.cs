@@ -41,5 +41,18 @@ namespace ProspectingProject
 
         // This caters for the different enquiry/lookup types : should be equal to one of the types in ProspectingStaticData.
         public string PersonLookupType { get; set; }
+
+        // Hedonic data
+        public int? ErfSize { get; set; }
+        public int? DwellingSize { get; set; }
+        public string Condition { get; set; }
+        public int? Beds { get; set; }
+        public int? Baths { get; set; }
+        public int? Receptions { get; set; }
+        public int? Studies { get; set; }
+        public int? Garages { get; set; }
+        public int? ParkingBays { get; set; }
+        public bool? Pool { get; set; }
+        public bool? StaffAccomodation { get; set; }
     }
 }

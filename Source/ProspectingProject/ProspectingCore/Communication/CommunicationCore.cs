@@ -582,6 +582,6 @@ namespace ProspectingProject
                 var prospectingUser = RequestHandler.GetUserSessionObject();
                 prospectingAuthService.DebitUserBalance(cost, prospectingUser.UserGuid);
             }
-        }       
+        }
     }
 }

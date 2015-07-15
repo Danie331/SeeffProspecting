@@ -55,8 +55,11 @@ function createProspectingMenu(userData) {
         menuItems.push(menuItem);
     }
 
-    if (/*prospectingContext.LoggedInUser.toLowerCase() == 'a2c48f98-14fb-425e-bbd2-312cfb89980c' || */prospectingContext.LoggedInUser.toLowerCase() == '62a85a9d-be7a-4fad-b704-a55edb1d338f') {
-        menuItem = createMenuItem("Property Information", "propertyinformation", buildPropertyInformationMenu(), function () { toggleMultiSelectMode(false); }, null);
+    if (prospectingContext.LoggedInUser.toLowerCase() == 'a2c48f98-14fb-425e-bbd2-312cfb89980c' || prospectingContext.LoggedInUser.toLowerCase() == '62a85a9d-be7a-4fad-b704-a55edb1d338f') {
+        menuItem = createMenuItem("Property Information", "propertyinformation", buildPropertyInformationMenu(), function () {
+            toggleMultiSelectMode(false);
+            togglePropertyInformationMenu();
+        }, null);
         appendMenuItemContent(menuItem.MenuItemContent);
         menuItems.push(menuItem);
     }

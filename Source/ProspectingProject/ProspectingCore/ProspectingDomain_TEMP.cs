@@ -98,7 +98,19 @@ namespace ProspectingProject
                 Portion = prospectingRecord.portion_no != null ? prospectingRecord.portion_no.ToString() : "n/a",
                  LightstoneSuburb = prospectingRecord.lightstone_suburb,
                   SS_UNIQUE_IDENTIFIER = prospectingRecord.ss_unique_identifier,
-                   LatestRegDateForUpdate = prospectingRecord.latest_reg_date
+                   LatestRegDateForUpdate = prospectingRecord.latest_reg_date,
+
+                Baths = prospectingRecord.baths,
+                Condition = prospectingRecord.condition,
+                Beds = prospectingRecord.beds,
+                DwellingSize = prospectingRecord.dwell_size,
+                ErfSize = prospectingRecord.erf_size,
+                Garages = prospectingRecord.garages,
+                Pool = prospectingRecord.pool,
+                Receptions = prospectingRecord.receptions,
+                StaffAccomodation = prospectingRecord.staff_accomodation,
+                Studies = prospectingRecord.studies,
+                ParkingBays = prospectingRecord.parking_bays 
             };
 
             switch (prospectingRecord.ss_fh)
@@ -224,7 +236,19 @@ namespace ProspectingProject
                 Portion = prospectingRecord.portion_no.HasValue ? prospectingRecord.portion_no.ToString() : null,
                 LightstoneSuburb = prospectingRecord.lightstone_suburb,
                 SS_UNIQUE_IDENTIFIER = prospectingRecord.ss_unique_identifier,
-                 LatestRegDateForUpdate = prospectingRecord.latest_reg_date
+                 LatestRegDateForUpdate = prospectingRecord.latest_reg_date,
+
+                Baths = prospectingRecord.baths,
+                Condition = prospectingRecord.condition,
+                Beds = prospectingRecord.beds,
+                DwellingSize = prospectingRecord.dwell_size,
+                ErfSize = prospectingRecord.erf_size,
+                Garages = prospectingRecord.garages,
+                Pool = prospectingRecord.pool,
+                Receptions = prospectingRecord.receptions,
+                StaffAccomodation = prospectingRecord.staff_accomodation,
+                Studies = prospectingRecord.studies,
+                ParkingBays = prospectingRecord.parking_bays 
             };
 
             return prop;
@@ -610,7 +634,7 @@ namespace ProspectingProject
                 var propAddress = dataPacket.PropertyAddress;
                 var unitDoorNo = dataPacket.SSDoorNo;
 
-                var existingRecord = prospecting.prospecting_properties.First(pp => pp.prospecting_property_id == propectingPropertyId);          
+                var existingRecord = prospecting.prospecting_properties.First(pp => pp.prospecting_property_id == propectingPropertyId);
                 if (dataPacket.SS_FH == "SS")
                 {
                     existingRecord.ss_door_number = unitDoorNo;
@@ -620,6 +644,18 @@ namespace ProspectingProject
                     existingRecord.property_address = propAddress;
                     existingRecord.street_or_unit_no = streetOrUnitNo;
                 }
+
+                existingRecord.erf_size = dataPacket.ErfSize;
+                existingRecord.dwell_size = dataPacket.DwellingSize;
+                existingRecord.condition = dataPacket.Condition;
+                existingRecord.beds = dataPacket.Beds;
+                existingRecord.baths = dataPacket.Baths;
+                existingRecord.receptions = dataPacket.Receptions;
+                existingRecord.studies = dataPacket.Studies;
+                existingRecord.garages = dataPacket.Garages;
+                existingRecord.parking_bays = dataPacket.ParkingBays;
+                existingRecord.pool = dataPacket.Pool;
+                existingRecord.staff_accomodation = dataPacket.StaffAccomodation;
 
                 prospecting.SubmitChanges();
             }
@@ -1677,7 +1713,19 @@ namespace ProspectingProject
                                       SSDoorNo = pp.ss_door_number,
                                       LastPurchPrice = pp.last_purch_price,
                                        SS_UNIQUE_IDENTIFIER = pp.ss_unique_identifier,
-                                        LatestRegDateForUpdate = pp.latest_reg_date
+                                        LatestRegDateForUpdate = pp.latest_reg_date,
+
+                                         Baths = pp.baths,
+                                         Condition = pp.condition,
+                                          Beds = pp.beds,
+                                           DwellingSize = pp.dwell_size,
+                                            ErfSize = pp.erf_size,
+                                             Garages = pp.garages,
+                                              Pool = pp.pool,
+                                               Receptions = pp.receptions,
+                                                StaffAccomodation = pp.staff_accomodation,
+                                                 Studies = pp.studies,
+                                                  ParkingBays = pp.parking_bays                                                   
                                   }).ToList();
                 return properties;
             }
@@ -2448,6 +2496,55 @@ namespace ProspectingProject
                 }
 
                 return true;
+        }
+
+        public static void CreateValuation(PropertyValuation valuation)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                long? activityRecordId = null;
+                var propertyRecord = prospecting.prospecting_properties.First(pp => pp.prospecting_property_id == valuation.ProspectingPropertyId);
+                if (valuation.CreateActivity)
+                {
+                    string comment = "A new valuation has been created for this property:" + Environment.NewLine +
+                                    "New value: R" + valuation.Value + Environment.NewLine + 
+                                    "Valuation date: " + valuation.ValuationDate + Environment.NewLine + 
+                                    "Is this its current value: " + (valuation.IsCurrentValue ? "Yes" : "No");
+
+                    var activityType = ProspectingLookupData.ActivityTypes.First(act => act.Value == "Valuation Done").Key;
+                    var activityRecord = new activity_log
+                    {
+                        lightstone_property_id = propertyRecord.lightstone_property_id,
+                        followup_date = null,
+                        allocated_to = null,
+                        activity_type_id = activityType,
+                        comment = comment,
+                        created_by = RequestHandler.GetUserSessionObject().UserGuid,
+                        created_date = DateTime.Now,
+                        contact_person_id = null,
+                        // Add the rest later
+                        parent_activity_id = null,
+                        activity_followup_type_id = null
+                    };
+                    prospecting.activity_logs.InsertOnSubmit(activityRecord);
+                    prospecting.SubmitChanges();
+                    activityRecordId = activityRecord.activity_log_id;
+                }
+
+                property_valuation newValuation = new property_valuation
+                {
+                     prospecting_property_id = propertyRecord.prospecting_property_id,
+                     created_date = DateTime.Now,
+                     created_by_user_guid = RequestHandler.GetUserSessionObject().UserGuid,
+                     activity_log_id = activityRecordId,
+                     value_estimate = valuation.Value,
+                     date_valued = valuation.ValuationDate,
+                     current_value = valuation.IsCurrentValue
+                };
+
+                prospecting.property_valuations.InsertOnSubmit(newValuation);
+                prospecting.SubmitChanges();
+            }
         }
     }
 }

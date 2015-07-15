@@ -644,9 +644,7 @@ function loadExistingProspectAddActivity(property, defaultSelection, callbackFun
                             currentMarker = property.Marker;
                             updateOwnerDetailsEditor();
 
-                            if (currentProperty.Contacts.length || currentProperty.ContactCompanies.length) {
-                                showMenu("contactdetails");                                
-                            }
+                            showMenu("contactdetails");
                         });
                     }
 
@@ -922,9 +920,7 @@ function loadProspectingProperty(marker) {
             currentProperty.Marker = marker;
             updateOwnerDetailsEditor();
             //updatePropertyNotesDiv();
-            if (currentProperty.Contacts.length || currentProperty.ContactCompanies.length) {
-                showMenu("contactdetails");
-            }
+            showMenu("contactdetails");
 
             updateProspectedStatus();
         }
@@ -970,14 +966,26 @@ function updateProspectingRecord(record, property, callbackFn) {
         StreetOrUnitNo: record.StreetOrUnitNo,
         SSDoorNo: record.SSDoorNo,
         SS_FH: record.SS_FH,
-        ProspectingPropertyId: record.ProspectingPropertyId
+        ProspectingPropertyId: record.ProspectingPropertyId,
+
+        ErfSize: record.ErfSize,
+        DwellingSize: record.DwellingSize,
+        Condition: record.Condition , 
+        Beds:record.Beds ,
+        Baths:record.Baths ,
+        Receptions:record.Receptions ,
+        Studies:record.Studies ,
+        Garages:record.Garages ,
+        ParkingBays:record.ParkingBays ,
+        Pool:record.Pool ,
+        StaffAccomodation: record.StaffAccomodation
     };
 
     if (!property) {
         property = currentProperty;
     }
 
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Updating address...</p>' });
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Updating Property Details...</p>' });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
@@ -1611,9 +1619,7 @@ function loadExistingSSUnit(unit, callbackFn) {
                     updateExistingPropertyFromProperty(unit, data);
                     currentProperty = unit;
                     updateOwnerDetailsEditor();
-                    if (currentProperty.Contacts && currentProperty.Contacts.length > 0) {
-                        showMenu("contactdetails");
-                    }
+                    showMenu("contactdetails");
 
                     updateProspectedStatus();
 

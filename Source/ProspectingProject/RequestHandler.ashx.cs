@@ -157,6 +157,9 @@ namespace ProspectingProject
                         string updatedProperty = UpdatePropertyOwnership(json);
                         context.Response.Write(updatedProperty);
                         break;
+                    case "create_valuation":
+                        CreateValuation(json);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -189,6 +192,12 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private void CreateValuation(string json)
+        {
+            var valuation = ProspectingCore.Deserialise<PropertyValuation>(json);
+            ProspectingCore.CreateValuation(valuation);
         }
 
         private string UpdatePropertyOwnership(string json)

@@ -715,6 +715,7 @@
     <Content Include="Assets\fh_edit.png" />
     <Content Include="Assets\frm_edit.png" />
     <Content Include="Assets\google.png" />
+    <Content Include="Assets\hedonic_data.png" />
     <Content Include="Assets\item_template.png" />
     <Content Include="Assets\lightstone.png" />
     <Content Include="Assets\make_primary_contact.png" />
@@ -730,6 +731,7 @@
     <Content Include="Assets\marker_icons\prospecting\unprospected_bulk_select.png" />
     <Content Include="Assets\my_templates.png" />
     <Content Include="Assets\newsletter_template.png" />
+    <Content Include="Assets\new_valuation.png" />
     <Content Include="Assets\notes.png" />
     <Content Include="Assets\person.png" />
     <Content Include="Assets\phone_icon.png" />
@@ -743,6 +745,7 @@
     <Content Include="Assets\standard_templates.png" />
     <Content Include="Assets\tps_info.png" />
     <Content Include="Assets\traceps_lookup.png" />
+    <Content Include="Assets\valuations_history.png" />
     <Content Include="Assets\view_btn.png" />
     <Content Include="Database scripts\boss.sql" />
     <Content Include="Database scripts\change_of_ownership.sql" />
@@ -1173,6 +1176,7 @@
     <Compile Include="Types\FollowupBundle.cs" />
     <Compile Include="Types\LightstonePropertyIDPacket.cs" />
     <Compile Include="Types\PropertyProspectedStatus.cs" />
+    <Compile Include="Types\PropertyValuation.cs" />
     <Compile Include="Types\ProspectingEntityInputBundle.cs" />
     <Compile Include="Types\ProspectingEntityOutputBundle.cs" />
     <Compile Include="Types\ProspectingPropertyInputData.cs" />
