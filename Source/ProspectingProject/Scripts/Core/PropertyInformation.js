@@ -1,5 +1,14 @@
 ﻿var currentPropertyForPropertyInformation = null;
 
+var propertyConditionDescription = {
+    item1: 'High quality finishings ready to move in',
+    item2: 'Standard finishings ready to move in',
+    item3: 'Spec finishings ready to move in',
+    item4: 'Needs TLC however one could move in',
+    item5: 'Needs serious attention however one could move in',
+    item6: 'Not habitable'
+};
+
 function buildPropertyInformationMenu() {
 
     var div = $("<div class='contentdiv' id='propertyInformationDiv' style='display:none' />");
@@ -19,7 +28,7 @@ function togglePropertyInformationMenu() {
 
         var expander = buildContentExpanderForPropertyInfo();
         container.append(expander.construct());
-
+        expander.open('hedonicDataTab');
         // hedonic data
         populateHedonicData();
         $("#saveHedonicDataBtn").click(function () {
@@ -32,7 +41,7 @@ function togglePropertyInformationMenu() {
                 currentProperty.Studies = $("#studiesInput").val();
                 currentProperty.Garages = $("#garagesInput").val();
                 currentProperty.ParkingBays = $("#parkingbaysInput").val();
-                currentProperty.Condition = $("#conditionInput").val();
+                currentProperty.Condition = $("#conditionInput>option:selected").html();
                 currentProperty.Pool = $("#poolInput").prop('checked');
                 currentProperty.StaffAccomodation = $("#staffAccomInput").prop('checked');
 
@@ -41,7 +50,7 @@ function togglePropertyInformationMenu() {
         });
 
         // New valuation
-        $("#dateValuedInput").datepicker({ dateFormat: 'DD, d MM yy' });
+        $("#dateValuedInput").datepicker({ dateFormat: 'DD, d MM yy', maxDate: 0, beforeShow: function (i) { if ($(i).attr('readonly')) { return false; } } });
         $('#saveNewValuationBtn').click(function () {
             if (validateNewValuationInputs()) {
                 saveValuation();
@@ -49,9 +58,68 @@ function togglePropertyInformationMenu() {
                 alert("Some of your inputs are not valid.");
             }
         });
+        $('#isCurrentValueInput').change(function () {
+            var checked = $(this).is(':checked');
+            if (checked) {
+                $('#valueEstimateInput').val(currentPropertyForPropertyInformation.LastPurchPrice).attr('readonly', true);
+                $("#dateValuedInput").datepicker('setDate', new Date()).attr('readonly','readonly');
+            } else {
+                $('#valueEstimateInput').val('').attr('readonly', false);
+                $("#dateValuedInput").datepicker('setDate', '').attr('readonly', false);
+            }
+        });
+
+        // Valuations history
+        loadValuationsHistory();
     }
 
     container.css('display', 'block');
+}
+
+function loadValuationsHistory() {
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: 'load_valuations', ProspectingPropertyID: currentProperty.ProspectingPropertyId }),
+        dataType: "json"
+    }).done(function (data) {
+        if (!handleResponseIfServerError(data)) {
+            return;
+        }
+        
+        var tbl = $("#valuationsHistoryTbl");
+        tbl.find("tr:gt(0)").remove();
+        if (data) {
+            $.each(data, function (idx, val) {
+                var tr = $("<tr />");
+                tr.append("<td>" + formatRandValue(val.Value) + "</td>");
+                tr.append("<td>" + val.ValuationDate.substring(0,10) + "</td>");
+                tr.append("<td>" + val.CreatedByUsername + "</td>");
+                var deleteRecordBtn = $("<input type='button' value='Delete' id='valuation_row_" + val.ValuationRecordId + "' />");
+                tr.append(deleteRecordBtn);                
+                tbl.append(tr);
+
+                deleteRecordBtn.click(function () {
+                    var valuationRecordId = $(this).attr('id').replace('valuation_row_', '');
+                    deleteValuation(valuationRecordId);
+                });
+            });
+        }
+    });
+}
+
+function deleteValuation(valuationRecordId) {
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: 'delete_valuation', ValuationRecordId: valuationRecordId }),
+        dataType: "json"
+    }).done(function (data) {
+        if (!handleResponseIfServerError(data)) {
+            return;
+        }
+        loadValuationsHistory();
+    });
 }
 
 function saveValuation() {
@@ -70,6 +138,7 @@ function saveValuation() {
             return;
         }
         showSavedSplashDialog('Valuation Saved');
+        loadValuationsHistory();
     });
 }
 
@@ -117,21 +186,21 @@ function buildContentExpanderForPropertyInfo() {
     $('#valuationsHistoryTab').empty();
     var valuationsHistoryTab = buildContentExpanderItem('valuationsHistoryTab', 'Assets/valuations_history.png', "Valuations History", buildValuationsHistoryTab());
     $('#hedonicDataTab').empty();
-    var hedonicDataTab = buildContentExpanderItem('hedonicDataTab', 'Assets/hedonic_data.png', "Hedonic Information", buildHedonicDataTab());
+    var basicDataTab = buildContentExpanderItem('hedonicDataTab', 'Assets/hedonic_data.png', "Basic Information", buildBasicDataTab());
 
-    return new ContentExpanderWidget('#contentarea', [hedonicDataTab, newValuationTab, valuationsHistoryTab], "propertyInfoExpander");
+    return new ContentExpanderWidget('#contentarea', [basicDataTab, newValuationTab, valuationsHistoryTab], "propertyInfoExpander");
 }
 
 function buildNewValuationTab() {
     var container = $("<div />")
                 .empty()
-                .append("<label class='fieldAlignment'>Value estimate (R) </label><input type='number' id='valueEstimateInput' size='6' />")
+                .append("<label class='fieldAlignment' style='width:185px'>Value estimate (R) </label><input type='number' id='valueEstimateInput' size='6' />")
                 .append("<br />")
-                .append("<label class='fieldAlignment'>Date valued </label><input type='text' id='dateValuedInput' />")
+                .append("<label class='fieldAlignment' style='width:185px'>Date valued </label><input type='text' id='dateValuedInput' />")
                 .append("<br />")
-                .append("<label class='fieldAlignment'>Same as current value </label><input type='checkbox' id='isCurrentValueInput' />")
+                .append("<label class='fieldAlignment' style='width:185px'>Use current Lightstone value </label><input type='checkbox' id='isCurrentValueInput' />")
                 .append("<br />")
-                .append("<label class='fieldAlignment'>Create a 'Valuation Done' activity? </label><input type='checkbox' id='createValuationActivityInput' checked />")
+                .append("<label class='fieldAlignment' style='width:185px'>Create a 'Valuation Done' activity? </label><input type='checkbox' id='createValuationActivityInput' checked />")
                 .append("<p />")
                 .append("<input type='button' id='saveNewValuationBtn' value='Save' />");
 
@@ -139,10 +208,15 @@ function buildNewValuationTab() {
 }
 
 function buildValuationsHistoryTab() {
-    return "";
+    var container = $("<div />");
+    var tableHeader = $("<table id='valuationsHistoryTbl' style='width:100%' />");
+    tableHeader.append("<tr><td id='th_value'>Value Estimate</td><td id='th_datevalued'>Valuation Date</td><td id='th_createdby'>Created By</td></tr>");
+    container.append(tableHeader);
+
+    return container;
 }
 
-function buildHedonicDataTab() {
+function buildBasicDataTab() {
     var container = $("<div />")
     .empty()
     .append("<label class='fieldAlignment'>ERF size(m&sup2;) </label><input type='number' id='erfSizeInput' size='3' />")
@@ -161,7 +235,15 @@ function buildHedonicDataTab() {
     .append("<br />")
     .append("<label class='fieldAlignment'>Parking bays </label><input type='number' id='parkingbaysInput' size='3' />")
     .append("<br />")
-    .append("<label class='fieldAlignment'>Condition </label><input type='text' id='conditionInput' maxlength='16' />")
+    .append("<label class='fieldAlignment'>Condition </label><select id='conditionInput'>\
+                                                                <option></option>\
+                                                                  <option>" + propertyConditionDescription["item1"] + "</option>\
+                                                                  <option>" + propertyConditionDescription["item2"] + "</option>\
+                                                                  <option>" + propertyConditionDescription["item3"] + "</option>\
+                                                                <option>" + propertyConditionDescription["item4"] + "</option>\
+                                                                  <option>" + propertyConditionDescription["item5"] + "</option>\
+                                                                  <option>" + propertyConditionDescription["item6"] + "</option>\
+                                                             </select>")
     .append("<br />")
     .append("<label class='fieldAlignment'>Pool </label><input type='checkbox' id='poolInput' />")
     .append("<br />")

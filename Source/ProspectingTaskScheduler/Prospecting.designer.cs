@@ -108,15 +108,15 @@ namespace ProspectingTaskScheduler
     partial void Insertsms_communications_log(sms_communications_log instance);
     partial void Updatesms_communications_log(sms_communications_log instance);
     partial void Deletesms_communications_log(sms_communications_log instance);
-    partial void Insertprospecting_property(prospecting_property instance);
-    partial void Updateprospecting_property(prospecting_property instance);
-    partial void Deleteprospecting_property(prospecting_property instance);
     partial void Insertemail_communications_log(email_communications_log instance);
     partial void Updateemail_communications_log(email_communications_log instance);
     partial void Deleteemail_communications_log(email_communications_log instance);
     partial void Insertproperty_valuation(property_valuation instance);
     partial void Updateproperty_valuation(property_valuation instance);
     partial void Deleteproperty_valuation(property_valuation instance);
+    partial void Insertprospecting_property(prospecting_property instance);
+    partial void Updateprospecting_property(prospecting_property instance);
+    partial void Deleteprospecting_property(prospecting_property instance);
     #endregion
 		
 		public ProspectingDataContext() : 
@@ -357,14 +357,6 @@ namespace ProspectingTaskScheduler
 			}
 		}
 		
-		public System.Data.Linq.Table<prospecting_property> prospecting_properties
-		{
-			get
-			{
-				return this.GetTable<prospecting_property>();
-			}
-		}
-		
 		public System.Data.Linq.Table<email_communications_log> email_communications_logs
 		{
 			get
@@ -378,6 +370,14 @@ namespace ProspectingTaskScheduler
 			get
 			{
 				return this.GetTable<property_valuation>();
+			}
+		}
+		
+		public System.Data.Linq.Table<prospecting_property> prospecting_properties
+		{
+			get
+			{
+				return this.GetTable<prospecting_property>();
 			}
 		}
 	}
@@ -7796,1344 +7796,6 @@ namespace ProspectingTaskScheduler
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.prospecting_property")]
-	public partial class prospecting_property : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _prospecting_property_id;
-		
-		private System.Nullable<int> _licence_id;
-		
-		private System.Nullable<int> _seeff_area_id;
-		
-		private System.Nullable<int> _development_id;
-		
-		private int _lightstone_property_id;
-		
-		private System.Nullable<int> _propstats_id;
-		
-		private System.Nullable<int> _windeed_id;
-		
-		private System.Nullable<int> _erf_no;
-		
-		private System.Nullable<int> _portion_no;
-		
-		private string _property_address;
-		
-		private string _street_or_unit_no;
-		
-		private string _photo_url;
-		
-		private System.Nullable<decimal> _latitude;
-		
-		private System.Nullable<decimal> _longitude;
-		
-		private System.Nullable<System.DateTime> _age;
-		
-		private System.Nullable<int> _erf_size;
-		
-		private System.Nullable<int> _dwell_size;
-		
-		private string _condition;
-		
-		private System.Nullable<int> _beds;
-		
-		private System.Nullable<int> _baths;
-		
-		private System.Nullable<int> _receptions;
-		
-		private System.Nullable<int> _studies;
-		
-		private System.Nullable<int> _garages;
-		
-		private System.Nullable<int> _parking_bays;
-		
-		private System.Nullable<bool> _pool;
-		
-		private System.Nullable<bool> _staff_accomodation;
-		
-		private System.Nullable<System.DateTime> _created_date;
-		
-		private System.Nullable<System.DateTime> _updated_date;
-		
-		private System.Nullable<System.Guid> _created_by;
-		
-		private string _lightstone_id_or_ck_no;
-		
-		private string _lightstone_reg_date;
-		
-		private string _comments;
-		
-		private string _ss_name;
-		
-		private string _ss_number;
-		
-		private string _unit;
-		
-		private string _ss_fh;
-		
-		private System.Nullable<decimal> _last_purch_price;
-		
-		private string _ss_id;
-		
-		private string _ss_door_number;
-		
-		private System.Nullable<bool> _prospected;
-		
-		private string _farm_name;
-		
-		private string _lightstone_suburb;
-		
-		private string _ss_unique_identifier;
-		
-		private System.Nullable<System.Guid> _locked_by_guid;
-		
-		private System.Nullable<System.DateTime> _locked_datetime;
-		
-		private string _latest_reg_date;
-		
-		private EntitySet<activity_log> _activity_logs;
-		
-		private EntitySet<prospecting_company_property_relationship> _prospecting_company_property_relationships;
-		
-		private EntitySet<prospecting_person_property_relationship> _prospecting_person_property_relationships;
-		
-		private EntitySet<service_enquiry_log> _service_enquiry_logs;
-		
-		private EntitySet<sms_communications_log> _sms_communications_logs;
-		
-		private EntitySet<email_communications_log> _email_communications_logs;
-		
-		private EntitySet<property_valuation> _property_valuations;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void Onprospecting_property_idChanging(int value);
-    partial void Onprospecting_property_idChanged();
-    partial void Onlicence_idChanging(System.Nullable<int> value);
-    partial void Onlicence_idChanged();
-    partial void Onseeff_area_idChanging(System.Nullable<int> value);
-    partial void Onseeff_area_idChanged();
-    partial void Ondevelopment_idChanging(System.Nullable<int> value);
-    partial void Ondevelopment_idChanged();
-    partial void Onlightstone_property_idChanging(int value);
-    partial void Onlightstone_property_idChanged();
-    partial void Onpropstats_idChanging(System.Nullable<int> value);
-    partial void Onpropstats_idChanged();
-    partial void Onwindeed_idChanging(System.Nullable<int> value);
-    partial void Onwindeed_idChanged();
-    partial void Onerf_noChanging(System.Nullable<int> value);
-    partial void Onerf_noChanged();
-    partial void Onportion_noChanging(System.Nullable<int> value);
-    partial void Onportion_noChanged();
-    partial void Onproperty_addressChanging(string value);
-    partial void Onproperty_addressChanged();
-    partial void Onstreet_or_unit_noChanging(string value);
-    partial void Onstreet_or_unit_noChanged();
-    partial void Onphoto_urlChanging(string value);
-    partial void Onphoto_urlChanged();
-    partial void OnlatitudeChanging(System.Nullable<decimal> value);
-    partial void OnlatitudeChanged();
-    partial void OnlongitudeChanging(System.Nullable<decimal> value);
-    partial void OnlongitudeChanged();
-    partial void OnageChanging(System.Nullable<System.DateTime> value);
-    partial void OnageChanged();
-    partial void Onerf_sizeChanging(System.Nullable<int> value);
-    partial void Onerf_sizeChanged();
-    partial void Ondwell_sizeChanging(System.Nullable<int> value);
-    partial void Ondwell_sizeChanged();
-    partial void OnconditionChanging(string value);
-    partial void OnconditionChanged();
-    partial void OnbedsChanging(System.Nullable<int> value);
-    partial void OnbedsChanged();
-    partial void OnbathsChanging(System.Nullable<int> value);
-    partial void OnbathsChanged();
-    partial void OnreceptionsChanging(System.Nullable<int> value);
-    partial void OnreceptionsChanged();
-    partial void OnstudiesChanging(System.Nullable<int> value);
-    partial void OnstudiesChanged();
-    partial void OngaragesChanging(System.Nullable<int> value);
-    partial void OngaragesChanged();
-    partial void Onparking_baysChanging(System.Nullable<int> value);
-    partial void Onparking_baysChanged();
-    partial void OnpoolChanging(System.Nullable<bool> value);
-    partial void OnpoolChanged();
-    partial void Onstaff_accomodationChanging(System.Nullable<bool> value);
-    partial void Onstaff_accomodationChanged();
-    partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
-    partial void Oncreated_dateChanged();
-    partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
-    partial void Onupdated_dateChanged();
-    partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
-    partial void Oncreated_byChanged();
-    partial void Onlightstone_id_or_ck_noChanging(string value);
-    partial void Onlightstone_id_or_ck_noChanged();
-    partial void Onlightstone_reg_dateChanging(string value);
-    partial void Onlightstone_reg_dateChanged();
-    partial void OncommentsChanging(string value);
-    partial void OncommentsChanged();
-    partial void Onss_nameChanging(string value);
-    partial void Onss_nameChanged();
-    partial void Onss_numberChanging(string value);
-    partial void Onss_numberChanged();
-    partial void OnunitChanging(string value);
-    partial void OnunitChanged();
-    partial void Onss_fhChanging(string value);
-    partial void Onss_fhChanged();
-    partial void Onlast_purch_priceChanging(System.Nullable<decimal> value);
-    partial void Onlast_purch_priceChanged();
-    partial void Onss_idChanging(string value);
-    partial void Onss_idChanged();
-    partial void Onss_door_numberChanging(string value);
-    partial void Onss_door_numberChanged();
-    partial void OnprospectedChanging(System.Nullable<bool> value);
-    partial void OnprospectedChanged();
-    partial void Onfarm_nameChanging(string value);
-    partial void Onfarm_nameChanged();
-    partial void Onlightstone_suburbChanging(string value);
-    partial void Onlightstone_suburbChanged();
-    partial void Onss_unique_identifierChanging(string value);
-    partial void Onss_unique_identifierChanged();
-    partial void Onlocked_by_guidChanging(System.Nullable<System.Guid> value);
-    partial void Onlocked_by_guidChanged();
-    partial void Onlocked_datetimeChanging(System.Nullable<System.DateTime> value);
-    partial void Onlocked_datetimeChanged();
-    partial void Onlatest_reg_dateChanging(string value);
-    partial void Onlatest_reg_dateChanged();
-    #endregion
-		
-		public prospecting_property()
-		{
-			this._activity_logs = new EntitySet<activity_log>(new Action<activity_log>(this.attach_activity_logs), new Action<activity_log>(this.detach_activity_logs));
-			this._prospecting_company_property_relationships = new EntitySet<prospecting_company_property_relationship>(new Action<prospecting_company_property_relationship>(this.attach_prospecting_company_property_relationships), new Action<prospecting_company_property_relationship>(this.detach_prospecting_company_property_relationships));
-			this._prospecting_person_property_relationships = new EntitySet<prospecting_person_property_relationship>(new Action<prospecting_person_property_relationship>(this.attach_prospecting_person_property_relationships), new Action<prospecting_person_property_relationship>(this.detach_prospecting_person_property_relationships));
-			this._service_enquiry_logs = new EntitySet<service_enquiry_log>(new Action<service_enquiry_log>(this.attach_service_enquiry_logs), new Action<service_enquiry_log>(this.detach_service_enquiry_logs));
-			this._sms_communications_logs = new EntitySet<sms_communications_log>(new Action<sms_communications_log>(this.attach_sms_communications_logs), new Action<sms_communications_log>(this.detach_sms_communications_logs));
-			this._email_communications_logs = new EntitySet<email_communications_log>(new Action<email_communications_log>(this.attach_email_communications_logs), new Action<email_communications_log>(this.detach_email_communications_logs));
-			this._property_valuations = new EntitySet<property_valuation>(new Action<property_valuation>(this.attach_property_valuations), new Action<property_valuation>(this.detach_property_valuations));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_property_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int prospecting_property_id
-		{
-			get
-			{
-				return this._prospecting_property_id;
-			}
-			set
-			{
-				if ((this._prospecting_property_id != value))
-				{
-					this.Onprospecting_property_idChanging(value);
-					this.SendPropertyChanging();
-					this._prospecting_property_id = value;
-					this.SendPropertyChanged("prospecting_property_id");
-					this.Onprospecting_property_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_licence_id", DbType="Int")]
-		public System.Nullable<int> licence_id
-		{
-			get
-			{
-				return this._licence_id;
-			}
-			set
-			{
-				if ((this._licence_id != value))
-				{
-					this.Onlicence_idChanging(value);
-					this.SendPropertyChanging();
-					this._licence_id = value;
-					this.SendPropertyChanged("licence_id");
-					this.Onlicence_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_seeff_area_id", DbType="Int")]
-		public System.Nullable<int> seeff_area_id
-		{
-			get
-			{
-				return this._seeff_area_id;
-			}
-			set
-			{
-				if ((this._seeff_area_id != value))
-				{
-					this.Onseeff_area_idChanging(value);
-					this.SendPropertyChanging();
-					this._seeff_area_id = value;
-					this.SendPropertyChanged("seeff_area_id");
-					this.Onseeff_area_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_development_id", DbType="Int")]
-		public System.Nullable<int> development_id
-		{
-			get
-			{
-				return this._development_id;
-			}
-			set
-			{
-				if ((this._development_id != value))
-				{
-					this.Ondevelopment_idChanging(value);
-					this.SendPropertyChanging();
-					this._development_id = value;
-					this.SendPropertyChanged("development_id");
-					this.Ondevelopment_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lightstone_property_id", DbType="Int NOT NULL")]
-		public int lightstone_property_id
-		{
-			get
-			{
-				return this._lightstone_property_id;
-			}
-			set
-			{
-				if ((this._lightstone_property_id != value))
-				{
-					this.Onlightstone_property_idChanging(value);
-					this.SendPropertyChanging();
-					this._lightstone_property_id = value;
-					this.SendPropertyChanged("lightstone_property_id");
-					this.Onlightstone_property_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_propstats_id", DbType="Int")]
-		public System.Nullable<int> propstats_id
-		{
-			get
-			{
-				return this._propstats_id;
-			}
-			set
-			{
-				if ((this._propstats_id != value))
-				{
-					this.Onpropstats_idChanging(value);
-					this.SendPropertyChanging();
-					this._propstats_id = value;
-					this.SendPropertyChanged("propstats_id");
-					this.Onpropstats_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_windeed_id", DbType="Int")]
-		public System.Nullable<int> windeed_id
-		{
-			get
-			{
-				return this._windeed_id;
-			}
-			set
-			{
-				if ((this._windeed_id != value))
-				{
-					this.Onwindeed_idChanging(value);
-					this.SendPropertyChanging();
-					this._windeed_id = value;
-					this.SendPropertyChanged("windeed_id");
-					this.Onwindeed_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_erf_no", DbType="Int")]
-		public System.Nullable<int> erf_no
-		{
-			get
-			{
-				return this._erf_no;
-			}
-			set
-			{
-				if ((this._erf_no != value))
-				{
-					this.Onerf_noChanging(value);
-					this.SendPropertyChanging();
-					this._erf_no = value;
-					this.SendPropertyChanged("erf_no");
-					this.Onerf_noChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_portion_no", DbType="Int")]
-		public System.Nullable<int> portion_no
-		{
-			get
-			{
-				return this._portion_no;
-			}
-			set
-			{
-				if ((this._portion_no != value))
-				{
-					this.Onportion_noChanging(value);
-					this.SendPropertyChanging();
-					this._portion_no = value;
-					this.SendPropertyChanged("portion_no");
-					this.Onportion_noChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_property_address", DbType="VarChar(255)")]
-		public string property_address
-		{
-			get
-			{
-				return this._property_address;
-			}
-			set
-			{
-				if ((this._property_address != value))
-				{
-					this.Onproperty_addressChanging(value);
-					this.SendPropertyChanging();
-					this._property_address = value;
-					this.SendPropertyChanged("property_address");
-					this.Onproperty_addressChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_street_or_unit_no", DbType="VarChar(255)")]
-		public string street_or_unit_no
-		{
-			get
-			{
-				return this._street_or_unit_no;
-			}
-			set
-			{
-				if ((this._street_or_unit_no != value))
-				{
-					this.Onstreet_or_unit_noChanging(value);
-					this.SendPropertyChanging();
-					this._street_or_unit_no = value;
-					this.SendPropertyChanged("street_or_unit_no");
-					this.Onstreet_or_unit_noChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_photo_url", DbType="NVarChar(256)")]
-		public string photo_url
-		{
-			get
-			{
-				return this._photo_url;
-			}
-			set
-			{
-				if ((this._photo_url != value))
-				{
-					this.Onphoto_urlChanging(value);
-					this.SendPropertyChanging();
-					this._photo_url = value;
-					this.SendPropertyChanged("photo_url");
-					this.Onphoto_urlChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_latitude", DbType="Decimal(13,8)")]
-		public System.Nullable<decimal> latitude
-		{
-			get
-			{
-				return this._latitude;
-			}
-			set
-			{
-				if ((this._latitude != value))
-				{
-					this.OnlatitudeChanging(value);
-					this.SendPropertyChanging();
-					this._latitude = value;
-					this.SendPropertyChanged("latitude");
-					this.OnlatitudeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_longitude", DbType="Decimal(13,8)")]
-		public System.Nullable<decimal> longitude
-		{
-			get
-			{
-				return this._longitude;
-			}
-			set
-			{
-				if ((this._longitude != value))
-				{
-					this.OnlongitudeChanging(value);
-					this.SendPropertyChanging();
-					this._longitude = value;
-					this.SendPropertyChanged("longitude");
-					this.OnlongitudeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_age", DbType="DateTime")]
-		public System.Nullable<System.DateTime> age
-		{
-			get
-			{
-				return this._age;
-			}
-			set
-			{
-				if ((this._age != value))
-				{
-					this.OnageChanging(value);
-					this.SendPropertyChanging();
-					this._age = value;
-					this.SendPropertyChanged("age");
-					this.OnageChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_erf_size", DbType="Int")]
-		public System.Nullable<int> erf_size
-		{
-			get
-			{
-				return this._erf_size;
-			}
-			set
-			{
-				if ((this._erf_size != value))
-				{
-					this.Onerf_sizeChanging(value);
-					this.SendPropertyChanging();
-					this._erf_size = value;
-					this.SendPropertyChanged("erf_size");
-					this.Onerf_sizeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dwell_size", DbType="Int")]
-		public System.Nullable<int> dwell_size
-		{
-			get
-			{
-				return this._dwell_size;
-			}
-			set
-			{
-				if ((this._dwell_size != value))
-				{
-					this.Ondwell_sizeChanging(value);
-					this.SendPropertyChanging();
-					this._dwell_size = value;
-					this.SendPropertyChanged("dwell_size");
-					this.Ondwell_sizeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_condition", DbType="VarChar(16)")]
-		public string condition
-		{
-			get
-			{
-				return this._condition;
-			}
-			set
-			{
-				if ((this._condition != value))
-				{
-					this.OnconditionChanging(value);
-					this.SendPropertyChanging();
-					this._condition = value;
-					this.SendPropertyChanged("condition");
-					this.OnconditionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_beds", DbType="Int")]
-		public System.Nullable<int> beds
-		{
-			get
-			{
-				return this._beds;
-			}
-			set
-			{
-				if ((this._beds != value))
-				{
-					this.OnbedsChanging(value);
-					this.SendPropertyChanging();
-					this._beds = value;
-					this.SendPropertyChanged("beds");
-					this.OnbedsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_baths", DbType="Int")]
-		public System.Nullable<int> baths
-		{
-			get
-			{
-				return this._baths;
-			}
-			set
-			{
-				if ((this._baths != value))
-				{
-					this.OnbathsChanging(value);
-					this.SendPropertyChanging();
-					this._baths = value;
-					this.SendPropertyChanged("baths");
-					this.OnbathsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_receptions", DbType="Int")]
-		public System.Nullable<int> receptions
-		{
-			get
-			{
-				return this._receptions;
-			}
-			set
-			{
-				if ((this._receptions != value))
-				{
-					this.OnreceptionsChanging(value);
-					this.SendPropertyChanging();
-					this._receptions = value;
-					this.SendPropertyChanged("receptions");
-					this.OnreceptionsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_studies", DbType="Int")]
-		public System.Nullable<int> studies
-		{
-			get
-			{
-				return this._studies;
-			}
-			set
-			{
-				if ((this._studies != value))
-				{
-					this.OnstudiesChanging(value);
-					this.SendPropertyChanging();
-					this._studies = value;
-					this.SendPropertyChanged("studies");
-					this.OnstudiesChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_garages", DbType="Int")]
-		public System.Nullable<int> garages
-		{
-			get
-			{
-				return this._garages;
-			}
-			set
-			{
-				if ((this._garages != value))
-				{
-					this.OngaragesChanging(value);
-					this.SendPropertyChanging();
-					this._garages = value;
-					this.SendPropertyChanged("garages");
-					this.OngaragesChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_parking_bays", DbType="Int")]
-		public System.Nullable<int> parking_bays
-		{
-			get
-			{
-				return this._parking_bays;
-			}
-			set
-			{
-				if ((this._parking_bays != value))
-				{
-					this.Onparking_baysChanging(value);
-					this.SendPropertyChanging();
-					this._parking_bays = value;
-					this.SendPropertyChanged("parking_bays");
-					this.Onparking_baysChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pool", DbType="Bit")]
-		public System.Nullable<bool> pool
-		{
-			get
-			{
-				return this._pool;
-			}
-			set
-			{
-				if ((this._pool != value))
-				{
-					this.OnpoolChanging(value);
-					this.SendPropertyChanging();
-					this._pool = value;
-					this.SendPropertyChanged("pool");
-					this.OnpoolChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_staff_accomodation", DbType="Bit")]
-		public System.Nullable<bool> staff_accomodation
-		{
-			get
-			{
-				return this._staff_accomodation;
-			}
-			set
-			{
-				if ((this._staff_accomodation != value))
-				{
-					this.Onstaff_accomodationChanging(value);
-					this.SendPropertyChanging();
-					this._staff_accomodation = value;
-					this.SendPropertyChanged("staff_accomodation");
-					this.Onstaff_accomodationChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_date", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
-		public System.Nullable<System.DateTime> created_date
-		{
-			get
-			{
-				return this._created_date;
-			}
-			set
-			{
-				if ((this._created_date != value))
-				{
-					this.Oncreated_dateChanging(value);
-					this.SendPropertyChanging();
-					this._created_date = value;
-					this.SendPropertyChanged("created_date");
-					this.Oncreated_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_date", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
-		public System.Nullable<System.DateTime> updated_date
-		{
-			get
-			{
-				return this._updated_date;
-			}
-			set
-			{
-				if ((this._updated_date != value))
-				{
-					this.Onupdated_dateChanging(value);
-					this.SendPropertyChanging();
-					this._updated_date = value;
-					this.SendPropertyChanged("updated_date");
-					this.Onupdated_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_by", DbType="UniqueIdentifier")]
-		public System.Nullable<System.Guid> created_by
-		{
-			get
-			{
-				return this._created_by;
-			}
-			set
-			{
-				if ((this._created_by != value))
-				{
-					this.Oncreated_byChanging(value);
-					this.SendPropertyChanging();
-					this._created_by = value;
-					this.SendPropertyChanged("created_by");
-					this.Oncreated_byChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lightstone_id_or_ck_no", DbType="VarChar(255)")]
-		public string lightstone_id_or_ck_no
-		{
-			get
-			{
-				return this._lightstone_id_or_ck_no;
-			}
-			set
-			{
-				if ((this._lightstone_id_or_ck_no != value))
-				{
-					this.Onlightstone_id_or_ck_noChanging(value);
-					this.SendPropertyChanging();
-					this._lightstone_id_or_ck_no = value;
-					this.SendPropertyChanged("lightstone_id_or_ck_no");
-					this.Onlightstone_id_or_ck_noChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lightstone_reg_date", DbType="VarChar(8)")]
-		public string lightstone_reg_date
-		{
-			get
-			{
-				return this._lightstone_reg_date;
-			}
-			set
-			{
-				if ((this._lightstone_reg_date != value))
-				{
-					this.Onlightstone_reg_dateChanging(value);
-					this.SendPropertyChanging();
-					this._lightstone_reg_date = value;
-					this.SendPropertyChanged("lightstone_reg_date");
-					this.Onlightstone_reg_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_comments", DbType="VarChar(MAX)")]
-		public string comments
-		{
-			get
-			{
-				return this._comments;
-			}
-			set
-			{
-				if ((this._comments != value))
-				{
-					this.OncommentsChanging(value);
-					this.SendPropertyChanging();
-					this._comments = value;
-					this.SendPropertyChanged("comments");
-					this.OncommentsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_name", DbType="VarChar(255)")]
-		public string ss_name
-		{
-			get
-			{
-				return this._ss_name;
-			}
-			set
-			{
-				if ((this._ss_name != value))
-				{
-					this.Onss_nameChanging(value);
-					this.SendPropertyChanging();
-					this._ss_name = value;
-					this.SendPropertyChanged("ss_name");
-					this.Onss_nameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_number", DbType="VarChar(50)")]
-		public string ss_number
-		{
-			get
-			{
-				return this._ss_number;
-			}
-			set
-			{
-				if ((this._ss_number != value))
-				{
-					this.Onss_numberChanging(value);
-					this.SendPropertyChanging();
-					this._ss_number = value;
-					this.SendPropertyChanged("ss_number");
-					this.Onss_numberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_unit", DbType="VarChar(50)")]
-		public string unit
-		{
-			get
-			{
-				return this._unit;
-			}
-			set
-			{
-				if ((this._unit != value))
-				{
-					this.OnunitChanging(value);
-					this.SendPropertyChanging();
-					this._unit = value;
-					this.SendPropertyChanged("unit");
-					this.OnunitChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_fh", DbType="VarChar(3)")]
-		public string ss_fh
-		{
-			get
-			{
-				return this._ss_fh;
-			}
-			set
-			{
-				if ((this._ss_fh != value))
-				{
-					this.Onss_fhChanging(value);
-					this.SendPropertyChanging();
-					this._ss_fh = value;
-					this.SendPropertyChanged("ss_fh");
-					this.Onss_fhChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_last_purch_price", DbType="Decimal(18,2)")]
-		public System.Nullable<decimal> last_purch_price
-		{
-			get
-			{
-				return this._last_purch_price;
-			}
-			set
-			{
-				if ((this._last_purch_price != value))
-				{
-					this.Onlast_purch_priceChanging(value);
-					this.SendPropertyChanging();
-					this._last_purch_price = value;
-					this.SendPropertyChanged("last_purch_price");
-					this.Onlast_purch_priceChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_id", DbType="VarChar(10)")]
-		public string ss_id
-		{
-			get
-			{
-				return this._ss_id;
-			}
-			set
-			{
-				if ((this._ss_id != value))
-				{
-					this.Onss_idChanging(value);
-					this.SendPropertyChanging();
-					this._ss_id = value;
-					this.SendPropertyChanged("ss_id");
-					this.Onss_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_door_number", DbType="VarChar(50)")]
-		public string ss_door_number
-		{
-			get
-			{
-				return this._ss_door_number;
-			}
-			set
-			{
-				if ((this._ss_door_number != value))
-				{
-					this.Onss_door_numberChanging(value);
-					this.SendPropertyChanging();
-					this._ss_door_number = value;
-					this.SendPropertyChanged("ss_door_number");
-					this.Onss_door_numberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospected", DbType="Bit")]
-		public System.Nullable<bool> prospected
-		{
-			get
-			{
-				return this._prospected;
-			}
-			set
-			{
-				if ((this._prospected != value))
-				{
-					this.OnprospectedChanging(value);
-					this.SendPropertyChanging();
-					this._prospected = value;
-					this.SendPropertyChanged("prospected");
-					this.OnprospectedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_farm_name", DbType="NVarChar(255)")]
-		public string farm_name
-		{
-			get
-			{
-				return this._farm_name;
-			}
-			set
-			{
-				if ((this._farm_name != value))
-				{
-					this.Onfarm_nameChanging(value);
-					this.SendPropertyChanging();
-					this._farm_name = value;
-					this.SendPropertyChanged("farm_name");
-					this.Onfarm_nameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lightstone_suburb", DbType="NVarChar(255)")]
-		public string lightstone_suburb
-		{
-			get
-			{
-				return this._lightstone_suburb;
-			}
-			set
-			{
-				if ((this._lightstone_suburb != value))
-				{
-					this.Onlightstone_suburbChanging(value);
-					this.SendPropertyChanging();
-					this._lightstone_suburb = value;
-					this.SendPropertyChanged("lightstone_suburb");
-					this.Onlightstone_suburbChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_unique_identifier", DbType="NVarChar(MAX)")]
-		public string ss_unique_identifier
-		{
-			get
-			{
-				return this._ss_unique_identifier;
-			}
-			set
-			{
-				if ((this._ss_unique_identifier != value))
-				{
-					this.Onss_unique_identifierChanging(value);
-					this.SendPropertyChanging();
-					this._ss_unique_identifier = value;
-					this.SendPropertyChanged("ss_unique_identifier");
-					this.Onss_unique_identifierChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_locked_by_guid", DbType="UniqueIdentifier")]
-		public System.Nullable<System.Guid> locked_by_guid
-		{
-			get
-			{
-				return this._locked_by_guid;
-			}
-			set
-			{
-				if ((this._locked_by_guid != value))
-				{
-					this.Onlocked_by_guidChanging(value);
-					this.SendPropertyChanging();
-					this._locked_by_guid = value;
-					this.SendPropertyChanged("locked_by_guid");
-					this.Onlocked_by_guidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_locked_datetime", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
-		public System.Nullable<System.DateTime> locked_datetime
-		{
-			get
-			{
-				return this._locked_datetime;
-			}
-			set
-			{
-				if ((this._locked_datetime != value))
-				{
-					this.Onlocked_datetimeChanging(value);
-					this.SendPropertyChanging();
-					this._locked_datetime = value;
-					this.SendPropertyChanged("locked_datetime");
-					this.Onlocked_datetimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_latest_reg_date", DbType="VarChar(8)")]
-		public string latest_reg_date
-		{
-			get
-			{
-				return this._latest_reg_date;
-			}
-			set
-			{
-				if ((this._latest_reg_date != value))
-				{
-					this.Onlatest_reg_dateChanging(value);
-					this.SendPropertyChanging();
-					this._latest_reg_date = value;
-					this.SendPropertyChanged("latest_reg_date");
-					this.Onlatest_reg_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_activity_log", Storage="_activity_logs", ThisKey="lightstone_property_id", OtherKey="lightstone_property_id")]
-		public EntitySet<activity_log> activity_logs
-		{
-			get
-			{
-				return this._activity_logs;
-			}
-			set
-			{
-				this._activity_logs.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_prospecting_company_property_relationship", Storage="_prospecting_company_property_relationships", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id")]
-		public EntitySet<prospecting_company_property_relationship> prospecting_company_property_relationships
-		{
-			get
-			{
-				return this._prospecting_company_property_relationships;
-			}
-			set
-			{
-				this._prospecting_company_property_relationships.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_prospecting_person_property_relationship", Storage="_prospecting_person_property_relationships", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id")]
-		public EntitySet<prospecting_person_property_relationship> prospecting_person_property_relationships
-		{
-			get
-			{
-				return this._prospecting_person_property_relationships;
-			}
-			set
-			{
-				this._prospecting_person_property_relationships.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_service_enquiry_log", Storage="_service_enquiry_logs", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id")]
-		public EntitySet<service_enquiry_log> service_enquiry_logs
-		{
-			get
-			{
-				return this._service_enquiry_logs;
-			}
-			set
-			{
-				this._service_enquiry_logs.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_sms_communications_log", Storage="_sms_communications_logs", ThisKey="lightstone_property_id", OtherKey="target_lightstone_property_id")]
-		public EntitySet<sms_communications_log> sms_communications_logs
-		{
-			get
-			{
-				return this._sms_communications_logs;
-			}
-			set
-			{
-				this._sms_communications_logs.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_email_communications_log", Storage="_email_communications_logs", ThisKey="lightstone_property_id", OtherKey="target_lightstone_property_id")]
-		public EntitySet<email_communications_log> email_communications_logs
-		{
-			get
-			{
-				return this._email_communications_logs;
-			}
-			set
-			{
-				this._email_communications_logs.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_property_valuation", Storage="_property_valuations", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id")]
-		public EntitySet<property_valuation> property_valuations
-		{
-			get
-			{
-				return this._property_valuations;
-			}
-			set
-			{
-				this._property_valuations.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_activity_logs(activity_log entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = this;
-		}
-		
-		private void detach_activity_logs(activity_log entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = null;
-		}
-		
-		private void attach_prospecting_company_property_relationships(prospecting_company_property_relationship entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = this;
-		}
-		
-		private void detach_prospecting_company_property_relationships(prospecting_company_property_relationship entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = null;
-		}
-		
-		private void attach_prospecting_person_property_relationships(prospecting_person_property_relationship entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = this;
-		}
-		
-		private void detach_prospecting_person_property_relationships(prospecting_person_property_relationship entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = null;
-		}
-		
-		private void attach_service_enquiry_logs(service_enquiry_log entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = this;
-		}
-		
-		private void detach_service_enquiry_logs(service_enquiry_log entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = null;
-		}
-		
-		private void attach_sms_communications_logs(sms_communications_log entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = this;
-		}
-		
-		private void detach_sms_communications_logs(sms_communications_log entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = null;
-		}
-		
-		private void attach_email_communications_logs(email_communications_log entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = this;
-		}
-		
-		private void detach_email_communications_logs(email_communications_log entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = null;
-		}
-		
-		private void attach_property_valuations(property_valuation entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = this;
-		}
-		
-		private void detach_property_valuations(property_valuation entity)
-		{
-			this.SendPropertyChanging();
-			entity.prospecting_property = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.email_communications_log")]
 	public partial class email_communications_log : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -10351,6 +9013,1344 @@ namespace ProspectingTaskScheduler
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.prospecting_property")]
+	public partial class prospecting_property : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _prospecting_property_id;
+		
+		private System.Nullable<int> _licence_id;
+		
+		private System.Nullable<int> _seeff_area_id;
+		
+		private System.Nullable<int> _development_id;
+		
+		private int _lightstone_property_id;
+		
+		private System.Nullable<int> _propstats_id;
+		
+		private System.Nullable<int> _windeed_id;
+		
+		private System.Nullable<int> _erf_no;
+		
+		private System.Nullable<int> _portion_no;
+		
+		private string _property_address;
+		
+		private string _street_or_unit_no;
+		
+		private string _photo_url;
+		
+		private System.Nullable<decimal> _latitude;
+		
+		private System.Nullable<decimal> _longitude;
+		
+		private System.Nullable<System.DateTime> _age;
+		
+		private System.Nullable<int> _erf_size;
+		
+		private System.Nullable<int> _dwell_size;
+		
+		private string _condition;
+		
+		private System.Nullable<int> _beds;
+		
+		private System.Nullable<int> _baths;
+		
+		private System.Nullable<int> _receptions;
+		
+		private System.Nullable<int> _studies;
+		
+		private System.Nullable<int> _garages;
+		
+		private System.Nullable<int> _parking_bays;
+		
+		private System.Nullable<bool> _pool;
+		
+		private System.Nullable<bool> _staff_accomodation;
+		
+		private System.Nullable<System.DateTime> _created_date;
+		
+		private System.Nullable<System.DateTime> _updated_date;
+		
+		private System.Nullable<System.Guid> _created_by;
+		
+		private string _lightstone_id_or_ck_no;
+		
+		private string _lightstone_reg_date;
+		
+		private string _comments;
+		
+		private string _ss_name;
+		
+		private string _ss_number;
+		
+		private string _unit;
+		
+		private string _ss_fh;
+		
+		private System.Nullable<decimal> _last_purch_price;
+		
+		private string _ss_id;
+		
+		private string _ss_door_number;
+		
+		private System.Nullable<bool> _prospected;
+		
+		private string _farm_name;
+		
+		private string _lightstone_suburb;
+		
+		private string _ss_unique_identifier;
+		
+		private System.Nullable<System.Guid> _locked_by_guid;
+		
+		private System.Nullable<System.DateTime> _locked_datetime;
+		
+		private string _latest_reg_date;
+		
+		private EntitySet<activity_log> _activity_logs;
+		
+		private EntitySet<prospecting_company_property_relationship> _prospecting_company_property_relationships;
+		
+		private EntitySet<prospecting_person_property_relationship> _prospecting_person_property_relationships;
+		
+		private EntitySet<service_enquiry_log> _service_enquiry_logs;
+		
+		private EntitySet<sms_communications_log> _sms_communications_logs;
+		
+		private EntitySet<email_communications_log> _email_communications_logs;
+		
+		private EntitySet<property_valuation> _property_valuations;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onprospecting_property_idChanging(int value);
+    partial void Onprospecting_property_idChanged();
+    partial void Onlicence_idChanging(System.Nullable<int> value);
+    partial void Onlicence_idChanged();
+    partial void Onseeff_area_idChanging(System.Nullable<int> value);
+    partial void Onseeff_area_idChanged();
+    partial void Ondevelopment_idChanging(System.Nullable<int> value);
+    partial void Ondevelopment_idChanged();
+    partial void Onlightstone_property_idChanging(int value);
+    partial void Onlightstone_property_idChanged();
+    partial void Onpropstats_idChanging(System.Nullable<int> value);
+    partial void Onpropstats_idChanged();
+    partial void Onwindeed_idChanging(System.Nullable<int> value);
+    partial void Onwindeed_idChanged();
+    partial void Onerf_noChanging(System.Nullable<int> value);
+    partial void Onerf_noChanged();
+    partial void Onportion_noChanging(System.Nullable<int> value);
+    partial void Onportion_noChanged();
+    partial void Onproperty_addressChanging(string value);
+    partial void Onproperty_addressChanged();
+    partial void Onstreet_or_unit_noChanging(string value);
+    partial void Onstreet_or_unit_noChanged();
+    partial void Onphoto_urlChanging(string value);
+    partial void Onphoto_urlChanged();
+    partial void OnlatitudeChanging(System.Nullable<decimal> value);
+    partial void OnlatitudeChanged();
+    partial void OnlongitudeChanging(System.Nullable<decimal> value);
+    partial void OnlongitudeChanged();
+    partial void OnageChanging(System.Nullable<System.DateTime> value);
+    partial void OnageChanged();
+    partial void Onerf_sizeChanging(System.Nullable<int> value);
+    partial void Onerf_sizeChanged();
+    partial void Ondwell_sizeChanging(System.Nullable<int> value);
+    partial void Ondwell_sizeChanged();
+    partial void OnconditionChanging(string value);
+    partial void OnconditionChanged();
+    partial void OnbedsChanging(System.Nullable<int> value);
+    partial void OnbedsChanged();
+    partial void OnbathsChanging(System.Nullable<int> value);
+    partial void OnbathsChanged();
+    partial void OnreceptionsChanging(System.Nullable<int> value);
+    partial void OnreceptionsChanged();
+    partial void OnstudiesChanging(System.Nullable<int> value);
+    partial void OnstudiesChanged();
+    partial void OngaragesChanging(System.Nullable<int> value);
+    partial void OngaragesChanged();
+    partial void Onparking_baysChanging(System.Nullable<int> value);
+    partial void Onparking_baysChanged();
+    partial void OnpoolChanging(System.Nullable<bool> value);
+    partial void OnpoolChanged();
+    partial void Onstaff_accomodationChanging(System.Nullable<bool> value);
+    partial void Onstaff_accomodationChanged();
+    partial void Oncreated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Oncreated_dateChanged();
+    partial void Onupdated_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_dateChanged();
+    partial void Oncreated_byChanging(System.Nullable<System.Guid> value);
+    partial void Oncreated_byChanged();
+    partial void Onlightstone_id_or_ck_noChanging(string value);
+    partial void Onlightstone_id_or_ck_noChanged();
+    partial void Onlightstone_reg_dateChanging(string value);
+    partial void Onlightstone_reg_dateChanged();
+    partial void OncommentsChanging(string value);
+    partial void OncommentsChanged();
+    partial void Onss_nameChanging(string value);
+    partial void Onss_nameChanged();
+    partial void Onss_numberChanging(string value);
+    partial void Onss_numberChanged();
+    partial void OnunitChanging(string value);
+    partial void OnunitChanged();
+    partial void Onss_fhChanging(string value);
+    partial void Onss_fhChanged();
+    partial void Onlast_purch_priceChanging(System.Nullable<decimal> value);
+    partial void Onlast_purch_priceChanged();
+    partial void Onss_idChanging(string value);
+    partial void Onss_idChanged();
+    partial void Onss_door_numberChanging(string value);
+    partial void Onss_door_numberChanged();
+    partial void OnprospectedChanging(System.Nullable<bool> value);
+    partial void OnprospectedChanged();
+    partial void Onfarm_nameChanging(string value);
+    partial void Onfarm_nameChanged();
+    partial void Onlightstone_suburbChanging(string value);
+    partial void Onlightstone_suburbChanged();
+    partial void Onss_unique_identifierChanging(string value);
+    partial void Onss_unique_identifierChanged();
+    partial void Onlocked_by_guidChanging(System.Nullable<System.Guid> value);
+    partial void Onlocked_by_guidChanged();
+    partial void Onlocked_datetimeChanging(System.Nullable<System.DateTime> value);
+    partial void Onlocked_datetimeChanged();
+    partial void Onlatest_reg_dateChanging(string value);
+    partial void Onlatest_reg_dateChanged();
+    #endregion
+		
+		public prospecting_property()
+		{
+			this._activity_logs = new EntitySet<activity_log>(new Action<activity_log>(this.attach_activity_logs), new Action<activity_log>(this.detach_activity_logs));
+			this._prospecting_company_property_relationships = new EntitySet<prospecting_company_property_relationship>(new Action<prospecting_company_property_relationship>(this.attach_prospecting_company_property_relationships), new Action<prospecting_company_property_relationship>(this.detach_prospecting_company_property_relationships));
+			this._prospecting_person_property_relationships = new EntitySet<prospecting_person_property_relationship>(new Action<prospecting_person_property_relationship>(this.attach_prospecting_person_property_relationships), new Action<prospecting_person_property_relationship>(this.detach_prospecting_person_property_relationships));
+			this._service_enquiry_logs = new EntitySet<service_enquiry_log>(new Action<service_enquiry_log>(this.attach_service_enquiry_logs), new Action<service_enquiry_log>(this.detach_service_enquiry_logs));
+			this._sms_communications_logs = new EntitySet<sms_communications_log>(new Action<sms_communications_log>(this.attach_sms_communications_logs), new Action<sms_communications_log>(this.detach_sms_communications_logs));
+			this._email_communications_logs = new EntitySet<email_communications_log>(new Action<email_communications_log>(this.attach_email_communications_logs), new Action<email_communications_log>(this.detach_email_communications_logs));
+			this._property_valuations = new EntitySet<property_valuation>(new Action<property_valuation>(this.attach_property_valuations), new Action<property_valuation>(this.detach_property_valuations));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospecting_property_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int prospecting_property_id
+		{
+			get
+			{
+				return this._prospecting_property_id;
+			}
+			set
+			{
+				if ((this._prospecting_property_id != value))
+				{
+					this.Onprospecting_property_idChanging(value);
+					this.SendPropertyChanging();
+					this._prospecting_property_id = value;
+					this.SendPropertyChanged("prospecting_property_id");
+					this.Onprospecting_property_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_licence_id", DbType="Int")]
+		public System.Nullable<int> licence_id
+		{
+			get
+			{
+				return this._licence_id;
+			}
+			set
+			{
+				if ((this._licence_id != value))
+				{
+					this.Onlicence_idChanging(value);
+					this.SendPropertyChanging();
+					this._licence_id = value;
+					this.SendPropertyChanged("licence_id");
+					this.Onlicence_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_seeff_area_id", DbType="Int")]
+		public System.Nullable<int> seeff_area_id
+		{
+			get
+			{
+				return this._seeff_area_id;
+			}
+			set
+			{
+				if ((this._seeff_area_id != value))
+				{
+					this.Onseeff_area_idChanging(value);
+					this.SendPropertyChanging();
+					this._seeff_area_id = value;
+					this.SendPropertyChanged("seeff_area_id");
+					this.Onseeff_area_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_development_id", DbType="Int")]
+		public System.Nullable<int> development_id
+		{
+			get
+			{
+				return this._development_id;
+			}
+			set
+			{
+				if ((this._development_id != value))
+				{
+					this.Ondevelopment_idChanging(value);
+					this.SendPropertyChanging();
+					this._development_id = value;
+					this.SendPropertyChanged("development_id");
+					this.Ondevelopment_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lightstone_property_id", DbType="Int NOT NULL")]
+		public int lightstone_property_id
+		{
+			get
+			{
+				return this._lightstone_property_id;
+			}
+			set
+			{
+				if ((this._lightstone_property_id != value))
+				{
+					this.Onlightstone_property_idChanging(value);
+					this.SendPropertyChanging();
+					this._lightstone_property_id = value;
+					this.SendPropertyChanged("lightstone_property_id");
+					this.Onlightstone_property_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_propstats_id", DbType="Int")]
+		public System.Nullable<int> propstats_id
+		{
+			get
+			{
+				return this._propstats_id;
+			}
+			set
+			{
+				if ((this._propstats_id != value))
+				{
+					this.Onpropstats_idChanging(value);
+					this.SendPropertyChanging();
+					this._propstats_id = value;
+					this.SendPropertyChanged("propstats_id");
+					this.Onpropstats_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_windeed_id", DbType="Int")]
+		public System.Nullable<int> windeed_id
+		{
+			get
+			{
+				return this._windeed_id;
+			}
+			set
+			{
+				if ((this._windeed_id != value))
+				{
+					this.Onwindeed_idChanging(value);
+					this.SendPropertyChanging();
+					this._windeed_id = value;
+					this.SendPropertyChanged("windeed_id");
+					this.Onwindeed_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_erf_no", DbType="Int")]
+		public System.Nullable<int> erf_no
+		{
+			get
+			{
+				return this._erf_no;
+			}
+			set
+			{
+				if ((this._erf_no != value))
+				{
+					this.Onerf_noChanging(value);
+					this.SendPropertyChanging();
+					this._erf_no = value;
+					this.SendPropertyChanged("erf_no");
+					this.Onerf_noChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_portion_no", DbType="Int")]
+		public System.Nullable<int> portion_no
+		{
+			get
+			{
+				return this._portion_no;
+			}
+			set
+			{
+				if ((this._portion_no != value))
+				{
+					this.Onportion_noChanging(value);
+					this.SendPropertyChanging();
+					this._portion_no = value;
+					this.SendPropertyChanged("portion_no");
+					this.Onportion_noChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_property_address", DbType="VarChar(255)")]
+		public string property_address
+		{
+			get
+			{
+				return this._property_address;
+			}
+			set
+			{
+				if ((this._property_address != value))
+				{
+					this.Onproperty_addressChanging(value);
+					this.SendPropertyChanging();
+					this._property_address = value;
+					this.SendPropertyChanged("property_address");
+					this.Onproperty_addressChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_street_or_unit_no", DbType="VarChar(255)")]
+		public string street_or_unit_no
+		{
+			get
+			{
+				return this._street_or_unit_no;
+			}
+			set
+			{
+				if ((this._street_or_unit_no != value))
+				{
+					this.Onstreet_or_unit_noChanging(value);
+					this.SendPropertyChanging();
+					this._street_or_unit_no = value;
+					this.SendPropertyChanged("street_or_unit_no");
+					this.Onstreet_or_unit_noChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_photo_url", DbType="NVarChar(256)")]
+		public string photo_url
+		{
+			get
+			{
+				return this._photo_url;
+			}
+			set
+			{
+				if ((this._photo_url != value))
+				{
+					this.Onphoto_urlChanging(value);
+					this.SendPropertyChanging();
+					this._photo_url = value;
+					this.SendPropertyChanged("photo_url");
+					this.Onphoto_urlChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_latitude", DbType="Decimal(13,8)")]
+		public System.Nullable<decimal> latitude
+		{
+			get
+			{
+				return this._latitude;
+			}
+			set
+			{
+				if ((this._latitude != value))
+				{
+					this.OnlatitudeChanging(value);
+					this.SendPropertyChanging();
+					this._latitude = value;
+					this.SendPropertyChanged("latitude");
+					this.OnlatitudeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_longitude", DbType="Decimal(13,8)")]
+		public System.Nullable<decimal> longitude
+		{
+			get
+			{
+				return this._longitude;
+			}
+			set
+			{
+				if ((this._longitude != value))
+				{
+					this.OnlongitudeChanging(value);
+					this.SendPropertyChanging();
+					this._longitude = value;
+					this.SendPropertyChanged("longitude");
+					this.OnlongitudeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_age", DbType="DateTime")]
+		public System.Nullable<System.DateTime> age
+		{
+			get
+			{
+				return this._age;
+			}
+			set
+			{
+				if ((this._age != value))
+				{
+					this.OnageChanging(value);
+					this.SendPropertyChanging();
+					this._age = value;
+					this.SendPropertyChanged("age");
+					this.OnageChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_erf_size", DbType="Int")]
+		public System.Nullable<int> erf_size
+		{
+			get
+			{
+				return this._erf_size;
+			}
+			set
+			{
+				if ((this._erf_size != value))
+				{
+					this.Onerf_sizeChanging(value);
+					this.SendPropertyChanging();
+					this._erf_size = value;
+					this.SendPropertyChanged("erf_size");
+					this.Onerf_sizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dwell_size", DbType="Int")]
+		public System.Nullable<int> dwell_size
+		{
+			get
+			{
+				return this._dwell_size;
+			}
+			set
+			{
+				if ((this._dwell_size != value))
+				{
+					this.Ondwell_sizeChanging(value);
+					this.SendPropertyChanging();
+					this._dwell_size = value;
+					this.SendPropertyChanged("dwell_size");
+					this.Ondwell_sizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_condition", DbType="VarChar(255)")]
+		public string condition
+		{
+			get
+			{
+				return this._condition;
+			}
+			set
+			{
+				if ((this._condition != value))
+				{
+					this.OnconditionChanging(value);
+					this.SendPropertyChanging();
+					this._condition = value;
+					this.SendPropertyChanged("condition");
+					this.OnconditionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_beds", DbType="Int")]
+		public System.Nullable<int> beds
+		{
+			get
+			{
+				return this._beds;
+			}
+			set
+			{
+				if ((this._beds != value))
+				{
+					this.OnbedsChanging(value);
+					this.SendPropertyChanging();
+					this._beds = value;
+					this.SendPropertyChanged("beds");
+					this.OnbedsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_baths", DbType="Int")]
+		public System.Nullable<int> baths
+		{
+			get
+			{
+				return this._baths;
+			}
+			set
+			{
+				if ((this._baths != value))
+				{
+					this.OnbathsChanging(value);
+					this.SendPropertyChanging();
+					this._baths = value;
+					this.SendPropertyChanged("baths");
+					this.OnbathsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_receptions", DbType="Int")]
+		public System.Nullable<int> receptions
+		{
+			get
+			{
+				return this._receptions;
+			}
+			set
+			{
+				if ((this._receptions != value))
+				{
+					this.OnreceptionsChanging(value);
+					this.SendPropertyChanging();
+					this._receptions = value;
+					this.SendPropertyChanged("receptions");
+					this.OnreceptionsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_studies", DbType="Int")]
+		public System.Nullable<int> studies
+		{
+			get
+			{
+				return this._studies;
+			}
+			set
+			{
+				if ((this._studies != value))
+				{
+					this.OnstudiesChanging(value);
+					this.SendPropertyChanging();
+					this._studies = value;
+					this.SendPropertyChanged("studies");
+					this.OnstudiesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_garages", DbType="Int")]
+		public System.Nullable<int> garages
+		{
+			get
+			{
+				return this._garages;
+			}
+			set
+			{
+				if ((this._garages != value))
+				{
+					this.OngaragesChanging(value);
+					this.SendPropertyChanging();
+					this._garages = value;
+					this.SendPropertyChanged("garages");
+					this.OngaragesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_parking_bays", DbType="Int")]
+		public System.Nullable<int> parking_bays
+		{
+			get
+			{
+				return this._parking_bays;
+			}
+			set
+			{
+				if ((this._parking_bays != value))
+				{
+					this.Onparking_baysChanging(value);
+					this.SendPropertyChanging();
+					this._parking_bays = value;
+					this.SendPropertyChanged("parking_bays");
+					this.Onparking_baysChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pool", DbType="Bit")]
+		public System.Nullable<bool> pool
+		{
+			get
+			{
+				return this._pool;
+			}
+			set
+			{
+				if ((this._pool != value))
+				{
+					this.OnpoolChanging(value);
+					this.SendPropertyChanging();
+					this._pool = value;
+					this.SendPropertyChanged("pool");
+					this.OnpoolChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_staff_accomodation", DbType="Bit")]
+		public System.Nullable<bool> staff_accomodation
+		{
+			get
+			{
+				return this._staff_accomodation;
+			}
+			set
+			{
+				if ((this._staff_accomodation != value))
+				{
+					this.Onstaff_accomodationChanging(value);
+					this.SendPropertyChanging();
+					this._staff_accomodation = value;
+					this.SendPropertyChanged("staff_accomodation");
+					this.Onstaff_accomodationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_date", DbType="DateTime")]
+		public System.Nullable<System.DateTime> created_date
+		{
+			get
+			{
+				return this._created_date;
+			}
+			set
+			{
+				if ((this._created_date != value))
+				{
+					this.Oncreated_dateChanging(value);
+					this.SendPropertyChanging();
+					this._created_date = value;
+					this.SendPropertyChanged("created_date");
+					this.Oncreated_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_date", DbType="DateTime")]
+		public System.Nullable<System.DateTime> updated_date
+		{
+			get
+			{
+				return this._updated_date;
+			}
+			set
+			{
+				if ((this._updated_date != value))
+				{
+					this.Onupdated_dateChanging(value);
+					this.SendPropertyChanging();
+					this._updated_date = value;
+					this.SendPropertyChanged("updated_date");
+					this.Onupdated_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_by", DbType="UniqueIdentifier")]
+		public System.Nullable<System.Guid> created_by
+		{
+			get
+			{
+				return this._created_by;
+			}
+			set
+			{
+				if ((this._created_by != value))
+				{
+					this.Oncreated_byChanging(value);
+					this.SendPropertyChanging();
+					this._created_by = value;
+					this.SendPropertyChanged("created_by");
+					this.Oncreated_byChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lightstone_id_or_ck_no", DbType="VarChar(255)")]
+		public string lightstone_id_or_ck_no
+		{
+			get
+			{
+				return this._lightstone_id_or_ck_no;
+			}
+			set
+			{
+				if ((this._lightstone_id_or_ck_no != value))
+				{
+					this.Onlightstone_id_or_ck_noChanging(value);
+					this.SendPropertyChanging();
+					this._lightstone_id_or_ck_no = value;
+					this.SendPropertyChanged("lightstone_id_or_ck_no");
+					this.Onlightstone_id_or_ck_noChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lightstone_reg_date", DbType="VarChar(8)")]
+		public string lightstone_reg_date
+		{
+			get
+			{
+				return this._lightstone_reg_date;
+			}
+			set
+			{
+				if ((this._lightstone_reg_date != value))
+				{
+					this.Onlightstone_reg_dateChanging(value);
+					this.SendPropertyChanging();
+					this._lightstone_reg_date = value;
+					this.SendPropertyChanged("lightstone_reg_date");
+					this.Onlightstone_reg_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_comments", DbType="VarChar(MAX)")]
+		public string comments
+		{
+			get
+			{
+				return this._comments;
+			}
+			set
+			{
+				if ((this._comments != value))
+				{
+					this.OncommentsChanging(value);
+					this.SendPropertyChanging();
+					this._comments = value;
+					this.SendPropertyChanged("comments");
+					this.OncommentsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_name", DbType="VarChar(255)")]
+		public string ss_name
+		{
+			get
+			{
+				return this._ss_name;
+			}
+			set
+			{
+				if ((this._ss_name != value))
+				{
+					this.Onss_nameChanging(value);
+					this.SendPropertyChanging();
+					this._ss_name = value;
+					this.SendPropertyChanged("ss_name");
+					this.Onss_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_number", DbType="VarChar(50)")]
+		public string ss_number
+		{
+			get
+			{
+				return this._ss_number;
+			}
+			set
+			{
+				if ((this._ss_number != value))
+				{
+					this.Onss_numberChanging(value);
+					this.SendPropertyChanging();
+					this._ss_number = value;
+					this.SendPropertyChanged("ss_number");
+					this.Onss_numberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_unit", DbType="VarChar(50)")]
+		public string unit
+		{
+			get
+			{
+				return this._unit;
+			}
+			set
+			{
+				if ((this._unit != value))
+				{
+					this.OnunitChanging(value);
+					this.SendPropertyChanging();
+					this._unit = value;
+					this.SendPropertyChanged("unit");
+					this.OnunitChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_fh", DbType="VarChar(3)")]
+		public string ss_fh
+		{
+			get
+			{
+				return this._ss_fh;
+			}
+			set
+			{
+				if ((this._ss_fh != value))
+				{
+					this.Onss_fhChanging(value);
+					this.SendPropertyChanging();
+					this._ss_fh = value;
+					this.SendPropertyChanged("ss_fh");
+					this.Onss_fhChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_last_purch_price", DbType="Decimal(18,2)")]
+		public System.Nullable<decimal> last_purch_price
+		{
+			get
+			{
+				return this._last_purch_price;
+			}
+			set
+			{
+				if ((this._last_purch_price != value))
+				{
+					this.Onlast_purch_priceChanging(value);
+					this.SendPropertyChanging();
+					this._last_purch_price = value;
+					this.SendPropertyChanged("last_purch_price");
+					this.Onlast_purch_priceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_id", DbType="VarChar(10)")]
+		public string ss_id
+		{
+			get
+			{
+				return this._ss_id;
+			}
+			set
+			{
+				if ((this._ss_id != value))
+				{
+					this.Onss_idChanging(value);
+					this.SendPropertyChanging();
+					this._ss_id = value;
+					this.SendPropertyChanged("ss_id");
+					this.Onss_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_door_number", DbType="VarChar(50)")]
+		public string ss_door_number
+		{
+			get
+			{
+				return this._ss_door_number;
+			}
+			set
+			{
+				if ((this._ss_door_number != value))
+				{
+					this.Onss_door_numberChanging(value);
+					this.SendPropertyChanging();
+					this._ss_door_number = value;
+					this.SendPropertyChanged("ss_door_number");
+					this.Onss_door_numberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_prospected", DbType="Bit")]
+		public System.Nullable<bool> prospected
+		{
+			get
+			{
+				return this._prospected;
+			}
+			set
+			{
+				if ((this._prospected != value))
+				{
+					this.OnprospectedChanging(value);
+					this.SendPropertyChanging();
+					this._prospected = value;
+					this.SendPropertyChanged("prospected");
+					this.OnprospectedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_farm_name", DbType="NVarChar(255)")]
+		public string farm_name
+		{
+			get
+			{
+				return this._farm_name;
+			}
+			set
+			{
+				if ((this._farm_name != value))
+				{
+					this.Onfarm_nameChanging(value);
+					this.SendPropertyChanging();
+					this._farm_name = value;
+					this.SendPropertyChanged("farm_name");
+					this.Onfarm_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lightstone_suburb", DbType="NVarChar(255)")]
+		public string lightstone_suburb
+		{
+			get
+			{
+				return this._lightstone_suburb;
+			}
+			set
+			{
+				if ((this._lightstone_suburb != value))
+				{
+					this.Onlightstone_suburbChanging(value);
+					this.SendPropertyChanging();
+					this._lightstone_suburb = value;
+					this.SendPropertyChanged("lightstone_suburb");
+					this.Onlightstone_suburbChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ss_unique_identifier", DbType="NVarChar(MAX)")]
+		public string ss_unique_identifier
+		{
+			get
+			{
+				return this._ss_unique_identifier;
+			}
+			set
+			{
+				if ((this._ss_unique_identifier != value))
+				{
+					this.Onss_unique_identifierChanging(value);
+					this.SendPropertyChanging();
+					this._ss_unique_identifier = value;
+					this.SendPropertyChanged("ss_unique_identifier");
+					this.Onss_unique_identifierChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_locked_by_guid", DbType="UniqueIdentifier")]
+		public System.Nullable<System.Guid> locked_by_guid
+		{
+			get
+			{
+				return this._locked_by_guid;
+			}
+			set
+			{
+				if ((this._locked_by_guid != value))
+				{
+					this.Onlocked_by_guidChanging(value);
+					this.SendPropertyChanging();
+					this._locked_by_guid = value;
+					this.SendPropertyChanged("locked_by_guid");
+					this.Onlocked_by_guidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_locked_datetime", DbType="DateTime")]
+		public System.Nullable<System.DateTime> locked_datetime
+		{
+			get
+			{
+				return this._locked_datetime;
+			}
+			set
+			{
+				if ((this._locked_datetime != value))
+				{
+					this.Onlocked_datetimeChanging(value);
+					this.SendPropertyChanging();
+					this._locked_datetime = value;
+					this.SendPropertyChanged("locked_datetime");
+					this.Onlocked_datetimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_latest_reg_date", DbType="VarChar(8)")]
+		public string latest_reg_date
+		{
+			get
+			{
+				return this._latest_reg_date;
+			}
+			set
+			{
+				if ((this._latest_reg_date != value))
+				{
+					this.Onlatest_reg_dateChanging(value);
+					this.SendPropertyChanging();
+					this._latest_reg_date = value;
+					this.SendPropertyChanged("latest_reg_date");
+					this.Onlatest_reg_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_activity_log", Storage="_activity_logs", ThisKey="lightstone_property_id", OtherKey="lightstone_property_id")]
+		public EntitySet<activity_log> activity_logs
+		{
+			get
+			{
+				return this._activity_logs;
+			}
+			set
+			{
+				this._activity_logs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_prospecting_company_property_relationship", Storage="_prospecting_company_property_relationships", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id")]
+		public EntitySet<prospecting_company_property_relationship> prospecting_company_property_relationships
+		{
+			get
+			{
+				return this._prospecting_company_property_relationships;
+			}
+			set
+			{
+				this._prospecting_company_property_relationships.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_prospecting_person_property_relationship", Storage="_prospecting_person_property_relationships", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id")]
+		public EntitySet<prospecting_person_property_relationship> prospecting_person_property_relationships
+		{
+			get
+			{
+				return this._prospecting_person_property_relationships;
+			}
+			set
+			{
+				this._prospecting_person_property_relationships.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_service_enquiry_log", Storage="_service_enquiry_logs", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id")]
+		public EntitySet<service_enquiry_log> service_enquiry_logs
+		{
+			get
+			{
+				return this._service_enquiry_logs;
+			}
+			set
+			{
+				this._service_enquiry_logs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_sms_communications_log", Storage="_sms_communications_logs", ThisKey="lightstone_property_id", OtherKey="target_lightstone_property_id")]
+		public EntitySet<sms_communications_log> sms_communications_logs
+		{
+			get
+			{
+				return this._sms_communications_logs;
+			}
+			set
+			{
+				this._sms_communications_logs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_email_communications_log", Storage="_email_communications_logs", ThisKey="lightstone_property_id", OtherKey="target_lightstone_property_id")]
+		public EntitySet<email_communications_log> email_communications_logs
+		{
+			get
+			{
+				return this._email_communications_logs;
+			}
+			set
+			{
+				this._email_communications_logs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="prospecting_property_property_valuation", Storage="_property_valuations", ThisKey="prospecting_property_id", OtherKey="prospecting_property_id")]
+		public EntitySet<property_valuation> property_valuations
+		{
+			get
+			{
+				return this._property_valuations;
+			}
+			set
+			{
+				this._property_valuations.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_activity_logs(activity_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = this;
+		}
+		
+		private void detach_activity_logs(activity_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = null;
+		}
+		
+		private void attach_prospecting_company_property_relationships(prospecting_company_property_relationship entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = this;
+		}
+		
+		private void detach_prospecting_company_property_relationships(prospecting_company_property_relationship entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = null;
+		}
+		
+		private void attach_prospecting_person_property_relationships(prospecting_person_property_relationship entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = this;
+		}
+		
+		private void detach_prospecting_person_property_relationships(prospecting_person_property_relationship entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = null;
+		}
+		
+		private void attach_service_enquiry_logs(service_enquiry_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = this;
+		}
+		
+		private void detach_service_enquiry_logs(service_enquiry_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = null;
+		}
+		
+		private void attach_sms_communications_logs(sms_communications_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = this;
+		}
+		
+		private void detach_sms_communications_logs(sms_communications_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = null;
+		}
+		
+		private void attach_email_communications_logs(email_communications_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = this;
+		}
+		
+		private void detach_email_communications_logs(email_communications_log entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = null;
+		}
+		
+		private void attach_property_valuations(property_valuation entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = this;
+		}
+		
+		private void detach_property_valuations(property_valuation entity)
+		{
+			this.SendPropertyChanging();
+			entity.prospecting_property = null;
 		}
 	}
 }

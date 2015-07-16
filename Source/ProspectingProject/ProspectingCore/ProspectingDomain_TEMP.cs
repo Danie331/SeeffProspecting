@@ -2509,7 +2509,7 @@ namespace ProspectingProject
                     string comment = "A new valuation has been created for this property:" + Environment.NewLine +
                                     "New value: R" + valuation.Value + Environment.NewLine + 
                                     "Valuation date: " + valuation.ValuationDate + Environment.NewLine + 
-                                    "Is this its current value: " + (valuation.IsCurrentValue ? "Yes" : "No");
+                                    "Is this its current Lightstone value? " + (valuation.IsCurrentValue ? "Yes" : "No");
 
                     var activityType = ProspectingLookupData.ActivityTypes.First(act => act.Value == "Valuation Done").Key;
                     var activityRecord = new activity_log
@@ -2544,6 +2544,47 @@ namespace ProspectingProject
 
                 prospecting.property_valuations.InsertOnSubmit(newValuation);
                 prospecting.SubmitChanges();
+            }
+        }
+
+        public static List<PropertyValuation> LoadValuations(int prospectingPropertyId)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                UserDataResponsePacket user = RequestHandler.GetUserSessionObject();
+                var valuations = (from valuation in prospecting.property_valuations
+                                  where valuation.prospecting_property_id == prospectingPropertyId && !valuation.deleted
+                                  orderby valuation.date_valued descending
+                                  select new PropertyValuation
+                                  {
+                                      Value = valuation.value_estimate,
+                                      ValuationDate = valuation.date_valued,
+                                      CreatedByGuid = valuation.created_by_user_guid,
+                                      ValuationRecordId = valuation.property_valuation_id
+                                  }).ToList();
+
+                foreach (var val in valuations)
+                {
+                    var createdBy = user.BusinessUnitUsers.FirstOrDefault(s => s.UserGuid == val.CreatedByGuid);
+                    val.CreatedByUsername = createdBy != null ? createdBy.Fullname : "";
+                }
+
+                return valuations;
+            }
+        }
+
+        public static void DeleteValuation(PropertyValuation valuation)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                var target = prospecting.property_valuations.FirstOrDefault(val => val.property_valuation_id == valuation.ValuationRecordId);
+                if (target != null)
+                {
+                    target.deleted = true;
+                    target.date_deleted = DateTime.Now;
+                    target.deleted_by = RequestHandler.GetUserSessionObject().UserGuid;
+                    prospecting.SubmitChanges();
+                }
             }
         }
     }

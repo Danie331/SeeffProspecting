@@ -160,6 +160,13 @@ namespace ProspectingProject
                     case "create_valuation":
                         CreateValuation(json);
                         break;
+                    case "load_valuations":
+                        string valuations = LoadValuations(json);
+                        context.Response.Write(valuations);
+                        break;
+                    case "delete_valuation":
+                        DeleteValuation(json);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -192,6 +199,19 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private void DeleteValuation(string json)
+        {
+             var valuation = ProspectingCore.Deserialise<PropertyValuation>(json);
+             ProspectingCore.DeleteValuation(valuation);
+        }
+
+        private string LoadValuations(string json)
+        {
+            var prospectingProperty = ProspectingCore.Deserialise<ProspectingPropertyId>(json);
+            var valuations = ProspectingCore.LoadValuations(prospectingProperty.ProspectingPropertyID.Value);
+            return ProspectingCore.SerializeToJsonWithDefaults(valuations);
         }
 
         private void CreateValuation(string json)
