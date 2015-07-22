@@ -28,5 +28,7 @@ namespace ProspectingProject
         public ProspectingContactPerson RelatedToContactPerson { get; set; }
 
         public int? SeeffAreaId { get; set; }
+
+        public string PropertyType { get; set; } // SS - FH
     }
 }

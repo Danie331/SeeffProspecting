@@ -62,6 +62,10 @@ function createProspectingMenu(userData) {
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
+    //menuItem = createMenuItem("Document Vault", "documentvault", buildDocumentVault(), function () { toggleMultiSelectMode(false); }, null);
+    //appendMenuItemContent(menuItem.MenuItemContent);
+    //menuItems.push(menuItem);
+
     // If the user has followups, default to the followups screen instead of the suburb selection
     if (userData.FollowupActivities.length == 0) {
         showMenu("suburbselector");
@@ -301,7 +305,8 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
         });
 
         // view property button
-        var viewPropertyBtn = $("<button type='text' id='viewPropertyFollowupBtn' style='cursor:pointer;vertical-align:middle;float:right;margin-right:2px'><img src='Assets/lightstone.png' style='vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>View Property</label></button>");
+        var viewPropertyBtnText = followup.PropertyType == 'FH' ? 'View Property' : 'Go To Complex';
+        var viewPropertyBtn = $("<button type='text' id='viewPropertyFollowupBtn' style='cursor:pointer;vertical-align:middle;float:right;margin-right:2px'><img src='Assets/lightstone.png' style='vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>" + viewPropertyBtnText + "</label></button>");
         feedbackRightSpacer.append(viewPropertyBtn);
         viewPropertyBtn.click(function (e) {
             e.preventDefault();
@@ -909,7 +914,11 @@ function buildActivityDisplayItem(activity) {
     var viewPropertyContainer = $("<div style='display:block;background-color:white;border: 1px solid white !important;padding:1px'></div>");
     var viewPropertyLeftSpacer = $("<div style='width:50%;display:inline-block;'></div>");
     var viewPropertyRightSpacer = $("<div style='width:50%;display:inline-block;'></div>");
-    var viewPropertyBtn = $("<button type='text' id='viewPropertyBtn' style='cursor:pointer;vertical-align:middle;float:right'><img src='Assets/lightstone.png' style='vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>View Property</label></button>");
+
+    var propertyAddress = $("<div style='display:block;background-color:#F0E68C;border: 1px solid white !important;'>" + formatLabelValue('', activity.PropertyAddress) + " </div>");
+
+    var viewPropertyBtnText = activity.PropertyType == 'FH' ? 'View Property' : 'Go To Complex';
+    var viewPropertyBtn = $("<button type='text' id='viewPropertyBtn' style='cursor:pointer;vertical-align:middle;float:right'><img src='Assets/lightstone.png' style='vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>" + viewPropertyBtnText + "</label></button>");
     viewPropertyRightSpacer.append(viewPropertyBtn);
     viewPropertyContainer.append(viewPropertyLeftSpacer).append(viewPropertyRightSpacer);
     viewPropertyBtn.click(function (e) {
@@ -943,6 +952,7 @@ function buildActivityDisplayItem(activity) {
     } 
     containerDiv.append(relatedTo);
     if (currentProperty == null) {
+        containerDiv.append(propertyAddress);
         containerDiv.append(viewPropertyContainer);
     }
 

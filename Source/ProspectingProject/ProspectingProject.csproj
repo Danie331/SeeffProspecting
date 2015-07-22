@@ -59,6 +59,9 @@
     <Reference Include="Google.Apis.Core">
       <HintPath>..\packages\Google.Apis.Core.1.9.0\lib\portable-net40+sl50+win+wpa81+wp80\Google.Apis.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Google.Apis.Drive.v2">
+      <HintPath>..\packages\Google.Apis.Drive.v2.1.9.0.1760\lib\portable-net40+sl50+win+wpa81+wp80\Google.Apis.Drive.v2.dll</HintPath>
+    </Reference>
     <Reference Include="Google.Apis.Gmail.v1">
       <HintPath>..\packages\Google.Apis.Gmail.v1.1.9.0.280\lib\portable-net40+sl50+win+wpa81+wp80\Google.Apis.Gmail.v1.dll</HintPath>
     </Reference>
@@ -751,6 +754,7 @@
     <Content Include="Database scripts\change_of_ownership.sql" />
     <Content Include="Database scripts\seeff_prospecting.sql" />
     <Content Include="Database scripts\seeff_prospecting_data_takeon.sql" />
+    <Content Include="Database scripts\useful.sql" />
     <Content Include="Default.aspx" />
     <Content Include="LogOut.aspx" />
     <Content Include="NotAuthorised.aspx" />
@@ -1026,6 +1030,7 @@
     <Content Include="Scripts\3rdParty\jqueryBlockUI.js" />
     <Content Include="Scripts\3rdParty\waitForImage.js" />
     <Content Include="Scripts\Core\CommunicationTemplates.js" />
+    <Content Include="Scripts\Core\DocumentVault.js" />
     <Content Include="Scripts\Core\DrawingMultiSelect.js" />
     <Content Include="Scripts\Core\Communication.js" />
     <Content Include="Scripts\Core\Extensions.js" />

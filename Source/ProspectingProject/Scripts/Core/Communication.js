@@ -1921,8 +1921,8 @@ function calculateCostOfBatch(callbackFn) {
                 $.each(commSelectedRows, function (idx, row) {
                     var contactId = $(row).attr("id").replace('comm_row_', '');
                     var contact = getContactFromId(contactId);
-                    var email = $('#comm_default_email_select_' + contactId); 
-                    contact.TargetContactEmailAddress = email.val();  // TODO: make this right at some point.
+                    var email = getContactDetailFromContactRow(contactId);
+                    contact.TargetContactEmailAddress = email;  // TODO: make this right at some point.
                     recipients.push(contact);
                 });
             }

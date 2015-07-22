@@ -61,5 +61,9 @@ namespace ProspectingProject
         public string ActivityFollowupTypeName { get; set; }
 
         public int? SeeffAreaId { get; set; }
+
+        public string PropertyType { get; set; }
+
+        public string PropertyAddress { get; set; }
     }
 }

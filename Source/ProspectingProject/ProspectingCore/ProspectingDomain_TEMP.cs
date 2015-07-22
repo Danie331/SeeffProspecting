@@ -171,7 +171,7 @@ namespace ProspectingProject
                {
                    activityFollowupTypeName = activityFollowupType.activity_name;
                }
-                int? seeffAreaId = prospectingContext.prospecting_properties.First(pp => pp.lightstone_property_id == activity.lightstone_property_id).seeff_area_id;
+                var propertyRecord = prospectingContext.prospecting_properties.First(pp => pp.lightstone_property_id == activity.lightstone_property_id);
                 ProspectingActivity act = new ProspectingActivity
                 {
                     ActivityLogId = activity.activity_log_id,
@@ -199,7 +199,9 @@ namespace ProspectingProject
                     RelatedToContactPersonName = relatedToContactPersonName,
                     ActivityFollowupTypeId = activity.activity_followup_type_id,
                     ActivityFollowupTypeName = activityFollowupTypeName,
-                    SeeffAreaId = seeffAreaId
+                    SeeffAreaId = propertyRecord.seeff_area_id,
+                    PropertyType = propertyRecord.ss_fh,
+                    PropertyAddress = GetFormattedAddress(propertyRecord.lightstone_property_id)
                 };
                 activityBundle.Activities.Add(act);
             }
@@ -749,7 +751,7 @@ namespace ProspectingProject
                     var createdByUser = businessUnitUsers.FirstOrDefault(b => b.UserGuid == act.created_by);
                     string createdBy = createdByUser != null && createdByUser.UserGuid != Guid.Empty ? createdByUser.UserName + " " + createdByUser.UserSurname : "System";
                     var propertyRecord = prospecting.prospecting_properties.First(pp => pp.lightstone_property_id == act.lightstone_property_id);
-                    string propAddress = propertyRecord.street_or_unit_no + " " + propertyRecord.property_address;
+                    string propAddress = GetFormattedAddress(act.lightstone_property_id);
 
                     var activityType = prospecting.activity_types.FirstOrDefault(t => t.activity_type_id == act.activity_type_id);
                     string activityTypeName = "";
@@ -779,7 +781,8 @@ namespace ProspectingProject
                                             RelatedToContactPerson = LoadContactForFollowup(prospecting, act.contact_person_id),
                                             ActivityFollowupTypeId = act.activity_followup_type_id,
                                             PropertyAddress = propAddress,
-                                            SeeffAreaId = seeffAreaId
+                                            SeeffAreaId = seeffAreaId,
+                                            PropertyType = propertyRecord.ss_fh
                                         };
                     followups.Add(followup);
                 }
