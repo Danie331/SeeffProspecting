@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/ETL.Common.WCF.Exceptions" />
+  <xs:complexType name="UnauthorizedEnquiryExceptionFault">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/ETL.Common.WCF.Exceptions" base="q1:BaseExceptionFault">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="UnauthorizedEnquiryExceptionFault" nillable="true" type="tns:UnauthorizedEnquiryExceptionFault" />
+  <xs:complexType name="SecurityExceptionFault">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/ETL.Common.WCF.Exceptions" base="q2:BaseExceptionFault">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SecurityExceptionFault" nillable="true" type="tns:SecurityExceptionFault" />
+  <xs:complexType name="LimitFault">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/ETL.Common.WCF.Exceptions" base="q3:BaseExceptionFault">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LimitFault" nillable="true" type="tns:LimitFault" />
+</xs:schema>

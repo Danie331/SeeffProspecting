@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ETLConsumerService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" />
+      <xsd:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/ETL.Common.WCF" />
+      <xsd:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/ETL.Common.WCF.Exceptions" />
+      <xsd:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd5" />
+      <xsd:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/ETL.WebServices.BusinessLogic.EnquiryEntities" />
+      <xsd:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd7" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/ETL.WebServices.BusinessLogic.Exceptions" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IETLConsumerService_Login_InputMessage">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_Login_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_Login_UnauthorizedEnquiryExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q1:UnauthorizedEnquiryExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_Login_SecurityExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q2:SecurityExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_Login_UnableToConnectToServiceExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/ETL.Common.WCF" name="detail" element="q3:UnableToConnectToServiceExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ValidateToken_InputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateToken" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ValidateToken_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateTokenResponse" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ValidateToken_UnauthorizedEnquiryExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q4:UnauthorizedEnquiryExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ValidateToken_UnableToConnectToServiceExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/ETL.Common.WCF" name="detail" element="q5:UnableToConnectToServiceExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ValidateToken_SecurityExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q6:SecurityExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiryByIdNo_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerEnquiryByIdNo" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiryByIdNo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerEnquiryByIdNoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiryByIdNo_SecurityExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q7:SecurityExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiryByIdNo_UnableToConnectToServiceExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/ETL.Common.WCF" name="detail" element="q8:UnableToConnectToServiceExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiryByIdNo_UnauthorizedEnquiryExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q9:UnauthorizedEnquiryExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiry_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerEnquiry" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerEnquiryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiry_LimitFaultFault_FaultMessage">
+    <wsdl:part xmlns:q10="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q10:LimitFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiry_UnauthorizedEnquiryExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q11="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q11:UnauthorizedEnquiryExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiry_SecurityExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q12="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q12:SecurityExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiry_UnableToConnectToServiceExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q13="http://schemas.datacontract.org/2004/07/ETL.Common.WCF" name="detail" element="q13:UnableToConnectToServiceExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiryByConsumerID_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerEnquiryByConsumerID" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiryByConsumerID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerEnquiryByConsumerIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiryByConsumerID_SecurityExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q14="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q14:SecurityExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiryByConsumerID_UnauthorizedEnquiryExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q15="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q15:UnauthorizedEnquiryExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiryByConsumerID_LimitFaultFault_FaultMessage">
+    <wsdl:part xmlns:q16="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q16:LimitFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_ConsumerEnquiryByConsumerID_UnableToConnectToServiceExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q17="http://schemas.datacontract.org/2004/07/ETL.Common.WCF" name="detail" element="q17:UnableToConnectToServiceExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_RetrieveConsumerLinksByAddress_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetrieveConsumerLinksByAddress" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_RetrieveConsumerLinksByAddress_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetrieveConsumerLinksByAddressResponse" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_RetrieveConsumerLinksByAddress_SecurityExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q18="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q18:SecurityExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_RetrieveConsumerLinksByAddress_UnableToConnectToServiceExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q19="http://schemas.datacontract.org/2004/07/ETL.Common.WCF" name="detail" element="q19:UnableToConnectToServiceExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_RetrieveConsumerLinksByAddress_LimitFaultFault_FaultMessage">
+    <wsdl:part xmlns:q20="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q20:LimitFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_RetrieveConsumerLinksByAddress_UnauthorizedEnquiryExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q21="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q21:UnauthorizedEnquiryExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_RetrieveConsumerLinksByTelephone_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetrieveConsumerLinksByTelephone" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_RetrieveConsumerLinksByTelephone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetrieveConsumerLinksByTelephoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_RetrieveConsumerLinksByTelephone_UnauthorizedEnquiryExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q22="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q22:UnauthorizedEnquiryExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_RetrieveConsumerLinksByTelephone_UnableToConnectToServiceExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q23="http://schemas.datacontract.org/2004/07/ETL.Common.WCF" name="detail" element="q23:UnableToConnectToServiceExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_RetrieveConsumerLinksByTelephone_SecurityExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q24="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q24:SecurityExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_RetrieveConsumerLinksByTelephone_LimitFaultFault_FaultMessage">
+    <wsdl:part xmlns:q25="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q25:LimitFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_DirectorEnquiry_InputMessage">
+    <wsdl:part name="parameters" element="tns:DirectorEnquiry" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_DirectorEnquiry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DirectorEnquiryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_DirectorEnquiry_UnauthorizedEnquiryExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q26="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q26:UnauthorizedEnquiryExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_DirectorEnquiry_SecurityExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q27="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q27:SecurityExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_DirectorEnquiry_UnableToConnectToServiceExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q28="http://schemas.datacontract.org/2004/07/ETL.Common.WCF" name="detail" element="q28:UnableToConnectToServiceExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_DirectorEnquiry_LimitFaultFault_FaultMessage">
+    <wsdl:part xmlns:q29="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q29:LimitFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_BusinessEnquiry_InputMessage">
+    <wsdl:part name="parameters" element="tns:BusinessEnquiry" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_BusinessEnquiry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BusinessEnquiryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_BusinessEnquiry_UnauthorizedEnquiryExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q30="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q30:UnauthorizedEnquiryExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_BusinessEnquiry_LimitFaultFault_FaultMessage">
+    <wsdl:part xmlns:q31="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q31:LimitFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_BusinessEnquiry_SecurityExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q32="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q32:SecurityExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_BusinessEnquiry_UnableToConnectToServiceExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q33="http://schemas.datacontract.org/2004/07/ETL.Common.WCF" name="detail" element="q33:UnableToConnectToServiceExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_BusinessEnquiryByCompanyID_InputMessage">
+    <wsdl:part name="parameters" element="tns:BusinessEnquiryByCompanyID" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_BusinessEnquiryByCompanyID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BusinessEnquiryByCompanyIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_BusinessEnquiryByCompanyID_SecurityExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q34="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q34:SecurityExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_BusinessEnquiryByCompanyID_LimitFaultFault_FaultMessage">
+    <wsdl:part xmlns:q35="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q35:LimitFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_BusinessEnquiryByCompanyID_UnableToConnectToServiceExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q36="http://schemas.datacontract.org/2004/07/ETL.Common.WCF" name="detail" element="q36:UnableToConnectToServiceExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_BusinessEnquiryByCompanyID_UnauthorizedEnquiryExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q37="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q37:UnauthorizedEnquiryExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_CleanAddress_InputMessage">
+    <wsdl:part name="parameters" element="tns:CleanAddress" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_CleanAddress_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CleanAddressResponse" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_CleanAddress_UnauthorizedEnquiryExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q38="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q38:UnauthorizedEnquiryExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_CleanAddress_UnableToConnectToServiceExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q39="http://schemas.datacontract.org/2004/07/ETL.Common.WCF" name="detail" element="q39:UnableToConnectToServiceExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_CleanAddress_LimitFaultFault_FaultMessage">
+    <wsdl:part xmlns:q40="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q40:LimitFault" />
+  </wsdl:message>
+  <wsdl:message name="IETLConsumerService_CleanAddress_SecurityExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q41="http://schemas.datacontract.org/2004/07/ETL.BusinessLogic.Exceptions" name="detail" element="q41:SecurityExceptionFault" />
+  </wsdl:message>
+  <wsdl:portType name="IETLConsumerService">
+    <wsdl:operation name="Login">
+      <wsdl:input wsaw:Action="http://tempuri.org/IETLConsumerService/Login" message="tns:IETLConsumerService_Login_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IETLConsumerService/LoginResponse" message="tns:IETLConsumerService_Login_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/LoginUnauthorizedEnquiryExceptionFaultFault" name="UnauthorizedEnquiryExceptionFaultFault" message="tns:IETLConsumerService_Login_UnauthorizedEnquiryExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/LoginSecurityExceptionFaultFault" name="SecurityExceptionFaultFault" message="tns:IETLConsumerService_Login_SecurityExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/LoginUnableToConnectToServiceExceptionFaultFault" name="UnableToConnectToServiceExceptionFaultFault" message="tns:IETLConsumerService_Login_UnableToConnectToServiceExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateToken">
+      <wsdl:input wsaw:Action="http://tempuri.org/IETLConsumerService/ValidateToken" message="tns:IETLConsumerService_ValidateToken_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IETLConsumerService/ValidateTokenResponse" message="tns:IETLConsumerService_ValidateToken_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ValidateTokenUnauthorizedEnquiryExceptionFaultFault" name="UnauthorizedEnquiryExceptionFaultFault" message="tns:IETLConsumerService_ValidateToken_UnauthorizedEnquiryExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ValidateTokenUnableToConnectToServiceExceptionFaultFault" name="UnableToConnectToServiceExceptionFaultFault" message="tns:IETLConsumerService_ValidateToken_UnableToConnectToServiceExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ValidateTokenSecurityExceptionFaultFault" name="SecurityExceptionFaultFault" message="tns:IETLConsumerService_ValidateToken_SecurityExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerEnquiryByIdNo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByIdNo" message="tns:IETLConsumerService_ConsumerEnquiryByIdNo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByIdNoResponse" message="tns:IETLConsumerService_ConsumerEnquiryByIdNo_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByIdNoSecurityExceptionFaultFault" name="SecurityExceptionFaultFault" message="tns:IETLConsumerService_ConsumerEnquiryByIdNo_SecurityExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByIdNoUnableToConnectToServiceExceptionFaultFault" name="UnableToConnectToServiceExceptionFaultFault" message="tns:IETLConsumerService_ConsumerEnquiryByIdNo_UnableToConnectToServiceExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByIdNoUnauthorizedEnquiryExceptionFaultFault" name="UnauthorizedEnquiryExceptionFaultFault" message="tns:IETLConsumerService_ConsumerEnquiryByIdNo_UnauthorizedEnquiryExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerEnquiry">
+      <wsdl:input wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiry" message="tns:IETLConsumerService_ConsumerEnquiry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryResponse" message="tns:IETLConsumerService_ConsumerEnquiry_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryLimitFaultFault" name="LimitFaultFault" message="tns:IETLConsumerService_ConsumerEnquiry_LimitFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryUnauthorizedEnquiryExceptionFaultFault" name="UnauthorizedEnquiryExceptionFaultFault" message="tns:IETLConsumerService_ConsumerEnquiry_UnauthorizedEnquiryExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquirySecurityExceptionFaultFault" name="SecurityExceptionFaultFault" message="tns:IETLConsumerService_ConsumerEnquiry_SecurityExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryUnableToConnectToServiceExceptionFaultFault" name="UnableToConnectToServiceExceptionFaultFault" message="tns:IETLConsumerService_ConsumerEnquiry_UnableToConnectToServiceExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerEnquiryByConsumerID">
+      <wsdl:input wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByConsumerID" message="tns:IETLConsumerService_ConsumerEnquiryByConsumerID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByConsumerIDResponse" message="tns:IETLConsumerService_ConsumerEnquiryByConsumerID_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByConsumerIDSecurityExceptionFaultFault" name="SecurityExceptionFaultFault" message="tns:IETLConsumerService_ConsumerEnquiryByConsumerID_SecurityExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByConsumerIDUnauthorizedEnquiryExceptionFaultFault" name="UnauthorizedEnquiryExceptionFaultFault" message="tns:IETLConsumerService_ConsumerEnquiryByConsumerID_UnauthorizedEnquiryExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByConsumerIDLimitFaultFault" name="LimitFaultFault" message="tns:IETLConsumerService_ConsumerEnquiryByConsumerID_LimitFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByConsumerIDUnableToConnectToServiceExceptionFaultFault" name="UnableToConnectToServiceExceptionFaultFault" message="tns:IETLConsumerService_ConsumerEnquiryByConsumerID_UnableToConnectToServiceExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveConsumerLinksByAddress">
+      <wsdl:input wsaw:Action="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByAddress" message="tns:IETLConsumerService_RetrieveConsumerLinksByAddress_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByAddressResponse" message="tns:IETLConsumerService_RetrieveConsumerLinksByAddress_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByAddressSecurityExceptionFaultFault" name="SecurityExceptionFaultFault" message="tns:IETLConsumerService_RetrieveConsumerLinksByAddress_SecurityExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByAddressUnableToConnectToServiceExceptionFaultFault" name="UnableToConnectToServiceExceptionFaultFault" message="tns:IETLConsumerService_RetrieveConsumerLinksByAddress_UnableToConnectToServiceExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByAddressLimitFaultFault" name="LimitFaultFault" message="tns:IETLConsumerService_RetrieveConsumerLinksByAddress_LimitFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByAddressUnauthorizedEnquiryExceptionFaultFault" name="UnauthorizedEnquiryExceptionFaultFault" message="tns:IETLConsumerService_RetrieveConsumerLinksByAddress_UnauthorizedEnquiryExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveConsumerLinksByTelephone">
+      <wsdl:input wsaw:Action="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByTelephone" message="tns:IETLConsumerService_RetrieveConsumerLinksByTelephone_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByTelephoneResponse" message="tns:IETLConsumerService_RetrieveConsumerLinksByTelephone_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByTelephoneUnauthorizedEnquiryExceptionFaultFault" name="UnauthorizedEnquiryExceptionFaultFault" message="tns:IETLConsumerService_RetrieveConsumerLinksByTelephone_UnauthorizedEnquiryExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByTelephoneUnableToConnectToServiceExceptionFaultFault" name="UnableToConnectToServiceExceptionFaultFault" message="tns:IETLConsumerService_RetrieveConsumerLinksByTelephone_UnableToConnectToServiceExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByTelephoneSecurityExceptionFaultFault" name="SecurityExceptionFaultFault" message="tns:IETLConsumerService_RetrieveConsumerLinksByTelephone_SecurityExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByTelephoneLimitFaultFault" name="LimitFaultFault" message="tns:IETLConsumerService_RetrieveConsumerLinksByTelephone_LimitFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DirectorEnquiry">
+      <wsdl:input wsaw:Action="http://tempuri.org/IETLConsumerService/DirectorEnquiry" message="tns:IETLConsumerService_DirectorEnquiry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IETLConsumerService/DirectorEnquiryResponse" message="tns:IETLConsumerService_DirectorEnquiry_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/DirectorEnquiryUnauthorizedEnquiryExceptionFaultFault" name="UnauthorizedEnquiryExceptionFaultFault" message="tns:IETLConsumerService_DirectorEnquiry_UnauthorizedEnquiryExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/DirectorEnquirySecurityExceptionFaultFault" name="SecurityExceptionFaultFault" message="tns:IETLConsumerService_DirectorEnquiry_SecurityExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/DirectorEnquiryUnableToConnectToServiceExceptionFaultFault" name="UnableToConnectToServiceExceptionFaultFault" message="tns:IETLConsumerService_DirectorEnquiry_UnableToConnectToServiceExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/DirectorEnquiryLimitFaultFault" name="LimitFaultFault" message="tns:IETLConsumerService_DirectorEnquiry_LimitFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BusinessEnquiry">
+      <wsdl:input wsaw:Action="http://tempuri.org/IETLConsumerService/BusinessEnquiry" message="tns:IETLConsumerService_BusinessEnquiry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IETLConsumerService/BusinessEnquiryResponse" message="tns:IETLConsumerService_BusinessEnquiry_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/BusinessEnquiryUnauthorizedEnquiryExceptionFaultFault" name="UnauthorizedEnquiryExceptionFaultFault" message="tns:IETLConsumerService_BusinessEnquiry_UnauthorizedEnquiryExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/BusinessEnquiryLimitFaultFault" name="LimitFaultFault" message="tns:IETLConsumerService_BusinessEnquiry_LimitFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/BusinessEnquirySecurityExceptionFaultFault" name="SecurityExceptionFaultFault" message="tns:IETLConsumerService_BusinessEnquiry_SecurityExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/BusinessEnquiryUnableToConnectToServiceExceptionFaultFault" name="UnableToConnectToServiceExceptionFaultFault" message="tns:IETLConsumerService_BusinessEnquiry_UnableToConnectToServiceExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BusinessEnquiryByCompanyID">
+      <wsdl:input wsaw:Action="http://tempuri.org/IETLConsumerService/BusinessEnquiryByCompanyID" message="tns:IETLConsumerService_BusinessEnquiryByCompanyID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IETLConsumerService/BusinessEnquiryByCompanyIDResponse" message="tns:IETLConsumerService_BusinessEnquiryByCompanyID_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/BusinessEnquiryByCompanyIDSecurityExceptionFaultFault" name="SecurityExceptionFaultFault" message="tns:IETLConsumerService_BusinessEnquiryByCompanyID_SecurityExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/BusinessEnquiryByCompanyIDLimitFaultFault" name="LimitFaultFault" message="tns:IETLConsumerService_BusinessEnquiryByCompanyID_LimitFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/BusinessEnquiryByCompanyIDUnableToConnectToServiceExceptionFaultFault" name="UnableToConnectToServiceExceptionFaultFault" message="tns:IETLConsumerService_BusinessEnquiryByCompanyID_UnableToConnectToServiceExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/BusinessEnquiryByCompanyIDUnauthorizedEnquiryExceptionFaultFault" name="UnauthorizedEnquiryExceptionFaultFault" message="tns:IETLConsumerService_BusinessEnquiryByCompanyID_UnauthorizedEnquiryExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CleanAddress">
+      <wsdl:input wsaw:Action="http://tempuri.org/IETLConsumerService/CleanAddress" message="tns:IETLConsumerService_CleanAddress_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IETLConsumerService/CleanAddressResponse" message="tns:IETLConsumerService_CleanAddress_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/CleanAddressUnauthorizedEnquiryExceptionFaultFault" name="UnauthorizedEnquiryExceptionFaultFault" message="tns:IETLConsumerService_CleanAddress_UnauthorizedEnquiryExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/CleanAddressUnableToConnectToServiceExceptionFaultFault" name="UnableToConnectToServiceExceptionFaultFault" message="tns:IETLConsumerService_CleanAddress_UnableToConnectToServiceExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/CleanAddressLimitFaultFault" name="LimitFaultFault" message="tns:IETLConsumerService_CleanAddress_LimitFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IETLConsumerService/CleanAddressSecurityExceptionFaultFault" name="SecurityExceptionFaultFault" message="tns:IETLConsumerService_CleanAddress_SecurityExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="HTTP" type="tns:IETLConsumerService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Login">
+      <soap:operation soapAction="http://tempuri.org/IETLConsumerService/Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="UnauthorizedEnquiryExceptionFaultFault">
+        <soap:fault use="literal" name="UnauthorizedEnquiryExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="SecurityExceptionFaultFault">
+        <soap:fault use="literal" name="SecurityExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnableToConnectToServiceExceptionFaultFault">
+        <soap:fault use="literal" name="UnableToConnectToServiceExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateToken">
+      <soap:operation soapAction="http://tempuri.org/IETLConsumerService/ValidateToken" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="UnauthorizedEnquiryExceptionFaultFault">
+        <soap:fault use="literal" name="UnauthorizedEnquiryExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnableToConnectToServiceExceptionFaultFault">
+        <soap:fault use="literal" name="UnableToConnectToServiceExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="SecurityExceptionFaultFault">
+        <soap:fault use="literal" name="SecurityExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerEnquiryByIdNo">
+      <soap:operation soapAction="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByIdNo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SecurityExceptionFaultFault">
+        <soap:fault use="literal" name="SecurityExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnableToConnectToServiceExceptionFaultFault">
+        <soap:fault use="literal" name="UnableToConnectToServiceExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnauthorizedEnquiryExceptionFaultFault">
+        <soap:fault use="literal" name="UnauthorizedEnquiryExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerEnquiry">
+      <soap:operation soapAction="http://tempuri.org/IETLConsumerService/ConsumerEnquiry" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="LimitFaultFault">
+        <soap:fault use="literal" name="LimitFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnauthorizedEnquiryExceptionFaultFault">
+        <soap:fault use="literal" name="UnauthorizedEnquiryExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="SecurityExceptionFaultFault">
+        <soap:fault use="literal" name="SecurityExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnableToConnectToServiceExceptionFaultFault">
+        <soap:fault use="literal" name="UnableToConnectToServiceExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerEnquiryByConsumerID">
+      <soap:operation soapAction="http://tempuri.org/IETLConsumerService/ConsumerEnquiryByConsumerID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SecurityExceptionFaultFault">
+        <soap:fault use="literal" name="SecurityExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnauthorizedEnquiryExceptionFaultFault">
+        <soap:fault use="literal" name="UnauthorizedEnquiryExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="LimitFaultFault">
+        <soap:fault use="literal" name="LimitFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnableToConnectToServiceExceptionFaultFault">
+        <soap:fault use="literal" name="UnableToConnectToServiceExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveConsumerLinksByAddress">
+      <soap:operation soapAction="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByAddress" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SecurityExceptionFaultFault">
+        <soap:fault use="literal" name="SecurityExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnableToConnectToServiceExceptionFaultFault">
+        <soap:fault use="literal" name="UnableToConnectToServiceExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="LimitFaultFault">
+        <soap:fault use="literal" name="LimitFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnauthorizedEnquiryExceptionFaultFault">
+        <soap:fault use="literal" name="UnauthorizedEnquiryExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveConsumerLinksByTelephone">
+      <soap:operation soapAction="http://tempuri.org/IETLConsumerService/RetrieveConsumerLinksByTelephone" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="UnauthorizedEnquiryExceptionFaultFault">
+        <soap:fault use="literal" name="UnauthorizedEnquiryExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnableToConnectToServiceExceptionFaultFault">
+        <soap:fault use="literal" name="UnableToConnectToServiceExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="SecurityExceptionFaultFault">
+        <soap:fault use="literal" name="SecurityExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="LimitFaultFault">
+        <soap:fault use="literal" name="LimitFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DirectorEnquiry">
+      <soap:operation soapAction="http://tempuri.org/IETLConsumerService/DirectorEnquiry" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="UnauthorizedEnquiryExceptionFaultFault">
+        <soap:fault use="literal" name="UnauthorizedEnquiryExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="SecurityExceptionFaultFault">
+        <soap:fault use="literal" name="SecurityExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnableToConnectToServiceExceptionFaultFault">
+        <soap:fault use="literal" name="UnableToConnectToServiceExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="LimitFaultFault">
+        <soap:fault use="literal" name="LimitFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="BusinessEnquiry">
+      <soap:operation soapAction="http://tempuri.org/IETLConsumerService/BusinessEnquiry" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="UnauthorizedEnquiryExceptionFaultFault">
+        <soap:fault use="literal" name="UnauthorizedEnquiryExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="LimitFaultFault">
+        <soap:fault use="literal" name="LimitFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="SecurityExceptionFaultFault">
+        <soap:fault use="literal" name="SecurityExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnableToConnectToServiceExceptionFaultFault">
+        <soap:fault use="literal" name="UnableToConnectToServiceExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="BusinessEnquiryByCompanyID">
+      <soap:operation soapAction="http://tempuri.org/IETLConsumerService/BusinessEnquiryByCompanyID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SecurityExceptionFaultFault">
+        <soap:fault use="literal" name="SecurityExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="LimitFaultFault">
+        <soap:fault use="literal" name="LimitFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnableToConnectToServiceExceptionFaultFault">
+        <soap:fault use="literal" name="UnableToConnectToServiceExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnauthorizedEnquiryExceptionFaultFault">
+        <soap:fault use="literal" name="UnauthorizedEnquiryExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CleanAddress">
+      <soap:operation soapAction="http://tempuri.org/IETLConsumerService/CleanAddress" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="UnauthorizedEnquiryExceptionFaultFault">
+        <soap:fault use="literal" name="UnauthorizedEnquiryExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="UnableToConnectToServiceExceptionFaultFault">
+        <soap:fault use="literal" name="UnableToConnectToServiceExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="LimitFaultFault">
+        <soap:fault use="literal" name="LimitFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="SecurityExceptionFaultFault">
+        <soap:fault use="literal" name="SecurityExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ETLConsumerService">
+    <wsdl:port name="HTTP" binding="tns:HTTP">
+      <soap:address location="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

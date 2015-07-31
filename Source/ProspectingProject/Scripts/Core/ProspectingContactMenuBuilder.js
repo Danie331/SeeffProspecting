@@ -824,11 +824,21 @@ function buildContactDashboard(contacts) {
         var counter = 1;
         $.each(currentProperty.ContactCompanies, function (idx, cc) {
             if (counter > 1 && counter <= currentProperty.ContactCompanies.length) {
-                container.append(" / ");
+                container.append("<br />");
             }
+
+            var companyEnquiryBtn = $("<input type='button' id='companyEnquiryBtn' value='Lookup Company Directors' style='display:inline-block;float:right' />");
             container.append(cc.CompanyName + "(" + cc.CKNumber + ")");
+            if (cc.CompanyType != 'TR') {
+                container.append(companyEnquiryBtn);
+                companyEnquiryBtn.click(function () {
+                    performCompanyEnquiry(cc.ContactCompanyId);
+                });
+            }
+
             counter++;
-        });
+        });        
+
         container.append("<br />");
         container.append("<hr /><br />");
     }
@@ -909,6 +919,59 @@ function buildContactDashboard(contacts) {
     });
 
     return container;
+}
+
+function performCompanyEnquiry(contactCompanyId) {
+    var companyEnquiryInfoDiv = $("<div title='Company Enquiry Service Request' style='font-family:Verdana;font-size:12px;' />").empty()
+        .append('You are about to perform an enquiry to retrieve the directors of this company. Please note that you will need to perform a separate enquiry to retrieve their contact details.')
+        .append("<p />")
+        .append('If successful, this enquiry will cost R14.40 (excl. VAT) and will be deducted from your Prospecting balance.');
+
+    companyEnquiryInfoDiv.dialog(
+                {
+                    modal: true,
+                    closeOnEscape: false,
+                    width: '550',
+                    buttons: {
+                        "Proceed": function () {
+                            $(this).dialog("close");
+
+                            $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Performing Lookup...</p>' });
+                            $.ajax({
+                                type: "POST",
+                                url: "RequestHandler.ashx",
+                                data: JSON.stringify({ Instruction: 'perform_company_enquiry', ContactCompanyId: contactCompanyId, ProspectingPropertyId: currentProperty.ProspectingPropertyId }),
+                                dataType: "json"
+                            }).done(function (data) {
+                                $.unblockUI();
+                                if (!handleResponseIfServerError(data)) {
+                                    return;
+                                }
+
+                                if (data.WalletBalance != null) {
+                                    // If the AvailableTracePsCredits is not null, then update the availableCredit variable
+                                    availableCredit = data.WalletBalance;
+                                    $('#availableCreditLabel').text(availableCredit.toFixed(2));
+                                }
+                                if (data.EnquirySuccessful) {
+                                    currentPersonContact = null;
+                                    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Refreshing Contacts...</p>' });
+                                    setCurrentMarker(currentSuburb, currentProperty, function (data) {
+                                        updateExistingPropertyFromProperty(currentProperty, data);
+                                        buildPersonContactMenu(currentProperty.Contacts, false);
+                                        updateProspectedStatus();
+                                        $.unblockUI();
+                                    });
+                                } else {
+                                    // feedback to user
+                                    alert(data.ErrorMsg);
+                                }
+                            });
+                        },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    },
+                    position: ['center', 'center']
+                });
 }
 
 function handleAddActivityFromContact() {

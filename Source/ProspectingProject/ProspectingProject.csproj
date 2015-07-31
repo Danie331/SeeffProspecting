@@ -1061,6 +1061,25 @@
     <None Include="Properties\PublishProfiles\Seeff Server.pubxml" />
     <None Include="Properties\PublishProfiles\seeffprospecting - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\seeffprospecting - Web Deploy.pubxml" />
+    <None Include="Service References\DracoreETLConsumerService\ConsumerService.disco" />
+    <None Include="Service References\DracoreETLConsumerService\configuration91.svcinfo" />
+    <None Include="Service References\DracoreETLConsumerService\configuration.svcinfo" />
+    <Content Include="Service References\DracoreETLConsumerService\ProspectingProject.DracoreETLConsumerService.AddressInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\DracoreETLConsumerService\ProspectingProject.DracoreETLConsumerService.CompanyInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\DracoreETLConsumerService\ProspectingProject.DracoreETLConsumerService.ConsumerEnquiryResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\DracoreETLConsumerService\ProspectingProject.DracoreETLConsumerService.ConsumerTraceResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\DracoreETLConsumerService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Service References\ProspectingUserAuthService\ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -1075,6 +1094,34 @@
     <Content Include="Scripts\3rdParty\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\outputforflash.fla" />
     <Content Include="Scripts\3rdParty\ckeditor\samples\sample_posteddata.php" />
     <Content Include="Scripts\3rdParty\ckeditor\skins\moono\readme.md" />
+    <None Include="Service References\DracoreETLConsumerService\ConsumerService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\ConsumerService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\ConsumerService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\ConsumerService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\ConsumerService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\ConsumerService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\ConsumerService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\ConsumerService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\ConsumerService8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\ETLConsumerService.wsdl" />
     <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService.wsdl" />
     <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService.xsd">
       <SubType>Designer</SubType>
@@ -1142,11 +1189,17 @@
     <Compile Include="RequestHandler.ashx.cs">
       <DependentUpon>RequestHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Service References\DracoreETLConsumerService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\ProspectingUserAuthService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Services\Dracore\DracoreCompanyLookupService.cs" />
     <Compile Include="Services\Dracore\DracoreEmailAddressLookup.cs" />
     <Compile Include="Services\Dracore\DracoreLiveService.cs" />
     <Compile Include="Services\Dracore\DracorePhoneNumberLookup.cs" />
@@ -1155,6 +1208,7 @@
     <Compile Include="Services\Dracore\IDracoreService.cs" />
     <Compile Include="Services\EnquiryServiceFactory.cs" />
     <Compile Include="Services\EnquiryServiceManager.cs" />
+    <Compile Include="Services\ICompanyEnquiryService.cs" />
     <Compile Include="Services\IPersonEnquiryService.cs" />
     <Compile Include="Services\TracePS\ITracepsService.cs" />
     <Compile Include="Services\TracePS\TracepsLiveService.cs" />
@@ -1164,6 +1218,8 @@
     <Compile Include="Types\CommTemplateRequest.cs" />
     <Compile Include="Types\CommunicationBatchStatus.cs" />
     <Compile Include="Types\CommunicationTemplate.cs" />
+    <Compile Include="Types\CompanyEnquiryInputPacket.cs" />
+    <Compile Include="Types\CompanyEnquiryResponsePacket.cs" />
     <Compile Include="Types\CostOfBatch.cs" />
     <Compile Include="Types\EmailAttachment.cs" />
     <Compile Include="Types\EmailBatch.cs" />
@@ -1285,6 +1341,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\DracoreETLConsumerService\" />
     <WCFMetadataStorage Include="Service References\ProspectingUserAuthService\" />
   </ItemGroup>
   <ItemGroup />

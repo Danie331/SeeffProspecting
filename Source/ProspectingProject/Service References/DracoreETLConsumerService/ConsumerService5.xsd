@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/ETL.WebServices.BusinessLogic.EnquiryEntities" />
+  <xs:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd7" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/ETL.WebServices.BusinessLogic.Exceptions" />
+  <xs:complexType name="ConsumerEnquiryResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AuditID" type="xs:long" />
+      <xs:element minOccurs="0" name="ConsumerResult" nillable="true" type="Consumer" />
+      <xs:element minOccurs="0" name="ConsumerSummary" nillable="true" type="ConsumerSummary" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ETL.WebServices.BusinessLogic.EnquiryEntities" minOccurs="0" name="EnquiryResultType" type="q1:EnquiryResultType" />
+      <xs:element minOccurs="0" name="MultipleTraceResults" nillable="true" type="ArrayOfConsumerTraceResult" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProcessMessages" nillable="true" type="q2:ArrayOfstring" />
+      <xs:element minOccurs="0" name="ServiceException" nillable="true" type="ServiceException" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsumerEnquiryResult" nillable="true" type="ConsumerEnquiryResult" />
+  <xs:complexType name="Consumer">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AgeNextBirthday" type="xs:int" />
+      <xs:element minOccurs="0" name="ConsumerContact" nillable="true" type="ConsumerContact" />
+      <xs:element minOccurs="0" name="ConsumerEmployment" nillable="true" type="ArrayOfEmployerEntity" />
+      <xs:element minOccurs="0" name="ConsumerID" type="xs:int" />
+      <xs:element minOccurs="0" name="CustomAttributes" nillable="true" type="ArrayOfConsumerCustomAttribute" />
+      <xs:element minOccurs="0" name="DateOfBirth" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="FirstNames" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Gender" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IdentityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Initial" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MaidenName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ThirdPartyUpdated" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Consumer" nillable="true" type="Consumer" />
+  <xs:complexType name="ConsumerContact">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ConsumerAddresses" nillable="true" type="ArrayOfConsumerAddress" />
+      <xs:element minOccurs="0" name="ConsumerEmailAddresses" nillable="true" type="ArrayOfEmailInfo" />
+      <xs:element minOccurs="0" name="ConsumerTelephones" nillable="true" type="ArrayOfConsumerTelephone" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsumerContact" nillable="true" type="ConsumerContact" />
+  <xs:complexType name="ArrayOfConsumerAddress">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsumerAddress" nillable="true" type="ConsumerAddress" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsumerAddress" nillable="true" type="ArrayOfConsumerAddress" />
+  <xs:complexType name="ConsumerAddress">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AddressID" type="xs:int" />
+      <xs:element minOccurs="0" name="AddressLine1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AddressLine2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AddressLine3" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AddressLine4" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BuildingName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BuildingNo" nillable="true" type="xs:string" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/ETL.WebServices.BusinessLogic.EnquiryEntities" minOccurs="0" name="ConsumerAddressType" type="q3:ConsumerAddressType" />
+      <xs:element minOccurs="0" name="Deliverable" type="xs:boolean" />
+      <xs:element minOccurs="0" name="FirstReportedDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="FullAddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="GeoLev" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LastUpdated" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="PostalCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RecentlyUpdated" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Relevance" type="xs:double" />
+      <xs:element minOccurs="0" name="SB" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Street_Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Street_No" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Street_Suffix" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SubCode" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Suburb" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Town" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="nadlat" type="xs:double" />
+      <xs:element minOccurs="0" name="nadlong" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsumerAddress" nillable="true" type="ConsumerAddress" />
+  <xs:complexType name="ArrayOfEmailInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="EmailInfo" nillable="true" type="EmailInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEmailInfo" nillable="true" type="ArrayOfEmailInfo" />
+  <xs:complexType name="EmailInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="DomainObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RecentlyUpdated" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="EmailInfo" nillable="true" type="EmailInfo" />
+  <xs:complexType name="DomainObject">
+    <xs:sequence />
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="DomainObject" nillable="true" type="DomainObject" />
+  <xs:complexType name="ArrayOfConsumerTelephone">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsumerTelephone" nillable="true" type="ConsumerTelephone" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsumerTelephone" nillable="true" type="ArrayOfConsumerTelephone" />
+  <xs:complexType name="ConsumerTelephone">
+    <xs:sequence>
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ETL.WebServices.BusinessLogic.EnquiryEntities" minOccurs="0" name="ConsumerTelephoneType" type="q4:ConsumerTelephoneType" />
+      <xs:element minOccurs="0" name="FirstReportedDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="LastUpdated" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="RecentlyUpdated" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Relevance" type="xs:double" />
+      <xs:element minOccurs="0" name="TelephoneID" type="xs:long" />
+      <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsumerTelephone" nillable="true" type="ConsumerTelephone" />
+  <xs:complexType name="ArrayOfEmployerEntity">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="EmployerEntity" nillable="true" type="EmployerEntity" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEmployerEntity" nillable="true" type="ArrayOfEmployerEntity" />
+  <xs:complexType name="EmployerEntity">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Employer" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="First_Rep_Date" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="LastUpdated" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="EmployerEntity" nillable="true" type="EmployerEntity" />
+  <xs:complexType name="ArrayOfConsumerCustomAttribute">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsumerCustomAttribute" nillable="true" type="ConsumerCustomAttribute" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsumerCustomAttribute" nillable="true" type="ArrayOfConsumerCustomAttribute" />
+  <xs:complexType name="ConsumerCustomAttribute">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Key" type="xs:int" />
+      <xs:element minOccurs="0" name="Value" nillable="true" type="xs:anyType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsumerCustomAttribute" nillable="true" type="ConsumerCustomAttribute" />
+  <xs:complexType name="ConsumerSummary">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DeceasedIndicator" nillable="true" type="DeceasedIndicator" />
+      <xs:element minOccurs="0" name="DoNotContactIndicator" type="xs:boolean" />
+      <xs:element minOccurs="0" name="DoNotContactLastUpdateDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsumerSummary" nillable="true" type="ConsumerSummary" />
+  <xs:complexType name="DeceasedIndicator">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Deceased" type="xs:boolean" />
+      <xs:element minOccurs="0" name="DeceasedCause" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DeceasedDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DeceasedLocation" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DeceasedIndicator" nillable="true" type="DeceasedIndicator" />
+  <xs:complexType name="ArrayOfConsumerTraceResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsumerTraceResult" nillable="true" type="ConsumerTraceResult" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsumerTraceResult" nillable="true" type="ArrayOfConsumerTraceResult" />
+  <xs:complexType name="ConsumerTraceResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ConsumerID" type="xs:int" />
+      <xs:element minOccurs="0" name="DateOfBirth" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="FirstNames" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="First_Rep_Date" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Gender" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IdentityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LastUpdated" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsumerTraceResult" nillable="true" type="ConsumerTraceResult" />
+  <xs:complexType name="ServiceException">
+    <xs:sequence>
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ETL.WebServices.BusinessLogic.Exceptions" minOccurs="0" name="ExceptionType" type="q5:ExceptionType" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ServiceException" nillable="true" type="ServiceException" />
+  <xs:complexType name="ArrayOfCompanyInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CompanyInfo" nillable="true" type="CompanyInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCompanyInfo" nillable="true" type="ArrayOfCompanyInfo" />
+  <xs:complexType name="CompanyInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="DomainObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AuditorsList" nillable="true" type="ArrayOfCompanyAuditorInfo" />
+          <xs:element minOccurs="0" name="Authorised_Capital" nillable="true" type="xs:double" />
+          <xs:element minOccurs="0" name="Authorised_Shares" nillable="true" type="xs:double" />
+          <xs:element minOccurs="0" name="BothTelephoneNoList" nillable="true" type="ArrayOfTelephoneInfo" />
+          <xs:element minOccurs="0" name="Business_Start_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="CapitalList" nillable="true" type="ArrayOfCompanyCapitalInfo" />
+          <xs:element minOccurs="0" name="CellTelephoneNoList" nillable="true" type="ArrayOfTelephoneInfo" />
+          <xs:element minOccurs="0" name="Company_ID" type="xs:int" />
+          <xs:element minOccurs="0" name="Company_Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Company_Registration_Number" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Conversion_Number" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Country_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Country_Of_Origin" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DirectorsList" nillable="true" type="ArrayOfCompanyDirectorInfo" />
+          <xs:element minOccurs="0" name="Enterprise_Type" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Enterprise_Type_Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Financial_Effective_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Financial_Year_End" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Form_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Form_Received_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="HistoryList" nillable="true" type="ArrayOfCompanyHistoryInfo" />
+          <xs:element minOccurs="0" name="Issued_Capital" nillable="true" type="xs:double" />
+          <xs:element minOccurs="0" name="Issued_Shares" nillable="true" type="xs:double" />
+          <xs:element minOccurs="0" name="LastUpdated" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Old_Registration_Number" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PhysicalAddressList" nillable="true" type="ArrayOfAddressInfo" />
+          <xs:element minOccurs="0" name="PostalAddressList" nillable="true" type="ArrayOfAddressInfo" />
+          <xs:element minOccurs="0" name="Region_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Registration_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Short_Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Shorten_Type" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Sic_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Sic_Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Status_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Status_Code_Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Status_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Tax_Number" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Translated_Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Type_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Withdrawn_Public" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="WorkTelephoneNoList" nillable="true" type="ArrayOfTelephoneInfo" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CompanyInfo" nillable="true" type="CompanyInfo" />
+  <xs:complexType name="ArrayOfCompanyAuditorInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CompanyAuditorInfo" nillable="true" type="CompanyAuditorInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCompanyAuditorInfo" nillable="true" type="ArrayOfCompanyAuditorInfo" />
+  <xs:complexType name="CompanyAuditorInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="DomainObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Act_Ind_Mpy_No_Sp" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Auditor_ID" type="xs:int" />
+          <xs:element minOccurs="0" name="Auditor_Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Company_ID" type="xs:int" />
+          <xs:element minOccurs="0" name="End_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Expiry_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Fine_Letter" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Form_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="PhysicalAddressList" nillable="true" type="ArrayOfAddressInfo" />
+          <xs:element minOccurs="0" name="PostalAddressList" nillable="true" type="ArrayOfAddressInfo" />
+          <xs:element minOccurs="0" name="Profession_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Profession_Number" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Receive_Form_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Reference_Number" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Registration_Entry_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Start_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Status_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Type_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="WithDraw_Public" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CompanyAuditorInfo" nillable="true" type="CompanyAuditorInfo" />
+  <xs:complexType name="ArrayOfAddressInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AddressInfo" nillable="true" type="AddressInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAddressInfo" nillable="true" type="ArrayOfAddressInfo" />
+  <xs:complexType name="AddressInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="DomainObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Active" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Address1" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Address2" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Address3" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Address4" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="AddressType" type="DomainConstants.AddressType" />
+          <xs:element minOccurs="0" name="Address_ID" type="xs:int" />
+          <xs:element minOccurs="0" name="BuildingName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="BuildingNo" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="City" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Complex" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Del" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Deliverable" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="DupeCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ErfNo" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ErrMsg" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="First_Rep_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="GeoLev" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IsValid" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Last_Upd_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="NadId" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="NadLat" nillable="true" type="xs:double" />
+          <xs:element minOccurs="0" name="NadLong" nillable="true" type="xs:double" />
+          <xs:element minOccurs="0" name="OwnerOrTennant" type="DomainConstants.AddressOwnerTennantEnum" />
+          <xs:element minOccurs="0" name="Period" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PostalCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Province" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ProvinceCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RecentlyUpdated" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Relevance" type="xs:double" />
+          <xs:element minOccurs="0" name="SB" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SG23Key" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Source_ID" type="xs:int" />
+          <xs:element minOccurs="0" name="Status" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Street_Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Street_No" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Street_Suffix" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SubCode" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Suburb" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Town" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Valid" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AddressInfo" nillable="true" type="AddressInfo" />
+  <xs:simpleType name="DomainConstants.AddressType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="Physical" />
+      <xs:enumeration value="Postal" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="DomainConstants.AddressType" nillable="true" type="DomainConstants.AddressType" />
+  <xs:simpleType name="DomainConstants.AddressOwnerTennantEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="Owner" />
+      <xs:enumeration value="Tennant" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="DomainConstants.AddressOwnerTennantEnum" nillable="true" type="DomainConstants.AddressOwnerTennantEnum" />
+  <xs:complexType name="ArrayOfTelephoneInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TelephoneInfo" nillable="true" type="TelephoneInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTelephoneInfo" nillable="true" type="ArrayOfTelephoneInfo" />
+  <xs:complexType name="TelephoneInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseTelephoneInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Consumer_ID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TelephoneInfo" nillable="true" type="TelephoneInfo" />
+  <xs:complexType name="BaseTelephoneInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="DomainObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Active" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="AreaCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="First_Rep_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Last_Upd_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="RecentlyUpdated" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Relevance" type="xs:double" />
+          <xs:element minOccurs="0" name="Telephone" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TelephoneType" type="DomainConstants.TelephoneType" />
+          <xs:element minOccurs="0" name="Telephone_ID" type="xs:long" />
+          <xs:element minOccurs="0" name="Telephone_Type" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="User_ID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="YearsAtAddress" nillable="true" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseTelephoneInfo" nillable="true" type="BaseTelephoneInfo" />
+  <xs:simpleType name="DomainConstants.TelephoneType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="Work" />
+      <xs:enumeration value="Cellular" />
+      <xs:enumeration value="Home" />
+      <xs:enumeration value="Both" />
+      <xs:enumeration value="Landline" />
+      <xs:enumeration value="Fax" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="DomainConstants.TelephoneType" nillable="true" type="DomainConstants.TelephoneType" />
+  <xs:complexType name="ArrayOfCompanyCapitalInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CompanyCapitalInfo" nillable="true" type="CompanyCapitalInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCompanyCapitalInfo" nillable="true" type="ArrayOfCompanyCapitalInfo" />
+  <xs:complexType name="CompanyCapitalInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="DomainObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Capital_Type" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Company_Capital_ID" type="xs:int" />
+          <xs:element minOccurs="0" name="Company_ID" type="xs:int" />
+          <xs:element minOccurs="0" name="Company_Registration_Number" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="No_Shares" nillable="true" type="xs:double" />
+          <xs:element minOccurs="0" name="Parri_Value" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Premium" type="xs:int" />
+          <xs:element minOccurs="0" name="Share_Amount" nillable="true" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CompanyCapitalInfo" nillable="true" type="CompanyCapitalInfo" />
+  <xs:complexType name="ArrayOfCompanyDirectorInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CompanyDirectorInfo" nillable="true" type="CompanyDirectorInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCompanyDirectorInfo" nillable="true" type="ArrayOfCompanyDirectorInfo" />
+  <xs:complexType name="CompanyDirectorInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="DomainObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Appointment_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Company_ID" type="xs:int" />
+          <xs:element minOccurs="0" name="Consumer" nillable="true" type="ConsumerInfo" />
+          <xs:element minOccurs="0" name="Consumer_ID" type="xs:int" />
+          <xs:element minOccurs="0" name="Country_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Designation" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Designation_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Director_ID" type="xs:int" />
+          <xs:element minOccurs="0" name="Estate" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Excl_Con" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Executor_Appoint_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Executor_Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Fine_Expiry_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Form_Lodge_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Form_Receive_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Founding_Statement_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="LastUpdateDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Member_Contribution" nillable="true" type="xs:double" />
+          <xs:element minOccurs="0" name="Member_Contribution_Type" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Member_Size" nillable="true" type="xs:double" />
+          <xs:element minOccurs="0" name="Nationality_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Nature_Of_Change" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Occupation_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PhysicalAddressList" nillable="true" type="ArrayOfAddressInfo" />
+          <xs:element minOccurs="0" name="PostalAddressList" nillable="true" type="ArrayOfAddressInfo" />
+          <xs:element minOccurs="0" name="Profession" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Register_Number" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Resignation_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Rsa_Resident" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Status_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Status_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Trustee_Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Type_Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Withdraw_Public" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CompanyDirectorInfo" nillable="true" type="CompanyDirectorInfo" />
+  <xs:complexType name="ConsumerInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="DomainObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AltSurname" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="BothTelephoneNoList" nillable="true" type="ArrayOfTelephoneInfo" />
+          <xs:element minOccurs="0" name="CellTelephoneNoList" nillable="true" type="ArrayOfTelephoneInfo" />
+          <xs:element minOccurs="0" name="Citizenship" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Consumer_ID" type="xs:int" />
+          <xs:element minOccurs="0" name="CustomAttributes" nillable="true" type="ArrayOfConsumerCustomAttributeInfo" />
+          <xs:element minOccurs="0" name="DNC" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="DNC_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DNC_Source" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DOB" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Date_Divorced" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Date_Married" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Death_Cause" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Death_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Death_Place" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Deceased_Status" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Do_Not_Contact_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="EmailAddressList" nillable="true" type="ArrayOfEmailInfo" />
+          <xs:element minOccurs="0" name="EmployerList" nillable="true" type="ArrayOfEmployerInfo" />
+          <xs:element minOccurs="0" name="First_Names" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="First_Rep_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="FullName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Gender" type="DomainConstants.Gender" />
+          <xs:element minOccurs="0" name="HomeTelephoneNoList" nillable="true" type="ArrayOfTelephoneInfo" />
+          <xs:element minOccurs="0" name="IDNo" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IDNo10" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Initial" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Last_Upd_Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Maiden_Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MaritalStatus" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Passport_No" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PhysicalAddressList" nillable="true" type="ArrayOfAddressInfo" />
+          <xs:element minOccurs="0" name="Place_Divorced" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Place_Married" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PostalAddressList" nillable="true" type="ArrayOfAddressInfo" />
+          <xs:element minOccurs="0" name="Rating" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Salutation" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Source" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Spouse_FNames" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Spouse_IDNo" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Spouse_Maiden" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ThirdPartyUpdated" type="xs:boolean" />
+          <xs:element minOccurs="0" name="User_ID" type="xs:int" />
+          <xs:element minOccurs="0" name="WorkTelephoneNoList" nillable="true" type="ArrayOfTelephoneInfo" />
+          <xs:element minOccurs="0" name="spouseConsumerID" nillable="true" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ConsumerInfo" nillable="true" type="ConsumerInfo" />
+  <xs:complexType name="ArrayOfConsumerCustomAttributeInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsumerCustomAttributeInfo" nillable="true" type="ConsumerCustomAttributeInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsumerCustomAttributeInfo" nillable="true" type="ArrayOfConsumerCustomAttributeInfo" />
+  <xs:complexType name="ConsumerCustomAttributeInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="DomainObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Key" type="xs:int" />
+          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:anyType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ConsumerCustomAttributeInfo" nillable="true" type="ConsumerCustomAttributeInfo" />
+  <xs:complexType name="ArrayOfEmployerInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="EmployerInfo" nillable="true" type="EmployerInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEmployerInfo" nillable="true" type="ArrayOfEmployerInfo" />
+  <xs:complexType name="EmployerInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="CompanyInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Employer" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Occupation" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PeriodEmployed" nillable="true" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="EmployerInfo" nillable="true" type="EmployerInfo" />
+  <xs:simpleType name="DomainConstants.Gender">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="Male" />
+      <xs:enumeration value="Female" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="DomainConstants.Gender" nillable="true" type="DomainConstants.Gender" />
+  <xs:complexType name="ArrayOfCompanyHistoryInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CompanyHistoryInfo" nillable="true" type="CompanyHistoryInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCompanyHistoryInfo" nillable="true" type="ArrayOfCompanyHistoryInfo" />
+  <xs:complexType name="CompanyHistoryInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="DomainObject">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CompanyHistoryInfo" nillable="true" type="CompanyHistoryInfo" />
+</xs:schema>

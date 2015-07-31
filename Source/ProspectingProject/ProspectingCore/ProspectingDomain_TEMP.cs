@@ -946,27 +946,57 @@ namespace ProspectingProject
                                                        select c).FirstOrDefault();
                     if (contactWithExistingIDNumber != null)
                     {
-                        // A contact with this id number already exists, we must ensure that they are linked to the property
-                        var existingRelationshipToProperty = from ppr in prospecting.prospecting_person_property_relationships
-                                                             where ppr.contact_person_id == contactWithExistingIDNumber.contact_person_id
-                                                             && ppr.prospecting_property_id == dataPacket.ProspectingPropertyId
-                                                             select ppr;
-
-                        // TODO: This code will need to change to accomodate multiple records for the same person who changed their relationship to the property over time.
-                        if (existingRelationshipToProperty.Count()==0)
+                        if (dataPacket.ContactCompanyId.HasValue)
                         {
-                            incomingContact.PropertiesOwned = LoadPropertiesOwnedByThisContact(idNumberOfNewContact, prospecting);
-
-                            // New person-property relationship
-                            var personPropertyRelation = new prospecting_person_property_relationship
+                            // This contact has a relationship with a company as opposed to a property
+                            var personCompanyRelation = (from r in prospecting.prospecting_person_company_relationships
+                                                         join q in prospecting.prospecting_company_property_relationships on r.contact_company_id equals q.contact_company_id
+                                                         where r.contact_person_id == contactWithExistingIDNumber.contact_person_id && q.prospecting_property_id == dataPacket.ProspectingPropertyId
+                                                         select r).FirstOrDefault();
+                            if (personCompanyRelation != null)
                             {
-                                contact_person_id = contactWithExistingIDNumber.contact_person_id,
-                                prospecting_property_id = dataPacket.ProspectingPropertyId.Value,
-                                relationship_to_property = GetPersonRelationshipToProperty(dataPacket.ProspectingPropertyId, incomingContact.PersonPropertyRelationships),
-                                created_date = DateTime.Now
-                            };
-                            prospecting.prospecting_person_property_relationships.InsertOnSubmit(personPropertyRelation);
-                            prospecting.SubmitChanges();
+                                personCompanyRelation.relationship_to_company = incomingContact.PersonCompanyRelationshipType.Value;
+                                personCompanyRelation.contact_company_id = dataPacket.ContactCompanyId.Value;
+                                personCompanyRelation.updated_date = DateTime.Now;
+                                prospecting.SubmitChanges();
+                            }
+                            else
+                            {
+                                personCompanyRelation = new prospecting_person_company_relationship
+                                {
+                                    contact_person_id = contactWithExistingIDNumber.contact_person_id,
+                                    contact_company_id = dataPacket.ContactCompanyId,
+                                    relationship_to_company = incomingContact.PersonCompanyRelationshipType,
+                                    created_date = DateTime.Now
+                                };
+                                prospecting.prospecting_person_company_relationships.InsertOnSubmit(personCompanyRelation);
+                                prospecting.SubmitChanges();
+                            }
+                        }
+                        else
+                        {
+                            // A contact with this id number already exists, we must ensure that they are linked to the property
+                            var existingRelationshipToProperty = from ppr in prospecting.prospecting_person_property_relationships
+                                                                 where ppr.contact_person_id == contactWithExistingIDNumber.contact_person_id
+                                                                 && ppr.prospecting_property_id == dataPacket.ProspectingPropertyId
+                                                                 select ppr;
+
+                            // TODO: This code will need to change to accomodate multiple records for the same person who changed their relationship to the property over time.
+                            if (existingRelationshipToProperty.Count() == 0)
+                            {
+                                incomingContact.PropertiesOwned = LoadPropertiesOwnedByThisContact(idNumberOfNewContact, prospecting);
+
+                                // New person-property relationship
+                                var personPropertyRelation = new prospecting_person_property_relationship
+                                {
+                                    contact_person_id = contactWithExistingIDNumber.contact_person_id,
+                                    prospecting_property_id = dataPacket.ProspectingPropertyId.Value,
+                                    relationship_to_property = GetPersonRelationshipToProperty(dataPacket.ProspectingPropertyId, incomingContact.PersonPropertyRelationships),
+                                    created_date = DateTime.Now
+                                };
+                                prospecting.prospecting_person_property_relationships.InsertOnSubmit(personPropertyRelation);
+                                prospecting.SubmitChanges();
+                            }
                         }
                     }
                     else
@@ -2589,6 +2619,62 @@ namespace ProspectingProject
                     prospecting.SubmitChanges();
                 }
             }
+        }
+
+        public static CompanyEnquiryResponsePacket PerformCompanyEnquiry(CompanyEnquiryInputPacket enquiryPacket)
+        {
+            prospecting_contact_company prospectingTargetCompany;
+            using (var prospecting = new ProspectingDataContext())
+            {
+                prospectingTargetCompany = prospecting.prospecting_contact_companies.First(cc => cc.contact_company_id == enquiryPacket.ContactCompanyId);
+            }
+
+            CompanyEnquiryResponsePacket results = new CompanyEnquiryResponsePacket();
+            ICompanyEnquiryService companyService = new DracoreCompanyLookupService(prospectingTargetCompany, enquiryPacket.ProspectingPropertyId);
+
+            decimal? walletBalance = null;
+            // Variables to keep track of the state of the transaction
+            bool enquirySuccessful = false, deductionMade = false, deductionReimbursed = false;
+            try
+            {
+                companyService.InitResponsePacket(results);
+                walletBalance = companyService.DeductEnquiryCost(); // NB: Will return a value < 0 if insufficient funds
+                if (walletBalance >= decimal.Zero)
+                {
+                    deductionMade = true;
+                    companyService.DoEnquiry();
+                    if (results.EnquirySuccessful && string.IsNullOrEmpty(results.ErrorMsg))
+                    {
+                        enquirySuccessful = true;
+                    }
+                    else
+                    {
+                        walletBalance = companyService.ReverseEnquiryCost();
+                        deductionReimbursed = true;
+                    }
+                    results.WalletBalance = walletBalance;
+                }
+                else
+                {
+                    results.ErrorMsg = "Insufficient funds to perform enquiry.";
+                }
+            }
+            catch (Exception ex)
+            {
+                results.ErrorMsg = "Exception occurred performing enquiry: " + ex.Message;
+                companyService.SetError(ex);
+            }
+            finally
+            {
+                // Double check here that if enquiry failed we do not accidently bill the user.
+                if (!enquirySuccessful && deductionMade && !deductionReimbursed)
+                {
+                    results.WalletBalance = companyService.ReverseEnquiryCost();
+                }
+                companyService.LogEnquiry();
+            }
+
+            return results;
         }
     }
 }

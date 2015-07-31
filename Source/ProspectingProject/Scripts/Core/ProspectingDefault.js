@@ -400,7 +400,7 @@ function changeBgColour(id, colour) {
     row.css('background-color', 'lightblue');
 }
 
-function setCurrentMarker(suburb, property) {
+function setCurrentMarker(suburb, property, callback) {
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
@@ -438,6 +438,9 @@ function setCurrentMarker(suburb, property) {
                     }                    
                 });
 
+                if (callback) {
+                    callback(data);
+                }
             } else {
                 alert('Could not complete request.');
             }
@@ -1076,6 +1079,7 @@ function addOrUpdateContactToCurrentProperty(newContact) {
         contact.Title = newContact.Title;
         contact.IdNumber = newContact.IdNumber;
         contact.PersonPropertyRelationships = newContact.PersonPropertyRelationships;
+        contact.PersonCompanyRelationshipType = newContact.PersonCompanyRelationshipType;
         contact.PhoneNumbers = newContact.PhoneNumbers;
         contact.EmailAddresses = newContact.EmailAddresses;
         contact.Comments = newContact.Comments;

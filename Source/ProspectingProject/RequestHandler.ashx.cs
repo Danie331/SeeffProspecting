@@ -167,6 +167,10 @@ namespace ProspectingProject
                     case "delete_valuation":
                         DeleteValuation(json);
                         break;
+                    case"perform_company_enquiry":
+                        string enquiryResults = PerformCompanyEnquiry(json);
+                        context.Response.Write(enquiryResults);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -199,6 +203,13 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string PerformCompanyEnquiry(string json)
+        {
+            var enquiryPacket = ProspectingCore.Deserialise<CompanyEnquiryInputPacket>(json);
+            var responsePacket = ProspectingCore.PerformCompanyEnquiry(enquiryPacket);
+            return ProspectingCore.SerializeToJsonWithDefaults(responsePacket);
         }
 
         private void DeleteValuation(string json)
