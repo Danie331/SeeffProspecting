@@ -108,7 +108,7 @@ namespace ProspectingProject
             {
                 if (targetCompany.DirectorsList != null)
                 {
-                    int? relationshipToCompany = ProspectingLookupData.PersonCompanyRelationshipTypes.First(kvp => kvp.Value == "Company Representative").Key;
+                    int? relationshipToCompany = ProspectingLookupData.PersonCompanyRelationshipTypes.First(kvp => kvp.Value == "Company Director").Key;
                     foreach (var director in targetCompany.DirectorsList)
                     {
                         if (director.Consumer != null)
