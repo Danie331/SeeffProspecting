@@ -2676,5 +2676,233 @@ namespace ProspectingProject
 
             return results;
         }
+
+        public static CommReportResults LoadCommunicationData(CommReportFilters filterPacket)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                CommReportResults results = new CommReportResults();
+                switch (filterPacket.MessageType)
+                {
+                    case "EMAIL":
+                        IEnumerable<email_communications_log> emailResults = from log in prospecting.email_communications_logs select log;
+                        if (filterPacket.SentByMe)
+                        {
+                            var userGuid = RequestHandler.GetUserSessionObject().UserGuid;
+                            emailResults = emailResults.Where(em => em.created_by_user_guid == userGuid);
+                        }
+                        else
+                        {
+                            var businessUnitUsers = RequestHandler.GetUserSessionObject().BusinessUnitUsers;
+                            var userGuids = from u in businessUnitUsers select u.UserGuid;
+                            emailResults = emailResults.Where(em => userGuids.Contains(em.created_by_user_guid));
+                        }
+                        if (!string.IsNullOrWhiteSpace(filterPacket.BatchName))
+                        {
+                            emailResults = emailResults.Where(em =>
+                            {
+                                if (!string.IsNullOrEmpty(em.batch_friendly_name))
+                                {
+                                    if (em.batch_friendly_name.ToLower().Contains(filterPacket.BatchName.ToLower()))
+                                        return true;
+                                }
+                                return false;
+                            });
+                        }
+                        if (filterPacket.FromDate.HasValue)
+                        {
+                            emailResults = emailResults.Where(em => em.created_datetime.Date >= filterPacket.FromDate);
+                        }
+                        if (filterPacket.ToDate.HasValue)
+                        {
+                            emailResults = emailResults.Where(em => em.created_datetime.Date <= filterPacket.ToDate);
+                        }
+                        if (!string.IsNullOrWhiteSpace(filterPacket.SentStatus))
+                        {
+                            switch (filterPacket.SentStatus)
+                            {
+                                case "statusAllMessages":
+                                    // no filtering needed.
+                                    break;
+                                case "statusSuccessfulMessages":
+                                    int successStatus = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "EMAIL_SENT").Key;
+                                    emailResults = emailResults.Where(em => em.status == successStatus);
+                                    break;
+                                case "statusPendingMessages":
+                                    int pendingSubmit = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "PENDING_SUBMIT_TO_API").Key;
+                                    int awaitingResponse = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "AWAITING_RESPONSE_FROM_API").Key;
+                                    emailResults = emailResults.Where(em => new[] { pendingSubmit, awaitingResponse}.Contains(em.status));
+                                    break;
+                                case "statusFailedMessages":
+                                    int failedStatus = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "EMAIL_UNSENT").Key;
+                                    emailResults = emailResults.Where(em => em.status == failedStatus);
+                                    break;
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(filterPacket.TargetEmailAddress))
+                        {
+                            emailResults = emailResults.Where(em => em.target_email_address.ToLower() == filterPacket.TargetEmailAddress.ToLower());
+                        }
+                        if (filterPacket.TargetLightstonePropertyId.HasValue)
+                        {
+                            emailResults = emailResults.Where(em => em.target_lightstone_property_id == filterPacket.TargetLightstonePropertyId);
+                        }
+
+                        // Finally take a maximum set of results and set the count variable
+                        results.TotalResultsPerFilterCriteria = emailResults.Count();
+                        emailResults = emailResults.Take(500);
+                        results.EmailLogItems = BuildCommunicationEmailResults(emailResults);
+                        return results;
+                    case "SMS":
+                        IEnumerable<sms_communications_log> smsResults = from log in prospecting.sms_communications_logs select log;
+                        if (filterPacket.SentByMe)
+                        {
+                            var userGuid = RequestHandler.GetUserSessionObject().UserGuid;
+                            smsResults = smsResults.Where(em => em.created_by_user_guid == userGuid);
+                        }
+                        else
+                        {
+                            var businessUnitUsers = RequestHandler.GetUserSessionObject().BusinessUnitUsers;
+                            var userGuids = from u in businessUnitUsers select u.UserGuid;
+                            smsResults = smsResults.Where(em => userGuids.Contains(em.created_by_user_guid));
+                        }
+                        if (!string.IsNullOrWhiteSpace(filterPacket.BatchName))
+                        {
+                            smsResults = smsResults.Where(em =>
+                            {
+                                if (!string.IsNullOrEmpty(em.batch_friendly_name))
+                                {
+                                    if (em.batch_friendly_name.ToLower().Contains(filterPacket.BatchName.ToLower()))
+                                        return true;
+                                }
+                                return false;
+                            });
+                        }
+                        if (filterPacket.FromDate.HasValue)
+                        {
+                            smsResults = smsResults.Where(em => em.created_datetime.Date >= filterPacket.FromDate);
+                        }
+                        if (filterPacket.ToDate.HasValue)
+                        {
+                            smsResults = smsResults.Where(em => em.created_datetime.Date <= filterPacket.ToDate);
+                        }
+                        if (!string.IsNullOrWhiteSpace(filterPacket.SentStatus))
+                        {
+                            switch (filterPacket.SentStatus)
+                            {
+                                case "statusAllMessages":
+                                    // no filtering needed.
+                                    break;
+                                case "statusSuccessfulMessages":
+                                    int successStatus = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "SMS_DELIVERED").Key;
+                                    int reply = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "SMS_REPLY").Key;
+                                    smsResults = smsResults.Where(em => new[] {successStatus, reply}.Contains(em.status));
+                                    break;
+                                case "statusPendingMessages":
+                                    int pendingSubmit = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "PENDING_SUBMIT_TO_API").Key;
+                                    int awaitingResponse = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "AWAITING_RESPONSE_FROM_API").Key;
+                                    int submitted = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "SMS_SUBMITTED").Key;
+                                    smsResults = smsResults.Where(em => new[] { pendingSubmit, awaitingResponse, submitted }.Contains(em.status));
+                                    break;
+                                case "statusFailedMessages":
+                                    int failedStatus = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "SMS_OTHER").Key;
+                                    smsResults = smsResults.Where(em => em.status == failedStatus);
+                                    break;
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(filterPacket.TargetCellNo))
+                        {
+                            string formattedNo = Regex.Replace(filterPacket.TargetCellNo, @"\s+", "");
+                            if (formattedNo.StartsWith("0"))
+                            {
+                                formattedNo = "27" + formattedNo.Remove(0, 1);
+                            }
+                            if (formattedNo.StartsWith("+27"))
+                            {
+                                formattedNo = formattedNo.Remove(0, 1);
+                            }
+                            smsResults = smsResults.Where(em => em.target_cellphone_no == formattedNo);
+                        }
+                        if (filterPacket.TargetLightstonePropertyId.HasValue)
+                        {
+                            smsResults = smsResults.Where(em => em.target_lightstone_property_id == filterPacket.TargetLightstonePropertyId);
+                        }
+
+                        // Finally take a maximum set of results and set the count variable
+                        results.TotalResultsPerFilterCriteria = smsResults.Count();
+                        smsResults = smsResults.Take(500);
+                        results.SMSLogItems = BuildCommunicationSMSResults(smsResults);
+                        return results;
+                }
+                throw new Exception("Invalid message type for filtering!");
+            }
+        }
+
+        private static List<SentSMSLogItem> BuildCommunicationSMSResults(IEnumerable<sms_communications_log> smsResults)
+        {
+            Func<Guid, string> getSenderName = guid =>
+                {
+                    var businessUnitUsers = RequestHandler.GetUserSessionObject().BusinessUnitUsers;
+                    return (from u in businessUnitUsers
+                            where u.UserGuid == guid
+                            select u.Fullname).FirstOrDefault();
+
+                };
+
+            List<SentSMSLogItem> items = new List<SentSMSLogItem>();
+            foreach (var record in smsResults)
+            {
+                SentSMSLogItem newItem = new SentSMSLogItem
+                {
+                         DateSent = record.created_datetime,
+                          DeliveryStatus = !string.IsNullOrEmpty(record.api_delivery_status) ? record.api_delivery_status : "",
+                           FriendlyNameOfBatch = record.batch_friendly_name,
+                            SentBy = getSenderName(record.created_by_user_guid),
+                             SentTo = record.target_cellphone_no,
+                              TargetLightstonePropertyId = record.target_lightstone_property_id
+                };
+                items.Add(newItem);
+            }
+            return items.OrderByDescending(f => f.DateSent).ToList();
+        }
+
+        private static List<SentEmailLogItem> BuildCommunicationEmailResults(IEnumerable<email_communications_log> emailResults)
+        {
+            Func<int, string> getStatusDesc = status =>
+            {
+                if (status == ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "EMAIL_SENT").Key)
+                {
+                    return "Sent";
+                }
+                if (status == ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "PENDING_SUBMIT_TO_API").Key ||
+                    status == ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "AWAITING_RESPONSE_FROM_API").Key)
+                {
+                    return "Pending";
+                }
+
+                if (status == ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "EMAIL_UNSENT").Key)
+                {
+                    return "Fail";
+                }
+
+                return "";
+            };
+
+            List<SentEmailLogItem> items = new List<SentEmailLogItem>();
+            foreach (var record in emailResults)
+            {
+                SentEmailLogItem newItem = new SentEmailLogItem
+                {
+                    DateSent = record.created_datetime,
+                    DeliveryStatus = getStatusDesc(record.status),
+                    FriendlyNameOfBatch = record.batch_friendly_name,
+                    SentBy = record.created_by_user_name,
+                    SentTo = record.target_email_address,
+                    TargetLightstonePropertyId = record.target_lightstone_property_id
+                };
+                items.Add(newItem);
+            }
+            return items.OrderByDescending(f => f.DateSent).ToList();
+        }
     }
 }

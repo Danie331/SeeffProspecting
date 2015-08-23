@@ -36,6 +36,16 @@ function ContentExpanderWidget(containerElementId, contentExpanderItemArray, ele
         }
     };
 
+    this.close = function (itemId) {
+        var targetDiv = $.grep(contentExpanderItemArray, function (div) {
+            return div.find('.expanderItemHeader').attr('id') == itemId;
+        })[0];
+
+        if (targetDiv.find('.expanderItemContent').css('display') == 'block') {
+            targetDiv.find('.expanderItemHeader').trigger('click');
+        }
+    };
+
     return this;
 }
 

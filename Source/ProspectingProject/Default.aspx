@@ -60,6 +60,7 @@
     <script src="Scripts/Core/Communication.js"></script>
     <script src="Scripts/Core/PropertyInformation.js"></script>
     <script src="Scripts/Core/DocumentVault.js"></script>
+    <script src="Scripts/Core/CommReports.js"></script>
     <script src="Scripts/Core/DrawingMultiSelect.js"></script>
     <script src="Scripts/Core/AppStart.js"></script>
      <%-- END_SECTION:CORE_SCRIPTS --%>

@@ -113,7 +113,7 @@ namespace ProspectingProject
                              .Replace("*surname*", surname)
                              .Replace("*address*", address);
 
-            return rawMessageBody + " -Reply STOP to opt-out";
+            return rawMessageBody + " STOP to opt out";
         }
 
         private static List<ProspectingContactPerson> GetSmsTargetContactPersons(SmsBatch batch)

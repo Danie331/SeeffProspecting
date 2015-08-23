@@ -711,6 +711,8 @@
     <Content Include="Assets\comm_anniversary.png" />
     <Content Include="Assets\comm_bday.png" />
     <Content Include="Assets\comm_email.png" />
+    <Content Include="Assets\comm_message_history.png" />
+    <Content Include="Assets\comm_report_filters.png" />
     <Content Include="Assets\comm_sms.png" />
     <Content Include="Assets\contact.png" />
     <Content Include="Assets\dracore_email_lookup.png" />
@@ -1029,6 +1031,7 @@
     <Content Include="Scripts\3rdParty\CrossDomainRequestPlugin.js" />
     <Content Include="Scripts\3rdParty\jqueryBlockUI.js" />
     <Content Include="Scripts\3rdParty\waitForImage.js" />
+    <Content Include="Scripts\Core\CommReports.js" />
     <Content Include="Scripts\Core\CommunicationTemplates.js" />
     <Content Include="Scripts\Core\DocumentVault.js" />
     <Content Include="Scripts\Core\DrawingMultiSelect.js" />
@@ -1215,6 +1218,8 @@
     <Compile Include="Services\TracePS\TracepsPhoneNumberLookup.cs" />
     <Compile Include="Services\TracePS\TracepsTestService.cs" />
     <Compile Include="Types\ActivityBundle.cs" />
+    <Compile Include="Types\CommReportFilters.cs" />
+    <Compile Include="Types\CommReportResults.cs" />
     <Compile Include="Types\CommTemplateRequest.cs" />
     <Compile Include="Types\CommunicationBatchStatus.cs" />
     <Compile Include="Types\CommunicationTemplate.cs" />
@@ -1245,6 +1250,8 @@
     <Compile Include="Types\ContactDetails.cs" />
     <Compile Include="Types\PropertyCommentsNotes.cs" />
     <Compile Include="Types\SearchInputPacket.cs" />
+    <Compile Include="Types\SentEmailLogItem.cs" />
+    <Compile Include="Types\SentSMSLogItem.cs" />
     <Compile Include="Types\SmsBatch.cs" />
     <Compile Include="Types\UserDataResponsePacket.cs" />
     <Compile Include="Types\UserSuburb.cs" />

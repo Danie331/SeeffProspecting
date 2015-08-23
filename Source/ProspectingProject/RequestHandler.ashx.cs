@@ -171,6 +171,10 @@ namespace ProspectingProject
                         string enquiryResults = PerformCompanyEnquiry(json);
                         context.Response.Write(enquiryResults);
                         break;
+                    case "load_comm_report":
+                        string messagesReport = LoadCommunicationData(json);
+                        context.Response.Write(messagesReport);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -203,6 +207,13 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string LoadCommunicationData(string json)
+        {
+            var filterPacket = ProspectingCore.Deserialise<CommReportFilters>(json);
+            var results = ProspectingCore.LoadCommunicationData(filterPacket);
+            return ProspectingCore.SerializeToJsonWithDefaults(results);
         }
 
         private string PerformCompanyEnquiry(string json)

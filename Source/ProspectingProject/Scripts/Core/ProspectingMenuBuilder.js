@@ -53,6 +53,13 @@ function createProspectingMenu(userData) {
         menuItem = createMenuItem("Communication", "communication", buildCommunicationMenu(), handleEnableComms, null);
         appendMenuItemContent(menuItem.MenuItemContent);
         menuItems.push(menuItem);
+
+        menuItem = createMenuItem("Comm. Reporting", "commreporting", buildCommReportingMenu(), function () {
+            toggleMultiSelectMode(false);
+            toggleCommReportingMenu();
+        }, null);
+        appendMenuItemContent(menuItem.MenuItemContent);
+        menuItems.push(menuItem);
     }
 
     menuItem = createMenuItem("Property Information", "propertyinformation", buildPropertyInformationMenu(), function () {
