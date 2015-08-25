@@ -2862,13 +2862,21 @@ namespace ProspectingProject
 
             Func<string, string> formatCellNo = cell => cell.StartsWith("27") ? "0" + cell.Remove(0, 2) : cell;
 
+            Func<string, int, string> getDeliveryStatus = (apiStatus, prospectingStatus) =>
+            {
+                if (!string.IsNullOrEmpty(apiStatus)) return apiStatus;
+
+                string currentCommStatus = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Key == prospectingStatus).Value;
+                return currentCommStatus;
+            };
+
             List<SentSMSLogItem> items = new List<SentSMSLogItem>();
             foreach (var record in smsResults)
             {
                 SentSMSLogItem newItem = new SentSMSLogItem
                 {
                     DateSent = record.updated_datetime.HasValue ? record.updated_datetime.Value : record.created_datetime,
-                    DeliveryStatus = !string.IsNullOrEmpty(record.api_delivery_status) ? record.api_delivery_status : "",
+                    DeliveryStatus = getDeliveryStatus(record.api_delivery_status, record.status),
                     FriendlyNameOfBatch = record.batch_friendly_name,
                     SentBy = getSenderName(record.created_by_user_guid),
                     SentTo = formatCellNo(record.target_cellphone_no),
