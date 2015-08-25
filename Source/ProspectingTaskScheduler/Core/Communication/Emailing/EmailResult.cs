@@ -9,5 +9,6 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
     {
         public bool Success { get; set; }
         public string ErrorMessage { get; set; }
+        public string ApiTrackingKey { get; set; }
     }
 }

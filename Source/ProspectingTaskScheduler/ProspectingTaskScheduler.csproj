@@ -118,6 +118,7 @@
     <Compile Include="Core\Communication\CommunicationHelpers.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillAttachment.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillEmailMessage.cs" />
+    <Compile Include="Core\Communication\Emailing\Mandrill\MandrillErrorResponse.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillGlobalMergeVar.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillImage.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillMergeVarVar.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillRecipientMetaData.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillRecipientMetaDataValues.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillSendRequest.cs" />
+    <Compile Include="Core\Communication\Emailing\Mandrill\MandrillSuccessfulResponse.cs" />
     <Compile Include="Core\Communication\SMSing\SMSBatchResult.cs" />
     <Compile Include="Core\Communication\SMSing\SMSHandler.cs" />
     <Compile Include="Core\Housekeeping\CleanupLockedPropertyRecords.cs" />

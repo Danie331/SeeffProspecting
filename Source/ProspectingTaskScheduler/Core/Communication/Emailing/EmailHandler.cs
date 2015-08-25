@@ -78,6 +78,7 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                     emailItem.attachment1_content = null;
                     emailItem.attachment1_name = null;
                     emailItem.attachment1_type = null;
+                    emailItem.api_tracking_id = sendingResult.ApiTrackingKey;
 
                     return;
                 }
@@ -92,6 +93,7 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                 emailItem.attachment1_name = null;
                 emailItem.attachment1_type = null;
                 emailItem.error_msg = sendingResult.ErrorMessage;
+                emailItem.api_tracking_id = sendingResult.ApiTrackingKey;
             }
 
 
@@ -176,6 +178,15 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                     try
                     {
                         response = client.PostAsync("/api/1.0/messages/send.json", httpContent).Result;
+
+                        var mandrillResponseArray = response.Content.ReadAsAsync<MandrillSuccessfulResponse[]>().Result;
+                        MandrillSuccessfulResponse successResponse = mandrillResponseArray[0];
+                        result.ApiTrackingKey = successResponse._id;
+                        if (successResponse.status != "sent")
+                        {
+                            result.Success = false;
+                            result.ErrorMessage = successResponse.status + ": " + successResponse.reject_reason;
+                        }
                     }
                     catch (Exception e)
                     {

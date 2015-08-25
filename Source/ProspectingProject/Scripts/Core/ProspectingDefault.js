@@ -1771,7 +1771,8 @@ function buildContentForInfoWindow(property, infowindow, showStreetView) {
         if (property.ContactCompanies) {
             if (property.ContactCompanies.length) {
                 $.each(property.ContactCompanies, function (idx, c) {
-                    div.append(c.CompanyName + " (" + c.CKNumber + ")");
+                    var regNo = c.CKNumber && c.CKNumber.indexOf('UNKNOWN_CK') == -1 ? " (" + c.CKNumber + ")" : '';
+                    div.append(c.CompanyName + regNo);
                     div.append("<br />");
                 });
             }

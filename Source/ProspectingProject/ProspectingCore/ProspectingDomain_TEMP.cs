@@ -1702,6 +1702,10 @@ namespace ProspectingProject
         private static ProspectingContactCompany CreateCompanyContactFromDataRow(DataRow dr)
         {
             var ckNo = dr["BUYER_IDCK"].ToString();
+            if (string.IsNullOrEmpty(ckNo))
+            {
+                ckNo = "UNKNOWN_CK_" + dr["BUYER_NAME"].ToString().Replace(" ", "_");
+            }
             var pcc = new ProspectingContactCompany
             {
                 CKNumber = ckNo,
@@ -1830,7 +1834,7 @@ namespace ProspectingProject
 
         private static IProspectingContactEntity GetOwnerFromDataRow(DataRow dr)
         {
-            if (string.IsNullOrEmpty(dr["BUYER_IDCK"].ToString()))
+            if (string.IsNullOrEmpty(dr["BUYER_IDCK"].ToString()) && string.IsNullOrEmpty(dr["BUYER_NAME"].ToString()))
             {
                 return null;
             }
@@ -2630,13 +2634,14 @@ namespace ProspectingProject
             }
 
             CompanyEnquiryResponsePacket results = new CompanyEnquiryResponsePacket();
-            ICompanyEnquiryService companyService = new DracoreCompanyLookupService(prospectingTargetCompany, enquiryPacket.ProspectingPropertyId);
 
             decimal? walletBalance = null;
             // Variables to keep track of the state of the transaction
             bool enquirySuccessful = false, deductionMade = false, deductionReimbursed = false;
+            ICompanyEnquiryService companyService = null;
             try
             {
+                companyService = new DracoreCompanyLookupService(prospectingTargetCompany, enquiryPacket.ProspectingPropertyId);
                 companyService.InitResponsePacket(results);
                 walletBalance = companyService.DeductEnquiryCost(); // NB: Will return a value < 0 if insufficient funds
                 if (walletBalance >= decimal.Zero)
@@ -2661,8 +2666,11 @@ namespace ProspectingProject
             }
             catch (Exception ex)
             {
-                results.ErrorMsg = "Exception occurred performing enquiry: " + ex.Message;
-                companyService.SetError(ex);
+                results.ErrorMsg = "Error occurred performing enquiry: " + ex.Message;
+                if (companyService != null)
+                {
+                    companyService.SetError(ex);
+                }
             }
             finally
             {
@@ -2671,7 +2679,10 @@ namespace ProspectingProject
                 {
                     results.WalletBalance = companyService.ReverseEnquiryCost();
                 }
-                companyService.LogEnquiry();
+                if (companyService != null)
+                {
+                    companyService.LogEnquiry();
+                }
             }
 
             return results;
@@ -2849,17 +2860,19 @@ namespace ProspectingProject
 
                 };
 
+            Func<string, string> formatCellNo = cell => cell.StartsWith("27") ? "0" + cell.Remove(0, 2) : cell;
+
             List<SentSMSLogItem> items = new List<SentSMSLogItem>();
             foreach (var record in smsResults)
             {
                 SentSMSLogItem newItem = new SentSMSLogItem
                 {
-                         DateSent = record.created_datetime,
-                          DeliveryStatus = !string.IsNullOrEmpty(record.api_delivery_status) ? record.api_delivery_status : "",
-                           FriendlyNameOfBatch = record.batch_friendly_name,
-                            SentBy = getSenderName(record.created_by_user_guid),
-                             SentTo = record.target_cellphone_no,
-                              TargetLightstonePropertyId = record.target_lightstone_property_id
+                    DateSent = record.updated_datetime.HasValue ? record.updated_datetime.Value : record.created_datetime,
+                    DeliveryStatus = !string.IsNullOrEmpty(record.api_delivery_status) ? record.api_delivery_status : "",
+                    FriendlyNameOfBatch = record.batch_friendly_name,
+                    SentBy = getSenderName(record.created_by_user_guid),
+                    SentTo = formatCellNo(record.target_cellphone_no),
+                    TargetLightstonePropertyId = record.target_lightstone_property_id
                 };
                 items.Add(newItem);
             }
@@ -2868,7 +2881,7 @@ namespace ProspectingProject
 
         private static List<SentEmailLogItem> BuildCommunicationEmailResults(IEnumerable<email_communications_log> emailResults)
         {
-            Func<int, string> getStatusDesc = status =>
+            Func<int, string, string> getStatusDesc = (status, errMsg) =>
             {
                 if (status == ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "EMAIL_SENT").Key)
                 {
@@ -2882,7 +2895,7 @@ namespace ProspectingProject
 
                 if (status == ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "EMAIL_UNSENT").Key)
                 {
-                    return "Fail";
+                    return "Failed (" + (!string.IsNullOrEmpty(errMsg) ? errMsg : "Reason unknown") + ")";
                 }
 
                 return "";
@@ -2893,8 +2906,8 @@ namespace ProspectingProject
             {
                 SentEmailLogItem newItem = new SentEmailLogItem
                 {
-                    DateSent = record.created_datetime,
-                    DeliveryStatus = getStatusDesc(record.status),
+                    DateSent = record.updated_datetime.HasValue ? record.updated_datetime.Value : record.created_datetime,
+                    DeliveryStatus = getStatusDesc(record.status, record.error_msg),
                     FriendlyNameOfBatch = record.batch_friendly_name,
                     SentBy = record.created_by_user_name,
                     SentTo = record.target_email_address,

@@ -819,7 +819,7 @@ function buildContactDashboard(contacts) {
 
     // Companies
     if (currentProperty.ContactCompanies.length) {
-        container.append("<b>Company details</b>");
+        container.append("<b>Company&#47;Organisation details</b>");
         container.append("<p />");
         var counter = 1;
         $.each(currentProperty.ContactCompanies, function (idx, cc) {
@@ -828,8 +828,9 @@ function buildContactDashboard(contacts) {
             }
 
             var companyEnquiryBtn = $("<input type='button' id='companyEnquiryBtn' value='Lookup Company Directors' style='display:inline-block;float:right' />");
-            container.append(cc.CompanyName + "(" + cc.CKNumber + ")");
-            if (cc.CompanyType != 'TR') {
+            var regNo = cc.CKNumber && cc.CKNumber.indexOf("UNKNOWN_CK_") == -1 ? "(" + cc.CKNumber + ")" : '';
+            container.append(cc.CompanyName + regNo);
+            if (cc.CompanyType != 'TR' && regNo) {
                 container.append(companyEnquiryBtn);
                 companyEnquiryBtn.click(function () {
                     performCompanyEnquiry(cc.ContactCompanyId);

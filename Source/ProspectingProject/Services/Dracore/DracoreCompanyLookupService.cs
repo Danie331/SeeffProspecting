@@ -33,7 +33,7 @@ namespace ProspectingProject
             catch (Exception e)
             {
                 _results.EnquirySuccessful = false;
-                _results.ErrorMsg = "Dracore service currently unavailable - please try again later.";
+                _results.ErrorMsg = "Service provider is currently unavailable - please try again later";
                 using (var prospectingDb = new ProspectingDataContext())
                 {
                     var errorRec = new exception_log
@@ -46,6 +46,7 @@ namespace ProspectingProject
                     prospectingDb.exception_logs.InsertOnSubmit(errorRec);
                     prospectingDb.SubmitChanges();
                 }
+                throw new Exception(_results.ErrorMsg, e);
             }
         }
 
