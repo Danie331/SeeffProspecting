@@ -182,7 +182,7 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                         var mandrillResponseArray = response.Content.ReadAsAsync<MandrillSuccessfulResponse[]>().Result;
                         MandrillSuccessfulResponse successResponse = mandrillResponseArray[0];
                         result.ApiTrackingKey = successResponse._id;
-                        if (successResponse.status != "sent")
+                        if (successResponse.status != "sent" && !string.IsNullOrEmpty(successResponse.reject_reason))
                         {
                             result.Success = false;
                             result.ErrorMessage = successResponse.status + ": " + successResponse.reject_reason;
