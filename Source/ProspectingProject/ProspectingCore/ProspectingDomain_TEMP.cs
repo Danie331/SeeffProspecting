@@ -17,6 +17,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Formatting;
 using System.Data.Linq;
+using System.Threading.Tasks;
 
 namespace ProspectingProject
 {
@@ -71,7 +72,7 @@ namespace ProspectingProject
             }
         }      
 
-        private static ProspectingProperty CreateProspectingProperty(ProspectingDataContext prospectingContext, prospecting_property prospectingRecord, bool loadContactsAndCompanies, bool loadOwnedProperties, bool loadActivities)
+        private static ProspectingProperty CreateProspectingProperty(ProspectingDataContext prospectingContext, prospecting_property prospectingRecord, bool loadContactsOnly, bool loadContactsAndCompanies, bool loadOwnedProperties, bool loadActivities)
         {
             var latLng = new GeoLocation { Lat= prospectingRecord.latitude.Value, Lng = prospectingRecord.longitude.Value};
             ProspectingProperty prop = new ProspectingProperty
@@ -120,6 +121,11 @@ namespace ProspectingProject
                 case "FS": prop.SS_FH = "FS"; break;
                 case "FRM": prop.SS_FH = "FRM"; break;
                 default: prop.SS_FH = "FH"; break;
+            }
+
+            if (loadContactsOnly)
+            {
+                prop.Contacts = LoadContacts(prospectingContext, prospectingRecord, loadOwnedProperties);
             }
 
             if (loadContactsAndCompanies)
@@ -494,7 +500,7 @@ namespace ProspectingProject
                     }
                 }
 
-                var property = CreateProspectingProperty(prospecting, newPropRecord, true, true, false);
+                var property = CreateProspectingProperty(prospecting, newPropRecord, false, true, true, false);
                 recordToCreate.SeeffAreaId = property.SeeffAreaId = areaId;
                 return property;
             }
@@ -1393,7 +1399,7 @@ namespace ProspectingProject
                 {
                     if (!prospectables.Any(p => p.LightstonePropertyId == prospectable.lightstone_property_id))
                     {
-                        ProspectingProperty prop = CreateProspectingProperty(prospectingDB, prospectable, false, false,false);
+                        ProspectingProperty prop = CreateProspectingProperty(prospectingDB, prospectable, false, false, false,false);
                         prospectables.Add(prop);
                     }
                 }
@@ -2065,7 +2071,7 @@ namespace ProspectingProject
                         }
                     }
 
-                    var property = CreateProspectingProperty(prospecting, newPropRecord, false, false, false);
+                    var property = CreateProspectingProperty(prospecting, newPropRecord, false, false, false, false);
                     sectionalTitle.SeeffAreaId = property.SeeffAreaId = areaId;
                     units.Add(property);
                 }
@@ -2083,7 +2089,7 @@ namespace ProspectingProject
                 int lightstoneId = dataPacket.LightstonePropertyId;
                 var propRecord = prospectingDB.prospecting_properties.First(pp => pp.lightstone_property_id == lightstoneId);
 
-                ProspectingProperty property = CreateProspectingProperty(prospectingDB, propRecord, true, true, dataPacket.LoadActivities);
+                ProspectingProperty property = CreateProspectingProperty(prospectingDB, propRecord, false, true, true, dataPacket.LoadActivities);
 
                 var currentUser = RequestHandler.GetUserSessionObject();
                 if (propRecord.locked_by_guid != null && propRecord.locked_by_guid != currentUser.UserGuid)
@@ -2356,22 +2362,44 @@ namespace ProspectingProject
             int? areaId = resp.Content.ReadAsAsync<int?>().Result;
 
             return areaId;
-        }        
+        }
 
         public static List<ProspectingProperty> LoadProperties(int[] inputProperties)
         {
             UnlockCurrentProspectingRecord();
             List<ProspectingProperty> results = new List<ProspectingProperty>();
+
+            IEnumerable<List<int>> sets = inputProperties.Partition<int>(20);
+
+            List<System.Threading.Tasks.Task<List<ProspectingProperty>>> tasks = new List<System.Threading.Tasks.Task<List<ProspectingProperty>>>();
+            foreach (var item in sets)
+            {
+                tasks.Add(Task<List<ProspectingProperty>>.Factory.StartNew(() => { return GetPropertiesTask(item); }));
+            }
+
+            Task.WaitAll(tasks.ToArray());
+
+            foreach (Task<List<ProspectingProperty>> item in tasks)
+            {
+                results.AddRange(item.Result);
+            }
+
+            return results;
+        }
+
+        public static List<ProspectingProperty> GetPropertiesTask(List<int> items)
+        {
             using (var prospectingDB = new ProspectingDataContext())
             {
-                foreach (int lightstonePropertyId in inputProperties)
+                List<ProspectingProperty> results = new List<ProspectingProperty>();
+                foreach (int lightstonePropertyId in items)
                 {
                     var propRecord = prospectingDB.prospecting_properties.First(pp => pp.lightstone_property_id == lightstonePropertyId);
-                    ProspectingProperty propertyWithContacts = CreateProspectingProperty(prospectingDB, propRecord, true, false, false);
+                    ProspectingProperty propertyWithContacts = CreateProspectingProperty(prospectingDB, propRecord, true, false, false, false);
                     results.Add(propertyWithContacts);
                 }
+                return results;
             }
-            return results;
         }
 
         public static string GetFormattedAddress(int lightstonePropertyId)
@@ -2925,5 +2953,14 @@ namespace ProspectingProject
             }
             return items.OrderByDescending(f => f.DateSent).ToList();
         }
+    }
+}
+
+public static class ListExtensions
+{
+    public static IEnumerable<List<T>> Partition<T>(this IList<T> source, Int32 size)
+    {
+        for (int i = 0; i < Math.Ceiling(source.Count / (Double)size); i++)
+            yield return new List<T>(source.Skip(size * i).Take(size));
     }
 }
