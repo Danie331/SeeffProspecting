@@ -183,7 +183,9 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
         }
 
         return meetsCriteria;
-    });
+   });
+
+   displayItems.sort(function (a, b) { return new Date(b.FollowupDate) - new Date(a.FollowupDate); });
 
     $.each(displayItems, function (idx, followup) {
         var formattedItem = buildFollowupDisplayItem(followup);
@@ -192,11 +194,10 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
     });
 
     function buildFollowupDisplayItem(followup) {
-        function formatLabelValue(label, value) {
+        function formatLabelValue(label, value, isDate) {
             var container = $("<div style='padding:5px' />");
             if (value == null) value = "n/a";
 
-            var isDate = new Date(value) !== "Invalid Date" && !isNaN(new Date(value)) ? true : false;
             if (isDate) {
                 value = value.substring(0, 10);
             }
@@ -216,7 +217,7 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
 
         var itemTypeName = followup.FollowupActivityTypeName ? followup.FollowupActivityTypeName : followup.ActivityTypeName;
         var followupDateActivityTypeContainer = $("<div id='followupDateActivityTypeContainer' style='border: 1px solid white !important;background-color:#955ba5;color:#FFFFFF' />");
-        var followupDate = $("<div style='width:50%;display:inline-block;float:left;'>" + formatLabelValue('Follow-up Date', followup.FollowupDate) + " </div>");
+        var followupDate = $("<div style='width:50%;display:inline-block;float:left;'>" + formatLabelValue('Follow-up Date', followup.FollowupDate, true) + " </div>");
         var activityType = $("<div style='width:50%;display:inline-block;'>" + formatLabelValue('Activity Type', itemTypeName) + " </div>");
         followupDateActivityTypeContainer.append(followupDate).append(activityType);
 

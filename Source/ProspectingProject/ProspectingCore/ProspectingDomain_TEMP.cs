@@ -734,11 +734,13 @@ namespace ProspectingProject
             FollowupBundle fb = new FollowupBundle();
             List<FollowUpActivity> followups = new List<FollowUpActivity>();
             using (var prospecting = new ProspectingDataContext())
-            {                
-                IEnumerable<activity_log> activities = from act in prospecting.activity_logs 
+            {
+                IEnumerable<activity_log> activities = from act in prospecting.activity_logs
                                                        where act.allocated_to == userGuid && act.followup_date != null && act.followup_date <= DateTime.Now
                                                        orderby act.followup_date 
                                                        select act;
+
+                activities = activities.OrderByDescending(d => d.followup_date);
 
                 List<long?> parentIds = prospecting.activity_logs.Where(a => a.parent_activity_id != null).Select(a => a.parent_activity_id).ToList();
                 activities = activities.Where(a => !parentIds.Contains(a.activity_log_id));
