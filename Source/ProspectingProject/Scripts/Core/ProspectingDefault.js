@@ -1489,6 +1489,10 @@ function buildInfoWindowContentForSS(unit) {
     function buildUnitContentRow(unit) {
 
         function getBGColourForRow(unit) {
+            if (unit.Whence == 'from_followup' || unit.Whence == 'from_activity') {
+                unit.Whence = null;
+                return "#CC00CC";
+            }
             if (unit.LatestRegDateForUpdate) {
                 return "#FF0000";
             }

@@ -330,11 +330,12 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
                 var targetProperty = $.grep(currentSuburb.ProspectingProperties, function (pp) {
                     return pp.LightstonePropertyId == followup.LightstonePropertyId;
                 })[0];
+                targetProperty.Whence = 'from_followup';
                 var marker = targetProperty.Marker;
                 try {
                     centreMap(marker.Suburb, marker, true);
                     new google.maps.event.trigger(marker, 'click', function () {
-                        debugger;
+                        //debugger;
                     });
                 } catch (e) { }
                 // Set current proeprty, what about SS?
@@ -943,6 +944,7 @@ function buildActivityDisplayItem(activity) {
             var targetProperty = $.grep(currentSuburb.ProspectingProperties, function (pp) {
                 return pp.LightstonePropertyId == activity.LightstonePropertyId;
             })[0];
+            targetProperty.Whence = 'from_activity';
             var marker = targetProperty.Marker;
             try {
                 centreMap(marker.Suburb, marker, true);
