@@ -242,7 +242,7 @@ function getAllMarkersThatWillSpiderfy(listing) {
 
     var suburb = listing.Marker.Suburb;
     var allListingsWithSameLatLong = $.grep(suburb.Listings, function (lis, index) {
-        return lis.LatLong.Lat == listing.LatLong.Lat && lis.LatLong.Lng == listing.LatLong.Lng;
+        return lis.LatLong.Lat == listing.LatLong.Lat && lis.LatLong.Lng == listing.LatLong.Lng && !lis.IsCurrentSeeffListing;
     });
 
     if (allListingsWithSameLatLong.length > 0) {
