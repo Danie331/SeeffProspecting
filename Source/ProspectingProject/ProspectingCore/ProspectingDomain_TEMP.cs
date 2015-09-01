@@ -2371,6 +2371,189 @@ namespace ProspectingProject
             UnlockCurrentProspectingRecord();
             List<ProspectingProperty> results = new List<ProspectingProperty>();
 
+            using (var prospecting = new ProspectingDataContext())
+            {
+                string params_ = (from n in inputProperties select n.ToString()).Aggregate( (s1, s2) => s1 + "," + s2);
+                var queryResults = prospecting.ExecuteQuery<FlattenedPropertyRecord>(@"SELECT        pp.prospecting_property_id, pp.lightstone_property_id, pp.latitude, pp.longitude, pp.property_address, pp.street_or_unit_no, pp.seeff_area_id, pp.lightstone_id_or_ck_no, pp.lightstone_reg_date, pp.erf_no, 
+                         pp.comments, pp.ss_name, pp.ss_number, pp.ss_id, pp.unit, pp.ss_door_number, pp.last_purch_price, pp.prospected, pp.farm_name, pp.portion_no, pp.lightstone_suburb, pp.ss_fh, pp.ss_unique_identifier, 
+                         pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays, pcp.contact_person_id, 
+                         ppr.relationship_to_property, NULL AS 'relationship_to_company', NULL AS 'contact_company_id', pcp.firstname, pcp.surname, pcp.id_number, pcp.person_title, pcp.person_gender, pcp.comments_notes, 
+                         pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
+                         pcp.physical_address, pcp.home_ownership, pcp.marital_status, pcp.location, pcd.contact_detail_type, pcd.prospecting_contact_detail_id, pcd.contact_detail, pcd.is_primary_contact, pcd.intl_dialing_code_id, 
+                         padc.dialing_code_id, pcd.eleventh_digit, pcd.deleted
+FROM            prospecting_property AS pp LEFT OUTER JOIN
+                         prospecting_person_property_relationship AS ppr ON pp.prospecting_property_id = ppr.prospecting_property_id LEFT OUTER JOIN
+                         prospecting_contact_person AS pcp ON pcp.contact_person_id = ppr.contact_person_id LEFT OUTER JOIN
+                         prospecting_contact_detail AS pcd ON pcd.contact_person_id = pcp.contact_person_id LEFT OUTER JOIN
+                         prospecting_area_dialing_code AS padc ON padc.prospecting_area_dialing_code_id = pcd.intl_dialing_code_id
+WHERE        (pp.lightstone_property_id IN (" + params_ + @"))
+UNION ALL
+SELECT        pp.prospecting_property_id, pp.lightstone_property_id, pp.latitude, pp.longitude, pp.property_address, pp.street_or_unit_no, pp.seeff_area_id, pp.lightstone_id_or_ck_no, pp.lightstone_reg_date, pp.erf_no, 
+                         pp.comments, pp.ss_name, pp.ss_number, pp.ss_id, pp.unit, pp.ss_door_number, pp.last_purch_price, pp.prospected, pp.farm_name, pp.portion_no, pp.lightstone_suburb, pp.ss_fh, pp.ss_unique_identifier, 
+                         pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays, pcp.contact_person_id, NULL 
+                         AS 'relationship_to_property', ppcr.relationship_to_company, ppcr.contact_company_id, pcp.firstname, pcp.surname, pcp.id_number, pcp.person_title, pcp.person_gender, pcp.comments_notes, 
+                         pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
+                         pcp.physical_address, pcp.home_ownership, pcp.marital_status, pcp.location, pcd.contact_detail_type, pcd.prospecting_contact_detail_id, pcd.contact_detail, pcd.is_primary_contact, pcd.intl_dialing_code_id, 
+                         padc.dialing_code_id, pcd.eleventh_digit, pcd.deleted
+FROM            prospecting_property AS pp LEFT OUTER JOIN
+                         prospecting_company_property_relationship AS cpr ON pp.prospecting_property_id = cpr.prospecting_property_id LEFT OUTER JOIN
+                         prospecting_person_company_relationship AS ppcr ON ppcr.contact_company_id = cpr.contact_company_id LEFT OUTER JOIN
+                         prospecting_contact_person AS pcp ON pcp.contact_person_id = ppcr.contact_person_id LEFT OUTER JOIN
+                         prospecting_contact_detail AS pcd ON pcd.contact_person_id = pcp.contact_person_id LEFT OUTER JOIN
+                         prospecting_area_dialing_code AS padc ON padc.prospecting_area_dialing_code_id = pcd.intl_dialing_code_id
+WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] { });
+
+                // Performance: tolist() or not?
+                var propertyGroupings = queryResults.GroupBy(fpr => fpr.lightstone_property_id);
+                                                   // .Select(g => new { LightstonePropID = g.Key, Properties = g.Select(t => t) });
+                foreach (var sameLightstoneIDGroup in propertyGroupings)
+                {
+                    var prospectingRecord = sameLightstoneIDGroup.First();
+                    var latLng = new GeoLocation { Lat = prospectingRecord.latitude.Value, Lng = prospectingRecord.longitude.Value };
+                    ProspectingProperty prop = new ProspectingProperty
+                    {
+                        ProspectingPropertyId = prospectingRecord.prospecting_property_id,
+                        LightstonePropertyId = prospectingRecord.lightstone_property_id,
+                        LatLng = latLng,
+                        PropertyAddress = prospectingRecord.property_address,
+                        StreetOrUnitNo = prospectingRecord.street_or_unit_no,
+                        SeeffAreaId = prospectingRecord.seeff_area_id.HasValue ? prospectingRecord.seeff_area_id.Value : (int?)null,
+                        LightstoneIDOrCKNo = prospectingRecord.lightstone_id_or_ck_no,
+                        LightstoneRegDate = prospectingRecord.lightstone_reg_date,
+                        ErfNo = prospectingRecord.erf_no,
+                        Comments = prospectingRecord.comments,
+                        //SS_FH = prospectingRecord.ss_fh == "SS" ? "SS" : "FH", // default to FH for backward compat.
+                        SSName = prospectingRecord.ss_name,
+                        SSNumber = prospectingRecord.ss_number,
+                        SS_ID = prospectingRecord.ss_id,
+                        Unit = prospectingRecord.unit,
+                        SSDoorNo = prospectingRecord.ss_door_number,
+                        LastPurchPrice = prospectingRecord.last_purch_price,
+                        Prospected = Convert.ToBoolean(prospectingRecord.prospected),
+                        FarmName = prospectingRecord.farm_name,
+                        Portion = prospectingRecord.portion_no != null ? prospectingRecord.portion_no.ToString() : "n/a",
+                        LightstoneSuburb = prospectingRecord.lightstone_suburb,
+                        SS_UNIQUE_IDENTIFIER = prospectingRecord.ss_unique_identifier,
+                        LatestRegDateForUpdate = prospectingRecord.latest_reg_date,
+
+                        Baths = prospectingRecord.baths,
+                        Condition = prospectingRecord.condition,
+                        Beds = prospectingRecord.beds,
+                        DwellingSize = prospectingRecord.dwell_size,
+                        ErfSize = prospectingRecord.erf_size,
+                        Garages = prospectingRecord.garages,
+                        Pool = prospectingRecord.pool,
+                        Receptions = prospectingRecord.receptions,
+                        StaffAccomodation = prospectingRecord.staff_accomodation,
+                        Studies = prospectingRecord.studies,
+                        ParkingBays = prospectingRecord.parking_bays
+                    };
+                    switch (prospectingRecord.ss_fh)
+                    {
+                        case "SS": prop.SS_FH = "SS"; break;
+                        case "FH": prop.SS_FH = "FH"; break;
+                        case "FS": prop.SS_FH = "FS"; break;
+                        case "FRM": prop.SS_FH = "FRM"; break;
+                        default: prop.SS_FH = "FH"; break;
+                    }
+
+                    // contacts grouping
+                    var contactsGroupings = sameLightstoneIDGroup.GroupBy(pp => pp.contact_person_id);
+                    List<ProspectingContactPerson> propertyContacts = new List<ProspectingContactPerson>();
+                    foreach (var sameContactPersonIdGroup in contactsGroupings)
+                    {
+                        if (sameContactPersonIdGroup.Key == null)
+                            continue;
+                        // Dealing with a single contact now
+                        var contactRecord = sameContactPersonIdGroup.First();
+                        List<KeyValuePair<int, int>> personPropertyrelationships = new List<KeyValuePair<int, int>>();
+                        if (contactRecord.relationship_to_property.HasValue)
+                        {
+                            personPropertyrelationships.Add(new KeyValuePair<int, int>(contactRecord.prospecting_property_id, contactRecord.relationship_to_property.Value));
+                        }
+                        var newContactPerson = new ProspectingContactPerson
+                         {
+                             ContactPersonId = contactRecord.contact_person_id,
+                             PersonPropertyRelationships = personPropertyrelationships,
+                             PersonCompanyRelationshipType = contactRecord.relationship_to_company,
+                             ContactCompanyId = contactRecord.contact_company_id,
+                             Firstname = contactRecord.firstname,
+                             Surname = contactRecord.surname,
+                             IdNumber = contactRecord.id_number,
+                             Title = contactRecord.person_title,
+                             Gender = contactRecord.person_gender,
+                             Comments = contactRecord.comments_notes,
+                             IsPOPIrestricted = contactRecord.is_popi_restricted.HasValue ? contactRecord.is_popi_restricted.Value : false,
+                             PropertiesOwned = null,
+                             EmailOptout = contactRecord.optout_emails.HasValue ? contactRecord.optout_emails.Value : false,
+                             SMSOptout = contactRecord.optout_sms.HasValue ? contactRecord.optout_sms.Value : false,
+
+                             // Dracore fields
+                             AgeGroup = contactRecord.age_group,
+                             BureauAdverseIndicator = contactRecord.bureau_adverse_indicator,
+                             Citizenship = contactRecord.citizenship,
+                             DeceasedStatus = contactRecord.deceased_status,
+                             Directorship = contactRecord.directorship,
+                             Occupation = contactRecord.occupation,
+                             Employer = contactRecord.employer,
+                             PhysicalAddress = contactRecord.physical_address,
+                             HomeOwnership = contactRecord.home_ownership,
+                             MaritalStatus = contactRecord.marital_status,
+                             Location = contactRecord.location
+                         };
+
+                        var contactDetailGroupings = sameContactPersonIdGroup.GroupBy(cp => cp.contact_detail_type);
+                        List<ProspectingContactDetail> phoneNumbers = new List<ProspectingContactDetail>();
+                        List<ProspectingContactDetail> emaiLAddresses = new List<ProspectingContactDetail>();
+                        foreach (var sameContactDetailTypeGroup in contactDetailGroupings)
+                        {
+                            foreach (var contactDetailType in sameContactDetailTypeGroup)
+                            {
+                                if (contactDetailType.contact_detail_type.HasValue && contactDetailType.deleted == false)
+                                {
+                                    if (ProspectingLookupData.PhoneTypeIds.Contains(contactDetailType.contact_detail_type.Value))
+                                    {
+                                        phoneNumbers.Add(new ProspectingContactDetail
+                                        {
+                                            ItemId = contactDetailType.prospecting_contact_detail_id.ToString(),
+                                            ContactItemType = "PHONE",
+                                            ItemContent = contactDetailType.contact_detail,
+                                            IsPrimary = contactDetailType.is_primary_contact,
+                                            ItemType = contactDetailType.contact_detail_type,
+                                            IsValid = true,
+                                            IntDialingCode = contactDetailType.intl_dialing_code_id,
+                                            IntDialingCodePrefix = contactDetailType.dialing_code_id,
+                                            EleventhDigit = contactDetailType.eleventh_digit
+                                        });
+                                    }
+                                    else if (ProspectingLookupData.EmailTypeIds.Contains(contactDetailType.contact_detail_type.Value))
+                                    {
+                                        emaiLAddresses.Add(new ProspectingContactDetail
+                                        {
+                                            ItemId = contactDetailType.prospecting_contact_detail_id.ToString(),
+                                            ContactItemType = "EMAIL",
+                                            ItemContent = contactDetailType.contact_detail,
+                                            IsPrimary = contactDetailType.is_primary_contact,
+                                            ItemType = contactDetailType.contact_detail_type,
+                                            IsValid = true,
+                                            IntDialingCode = contactDetailType.intl_dialing_code_id,
+                                            EleventhDigit = contactDetailType.eleventh_digit
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                        newContactPerson.PhoneNumbers = phoneNumbers;
+                        newContactPerson.EmailAddresses = emaiLAddresses;
+                        propertyContacts.Add(newContactPerson);
+                    }
+                    prop.Contacts = propertyContacts;
+                    results.Add(prop);
+                }                                
+
+                return results;
+            }
+
             IEnumerable<List<int>> sets = inputProperties.Partition<int>(20);
 
             List<System.Threading.Tasks.Task<List<ProspectingProperty>>> tasks = new List<System.Threading.Tasks.Task<List<ProspectingProperty>>>();

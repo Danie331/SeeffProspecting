@@ -1228,6 +1228,7 @@
     <Compile Include="Types\CostOfBatch.cs" />
     <Compile Include="Types\EmailAttachment.cs" />
     <Compile Include="Types\EmailBatch.cs" />
+    <Compile Include="Types\FlattenedPropertyRecord.cs" />
     <Compile Include="Types\FollowupActivity.cs" />
     <Compile Include="Types\IProspectingContactEntity.cs" />
     <Compile Include="Types\BaseDataRequestPacket.cs" />
