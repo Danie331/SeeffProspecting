@@ -2906,6 +2906,8 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
             using (var prospecting = new ProspectingDataContext())
             {
                 CommReportResults results = new CommReportResults();
+                results.EmailLogItems = new List<SentEmailLogItem>();
+                results.SMSLogItems = new List<SentSMSLogItem>();
                 switch (filterPacket.MessageType)
                 {
                     case "EMAIL":
@@ -2972,9 +2974,6 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
                             emailResults = emailResults.Where(em => em.target_lightstone_property_id == filterPacket.TargetLightstonePropertyId);
                         }
 
-                        // Finally take a maximum set of results and set the count variable
-                        results.TotalResultsPerFilterCriteria = emailResults.Count();
-                        emailResults = emailResults.Take(500);
                         results.EmailLogItems = BuildCommunicationEmailResults(emailResults);
                         return results;
                     case "SMS":
@@ -3052,9 +3051,6 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
                             smsResults = smsResults.Where(em => em.target_lightstone_property_id == filterPacket.TargetLightstonePropertyId);
                         }
 
-                        // Finally take a maximum set of results and set the count variable
-                        results.TotalResultsPerFilterCriteria = smsResults.Count();
-                        smsResults = smsResults.Take(500);
                         results.SMSLogItems = BuildCommunicationSMSResults(smsResults);
                         return results;
                 }
@@ -3084,10 +3080,12 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
             };
 
             List<SentSMSLogItem> items = new List<SentSMSLogItem>();
+            int index = 0;
             foreach (var record in smsResults)
             {
                 SentSMSLogItem newItem = new SentSMSLogItem
                 {
+                    id = index++,
                     DateSent = record.updated_datetime.HasValue ? record.updated_datetime.Value : record.created_datetime,
                     DeliveryStatus = getDeliveryStatus(record.api_delivery_status, record.status),
                     FriendlyNameOfBatch = record.batch_friendly_name,
@@ -3123,10 +3121,12 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
             };
 
             List<SentEmailLogItem> items = new List<SentEmailLogItem>();
+            int index = 0;
             foreach (var record in emailResults)
             {
                 SentEmailLogItem newItem = new SentEmailLogItem
                 {
+                    id = index++,
                     DateSent = record.updated_datetime.HasValue ? record.updated_datetime.Value : record.created_datetime,
                     DeliveryStatus = getStatusDesc(record.status, record.error_msg),
                     FriendlyNameOfBatch = record.batch_friendly_name,

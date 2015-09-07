@@ -144,57 +144,68 @@ function loadMessageHistoryReport(dataPacket, callbackFn) {
 }
 
 function renderCommHistoryReport(results) {
-    var headerText = '';
-    if (results.TotalResultsPerFilterCriteria > 500) {
-        headerText = 'Showing 500 of ' + results.TotalResultsPerFilterCriteria + ' transactions. Refine your search criteria to see more specific results.';
-    } else {
-        headerText = 'Showing ' + results.TotalResultsPerFilterCriteria + ' transactions.';
+    $('#commMessageHistory').empty();
+    if (!results.EmailLogItems.length && !results.SMSLogItems.length) {
+        $('#commMessageHistory').append("No matching results found.");
+        return;
     }
-    var resultsDiv1 = $("<div id='commResultsHeaderDiv' style='display:block;width:100%' />")
-                        .empty()
-                        .append(headerText);
+    var options = {
+        forceFitColumns: true,
+        enableCellNavigation: true,
+        enableColumnReorder: false,
+        multiColumnSort: true
+    };
 
-    var tbl = $("<div style='overflow:auto;max-height:450px;'><table id='commReportTableBody' class='commTable' ></table></div>");
-    var resultsDiv2 = $("<div id='commResultsBodyDiv' />")
-                        .empty()
-                        .append($("<table id='commReportTableHeader' class='commTable' ></table>")
-                         .append("<thead><tr class='commTableHeader'><th class='commTableRow120'>Sent To</th><th class='commTableRow70'>Date</th><th class='commTableRow'>Sender</th><th class='commTableRow'>Status</th><th class='commTableRow'>Prop ID</th><th class='commTableRow120' style='padding-right:20px'>Batch Name</th></tr></thead>"))
-                         .append(tbl);
+    var grid;
+    var columns;
+    var sortcol;
+    var sortdir = 1;
+    var dataView = new Slick.Data.DataView(/*{ inlineFilters: true }*/);
 
-    var tbody = $("<tbody></tbody>");
-    if (results.EmailLogItems) {
-        $.each(results.EmailLogItems, function (idx, record) {
-            var tr = $("<tr />");
-            var sentTo = $("<td class='commTableRow120' title='" + record.SentTo + "'></td>").append(record.SentTo);
-            var dateSent = $("<td class='commTableRow70' title='" + record.DateSent + "'></td>").append(record.DateSent.substring(0,10));
-            var sentBy = $("<td class='commTableRow' title='" + record.SentBy + "'></td>").append(record.SentBy);
-            var status = $("<td class='commTableRow' title='" + record.DeliveryStatus + "'></td>").append(record.DeliveryStatus);
-            var propID = $("<td class='commTableRow' title='" + record.TargetLightstonePropertyId + "'></td>").append(record.TargetLightstonePropertyId);
-            var batchName = $("<td class='commTableRow120' title='" + record.FriendlyNameOfBatch + "'></td>").append(record.FriendlyNameOfBatch);
+    columns = [
+                 { id: "col_SentTo", name: "Sent To", field: "SentTo", sortable: true },
+                 { id: "col_DateSent", name: "Date Sent", field: "DateSent", sortable: true },
+                 { id: "col_SentBy", name: "Sent By", field: "SentBy", sortable: true },
+                 { id: "col_DeliveryStatus", name: "Delivery Status", field: "DeliveryStatus", sortable: true },
+                 { id: "col_TargetLightstonePropertyId", name: "Property Id", field: "TargetLightstonePropertyId", sortable: false },
+                 { id: "col_FriendlyNameOfBatch", name: "Batch Name", field: "FriendlyNameOfBatch", sortable: true }
+    ];
+    grid = new Slick.Grid("#commMessageHistory", dataView, columns, options);
+    grid.setSelectionModel(new Slick.RowSelectionModel());
 
-            tr.append(sentTo).append(dateSent).append(sentBy).append(status).append(propID).append(batchName);
-            tbody.append(tr);
-        });
-        tbl.find('table').append(tbody);
-    }
-    if (results.SMSLogItems) {
-        $.each(results.SMSLogItems, function (idx, record) {
-            var tr = $("<tr />");
-            var sentTo = $("<td class='commTableRow120' title='" + record.SentTo + "'></td>").append(record.SentTo);
-            var dateSent = $("<td class='commTableRow70' title='" + record.DateSent + "'></td>").append(record.DateSent.substring(0, 10));
-            var sentBy = $("<td class='commTableRow' title='" + record.SentBy + "'></td>").append(record.SentBy);
-            var status = $("<td class='commTableRow' title='" + record.DeliveryStatus + "'></td>").append(record.DeliveryStatus);
-            var propID = $("<td class='commTableRow' title='" + record.TargetLightstonePropertyId + "'></td>").append(record.TargetLightstonePropertyId);
-            var batchName = $("<td class='commTableRow120' title='" + record.FriendlyNameOfBatch + "'></td>").append(record.FriendlyNameOfBatch);
-
-            tr.append(sentTo).append(dateSent).append(sentBy).append(status).append(propID).append(batchName);
-            tbody.append(tr);
-        });
-        tbl.find('table').append(tbody);
+    function comparer(a, b) {
+        var x = a[sortcol].toLowerCase(), y = b[sortcol].toLowerCase();
+        return (x == y ? 0 : (x > y ? 1 : -1));
     }
 
-    resultsDiv2.append(tbl);
-    $('#commMessageHistory').empty().append(resultsDiv1).append("<p />").append(resultsDiv2);
+    grid.onSort.subscribe(function (e, args) {
+        sortcol = args.sortCols[0].sortCol.field;
+        sortdir = args.sortCols[0].sortAsc ? true : false;
+        dataView.sort(comparer, sortdir);
+    });
+
+    dataView.onRowCountChanged.subscribe(function (e, args) {
+        grid.updateRowCount();
+        grid.render();
+    });
+
+    dataView.onRowsChanged.subscribe(function (e, args) {
+        grid.invalidateRows(args.rows);
+        grid.render();
+    });
+
+    if (results.EmailLogItems.length) {
+        dataView.beginUpdate();
+        dataView.setItems(results.EmailLogItems);
+        dataView.endUpdate();
+        dataView.syncGridSelection(grid, true);
+    }
+    else {
+        dataView.beginUpdate();
+        dataView.setItems(results.SMSLogItems);
+        dataView.endUpdate();
+        dataView.syncGridSelection(grid, true);
+    }
 }
 
 function validateFilterInputs() {
@@ -214,6 +225,6 @@ function validateFilterInputs() {
 }
 
 function buildCommMessageHistoryTab() {
-    var container = $("<div id='commMessageHistory' class='contentdiv' />");
+    var container = $("<div id='commMessageHistory' class='contentdiv' style='height:480px' />");
     return container;
 }

@@ -7,6 +7,7 @@ namespace ProspectingProject
 {
     public class SentEmailLogItem
     {
+        public int id { get; set; }
         public string SentTo { get; set;}
         public DateTime DateSent {get; set;}
         public string FriendlyNameOfBatch { get; set; }
