@@ -119,6 +119,8 @@
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillAttachment.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillEmailMessage.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillErrorResponse.cs" />
+    <Compile Include="Core\Communication\Emailing\Mandrill\MandrillEvent.cs" />
+    <Compile Include="Core\Communication\Emailing\Mandrill\MandrillEventMessageResult.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillGlobalMergeVar.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillImage.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillMergeVarVar.cs" />
