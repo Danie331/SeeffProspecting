@@ -723,6 +723,7 @@
     <Content Include="Assets\hedonic_data.png" />
     <Content Include="Assets\item_template.png" />
     <Content Include="Assets\lightstone.png" />
+    <Content Include="Assets\log_off.png" />
     <Content Include="Assets\make_primary_contact.png" />
     <Content Include="Assets\marker_icons\prospecting\prospected.png" />
     <Content Include="Assets\marker_icons\prospecting\prospected_attention_required.png" />

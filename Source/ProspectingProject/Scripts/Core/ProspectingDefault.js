@@ -2358,6 +2358,25 @@ function initializeMenuHtml() {
     togglePanel();
 
     $("#menuitempanel").resizable();
+
+    // Wire up the log off button
+    $("#logoffBtn").click(function (e) {
+        e.preventDefault();
+        var logoffDialog = $("<div title='Log off Prospecting' style='font-family:Verdana;font-size:12px;' />").empty()
+            .append("Are you sure you want to return to BOSS?").dialog(
+            {
+                modal: true,
+                closeOnEscape: false,
+                buttons: {
+                    "Yes": function () {
+                        $(this).dialog("close");
+                        window.history.back();
+                    },
+                    "No": function () { $(this).dialog("close"); }
+                },
+                position: ['center', 'center']
+            });
+    });
 }
 
 function togglePanel(actionAfterClosing) {

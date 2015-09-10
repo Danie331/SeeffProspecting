@@ -26,15 +26,16 @@ namespace ProspectingProject
             // This is a POST from an internal request
             try
             {
-                json = context.Request.Form[0];
-            }
-            catch
-            {
-                json = HttpUtility.UrlDecode(context.Request.Form[0]);
-            }
-            request = ProspectingCore.Deserialise<BaseDataRequestPacket>(json);
-            try
-            {
+                try
+                {
+                    json = context.Request.Form[0];
+                }
+                catch (Exception ex)
+                {
+                    json = HttpUtility.UrlDecode(context.Request.Form[0]);
+                }
+                request = ProspectingCore.Deserialise<BaseDataRequestPacket>(json);
+
                 // This handles the authorisation request
                 if (request.Instruction == "load_application")
                 {
