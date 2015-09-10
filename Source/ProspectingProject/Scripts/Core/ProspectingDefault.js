@@ -397,7 +397,7 @@ function changeBgColour(id, colour) {
     var id = "#unit" + id;
     var row = $(id);
     row.data('color', colour)
-    row.css('background-color', 'lightblue');
+    //row.css('background-color', 'lightblue');
 }
 
 function setCurrentMarker(suburb, property, callback) {
@@ -1562,9 +1562,26 @@ function buildInfoWindowContentForSS(unit) {
                 openSSUnitInfo(unit, function () {
                     row.empty();
                     row.append(buildUnitContent(unit));
-
                     // Update the icon for the SS
                     unit.Marker.setIcon(getIconForMarker(unit.Marker));
+
+                    // Determine whether all units in the SS are now up-to-date, if so then reset their icons
+                    var ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+                        if (!pp.SS_UNIQUE_IDENTIFIER) return false;
+                        return pp.SS_UNIQUE_IDENTIFIER == unit.SS_UNIQUE_IDENTIFIER;
+                    });
+                    var anyOtherUnitsNeedUpdate = false;
+                    $.each(ssUnits, function (idx, ssunit) {
+                        if (ssunit.LatestRegDateForUpdate) {
+                            anyOtherUnitsNeedUpdate = true;
+                        }
+                    });
+                    // If no other units need to be updated then revert to the normal icon.
+                    if (!anyOtherUnitsNeedUpdate) {
+                        $.each(ssUnits, function (idx, ssunit) {
+                            ssunit.Marker.setIcon(getIconForMarker(ssunit.Marker));
+                        });
+                    }
                 });
             }
             else if (e.which == 3) {
@@ -2363,7 +2380,10 @@ function initializeMenuHtml() {
     $("#logoffBtn").click(function (e) {
         e.preventDefault();
         var logoffDialog = $("<div title='Log off Prospecting' style='font-family:Verdana;font-size:12px;' />").empty()
-            .append("Are you sure you want to return to BOSS?").dialog(
+            .append("Are you sure you want to return to BOSS?")
+            .append("<p />")
+            .append("Note: If you return to BOSS, you might need to log out and log in again to access Prospecting.")
+            .dialog(
             {
                 modal: true,
                 closeOnEscape: false,
