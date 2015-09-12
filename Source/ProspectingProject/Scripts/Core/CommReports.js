@@ -143,6 +143,39 @@ function loadMessageHistoryReport(dataPacket, callbackFn) {
     });
 }
 
+function handleCommReportRowClick(e) {
+    var row = $(this);
+    var id = row.attr('id').replace('path_to_contact_','');
+
+    var seeffAreaId = id.split('_')[0];
+    var lightstonePropertyId = id.split('_')[1];
+    var contactPersonId = id.split('_')[2];
+
+    e.preventDefault();
+    // Find the suburb this property belongs to:
+    var targetSuburb = $.grep(suburbsInfo, function (sub) {
+        return sub.SuburbId == seeffAreaId;
+    })[0];
+
+    // Load the suburb
+    globalZoomLevel = 20;
+    $('#suburbLink' + targetSuburb.SuburbId).trigger('click', function () {
+        var targetProperty = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+            return pp.LightstonePropertyId == lightstonePropertyId;
+        })[0];
+     
+        targetProperty.Whence = 'from_comm_report';
+        targetProperty.TargetContactIdForComms = contactPersonId;
+        var marker = targetProperty.Marker;
+        try {
+            centreMap(marker.Suburb, marker, true);
+            new google.maps.event.trigger(marker, 'click', function () {
+                //debugger;
+            });
+        } catch (e) {}
+    });
+}
+
 function renderCommHistoryReport(results) {
     $('#commMessageHistory').empty();
     if (!results.EmailLogItems.length && !results.SMSLogItems.length) {
@@ -156,6 +189,12 @@ function renderCommHistoryReport(results) {
         multiColumnSort: true
     };
 
+    function commReportBtnFormatter(row, cell, value, columnDef, dataContext) {
+        var id = 'path_to_contact_' + dataContext.SeeffAreaId + '_' + dataContext.TargetLightstonePropertyId + '_' + dataContext.ContactPersonId;
+        var viewContactBtn = $("<img src='Assets/view_btn.png' style='cursor:pointer;float:right' id='" + id + "' class='commReportViewContactRow' />");
+        return viewContactBtn[0].outerHTML;
+    }
+
     var grid;
     var columns;
     var sortcol;
@@ -167,11 +206,13 @@ function renderCommHistoryReport(results) {
                  { id: "col_DateSent", name: "Date Sent", field: "DateSent", sortable: true },
                  { id: "col_SentBy", name: "Sent By", field: "SentBy", sortable: true },
                  { id: "col_DeliveryStatus", name: "Delivery Status", field: "DeliveryStatus", sortable: true },
-                 { id: "col_TargetLightstonePropertyId", name: "Property Id", field: "TargetLightstonePropertyId", sortable: false },
-                 { id: "col_FriendlyNameOfBatch", name: "Batch Name", field: "FriendlyNameOfBatch", sortable: true }
+                 //{ id: "col_TargetLightstonePropertyId", name: "Property Id", field: "TargetLightstonePropertyId", sortable: false },
+                 { id: "col_FriendlyNameOfBatch", name: "Batch Name", field: "FriendlyNameOfBatch", sortable: true },
+                 { id: "col_ViewContactRecord", name: "", width: 12, formatter: commReportBtnFormatter }
     ];
     grid = new Slick.Grid("#commMessageHistory", dataView, columns, options);
     grid.setSelectionModel(new Slick.RowSelectionModel());
+    grid.registerPlugin(new Slick.AutoTooltips());
 
     function comparer(a, b) {
         var x = a[sortcol].toLowerCase(), y = b[sortcol].toLowerCase();
@@ -206,6 +247,8 @@ function renderCommHistoryReport(results) {
         dataView.endUpdate();
         dataView.syncGridSelection(grid, true);
     }
+
+    $('.commReportViewContactRow').unbind('click').bind('click', handleCommReportRowClick);
 }
 
 function validateFilterInputs() {

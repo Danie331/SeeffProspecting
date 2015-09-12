@@ -14,5 +14,7 @@ namespace ProspectingProject
         public string SentBy { get; set; }
         public int TargetLightstonePropertyId { get; set; }
         public string DeliveryStatus { get; set; }
+        public int ContactPersonId { get; set; }
+        public int SeeffAreaId { get; set; }
     }
 }

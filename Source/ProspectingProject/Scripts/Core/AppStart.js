@@ -39,10 +39,10 @@ function initialize() {
                 availableCredit = data.AvailableCredit;
                 initializeMenuHtml();
                 loadSuburbsInfo(data);
-                initializeMap();
-
-                createProspectingMenu(data);
-                initEventHandlers();
+                initializeMap(function () {
+                    createProspectingMenu(data);
+                    initEventHandlers();
+                });
             }
         },
         error: function (textStatus, errorThrown) { debugger; },
@@ -67,7 +67,7 @@ function initialize() {
     });
 }
 
-function initializeMap(defaultZoomAndLocation) {
+function initializeMap(callback) {
     map = new google.maps.Map(document.getElementById("googleMap"),
         {
             zoom: 13,
@@ -84,6 +84,16 @@ function initializeMap(defaultZoomAndLocation) {
     map.setZoom(6);
     var center = new google.maps.LatLng(-29.687345, 22.669017);
     map.setCenter(center);
+
+    google.maps.event.addListenerOnce(map, 'idle', function () {
+        // Leave the 2 statements below [Google Maps initialization quirks]
+        var infWindow = new google.maps.InfoWindow({
+            content: ""
+        });
+        calcMapCenterWithOffset(-29.687345, 22.669017);
+
+        callback();
+    });
 }
 
 function loadSuburbsInfo(data) {

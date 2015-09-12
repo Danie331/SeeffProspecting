@@ -54,6 +54,7 @@
     <script src="Scripts/3rdParty/SlickGrid/slick.dataview.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/plugins/slick.rowselectionmodel.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/slick.editors.js"></script>
+    <script src="Scripts/3rdParty/SlickGrid/plugins/slick.autotooltips.js"></script>
     <%-- END_SECTION:3RD_PARTY_SCRIPTS --%>
     <%-- BEGIN_SECTION:CORE_SCRIPTS --%>
     <script src="Scripts/Core/Utils.js"></script>

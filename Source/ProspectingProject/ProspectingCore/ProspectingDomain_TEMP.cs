@@ -3080,20 +3080,29 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
             };
 
             List<SentSMSLogItem> items = new List<SentSMSLogItem>();
-            int index = 0;
-            foreach (var record in smsResults)
+            using (var prospectingDb = new ProspectingDataContext())
             {
-                SentSMSLogItem newItem = new SentSMSLogItem
+                Func<int, int> findSeeffAreaId = lightstonePropId =>
                 {
-                    id = index++,
-                    DateSent = record.updated_datetime.HasValue ? record.updated_datetime.Value : record.created_datetime,
-                    DeliveryStatus = getDeliveryStatus(record.api_delivery_status, record.status),
-                    FriendlyNameOfBatch = record.batch_friendly_name,
-                    SentBy = getSenderName(record.created_by_user_guid),
-                    SentTo = formatCellNo(record.target_cellphone_no),
-                    TargetLightstonePropertyId = record.target_lightstone_property_id
+                    return prospectingDb.prospecting_properties.First(pp => pp.lightstone_property_id == lightstonePropId).seeff_area_id.Value;
                 };
-                items.Add(newItem);
+                int index = 0;
+                foreach (var record in smsResults)
+                {
+                    SentSMSLogItem newItem = new SentSMSLogItem
+                    {
+                        id = index++,
+                        DateSent = record.updated_datetime.HasValue ? record.updated_datetime.Value : record.created_datetime,
+                        DeliveryStatus = getDeliveryStatus(record.api_delivery_status, record.status),
+                        FriendlyNameOfBatch = record.batch_friendly_name,
+                        SentBy = getSenderName(record.created_by_user_guid),
+                        SentTo = formatCellNo(record.target_cellphone_no),
+                        TargetLightstonePropertyId = record.target_lightstone_property_id,
+                        ContactPersonId = record.target_contact_person_id,
+                        SeeffAreaId = findSeeffAreaId(record.target_lightstone_property_id)
+                    };
+                    items.Add(newItem);
+                }
             }
             return items.OrderByDescending(f => f.DateSent).ToList();
         }
@@ -3121,20 +3130,30 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
             };
 
             List<SentEmailLogItem> items = new List<SentEmailLogItem>();
-            int index = 0;
-            foreach (var record in emailResults)
+            using (var prospectingDb = new ProspectingDataContext())
             {
-                SentEmailLogItem newItem = new SentEmailLogItem
+                Func<int, int> findSeeffAreaId = lightstonePropId =>
                 {
-                    id = index++,
-                    DateSent = record.updated_datetime.HasValue ? record.updated_datetime.Value : record.created_datetime,
-                    DeliveryStatus = getStatusDesc(record.status, record.error_msg),
-                    FriendlyNameOfBatch = record.batch_friendly_name,
-                    SentBy = record.created_by_user_name,
-                    SentTo = record.target_email_address,
-                    TargetLightstonePropertyId = record.target_lightstone_property_id
+                    return prospectingDb.prospecting_properties.First(pp => pp.lightstone_property_id == lightstonePropId).seeff_area_id.Value;
                 };
-                items.Add(newItem);
+
+                int index = 0;
+                foreach (var record in emailResults)
+                {
+                    SentEmailLogItem newItem = new SentEmailLogItem
+                    {
+                        id = index++,
+                        DateSent = record.updated_datetime.HasValue ? record.updated_datetime.Value : record.created_datetime,
+                        DeliveryStatus = getStatusDesc(record.status, record.error_msg),
+                        FriendlyNameOfBatch = record.batch_friendly_name,
+                        SentBy = record.created_by_user_name,
+                        SentTo = record.target_email_address,
+                        TargetLightstonePropertyId = record.target_lightstone_property_id,
+                        ContactPersonId = record.target_contact_person_id,
+                        SeeffAreaId = findSeeffAreaId(record.target_lightstone_property_id)
+                    };
+                    items.Add(newItem);
+                }
             }
             return items.OrderByDescending(f => f.DateSent).ToList();
         }

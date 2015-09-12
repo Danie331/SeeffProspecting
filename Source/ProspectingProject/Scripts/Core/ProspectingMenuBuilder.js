@@ -54,7 +54,7 @@ function createProspectingMenu(userData) {
         appendMenuItemContent(menuItem.MenuItemContent);
         menuItems.push(menuItem);
 
-        menuItem = createMenuItem("Comm. Reporting", "commreporting", buildCommReportingMenu(), function () {
+        menuItem = createMenuItem("Comm Reports", "commreporting", buildCommReportingMenu(), function () {
             toggleMultiSelectMode(false);
             toggleCommReportingMenu();
         }, null);

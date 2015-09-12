@@ -917,6 +917,28 @@ function loadProspectingProperty(marker) {
     openInfoWindow(marker, function () {
         if (marker.ProspectingProperty.SS_FH == "SS" || marker.ProspectingProperty.SS_FH == "FS") {
             currentProperty = null;
+            if (marker.ProspectingProperty.Whence) {
+                var container = $('#ssUnitsTbl');
+                var unitInTable = $('#unit_row' + marker.ProspectingProperty.LightstonePropertyId);
+                var offset = unitInTable.offset();
+                var topOffset = offset.top - unitInTable.height();
+                container.scrollTop(topOffset);
+
+                if (marker.ProspectingProperty.Whence == 'from_comm_report') {
+                    currentProperty = marker.ProspectingProperty;
+                    updateOwnerDetailsEditor();
+                    showMenu("contactdetails");
+
+                    var contactPerson = $.grep(currentProperty.Contacts, function (c) {
+                        return marker.ProspectingProperty.TargetContactIdForComms == c.ContactPersonId; // person or company
+                    })[0];
+
+                    $('#contactsExpander').remove();
+                    openExpanderWidget(contactPerson);
+                }
+
+                marker.ProspectingProperty.Whence = null;
+            }
         }
         else {
             currentProperty = marker.ProspectingProperty;
@@ -924,6 +946,17 @@ function loadProspectingProperty(marker) {
             updateOwnerDetailsEditor();
             //updatePropertyNotesDiv();
             showMenu("contactdetails");
+
+            if (marker.ProspectingProperty.Whence == 'from_comm_report') {
+                marker.ProspectingProperty.Whence = null;
+
+                var contactPerson = $.grep(currentProperty.Contacts, function (c) {
+                    return marker.ProspectingProperty.TargetContactIdForComms == c.ContactPersonId; // person or company
+                })[0];
+
+                $('#contactsExpander').remove();
+                openExpanderWidget(contactPerson);
+            }
 
             updateProspectedStatus();
         }
@@ -1490,7 +1523,9 @@ function buildInfoWindowContentForSS(unit) {
 
         function getBGColourForRow(unit) {
             if (unit.Whence == 'from_followup' || unit.Whence == 'from_activity') {
-                unit.Whence = null;
+                return "#CC00CC";
+            }
+            if (unit.Whence == 'from_comm_report') {
                 return "#CC00CC";
             }
             if (unit.LatestRegDateForUpdate) {
@@ -1526,7 +1561,8 @@ function buildInfoWindowContentForSS(unit) {
             return unitContent;
         }
         
-        var tr = $("<tr class='unitrow' />");
+        var unitRowId = 'unit_row' + unit.LightstonePropertyId;
+        var tr = $("<tr class='unitrow' id='" + unitRowId + "' />");
         var id = "unit" + unit.LightstonePropertyId;
         var color = getBGColourForRow(unit);
         var bgcolor = "background-color:" + color;
@@ -1945,19 +1981,17 @@ function closeInfoWindow() {
 }
 
 function unlockCurrentProperty() {
-    if (currentProperty != null) {
-        $.ajax({
-            type: "POST",
-            url: "RequestHandler.ashx",
-            data: JSON.stringify({ Instruction: 'unlock_prospecting_record' }),
-            async:   false,
-            dataType: "json"
-        }).done(function (data) {
-            if (!handleResponseIfServerError(data)) {
-                return;
-            }
-        });
-    }
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: 'unlock_prospecting_record' }),
+        async: false,
+        dataType: "json"
+    }).done(function (data) {
+        if (!handleResponseIfServerError(data)) {
+            return;
+        }
+    });
 }
 
 function clearActivityReport() {
@@ -2390,6 +2424,7 @@ function initializeMenuHtml() {
                 buttons: {
                     "Yes": function () {
                         $(this).dialog("close");
+                        unlockCurrentProperty();
                         window.history.back();
                     },
                     "No": function () { $(this).dialog("close"); }
