@@ -157,6 +157,11 @@ function handleCommReportRowClick(e) {
         return sub.SuburbId == seeffAreaId;
     })[0];
 
+    if (!targetSuburb) {
+        alert('This contact belongs to a property that falls outside your available suburbs (' + seeffAreaId + ')');
+        return;
+    }
+
     // Load the suburb
     globalZoomLevel = 20;
     $('#suburbLink' + targetSuburb.SuburbId).trigger('click', function () {
@@ -248,7 +253,8 @@ function renderCommHistoryReport(results) {
         dataView.syncGridSelection(grid, true);
     }
 
-    $('.commReportViewContactRow').unbind('click').bind('click', handleCommReportRowClick);
+    $('#commMessageHistory').off('click', '.commReportViewContactRow');
+    $('#commMessageHistory').on('click', '.commReportViewContactRow', handleCommReportRowClick);
 }
 
 function validateFilterInputs() {

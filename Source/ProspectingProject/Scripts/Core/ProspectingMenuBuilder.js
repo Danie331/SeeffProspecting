@@ -185,7 +185,15 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
         return meetsCriteria;
    });
 
-   displayItems.sort(function (a, b) { return new Date(b.FollowupDate) - new Date(a.FollowupDate); });
+   displayItems.sort(function (a, b) {
+       if (b.FollowupDate > a.FollowupDate) return 1;
+       if (b.FollowupDate < a.FollowupDate) return -1;
+       
+       if (b.ActivityLogId > a.ActivityLogId) return 1;
+       if (b.ActivityLogId < a.ActivityLogId) return -1;
+
+       return 0;
+   });
 
     $.each(displayItems, function (idx, followup) {
         var formattedItem = buildFollowupDisplayItem(followup);

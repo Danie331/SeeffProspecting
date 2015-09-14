@@ -796,7 +796,7 @@ namespace ProspectingProject
                 }
             }
 
-            fb.Followups = followups.OrderByDescending(s => s.FollowupDate).ToList();
+            fb.Followups = followups.OrderByDescending(s => s.FollowupDate).ThenByDescending(s => s.ActivityLogId).ToList();
             return fb;
         }
 

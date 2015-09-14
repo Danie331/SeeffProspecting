@@ -259,6 +259,8 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
                             record.activity_log_id = CreateActivityForRecord(record);
                             break;
                         case "#Submitted": // do absolutely nothing
+                          case  "#Pending":
+                           case  "#Accepted":
                             break;
                         default:
                             record.status = CommunicationHelpers.GetCommunicationStatusId("SMS_OTHER");
