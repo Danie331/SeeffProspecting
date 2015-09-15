@@ -739,7 +739,7 @@ function showRecentActivitiesForUser(activities) {
     if (activities.length) {
         activities.sort(function (a, b) { return new Date(b.CreatedDate) - new Date(a.CreatedDate); });
                       
-        recentActivitiesDiv.append("Recent activities created by you:");
+        recentActivitiesDiv.append("Your last 50 activities:");
         recentActivitiesDiv.append("<p />");
         $.each(activities, function (idx, activity) {
             var formattedActivity = buildActivityDisplayItem(activity);

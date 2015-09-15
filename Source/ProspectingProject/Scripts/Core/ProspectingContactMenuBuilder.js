@@ -135,11 +135,33 @@ function buildGeneralInfoHtml(contact) {
     html.append("<label class='fieldAlignment'>Title: </label>");
     html.append(buildPersonTitleCombo());
     html.append("<br />");
-    html.append("<label class='fieldAlignment'>First name:</label><input type='text' id='firstNameTextBox' name='firstNameTextBox' size='40'/>");
+    var makeFirstNameTitleCase = $('<input type="image" src="Assets/titlecase_icon.png" title="Convert to Title Case" style="display:inline-block;vertical-align:middle; border: 1px outset lightgray;margin-left:1px;" />'); // title=, inline-block, test browser resize, add a new contact + retest, cross browser, change of ownership test.
+    var firstNameInputItem = $("<label class='fieldAlignment'>First name:</label><input type='text' id='firstNameTextBox' name='firstNameTextBox' size='25' style='display:inline-block;vertical-align:middle;'/>");
+    html.append(firstNameInputItem).append(makeFirstNameTitleCase);
+    makeFirstNameTitleCase.click(function (e) {
+        e.preventDefault();
+        var value = $('#firstNameTextBox').val();
+        if (value.length) {
+            value = toTitleCase(value);
+            $('#firstNameTextBox').val(value);
+        }
+    });
+
     html.append("<br />");
-    html.append("<label class='fieldAlignment'>Surname:</label><input type='text' id='surnameTextBox' name='surnameTextBox' size='40'/>");
+    var makeSurnameTitleCase = $('<input type="image" src="Assets/titlecase_icon.png" title="Convert to Title Case" style="display:inline-block;vertical-align:middle; border: 1px outset lightgray;margin-left:1px;" />');
+    var surnameInputItem = $("<label class='fieldAlignment'>Surname:</label><input type='text' id='surnameTextBox' name='surnameTextBox' size='25' style='display:inline-block;vertical-align:middle;' />");
+    html.append(surnameInputItem).append(makeSurnameTitleCase);
+    makeSurnameTitleCase.click(function (e) {
+        e.preventDefault();
+        var value = $('#surnameTextBox').val();
+        if (value.length) {
+            value = toTitleCase(value);
+            $('#surnameTextBox').val(value);
+        }
+    });
+
     html.append("<br />");
-    html.append("<label class='fieldAlignment'>ID no.:</label><input type='text' id='idOrCkTextBox' name='idOrCkTextBox' size='40'/>");
+    html.append("<label class='fieldAlignment'>ID no.:</label><input type='text' id='idOrCkTextBox' name='idOrCkTextBox' size='15'/>");
     html.append("<br />");
 
     var relationshipText = currentProperty.ContactCompanies.length > 0 ? "Relationship to property/company: " : "Relationship to property: ";
