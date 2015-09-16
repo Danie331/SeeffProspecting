@@ -19,6 +19,8 @@ var selectedTemplateActivityTypeId = null;
 
 var commCustomSelectionEnabled = true;
 
+var commWarningMessageShown = false;
+
 function buildCommunicationMenu() {
 
     var contentDiv = $("<div class='contentdiv' id='communicationsDiv' style='padding-right:10px' />");
@@ -841,17 +843,21 @@ function handleEmailMessageClick() {
 function handleEnableComms() {
     // you are about to enter comms..restart if made changes/edits. + when re-prospecting warn existing contact will be removed (create acticvity with primary contact details).
     // And of course the suburb selection screen.
-    var commWarningDialog = $("<div id='commWarningDialog' title='Communications Mode' style='font-family:Verdana;font-size:12px;' />");
-    commWarningDialog.empty().append('You have entered communications mode. Please note that if you have made changes to property and/or contact information during this session, \
+    if (!commWarningMessageShown) {
+        var commWarningDialog = $("<div id='commWarningDialog' title='Communications Mode' style='font-family:Verdana;font-size:12px;' />");
+        commWarningDialog.empty().append('You have entered communications mode. Please note that if you have made changes to property and/or contact information during this session, \
                                      it is recommended that you restart Prospecting to ensure that the communications system picks up the latest information.');
-    commWarningDialog.dialog(
-  {
-      modal: true,
-      closeOnEscape: true,
-      width: '450',
-      buttons: { "Ok": function () {  $(this).dialog("close"); } },
-      position: ['center', 'center']
-  });
+        commWarningDialog.dialog(
+      {
+          modal: true,
+          closeOnEscape: true,
+          width: '450',
+          buttons: { "Ok": function () { $(this).dialog("close"); } },
+          position: ['center', 'center']
+      });
+
+        commWarningMessageShown = true;
+    }
 
     toggleMultiSelectMode(true);
 }
@@ -2116,4 +2122,15 @@ function showDialogCommCustomSelectionDisabled() {
       buttons: { "Ok": function () { $(this).dialog("close"); } },
       position: ['center', 'center']
   });
+}
+
+function newMessageToProperty(messageType, marker) {
+    showMenu("communication");
+    if (messageType == 'SMS') {
+        handleSMSMessageClick();
+    } else {
+        handleEmailMessageClick();
+    }
+
+    new google.maps.event.trigger(marker, 'click', { TargetOnlySelectedProperty: true });
 }

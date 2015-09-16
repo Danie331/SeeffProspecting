@@ -83,6 +83,8 @@
 .context-menu-item.icon-add_activity {background-image: url(../../Assets/add_activity.png);}
 .context-menu-item.icon-google {background-image: url(../../Assets/google.png);}
 .context-menu-item.icon-capture {background-image: url(../../Assets/capture_address.png);}
+.context-menu-item.icon-new_sms_message {background-image: url(../../Assets/comm_sms.png);}
+.context-menu-item.icon-new_email_message {background-image: url(../../Assets/comm_email.png);}
 
 /* vertically align inside labels */
 .context-menu-input > label > * { vertical-align: top; }

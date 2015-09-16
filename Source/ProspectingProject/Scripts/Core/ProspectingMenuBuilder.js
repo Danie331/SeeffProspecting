@@ -1029,7 +1029,7 @@ function buildSuburbsSelectionHtml() {
 
         var tdPropertiesWithContactDetails = $("<td style='padding:0px;text-align:center;' />");
         var withDetailsId = "withDetailLabel" + suburbId;
-        var propertiesWithContactDetailsCnt = $("<label id='" + withDetailsId + "'>(" + numPropsWithContactDetails + ")</label>");
+        var propertiesWithContactDetailsCnt = $("<label id='" + withDetailsId + "'>" + numPropsWithContactDetails + "</label>");
         tdPropertiesWithContactDetails.append(propertiesWithContactDetailsCnt);
 
         var tdPropertiesRequireAttention = $("<td style='padding:0px;text-align:center;' />");

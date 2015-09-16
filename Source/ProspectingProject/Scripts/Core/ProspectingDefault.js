@@ -50,15 +50,28 @@ function initEventHandlers() {
     $.contextMenu({
         selector: '.context-menu-rightclick-property',
         build: function ($trigger, e) {
+            var items = { "Add Activity": { name: "Add Activity", icon: "add_activity" } };
+            if (prospectingContext.UserHasCommAccess) {
+                if (rightClickedProperty.Prospected) {
+                    items["New SMS Message"] = { name: "New SMS Message", icon: "new_sms_message" };
+                    items["New Email Message"] = { name: "New Email Message", icon: "new_email_message" };
+                }
+            }
             return {
                 callback: function (key, options) {
                     switch (key) {
                         case "Add Activity":
                             handlePropertyRightClick();
                             break;
+                        case "New SMS Message":
+                            newMessageToProperty('SMS', rightClickedProperty.Marker);
+                            break;
+                        case "New Email Message":
+                            newMessageToProperty('EMAIL', rightClickedProperty.Marker);
+                            break;
                     }
                 },
-                items: { "Add Activity": { name: "Add Activity", icon: "add_activity" } }
+                items: items
             };
         }
     });
@@ -506,7 +519,7 @@ function updateOwnershipOfProperty(marker, callbackFn) {
     });
 }
 
-function markerClick() {
+function markerClick(e) {
     closeInfoWindow();
     closeTransientInfoWindow(this);
 
@@ -521,7 +534,8 @@ function markerClick() {
         if (marker.IsPartOfSelection) {
             removeMarkersFromSelection(marker);
         } else {
-            addMarkerToSelection(marker, true);
+            var selectOnlyThisUnit = (e && e.TargetOnlySelectedProperty) ? true : false;
+            addMarkerToSelection(marker, true, selectOnlyThisUnit);
         }
         return;
     }

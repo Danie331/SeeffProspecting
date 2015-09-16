@@ -29,7 +29,7 @@ function toggleMultiSelectMode(value) {
     }
 }
 
-function addMarkerToSelection(marker, mustTriggerUpdate) {
+function addMarkerToSelection(marker, mustTriggerUpdate, addOnlyThisUnit) {
     // Must include SS hey.
     // check exitsing
     // reset all markers too when resetting array
@@ -42,26 +42,34 @@ function addMarkerToSelection(marker, mustTriggerUpdate) {
 
     var property = marker.ProspectingProperty;
     if (property.SS_FH == 'SS' || property.SS_FH == 'FS') {
-        var ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
-            if (!pp.SS_UNIQUE_IDENTIFIER) return false;
-            return pp.SS_UNIQUE_IDENTIFIER == property.SS_UNIQUE_IDENTIFIER;
-        });
-
-        var requiresOwnerUpdates = false;
-        $.each(ssUnits, function (idx, unit) {
-            if (unit.LatestRegDateForUpdate) {
-                requiresOwnerUpdates = true;
+        if (addOnlyThisUnit) {
+            flagMarkerSelected(marker, true);
+            //marker.setIcon(getIconForMarker(marker));
+            if (selectedMarkers.indexOf(marker) == -1) {
+                selectedMarkers.push(marker);
             }
-        });
-        if (!requiresOwnerUpdates) {
-            $.each(ssUnits, function (idx, u) {
-                flagMarkerSelected(u.Marker, true);
-                u.Marker.setIcon(getIconForMarker(u.Marker));
-                if (selectedMarkers.indexOf(u.Marker) == -1) {
-                    selectedMarkers.push(u.Marker);
+        } else {
+            var ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+                if (!pp.SS_UNIQUE_IDENTIFIER) return false;
+                return pp.SS_UNIQUE_IDENTIFIER == property.SS_UNIQUE_IDENTIFIER;
+            });
+
+            var requiresOwnerUpdates = false;
+            $.each(ssUnits, function (idx, unit) {
+                if (unit.LatestRegDateForUpdate) {
+                    requiresOwnerUpdates = true;
                 }
             });
-        }        
+            if (!requiresOwnerUpdates) {
+                $.each(ssUnits, function (idx, u) {
+                    flagMarkerSelected(u.Marker, true);
+                    u.Marker.setIcon(getIconForMarker(u.Marker));
+                    if (selectedMarkers.indexOf(u.Marker) == -1) {
+                        selectedMarkers.push(u.Marker);
+                    }
+                });
+            }
+        }
     }
     else {
         if (marker.ProspectingProperty.Prospected && marker.ProspectingProperty.LatestRegDateForUpdate == null) {
@@ -134,7 +142,7 @@ function selectPropertiesInsidePolygon(polygon) {
     // exit drawing mode, clear selection and empty arrays
     $.each(currentSuburb.ProspectingProperties, function (idx, pp) {
         if (google.maps.geometry.poly.containsLocation(pp.Marker.position, polygon)) {
-            addMarkerToSelection(pp.Marker, false);
+            addMarkerToSelection(pp.Marker, false, false);
         }
     });
 
