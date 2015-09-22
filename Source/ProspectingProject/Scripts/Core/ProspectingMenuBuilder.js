@@ -342,9 +342,7 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
                 var marker = targetProperty.Marker;
                 try {
                     centreMap(marker.Suburb, marker, true);
-                    new google.maps.event.trigger(marker, 'click', function () {
-                        //debugger;
-                    });
+                    new google.maps.event.trigger(marker, 'click', { FromFollowup: followup });
                 } catch (e) { }
                 // Set current proeprty, what about SS?
             });
@@ -956,7 +954,7 @@ function buildActivityDisplayItem(activity) {
             var marker = targetProperty.Marker;
             try {
                 centreMap(marker.Suburb, marker, true);
-                new google.maps.event.trigger(marker, 'click');
+                new google.maps.event.trigger(marker, 'click', { FromActivity:activity });
             } catch (e) {}
             // Set current proeprty, what about SS?
         });

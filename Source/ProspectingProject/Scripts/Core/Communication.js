@@ -1119,13 +1119,21 @@ function buildContactsBody(contacts, selectCells) {
             checkboxDisabled = 'disabled';
         }
 
+        var personTitle = $.grep(prospectingContext.ContactPersonTitle, function (i) {
+            return i.Key == c.Title;
+        })[0];
+        personTitle = !personTitle ? '' : personTitle.Value;
         var isSelectedCell = $("<td class='commTableRow30' id='comm_selected_" + rowId + "' ></td>").append($("<input type='checkbox' id='comm_selected_checkbox_" + rowId + "' name='comm_selected_checkbox_" + rowId + "' value='' " + rowIsSelected + " " + checkboxDisabled + " />"));
-        var name = $("<td class='commTableRow' id='comm_fullname_" + rowId + "' title='" + c.Firstname + ' ' + c.Surname + "' ></td>").append(toTitleCase(c.Firstname) + ' ' + toTitleCase(c.Surname));
+        var name = $("<td class='commTableRow' id='comm_fullname_" + rowId + "' title='" + personTitle + ' ' + escapePersonName(c.Firstname) + ' ' + escapePersonName(c.Surname) + "' ></td>").append(personTitle + ' ' + escapePersonName(c.Firstname) + ' ' + escapePersonName(c.Surname));
         var address = $("<td class='commTableRow120' id='comm_address_" + rowId + "' title='" + c.PropertyAddress + "' ></td>").append(c.PropertyAddress); // change for SS (unit no) + ordering
         var contact = $("<td class='commTableRow' id='comm_contactdetail_" + rowId + "' title='" + contactDetailTitle + "' ></td>").append(contactDetailContent); // change
         var action = $("<td class='commTableRow' id='comm_action_" + rowId + "' ></td>").append(actionStatus);
-        var editBtn = $("<a href='' id='comm_edit_contact_" + rowId + "' style='text-decoration:underline!important;'>Edit</a>");
-        var edit = $("<td class='commTableRow' id='comm_edit_" + rowId + "' ></td>").append(editBtn);
+        //var editBtn = $("<a href='' id='comm_edit_contact_" + rowId + "' style='text-decoration:underline!important;'>Edit</a>");
+
+        var editLink = $('<input type="image" src="Assets/edit_link.png" title="Edit contact details" style="display:inline-block;vertical-align:middle; border: 1px outset white;margin-right:3px;" />');
+        var convertToTitleCaseLink = $('<input type="image" src="Assets/titlecase_link.png" title="Convert names to Title Case" style="display:inline-block;vertical-align:middle; border: 1px outset lightgray;margin-left:3px;" />');
+
+        var edit = $("<td class='commTableRow' id='comm_edit_" + rowId + "' ></td>").append(editLink).append('|').append(convertToTitleCaseLink);
 
         tr.append(isSelectedCell).append(name).append(address).append(contact).append(action).append(edit);
         body.append(tr);
@@ -1154,9 +1162,13 @@ function buildContactsBody(contacts, selectCells) {
             }
         });
 
-        editBtn.click(function (e) {
+        editLink.click(function (e) {
             e.preventDefault();
             handleCommEditBtnClick(c, tr);
+        });
+        convertToTitleCaseLink.click(function (e) {
+            e.preventDefault();
+            handleCommTitleCaseBtnClick(c, tr);
         });
     });
     commContactsTable.append(body);
@@ -1198,13 +1210,69 @@ function handleMakeDefaultEmailAddress(itemId, callbackFn) {
     });
 }
 
+function handleCommTitleCaseBtnClick(contact, row) {
+    var property = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+        return pp.LightstonePropertyId == contact.TargetLightstonePropertyId;
+    })[0];
+
+    var newFirstname = toTitleCase(contact.Firstname);
+    var newSurname = toTitleCase(contact.Surname);
+    var newPropertyAddress = toTitleCase(property.PropertyAddress);
+
+    var ssName = property.SS_FH == 'SS' || property.SS_FH == 'FS' ? toTitleCase(property.SSName).replace('Ss ', 'SS ') : null;
+
+    var allPersonContacts = [];
+    $.each(currentSuburb.ProspectingProperties, function (idx1, pp) {
+        if (pp.Contacts) {
+            $.each(pp.Contacts, function (idx2, pc) {
+                if (pc.ContactPersonId == contact.ContactPersonId) {
+                    allPersonContacts.push(pc);
+                }
+            });
+        }
+    });
+
+    $.each(allPersonContacts, function (idx, cc) {
+        cc.Firstname = newFirstname;
+        cc.Surname = newSurname;
+    });
+
+    var prospectingPropId = contact.TargetCommPropertyId;
+    var propertyDetailsInputPacket = {
+        PropertyAddress: newPropertyAddress,
+        StreetOrUnitNo: property.StreetOrUnitNo,
+        SSDoorNo: null,
+        SS_FH: property.SS_FH,
+        ProspectingPropertyId: prospectingPropId,
+        TitleCaseSS: true,
+        SSName: ssName
+    };
+
+    saveContact(contact, { ProspectingPropertyId: prospectingPropId }, function () {
+        updateProspectingRecord(propertyDetailsInputPacket, property, function () {
+
+            contact.PropertyAddress = getFormattedAddress(property);
+
+            var addressTD = row.find('#comm_address_' + contact.ContactPersonId);
+            addressTD.empty().append(contact.PropertyAddress);
+
+            var fullnameTD = row.find('#comm_fullname_' + contact.ContactPersonId);
+            var personTitle = $.grep(prospectingContext.ContactPersonTitle, function (i) {
+                return i.Key == contact.Title;
+            })[0];
+            personTitle = !personTitle ? '' : personTitle.Value;
+            fullnameTD.empty().append(personTitle + ' ' + escapePersonName(contact.Firstname) + ' ' + escapePersonName(contact.Surname));
+        });
+    });
+}
+
 function handleCommEditBtnClick(contact, row) {
     var dialogHandle = $("<div title='Edit Contact|Property Details' style='display:none;font-family:Verdana;font-size:12px;'></div>");
     dialogHandle.empty();
     var title = $("<label class='fieldAlignmentExtraShortWidth'>Title:</label>");
     var titleCombo = buildContactTitle();
-    var firstname = $("<label class='fieldAlignmentExtraShortWidth'>First name:</label><input type='text' id='commContactFirstnameEdit' name='commContactFirstnameEdit' size='35' value='" + contact.Firstname + "' />");
-    var surname = $("<label class='fieldAlignmentExtraShortWidth'>Surname:</label><input type='text' id='commContactSurnameEdit' name='commContactSurnameEdit' size='35' value='" + contact.Surname + "' />");
+    var firstname = $("<label class='fieldAlignmentExtraShortWidth'>First name:</label><input type='text' id='commContactFirstnameEdit' name='commContactFirstnameEdit' size='35' value='" + escapePersonName(contact.Firstname) + "' />");
+    var surname = $("<label class='fieldAlignmentExtraShortWidth'>Surname:</label><input type='text' id='commContactSurnameEdit' name='commContactSurnameEdit' size='35' value='" + escapePersonName(contact.Surname) + "' />");
     var property = $.grep(currentSuburb.ProspectingProperties, function (pp) {
         return pp.LightstonePropertyId == contact.TargetLightstonePropertyId;
     })[0];
@@ -1265,6 +1333,7 @@ function handleCommEditBtnClick(contact, row) {
         return comboBox;
     }
 
+    var convertTitleCaseClicked = false;
     convertToTitleCase.click(function () {
         var firstnameInput = firstname.next();
         var firstnameText = firstnameInput.val();
@@ -1279,6 +1348,8 @@ function handleCommEditBtnClick(contact, row) {
         var streetAddressNew = streetAddress.val();
         streetAddressNew = toTitleCase(streetAddressNew);
         streetAddress.val(streetAddressNew);
+
+        convertTitleCaseClicked = true;
     });
     dialogHandle.dialog(
   {
@@ -1302,6 +1373,11 @@ function handleCommEditBtnClick(contact, row) {
         var newStreetAddress = streetAddress.val();
         // SS door no
         var newSSDoorNo = ssDoor != null ? ssDoor.val() : null;
+
+        var ssName = null;
+        if (convertTitleCaseClicked) {
+            ssName = property.SS_FH == 'SS' || property.SS_FH == 'FS' ? toTitleCase(property.SSName).replace('Ss ', 'SS ') : null;
+        }
     
         if (newFirstnameText.trim() && newSurnameText.trim() && newStreetNo.trim() && newStreetAddress.trim()) {
 
@@ -1328,7 +1404,9 @@ function handleCommEditBtnClick(contact, row) {
                 StreetOrUnitNo: newStreetNo,
                 SSDoorNo: newSSDoorNo,
                 SS_FH: property.SS_FH,
-                ProspectingPropertyId: prospectingPropId
+                ProspectingPropertyId: prospectingPropId,
+                TitleCaseSS: true,
+                SSName: ssName
             };
 
             saveContact(contact, { ProspectingPropertyId: prospectingPropId }, function () {
@@ -1338,6 +1416,13 @@ function handleCommEditBtnClick(contact, row) {
 
                     var addressTD = row.find('#comm_address_' + contact.ContactPersonId);
                     addressTD.empty().append(contact.PropertyAddress);
+
+                    var fullnameTD = row.find('#comm_fullname_' + contact.ContactPersonId);
+                    var personTitle = $.grep(prospectingContext.ContactPersonTitle, function (i) {
+                        return i.Key == contact.Title;
+                    })[0];
+                    personTitle = !personTitle ? '' : personTitle.Value;
+                    fullnameTD.empty().append(personTitle + ' ' + escapePersonName(contact.Firstname) + ' ' + escapePersonName(contact.Surname));
                 });
             });
         }
@@ -1811,9 +1896,9 @@ function getFormattedAddress(property) {
     if (property.SS_FH == "SS" || property.SS_FH == "FS") {
         var doorNr = '';
         if (property.SSDoorNo) doorNr = "(Door no.: " + property.SSDoorNo + ")";
-        return "Unit " + property.Unit + " " + doorNr + " " + formatPropertyAddressTitleCase(property.SSName);
+        return "Unit " + property.Unit + " " + doorNr + " " + property.SSName;
     } else {
-        return property.StreetOrUnitNo + " " + toTitleCase(property.PropertyAddress);
+        return property.StreetOrUnitNo + " " + property.PropertyAddress;
     }
 }
 

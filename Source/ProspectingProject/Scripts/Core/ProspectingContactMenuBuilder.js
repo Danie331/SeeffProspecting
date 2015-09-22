@@ -3,25 +3,25 @@ var currentCompanyContact;
 var contactDetailsWidget = null;
 var expanderWidget = null;
 
-function buildPersonContactMenu(propertyContacts, update) {
+function buildPersonContactMenu(propertyContacts, update, context) {
     if (!propertyContacts) propertyContacts = [];
     var contactDetailsDiv = $('#contactDetailsDiv');
 
     contactDetailsDiv.empty();
-    var contactDashboard = buildContactDashboard(propertyContacts);
+    var contactDashboard = buildContactDashboard(propertyContacts, context);
     contactDetailsDiv.append(contactDashboard);
     contactDetailsDiv.append("<p />");
 
     if (update) {
         // If updating the dashboard rebuild as above and open current contact person (which should already be open)
-        openExpanderWidget(currentPersonContact);
+        openExpanderWidget(currentPersonContact, context);
     }
 }
 
-function openExpanderWidget(contact) {
+function openExpanderWidget(contact, context) {
     // build the expander widget
     var contactDetailsDiv = $('#contactDetailsDiv');
-    expanderWidget = buildExpanderWidget(contact);
+    expanderWidget = buildExpanderWidget(contact, context);
     var div = $('#contactPlaceHolder').length == 0 ? $("<div id='contactPlaceHolder' style='padding:10px;' />") : $('#contactPlaceHolder');
     div.empty();
     div.append(expanderWidget.construct());
@@ -88,16 +88,16 @@ function openAndPopulateNewContactPerson(infoPacket) {
     return newContact;
 }
 
-function buildExpanderWidget(contact) {
+function buildExpanderWidget(contact, context) {
     $('#personGeneral').empty();
-    var personGeneralInfo = buildContentExpanderItem('personGeneral', 'Assets/person.png', "Contact Person", buildGeneralInfoHtml(contact));
+    var personGeneralInfo = buildContentExpanderItem('personGeneral', 'Assets/person.png', "Contact Person", buildGeneralInfoHtml(contact, context));
     $('#personContact').empty();
-    var personContactInfo = buildContentExpanderItem('personContact', 'Assets/contact.png', "Contact Details", buildContactDetailsHtml(contact));
+    var personContactInfo = buildContentExpanderItem('personContact', 'Assets/contact.png', "Contact Details", buildContactDetailsHtml(contact, context));
 
     return new ContentExpanderWidget('#contentarea', [personGeneralInfo, personContactInfo], "contactsExpander");
 }
 
-function buildGeneralInfoHtml(contact) {
+function buildGeneralInfoHtml(contact, context) {
     $('#contactPersonHeaderDiv').remove();
     var html = $("<div id='contactPersonHeaderDiv' />");
 
@@ -174,20 +174,44 @@ function buildGeneralInfoHtml(contact) {
     html.append(companySelect);
 
     // default to related to.
-    if (currentPersonContact) {
-        html.append("<br />");
-        var addActivityBtn = $("<button type='text' id='contactAddActivity' style='cursor:pointer;display:inline-block;vertical-align:middle'><img src='Assets/add_activity.png' style='display:inline-block;vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>Add Activity</label></button>");
-        html.append(addActivityBtn);
-        addActivityBtn.click(function (e) {
-            e.preventDefault();
-            handleAddActivityFromContact();
-        });
+    if (currentPersonContact) {       
+
+        if (context && context.FromFollowup) {
+            //check for SS, FH, button for property only as well as RelatedTo, problem: when user updates contact must preserve feedback btn., then hide btn., remove Add Actvity btn.
+            html.append("<br />");
+            var followupBtn = $("<button type='text' id='feedbackFromContactBtn' style='cursor:pointer;display:inline-block;vertical-align:middle;margin-left:5px'><img src='Assets/add_activity.png' style='display:inline-block;vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>Feedback</label></button>");
+            html.append(followupBtn);
+            followupBtn.click(function (e) {
+                e.preventDefault();
+                handleAddFollowupActivity(context.FromFollowup, function () {
+                    var index = globalFollowUps.indexOf(context.FromFollowup);
+                    globalFollowUps.splice(index, 1);
+
+                    performFollowupFiltering(globalFollowUps, $('#followupContent'));
+
+                    followupBtn.remove();
+                    //if (sourceFollowups.length == 0) {
+                    //    loadMoreFollowups();
+                    //}
+                });
+            });
+        } else {
+            html.append("<br />");
+            var addActivityBtn = $("<button type='text' id='contactAddActivity' style='cursor:pointer;display:inline-block;vertical-align:middle'><img src='Assets/add_activity.png' style='display:inline-block;vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>Add Activity</label></button>");
+            html.append(addActivityBtn);
+            addActivityBtn.click(function (e) {
+                e.preventDefault();
+                handleAddActivityFromContact();
+            });
+        }
     }
 
     html.append("<p />");
     var saveBtn = $("<input type='button' id='personGeneralSaveBtn' value='Save..' style='cursor:pointer;' />");
     html.append(saveBtn);
-    saveBtn.click(function () { handleSaveContactPerson(); });
+    saveBtn.click(function () {
+        handleSaveContactPerson(null, context);
+    });
 
     if (contact) {
         // If this contact has any contact details, hide the save button on the person header section
@@ -324,16 +348,19 @@ function removeCompanySelect() {
     selector.css('display', 'none');
 }
 
-function buildContactDetailsHtml(contact) {
+function buildContactDetailsHtml(contact, context) {
 
     var phoneNumbers = contact ? contact.PhoneNumbers : [];
     var emailAddresses = contact ? contact.EmailAddresses : [];
     var canEdit = contact ? !contact.IsPOPIrestricted : false;
-    contactDetailsWidget = new ContactDetailsEditorWidget('#contentarea', phoneNumbers, emailAddresses, handleSaveContactDetails, canEdit);
+    contactDetailsWidget = new ContactDetailsEditorWidget('#contentarea', phoneNumbers, emailAddresses,
+function (ph, em) {
+    handleSaveContactDetails(ph, em, context);
+}, canEdit);
     return contactDetailsWidget.construct();
 }
 
-function handleSaveContactDetails(phoneNumbers, emailAddresses) {
+function handleSaveContactDetails(phoneNumbers, emailAddresses, context) {
 
     if (currentPersonContact) {
         currentPersonContact.PhoneNumbers = phoneNumbers;
@@ -396,7 +423,7 @@ function handleSaveContactDetails(phoneNumbers, emailAddresses) {
                 }
             });
         }
-    });
+    }, context);
 }
 
 function determineIfDetailsAreAvailableForUse(phoneNumbers, emailAddresses, actionToRun) {
@@ -433,7 +460,7 @@ function determineIfDetailsAreAvailableForUse(phoneNumbers, emailAddresses, acti
     }
 }
 
-function handleSaveContactPerson(saveDetailsFunction) {
+function handleSaveContactPerson(saveDetailsFunction, context) {
 
     if (!validateCorrectnessOfPersonInfo()) {
         alert('Cannot save: One or more fields are missing or the data has been entered incorrectly');
@@ -533,7 +560,7 @@ function handleSaveContactPerson(saveDetailsFunction) {
                 showSavedSplashDialog('Contact Saved!');
                 currentPersonContact.ContactPersonId = data.ContactPersonId;
                 addOrUpdateContactToCurrentProperty(data);
-                buildPersonContactMenu(currentProperty.Contacts, true);
+                buildPersonContactMenu(currentProperty.Contacts, true, context);
 
                 currentPersonContact.PhoneNumbers = data.PhoneNumbers;
                 currentPersonContact.EmailAddresses = data.EmailAddresses;
@@ -553,7 +580,7 @@ function handleSaveContactPerson(saveDetailsFunction) {
                     //alert('Contact saved successfully!');
                     showSavedSplashDialog('Contact Saved!');
                     addOrUpdateContactToCurrentProperty(data);
-                    buildPersonContactMenu(currentProperty.Contacts, false);
+                    buildPersonContactMenu(currentProperty.Contacts, false, context);
                     updateProspectedStatus();
                     setCurrentMarker(currentSuburb, currentProperty);
                 });
@@ -801,13 +828,33 @@ function buildPropertyAddressEditor(property) {
 }
 
 // Represents the view that enables a user view/edit all owners (and/or other contacts) associated with the property
-function buildContactDashboard(contacts) {
+function buildContactDashboard(contacts, context) {
 
     var container = $("<div id='contactsDashboard' style='padding: 10px;' class='personGeneralInfoContainer' />");
     var propertyDetailsEditor = buildPropertyAddressEditor(currentProperty);
     var propertyDetailsEditorContent = propertyDetailsEditor.construct();
     container.append(propertyDetailsEditorContent);
     container.append("<hr /><p />");
+
+    if (context && context.FromFollowup && !context.FromFollowup.RelatedToContactPersonId) {
+        var feedbackBtn = $("<button type='text' id='feedbackFromPropertyBtn' style='cursor:pointer;vertical-align:middle;margin-left:5px;'><img src='Assets/add_activity.png' style='vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>Feedback</label></button>");
+        container.append(feedbackBtn);
+        feedbackBtn.click(function (e) {
+            e.preventDefault();
+            handleAddFollowupActivity(context.FromFollowup, function () {
+                var index = globalFollowUps.indexOf(context.FromFollowup);
+                globalFollowUps.splice(index, 1);
+
+                performFollowupFiltering(globalFollowUps, $('#followupContent'));
+
+                feedbackBtn.remove();
+                //if (sourceFollowups.length == 0) {
+                //    loadMoreFollowups();
+                //}
+            });
+        });
+        container.append("<hr /><p />");
+    }
 
     var availableCreditLabel = $("<label id='availableCreditLabel' style='color: red;' />");
     container.append("Available Prospecting amount: R ");

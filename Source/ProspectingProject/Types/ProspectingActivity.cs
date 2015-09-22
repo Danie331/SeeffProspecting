@@ -65,5 +65,7 @@ namespace ProspectingProject
         public string PropertyType { get; set; }
 
         public string PropertyAddress { get; set; }
+
+        public int? RelatedToContactPersonId { get; set; }
     }
 }

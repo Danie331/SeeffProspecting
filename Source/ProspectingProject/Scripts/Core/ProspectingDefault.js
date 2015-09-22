@@ -556,26 +556,26 @@ function markerClick(e) {
             }
         });
         if (requiresOwnerUpdates) {
-            showChangeOfOwnershipDialog('SS', function () { loadExistingProspectingProperty(marker); }, function () { });
+            showChangeOfOwnershipDialog('SS', function () { loadExistingProspectingProperty(marker, e); }, function () { });
         } else {
-            loadExistingProspectingProperty(marker);
+            loadExistingProspectingProperty(marker, e);
         }
     } else { // FH
         if (marker.ProspectingProperty.LatestRegDateForUpdate) {
             showChangeOfOwnershipDialog('FH', function () {
                 updateOwnershipOfProperty(marker, function (marker) {
                     marker.ProspectingProperty.Contacts = null;
-                    loadExistingProspectingProperty(marker);
+                    loadExistingProspectingProperty(marker, e);
                     marker.setIcon(getIconForMarker(marker));
                 });
-            }, function () { loadExistingProspectingProperty(marker); });
+            }, function () { loadExistingProspectingProperty(marker, e); });
         } else {
-            loadExistingProspectingProperty(marker);
+            loadExistingProspectingProperty(marker, e);
         }
     }        
 }
 
-function loadExistingProspectingProperty(marker) {
+function loadExistingProspectingProperty(marker, eventData) {
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Property Info...</p>' });
     $.ajax({
         type: "POST",
@@ -597,7 +597,7 @@ function loadExistingProspectingProperty(marker) {
                 } else {
                     updateExistingPropertyFromProperty(marker.ProspectingProperty, data);
                     currentMarker = marker;
-                    loadProspectingProperty(marker);
+                    loadProspectingProperty(marker, eventData);
                 }
             } else {
                 alert('Could not complete request.');
@@ -926,7 +926,7 @@ function markerRightClick(event) {
     }
 }
 
-function loadProspectingProperty(marker) {
+function loadProspectingProperty(marker, eventData) {
     currentMarker = marker;
     openInfoWindow(marker, function () {
         if (marker.ProspectingProperty.SS_FH == "SS" || marker.ProspectingProperty.SS_FH == "FS") {
@@ -943,12 +943,33 @@ function loadProspectingProperty(marker) {
                     updateOwnerDetailsEditor();
                     showMenu("contactdetails");
 
-                    var contactPerson = $.grep(currentProperty.Contacts, function (c) {
-                        return marker.ProspectingProperty.TargetContactIdForComms == c.ContactPersonId; // person or company
-                    })[0];
+                    openDetailsForContactFromContext(marker.ProspectingProperty.TargetContactIdForComms);
+                }
 
-                    $('#contactsExpander').remove();
-                    openExpanderWidget(contactPerson);
+                if (marker.ProspectingProperty.Whence == 'from_followup') {
+                    if (eventData && eventData.FromFollowup) {
+                        var followup = eventData.FromFollowup;
+                        currentProperty = marker.ProspectingProperty;
+                        updateOwnerDetailsEditor(eventData);
+                        showMenu("contactdetails");
+
+                        if (followup.RelatedToContactPersonId) {
+                            openDetailsForContactFromContext(followup.RelatedToContactPersonId, eventData);
+                        }
+                    }
+                }
+
+                if (marker.ProspectingProperty.Whence == 'from_activity') {
+                    if (eventData && eventData.FromActivity) {
+                        var activity = eventData.FromActivity;
+                        currentProperty = marker.ProspectingProperty;
+                        updateOwnerDetailsEditor();
+                        showMenu("contactdetails");
+
+                        if (activity.RelatedToContactPersonId) {
+                            openDetailsForContactFromContext(activity.RelatedToContactPersonId);
+                        }
+                    }
                 }
 
                 marker.ProspectingProperty.Whence = null;
@@ -957,26 +978,47 @@ function loadProspectingProperty(marker) {
         else {
             currentProperty = marker.ProspectingProperty;
             currentProperty.Marker = marker;
-            updateOwnerDetailsEditor();
-            //updatePropertyNotesDiv();
+            updateOwnerDetailsEditor(eventData);
             showMenu("contactdetails");
 
             if (marker.ProspectingProperty.Whence == 'from_comm_report') {
-                marker.ProspectingProperty.Whence = null;
-
-                var contactPerson = $.grep(currentProperty.Contacts, function (c) {
-                    return marker.ProspectingProperty.TargetContactIdForComms == c.ContactPersonId; // person or company
-                })[0];
-
-                $('#contactsExpander').remove();
-                openExpanderWidget(contactPerson);
+                openDetailsForContactFromContext(marker.ProspectingProperty.TargetContactIdForComms);
             }
 
+            if (marker.ProspectingProperty.Whence == 'from_followup') {
+                if (eventData && eventData.FromFollowup) {
+                    var followup = eventData.FromFollowup;
+                    if (followup.RelatedToContactPersonId) {
+                        openDetailsForContactFromContext(followup.RelatedToContactPersonId, eventData);
+                    }
+                }
+            }
+
+            if (marker.ProspectingProperty.Whence == 'from_activity') {
+                if (eventData && eventData.FromActivity) {
+                    var activity = eventData.FromActivity;
+                    if (activity.RelatedToContactPersonId) {
+                        openDetailsForContactFromContext(activity.RelatedToContactPersonId);
+                    }
+                }
+            }
+
+            marker.ProspectingProperty.Whence = null;
             updateProspectedStatus();
         }
-
         updatePropertyInfoMenu();
     });
+}
+
+function openDetailsForContactFromContext(contactPersonIdFromContext, context) {
+    var contactPerson = $.grep(currentProperty.Contacts, function (c) {
+        return contactPersonIdFromContext == c.ContactPersonId; // person or company
+    })[0];
+    if (contactPerson) {
+        currentPersonContact = contactPerson;
+        $('#contactsExpander').remove();
+        openExpanderWidget(currentPersonContact, context);
+    }
 }
 
 // Left here for legacy only - can remove in a future version.
@@ -1017,6 +1059,7 @@ function updateProspectingRecord(record, property, callbackFn) {
         SSDoorNo: record.SSDoorNo,
         SS_FH: record.SS_FH,
         ProspectingPropertyId: record.ProspectingPropertyId,
+        TitleCaseSS: record.TitleCaseSS,
 
         ErfSize: record.ErfSize,
         DwellingSize: record.DwellingSize,
@@ -1052,6 +1095,9 @@ function updateProspectingRecord(record, property, callbackFn) {
 
                     if (record.SS_FH == "SS") {
                         property.SSDoorNo = record.SSDoorNo;
+                        if (record.SSName) {
+                            property.SSName = record.SSName;
+                        }
                     } else {
                         property.PropertyAddress = record.PropertyAddress;
                         property.StreetOrUnitNo = record.StreetOrUnitNo;
@@ -1171,12 +1217,12 @@ function getSuburbById(suburbId) {
     return null;
 }
 
-function updateOwnerDetailsEditor() {
+function updateOwnerDetailsEditor(context) {
     var contactDetailsPane = $('#contactDetailsDiv');
     contactDetailsPane.empty();
     contactDetailsPane.css('display', 'block');
     if (currentMarker) {
-        contactDetailsPane.append(buildPersonContactMenu(currentProperty.Contacts));
+        contactDetailsPane.append(buildPersonContactMenu(currentProperty.Contacts, false, context));
     }
 }
 

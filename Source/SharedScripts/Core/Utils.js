@@ -185,3 +185,8 @@ function getUserSuburbsList() {
 function formatPropertyAddressTitleCase(ssName) {
     return toTitleCase(ssName).replace('Ss ', 'SS ');
 }
+
+function escapePersonName(name) {
+    var result = name.replace("'", "&#39;");
+    return result;
+}

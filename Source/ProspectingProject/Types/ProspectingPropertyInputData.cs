@@ -54,5 +54,7 @@ namespace ProspectingProject
         public int? ParkingBays { get; set; }
         public bool? Pool { get; set; }
         public bool? StaffAccomodation { get; set; }
+
+        public bool? TitleCaseSS { get; set; }
     }
 }

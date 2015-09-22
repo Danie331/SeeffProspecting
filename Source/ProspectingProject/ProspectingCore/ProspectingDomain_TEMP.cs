@@ -203,6 +203,7 @@ namespace ProspectingProject
                     PhoneCall = activity.phone_call,
                     Visit = activity.visit,
                     RelatedToContactPersonName = relatedToContactPersonName,
+                    RelatedToContactPersonId = activity.contact_person_id,
                     ActivityFollowupTypeId = activity.activity_followup_type_id,
                     ActivityFollowupTypeName = activityFollowupTypeName,
                     SeeffAreaId = propertyRecord.seeff_area_id,
@@ -646,6 +647,10 @@ namespace ProspectingProject
                 if (dataPacket.SS_FH == "SS")
                 {
                     existingRecord.ss_door_number = unitDoorNo;
+                    if (dataPacket.TitleCaseSS == true)
+                    {
+                        existingRecord.ss_name = new CultureInfo("en-US", false).TextInfo.ToTitleCase(existingRecord.ss_name.ToLower()).Replace("Ss ", "SS ");
+                    }
                 }
                 else
                 {
@@ -923,7 +928,8 @@ namespace ProspectingProject
                     // If not null, then we must assume there is valid data in the list. An empty list indicates
                     // that we should delete records. Same logic applies to email addresses.
                     var existingContactItems = from phoneOrEmail in prospecting.prospecting_contact_details
-                                               where phoneOrEmail.contact_person_id == incomingContact.ContactPersonId
+                                               where phoneOrEmail.contact_person_id == incomingContact.ContactPersonId     
+                                               && !phoneOrEmail.deleted
                                                select phoneOrEmail;
                     // Update contact info
                     if (incomingContact.PhoneNumbers != null)
@@ -1191,6 +1197,7 @@ namespace ProspectingProject
                                                    where c.contact_person_id == contactPersonId
                                                    && affectedContactTypeIds.Contains(c.contact_detail_type) // contact item is either a phone or email
                                                    && !newContactIDs.Contains(c.prospecting_contact_detail_id) // not affected by new insert/update
+                                                   && !c.deleted
                                                    select c;
             foreach (var item in removedItemsToBeFlaggedForDelete)
             {
@@ -1297,7 +1304,9 @@ namespace ProspectingProject
                     existingContactWithDetail = (from cp in prospecting.prospecting_contact_persons
                                                  join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
                                                  where (contactDetails.PhoneNumbers.Contains(cd.contact_detail.ToLower()) ||
-                                                    contactDetails.EmailAddresses.Contains(cd.contact_detail.ToLower())) && cp.id_number != contactDetails.IdNumber
+                                                    contactDetails.EmailAddresses.Contains(cd.contact_detail.ToLower())) 
+                                                    && cp.id_number != contactDetails.IdNumber
+                                                    && !cd.deleted
                                                  select cp).FirstOrDefault();
                 }
                 else
