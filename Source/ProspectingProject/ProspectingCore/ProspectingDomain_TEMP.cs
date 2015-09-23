@@ -3166,6 +3166,23 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
             }
             return items.OrderByDescending(f => f.DateSent).ToList();
         }
+
+        public static IDValidationResult ValidatePersonIdNumber(string json)
+        {
+            IDValidationResult result = new IDValidationResult();
+            try
+            {
+                IdValidatorService.SAIDValidator client = new IdValidatorService.SAIDValidator();
+                var resultType = client.ValidateIdString(null, json);
+
+                result.Result = resultType.Valid;
+            }
+            catch (Exception) 
+            {
+                result.ErrorMessage = "Service not available. Please try again later.";
+            }
+            return result;
+        }
     }
 }
 

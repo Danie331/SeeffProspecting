@@ -720,6 +720,7 @@
     <Content Include="Assets\email_icon.png" />
     <Content Include="Assets\fh_edit.png" />
     <Content Include="Assets\frm_edit.png" />
+    <Content Include="Assets\generate_id.png" />
     <Content Include="Assets\google.png" />
     <Content Include="Assets\hedonic_data.png" />
     <Content Include="Assets\item_template.png" />
@@ -754,6 +755,7 @@
     <Content Include="Assets\titlecase_link.png" />
     <Content Include="Assets\tps_info.png" />
     <Content Include="Assets\traceps_lookup.png" />
+    <Content Include="Assets\validate_id.png" />
     <Content Include="Assets\valuations_history.png" />
     <Content Include="Assets\view_btn.png" />
     <Content Include="Database scripts\boss.sql" />
@@ -1224,6 +1226,14 @@
     <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Web References\IdValidatorService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
+    <Content Include="Web References\IdValidatorService\saidType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <None Include="Web References\IdValidatorService\saidvalidator.wsdl" />
     <None Include="Web References\lightstoneSeeffService\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -1236,6 +1246,7 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Web References\IdValidatorService\saidvalidator.disco" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1319,6 +1330,7 @@
     <Compile Include="Types\EmailBatch.cs" />
     <Compile Include="Types\FlattenedPropertyRecord.cs" />
     <Compile Include="Types\FollowupActivity.cs" />
+    <Compile Include="Types\IDValidationResult.cs" />
     <Compile Include="Types\IProspectingContactEntity.cs" />
     <Compile Include="Types\BaseDataRequestPacket.cs" />
     <Compile Include="Types\CommunicationRecord.cs" />
@@ -1359,6 +1371,11 @@
     <Compile Include="ProspectingCore\ProspectingLookupData.cs" />
     <Compile Include="Types\ProspectingSuburb.cs" />
     <Compile Include="Types\SuburbDataRequestPacket.cs" />
+    <Compile Include="Web References\IdValidatorService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\lightstoneSeeffService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1429,6 +1446,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ProspectingProject_lightstoneSeeffService_Seeff</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://xml-fx.com/services/SAIDValidator/saidvalidator.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\IdValidatorService\</RelPath>
+      <UpdateFromURL>http://xml-fx.com/services/SAIDValidator/saidvalidator.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ProspectingProject_IdValidatorService_SAIDValidator</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>

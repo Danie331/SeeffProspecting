@@ -176,6 +176,10 @@ namespace ProspectingProject
                         string messagesReport = LoadCommunicationData(json);
                         context.Response.Write(messagesReport);
                         break;
+                    case "validate_person_id":
+                        string valid = ValidatePersonIdNumber(json);
+                        context.Response.Write(valid);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -208,6 +212,13 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string ValidatePersonIdNumber(string json)
+        {
+            string idNumber = ProspectingCore.Deserialise<ProspectingContactPerson>(json).IdNumber;
+            var validationResult = ProspectingCore.ValidatePersonIdNumber(idNumber);
+            return ProspectingCore.SerializeToJsonWithDefaults(validationResult);
         }
 
         private string LoadCommunicationData(string json)

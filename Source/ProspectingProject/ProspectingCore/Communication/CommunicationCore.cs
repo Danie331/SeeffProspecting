@@ -583,6 +583,6 @@ namespace ProspectingProject
                 prospectingAuthService.DebitUserBalance(cost, prospectingUser.UserGuid);
             }
         }
-
+       
     }
 }

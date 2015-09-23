@@ -172,7 +172,15 @@ function generateOutputFromLightstone(data) {
         });        
 
         form.append("<p />");
-        var createBtn = $('<input type="button" id="createProspectBtn" value="Create Prospect(s)" />');
+        var selectAllCheckbox = $("<label style='display:inline-block;float:right'><input type='checkbox' id='selectAllNewProspects' checked />Select All</label>");
+        form.append(selectAllCheckbox);
+        $('body').unbind('change.selectAllProspects').on('change.selectAllProspects', '#selectAllNewProspects', function () {
+            var selectAll = $('#selectAllNewProspects').is(":checked");
+            $('#areaMatchesForm input:checkbox').not('#selectAllNewProspects').each(function (idx, item) { this.checked = selectAll; });
+        });
+
+        form.append("<p />");
+        var createBtn = $('<input type="button" id="createProspectBtn" value="Create Properties" style="display:inline-block" />');
         form.append(createBtn);
 
         // If no items were added, show it.
@@ -180,13 +188,14 @@ function generateOutputFromLightstone(data) {
             div.empty();
             div.append('All properties and complexes have already been prospected at this location.');
             createBtn.attr('disabled', 'disabled');
+            selectAllCheckbox.attr('disabled', 'disabled');
         }
 
         div.append(form);
 
         $('body').unbind('click.createProspect').on('click.createProspect', '#createProspectBtn', function () {
             var selectedEntities = [];
-            $('#areaMatchesForm input:checked').each(function () {
+            $('#areaMatchesForm input:checked').not('#selectAllNewProspects').each(function () {
                 var id = $(this).attr('id');
                 var entity = itemIndex[id];
                 selectedEntities.push(entity);
@@ -2562,4 +2571,17 @@ function handleResponseIfServerError(responseObject) {
     }
 
     return true;
+}
+
+function validateIdNumberFromService(value, callbackFn) {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Please wait...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: 'validate_person_id', IdNumber: value }),
+        dataType: "json",
+    }).done(function (data) {
+        $.unblockUI();
+        callbackFn(data);
+    });
 }

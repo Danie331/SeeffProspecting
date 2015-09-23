@@ -52,5 +52,15 @@ namespace ProspectingProject.Properties {
                 return ((string)(this["Dracore_live"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://xml-fx.com/services/SAIDValidator/saidvalidator.asmx")]
+        public string ProspectingProject_IdValidatorService_SAIDValidator {
+            get {
+                return ((string)(this["ProspectingProject_IdValidatorService_SAIDValidator"]));
+            }
+        }
     }
 }

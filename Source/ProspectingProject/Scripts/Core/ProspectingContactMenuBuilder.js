@@ -161,7 +161,61 @@ function buildGeneralInfoHtml(contact, context) {
     });
 
     html.append("<br />");
-    html.append("<label class='fieldAlignment'>ID no.:</label><input type='text' id='idOrCkTextBox' name='idOrCkTextBox' size='15'/>");
+    var validateIdBtn = $('<input type="image" src="Assets/validate_id.png" title="Validate ID" style="display:inline-block;vertical-align:middle;margin-left:1px;" />');
+    var idNumberInput = $("<label class='fieldAlignment'>ID no.:</label><input type='text' id='idOrCkTextBox' name='idOrCkTextBox' size='15'/>");
+    html.append(idNumberInput).append(validateIdBtn);
+    if (!contact) {
+        validateIdBtn.css('display','none');
+    }
+    validateIdBtn.click(function (e) {
+        e.preventDefault();
+        var value = $("#idOrCkTextBox").val();
+        if (value.length && value.length == 13) {
+            validateIdNumberFromService(value, function (result) {
+                if (result.ErrorMessage) {
+                    alert(result.ErrorMessage);
+                } else {
+                    var resultDiv = $("<div title='ID Validation Result' style='font-family:Verdana;font-size:12px;' />");
+                    if (result.Result) {
+                        resultDiv.append('This is a valid RSA ID number - validation successful.');
+                    } else {
+                        resultDiv.append('Not a valid RSA ID number.');
+                    }
+                    resultDiv.dialog({
+                        modal: true,
+                        closeOnEscape: true,
+                        buttons: { "OK": function () { $(this).dialog("close"); } }
+                    });
+                }
+            });
+        } else {
+            alert('You can only validate 13-digit numbers.');
+        }
+    });
+
+    var generateNewIdBtn = $('<input type="image" src="Assets/generate_id.png" title="Generate a new, unique number" style="display:none;vertical-align:middle;margin-right:1px;margin-left:2px;" />');
+    html.append(generateNewIdBtn);
+    //if (!contact) {
+    //    generateNewIdBtn.css('display', 'inline-block');
+    //}
+    generateNewIdBtn.click(function (e) {
+        e.preventDefault();
+        var newId = contact.ContactPersonId + 'S';
+        newId = newId + Array(13 + 1 - newId.length).join('0');
+        idNumberInput.val(newId);
+    });
+    idNumberInput.on("input", function (e) {
+        var str = $(this).val();
+        if (!str.length) {
+            if (!contact) return;
+            validateIdBtn.css('display', 'none');
+            generateNewIdBtn.css('display', 'inline-block');
+        } else {
+            // don't add the validation button back.
+            generateNewIdBtn.css('display', 'none');
+            validateIdBtn.css('display', 'inline-block');
+        }
+    });
     html.append("<br />");
 
     var relationshipText = currentProperty.ContactCompanies.length > 0 ? "Relationship to property/company: " : "Relationship to property: ";

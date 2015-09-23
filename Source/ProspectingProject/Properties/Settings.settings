@@ -11,5 +11,8 @@
     <Setting Name="Dracore_live" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://www.govault.co.za/ws/ConsumerQuery.asmx</Value>
     </Setting>
+    <Setting Name="ProspectingProject_IdValidatorService_SAIDValidator" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://xml-fx.com/services/SAIDValidator/saidvalidator.asmx</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
