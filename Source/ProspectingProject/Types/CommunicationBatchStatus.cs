@@ -9,5 +9,7 @@ namespace ProspectingProject
     {
         public bool SuccessfullySubmitted {get; set;}
         public string ErrorMessage { get; set; }
+
+        public decimal WalletBalance { get; set; }
     }
 }

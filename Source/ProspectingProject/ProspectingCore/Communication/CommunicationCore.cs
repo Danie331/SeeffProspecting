@@ -22,10 +22,26 @@ namespace ProspectingProject
                 batch.NameOfBatch = Encoding.UTF8.GetString(data);
 
                 var emailRecipients = GetRecipientsFromBatch(batch);
-                EnqueueBatch(emailRecipients, batch);
-                DebitUserBalanceForEmailBatch(emailRecipients.Count);
 
-                return new CommunicationBatchStatus { SuccessfullySubmitted = true };
+                decimal costOfBatch = (decimal)emailRecipients.Count * 0.01M;
+                decimal userBalance = DebitUserBalanceForBatch(costOfBatch);
+                if (userBalance >= decimal.Zero)
+                {
+                    try
+                    {
+                        EnqueueBatch(emailRecipients, batch);
+                    }
+                    catch
+                    {
+                        CreditUserBalanceForBatch(costOfBatch);
+                        throw;
+                    }
+                    return new CommunicationBatchStatus { SuccessfullySubmitted = true, WalletBalance = userBalance };
+                }
+
+                // not enough credit..
+                return new CommunicationBatchStatus { SuccessfullySubmitted = false, ErrorMessage = "Insufficient credit available", WalletBalance = userBalance };
+                
             }
             catch (Exception ex)
             {
@@ -49,14 +65,23 @@ namespace ProspectingProject
             }
         }
 
-        private static void DebitUserBalanceForEmailBatch(int count)
+        private static decimal DebitUserBalanceForBatch(decimal amount)
+        {
+            using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
+            {               
+                var prospectingUser = RequestHandler.GetUserSessionObject();
+                decimal balance = prospectingAuthService.DebitUserBalance(amount, prospectingUser.UserGuid);
+
+                return balance;
+            }
+        }
+
+        private static void CreditUserBalanceForBatch(decimal amount)
         {
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
-                decimal cost = (decimal)count * 0.01M;
-
                 var prospectingUser = RequestHandler.GetUserSessionObject();
-                prospectingAuthService.DebitUserBalance(cost, prospectingUser.UserGuid);
+                prospectingAuthService.CreditUserBalance(amount, prospectingUser.UserGuid);
             }
         }
 
@@ -547,11 +572,26 @@ namespace ProspectingProject
                 batch.NameOfBatch = Encoding.UTF8.GetString(data);
 
                 var smsRecipients = GetRecipientsFromBatch(batch);
-                EnqueueBatch(smsRecipients, batch);
-                var batchCost = CalculateCostOfSmsBatch(smsRecipients);
-                DebitUserBalanceForSmsBatch(batchCost.TotalCost);
 
-                return new CommunicationBatchStatus { SuccessfullySubmitted = true };
+                var batchCost = CalculateCostOfSmsBatch(smsRecipients);
+                decimal userBalance = DebitUserBalanceForBatch(batchCost.TotalCost);
+
+                if (userBalance >= decimal.Zero)
+                {
+                    try
+                    {
+                        EnqueueBatch(smsRecipients, batch);
+                    }
+                    catch
+                    {
+                        CreditUserBalanceForBatch(batchCost.TotalCost);
+                        throw;
+                    }
+
+                    return new CommunicationBatchStatus { SuccessfullySubmitted = true, WalletBalance = userBalance };
+                }
+
+                return new CommunicationBatchStatus { SuccessfullySubmitted = false, ErrorMessage = "Insufficient credit available", WalletBalance = userBalance };
             }
             catch (Exception ex)
             {
@@ -572,15 +612,6 @@ namespace ProspectingProject
                     SuccessfullySubmitted = false,
                     ErrorMessage = ex.Message
                 };
-            }
-        }
-
-        private static void DebitUserBalanceForSmsBatch(decimal cost)
-        {
-            using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
-            {            
-                var prospectingUser = RequestHandler.GetUserSessionObject();
-                prospectingAuthService.DebitUserBalance(cost, prospectingUser.UserGuid);
             }
         }
        

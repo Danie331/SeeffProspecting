@@ -193,7 +193,7 @@ function buildGeneralInfoHtml(contact, context) {
         }
     });
 
-    var generateNewIdBtn = $('<input type="image" src="Assets/generate_id.png" title="Generate a new, unique number" style="display:none;vertical-align:middle;margin-right:1px;margin-left:2px;" />');
+    var generateNewIdBtn = $('<input type="image" src="Assets/generate_id.png" title="Generate a new, unique identifier" style="display:none;vertical-align:middle;margin-right:1px;margin-left:2px;" />');
     html.append(generateNewIdBtn);
     //if (!contact) {
     //    generateNewIdBtn.css('display', 'inline-block');

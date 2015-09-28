@@ -1497,10 +1497,10 @@ function submitSMS(callbackFn) {
                 buildContactsBody(contacts, false);
             }
             if (callbackFn) {
-                callbackFn();
+                callbackFn(response);
             }
         } else {
-            alert("An error occurred submitting your request. Please contact support. Details of the error: " + response.ErrorMessage);
+            alert("The batch could not be submitted. Reason: " + response.ErrorMessage);
             return;
         }
     });
@@ -1752,10 +1752,10 @@ function submitEmails(callbackFn) {
                     buildContactsBody(contacts, false);
                 }
                 if (callbackFn) {
-                    callbackFn();
+                    callbackFn(response);
                 }
         } else {
-            alert("An error occurred submitting your request. Please contact support. Details of the error: " + response.ErrorMessage);
+            alert("The batch could not be submitted. Reason: " + response.ErrorMessage);
             return;
         }
     });
@@ -1954,22 +1954,22 @@ function handleCommSendBtnClick() {
                                           calculateCostOfBatch(function () {
                                               dialog.dialog("close");
                                               userEmailSignature = signatureData;
-                                              handleSendMessage(function () {
-                                                  availableCredit -= costOfBatch;
-                                                  $('#commCreditValue').text(availableCredit.toFixed(2));
+                                              handleSendMessage(function (response) {
+                                                  if (response.SuccessfullySubmitted) {
+                                                      availableCredit = response.WalletBalance;
+                                                      $('#commCreditValue').text(availableCredit.toFixed(2));
+                                                  }
                                               });
                                           });
                                       } else {
-                                          if (availableCredit > costOfBatch) {
                                               $(this).dialog("close");
                                               userEmailSignature = signatureData;
-                                              handleSendMessage(function () {
-                                                  availableCredit -= costOfBatch;
-                                                  $('#commCreditValue').text(availableCredit.toFixed(2));
+                                              handleSendMessage(function (response) {
+                                                  if (response.SuccessfullySubmitted) {
+                                                      availableCredit = response.WalletBalance;
+                                                      $('#commCreditValue').text(availableCredit.toFixed(2));
+                                                  }
                                               });
-                                          } else {
-                                              alert('You have insufficient credit to perform this operation');
-                                          }
                                       }                                          
                                   }
                               },
@@ -2088,11 +2088,7 @@ function calculateCostOfBatch(callbackFn) {
                       click: function () {
                           $(this).dialog("close");
                           if (callbackFn) {
-                              if (availableCredit > result.TotalCost) {
-                                  callbackFn();
-                              } else {
-                                  alert('You have insufficient credit to perform this operation');
-                              }
+                              callbackFn();
                           }
                       }
                   }],
