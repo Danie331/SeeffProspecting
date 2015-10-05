@@ -55,6 +55,12 @@ namespace ProspectingProject
         public bool? Pool { get; set; }
         public bool? StaffAccomodation { get; set; }
 
+        public bool? IsShortTermRental { get; set; }
+        public bool? IsLongTermRental { get; set; }
+        public bool? IsCommercial { get; set; }
+        public bool? IsAgricultural { get; set; }
+        public bool? IsInvestment { get; set; }
+
         public bool? TitleCaseSS { get; set; }
     }
 }

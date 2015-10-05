@@ -31,6 +31,11 @@ function initEventHandlers() {
     $.contextMenu({
         selector: '.context-menu-prospect',
         build: function ($trigger, e) {
+            var items = {};
+            if (!filterMode) {
+                items = { "Search Lightstone here": { name: "Search Lightstone here", icon: "lightstone" } };
+            }
+            
             return {
                 callback: function (key, options) {
                     switch (key) {
@@ -40,9 +45,7 @@ function initEventHandlers() {
                             break;
                     }
                 },
-                items: {
-                    "Search Lightstone here": { name: "Search Lightstone here", icon: "lightstone" },
-                }
+                items: items
             };
         }
     });
@@ -443,6 +446,8 @@ function setCurrentMarker(suburb, property, callback) {
                     if (pp.ProspectingPropertyId == testpp.ProspectingPropertyId) {
                         pp.Prospected = testpp.Prospected;
                         pp.Marker.setIcon(getIconForMarker(pp.Marker));
+
+                        updateExistingPropertyStats(pp, testpp);
                         //if (testpp.Prospected) {
                         //    if (pp.SS_FH == "FH") {
                         //        pp.Marker.setIcon('Assets/marker_icons/prospecting/prospected.png');
@@ -953,6 +958,7 @@ function loadProspectingProperty(marker, eventData) {
                     showMenu("contactdetails");
 
                     openDetailsForContactFromContext(marker.ProspectingProperty.TargetContactIdForComms);
+                    marker.ProspectingProperty.Whence = null;
                 }
 
                 if (marker.ProspectingProperty.Whence == 'from_followup') {
@@ -966,6 +972,7 @@ function loadProspectingProperty(marker, eventData) {
                             openDetailsForContactFromContext(followup.RelatedToContactPersonId, eventData);
                         }
                     }
+                    marker.ProspectingProperty.Whence = null;
                 }
 
                 if (marker.ProspectingProperty.Whence == 'from_activity') {
@@ -979,9 +986,8 @@ function loadProspectingProperty(marker, eventData) {
                             openDetailsForContactFromContext(activity.RelatedToContactPersonId);
                         }
                     }
+                    marker.ProspectingProperty.Whence = null;
                 }
-
-                marker.ProspectingProperty.Whence = null;
             }
         }
         else {
@@ -992,6 +998,7 @@ function loadProspectingProperty(marker, eventData) {
 
             if (marker.ProspectingProperty.Whence == 'from_comm_report') {
                 openDetailsForContactFromContext(marker.ProspectingProperty.TargetContactIdForComms);
+                marker.ProspectingProperty.Whence = null;
             }
 
             if (marker.ProspectingProperty.Whence == 'from_followup') {
@@ -1001,6 +1008,7 @@ function loadProspectingProperty(marker, eventData) {
                         openDetailsForContactFromContext(followup.RelatedToContactPersonId, eventData);
                     }
                 }
+                marker.ProspectingProperty.Whence = null;
             }
 
             if (marker.ProspectingProperty.Whence == 'from_activity') {
@@ -1010,9 +1018,9 @@ function loadProspectingProperty(marker, eventData) {
                         openDetailsForContactFromContext(activity.RelatedToContactPersonId);
                     }
                 }
+                marker.ProspectingProperty.Whence = null;
             }
-
-            marker.ProspectingProperty.Whence = null;
+            
             updateProspectedStatus();
         }
         updatePropertyInfoMenu();
@@ -1080,7 +1088,13 @@ function updateProspectingRecord(record, property, callbackFn) {
         Garages:record.Garages ,
         ParkingBays:record.ParkingBays ,
         Pool:record.Pool ,
-        StaffAccomodation: record.StaffAccomodation
+        StaffAccomodation: record.StaffAccomodation,
+
+        IsShortTermRental: record.IsShortTermRental,
+        IsLongTermRental: record.IsLongTermRental,
+        IsCommercial: record.IsCommercial,
+        IsAgricultural: record.IsAgricultural,
+        IsInvestment: record.IsInvestment
     };
 
     if (!property) {
@@ -1425,7 +1439,7 @@ function getIconForMarker(marker) {
                     if (property.Prospected) {
                         changeBgColour(property.LightstonePropertyId, "#009900");
                     } else {
-                        changeBgColour(property.LightstonePropertyId, "#FBB917");
+                        changeBgColour(property.LightstonePropertyId, "#FFFF00");
                     }
                     if (property.LatestRegDateForUpdate) {
                         changeBgColour(property.LightstonePropertyId, "#FF0000");
@@ -1604,7 +1618,7 @@ function buildInfoWindowContentForSS(unit) {
             if (unit.Prospected) {
                 hasContactsWithDetails = true;
             }
-            return hasContactsWithDetails ? "#009900" : "#FBB917";
+            return hasContactsWithDetails ? "#009900" : "#FFFF00";
         }
 
         function buildUnitContent(unit) {
@@ -1702,10 +1716,26 @@ function buildInfoWindowContentForSS(unit) {
     // Going forward we must use a unique identifer for this SS that is set at creation
     // Backward compatability: if this identifer is not present then we must revert to using the SSName
     var ssUnits = [];
-    ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
-        if (!pp.SS_UNIQUE_IDENTIFIER) return false;
-        return pp.SS_UNIQUE_IDENTIFIER == unit.SS_UNIQUE_IDENTIFIER;
+
+    var isFiltering = false;
+    $.grep(currentSuburb.ProspectingProperties, function (pp) {
+        if (pp.Whence && pp.Whence == 'from_filter')
+            isFiltering = true;
     });
+    //if (isFiltering) {
+    //    ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+    //        if (!pp.SS_UNIQUE_IDENTIFIER) return false;
+    //        if (pp.SS_UNIQUE_IDENTIFIER == unit.SS_UNIQUE_IDENTIFIER) {
+    //            return pp.Whence == 'from_filter';
+    //        }
+    //        return false;
+    //    });
+    //} else {
+        ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+            if (!pp.SS_UNIQUE_IDENTIFIER) return false;
+            return pp.SS_UNIQUE_IDENTIFIER == unit.SS_UNIQUE_IDENTIFIER;
+        });
+    //}
 
     $.each(ssUnits, function (i, u) {
         if (u.SS_FH == 'FS') u.Unit = 99999999;
@@ -1719,6 +1749,11 @@ function buildInfoWindowContentForSS(unit) {
 
     for (var i = 0; i < ssUnits.length; i++) {
         var u = ssUnits[i];
+        if (isFiltering) {
+            if (u.Whence != 'from_filter')
+                continue;
+        }
+
         var unitContent = buildUnitContentRow(u);
         tableOfUnits.append(unitContent);
     }
@@ -1812,6 +1847,17 @@ function updateExistingPropertyFromProperty(existingProp, newProp) {
     existingProp.LightstoneSuburb = newProp.LightstoneSuburb;
     existingProp.ActivityBundle = newProp.ActivityBundle;
     existingProp.LatestRegDateForUpdate = newProp.LatestRegDateForUpdate;
+
+    updateExistingPropertyStats(existingProp, newProp);
+}
+
+function updateExistingPropertyStats(existingProp, newProp) {
+    existingProp.HasContactWithCell = newProp.HasContactWithCell;
+    existingProp.HasContactWithPrimaryCell = newProp.HasContactWithPrimaryCell;
+    existingProp.HasContactWithEmail = newProp.HasContactWithEmail;
+    existingProp.HasContactWithPrimaryEmail = newProp.HasContactWithPrimaryEmail;
+    existingProp.HasContactWithLandline = newProp.HasContactWithLandline;
+    existingProp.HasContactWithPrimaryLandline = newProp.HasContactWithPrimaryLandline;
 }
 
 function updateContactsOnProperty(existingProp, newProp) {
@@ -2085,44 +2131,6 @@ function showSavedSplashDialog(text) {
             }, 1000);
         }
     });
-}
-
-function applyProspectingSearch(visibleMarkers, matchedProperties) {
-    return $.grep(visibleMarkers, function (vm) {
-
-        for (var i = 0; i < matchedProperties.length; i++) {
-            var match = matchedProperties[i];
-            if (vm.ProspectingProperty.ProspectingPropertyId == match.ProspectingPropertyId) {
-                return true;
-            }
-        }
-
-        return false;
-    });
-}
-
-function initCurrentSearchResults(results) {
-    if (!currentSuburb) return;
-
-    if (currentSuburb) {
-        clearSuburbBySuburbId(currentSuburb.SuburbId);
-        initialiseAndDisplaySuburb(currentSuburb, null, false, function (vm) { return applyProspectingSearch(vm, results);});
-    }
-}
-
-function resetSearch() {
-    // Clear the form and reset the suburb
-    $('#idNumberSearchTextbox').val('');
-    $('#phoneNumberSearchTextbox').val('');
-    $('#emailAddressSearchTextbox').val('');
-    $('#propertyAddressSearchTextbox').val('');
-    $('#streetOrUnitNoSearchTextbox').val('');
-
-    if (currentSuburb) {
-        //currentSuburb.IsInitialised = false; // Flag for re-initialisation
-        //loadSuburb(currentSuburb.SuburbId, false);
-        initialiseAndDisplaySuburb(currentSuburb, null, false);
-    }
 }
 
 function showDialogOtherResults(otherMatches) {        

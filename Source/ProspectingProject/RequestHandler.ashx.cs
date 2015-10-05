@@ -48,6 +48,8 @@ namespace ProspectingProject
                 GetUserSessionObject();
                 switch (request.Instruction)
                 {
+                    case "server_tap": // purely to allow client a moment to breathe so we can refresh the UI
+                        break;
                     case "get_prop_owner_details":
                         var ownerDetailsResults = LookupPersonDetails(json);
                         context.Response.Write(ownerDetailsResults);

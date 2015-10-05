@@ -67,6 +67,7 @@
     <script src="Scripts/Core/CommunicationTemplates.js"></script>
     <script src="Scripts/Core/Communication.js"></script>
     <script src="Scripts/Core/PropertyInformation.js"></script>
+    <script src="Scripts/Core/Filtering.js"></script>
     <script src="Scripts/Core/DocumentVault.js"></script>
     <script src="Scripts/Core/CommReports.js"></script>
     <script src="Scripts/Core/DrawingMultiSelect.js"></script>
@@ -129,6 +130,9 @@
         <div id="selectPrimaryContactDetailDialog" title="Select Primary Contact Detail" style="display:none;font-family:Verdana;font-size:12px;"></div>
         <div id="multiSelectMode" style="display: none; font-family: Verdana; font-size: xx-large; color: red">
             You are in communications mode
+        </div>
+        <div id="filterMode" style="display: none; font-family: Verdana; font-size: xx-large; color: red">
+            You are in filter mode&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
         <div id="commSendMessageDialog" title="Preview Message" class="errorDialog"> 
         </div>

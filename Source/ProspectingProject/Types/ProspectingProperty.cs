@@ -84,5 +84,20 @@ namespace ProspectingProject
         public int? ParkingBays { get; set; }
         public bool? Pool { get; set; }
         public bool? StaffAccomodation { get; set; }
+
+        public bool? IsShortTermRental { get; set; }
+        public bool? IsLongTermRental { get; set; }
+        public bool? IsCommercial { get; set; }
+        public bool? IsAgricultural { get; set; }
+        public bool? IsInvestment { get; set; }
+
+        public bool? HasContactWithCell { get; set; }
+        public bool? HasContactWithPrimaryCell { get; set; }
+
+        public bool? HasContactWithEmail { get; set; }
+        public bool? HasContactWithPrimaryEmail { get; set; }
+
+        public bool? HasContactWithLandline { get; set; }
+        public bool? HasContactWithPrimaryLandline { get; set; }
     }
 }

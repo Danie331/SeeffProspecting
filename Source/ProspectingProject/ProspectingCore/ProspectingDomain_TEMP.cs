@@ -111,7 +111,22 @@ namespace ProspectingProject
                 Receptions = prospectingRecord.receptions,
                 StaffAccomodation = prospectingRecord.staff_accomodation,
                 Studies = prospectingRecord.studies,
-                ParkingBays = prospectingRecord.parking_bays 
+                ParkingBays = prospectingRecord.parking_bays,
+
+                IsShortTermRental = prospectingRecord.is_short_term_rental,
+                IsLongTermRental = prospectingRecord.is_long_term_rental,
+                IsCommercial = prospectingRecord.is_commercial,
+                IsAgricultural = prospectingRecord.is_agricultural,
+                IsInvestment = prospectingRecord.is_investment,
+
+                HasContactWithCell = prospectingRecord.has_cell,
+                HasContactWithPrimaryCell = prospectingRecord.has_primary_cell,
+
+                HasContactWithEmail = prospectingRecord.has_email,
+                HasContactWithPrimaryEmail = prospectingRecord.has_primary_email,
+
+                HasContactWithLandline = prospectingRecord.has_landline,
+                HasContactWithPrimaryLandline = prospectingRecord.has_primary_landline
             };
 
             switch (prospectingRecord.ss_fh)
@@ -257,7 +272,22 @@ namespace ProspectingProject
                 Receptions = prospectingRecord.receptions,
                 StaffAccomodation = prospectingRecord.staff_accomodation,
                 Studies = prospectingRecord.studies,
-                ParkingBays = prospectingRecord.parking_bays 
+                ParkingBays = prospectingRecord.parking_bays,
+
+                IsShortTermRental = prospectingRecord.is_short_term_rental,
+                IsLongTermRental = prospectingRecord.is_long_term_rental,
+                IsCommercial = prospectingRecord.is_commercial,
+                IsAgricultural = prospectingRecord.is_agricultural,
+                IsInvestment = prospectingRecord.is_investment,
+
+                HasContactWithCell = prospectingRecord.has_cell,
+                HasContactWithPrimaryCell = prospectingRecord.has_primary_cell,
+
+                HasContactWithEmail = prospectingRecord.has_email,
+                HasContactWithPrimaryEmail = prospectingRecord.has_primary_email,
+
+                HasContactWithLandline = prospectingRecord.has_landline,
+                HasContactWithPrimaryLandline = prospectingRecord.has_primary_landline
             };
 
             return prop;
@@ -670,6 +700,12 @@ namespace ProspectingProject
                 existingRecord.pool = dataPacket.Pool;
                 existingRecord.staff_accomodation = dataPacket.StaffAccomodation;
 
+                existingRecord.is_short_term_rental = dataPacket.IsShortTermRental;
+                existingRecord.is_long_term_rental = dataPacket.IsLongTermRental;
+                existingRecord.is_commercial = dataPacket.IsCommercial;
+                existingRecord.is_agricultural = dataPacket.IsAgricultural;
+                existingRecord.is_investment = dataPacket.IsInvestment;
+
                 prospecting.SubmitChanges();
             }
         }
@@ -1079,6 +1115,10 @@ namespace ProspectingProject
 
                 //Set the property as prospected
                 MarkAsProspected((int)dataPacket.ProspectingPropertyId);
+                if (dataPacket.ProspectingPropertyId.HasValue)
+                {
+                    UpdateContactDetailStatisticsToPropertyRecord(dataPacket.ProspectingPropertyId.Value);
+                }
 
                 return incomingContact;
             }
@@ -1766,20 +1806,35 @@ namespace ProspectingProject
                                       Unit = pp.unit,
                                       SSDoorNo = pp.ss_door_number,
                                       LastPurchPrice = pp.last_purch_price,
-                                       SS_UNIQUE_IDENTIFIER = pp.ss_unique_identifier,
-                                        LatestRegDateForUpdate = pp.latest_reg_date,
+                                      SS_UNIQUE_IDENTIFIER = pp.ss_unique_identifier,
+                                      LatestRegDateForUpdate = pp.latest_reg_date,
 
-                                         Baths = pp.baths,
-                                         Condition = pp.condition,
-                                          Beds = pp.beds,
-                                           DwellingSize = pp.dwell_size,
-                                            ErfSize = pp.erf_size,
-                                             Garages = pp.garages,
-                                              Pool = pp.pool,
-                                               Receptions = pp.receptions,
-                                                StaffAccomodation = pp.staff_accomodation,
-                                                 Studies = pp.studies,
-                                                  ParkingBays = pp.parking_bays                                                   
+                                      Baths = pp.baths,
+                                      Condition = pp.condition,
+                                      Beds = pp.beds,
+                                      DwellingSize = pp.dwell_size,
+                                      ErfSize = pp.erf_size,
+                                      Garages = pp.garages,
+                                      Pool = pp.pool,
+                                      Receptions = pp.receptions,
+                                      StaffAccomodation = pp.staff_accomodation,
+                                      Studies = pp.studies,
+                                      ParkingBays = pp.parking_bays,
+
+                                      IsShortTermRental = pp.is_short_term_rental,
+                                      IsLongTermRental = pp.is_long_term_rental,
+                                      IsCommercial = pp.is_commercial,
+                                      IsAgricultural = pp.is_agricultural,
+                                      IsInvestment = pp.is_investment,
+
+                                      HasContactWithCell = pp.has_cell,
+                                      HasContactWithPrimaryCell = pp.has_primary_cell,
+
+                                      HasContactWithEmail = pp.has_email,
+                                      HasContactWithPrimaryEmail = pp.has_primary_email,
+
+                                      HasContactWithLandline = pp.has_landline,
+                                      HasContactWithPrimaryLandline = pp.has_primary_landline
                                   }).ToList();
                 return properties;
             }
@@ -2349,6 +2404,72 @@ namespace ProspectingProject
                     }
                     contactDetail.is_primary_contact = true;
                     prospecting.SubmitChanges();
+
+                    var contact = contactDetail.prospecting_contact_person;
+                    var directRelationships = contact.prospecting_person_property_relationships;
+                    if (directRelationships.Count > 0)
+                    {
+                        foreach (var directRelation in directRelationships)
+                        {
+                            UpdateContactDetailStatisticsToPropertyRecord(directRelation.prospecting_property_id);
+                        }
+                    }
+                    // It is too processing intesive to do the same for company relationships here. Rely on the scheduled jobs to update DB.
+                }
+            }
+        }
+
+        private static void UpdateContactDetailStatisticsToPropertyRecord(int prospectingPropertyId)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                var prospectingProperty = prospecting.prospecting_properties.FirstOrDefault(pp => pp.prospecting_property_id == prospectingPropertyId);
+                if (prospectingProperty != null)
+                {
+                    var contactDetailsFromCompanyRelationships = from cpr in prospecting.prospecting_company_property_relationships
+                                                                 join pcr in prospecting.prospecting_person_company_relationships on cpr.contact_company_id equals pcr.contact_company_id
+                                                                 join cp in prospecting.prospecting_contact_persons on pcr.contact_person_id equals cp.contact_person_id
+                                                                 join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
+                                                                 where cpr.prospecting_property == prospectingProperty && !cd.deleted
+                                                                 select cd;
+                    var contactDetailsFromDirectRelationships = from ppr in prospecting.prospecting_person_property_relationships 
+                                                                join cp in prospecting.prospecting_contact_persons on ppr.contact_person_id equals cp.contact_person_id
+                                                                join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
+                                                                where ppr.prospecting_property == prospectingProperty && !cd.deleted
+                                                                select cd;
+
+                    // Emails
+                    int countEmails1 = contactDetailsFromCompanyRelationships.Where(cd => cd.contact_detail_type == 4 || cd.contact_detail_type == 5).Count();
+                    int countEmails2 = contactDetailsFromDirectRelationships.Where(cd => cd.contact_detail_type == 4 || cd.contact_detail_type == 5).Count();
+
+                    prospectingProperty.has_email = (countEmails1 + countEmails2) > 0;
+                    // Emails (primary)
+                    countEmails1 = contactDetailsFromCompanyRelationships.Where(cd => (cd.contact_detail_type == 4 || cd.contact_detail_type == 5) && cd.is_primary_contact).Count();
+                    countEmails2 = contactDetailsFromDirectRelationships.Where(cd => (cd.contact_detail_type == 4 || cd.contact_detail_type == 5) && cd.is_primary_contact).Count();
+
+                    prospectingProperty.has_primary_email = (countEmails1 + countEmails2) > 0;
+                    // Cell 
+                    int countCells1 = contactDetailsFromCompanyRelationships.Where(cd => cd.contact_detail_type == 3).Count();
+                    int countCells2 = contactDetailsFromDirectRelationships.Where(cd => cd.contact_detail_type == 3).Count();
+
+                    prospectingProperty.has_cell = (countCells1 + countCells2) > 0;
+                    // Cell (primary)
+                    countCells1 = contactDetailsFromCompanyRelationships.Where(cd => cd.contact_detail_type == 3 && cd.is_primary_contact).Count();
+                    countCells2 = contactDetailsFromDirectRelationships.Where(cd => cd.contact_detail_type == 3 && cd.is_primary_contact).Count();
+
+                    prospectingProperty.has_primary_cell = (countCells1 + countCells2) > 0;
+                    // Landline
+                    int countLandlines1 = contactDetailsFromCompanyRelationships.Where(cd => cd.contact_detail_type == 1 || cd.contact_detail_type == 2).Count();
+                    int countLandline2 = contactDetailsFromDirectRelationships.Where(cd => cd.contact_detail_type == 1 || cd.contact_detail_type == 2).Count();
+
+                    prospectingProperty.has_landline = (countLandlines1 + countLandline2) > 0;
+                    // Landline (primary)
+                    countLandlines1 = contactDetailsFromCompanyRelationships.Where(cd => (cd.contact_detail_type == 1 || cd.contact_detail_type == 2) && cd.is_primary_contact).Count();
+                    countLandline2 = contactDetailsFromDirectRelationships.Where(cd => (cd.contact_detail_type == 1 || cd.contact_detail_type == 2) && cd.is_primary_contact).Count();
+
+                    prospectingProperty.has_primary_landline = (countLandlines1 + countLandline2) > 0;
+
+                    prospecting.SubmitChanges();
                 }
             }
         }
@@ -2385,7 +2506,8 @@ namespace ProspectingProject
                 string params_ = (from n in inputProperties select n.ToString()).Aggregate( (s1, s2) => s1 + "," + s2);
                 var queryResults = prospecting.ExecuteQuery<FlattenedPropertyRecord>(@"SELECT        pp.prospecting_property_id, pp.lightstone_property_id, pp.latitude, pp.longitude, pp.property_address, pp.street_or_unit_no, pp.seeff_area_id, pp.lightstone_id_or_ck_no, pp.lightstone_reg_date, pp.erf_no, 
                          pp.comments, pp.ss_name, pp.ss_number, pp.ss_id, pp.unit, pp.ss_door_number, pp.last_purch_price, pp.prospected, pp.farm_name, pp.portion_no, pp.lightstone_suburb, pp.ss_fh, pp.ss_unique_identifier, 
-                         pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays, pcp.contact_person_id, 
+                         pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays,
+                         pp.has_cell, pp.has_primary_cell, pp.has_email, pp.has_primary_email, pp.has_landline, pp.has_primary_landline, pcp.contact_person_id, 
                          ppr.relationship_to_property, NULL AS 'relationship_to_company', NULL AS 'contact_company_id', pcp.firstname, pcp.surname, pcp.id_number, pcp.person_title, pcp.person_gender, pcp.comments_notes, 
                          pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
                          pcp.physical_address, pcp.home_ownership, pcp.marital_status, pcp.location, pcd.contact_detail_type, pcd.prospecting_contact_detail_id, pcd.contact_detail, pcd.is_primary_contact, pcd.intl_dialing_code_id, 
@@ -2399,7 +2521,8 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))
 UNION ALL
 SELECT        pp.prospecting_property_id, pp.lightstone_property_id, pp.latitude, pp.longitude, pp.property_address, pp.street_or_unit_no, pp.seeff_area_id, pp.lightstone_id_or_ck_no, pp.lightstone_reg_date, pp.erf_no, 
                          pp.comments, pp.ss_name, pp.ss_number, pp.ss_id, pp.unit, pp.ss_door_number, pp.last_purch_price, pp.prospected, pp.farm_name, pp.portion_no, pp.lightstone_suburb, pp.ss_fh, pp.ss_unique_identifier, 
-                         pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays, pcp.contact_person_id, NULL 
+                         pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays,
+                         pp.has_cell, pp.has_primary_cell, pp.has_email, pp.has_primary_email, pp.has_landline, pp.has_primary_landline, pcp.contact_person_id, NULL 
                          AS 'relationship_to_property', ppcr.relationship_to_company, ppcr.contact_company_id, pcp.firstname, pcp.surname, pcp.id_number, pcp.person_title, pcp.person_gender, pcp.comments_notes, 
                          pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
                          pcp.physical_address, pcp.home_ownership, pcp.marital_status, pcp.location, pcd.contact_detail_type, pcd.prospecting_contact_detail_id, pcd.contact_detail, pcd.is_primary_contact, pcd.intl_dialing_code_id, 
@@ -2455,7 +2578,22 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
                         Receptions = prospectingRecord.receptions,
                         StaffAccomodation = prospectingRecord.staff_accomodation,
                         Studies = prospectingRecord.studies,
-                        ParkingBays = prospectingRecord.parking_bays
+                        ParkingBays = prospectingRecord.parking_bays,
+
+                        IsShortTermRental = prospectingRecord.is_short_term_rental,
+                        IsLongTermRental = prospectingRecord.is_long_term_rental,
+                        IsCommercial = prospectingRecord.is_commercial,
+                        IsAgricultural = prospectingRecord.is_agricultural,
+                        IsInvestment = prospectingRecord.is_investment,
+
+                        HasContactWithCell = prospectingRecord.has_cell,
+                        HasContactWithPrimaryCell = prospectingRecord.has_primary_cell,
+
+                        HasContactWithEmail = prospectingRecord.has_email,
+                        HasContactWithPrimaryEmail = prospectingRecord.has_primary_email,
+
+                        HasContactWithLandline = prospectingRecord.has_landline,
+                        HasContactWithPrimaryLandline = prospectingRecord.has_primary_landline
                     };
                     switch (prospectingRecord.ss_fh)
                     {

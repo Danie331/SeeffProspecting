@@ -335,63 +335,6 @@
       <Association Name="prospecting_property_property_valuation" Member="prospecting_property" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_property" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.prospecting_property" Member="prospecting_properties">
-    <Type Name="prospecting_property">
-      <Column Name="prospecting_property_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="licence_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="seeff_area_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="development_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="lightstone_property_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="propstats_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="windeed_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="erf_no" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="portion_no" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="property_address" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="street_or_unit_no" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="photo_url" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
-      <Column Name="latitude" Type="System.Decimal" DbType="Decimal(13,8)" CanBeNull="true" />
-      <Column Name="longitude" Type="System.Decimal" DbType="Decimal(13,8)" CanBeNull="true" />
-      <Column Name="age" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="erf_size" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="dwell_size" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="condition" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="beds" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="baths" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="receptions" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="studies" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="garages" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="parking_bays" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="pool" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="staff_accomodation" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="created_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="updated_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="created_by" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Column Name="lightstone_id_or_ck_no" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="lightstone_reg_date" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
-      <Column Name="comments" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
-      <Column Name="ss_name" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="ss_number" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="unit" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="ss_fh" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
-      <Column Name="last_purch_price" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
-      <Column Name="ss_id" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="ss_door_number" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="prospected" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="farm_name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="lightstone_suburb" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="ss_unique_identifier" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="locked_by_guid" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Column Name="locked_datetime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="latest_reg_date" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
-      <Association Name="prospecting_property_activity_log" Member="activity_logs" ThisKey="lightstone_property_id" OtherKey="lightstone_property_id" Type="activity_log" />
-      <Association Name="prospecting_property_prospecting_company_property_relationship" Member="prospecting_company_property_relationships" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_company_property_relationship" />
-      <Association Name="prospecting_property_prospecting_person_property_relationship" Member="prospecting_person_property_relationships" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_person_property_relationship" />
-      <Association Name="prospecting_property_service_enquiry_log" Member="service_enquiry_logs" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="service_enquiry_log" />
-      <Association Name="prospecting_property_property_valuation" Member="property_valuations" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="property_valuation" />
-      <Association Name="prospecting_property_email_communications_log" Member="email_communications_logs" ThisKey="lightstone_property_id" OtherKey="target_lightstone_property_id" Type="email_communications_log" />
-      <Association Name="prospecting_property_sms_communications_log" Member="sms_communications_logs" ThisKey="lightstone_property_id" OtherKey="target_lightstone_property_id" Type="sms_communications_log" />
-    </Type>
-  </Table>
   <Table Name="dbo.email_communications_log" Member="email_communications_logs">
     <Type Name="email_communications_log">
       <Column Name="email_communications_log_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -452,6 +395,74 @@
       <Association Name="communications_status_sms_communications_log" Member="communications_status" ThisKey="status" OtherKey="communications_status_id" Type="communications_status" IsForeignKey="true" />
       <Association Name="prospecting_contact_person_sms_communications_log" Member="prospecting_contact_person" ThisKey="target_contact_person_id" OtherKey="contact_person_id" Type="prospecting_contact_person" IsForeignKey="true" />
       <Association Name="prospecting_property_sms_communications_log" Member="prospecting_property" ThisKey="target_lightstone_property_id" OtherKey="lightstone_property_id" Type="prospecting_property" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.prospecting_property" Member="prospecting_properties">
+    <Type Name="prospecting_property">
+      <Column Name="prospecting_property_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="licence_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="seeff_area_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="development_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="lightstone_property_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="propstats_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="windeed_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="erf_no" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="portion_no" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="property_address" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="street_or_unit_no" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="photo_url" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
+      <Column Name="latitude" Type="System.Decimal" DbType="Decimal(13,8)" CanBeNull="true" />
+      <Column Name="longitude" Type="System.Decimal" DbType="Decimal(13,8)" CanBeNull="true" />
+      <Column Name="age" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="erf_size" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="dwell_size" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="condition" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="beds" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="baths" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="receptions" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="studies" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="garages" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="parking_bays" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="pool" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="staff_accomodation" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="created_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="updated_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="created_by" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="lightstone_id_or_ck_no" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="lightstone_reg_date" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
+      <Column Name="comments" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="ss_name" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="ss_number" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="unit" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ss_fh" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="last_purch_price" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="ss_id" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="ss_door_number" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="prospected" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="farm_name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="lightstone_suburb" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ss_unique_identifier" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="locked_by_guid" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="locked_datetime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="latest_reg_date" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
+      <Column Name="has_email" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="has_cell" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="has_landline" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="has_primary_email" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="has_primary_cell" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="has_primary_landline" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="is_short_term_rental" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="is_long_term_rental" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="is_commercial" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="is_agricultural" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="is_investment" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="prospecting_property_activity_log" Member="activity_logs" ThisKey="lightstone_property_id" OtherKey="lightstone_property_id" Type="activity_log" />
+      <Association Name="prospecting_property_prospecting_company_property_relationship" Member="prospecting_company_property_relationships" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_company_property_relationship" />
+      <Association Name="prospecting_property_prospecting_person_property_relationship" Member="prospecting_person_property_relationships" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_person_property_relationship" />
+      <Association Name="prospecting_property_service_enquiry_log" Member="service_enquiry_logs" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="service_enquiry_log" />
+      <Association Name="prospecting_property_property_valuation" Member="property_valuations" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="property_valuation" />
+      <Association Name="prospecting_property_email_communications_log" Member="email_communications_logs" ThisKey="lightstone_property_id" OtherKey="target_lightstone_property_id" Type="email_communications_log" />
+      <Association Name="prospecting_property_sms_communications_log" Member="sms_communications_logs" ThisKey="lightstone_property_id" OtherKey="target_lightstone_property_id" Type="sms_communications_log" />
     </Type>
   </Table>
 </Database>

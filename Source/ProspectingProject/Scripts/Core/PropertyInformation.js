@@ -45,6 +45,12 @@ function togglePropertyInformationMenu() {
                 currentProperty.Pool = $("#poolInput").prop('checked');
                 currentProperty.StaffAccomodation = $("#staffAccomInput").prop('checked');
 
+                currentProperty.IsShortTermRental = $("#shortTermRentalInput").prop('checked');
+                currentProperty.IsLongTermRental = $("#longTermRentalInput").prop('checked');
+                currentProperty.IsCommercial = $("#commercialInput").prop('checked');
+                currentProperty.IsAgricultural = $("#agriculturalInput").prop('checked');
+                currentProperty.IsInvestment = $("#investmentInput").prop('checked');
+
                 updateProspectingRecord(currentProperty, null, null);
             }
         });
@@ -165,6 +171,12 @@ function populateHedonicData() {
     $("#conditionInput").val(currentPropertyForPropertyInformation.Condition);
     $("#poolInput").prop('checked', currentPropertyForPropertyInformation.Pool);
     $("#staffAccomInput").prop('checked', currentPropertyForPropertyInformation.StaffAccomodation);
+
+    $("#shortTermRentalInput").prop('checked', currentPropertyForPropertyInformation.IsShortTermRental);
+    $("#longTermRentalInput").prop('checked', currentPropertyForPropertyInformation.IsLongTermRental);
+    $("#commercialInput").prop('checked', currentPropertyForPropertyInformation.IsCommercial);
+    $("#agriculturalInput").prop('checked', currentPropertyForPropertyInformation.IsAgricultural);
+    $("#investmentInput").prop('checked', currentPropertyForPropertyInformation.IsInvestment);
 }
 
 function validateHedonicInputs() {
@@ -221,21 +233,21 @@ function buildBasicDataTab() {
     .empty()
     .append("<label class='fieldAlignment'>ERF size(m&sup2;) </label><input type='number' id='erfSizeInput' size='3' />")
     .append("<br />")
-    .append("<label class='fieldAlignment'>Dwelling size(m&sup2;) </label><input type='number' id='dwellingSizeInput' size='3' />")
+    .append("<label class='fieldAlignment'>Dwelling size(m&sup2;) </label><input type='number' id='dwellingSizeInput' size='3' style='margin-top:3px' />")
     .append("<br />")
-    .append("<label class='fieldAlignment'>Beds </label><input type='number' id='noBedsInput' size='3' />")
+    .append("<label class='fieldAlignment'>Beds </label><input type='number' id='noBedsInput' size='3' style='margin-top:3px' />")
     .append("<br />")
-    .append("<label class='fieldAlignment'>Baths </label><input type='number' id='noBathsInput' size='3' />")
+    .append("<label class='fieldAlignment'>Baths </label><input type='number' id='noBathsInput' size='3' style='margin-top:3px' />")
     .append("<br />")
-    .append("<label class='fieldAlignment'>Receptions </label><input type='number' id='receptionsInput' size='3' />")
+    .append("<label class='fieldAlignment'>Receptions </label><input type='number' id='receptionsInput' size='3' style='margin-top:3px' />")
     .append("<br />")
-    .append("<label class='fieldAlignment'>Studies </label><input type='number' id='studiesInput' size='3' />")
+    .append("<label class='fieldAlignment'>Studies </label><input type='number' id='studiesInput' size='3' style='margin-top:3px' />")
     .append("<br />")
-    .append("<label class='fieldAlignment'>Garages </label><input type='number' id='garagesInput' size='3' />")
+    .append("<label class='fieldAlignment'>Garages </label><input type='number' id='garagesInput' size='3' style='margin-top:3px' />")
     .append("<br />")
-    .append("<label class='fieldAlignment'>Parking bays </label><input type='number' id='parkingbaysInput' size='3' />")
+    .append("<label class='fieldAlignment'>Parking bays </label><input type='number' id='parkingbaysInput' size='3' style='margin-top:3px' />")
     .append("<br />")
-    .append("<label class='fieldAlignment'>Condition </label><select id='conditionInput'>\
+    .append("<label class='fieldAlignment'>Condition </label><select id='conditionInput' style='margin-top:3px' >\
                                                                 <option></option>\
                                                                   <option>" + propertyConditionDescription["item1"] + "</option>\
                                                                   <option>" + propertyConditionDescription["item2"] + "</option>\
@@ -249,6 +261,18 @@ function buildBasicDataTab() {
     .append("<br />")
     .append("<label class='fieldAlignment'>Staff accomodation </label><input type='checkbox' id='staffAccomInput' />")
     .append("<p />")
+        .append("<hr />")
+        .append("<label class='fieldAlignment'>Short-term rental </label><input type='checkbox' id='shortTermRentalInput' />")
+        .append("<br />")
+        .append("<label class='fieldAlignment'>Long-term rental </label><input type='checkbox' id='longTermRentalInput' />")
+        .append("<br />")
+        .append("<label class='fieldAlignment'>Commercial </label><input type='checkbox' id='commercialInput' />")
+        .append("<br />")
+        .append("<label class='fieldAlignment'>Agricultural </label><input type='checkbox' id='agriculturalInput' />")
+        .append("<br />")
+        .append("<label class='fieldAlignment'>Investment </label><input type='checkbox' id='investmentInput' />")
+        .append("<hr />")
+        .append("<p />")
     .append("<input type='button' id='saveHedonicDataBtn' value='Save' />");
 
     return container; // validation, saving + loading. update in memory record.

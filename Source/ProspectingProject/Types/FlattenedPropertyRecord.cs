@@ -74,5 +74,19 @@ namespace ProspectingProject
         public int? dialing_code_id { get; set; }
         public int? eleventh_digit { get; set; }
         public bool? deleted { get; set; }
+        public bool? is_short_term_rental { get; set; }
+        public bool? is_long_term_rental { get; set; }
+        public bool? is_commercial { get; set; }
+        public bool? is_agricultural { get; set; }
+        public bool? is_investment { get; set; }
+
+        public bool? has_cell { get; set; }
+        public bool? has_primary_cell { get; set; }
+
+        public bool? has_email { get; set; }
+        public bool? has_primary_email { get; set; }
+
+        public bool? has_landline { get; set; }
+        public bool? has_primary_landline { get; set; }
     }
 }

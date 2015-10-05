@@ -732,9 +732,9 @@
     <Content Include="Assets\marker_icons\prospecting\prospected_bulk_select.png" />
     <Content Include="Assets\marker_icons\prospecting\ss_attention_required.png" />
     <Content Include="Assets\marker_icons\prospecting\ss_unprospected_bulk_select.png" />
-    <Content Include="Assets\marker_icons\prospecting\unprospected.png" />
     <Content Include="Assets\marker_icons\prospecting\ss_prospected.png" />
     <Content Include="Assets\marker_icons\prospecting\ss_unprospected.png" />
+    <Content Include="Assets\marker_icons\prospecting\unprospected.png" />
     <Content Include="Assets\marker_icons\prospecting\unprospected_attention_required.png" />
     <Content Include="Assets\marker_icons\prospecting\unprospected_bulk_select.png" />
     <Content Include="Assets\my_templates.png" />
@@ -760,6 +760,7 @@
     <Content Include="Assets\view_btn.png" />
     <Content Include="Database scripts\boss.sql" />
     <Content Include="Database scripts\change_of_ownership.sql" />
+    <Content Include="Database scripts\prospecting_property_contact_details_stats.sql" />
     <Content Include="Database scripts\seeff_prospecting.sql" />
     <Content Include="Database scripts\seeff_prospecting_data_takeon.sql" />
     <Content Include="Database scripts\useful.sql" />
@@ -1127,6 +1128,7 @@
     <Content Include="Scripts\Core\DrawingMultiSelect.js" />
     <Content Include="Scripts\Core\Communication.js" />
     <Content Include="Scripts\Core\Extensions.js" />
+    <Content Include="Scripts\Core\Filtering.js" />
     <Content Include="Scripts\Core\PropertyInformation.js" />
     <Content Include="Scripts\StyleSheets\OpenTip.css" />
     <Content Include="Scripts\3rdParty\OpenTip.js" />
@@ -1326,6 +1328,7 @@
     <Compile Include="Types\CompanyEnquiryInputPacket.cs" />
     <Compile Include="Types\CompanyEnquiryResponsePacket.cs" />
     <Compile Include="Types\CostOfBatch.cs" />
+    <Compile Include="Types\DefaultContactDetail.cs" />
     <Compile Include="Types\EmailAttachment.cs" />
     <Compile Include="Types\EmailBatch.cs" />
     <Compile Include="Types\FlattenedPropertyRecord.cs" />

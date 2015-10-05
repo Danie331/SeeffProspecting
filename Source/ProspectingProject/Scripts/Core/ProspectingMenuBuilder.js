@@ -18,7 +18,10 @@ function fixElementHeightForIE(elementId, percHeight) {
 }
 
 function createProspectingMenu(userData) {
-    var menuItem = createMenuItem("Suburb Selection", "suburbselector", buildSuburbSelectionHtml(), function () { toggleMultiSelectMode(false); }, null);
+    var menuItem = createMenuItem("Suburb Selection", "suburbselector", buildSuburbSelectionHtml(), function () {
+        toggleMultiSelectMode(false);
+        toggleFilterMode(false);
+    }, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     fixElementHeightForIE('suburbsDiv');
     menuItems.push(menuItem);
@@ -27,12 +30,20 @@ function createProspectingMenu(userData) {
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Activity Report", "activityreport", buildActivityReport(), function () { toggleMultiSelectMode(false); handleActivityReportClick(); }, null);
+    menuItem = createMenuItem("Activity Report", "activityreport", buildActivityReport(), function () {
+        toggleMultiSelectMode(false);
+        toggleFilterMode(false);
+        handleActivityReportClick();
+    }, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     fixElementHeightForIE('contentactivityContainer', 0.8);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Follow-up", "followup", buildFollowupReport(userData.FollowupActivities), function () { toggleMultiSelectMode(false); handleFollowupReportClick(); }, userData.TotalFollowups);
+    menuItem = createMenuItem("Follow-up", "followup", buildFollowupReport(userData.FollowupActivities), function () {
+        toggleMultiSelectMode(false);
+        toggleFilterMode(false);
+        handleFollowupReportClick();
+    }, userData.TotalFollowups);
     appendMenuItemContent(menuItem.MenuItemContent);
     fixElementHeightForIE('contentfollowupContainer', 0.8);
     menuItems.push(menuItem);
@@ -45,7 +56,10 @@ function createProspectingMenu(userData) {
     // Check this thing not rebinding each time, test chrome, test mouse wheel + click, 
 
 
-    menuItem = createMenuItem("Lightstone Search", "lightstonesearch", buildSearchMenu(), function () { toggleMultiSelectMode(false); }, null);
+    menuItem = createMenuItem("Lightstone Search", "lightstonesearch", buildSearchMenu(), function () {
+        toggleMultiSelectMode(false);
+        toggleFilterMode(false);
+    }, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
@@ -56,6 +70,7 @@ function createProspectingMenu(userData) {
 
         menuItem = createMenuItem("Comm Reports", "commreporting", buildCommReportingMenu(), function () {
             toggleMultiSelectMode(false);
+            toggleFilterMode(false);
             toggleCommReportingMenu();
         }, null);
         appendMenuItemContent(menuItem.MenuItemContent);
@@ -64,7 +79,15 @@ function createProspectingMenu(userData) {
 
     menuItem = createMenuItem("Property Information", "propertyinformation", buildPropertyInformationMenu(), function () {
         toggleMultiSelectMode(false);
+        toggleFilterMode(false);
         togglePropertyInformationMenu();
+    }, null);
+    appendMenuItemContent(menuItem.MenuItemContent);
+    menuItems.push(menuItem);
+
+    menuItem = createMenuItem("Filtering", "filtering", buildFilteringMenu(), function () {
+        toggleFilterMode(true);
+        toggleFilteringMenu();
     }, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
