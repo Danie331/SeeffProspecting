@@ -1115,10 +1115,6 @@ namespace ProspectingProject
 
                 //Set the property as prospected
                 MarkAsProspected((int)dataPacket.ProspectingPropertyId);
-                if (dataPacket.ProspectingPropertyId.HasValue)
-                {
-                    UpdateContactDetailStatisticsToPropertyRecord(dataPacket.ProspectingPropertyId.Value);
-                }
 
                 return incomingContact;
             }
@@ -2404,75 +2400,64 @@ namespace ProspectingProject
                     }
                     contactDetail.is_primary_contact = true;
                     prospecting.SubmitChanges();
-
-                    var contact = contactDetail.prospecting_contact_person;
-                    var directRelationships = contact.prospecting_person_property_relationships;
-                    if (directRelationships.Count > 0)
-                    {
-                        foreach (var directRelation in directRelationships)
-                        {
-                            UpdateContactDetailStatisticsToPropertyRecord(directRelation.prospecting_property_id);
-                        }
-                    }
-                    // It is too processing intesive to do the same for company relationships here. Rely on the scheduled jobs to update DB.
                 }
             }
         }
 
-        private static void UpdateContactDetailStatisticsToPropertyRecord(int prospectingPropertyId)
-        {
-            using (var prospecting = new ProspectingDataContext())
-            {
-                var prospectingProperty = prospecting.prospecting_properties.FirstOrDefault(pp => pp.prospecting_property_id == prospectingPropertyId);
-                if (prospectingProperty != null)
-                {
-                    var contactDetailsFromCompanyRelationships = from cpr in prospecting.prospecting_company_property_relationships
-                                                                 join pcr in prospecting.prospecting_person_company_relationships on cpr.contact_company_id equals pcr.contact_company_id
-                                                                 join cp in prospecting.prospecting_contact_persons on pcr.contact_person_id equals cp.contact_person_id
-                                                                 join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
-                                                                 where cpr.prospecting_property == prospectingProperty && !cd.deleted
-                                                                 select cd;
-                    var contactDetailsFromDirectRelationships = from ppr in prospecting.prospecting_person_property_relationships 
-                                                                join cp in prospecting.prospecting_contact_persons on ppr.contact_person_id equals cp.contact_person_id
-                                                                join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
-                                                                where ppr.prospecting_property == prospectingProperty && !cd.deleted
-                                                                select cd;
+        //private static void UpdateContactDetailStatisticsToPropertyRecord(int prospectingPropertyId)
+        //{
+        //    using (var prospecting = new ProspectingDataContext())
+        //    {
+        //        var prospectingProperty = prospecting.prospecting_properties.FirstOrDefault(pp => pp.prospecting_property_id == prospectingPropertyId);
+        //        if (prospectingProperty != null)
+        //        {
+        //            var contactDetailsFromCompanyRelationships = from cpr in prospecting.prospecting_company_property_relationships
+        //                                                         join pcr in prospecting.prospecting_person_company_relationships on cpr.contact_company_id equals pcr.contact_company_id
+        //                                                         join cp in prospecting.prospecting_contact_persons on pcr.contact_person_id equals cp.contact_person_id
+        //                                                         join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
+        //                                                         where cpr.prospecting_property == prospectingProperty && !cd.deleted
+        //                                                         select cd;
+        //            var contactDetailsFromDirectRelationships = from ppr in prospecting.prospecting_person_property_relationships 
+        //                                                        join cp in prospecting.prospecting_contact_persons on ppr.contact_person_id equals cp.contact_person_id
+        //                                                        join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
+        //                                                        where ppr.prospecting_property == prospectingProperty && !cd.deleted
+        //                                                        select cd;
 
-                    // Emails
-                    int countEmails1 = contactDetailsFromCompanyRelationships.Where(cd => cd.contact_detail_type == 4 || cd.contact_detail_type == 5).Count();
-                    int countEmails2 = contactDetailsFromDirectRelationships.Where(cd => cd.contact_detail_type == 4 || cd.contact_detail_type == 5).Count();
+        //            // Emails
+        //            int countEmails1 = contactDetailsFromCompanyRelationships.Where(cd => cd.contact_detail_type == 4 || cd.contact_detail_type == 5).Count();
+        //            int countEmails2 = contactDetailsFromDirectRelationships.Where(cd => cd.contact_detail_type == 4 || cd.contact_detail_type == 5).Count();
 
-                    prospectingProperty.has_email = (countEmails1 + countEmails2) > 0;
-                    // Emails (primary)
-                    countEmails1 = contactDetailsFromCompanyRelationships.Where(cd => (cd.contact_detail_type == 4 || cd.contact_detail_type == 5) && cd.is_primary_contact).Count();
-                    countEmails2 = contactDetailsFromDirectRelationships.Where(cd => (cd.contact_detail_type == 4 || cd.contact_detail_type == 5) && cd.is_primary_contact).Count();
+        //            prospectingProperty.has_email = (countEmails1 + countEmails2) > 0;
+        //            // Emails (primary)
+        //            countEmails1 = contactDetailsFromCompanyRelationships.Where(cd => (cd.contact_detail_type == 4 || cd.contact_detail_type == 5) && cd.is_primary_contact).Count();
+        //            countEmails2 = contactDetailsFromDirectRelationships.Where(cd => (cd.contact_detail_type == 4 || cd.contact_detail_type == 5) && cd.is_primary_contact).Count();
 
-                    prospectingProperty.has_primary_email = (countEmails1 + countEmails2) > 0;
-                    // Cell 
-                    int countCells1 = contactDetailsFromCompanyRelationships.Where(cd => cd.contact_detail_type == 3).Count();
-                    int countCells2 = contactDetailsFromDirectRelationships.Where(cd => cd.contact_detail_type == 3).Count();
+        //            prospectingProperty.has_primary_email = (countEmails1 + countEmails2) > 0;
+        //            // Cell 
+        //            int countCells1 = contactDetailsFromCompanyRelationships.Where(cd => cd.contact_detail_type == 3).Count();
+        //            int countCells2 = contactDetailsFromDirectRelationships.Where(cd => cd.contact_detail_type == 3).Count();
 
-                    prospectingProperty.has_cell = (countCells1 + countCells2) > 0;
-                    // Cell (primary)
-                    countCells1 = contactDetailsFromCompanyRelationships.Where(cd => cd.contact_detail_type == 3 && cd.is_primary_contact).Count();
-                    countCells2 = contactDetailsFromDirectRelationships.Where(cd => cd.contact_detail_type == 3 && cd.is_primary_contact).Count();
+        //            prospectingProperty.has_cell = (countCells1 + countCells2) > 0;
+        //            // Cell (primary)
+        //            countCells1 = contactDetailsFromCompanyRelationships.Where(cd => cd.contact_detail_type == 3 && cd.is_primary_contact).Count();
+        //            countCells2 = contactDetailsFromDirectRelationships.Where(cd => cd.contact_detail_type == 3 && cd.is_primary_contact).Count();
 
-                    prospectingProperty.has_primary_cell = (countCells1 + countCells2) > 0;
-                    // Landline
-                    int countLandlines1 = contactDetailsFromCompanyRelationships.Where(cd => cd.contact_detail_type == 1 || cd.contact_detail_type == 2).Count();
-                    int countLandline2 = contactDetailsFromDirectRelationships.Where(cd => cd.contact_detail_type == 1 || cd.contact_detail_type == 2).Count();
+        //            prospectingProperty.has_primary_cell = (countCells1 + countCells2) > 0;
+        //            // Landline
+        //            int countLandlines1 = contactDetailsFromCompanyRelationships.Where(cd => cd.contact_detail_type == 1 || cd.contact_detail_type == 2).Count();
+        //            int countLandline2 = contactDetailsFromDirectRelationships.Where(cd => cd.contact_detail_type == 1 || cd.contact_detail_type == 2).Count();
 
-                    prospectingProperty.has_landline = (countLandlines1 + countLandline2) > 0;
-                    // Landline (primary)
-                    countLandlines1 = contactDetailsFromCompanyRelationships.Where(cd => (cd.contact_detail_type == 1 || cd.contact_detail_type == 2) && cd.is_primary_contact).Count();
-                    countLandline2 = contactDetailsFromDirectRelationships.Where(cd => (cd.contact_detail_type == 1 || cd.contact_detail_type == 2) && cd.is_primary_contact).Count();
+        //            prospectingProperty.has_landline = (countLandlines1 + countLandline2) > 0;
+        //            // Landline (primary)
+        //            countLandlines1 = contactDetailsFromCompanyRelationships.Where(cd => (cd.contact_detail_type == 1 || cd.contact_detail_type == 2) && cd.is_primary_contact).Count();
+        //            countLandline2 = contactDetailsFromDirectRelationships.Where(cd => (cd.contact_detail_type == 1 || cd.contact_detail_type == 2) && cd.is_primary_contact).Count();
 
-                    prospectingProperty.has_primary_landline = (countLandlines1 + countLandline2) > 0;
+        //            prospectingProperty.has_primary_landline = (countLandlines1 + countLandline2) > 0;
 
-                    prospecting.SubmitChanges();
-                }
-            }
-        }
+        //            prospecting.SubmitChanges();
+        //        }
+        //    }
+        //}
 
         public static ActivityBundle LoadUserActivities()
         {
@@ -3046,6 +3031,14 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
             }
 
             return results;
+        }
+
+        public static void UpdateStatisticsForSuburb(int suburbId)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                prospecting.update_property_contact_detail_statistics(suburbId);
+            }
         }
 
         public static CommReportResults LoadCommunicationData(CommReportFilters filterPacket)

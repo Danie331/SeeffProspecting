@@ -182,6 +182,9 @@ namespace ProspectingProject
                         string valid = ValidatePersonIdNumber(json);
                         context.Response.Write(valid);
                         break;
+                    case "update_suburb_statistics":
+                        UpdateStatisticsForSuburb(json);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -214,6 +217,12 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private void UpdateStatisticsForSuburb(string json)
+        {
+            var suburbContainer = ProspectingCore.Deserialise<UserSuburb>(json);
+            ProspectingCore.UpdateStatisticsForSuburb(suburbContainer.SuburbId);
         }
 
         private string ValidatePersonIdNumber(string json)

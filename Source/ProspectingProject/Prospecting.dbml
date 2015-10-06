@@ -482,4 +482,8 @@
     <Parameter Name="prospecting_property_id" Type="System.Int32" DbType="Int" />
     <Return Type="System.Int32" />
   </Function>
+  <Function Name="dbo.update_property_contact_detail_statistics" Method="update_property_contact_detail_statistics">
+    <Parameter Name="area_id" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
 </Database>

@@ -88,6 +88,7 @@ function createProspectingMenu(userData) {
     menuItem = createMenuItem("Filtering", "filtering", buildFilteringMenu(), function () {
         toggleFilterMode(true);
         toggleFilteringMenu();
+        prepareDataForFiltering();
     }, null);
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);

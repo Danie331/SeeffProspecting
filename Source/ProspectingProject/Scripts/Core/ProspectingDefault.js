@@ -360,7 +360,7 @@ function performPersonLookup(idNumber, lookupType) {
     });
 }
 
-function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCentreMap) {
+function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCentreMap, filterFunction) {
 
     var suburb = getSuburbById(suburbId);
     if (suburb == null) {
@@ -382,7 +382,7 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCent
                     }
 
                     if (data.PolyCoords.length > 0) {
-                        initialiseAndDisplaySuburb(suburb, data, showSeeffCurrentListings);
+                        initialiseAndDisplaySuburb(suburb, data, showSeeffCurrentListings, filterFunction);
 
                         $.unblockUI();
                         if (actionAfterLoad) {
@@ -405,7 +405,7 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCent
             dataType: "json"
         });
     } else {
-        initialiseAndDisplaySuburb(suburb, null, showSeeffCurrentListings);
+        initialiseAndDisplaySuburb(suburb, null, showSeeffCurrentListings, filterFunction);
 
         $.unblockUI();
         if (actionAfterLoad) {
@@ -1144,6 +1144,7 @@ function updateProspectingRecord(record, property, callbackFn) {
 }
 
 function saveContact(contact, property, actionToExecuteAfterwards) {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Saving Contact Information...</p>' });
     var inputPacket = null;
     if (contact.ContactCompanyId) {
         inputPacket = { Instruction: "save_contact", ContactPerson: contact, ProspectingPropertyId: property.ProspectingPropertyId, ContactCompanyId: contact.ContactCompanyId };
@@ -1166,6 +1167,7 @@ function saveContact(contact, property, actionToExecuteAfterwards) {
                 }
                 else {
                     actionToExecuteAfterwards(data);
+                    $.unblockUI();
                 }
             }
         },
@@ -1722,20 +1724,11 @@ function buildInfoWindowContentForSS(unit) {
         if (pp.Whence && pp.Whence == 'from_filter')
             isFiltering = true;
     });
-    //if (isFiltering) {
-    //    ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
-    //        if (!pp.SS_UNIQUE_IDENTIFIER) return false;
-    //        if (pp.SS_UNIQUE_IDENTIFIER == unit.SS_UNIQUE_IDENTIFIER) {
-    //            return pp.Whence == 'from_filter';
-    //        }
-    //        return false;
-    //    });
-    //} else {
-        ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
-            if (!pp.SS_UNIQUE_IDENTIFIER) return false;
-            return pp.SS_UNIQUE_IDENTIFIER == unit.SS_UNIQUE_IDENTIFIER;
-        });
-    //}
+  
+    ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+        if (!pp.SS_UNIQUE_IDENTIFIER) return false;
+        return pp.SS_UNIQUE_IDENTIFIER == unit.SS_UNIQUE_IDENTIFIER;
+    });
 
     $.each(ssUnits, function (i, u) {
         if (u.SS_FH == 'FS') u.Unit = 99999999;

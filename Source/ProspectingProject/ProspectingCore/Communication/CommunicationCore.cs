@@ -614,6 +614,5 @@ namespace ProspectingProject
                 };
             }
         }
-       
     }
 }

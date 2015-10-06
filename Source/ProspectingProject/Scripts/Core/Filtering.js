@@ -74,7 +74,7 @@ function buildContactsFilterTab() {
     .append(exclusiveFilter);
 
     var performFilteringBtn = $("<input type='button' id='performFilteringBtn' value='Filter' style='cursor:pointer;display:inline-block;float:left' />");
-    var resetSuburbFilterBtn = $("<input type='button' id='resetSuburbFilterBtn' value='Reset Suburb' style='cursor:pointer;display:inline-block;float:right' />");
+    var resetSuburbFilterBtn = $("<input type='button' id='resetSuburbFilterBtn' value='Reset Suburb & Refresh Data' style='cursor:pointer;display:inline-block;float:right' />");
 
     container
         .append(containerFieldset)
@@ -94,7 +94,7 @@ function buildContactsFilterTab() {
     .append(performFilteringBtn).append(resetSuburbFilterBtn);
 
     performFilteringBtn.click(handleFilterPropertiesByContactDetails);
-    resetSuburbFilterBtn.click(handleResetSuburbFiltering);
+    resetSuburbFilterBtn.click(function () { handleResetSuburbFiltering(true); });
 
     return container;
 }
@@ -134,32 +134,55 @@ function toggleFilterMode(value) {
     }
 }
 
+function prepareDataForFiltering(callbackFn) {
+    if (!currentSuburb)
+        return;
+
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Preparing Data For Filtering...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: "update_suburb_statistics", SuburbId: currentSuburb.SuburbId })
+    }).done(function() {
+        $.unblockUI();
+
+        if (callbackFn) {
+            callbackFn();
+        }
+    });
+}
+
+function contactsWithCell(property) {
+    return property.HasContactWithCell;
+}
+
+function contactsWithPrimaryCell(property) {
+    return property.HasContactWithPrimaryCell;
+}
+
+function contactsWithEmail(property) {
+    return property.HasContactWithEmail;
+}
+
+function contactsWithPrimaryEmail(property) {
+    return property.HasContactWithPrimaryEmail;
+}
+
+function contactsWithLandline(property) {
+    return property.HasContactWithLandline;
+}
+
+function contactsWithPrimaryLandline(property) {
+    return property.HasContactWithPrimaryLandline;
+}
+
 function handleFilterPropertiesByContactDetails() {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Filtering...</p>' });
+    handleResetSuburbFiltering(false);
+    loadSuburbAndFilter();
+}
 
-    function contactsWithCell(property) {
-        return property.HasContactWithCell;
-    }
-
-    function contactsWithPrimaryCell(property) {
-        return property.HasContactWithPrimaryCell;
-    }
-
-    function contactsWithEmail(property) {
-        return property.HasContactWithEmail;
-    }
-
-    function contactsWithPrimaryEmail(property) {
-        return property.HasContactWithPrimaryEmail;
-    }
-
-    function contactsWithLandline(property) {
-        return property.HasContactWithLandline;
-    }
-
-    function contactsWithPrimaryLandline(property) {
-        return property.HasContactWithPrimaryLandline;
-    }
-
+function loadSuburbAndFilter() {
     var filterPropertiesHaving = $('#contactsFilterHave').is(':checked');
     var filterByCell = $('#cellFilterInput').is(':checked');
     var filterByEmail = $('#emailFilterInput').is(':checked');
@@ -176,138 +199,142 @@ function handleFilterPropertiesByContactDetails() {
         return;
     }
 
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Filtering...</p>' });
-    handleResetSuburbFiltering();
-    clearSuburbBySuburbId(currentSuburb.SuburbId);    
-
-    $.ajax({
-        type: "POST",
-        url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "server_tap" })
-    }).done(function () {
-        initialiseAndDisplaySuburb(currentSuburb, null, false, function (markers) {
-            var filteredMarkers = [];
-            $.each(markers, function (idx, marker) {
-                var addMarker = false;
-                var candidateMarkerForExclusiveFilter = true;
-                if (filterByCell) {
-                    // Having
-                    if (filterPropertiesHaving) {
-                        if (contactsWithCell(marker.ProspectingProperty)) {
-                            addMarker = true;
-                        } else {
-                            candidateMarkerForExclusiveFilter = false;
-                        }
-                    } else {
-                        if (!contactsWithCell(marker.ProspectingProperty)) {
-                            addMarker = true;
-                        } else {
-                            candidateMarkerForExclusiveFilter = false;
-                        }
-                    }
-                }
-
-                if (filterByPrimaryCell) {
-                    if (filterPropertiesHaving) {
-                        if (contactsWithPrimaryCell(marker.ProspectingProperty)) {
-                            addMarker = true;
-                        } else {
-                            candidateMarkerForExclusiveFilter = false;
-                        }
-                    } else {
-                        if (!contactsWithPrimaryCell(marker.ProspectingProperty)) {
-                            addMarker = true;
-                        } else {
-                            candidateMarkerForExclusiveFilter = false;
-                        }
-                    }
-                }
-
-                if (filterByEmail) {
-                    if (filterPropertiesHaving) {
-                        if (contactsWithEmail(marker.ProspectingProperty)) {
-                            addMarker = true;
-                        } else {
-                            candidateMarkerForExclusiveFilter = false;
-                        }
-                    } else {
-                        if (!contactsWithEmail(marker.ProspectingProperty)) {
-                            addMarker = true;
-                        } else {
-                            candidateMarkerForExclusiveFilter = false;
-                        }
-                    }
-                }
-
-                if (filterByPrimaryEmail) {
-                    if (filterPropertiesHaving) {
-                        if (contactsWithPrimaryEmail(marker.ProspectingProperty)) {
-                            addMarker = true;
-                        } else {
-                            candidateMarkerForExclusiveFilter = false;
-                        }
-                    } else {
-                        if (!contactsWithPrimaryEmail(marker.ProspectingProperty)) {
-                            addMarker = true;
-                        } else {
-                            candidateMarkerForExclusiveFilter = false;
-                        }
-                    }
-                }
-
-                if (filterByLandline) {
-                    if (filterPropertiesHaving) {
-                        if (contactsWithLandline(marker.ProspectingProperty)) {
-                            addMarker = true;
-                        } else {
-                            candidateMarkerForExclusiveFilter = false;
-                        }
-                    } else {
-                        if (!contactsWithLandline(marker.ProspectingProperty)) {
-                            addMarker = true;
-                        } else {
-                            candidateMarkerForExclusiveFilter = false;
-                        }
-                    }
-                }
-
-                if (filterByPrimaryLandline) {
-                    if (filterPropertiesHaving) {
-                        if (contactsWithPrimaryLandline(marker.ProspectingProperty)) {
-                            addMarker = true;
-                        } else {
-                            candidateMarkerForExclusiveFilter = false;
-                        }
-                    } else {
-                        if (!contactsWithPrimaryLandline(marker.ProspectingProperty)) {
-                            addMarker = true;
-                        } else {
-                            candidateMarkerForExclusiveFilter = false;
-                        }
-                    }
-                }
-
-                if (exclusive) {
-                    if (addMarker && candidateMarkerForExclusiveFilter == true) {
-                        marker.ProspectingProperty.Whence = 'from_filter';
-                        filteredMarkers.push(marker);
-                    }
-                }
-                else { // not an exclusive filter
-                    if (addMarker) {
-                        marker.ProspectingProperty.Whence = 'from_filter';
-                        filteredMarkers.push(marker);
-                    }
-                }
-            });
-            return filteredMarkers;
-        });
-
+    clearSuburbBySuburbId(currentSuburb.SuburbId);
+    currentSuburb.IsInitialised = false;
+    loadSuburb(currentSuburb.SuburbId, false, function () {
+        currentProperty = null;
         $.unblockUI();
+    }, false, function (markers) {
+        var filteredMarkers = [];
+        $.each(markers, function (idx, marker) {
+            var addMarker = false;
+            var candidateMarkerForExclusiveFilter = true;
+            if (filterByCell) {
+                // Having
+                if (filterPropertiesHaving) {
+                    if (contactsWithCell(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!contactsWithCell(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (filterByPrimaryCell) {
+                if (filterPropertiesHaving) {
+                    if (contactsWithPrimaryCell(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!contactsWithPrimaryCell(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (filterByEmail) {
+                if (filterPropertiesHaving) {
+                    if (contactsWithEmail(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!contactsWithEmail(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (filterByPrimaryEmail) {
+                if (filterPropertiesHaving) {
+                    if (contactsWithPrimaryEmail(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!contactsWithPrimaryEmail(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (filterByLandline) {
+                if (filterPropertiesHaving) {
+                    if (contactsWithLandline(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!contactsWithLandline(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (filterByPrimaryLandline) {
+                if (filterPropertiesHaving) {
+                    if (contactsWithPrimaryLandline(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!contactsWithPrimaryLandline(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (exclusive) {
+                if (addMarker && candidateMarkerForExclusiveFilter == true) {
+                    marker.ProspectingProperty.Whence = 'from_filter';
+                    filteredMarkers.push(marker);
+                }
+            }
+            else { // not an exclusive filter
+                if (addMarker) {
+                    marker.ProspectingProperty.Whence = 'from_filter';
+                    filteredMarkers.push(marker);
+                }
+            }
+        });
+        return filteredMarkers;
     });
 }
 
-function handleResetSuburbFiltering() {
+function handleResetSuburbFiltering(refreshData) {
     toggleFilterMode(false);
     toggleFilterMode(true);
+
+    if (refreshData) {
+        prepareDataForFiltering(function () {
+            clearSuburbBySuburbId(currentSuburb.SuburbId);
+            currentSuburb.IsInitialised = false;
+            loadSuburb(currentSuburb.SuburbId, false, function () {
+                currentProperty = null;
+                $.unblockUI();
+            }, false, false);
+        });
+    }
 }
