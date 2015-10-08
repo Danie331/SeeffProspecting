@@ -138,7 +138,7 @@ function prepareDataForFiltering(callbackFn) {
     if (!currentSuburb)
         return;
 
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Preparing Data For Filtering...</p>' });
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Preparing Suburb For Filtering...</p>' });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",

@@ -2073,6 +2073,7 @@ function closeInfoWindow() {
         unlockCurrentProperty();
         currentProperty = null;
         currentPersonContact = null;
+        currentPropertyForPropertyInformation = null;
         if (tempIndicatorMarker) {
             tempIndicatorMarker.setMap(null);
             tempIndicatorMarker = null;
@@ -2081,6 +2082,7 @@ function closeInfoWindow() {
         updateOwnerDetailsEditor();
         clearActivityReport();
         resetFollowupFilters();
+        togglePropertyInformationMenu(true);
         //updatePropertyNotesDiv();
 
         currentTracePSInfoPacket = null;

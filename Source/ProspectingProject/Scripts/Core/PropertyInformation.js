@@ -16,13 +16,13 @@ function buildPropertyInformationMenu() {
     return div;
 }
 
-function togglePropertyInformationMenu() {
+function togglePropertyInformationMenu(hide) {
     var container = $("#propertyInformationDiv");
-    if (currentProperty == null) {
+    if (currentProperty == null || hide) {
         container.empty();
         return;
     }
-    if (currentPropertyForPropertyInformation != currentProperty) {
+    if (currentPropertyForPropertyInformation != currentProperty) { 
         currentPropertyForPropertyInformation = currentProperty;
         container.empty();
 

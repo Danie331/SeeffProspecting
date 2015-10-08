@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ls_base" Class="LightStoneDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost;Initial Catalog=ls_base;Integrated Security=True" SettingsObjectName="DataManager.Properties.Settings" SettingsPropertyName="ls_baseConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.agency" Member="agencies">
     <Type Name="agency">
       <Column Name="agency_name" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
@@ -112,6 +111,10 @@
     <Return Type="System.Int32" />
   </Function>
   <Function Name="dbo.sp_generate_area_parent_lookup_table" Method="sp_generate_area_parent_lookup_table">
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.update_area_fating" Method="update_area_fating">
+    <Parameter Name="year_after" Type="System.String" DbType="VarChar(4)" />
     <Return Type="System.Int32" />
   </Function>
 </Database>

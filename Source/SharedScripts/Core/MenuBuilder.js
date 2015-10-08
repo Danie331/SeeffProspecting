@@ -68,14 +68,17 @@ function showMenuForUser(userCanEdit, unfatedTransactions) {
     showMenu("suburbselector");
 }
 
-function fixElementHeightForIE(elementId) {
-
+function fixElementHeightForIE(elementId, percHeight) {
+    var maxHeight = $(document).height();
+    var percentage = percHeight ? percHeight : 0.9;
+    var newValue = percentage * maxHeight - 100;
+    $('#' + elementId).css('height', newValue + 'px');
     // IE bug fix: height:100% of div does not work unless all parent divs heights are also 100%
-    if (detectIE()) {
-        var maxHeight = $(document).height();
-        var newValue = 0.9 * maxHeight - 100;
-        $('#' + elementId).css('height', newValue + 'px');
-    }
+    //if (detectIE()) {
+    //    var maxHeight = $(document).height();
+    //    var newValue = 0.9 * maxHeight - 100;
+    //    $('#' + elementId).css('height', newValue + 'px');
+    //}
 }
 
 function buildUtils() {
@@ -304,7 +307,7 @@ function buildSuburbSelectionHtml() {
     var html = "<div id='suburbsInfoDiv' class='contentdiv'>"
                 + "<div id='suburbsSummaryDiv' style='font-size:12px;'>" + buildSuburbsSummaryContent() + "</div><p/>"
                 + buildSuburbsSelectionHeaderHtml()
-                + "<div id='suburbsDiv' style='height:90%;overflow: auto;'>"
+                + "<div id='suburbsDiv' style='height:50%;overflow: auto;'>"
                 + buildSuburbsSelectionHtml()
                 + "</div></div>";
 
@@ -350,7 +353,7 @@ function buildSuburbsSelectionHtml() {
             // select both fated/unfated, and center the map
             var areaId = $(this).attr('id').replace('suburb', '');
 
-            loadDataForSuburb(areaId, true, true, true);
+            loadDataForSuburb(areaId, true, true, true, setZoomToTarget);
             var suburb = getSuburbById(areaId);
             if (suburb) {
                 centreMap(suburb);
@@ -607,13 +610,11 @@ function openResultOnMap(searchResult) {
         })[0];
         // trigger the marker click event.
         openInfoWindow(target.Marker);
-        var pos = calcMapCenterWithOffset(target.LatLong.Lat, target.LatLong.Lng, -200, 0);
+        var pos = calcMapCenterWithOffset(target.LatLong.Lat, target.LatLong.Lng, -350, 0);
         if (pos) {
+            //map.setZoom(13);
             map.setCenter(pos);
-        }
-        else {
-            map.setCenter(latLng);
-        }
+        }     
     });
 
     //setTimeout(function () {

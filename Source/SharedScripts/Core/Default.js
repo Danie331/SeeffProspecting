@@ -45,17 +45,12 @@ function timerIncrement() {
 }
 
 function loadAllAgencies() {
-    allAgencies = $("#all_agencies").val();
-    if (allAgencies) {
-        allAgencies = JSON.parse(allAgencies);
-    }
+    allAgencies = initializationData.Agencies;
 }
 
 function loadSuburbsInfo() {
-    suburbsInfo = $("#user_suburbs").val();
+    suburbsInfo = initializationData.UserSuburbs;
     if (suburbsInfo) {
-        suburbsInfo = JSON.parse(suburbsInfo);
-
         for (var i = 0; i < suburbsInfo.length; i++) {
             suburbsInfo[i].IsInitialised = false;
         }
@@ -86,6 +81,15 @@ function initializeMap(defaultZoomAndLocation) {
         map.setZoom(zoom);
         var center = new google.maps.LatLng(defaultLat, defaultLng);
         map.setCenter(center);
+
+        google.maps.event.addListenerOnce(map, 'idle', function () {
+            // Leave the 2 statements below [Google Maps initialization quirks]
+            var infWindow = new google.maps.InfoWindow({
+                content: ""
+            });
+
+            calcMapCenterWithOffset(defaultLat, defaultLng, 0, 0);           
+        });
     }
 }
 
@@ -164,7 +168,7 @@ function togglePanel(actionAfterClosing) {
 
 function userContext() {
 
-    var typeOfUser = $("#user_designation").val();
+    var typeOfUser = initializationData.UserDesignation;
     typeOfUser = typeOfUser.split("_")[0];
     switch (typeOfUser) {
         case "licensee":
@@ -650,7 +654,21 @@ function handleSuburbItemSelect() {
         $('#forsale_filter').prop('checked', true);
     }
 
-    loadDataForSuburb(areaId, false, true, true);
+    loadDataForSuburb(areaId, false, true, true, setZoomToTarget);
+}
+
+function setZoomToTarget(suburb) {
+    if (suburb && suburb.Listings && suburb.Listings.length) {
+        var target = suburb.Listings[0];
+        map.setZoom(15);
+        var pos = calcMapCenterWithOffset(target.LatLong.Lat, target.LatLong.Lng, -350, 0);
+        if (pos) {
+            map.setCenter(pos);
+        }
+        else {
+            map.setCenter(suburb.PolyCoords[0]);
+        }
+    }
 }
 
 function getTypeOfFatingToLoad(areaId) {
@@ -1261,12 +1279,12 @@ function updateAgencyForListing(uniqueId, value) {
 }
 
 function loadSuburb(suburbId, typeOfFating, showSeeffCurrentListings, showPopup, callbackHandler) {
-
     var suburb = getSuburbById(suburbId);
     if (suburb == null) {
         suburb = newSuburb();
         suburb.SuburbId = suburbId;
     }
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading ' + suburb.SuburbName + ' ...</p>' });
     if (!suburb.IsInitialised) {
 
         $.ajax({
@@ -1280,13 +1298,15 @@ function loadSuburb(suburbId, typeOfFating, showSeeffCurrentListings, showPopup,
                     generateStatisticsMenu(true);
 
                     if (callbackHandler) {
-                        callbackHandler();
+                        callbackHandler(suburb);
                     }
                 } else {
                     alert('No data found for this area on the map. Please contact support.');
                 }
+                $.unblockUI();
             },
             error: function (textStatus, errorThrown) {
+                $.unblockUI();
                 alert(textStatus.responseText);
                 alert(errorThrown);
             },
@@ -1295,9 +1315,9 @@ function loadSuburb(suburbId, typeOfFating, showSeeffCurrentListings, showPopup,
     } else {
         initialiseAndDisplaySuburb(suburb, null, typeOfFating, showSeeffCurrentListings, undefined, showPopup);
         generateStatisticsMenu(true);
-
+        $.unblockUI();
         if (callbackHandler) {
-            callbackHandler();
+            callbackHandler(suburb);
         }
     }
 }
@@ -1310,7 +1330,7 @@ function loadAgenciesForSuburb(actionAfterLoading) {
             $.ajax({
                 type: "POST",
                 url: "AgenciesDataManager.ashx",
-                data: JSON.stringify({ instruction: 'load', suburbID: currentSuburb.SuburbId, userGuid: $('#user_guid').attr('value') }),
+                data: JSON.stringify({ instruction: 'load', suburbID: currentSuburb.SuburbId, userGuid: initializationData.UserGuid }),
                 success: function (data, textStatus, jqXHR) {
                     if (textStatus == "success") {
                         currentSuburb.SelectedAgencies = data;
@@ -1339,7 +1359,7 @@ function saveAgencies(selectedAgencyIds, callbackFunction) {
         url: "AgenciesDataManager.ashx",
         data: JSON.stringify({
             instruction: 'save',
-            userGuid: $('#user_guid').attr('value'),
+            userGuid: initializationData.UserGuid,
             selectedAgencies: selectedAgencyIds
         }),
         dataType: "json"

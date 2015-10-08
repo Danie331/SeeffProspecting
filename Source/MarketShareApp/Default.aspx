@@ -52,6 +52,8 @@
         // Global variables
         // *******************************************************************************************
         //////////////////////////////////////////////////////////////////////////////////////////////
+        var initializationData = null;
+
         var suburbsInfo, allAgencies;
         var map, menu, infowindow;
         var rightClickedLocation = {};
@@ -72,19 +74,30 @@
         // ********************************************************************************************
         ////////////////////////////////////////////////////////////////////////////////////////////////
         function initialize() {
+            $(function () {
+                $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading. Please wait...</p>' });
+                $.ajax({
+                    type: "POST",
+                    url: "ApplicationLoad.ashx",
+                    dataType:"json"
+                }).done(function (data) {
+                    initializationData = data;
 
-            loadApplication();
-            adjustHtml();
+                    loadApplication();
+                    adjustHtml();
 
-            // For timeout
-            setInterval(timerIncrement, 60000);
-            $(document).mousemove(function (e) {
-                // when the mouse is moved reset the idle time, ie the time that determines user inactivity
-                idleTime = 0;
+                    // For timeout
+                    setInterval(timerIncrement, 60000);
+                    $(document).mousemove(function (e) {
+                        // when the mouse is moved reset the idle time, ie the time that determines user inactivity
+                        idleTime = 0;
 
-                // update the current position of the mouse
-                currentMousePos.x = e.clientX;
-                currentMousePos.y = e.clientY;
+                        // update the current position of the mouse
+                        currentMousePos.x = e.clientX;
+                        currentMousePos.y = e.clientY;
+                    });
+                    $.unblockUI();
+                });
             });
         }
 
@@ -161,7 +174,7 @@
         <div id="openpanelbutton" style="display: none;">
             <img id="closepanelbutton2" src="Assets/double-arrow-right.png" style="float: left;" />
         </div>
-        <div id="googleMap"></div>
+        
         <%--<div id="menu" style="width: 37%; top: 2%; right: 2%; position: absolute;"></div>--%>
         <div class="context-menu-search box menu-1"></div>
         <div class="context-menu-polyoptions box menu-1"></div>
@@ -235,6 +248,6 @@
         </div>
 
     </form>
-
+    <div id="googleMap"></div>
 </body>
 </html>

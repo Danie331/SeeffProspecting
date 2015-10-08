@@ -156,6 +156,7 @@
     <Content Include="NotAuthorised.aspx" />
     <Content Include="SuburbDataManager.ashx" />
     <Content Include="packages.config" />
+    <Content Include="ApplicationLoad.ashx" />
     <None Include="Properties\PublishProfiles\1.pubxml" />
     <None Include="Properties\PublishProfiles\Primary.pubxml" />
     <Content Include="RequestHandler.ashx" />
@@ -776,6 +777,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationLoad.ashx.cs">
+      <DependentUpon>ApplicationLoad.ashx</DependentUpon>
+    </Compile>
     <Compile Include="AppStartup.aspx.cs">
       <DependentUpon>AppStartup.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -785,6 +789,8 @@
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="DomainTypes\Agency.cs" />
+    <Compile Include="DomainTypes\AppInitializationData.cs" />
     <Compile Include="DomainTypes\SuburbInfo.cs" />
     <Compile Include="Logout.aspx.cs">
       <DependentUpon>Logout.aspx</DependentUpon>
