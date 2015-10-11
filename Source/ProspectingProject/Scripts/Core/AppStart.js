@@ -100,9 +100,9 @@ function loadSuburbsInfo(data) {
     suburbsInfo = data.AvailableSuburbs;
     if (suburbsInfo) {
         suburbsInfo = JSON.parse(suburbsInfo);
-
         for (var i = 0; i < suburbsInfo.length; i++) {
             suburbsInfo[i].IsInitialised = false;
+            suburbsInfo[i].RequiresStatsUpdate = true;
         }
     }
 }

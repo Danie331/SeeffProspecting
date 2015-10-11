@@ -89,7 +89,7 @@
                 <label style="font-family: Verdana; font-size: 25px; padding: 10px; margin-top: 10px; display: inline-block; color: #000070">Seeff Prospecting</label>
                 <img src="Assets/seeff_logo.png" style="float: left;" />
                 <img id="closepanelbutton" src="Assets/double-arrow-left.png" style="float: right; padding-right: 5px; padding-left:5px; cursor: pointer;" title="Collapse" />
-                <button id="logoffBtn" style="display: inline-block; float: right; margin-top:2px; background-color:white;cursor:pointer;border-radius:15px" title="Back to BOSS">
+                <button id="logoffBtn" type="button" style="display: inline-block; float: right; margin-top:2px; background-color:white;cursor:pointer;border-radius:15px" title="Back to BOSS">
                     <span style="vertical-align:middle; padding-right:2px; font-style:italic; font-weight:100">Log off</span>
                 </button>
                 <%--<img id='snappanelbutton' src="Assets/snap.png" style="float:right;cursor:pointer;" />--%><br />

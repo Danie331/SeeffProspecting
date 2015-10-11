@@ -41,7 +41,72 @@ function buildContentExpanderForFiltering() {
 }
 
 function buildPropertyDetailsFilterTab() {
-    return "This feature is coming soon...";
+    var container = $("<div />");
+
+    var containerFieldset = $("<fieldset style='border:1px solid gray'></fieldset>");
+    containerFieldset.append("<legend style='padding: 0.2em 0.5em; border:1px solid gray; color:gray;font-size:90%;'>Filtering Options</legend>");
+
+    var haveRadio = $("<label><input id='propertiesFilterHave' type='radio' name='propertiesFilterSelector' checked />Show properties that <i>are</i></label>");
+    var doNotHaveRadio = $("<label><input id='propertiesFilterDoNotHave' type='radio' name='propertiesFilterSelector' />Show properties that <i>are not</i></label>");
+
+    var inclusiveFilter = $("<label><input id='inclusiveFilterOption2' type='radio' name='inclusiveExclusiveOptions2' checked />Inclusive (matches <i>any</i> of the criteria specified)</label>");
+    var exclusiveFilter = $("<label><input id='exclusiveFilterOption2' type='radio' name='inclusiveExclusiveOptions2' />Exclusive (matches <i>all</i> of the criteria specified)</label>");
+
+    var fhFilter = $("<label class='fieldAlignmentExtraShortWidth'>Free-hold</label><input type='checkbox' id='fhFilterInput' checked />");
+    var ssFilter = $("<label class='fieldAlignmentShortWidth'>Sectional Title</label><input type='checkbox' id='ssFilterInput' checked />");
+
+    var newRegistrationsFilter = $("<label class='fieldAlignment'>New Registrations</label><input type='checkbox' id='newRegistrationsFilterInput' checked />");
+
+    var shortTermRentalFilter = $("<label class='fieldAlignment'>Short-term Rental</label><input type='checkbox' id='shortTermRentalFilterInput' checked />");
+    var longTermRentalFilter = $("<label class='fieldAlignment'>Long-term Rental</label><input type='checkbox' id='longTermRentalFilterInput' checked />");
+    var agriFilter = $("<label class='fieldAlignment'>Agricultural</label><input type='checkbox' id='agriFilterInput' checked />");
+    var commFilter = $("<label class='fieldAlignment'>Commercial</label><input type='checkbox' id='commFilterInput' checked />");
+    var investmentFilter = $("<label class='fieldAlignment'>Investment</label><input type='checkbox' id='investmentFilterInput' checked />");
+
+    containerFieldset
+    .append(fhFilter)
+    .append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+    .append(ssFilter)
+    .append("<p />")
+    .append(haveRadio)
+   .append("<br />")
+   .append(doNotHaveRadio)
+   .append("<p />")
+   .append(inclusiveFilter)
+   .append("<br />")
+   .append(exclusiveFilter);
+
+    var performFilteringBtn = $("<input type='button' id='performFilteringBtn2' value='Filter' style='cursor:pointer;display:inline-block;float:left' />");
+    var resetSuburbFilterBtn = $("<input type='button' id='resetSuburbFilterBtn2' value='Refresh & Reload Suburb' style='cursor:pointer;display:inline-block;float:right' />");
+
+    container
+        .append(containerFieldset)
+        .append("<p />")
+        .append(newRegistrationsFilter)
+        .append("<hr />")
+        .append(shortTermRentalFilter)
+        .append("<br />")
+        .append(longTermRentalFilter)
+        .append("<br />")
+        .append(agriFilter)
+        .append("<br />")
+        .append(commFilter)
+        .append("<br />")
+        .append(investmentFilter)
+                .append("<hr />")
+        .append("<p />")
+        .append(performFilteringBtn).append(resetSuburbFilterBtn);
+
+    performFilteringBtn.click(handleFilterPropertiesByPropertyDetails);
+    resetSuburbFilterBtn.click(function () { handleResetSuburbFiltering(true); });
+
+    return container;
+}
+
+function handleFilterPropertiesByPropertyDetails() {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Filtering...</p>' });
+    handleResetSuburbFiltering(false);
+    loadSuburbAndFilterByPropertyDetails();
 }
 
 function buildContactsFilterTab() {
@@ -74,7 +139,7 @@ function buildContactsFilterTab() {
     .append(exclusiveFilter);
 
     var performFilteringBtn = $("<input type='button' id='performFilteringBtn' value='Filter' style='cursor:pointer;display:inline-block;float:left' />");
-    var resetSuburbFilterBtn = $("<input type='button' id='resetSuburbFilterBtn' value='Reset Suburb & Refresh Data' style='cursor:pointer;display:inline-block;float:right' />");
+    var resetSuburbFilterBtn = $("<input type='button' id='resetSuburbFilterBtn' value='Refresh & Reload Suburb' style='cursor:pointer;display:inline-block;float:right' />");
 
     container
         .append(containerFieldset)
@@ -135,7 +200,7 @@ function toggleFilterMode(value) {
 }
 
 function prepareDataForFiltering(callbackFn) {
-    if (!currentSuburb)
+    if (!currentSuburb || !currentSuburb.RequiresStatsUpdate)
         return;
 
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Preparing Suburb For Filtering...</p>' });
@@ -145,7 +210,6 @@ function prepareDataForFiltering(callbackFn) {
         data: JSON.stringify({ Instruction: "update_suburb_statistics", SuburbId: currentSuburb.SuburbId })
     }).done(function() {
         $.unblockUI();
-
         if (callbackFn) {
             callbackFn();
         }
@@ -179,10 +243,10 @@ function contactsWithPrimaryLandline(property) {
 function handleFilterPropertiesByContactDetails() {
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Filtering...</p>' });
     handleResetSuburbFiltering(false);
-    loadSuburbAndFilter();
+    loadSuburbAndFilterByContactDetails();
 }
 
-function loadSuburbAndFilter() {
+function loadSuburbAndFilterByContactDetails() {
     var filterPropertiesHaving = $('#contactsFilterHave').is(':checked');
     var filterByCell = $('#cellFilterInput').is(':checked');
     var filterByEmail = $('#emailFilterInput').is(':checked');
@@ -196,11 +260,16 @@ function loadSuburbAndFilter() {
 
     if (!filterByCell && !filterByEmail && !filterByLandline && !filterByPrimaryCell && !filterByPrimaryEmail && !filterByPrimaryLandline) {
         alert('Please select at least one criterion to filter by');
+        $.unblockUI();
         return;
     }
 
     clearSuburbBySuburbId(currentSuburb.SuburbId);
-    currentSuburb.IsInitialised = false;
+    if (currentSuburb.RequiresStatsUpdate) {
+        currentSuburb.RequiresStatsUpdate = false;
+        currentSuburb.IsInitialised = false;
+    }
+
     loadSuburb(currentSuburb.SuburbId, false, function () {
         currentProperty = null;
         $.unblockUI();
@@ -323,11 +392,210 @@ function loadSuburbAndFilter() {
     });
 }
 
+function propertyIsFH(property) {
+    return property.SS_FH == "FH";
+}
+
+function propertyIsSS(property) {
+    return (property.SS_FH == "SS") || (property.SS_FH == "FS");
+}
+
+function propertyIsNewRegForUpdate(property) {
+    return property.LatestRegDateForUpdate != null;
+}
+
+function propertyIsShortTermRental(property) {
+    return property.IsShortTermRental == true;
+}
+
+function propertyIsLongTermRental(property) {
+    return property.IsLongTermRental == true;
+}
+
+function propertyIsAgri(property) {
+    return property.IsAgricultural == true;
+}
+
+function propertyIsComm(property) {
+    return property.IsCommercial == true;
+}
+
+function propertyIsInvestment(property) {
+    return property.IsInvestment == true;
+}
+
+function loadSuburbAndFilterByPropertyDetails() {
+    var filterPropertiesHaving = $('#propertiesFilterHave').is(':checked');
+    var exclusive = $("#exclusiveFilterOption2").is(':checked');
+
+    var fhFilter = $('#fhFilterInput').is(':checked');
+    var ssFilter = $('#ssFilterInput').is(':checked');
+
+    if (!fhFilter && !ssFilter) {
+        alert('Please select at least one property type to filter on');
+        $.unblockUI();
+        return;
+    }
+
+    var newRegistrationsFilter = $('#newRegistrationsFilterInput').is(':checked');
+
+    var shortTermRentalFilter = $("#shortTermRentalFilterInput").is(':checked');
+    var longTermRentalFilter = $("#longTermRentalFilterInput").is(':checked');
+    var agriFilter = $("#agriFilterInput").is(':checked');
+    var commFilter = $("#commFilterInput").is(':checked');
+    var investmentFilter = $("#investmentFilterInput").is(':checked');
+
+    clearSuburbBySuburbId(currentSuburb.SuburbId);
+    if (currentSuburb.RequiresStatsUpdate) {
+        currentSuburb.RequiresStatsUpdate = false;
+        currentSuburb.IsInitialised = false;
+    }
+
+    loadSuburb(currentSuburb.SuburbId, false, function () {
+        currentProperty = null;
+        $.unblockUI();
+    }, false, function (markers) {
+        var filteredMarkers = [];
+        $.each(markers, function (idx, marker) {
+            var addMarker = false;
+            var candidateMarkerForExclusiveFilter = true;
+            
+            if (!fhFilter) {
+                if (propertyIsFH(marker.ProspectingProperty)) {
+                    return;
+                }
+            }
+
+            if (!ssFilter) {
+                if (propertyIsSS(marker.ProspectingProperty)) {
+                    return;
+                }
+            }
+
+            if (newRegistrationsFilter) {
+                if (filterPropertiesHaving) {
+                    if (propertyIsNewRegForUpdate(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!propertyIsNewRegForUpdate(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (shortTermRentalFilter) {
+                if (filterPropertiesHaving) {
+                    if (propertyIsShortTermRental(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    }
+                    else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!propertyIsShortTermRental(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (longTermRentalFilter) {
+                if (filterPropertiesHaving) {
+                    if (propertyIsLongTermRental(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    }
+                    else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!propertyIsLongTermRental(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (agriFilter) {
+                if (filterPropertiesHaving) {
+                    if (propertyIsAgri(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    }
+                    else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!propertyIsAgri(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (commFilter) {
+                if (filterPropertiesHaving) {
+                    if (propertyIsComm(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    }
+                    else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!propertyIsComm(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (investmentFilter) {
+                if (filterPropertiesHaving) {
+                    if (propertyIsInvestment(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    }
+                    else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!propertyIsInvestment(marker.ProspectingProperty)) {
+                        addMarker = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (exclusive) {
+                if (addMarker && candidateMarkerForExclusiveFilter == true) {
+                    marker.ProspectingProperty.Whence = 'from_filter';
+                    filteredMarkers.push(marker);
+                }
+            }
+            else { // not an exclusive filter
+                if (addMarker) {
+                    marker.ProspectingProperty.Whence = 'from_filter';
+                    filteredMarkers.push(marker);
+                }
+            }
+        });
+        return filteredMarkers;
+    });
+}
+
 function handleResetSuburbFiltering(refreshData) {
     toggleFilterMode(false);
     toggleFilterMode(true);
 
     if (refreshData) {
+        currentSuburb.RequiresStatsUpdate = true;
         prepareDataForFiltering(function () {
             clearSuburbBySuburbId(currentSuburb.SuburbId);
             currentSuburb.IsInitialised = false;

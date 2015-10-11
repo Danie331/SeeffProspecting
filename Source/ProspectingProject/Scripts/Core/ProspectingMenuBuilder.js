@@ -499,28 +499,28 @@ function buildSearchMenu() {
     var searchDiv = $("<div id='lightstoneSearchDiv' class='contentdiv' style='padding-right:10px;font-size:12px' />");
 
     searchDiv.append("<label class='fieldAlignmentShortWidth' for='deedTownInput'>Deed Town</label>\
-                      <input type='text' name='deedTownInput' id='deedTownInput' style='height:12px;font-size:12px' size='60' ><p style='margin:3px;' />\
+                      <input type='text' name='deedTownInput' id='deedTownInput' style='height:12px;font-size:12px' size='60' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
                       <label class='fieldAlignmentShortWidth' for='suburbInput'>Suburb</label>\
-                      <input type='text' name='suburbInput' id='suburbInput' style='height:12px;font-size:12px' size='60'><p style='margin:3px;' />\
+                      <input type='text' name='suburbInput' id='suburbInput' style='height:12px;font-size:12px' size='60' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
                       <label class='fieldAlignmentShortWidth' for='streetNameInput'>Street Name</label>\
-                      <input type='text' name='streetNameInput' id='streetNameInput' style='height:12px;font-size:12px' size='60'><p style='margin:3px;' />\
+                      <input type='text' name='streetNameInput' id='streetNameInput' style='height:12px;font-size:12px' size='60' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
                       <label class='fieldAlignmentShortWidth' for='streetNoInput'>Street Number</label>\
-                      <input type='text' name='streetNoInput' id='streetNoInput' style='height:12px;font-size:12px' size='60'><p style='margin:3px;' />\
+                      <input type='text' name='streetNoInput' id='streetNoInput' style='height:12px;font-size:12px' size='60' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
                       <label class='fieldAlignmentShortWidth' for='complexNameInput'>Complex Name</label>\
-                      <input type='text' name='complexNameInput' id='complexNameInput' style='height:12px;font-size:12px' size='60'><p style='margin:3px;' />\
+                      <input type='text' name='complexNameInput' id='complexNameInput' style='height:12px;font-size:12px' size='60' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
                       <label class='fieldAlignmentShortWidth' for='estateNameInput'>Estate Name</label>\
-                      <input type='text' name='estateNameInput' id='estateNameInput' style='height:12px;font-size:12px' size='60'><p style='margin:3px;' />\
+                      <input type='text' name='estateNameInput' id='estateNameInput' style='height:12px;font-size:12px' size='60' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
                       <label class='fieldAlignmentShortWidth' for='erfNoInput'>ERF Number</label>\
-                      <input type='text' name='erfNoInput' id='erfNoInput' size='30' style='height:12px;font-size:12px'><p style='margin:3px;' />\
+                      <input type='text' name='erfNoInput' id='erfNoInput' size='30' style='height:12px;font-size:12px' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
                       <label class='fieldAlignmentShortWidth' for='portionNoInput'>Portion Number</label>\
-                      <input type='text' name='portionNoInput' id='portionNoInputBox' size='30' style='height:12px;font-size:12px' disabled><p style='margin:3px;' />\
+                      <input type='text' name='portionNoInput' id='portionNoInputBox' size='30' style='height:12px;font-size:12px' disabled onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
                       <label class='fieldAlignmentShortWidth' for='propertyIdInput'>Property ID</label>\
-                      <input type='text' name='propertyIdInput' id='propertyIdInput' size='30' style='height:12px;font-size:12px'><p style='margin:3px;' />\
+                      <input type='text' name='propertyIdInput' id='propertyIdInput' size='30' style='height:12px;font-size:12px' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
                       <hr />\
                       <label class='fieldAlignmentShortWidth' for='ownerNameInput'>Owner Name</label>\
-                      <input type='text' name='ownerNameInput' id='ownerNameInput' size='30' style='height:12px;font-size:12px'><p style='margin:3px;' />\
+                      <input type='text' name='ownerNameInput' id='ownerNameInput' size='30' style='height:12px;font-size:12px' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
                       <label class='fieldAlignmentShortWidth' for='ownerIDnoInput'>Owner ID No.</label>\
-                      <input type='text' name='ownerIDnoInput' id='ownerIDnoInput' size='30' style='height:12px;font-size:12px'><p style='margin:3px;' />");
+                      <input type='text' name='ownerIDnoInput' id='ownerIDnoInput' size='30' style='height:12px;font-size:12px' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />");
 
     // Portion number only valid when erf no present
     $('#contentarea').on('keyup', '#erfNoInput', function () {        
@@ -546,6 +546,15 @@ function buildSearchMenu() {
     });
 
     return searchDiv;
+}
+
+function searchLightstoneOnEnter(event) {
+    event = event || window.event;
+    if (event.which == 13) {
+        performLightstoneSearch();
+        return false;
+    }
+    return true;
 }
 
 function clearLightstoneSearchResults() {
