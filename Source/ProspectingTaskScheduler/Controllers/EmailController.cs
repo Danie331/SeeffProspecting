@@ -58,7 +58,7 @@ namespace ProspectingTaskScheduler.Controllers
 
                 decoded = decoded.Replace("mandrill_events=", "");
                 MandrillEvent[] events = JsonConvert.DeserializeObject<MandrillEvent[]>(decoded);
-                MandrillEvent target = events[0];
+                MandrillEvent target = events.OrderByDescending(ev => ev.TimeStamp).First();
 
                 if (target.MessageResult != null)
                 {
@@ -71,6 +71,7 @@ namespace ProspectingTaskScheduler.Controllers
                             switch (target.Event)
                             {
                                 case "send":
+                                case "deferral": // check DB for any 'sent's in the error_msg field before commit.
                                     if (target.MessageResult.State != "sent")
                                     {
                                         failureReason = getFailureReason(target.MessageResult);
@@ -79,12 +80,18 @@ namespace ProspectingTaskScheduler.Controllers
                                         targetRecord.updated_datetime = DateTime.Now;
                                         prospecting.SubmitChanges();
                                     }
+                                    else
+                                    {
+                                        targetRecord.status = emailSuccessStatus;
+                                        targetRecord.error_msg = null;
+                                        targetRecord.updated_datetime = DateTime.Now;
+                                        prospecting.SubmitChanges();
+                                    }
                                     break;
-                                case "deferral":
                                 case "hard_bounce":
                                 case "soft_bounce":
-                                case "spam":
-                                case "unsub":
+                                //case "spam":
+                                //case "unsub":
                                 case "reject":
                                     failureReason = getFailureReason(target.MessageResult);
                                     targetRecord.status = emailFailedStatus;

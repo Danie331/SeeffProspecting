@@ -144,7 +144,7 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
                         result.Success = true;
                         try
                         {
-                            UpdateBatchWithResponse(prospecting, batch, responseXml);
+                            UpdateBatchWithResponse(prospecting, batch, responseXml); 
                         }
                         catch  (Exception e)
                         {

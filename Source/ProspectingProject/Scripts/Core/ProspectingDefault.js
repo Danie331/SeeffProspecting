@@ -2292,21 +2292,23 @@ function showSearchedPropertyOnMap(result) { // test for ss (new and existing)
             dataType: "json",
         }).done(function (data) {
             $.unblockUI();
-            if (!handleResponseIfServerError(data)) {
-                return;
-            }
            
-            if (handleLocatePropertyFromSearch(data, result)) {
-                result.SeeffAreaId = data;
+            if (data != null && handleLocatePropertyFromSearch(data, result)) {
+                result.SeeffAreaId = data.SuburbId;
             }
             else {
                 // We did not find a suburb belonging to this user.
                 var message;
-                if (data == -1) {
+                if (data == null) {
                     message = 'Unable to find a Seeff area that contains this property';
                 }
                 else {
-                    message = 'This property falls outside your available suburbs. Seeff area ID = ' + data;
+                    var areaName = data.SuburbName ? "'" + data.SuburbName + "'" : "Seeff Area ID";
+                    if (data.SuburbId == -1) {
+                        message = "This property falls outside your available areas, furthermore Prospecting cannot find the area to which this property belongs. Please contact support if you believe this property falls within a valid Seeff suburb.";
+                    } else {
+                        message = "This property falls outside your available areas. Please ask your prospecting administrator to add " + areaName + " (" + data.SuburbId + ") to your list of areas under 'Prospecting Permissions' on BOSS.";
+                    }
                 }
                 alert(message);
             }
@@ -2317,9 +2319,9 @@ function showSearchedPropertyOnMap(result) { // test for ss (new and existing)
     }
 }
 
-function handleLocatePropertyFromSearch(seeffAreaId, searchResult) {
+function handleLocatePropertyFromSearch(seeffArea, searchResult) {
     var containingSuburb = $.grep(suburbsInfo, function (sub) {
-        return sub.SuburbId == seeffAreaId;
+        return sub.SuburbId == seeffArea.SuburbId;
     })[0];
 
     if (!containingSuburb) return null;

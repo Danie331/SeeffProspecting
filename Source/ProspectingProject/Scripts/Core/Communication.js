@@ -860,7 +860,7 @@ function handleEnableComms() {
     }
 
     toggleMultiSelectMode(true);
-    toggleFilterMode(false);
+    toggleFilterMode(false); // Change here
 }
 
 function updateCommunicationsContacts() {

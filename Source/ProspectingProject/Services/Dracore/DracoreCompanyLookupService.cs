@@ -101,13 +101,17 @@ namespace ProspectingProject
                 _results.ErrorMsg = "Service provider could not find a company with matching criteria.";
             }
         }
-
+        /// <summary>
+        /// //
+        /// </summary>
+        /// <param name="targetCompany"></param>
+        /// <returns></returns>
         private List<ProspectingContactPerson> CreateCompanyContactPersons(DracoreETLConsumerService.CompanyInfo targetCompany)
         {
             List<ProspectingContactPerson> prospectingContactPersons = new List<ProspectingContactPerson>();
             try
             {
-                if (targetCompany.DirectorsList != null)
+                if (targetCompany.DirectorsList != null && targetCompany.DirectorsList.Count() > 0)
                 {
                     int? relationshipToCompany = ProspectingLookupData.PersonCompanyRelationshipTypes.First(kvp => kvp.Value == "Company Director").Key;
                     foreach (var director in targetCompany.DirectorsList)
@@ -141,6 +145,12 @@ namespace ProspectingProject
                             }
                         }
                     }
+                }
+                else
+                {
+                    // Ensure enquiry not billed, that it is not successful, and front-end reflects accordingly.
+                    _results.EnquirySuccessful = false;
+                    _results.ErrorMsg = "No Directorship information was found for this company - the transaction will not be billed.";
                 }
             }
             catch(Exception ex)

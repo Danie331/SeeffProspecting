@@ -79,7 +79,7 @@ function createProspectingMenu(userData) {
 
     menuItem = createMenuItem("Property Information", "propertyinformation", buildPropertyInformationMenu(), function () {
         toggleMultiSelectMode(false);
-        toggleFilterMode(false);
+        toggleFilterMode(false); // change here.
         togglePropertyInformationMenu();
     }, null);
     appendMenuItemContent(menuItem.MenuItemContent);

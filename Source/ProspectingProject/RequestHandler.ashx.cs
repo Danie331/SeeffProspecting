@@ -111,8 +111,8 @@ namespace ProspectingProject
                         UnlockCurrentProspectingRecord();
                         break;
                     case "find_area_id":
-                        int? seeffAreaId = FindAreaId(json);
-                        context.Response.Write(seeffAreaId);
+                        var seeffArea = FindAreaId(json);
+                        context.Response.Write(seeffArea);
                         break;
                     case "load_properties":
                         var properties = LoadProperties(json);
@@ -346,10 +346,11 @@ namespace ProspectingProject
             return ProspectingCore.SerializeToJsonWithDefaults(status);
         }
 
-        private int? FindAreaId(string json)
+        private string FindAreaId(string json)
         {
             GeoLocation location = ProspectingCore.Deserialise<GeoLocation>(json);
-            return ProspectingCore.FindAreaId(location);
+            var result = ProspectingCore.FindAreaId(location);
+            return ProspectingCore.SerializeToJsonWithDefaults(result);
         }
 
         private void UnlockCurrentProspectingRecord()

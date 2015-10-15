@@ -55,13 +55,13 @@ function buildPropertyDetailsFilterTab() {
     var fhFilter = $("<label class='fieldAlignmentExtraShortWidth'>Free-hold</label><input type='checkbox' id='fhFilterInput' checked />");
     var ssFilter = $("<label class='fieldAlignmentShortWidth'>Sectional Title</label><input type='checkbox' id='ssFilterInput' checked />");
 
-    var newRegistrationsFilter = $("<label class='fieldAlignment'>New Registrations</label><input type='checkbox' id='newRegistrationsFilterInput' checked />");
+    var newRegistrationsFilter = $("<label class='fieldAlignment'>New Registrations</label><input type='checkbox' id='newRegistrationsFilterInput'  />");
 
-    var shortTermRentalFilter = $("<label class='fieldAlignment'>Short-term Rental</label><input type='checkbox' id='shortTermRentalFilterInput' checked />");
-    var longTermRentalFilter = $("<label class='fieldAlignment'>Long-term Rental</label><input type='checkbox' id='longTermRentalFilterInput' checked />");
-    var agriFilter = $("<label class='fieldAlignment'>Agricultural</label><input type='checkbox' id='agriFilterInput' checked />");
-    var commFilter = $("<label class='fieldAlignment'>Commercial</label><input type='checkbox' id='commFilterInput' checked />");
-    var investmentFilter = $("<label class='fieldAlignment'>Investment</label><input type='checkbox' id='investmentFilterInput' checked />");
+    var shortTermRentalFilter = $("<label class='fieldAlignment'>Short-term Rental</label><input type='checkbox' id='shortTermRentalFilterInput'  />");
+    var longTermRentalFilter = $("<label class='fieldAlignment'>Long-term Rental</label><input type='checkbox' id='longTermRentalFilterInput'  />");
+    var agriFilter = $("<label class='fieldAlignment'>Agricultural</label><input type='checkbox' id='agriFilterInput'  />");
+    var commFilter = $("<label class='fieldAlignment'>Commercial</label><input type='checkbox' id='commFilterInput'  />");
+    var investmentFilter = $("<label class='fieldAlignment'>Investment</label><input type='checkbox' id='investmentFilterInput'  />");
 
     containerFieldset
     .append(fhFilter)
@@ -451,15 +451,16 @@ function loadSuburbAndFilterByPropertyDetails() {
         currentSuburb.IsInitialised = false;
     }
 
+    var anyOptionsSelected = newRegistrationsFilter || shortTermRentalFilter || longTermRentalFilter || agriFilter || commFilter || investmentFilter;
+
     loadSuburb(currentSuburb.SuburbId, false, function () {
         currentProperty = null;
         $.unblockUI();
     }, false, function (markers) {
         var filteredMarkers = [];
         $.each(markers, function (idx, marker) {
-            var addMarker = false;
             var candidateMarkerForExclusiveFilter = true;
-            
+            var candidateMarkerForInclusiveFilter = !anyOptionsSelected;
             if (!fhFilter) {
                 if (propertyIsFH(marker.ProspectingProperty)) {
                     return;
@@ -475,13 +476,13 @@ function loadSuburbAndFilterByPropertyDetails() {
             if (newRegistrationsFilter) {
                 if (filterPropertiesHaving) {
                     if (propertyIsNewRegForUpdate(marker.ProspectingProperty)) {
-                        addMarker = true;
+                        candidateMarkerForInclusiveFilter = true;
                     } else {
                         candidateMarkerForExclusiveFilter = false;
                     }
                 } else {
                     if (!propertyIsNewRegForUpdate(marker.ProspectingProperty)) {
-                        addMarker = true;
+                        candidateMarkerForInclusiveFilter = true;
                     } else {
                         candidateMarkerForExclusiveFilter = false;
                     }
@@ -491,14 +492,14 @@ function loadSuburbAndFilterByPropertyDetails() {
             if (shortTermRentalFilter) {
                 if (filterPropertiesHaving) {
                     if (propertyIsShortTermRental(marker.ProspectingProperty)) {
-                        addMarker = true;
+                        candidateMarkerForInclusiveFilter = true;
                     }
                     else {
                         candidateMarkerForExclusiveFilter = false;
                     }
                 } else {
                     if (!propertyIsShortTermRental(marker.ProspectingProperty)) {
-                        addMarker = true;
+                        candidateMarkerForInclusiveFilter = true;
                     } else {
                         candidateMarkerForExclusiveFilter = false;
                     }
@@ -508,14 +509,14 @@ function loadSuburbAndFilterByPropertyDetails() {
             if (longTermRentalFilter) {
                 if (filterPropertiesHaving) {
                     if (propertyIsLongTermRental(marker.ProspectingProperty)) {
-                        addMarker = true;
+                        candidateMarkerForInclusiveFilter = true;
                     }
                     else {
                         candidateMarkerForExclusiveFilter = false;
                     }
                 } else {
                     if (!propertyIsLongTermRental(marker.ProspectingProperty)) {
-                        addMarker = true;
+                        candidateMarkerForInclusiveFilter = true;
                     } else {
                         candidateMarkerForExclusiveFilter = false;
                     }
@@ -525,14 +526,14 @@ function loadSuburbAndFilterByPropertyDetails() {
             if (agriFilter) {
                 if (filterPropertiesHaving) {
                     if (propertyIsAgri(marker.ProspectingProperty)) {
-                        addMarker = true;
+                        candidateMarkerForInclusiveFilter = true;
                     }
                     else {
                         candidateMarkerForExclusiveFilter = false;
                     }
                 } else {
                     if (!propertyIsAgri(marker.ProspectingProperty)) {
-                        addMarker = true;
+                        candidateMarkerForInclusiveFilter = true;
                     } else {
                         candidateMarkerForExclusiveFilter = false;
                     }
@@ -542,14 +543,14 @@ function loadSuburbAndFilterByPropertyDetails() {
             if (commFilter) {
                 if (filterPropertiesHaving) {
                     if (propertyIsComm(marker.ProspectingProperty)) {
-                        addMarker = true;
+                        candidateMarkerForInclusiveFilter = true;
                     }
                     else {
                         candidateMarkerForExclusiveFilter = false;
                     }
                 } else {
                     if (!propertyIsComm(marker.ProspectingProperty)) {
-                        addMarker = true;
+                        candidateMarkerForInclusiveFilter = true;
                     } else {
                         candidateMarkerForExclusiveFilter = false;
                     }
@@ -559,14 +560,14 @@ function loadSuburbAndFilterByPropertyDetails() {
             if (investmentFilter) {
                 if (filterPropertiesHaving) {
                     if (propertyIsInvestment(marker.ProspectingProperty)) {
-                        addMarker = true;
+                        candidateMarkerForInclusiveFilter = true;
                     }
                     else {
                         candidateMarkerForExclusiveFilter = false;
                     }
                 } else {
                     if (!propertyIsInvestment(marker.ProspectingProperty)) {
-                        addMarker = true;
+                        candidateMarkerForInclusiveFilter = true;
                     } else {
                         candidateMarkerForExclusiveFilter = false;
                     }
@@ -574,13 +575,13 @@ function loadSuburbAndFilterByPropertyDetails() {
             }
 
             if (exclusive) {
-                if (addMarker && candidateMarkerForExclusiveFilter == true) {
+                if (candidateMarkerForExclusiveFilter == true) {
                     marker.ProspectingProperty.Whence = 'from_filter';
                     filteredMarkers.push(marker);
                 }
             }
             else { // not an exclusive filter
-                if (addMarker) {
+                if (candidateMarkerForInclusiveFilter) {
                     marker.ProspectingProperty.Whence = 'from_filter';
                     filteredMarkers.push(marker);
                 }

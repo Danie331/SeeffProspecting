@@ -2468,7 +2468,7 @@ namespace ProspectingProject
         }
 
         // NB. might need to remove occurrences of find_area_id that use the prospecting_area_layer tbl.
-        public static int? FindAreaId(GeoLocation location)
+        public static UserSuburb FindAreaId(GeoLocation location)
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri("http://spatial.seeff.com//"); // This is the web application's root server address
@@ -2478,7 +2478,22 @@ namespace ProspectingProject
             var resp = client.PostAsync("api/SeeffSpatialLookup/GetAreaId", content).Result;
             int? areaId = resp.Content.ReadAsAsync<int?>().Result;
 
-            return areaId;
+            UserSuburb suburb = null;
+            if (areaId.HasValue)
+            {
+                suburb = new UserSuburb
+                {
+                    SuburbId = areaId.Value
+                };
+
+                using (var prospecting = new ProspectingDataContext())
+                {
+                    var areaTarget = prospecting.prospecting_areas.FirstOrDefault(a => a.prospecting_area_id == areaId.Value);
+                    suburb.SuburbName = areaTarget != null ? areaTarget.area_name : "";
+                }
+            }
+
+            return suburb;
         }
 
         public static List<ProspectingProperty> LoadProperties(int[] inputProperties)
@@ -3263,7 +3278,7 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
 
                 if (status == ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "EMAIL_UNSENT").Key)
                 {
-                    return "Failed (" + (!string.IsNullOrEmpty(errMsg) ? errMsg : "Reason unknown") + ")";
+                    return "Unsent (" + (!string.IsNullOrEmpty(errMsg) ? errMsg : "Reason unknown") + ")";
                 }
 
                 return "";
