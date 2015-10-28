@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Seeff Area Mapping Toolkit</title>
+
+    <style>
+        .mainpanel {
+            /*position: absolute;*/
+            height: 100%;
+            width: 45%;
+            background: white;
+            float: left;
+            z-index: 999;
+            border-radius: 15px;
+            border-right: 1px solid grey;
+            overflow: hidden;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 100%;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            float: right;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- Jquery -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+    <script src="http://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDWHlk3fmGm0oDsqVaoBM3_YocW5xPKtwA&libraries=drawing,geometry,places&sensor=true"></script>
+
+    <!-- Core functionality -->
+    <script src="../Javascript/Initialisation/Application.js"></script>
+    <script src="../Javascript/Initialisation/Panel.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script>
+
+        google.maps.event.addDomListener(window, 'load', application.init);
+
+    </script>
+
+    <div id="map"></div>
+    <div id="panelContainer" class="mainpanel ui-widget-content" />
+</body>
+</html>
+

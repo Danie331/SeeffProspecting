@@ -132,7 +132,7 @@ function generateStatisticsMenu(canShow) {
     var totalListingsToCalculate = getTotalVisibleListings(true);
     var statistics = buildListingsByAgencyStatistics();
     var grandTotal = 0;
-    $.each(statistics, function (index, stat) {
+    $.each(statistics, function (index, stat) { 
 
         var statPerc = 0;
         if (totalListingsToCalculate > 0) {

@@ -1,0 +1,98 @@
+﻿
+
+   
+<div id="panelContentContainer"> 
+    <div class="panelheader" > 
+        <img src="../Graphics/seeff_logo.png" class="seefflogo paneldisplayexpanded" />
+        <img src="../Graphics/Seeff_header.png" class="seefflogo paneldisplayexpanded seeffheader" />
+        <img src="../Graphics/collapse_panel.png" onclick="application.panel.controllers.collapsePanel()" class="panelcollapsebutton paneldisplayexpanded" />
+        <img src="../Graphics/expand_panel.png" onclick="application.panel.controllers.expandPanel()" class="panelexpandbutton paneldisplaycollapsed" />
+    </div>
+    <div class="panelcontent paneldisplayexpanded">
+        <div id="contentMenu" class="contentmenu">
+                    <div class="navitem" style="padding-top:8px" onclick="application.panel.navMenu.controllers.Item1Click()">
+                        Howdy partner
+                    </div>
+            <div class="navitem" onclick="application.panel.navMenu.controllers.Item2Click()">
+                Howdy partner2
+            </div>
+            <div class="navitem" onclick="application.panel.navMenu.controllers.Item3Click()">
+                Howdy partner3333333333333
+            </div>
+        </div>
+        <div id="contentContainer" class="contentcontainer">
+
+        </div>
+    </div>
+</div>
+
+
+<style>
+
+    .seeffheader{
+        vertical-align:middle;
+        position:  static;
+    }
+
+    .navitem {
+      width: 100%;
+      cursor:pointer;
+      padding:8px;
+    }
+
+        .navitem:hover {
+            background-color: yellow;
+        }
+
+        .navitem-clicked {
+            background-color: yellow;
+            border: 1px solid lightgray;
+        }
+
+    .panelheader {
+        height: 80px;
+        border-bottom: 1px solid gray;
+    }
+
+    .seefflogo {
+        float: left;
+    }
+
+    .panelcontent {
+        height: 100%;
+    }
+
+    .panelcollapsebutton {
+        float: right;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    .panelexpandbutton {
+        float: right;
+        margin: 5px;
+        cursor: pointer;
+        display: none;
+    }
+
+    .paneldisplayexpanded {
+        display: block;
+    }
+
+    .paneldisplaycollapsed {
+        display:none;
+    }
+
+    .contentmenu {
+        float: left;
+        width: 200px;
+        height: 100%;
+        border-right: 1px solid lightgray;
+    }
+
+    .contentcontainer {
+        float:right;
+        height: 100%;
+    }
+
+</style>

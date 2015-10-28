@@ -69,10 +69,23 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="UserInterface\Graphics\collapse_panel.png" />
+    <Content Include="UserInterface\Graphics\expand_panel.png" />
+    <Content Include="UserInterface\Graphics\Seeff_header.png" />
+    <Content Include="UserInterface\Graphics\seeff_logo.png" />
+    <Content Include="UserInterface\HTML\Default.html" />
+    <Content Include="UserInterface\HTML\Panel.html" />
+    <Content Include="UserInterface\Javascript\Initialisation\Application.js" />
+    <Content Include="UserInterface\Javascript\Initialisation\Panel.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ServiceLayer\" />
+    <Folder Include="UserInterface\Javascript\Core\" />
+    <Folder Include="UserInterface\Javascript\Widgets\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

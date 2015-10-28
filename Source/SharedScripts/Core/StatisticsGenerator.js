@@ -117,9 +117,27 @@ function getRelevantListingsForPropFilter(listings) {
         selectedMarketShareTypes.push('P');
     }
 
+    var selectedYears = [];
+    if (menu.find("#2012_filter").is(':checked')) {
+        selectedYears.push('2012');
+    }
+    if (menu.find("#2013_filter").is(':checked')) {
+        selectedYears.push('2013');
+    }
+    if (menu.find("#2014_filter").is(':checked')) {
+        selectedYears.push('2014');
+    }
+    if (menu.find("#2015_filter").is(':checked')) {
+        selectedYears.push('2015');
+    }
+
     return $.grep(listings, function (listing, idx) {
         var isRelevant = $.inArray(listing.MarketShareType, selectedMarketShareTypes) > -1 || listing.IsCurrentSeeffListing == true
                                                 || !listing.MarketShareType || listing.MarketShareType == null;
+        if (listing.RegDate) {
+            var yearPortion = listing.RegDate.substring(0, 4);
+            isRelevant = isRelevant && $.inArray(yearPortion, selectedYears) > -1;
+        }
         return isRelevant;
     });
 }
