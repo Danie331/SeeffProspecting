@@ -12,7 +12,7 @@ namespace ProspectingTaskScheduler.Core.Housekeeping
         public static void SendNotificationEmail()
         {
             string body = "ProspectingTaskScheduler service alive and well as at " + DateTime.Now + " (local time on server)";
-            SendEmail("danie@learnit.co.za", "ProspectingTaskScheduler", "reports@seeff.com", "adam.roberts@learnit.co.za", "Notification from ProspectingTaskScheduler service", body);
+            SendEmail("danie.vdm@seeff.com", "ProspectingTaskScheduler", "reports@seeff.com", "adam.roberts@learnit.co.za", "Notification from ProspectingTaskScheduler service", body);
         }
 
         private static void SendEmail(string toAddress, string displayName, string fromAddress, string ccAddress, string subject, string body)

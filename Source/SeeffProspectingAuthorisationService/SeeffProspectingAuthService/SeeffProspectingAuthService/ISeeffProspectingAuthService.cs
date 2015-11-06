@@ -22,5 +22,8 @@ namespace SeeffProspectingAuthService
 
         [OperationContract]
         string RetrieveUserSignature(Guid userGuid);
+
+        [OperationContract]
+        SpatialUserAuthPacket AuthenticateAndLoadSpatialUser(Guid userGuid, Guid sessionKey);
     }
 }

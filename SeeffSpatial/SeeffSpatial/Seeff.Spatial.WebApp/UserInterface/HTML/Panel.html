@@ -10,18 +10,23 @@
     </div>
     <div class="panelcontent paneldisplayexpanded">
         <div id="contentMenu" class="contentmenu">
-                    <div class="navitem" style="padding-top:8px" onclick="application.panel.navMenu.controllers.Item1Click()">
-                        Howdy partner
-                    </div>
-            <div class="navitem" onclick="application.panel.navMenu.controllers.Item2Click()">
-                Howdy partner2
+            <div class="navitem navitem-clicked" style="padding-top:8px" onclick="application.panel.navMenu.controllers.suburbSelectionClick()">
+                Suburb Selection
             </div>
-            <div class="navitem" onclick="application.panel.navMenu.controllers.Item3Click()">
-                Howdy partner3333333333333
+            <div class="navitem" style="padding-top:8px" onclick="application.panel.navMenu.controllers.enterPolyEditModeClick()">
+                Edit Area
+            </div>
+            <div class="navitem" onclick="application.panel.navMenu.controllers.createAreaClick()">
+                Create New Area
+            </div>
+            <div class="navitem" onclick="application.panel.navMenu.controllers.areaInformationClick()">
+                Area Information
             </div>
         </div>
         <div id="contentContainer" class="contentcontainer">
+            <div id="contentContainerContent" class="contentcontainercontent">
 
+            </div>
         </div>
     </div>
 </div>
@@ -91,8 +96,13 @@
     }
 
     .contentcontainer {
-        float:right;
         height: 100%;
+    }
+
+    .contentcontainercontent {
+        height: 88%;
+        padding: 10px;
+        overflow-y: scroll;
     }
 
 </style>

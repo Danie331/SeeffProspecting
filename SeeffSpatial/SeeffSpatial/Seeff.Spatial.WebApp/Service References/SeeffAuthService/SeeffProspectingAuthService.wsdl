@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SeeffProspectingAuthService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:63146/SeeffProspectingAuthService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:63146/SeeffProspectingAuthService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:63146/SeeffProspectingAuthService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/SeeffProspectingAuthService" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ISeeffProspectingAuthService_AuthenticateAndGetUserInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateAndGetUserInfo" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_AuthenticateAndGetUserInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateAndGetUserInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_DebitUserBalance_InputMessage">
+    <wsdl:part name="parameters" element="tns:DebitUserBalance" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_DebitUserBalance_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DebitUserBalanceResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_CreditUserBalance_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreditUserBalance" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_CreditUserBalance_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreditUserBalanceResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_RetrieveUserSignature_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetrieveUserSignature" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_RetrieveUserSignature_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetrieveUserSignatureResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_AuthenticateAndLoadSpatialUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateAndLoadSpatialUser" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_AuthenticateAndLoadSpatialUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateAndLoadSpatialUserResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ISeeffProspectingAuthService">
+    <wsdl:operation name="AuthenticateAndGetUserInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfo" message="tns:ISeeffProspectingAuthService_AuthenticateAndGetUserInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfoResponse" message="tns:ISeeffProspectingAuthService_AuthenticateAndGetUserInfo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DebitUserBalance">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/DebitUserBalance" message="tns:ISeeffProspectingAuthService_DebitUserBalance_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/DebitUserBalanceResponse" message="tns:ISeeffProspectingAuthService_DebitUserBalance_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditUserBalance">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/CreditUserBalance" message="tns:ISeeffProspectingAuthService_CreditUserBalance_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/CreditUserBalanceResponse" message="tns:ISeeffProspectingAuthService_CreditUserBalance_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveUserSignature">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignature" message="tns:ISeeffProspectingAuthService_RetrieveUserSignature_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignatureResponse" message="tns:ISeeffProspectingAuthService_RetrieveUserSignature_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticateAndLoadSpatialUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndLoadSpatialUser" message="tns:ISeeffProspectingAuthService_AuthenticateAndLoadSpatialUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndLoadSpatialUserResponse" message="tns:ISeeffProspectingAuthService_AuthenticateAndLoadSpatialUser_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ISeeffProspectingAuthService" type="tns:ISeeffProspectingAuthService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AuthenticateAndGetUserInfo">
+      <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DebitUserBalance">
+      <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/DebitUserBalance" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditUserBalance">
+      <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/CreditUserBalance" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveUserSignature">
+      <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignature" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticateAndLoadSpatialUser">
+      <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndLoadSpatialUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SeeffProspectingAuthService">
+    <wsdl:port name="BasicHttpBinding_ISeeffProspectingAuthService" binding="tns:BasicHttpBinding_ISeeffProspectingAuthService">
+      <soap:address location="http://localhost:63146/SeeffProspectingAuthService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

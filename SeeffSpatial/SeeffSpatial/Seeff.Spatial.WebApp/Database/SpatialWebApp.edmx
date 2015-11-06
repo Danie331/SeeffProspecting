@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="spatial_web_appModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="exception_log">
+          <Key>
+            <PropertyRef Name="exception_log_id" />
+          </Key>
+          <Property Name="exception_log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="context" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="user" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="created" Type="datetime" Nullable="false" />
+          <Property Name="raw_exception" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="state_object_json" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityContainer Name="spatial_web_appModelStoreContainer">
+          <EntitySet Name="exception_log" EntityType="Self.exception_log" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="spatial_web_appModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="exception_log">
+          <Key>
+            <PropertyRef Name="exception_log_id" />
+          </Key>
+          <Property Name="exception_log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="context" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="user" Type="Guid" Nullable="false" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="raw_exception" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="state_object_json" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="spatial_web_appEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="exception_log" EntityType="Self.exception_log" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="spatial_web_appModelStoreContainer" CdmEntityContainer="spatial_web_appEntities">
+          <EntitySetMapping Name="exception_log">
+            <EntityTypeMapping TypeName="spatial_web_appModel.exception_log">
+              <MappingFragment StoreEntitySet="exception_log">
+                <ScalarProperty Name="exception_log_id" ColumnName="exception_log_id" />
+                <ScalarProperty Name="context" ColumnName="context" />
+                <ScalarProperty Name="user" ColumnName="user" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="raw_exception" ColumnName="raw_exception" />
+                <ScalarProperty Name="state_object_json" ColumnName="state_object_json" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="ISeeffProspectingAuthService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpatialUserAuthPacket.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

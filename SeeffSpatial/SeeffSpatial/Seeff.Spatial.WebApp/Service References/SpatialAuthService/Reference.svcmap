@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="0e8935d0-4776-431e-bbb8-555db81888d5" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:63146/SeeffProspectingAuthService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="SeeffProspectingAuthService.disco" MetadataType="Disco" ID="e86c9e72-76b9-4c71-8fde-08b9281b8542" SourceId="1" SourceUrl="http://localhost:63146/SeeffProspectingAuthService.svc?disco" />
+    <MetadataFile FileName="SeeffProspectingAuthService.xsd" MetadataType="Schema" ID="31f8b683-abf4-44e4-b389-f8c5ceaca9c4" SourceId="1" SourceUrl="http://localhost:63146/SeeffProspectingAuthService.svc?xsd=xsd2" />
+    <MetadataFile FileName="SeeffProspectingAuthService1.xsd" MetadataType="Schema" ID="266e2690-2b7a-429b-8c62-41da7649e33a" SourceId="1" SourceUrl="http://localhost:63146/SeeffProspectingAuthService.svc?xsd=xsd0" />
+    <MetadataFile FileName="SeeffProspectingAuthService.wsdl" MetadataType="Wsdl" ID="2418839d-8ce8-4f5e-ae47-18b86b5dea00" SourceId="1" SourceUrl="http://localhost:63146/SeeffProspectingAuthService.svc?wsdl" />
+    <MetadataFile FileName="SeeffProspectingAuthService2.xsd" MetadataType="Schema" ID="feb56fa9-2351-4f7e-b1c5-a0c8f301e81f" SourceId="1" SourceUrl="http://localhost:63146/SeeffProspectingAuthService.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

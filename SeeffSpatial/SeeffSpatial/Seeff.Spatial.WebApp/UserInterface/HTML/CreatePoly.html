@@ -1,0 +1,28 @@
+﻿
+<div>
+    <fieldset>
+        <legend>Step 1: Create The Area Shape</legend>
+            <input type="button" id="StartPolygonBtn" onclick="application.panel.navItemCreateNewArea.controllers.startNewPolygon()" value="Start New Polygon Shape" />
+    </fieldset>
+    <p />
+    <fieldset>
+        <legend>Step 2: Validate The Area</legend>
+        <input type="button" id="ValidateNewPolyBtn" onclick="application.panel.navItemCreateNewArea.controllers.validateNewPolygon()" value="Validate Area" />
+    </fieldset>
+    <p />
+    <fieldset>
+        <legend>Step 3: Capture And Save Area Details</legend>
+
+        <input type="button" id="SaveNewAreaBtn" onclick="application.panel.navItemCreateNewArea.controllers.saveNewPolygon()" value="Save Details" />
+    </fieldset>
+</div>
+
+<style>
+    .step-active {
+       
+    }
+
+    .step-nonactive {
+
+    }
+</style>

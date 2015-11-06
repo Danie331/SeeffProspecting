@@ -169,5 +169,42 @@ namespace SeeffProspectingAuthService
                 return null;
             }
         }
+
+        public SpatialUserAuthPacket AuthenticateAndLoadSpatialUser(Guid userGuid, Guid sessionKey)
+        {
+            using (var boss = new BossDataContext())
+            {
+                // We only need to authenticate in the live environment
+                if (!HttpContext.Current.IsDebuggingEnabled)
+                {
+                    if (boss.user_auth(userGuid.ToString(), sessionKey, "MAPPING") != 1)
+                    {
+                        return new SpatialUserAuthPacket { Authenticated = false, AuthMessage = "Failed to authenticate user GUID with BOSS" };
+                    }
+                }
+
+                var userRecord = boss.user_registrations.FirstOrDefault(u => u.user_guid == userGuid.ToString());
+                if (userRecord != null)
+                {
+                    if (userRecord.mapping)
+                    {
+                        return new SpatialUserAuthPacket
+                        {
+                            Authenticated = true,
+                            MarketShareSuburbsList = userRecord.ms_area_permissions,
+                            ProspectingSuburbsList = userRecord.prospecting_areas
+                        };
+                    }
+                    else
+                    {
+                        return new SpatialUserAuthPacket { Authenticated = false, AuthMessage = "You are not authorised for mapping. Please request access to mapping from the administrator." };
+                    }
+                }
+                else
+                {
+                    return new SpatialUserAuthPacket { Authenticated = false, AuthMessage = "Unable to find user record in database." };
+                }
+            }
+        }
     }
 }

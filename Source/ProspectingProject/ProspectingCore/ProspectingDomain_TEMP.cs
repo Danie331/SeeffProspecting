@@ -2279,7 +2279,7 @@ namespace ProspectingProject
             }
             else
             {
-                SendEmail("danie@learnit.co.za", manager.UserName, "reports@seeff.com", "", "reports@seeff.com", "TEST EMAIL >>>>" + "Prospecting system notification", "TEST EMAIL >>>>" + emailTemplate);
+                SendEmail("danie.vdm@seeff.com", manager.UserName, "reports@seeff.com", "", "reports@seeff.com", "TEST EMAIL >>>>" + "Prospecting system notification", "TEST EMAIL >>>>" + emailTemplate);
             }
         }
 
@@ -2296,7 +2296,7 @@ namespace ProspectingProject
             {
                 message.Bcc.Add(bccAddress);
             }
-            message.Bcc.Add("danie@learnit.co.za");
+            message.Bcc.Add("danie.vdm@seeff.com");
 
             message.SubjectEncoding = System.Text.Encoding.UTF8;
             message.Subject = subject;
