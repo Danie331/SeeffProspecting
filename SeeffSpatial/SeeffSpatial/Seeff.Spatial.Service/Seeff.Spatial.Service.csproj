@@ -145,6 +145,7 @@
       <DependentUpon>SpatialDB.edmx</DependentUpon>
       <LastGenOutput>SpatialDB.cs</LastGenOutput>
     </Content>
+    <None Include="Properties\PublishProfiles\default_live.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

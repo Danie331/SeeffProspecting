@@ -12,6 +12,7 @@ namespace Seeff.Spatial.WebApp
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin"));
         }
 
         protected void Application_PostAuthorizeRequest()

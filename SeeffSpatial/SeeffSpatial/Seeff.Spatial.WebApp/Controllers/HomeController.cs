@@ -16,10 +16,10 @@ namespace Seeff.Spatial.WebApp.Controllers
         [HttpPost]
         public SpatialUser Login()
         {
-            Guid userGuid = Guid.Parse((string)HttpContext.Current.Session["user_guid"]);
-            Guid sessionKey = Guid.Parse((string)HttpContext.Current.Session["session_key"]);
             try
             {
+                //Guid userGuid = Guid.Parse((string)HttpContext.Current.Session["user_guid"]);
+                //Guid sessionKey = Guid.Parse((string)HttpContext.Current.Session["session_key"]);
                 //using (var authService = new SpatialAuthService.SeeffProspectingAuthServiceClient())
                 //{
                     //var authResult = authService.AuthenticateAndLoadSpatialUser(userGuid, sessionKey);
@@ -43,12 +43,14 @@ namespace Seeff.Spatial.WebApp.Controllers
             }
             catch (Exception ex)
             {
-                var userCredentails = new
-                {
-                    UserGuid = userGuid,
-                    SessionKey = sessionKey
-                };
-                Utils.LogException(ex, "Login", userCredentails); // TODO: add exception handling all over the show.
+                //var userCredentails = new
+                //{
+                //    UserGuid = userGuid,
+                //    SessionKey = sessionKey
+                //};
+                while (ex.InnerException != null) ex = ex.InnerException;
+
+                Utils.LogException(ex, "Login", ""); // TODO: add exception handling all over the show.
                 return new SpatialUser { LoginSuccess = false, LoginMessage = ex.Message };
             }
         }
