@@ -1,6 +1,11 @@
-﻿using Seeff.Spatial.Service.Models;
+﻿using Microsoft.SqlServer.Types;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Seeff.Spatial.Service.BusinessLayer.Models;
+using Seeff.Spatial.Service.Database;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 
@@ -8,35 +13,21 @@ namespace Seeff.Spatial.Service.BusinessLayer
 {
     public class Utils
     {
-        public static List<GeoLocation> ParseKMLString(string input)
-        {
-            if (string.IsNullOrEmpty(input)) 
-            {
-                return new List<GeoLocation>();
-            }
-            try
-            {
-                string[] pairs = input.Split(new[] { ' ' });
-                List<GeoLocation> coords = (from pair in pairs
-                                            let pairSet = pair.Split(new[] { ',' })
-                                            select new GeoLocation
-                                            {
-                                                Lat = decimal.Parse(pairSet[1]),
-                                                Lng = decimal.Parse(pairSet[0])
-                                            }).ToList();
-
-                return coords;
-            }
-            catch (Exception ex)
-            {
-                LogException(ex, "ParseKMLString", input);
-                throw;
-            }
-        }
-
         public static void LogException(Exception ex, string context, object contextObject)
         {
-            // TODO.
+            using (var spatialDb = new seeff_spatialEntities())
+            {
+                exception_log newRec = new exception_log
+                {
+                    context = context,
+                    created = DateTime.Now,
+                    exception_friendly_msg = ex.Message,
+                    exception_string = ex.ToString()
+                };
+
+                spatialDb.exception_log.Add(newRec);
+                spatialDb.SaveChanges();
+            }
         }
     }
 }

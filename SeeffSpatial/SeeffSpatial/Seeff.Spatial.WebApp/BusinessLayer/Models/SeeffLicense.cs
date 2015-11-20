@@ -7,14 +7,17 @@ using System.Web;
 
 namespace Seeff.Spatial.WebApp.BusinessLayer.Models
 {
-    public class SeeffLicense: ISeeffAreaCollection
+    public class SeeffLicense: SpatialModelBase
     {
         public int LicenseID { get; set; }
+
         public int TerritoryID { get; set; }
+
         public IList<SeeffSuburb> Suburbs { get; set; }
-        [JsonConverter(typeof(Utils.DbGeographyConverter))]
-        public DbGeography Centroid { get; set; }
-        [JsonConverter(typeof(Utils.DbGeographyConverter))]
-        public DbGeography Polygon { get; set; }
+
+        public override int? PolyID
+        {
+            get { return LicenseID; }
+        }
     }
 }

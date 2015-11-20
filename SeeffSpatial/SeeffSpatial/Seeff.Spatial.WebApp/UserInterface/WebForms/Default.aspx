@@ -62,12 +62,19 @@
 
     <script src="http://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDWHlk3fmGm0oDsqVaoBM3_YocW5xPKtwA&libraries=drawing,geometry,places&sensor=true"></script>
 
+    <!-- 3rd party libs -->
+    <script src="../Javascript/3rd_party/jqueryBlockUI.js"></script>
+
+    <!-- Styles -->
+    <link href="../Stylesheets/Shared.css" rel="stylesheet" />
+
     <!-- Core functionality -->
     <script src="../Javascript/Core/Google.js"></script>
     <script src="../Javascript/Core/Panel.js"></script>
     <script src="../Javascript/Core/Utilities.js"></script>
     <script src="../Javascript/Core/ApplicationInit.js"></script>
     <script src="../Javascript/Core/StateManager.js"></script>
+    <script src="../Javascript/Core/Services.js"></script>
     <script src="../Javascript/Core/NavigationItemContent/NavItemAreaInformation.js"></script>
     <script src="../Javascript/Core/NavigationItemContent/NavItemCreateNewArea.js"></script>
     <script src="../Javascript/Core/NavigationItemContent/NavItemSuburbSelection.js"></script>
@@ -80,8 +87,14 @@
 
     <script type="text/javascript">
         $(function () {
+            var baseURL = '';
+            var debugFlag = application.utilities.getUrlParameter('debug');
+            if (!debugFlag) {
+                baseURL = '/Seeff.Spatial.WebApp';
+            }
+            application.baseURL = baseURL;
             $.ajax({
-                url: "/api/Home/Login",
+                url: baseURL + "/api/Home/Login",
                 type: 'POST',
                 contentType: "application/json"
             }).done(function (userResult) {

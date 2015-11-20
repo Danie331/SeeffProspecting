@@ -16,8 +16,8 @@ namespace Seeff.Spatial.WebApp.UserInterface
                 bool debugFlag = Request.QueryString["debug"] != null;
                 if (HttpContext.Current.IsDebuggingEnabled || debugFlag)
                 {
-                    Session["user_guid"] = Request.QueryString["user_guid"];
-                    Session["session_key"] = Guid.NewGuid().ToString();
+                    Session["user_guid"] = Guid.Parse(Request.QueryString["user_guid"]);
+                    Session["session_key"] = Guid.NewGuid();
                 }
                 else
                 {

@@ -10,7 +10,6 @@ $(function () {
                     container.html(html);
                 } else {
                     application.panel.navItemSuburbSelection.contentCache = $("<div />");
-
                     var userSuburbs = application.user.SeeffAreaCollection;
                     $.each(userSuburbs, function (idx, suburb) {
                         var radioItem = application.panel.navItemSuburbSelection.constructSuburbRadioItem(suburb);
@@ -30,6 +29,17 @@ $(function () {
                     application.stateManager.activeSuburb.PolygonInstance.setOptions({ fillOpacity: 0.5 });
                 }
             },
+            rebuildContentCache: function() {
+                application.panel.navItemSuburbSelection.contentCache = null;
+                application.panel.navItemSuburbSelection.contentCache = $("<div />");
+                var userSuburbs = application.user.SeeffAreaCollection;
+                $.each(userSuburbs, function (idx, suburb) {
+                    var radioItem = application.panel.navItemSuburbSelection.constructSuburbRadioItem(suburb);
+                    application.panel.navItemSuburbSelection.contentCache.append(radioItem);
+
+                    application.panel.navItemSuburbSelection.contentCache.append("<br />");
+                });
+            },
             constructSuburbRadioItem: function (suburb) {
                 var radioItem = $("<input type='radio' name='suburbSelection' class='suburbLinkItem'><a href='javascript:void(0);'>" + suburb.AreaName + "</a></input>");
                 radioItem.attr('id', 'suburb' + suburb.SeeffAreaID);
@@ -46,7 +56,7 @@ $(function () {
                 parentDiv.scrollTop(parentDiv.scrollTop() + target.position().top - parentDiv.height() / 2 + target.height() / 2);
             },
             selectSuburbFromPolyClick: function (suburb) {
-                application.stateManager.activeSuburb = suburb;
+                application.stateManager.setActiveSuburb(suburb);
                 if (application.stateManager.activeNavItem == application.panel.navItemSuburbSelection) {
                     application.panel.navItemSuburbSelection.selectSuburbRadioLink(suburb);
                 }
@@ -63,14 +73,15 @@ $(function () {
                 var targetSuburbID = id.replace('suburb', '');
                 var targetSuburb = application.user.SeeffAreaCollectionLookup[targetSuburbID];
 
+                application.stateManager.handleExitEditPolyMode();
                 application.Google.resetPolygonSelection();
                 application.Google.showSuburbInfoWindow(targetSuburb);
                 targetSuburb.PolygonInstance.selected = true;
                 targetSuburb.PolygonInstance.setOptions({ fillOpacity: 0.5 });
 
-                application.Google.centreMapAndZoom(targetSuburb.Centroid, 15);
+                application.Google.centreMapAndZoom(targetSuburb.CentroidInstance, 10);
 
-                application.stateManager.activeSuburb = targetSuburb;
+                application.stateManager.setActiveSuburb(targetSuburb);
             }
         }
     })

@@ -1,28 +1,68 @@
 ﻿
 <div>
-    <fieldset>
-        <legend>Step 1: Create The Area Shape</legend>
-            <input type="button" id="StartPolygonBtn" onclick="application.panel.navItemCreateNewArea.controllers.startNewPolygon()" value="Start New Polygon Shape" />
-    </fieldset>
-    <p />
-    <fieldset>
-        <legend>Step 2: Validate The Area</legend>
-        <input type="button" id="ValidateNewPolyBtn" onclick="application.panel.navItemCreateNewArea.controllers.validateNewPolygon()" value="Validate Area" />
-    </fieldset>
-    <p />
-    <fieldset>
-        <legend>Step 3: Capture And Save Area Details</legend>
+    <div id="createAreaStep1" class="step-active" style="width:100%">
+        <fieldset class="step-content-left">
+            <legend>Step 1: Create The Area Shape</legend>
+            <input type="button" id="startPolygonBtn" onclick="application.panel.navItemCreateNewArea.controllers.startNewPolygon()" value="Start New Area Shape" />
+        </fieldset>
+        <img id="createPolyStep1CompleteTick" src="../Graphics/green_tick.png" class="step-content-right step-nonactive" />
+    </div>
 
-        <input type="button" id="SaveNewAreaBtn" onclick="application.panel.navItemCreateNewArea.controllers.saveNewPolygon()" value="Save Details" />
-    </fieldset>
+    <div id="createAreaStep2" class="step-nonactive" style="width:100%;float:left;margin-top:20px">
+        <fieldset class="step-content-left">
+            <legend>Step 2: Validate The Area</legend>
+            <input type="button" id="ValidateNewPolyBtn" onclick="application.panel.navItemCreateNewArea.controllers.validateNewPolygon()" value="Validate Area" />
+        </fieldset>
+        <div class="step-content-right">
+            <img id="createPolyStep2CompleteTick" src="../Graphics/green_tick.png" class="step-nonactive" />
+            <img id="createPolyStep2ErrorTick" src="../Graphics/stop.png" class="step-nonactive" />
+        </div>
+        <br />
+        <div id="newAreaValidationResults" style="color:red;width:100%;float:left;margin-top:20px">
+
+        </div>
+    </div>
+
+    <div id="createAreaStep3" class="step-nonactive" style="width:100%;float:left;margin-top:20px">
+        <fieldset class="step-content-left">
+            <legend>Step 3: Capture And Save Area Details</legend>
+            Area Name: <input type="text" id="newAreaNameInput" /> <br/>
+            License ID: <select id="licenseIDSelect"> </select>  <br />
+            <input type="button" id="saveNewAreaBtn" onclick="application.panel.navItemCreateNewArea.controllers.saveNewPolygon()" value="Save Suburb" />
+        </fieldset>
+        <div class="step-content-right">
+            <img id="createPolyStep3CompleteTick" src="../Graphics/green_tick.png" class="step-nonactive" />
+            <img id="createPolyStep3ErrorTick" src="../Graphics/stop.png" class="step-nonactive" />
+        </div>
+        <br />
+        <div id="saveNewAreaResults" style="color:red;width:100%;float:left;margin-top:20px">
+
+        </div>
+    </div>
+
+    <hr style="width:100%;display:inline-block" />
+    <div id="startNewPolyOverBtn" class="step-nonactive" style="width:100%;float:left;">
+        <input type="button" value="Reset" onclick="application.panel.navItemCreateNewArea.controllers.resetCreateNewAreaForm()" />
+    </div>
 </div>
 
 <style>
     .step-active {
-       
+       display: block;
     }
 
     .step-nonactive {
-
+        display: none;
     }
+
+    .step-content-left {
+        display: block;
+        float: left;
+    }
+
+    .step-content-right {
+        /*display: inline-block;*/
+        float: right;
+    }
+
 </style>

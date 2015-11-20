@@ -1,6 +1,6 @@
 ﻿using Seeff.Spatial.Service.BusinessLayer;
 using Seeff.Spatial.Service.Database;
-using Seeff.Spatial.Service.Models;
+using Seeff.Spatial.Service.BusinessLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +29,7 @@ namespace Seeff.Spatial.Service.Controllers
                         Polygon = rec.geo_polygon,
                         Centroid = rec.area_center_point
                     };
+                    spatialSuburb.ConvertSpatialToWKT();
                     results.Add(spatialSuburb);
                 }
 
@@ -52,6 +53,7 @@ namespace Seeff.Spatial.Service.Controllers
                         Polygon = rec.geo_polygon,
                         Centroid = rec.area_center_point
                     };
+                    spatialLicense.ConvertSpatialToWKT();
                     results.Add(spatialLicense);
                 }
 
@@ -73,6 +75,7 @@ namespace Seeff.Spatial.Service.Controllers
                         TerritoryName = rec.territory_name,
                          Polygon = rec.geo_polygon
                     };
+                    spatialTerritory.ConvertSpatialToWKT();
                     results.Add(spatialTerritory);
                 }
                 return results;

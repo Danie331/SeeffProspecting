@@ -5,8 +5,16 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="seeff_spatialModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'seeff_spatial.dbo.spatial_area' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="exception_log">
+          <Key>
+            <PropertyRef Name="exception_log_id" />
+          </Key>
+          <Property Name="exception_log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="exception_string" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="exception_friendly_msg" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="context" Type="varchar" MaxLength="255" />
+          <Property Name="created" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="spatial_area">
           <Key>
             <PropertyRef Name="id" />
@@ -15,13 +23,10 @@ warning 6002: The table/view 'seeff_spatial.dbo.spatial_area' does not have a pr
           <Property Name="fkAreaId" Type="int" />
           <Property Name="geo_polygon" Type="geography" />
           <Property Name="fk_license_id" Type="int" />
-          <Property Name="kml_coords" Type="nvarchar(max)" />
           <Property Name="fk_territory_id" Type="int" />
           <Property Name="area_center_point" Type="geography" StoreGeneratedPattern="Computed" />
           <Property Name="area_name" Type="varchar" MaxLength="255" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'seeff_spatial.dbo.spatial_license' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="spatial_license">
           <Key>
             <PropertyRef Name="id" />
@@ -30,12 +35,9 @@ warning 6002: The table/view 'seeff_spatial.dbo.spatial_license' does not have a
           <Property Name="fk_license_id" Type="int" />
           <Property Name="geo_polygon" Type="geography" />
           <Property Name="region" Type="varchar" MaxLength="100" />
-          <Property Name="kml_coords" Type="nvarchar(max)" />
           <Property Name="fk_territory_id" Type="int" />
           <Property Name="area_center_point" Type="geography" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'seeff_spatial.dbo.spatial_terretory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="spatial_terretory">
           <Key>
             <PropertyRef Name="territory_id" />
@@ -45,53 +47,21 @@ warning 6002: The table/view 'seeff_spatial.dbo.spatial_terretory' does not have
           <Property Name="geo_polygon" Type="geography" />
         </EntityType>
         <EntityContainer Name="seeff_spatialModelStoreContainer">
-          <EntitySet Name="spatial_area" EntityType="Self.spatial_area" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [spatial_area].[id] AS [id], 
-    [spatial_area].[fkAreaId] AS [fkAreaId], 
-    [spatial_area].[geo_polygon] AS [geo_polygon], 
-    [spatial_area].[fk_license_id] AS [fk_license_id], 
-    [spatial_area].[kml_coords] AS [kml_coords], 
-    [spatial_area].[fk_territory_id] AS [fk_territory_id], 
-    [spatial_area].[area_center_point] AS [area_center_point], 
-    [spatial_area].[area_name] AS [area_name]
-    FROM [dbo].[spatial_area] AS [spatial_area]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="spatial_license" EntityType="Self.spatial_license" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [spatial_license].[id] AS [id], 
-    [spatial_license].[fk_license_id] AS [fk_license_id], 
-    [spatial_license].[geo_polygon] AS [geo_polygon], 
-    [spatial_license].[region] AS [region], 
-    [spatial_license].[kml_coords] AS [kml_coords], 
-    [spatial_license].[fk_territory_id] AS [fk_territory_id], 
-    [spatial_license].[area_center_point] AS [area_center_point]
-    FROM [dbo].[spatial_license] AS [spatial_license]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="spatial_terretory" EntityType="Self.spatial_terretory" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [spatial_terretory].[territory_id] AS [territory_id], 
-    [spatial_terretory].[territory_name] AS [territory_name], 
-    [spatial_terretory].[geo_polygon] AS [geo_polygon]
-    FROM [dbo].[spatial_terretory] AS [spatial_terretory]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="exception_log" EntityType="Self.exception_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="spatial_area" EntityType="Self.spatial_area" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="spatial_license" EntityType="Self.spatial_license" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="spatial_terretory" EntityType="Self.spatial_terretory" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="seeff_spatialModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="spatial_license">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fk_license_id" Type="Int32" />
-          <Property Name="geo_polygon" Type="Geography" />
-          <Property Name="region" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="kml_coords" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="fk_territory_id" Type="Int32" />
-          <Property Name="area_center_point" Type="Geography" annotation:StoreGeneratedPattern="Computed" />
-        </EntityType>
+        <EntityContainer Name="seeff_spatialEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="spatial_terretory" EntityType="seeff_spatialModel.spatial_terretory" />
+          <EntitySet Name="spatial_area" EntityType="seeff_spatialModel.spatial_area" />
+          <EntitySet Name="spatial_license" EntityType="seeff_spatialModel.spatial_license" />
+          <EntitySet Name="exception_log" EntityType="seeff_spatialModel.exception_log" />
+        </EntityContainer>
         <EntityType Name="spatial_terretory">
           <Key>
             <PropertyRef Name="territory_id" />
@@ -100,11 +70,6 @@ warning 6002: The table/view 'seeff_spatial.dbo.spatial_terretory' does not have
           <Property Name="territory_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="geo_polygon" Type="Geography" />
         </EntityType>
-        <EntityContainer Name="seeff_spatialEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="spatial_license" EntityType="Self.spatial_license" />
-          <EntitySet Name="spatial_terretory" EntityType="Self.spatial_terretory" />
-          <EntitySet Name="spatial_area" EntityType="seeff_spatialModel.spatial_area" />
-        </EntityContainer>
         <EntityType Name="spatial_area">
           <Key>
             <PropertyRef Name="id" />
@@ -113,36 +78,43 @@ warning 6002: The table/view 'seeff_spatial.dbo.spatial_terretory' does not have
           <Property Name="fkAreaId" Type="Int32" />
           <Property Name="geo_polygon" Type="Geography" />
           <Property Name="fk_license_id" Type="Int32" />
-          <Property Name="kml_coords" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="fk_territory_id" Type="Int32" />
           <Property Name="area_center_point" Type="Geography" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="area_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
-      </Schema>
+        <EntityType Name="spatial_license">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_license_id" Type="Int32" />
+          <Property Name="geo_polygon" Type="Geography" />
+          <Property Name="region" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="fk_territory_id" Type="Int32" />
+          <Property Name="area_center_point" Type="Geography" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="exception_log">
+          <Key>
+            <PropertyRef Name="exception_log_id" />
+          </Key>
+          <Property Name="exception_log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="exception_string" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="exception_friendly_msg" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="context" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="seeff_spatialModelStoreContainer" CdmEntityContainer="seeff_spatialEntities">
-          <EntitySetMapping Name="spatial_license">
-            <EntityTypeMapping TypeName="seeff_spatialModel.spatial_license">
-              <MappingFragment StoreEntitySet="spatial_license">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="fk_license_id" ColumnName="fk_license_id" />
-                <ScalarProperty Name="geo_polygon" ColumnName="geo_polygon" />
-                <ScalarProperty Name="region" ColumnName="region" />
-                <ScalarProperty Name="kml_coords" ColumnName="kml_coords" />
-                <ScalarProperty Name="fk_territory_id" ColumnName="fk_territory_id" />
-                <ScalarProperty Name="area_center_point" ColumnName="area_center_point" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="spatial_terretory">
             <EntityTypeMapping TypeName="seeff_spatialModel.spatial_terretory">
               <MappingFragment StoreEntitySet="spatial_terretory">
-                <ScalarProperty Name="territory_id" ColumnName="territory_id" />
-                <ScalarProperty Name="territory_name" ColumnName="territory_name" />
                 <ScalarProperty Name="geo_polygon" ColumnName="geo_polygon" />
+                <ScalarProperty Name="territory_name" ColumnName="territory_name" />
+                <ScalarProperty Name="territory_id" ColumnName="territory_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -152,11 +124,33 @@ warning 6002: The table/view 'seeff_spatial.dbo.spatial_terretory' does not have
                 <ScalarProperty Name="area_name" ColumnName="area_name" />
                 <ScalarProperty Name="area_center_point" ColumnName="area_center_point" />
                 <ScalarProperty Name="fk_territory_id" ColumnName="fk_territory_id" />
-                <ScalarProperty Name="kml_coords" ColumnName="kml_coords" />
                 <ScalarProperty Name="fk_license_id" ColumnName="fk_license_id" />
                 <ScalarProperty Name="geo_polygon" ColumnName="geo_polygon" />
                 <ScalarProperty Name="fkAreaId" ColumnName="fkAreaId" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="spatial_license">
+            <EntityTypeMapping TypeName="seeff_spatialModel.spatial_license">
+              <MappingFragment StoreEntitySet="spatial_license">
+                <ScalarProperty Name="area_center_point" ColumnName="area_center_point" />
+                <ScalarProperty Name="fk_territory_id" ColumnName="fk_territory_id" />
+                <ScalarProperty Name="region" ColumnName="region" />
+                <ScalarProperty Name="geo_polygon" ColumnName="geo_polygon" />
+                <ScalarProperty Name="fk_license_id" ColumnName="fk_license_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="exception_log">
+            <EntityTypeMapping TypeName="seeff_spatialModel.exception_log">
+              <MappingFragment StoreEntitySet="exception_log">
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="context" ColumnName="context" />
+                <ScalarProperty Name="exception_friendly_msg" ColumnName="exception_friendly_msg" />
+                <ScalarProperty Name="exception_string" ColumnName="exception_string" />
+                <ScalarProperty Name="exception_log_id" ColumnName="exception_log_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

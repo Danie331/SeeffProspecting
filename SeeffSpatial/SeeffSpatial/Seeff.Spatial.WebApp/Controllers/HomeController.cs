@@ -1,7 +1,10 @@
-﻿using Seeff.Spatial.WebApp.BusinessLayer;
+﻿using Newtonsoft.Json.Serialization;
+using Seeff.Spatial.WebApp.BusinessLayer;
+using Seeff.Spatial.WebApp.BusinessLayer.ControllerActions;
 using Seeff.Spatial.WebApp.BusinessLayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -14,7 +17,7 @@ namespace Seeff.Spatial.WebApp.Controllers
     public class HomeController : ApiController, IRequiresSessionState
     {
         [HttpPost]
-        public SpatialUser Login()
+        public UserModel Login()
         {
             try
             {
@@ -29,15 +32,16 @@ namespace Seeff.Spatial.WebApp.Controllers
                         //var prospectingAreas = Utils.ParseAreaListString(authResult.ProspectingSuburbsList);
                         //var targetAreas = msAreas.Union(prospectingAreas);
 
-                        SpatialUser user = new SpatialUser();
-                        user.SeeffAreaCollection = GlobalAreaManager.Instance.AllSuburbs; // TODO (user areas only)
+                        UserModel user = new UserModel();
+                        user.SeeffAreaCollection = GlobalAreaCache.Instance.AllSuburbs; // TODO (user areas only)
+                        user.SeeffLicenses = GlobalAreaCache.Instance.SeeffLicenses;
                         user.LoginSuccess = true;
 
                         return user;
                     }
                     else
                     {
-                        return new SpatialUser { LoginSuccess = false, /*LoginMessage = authResult.AuthMessage*/ };
+                        return new UserModel { LoginSuccess = false, /*LoginMessage = authResult.AuthMessage*/ };
                     }
                 //}
             }
@@ -51,7 +55,40 @@ namespace Seeff.Spatial.WebApp.Controllers
                 while (ex.InnerException != null) ex = ex.InnerException;
 
                 Utils.LogException(ex, "Login", ""); // TODO: add exception handling all over the show.
-                return new SpatialUser { LoginSuccess = false, LoginMessage = ex.Message };
+                return new UserModel { LoginSuccess = false, LoginMessage = ex.ToString() };
+            }
+        }
+
+        [HttpPost]
+        public AreaValidationResult ValidateSuburb([FromBody]SeeffSuburb suburbFromFrontEnd)
+        {
+            // NB: CHECK RULES!!!!!!
+            try
+            {
+                suburbFromFrontEnd.ConvertWktToSpatial();
+                var validationResult = ControllerActions.ValidateSuburb(suburbFromFrontEnd);
+                return validationResult;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "ValidateSuburb()", suburbFromFrontEnd);
+                return new AreaValidationResult { IsValid = false, ValidationMessage = ex.Message };
+            }
+        }
+
+        [HttpPost]
+        public SaveSuburbResult SaveSuburb([FromBody]SeeffSuburb suburbFromFrontEnd)
+        {
+            try
+            {
+                suburbFromFrontEnd.ConvertWktToSpatial();
+                var saveResult = ControllerActions.SaveSuburb(suburbFromFrontEnd);
+                return saveResult;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "SaveSuburb()", suburbFromFrontEnd);
+                return new SaveSuburbResult { Successful = false, SaveMessage = ex.Message };
             }
         }
     }

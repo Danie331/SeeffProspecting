@@ -1,8 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.SqlServer.Types;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Seeff.Spatial.WebApp.BusinessLayer.Models;
+using Seeff.Spatial.WebApp.Database;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
+using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -14,7 +18,22 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
     {
         public static void LogException(Exception ex, string context, object contextObject)
         {
-            // TODO.
+            using (var database = new spatial_web_appEntities()) 
+            {
+                string contextJson = JsonConvert.SerializeObject(contextObject ?? "");
+                Guid userGuid = (Guid)HttpContext.Current.Session["user_guid"];
+                exception_log error_record = new exception_log
+                {
+                    created = DateTime.Now,
+                    context = context,
+                    raw_exception = ex.ToString(),
+                    state_object_json = contextJson,
+                    user = userGuid
+                };
+
+                database.exception_log.Add(error_record);
+                database.SaveChanges();
+            }
         }
 
         public static List<int> ParseAreaListString(string areaStringList)
@@ -47,55 +66,6 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
             }
 
             return Enumerable.Empty<int>().ToList();
-        }
-
-        public class DbGeographyConverter : JsonConverter
-        {
-            public override bool CanConvert(Type objectType)
-            {
-                return objectType.Equals(typeof(DbGeography));
-            }
-
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-            {
-                if (reader.TokenType == JsonToken.Null)
-                    return default(DbGeography);
-
-                var jObject = JObject.Load(reader);
-
-                if (!jObject.HasValues || (jObject["Geography"]["WellKnownText"] == null))
-                    return default(DbGeography);
-
-                string wkt = jObject["Geography"]["WellKnownText"].Value<string>();
-
-                return DbGeography.FromText(wkt, DbGeography.DefaultCoordinateSystemId);
-            }
-
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-            {
-                var dbGeography = value as DbGeography;
-
-                if (dbGeography.WellKnownValue.WellKnownText.Contains("POINT"))
-                {
-                    string[] coordPair = dbGeography.WellKnownValue.WellKnownText.Replace("POINT (", "").Replace(")", "").Split(new[]{' '});
-                    serializer.Serialize(writer, dbGeography == null || dbGeography.IsEmpty ? null : new { lat = double.Parse(coordPair[1]), lng = double.Parse(coordPair[0]) });
-                }
-                else if (dbGeography.WellKnownValue.WellKnownText.Contains("POLYGON"))
-                {
-                    string[] coordPairs = dbGeography.WellKnownValue.WellKnownText.Replace("POLYGON ((", "").Replace("))", "").Split(new[]{','});
-                    List<object> set = new List<object>();
-                    foreach (var item in coordPairs)
-                    {
-                        string[] coordPair = item.Trim().Split(new[] { ' ' });
-                        double lat = double.Parse(coordPair[1]);
-                        double lng = double.Parse(coordPair[0]);
-
-                        set.Add(new { lat = lat, lng = lng });
-                    }
-                    // Serialise an array of lat/lng objects
-                    serializer.Serialize(writer, dbGeography == null || dbGeography.IsEmpty ? null : set.ToArray());
-                }               
-            }
         }
     }
 }

@@ -26,7 +26,8 @@ $(function () {
             handleEnterPolyEditMode: function () {
                 var suburb = application.stateManager.activeSuburb;
                 suburb.PolygonInstance.setOptions({ editable: true });
-
+                suburb.PolygonInstance.setOptions({ fillOpacity: 0.5 });
+                suburb.PolygonInstance.selected = true;
                 application.stateManager.activeSuburbInEditMode = true;
             },
             handleEnterCreateAreaMode: function () {
@@ -36,9 +37,28 @@ $(function () {
             },
             handleExitCreateAreaMode: function () {
                 application.stateManager.createAreaMode = false;
+
+                if (application.panel.navItemCreateNewArea.newAreaPolygon) {
+                    application.panel.navItemCreateNewArea.newAreaPolygon.setMap(null);
+                    application.panel.navItemCreateNewArea.newAreaPolygon = null;
+                }
+
                 if (application.Google.drawingManager != null)
                     application.Google.drawingManager.setMap(null);
                 // rollback the create steps
+            },
+            setActiveSuburb: function (activeSuburb) {
+                application.stateManager.activeSuburb = activeSuburb;
+                if (activeSuburb != null) {
+                }
+                else {
+                }
+            },
+            updateActiveSuburb: function (suburbData) {
+                var activeSuburb = application.stateManager.activeSuburb;
+                activeSuburb.PolyWKT = suburbData.PolyWKT;
+                activeSuburb.CentroidWKT = suburbData.CentroidWKT;
+                application.Google.drawPoly(activeSuburb);
             }
         }
     });

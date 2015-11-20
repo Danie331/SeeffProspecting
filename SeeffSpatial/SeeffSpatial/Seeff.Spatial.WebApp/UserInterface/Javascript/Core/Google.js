@@ -67,9 +67,26 @@ $(function () {
                 var offsetPoint = application.Google.findOffsetPoint(centrePoint.lat, centrePoint.lng, -250, 0);
                 application.Google.map.setCenter(offsetPoint);
             },
+            createPolyFromWKT: function(polyWKT) {                                
+                var coordPairs = polyWKT.replace("POLYGON ((", "").replace("))", "").split(',');
+                var outputPairs = [];
+                $.each(coordPairs, function (idx, pairObject) {
+                    var coordPair = pairObject.trim().split(' ');
+                    outputPairs.push({ lat: Number(coordPair[1]), lng: Number(coordPair[0]) });
+                });
+                return outputPairs;
+            },
+            createPointFromWKT: function(centroidWKT) {
+                var coordPair = centroidWKT.replace("POINT (", "").replace(")", "").split(' ');
+                return { lat: Number(coordPair[1]), lng: Number(coordPair[0]) };
+            },
             drawPoly: function (suburb) {
+                if (suburb.PolygonInstance) {
+                    suburb.PolygonInstance.setMap(null);
+                    suburb.PolygonInstance = null;
+                }
                 var polygon = new google.maps.Polygon({
-                    paths: suburb.Polygon,
+                    paths: application.Google.createPolyFromWKT(suburb.PolyWKT),
                     strokeColor: '#FF0000',
                     strokeOpacity: 0.8,
                     strokeWeight: 1.5,
@@ -78,6 +95,7 @@ $(function () {
                 });
                 polygon.setMap(application.Google.map);
                 suburb.PolygonInstance = polygon;
+                suburb.CentroidInstance = application.Google.createPointFromWKT(suburb.CentroidWKT);
                 google.maps.event.addListener(polygon, "mouseover", function () {
                     if (application.stateManager.activeSuburbInEditMode)
                         return;
@@ -131,10 +149,26 @@ $(function () {
 
                 var infoWindow = new google.maps.InfoWindow();
                 infoWindow.setContent(contentString.html());
-                infoWindow.setPosition(suburb.Centroid);
+                infoWindow.setPosition(suburb.CentroidInstance);
                 infoWindow.open(application.Google.map);
 
                 suburb.PolygonInstance.infoWindow = infoWindow;
+            },
+            getPolyAsGeographyString: function (polygon) {
+                var path = polygon.getPath().getArray();
+                var resultString = 'POLYGON ((';
+                $.each(path, function (idx, latLngPair) {
+                    resultString += latLngPair.lng() + ' ' + latLngPair.lat() + ','
+                });
+                resultString = resultString + '))';
+                resultString = resultString.replace(',))', '))');
+
+                return resultString;
+            },
+            getPointAsGeographyString: function (point) {
+                var resultString = "POINT (";
+                resultString += point.lng() + " " + point.lat() + ")";
+                return resultString;
             }
         }
     });

@@ -13,6 +13,12 @@ $(function () {
                 });
 
                 return kvps[paramName];
+            },
+            buildHomeURL: function (servicePath) {
+                return application.baseURL + servicePath;
+            },
+            defaultIfNullOrUndef: function (testValue, defaultValue) {
+                return testValue && testValue != null ? testValue : defaultValue;
             }
         }
     });
