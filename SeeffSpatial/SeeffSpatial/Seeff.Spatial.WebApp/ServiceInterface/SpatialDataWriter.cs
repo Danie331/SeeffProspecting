@@ -14,7 +14,6 @@ namespace Seeff.Spatial.WebApp.ServiceInterface
             try
             {
                 suburb = PostToService<SeeffSuburb>("api/CreateOrUpdate/SaveSuburb", suburb);
-                suburb.ConvertWktToSpatial();
                 return suburb;
             }
             catch (Exception ex)

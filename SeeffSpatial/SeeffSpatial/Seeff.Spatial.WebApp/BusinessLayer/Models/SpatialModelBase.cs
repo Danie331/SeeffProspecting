@@ -11,42 +11,45 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.Models
     public abstract class SpatialModelBase
     {
         [JsonIgnore]
-        public DbGeography Centroid { get; set; }
+        private DbGeography _polygon;
+        [JsonIgnore]
+        private DbGeography _centroid;
+
+        private string _polygonWKT;
+        private string _centroidWKT;
 
         [JsonIgnore]
-        public DbGeography Polygon { get; set; }
+        public DbGeography Centroid
+        {
+            get { return _centroid;  } 
+        }
 
-        public string PolyWKT { get; set; }
+        [JsonIgnore]
+        public DbGeography Polygon 
+        {
+            get { return _polygon;  }
+            set 
+            {
+                _polygon = value;
+                _polygonWKT = value.WellKnownValue.WellKnownText;
+                CalculateCentroid();
+            }
+        }
 
-        public string CentroidWKT { get; set; }
+        public string PolyWKT 
+        {
+            get { return _polygonWKT;  }
+            set
+            {
+                _polygon = CreateGeographyFromStringObject(value);
+                _polygonWKT = _polygon.WellKnownValue.WellKnownText;
+                CalculateCentroid();
+            }
+        }
+
+        public string CentroidWKT { get { return _centroidWKT; } }
 
         public abstract int? PolyID { get; }
-
-        public void ConvertSpatialToWKT()
-        {
-            if (Polygon != null)
-            {
-                PolyWKT = Polygon.WellKnownValue.WellKnownText;
-            }
-
-            if (Centroid != null)
-            {
-                CentroidWKT = Centroid.WellKnownValue.WellKnownText;
-            }
-        }
-
-        public void ConvertWktToSpatial()
-        {
-            if (!string.IsNullOrEmpty(PolyWKT))
-            {
-                Polygon = CreateGeographyFromStringObject(PolyWKT);
-            }
-
-            if (!string.IsNullOrEmpty(CentroidWKT))
-            {
-                Centroid = CreateGeographyFromStringObject(CentroidWKT);
-            }
-        }
 
         private DbGeography CreateGeographyFromStringObject(string polyString)
         {
@@ -95,20 +98,15 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.Models
 
         private void CalculateCentroid()
         {
-            if (Polygon == null) return;
-            string wkt = Polygon.WellKnownValue.WellKnownText;
+            if (_polygon == null) return;
+            string wkt = _polygon.WellKnownValue.WellKnownText;
             var geog = SqlGeography.STPolyFromText(new System.Data.SqlTypes.SqlChars(wkt), DbGeography.DefaultCoordinateSystemId);
             geog = geog.EnvelopeCenter();
             geog = geog.MakeValid();
             wkt = geog.ToString();
 
-            Centroid = DbGeography.FromText(wkt);
-        }
-
-        public void PrepareCalculations()
-        {
-            ConvertWktToSpatial();
-            CalculateCentroid();
+            _centroid = DbGeography.FromText(wkt);
+            _centroidWKT = _centroid.WellKnownValue.WellKnownText;
         }
 
         public List<T> GetIntersectingPolys<T>(List<T> polys)

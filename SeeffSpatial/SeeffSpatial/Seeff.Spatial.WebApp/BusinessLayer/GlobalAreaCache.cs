@@ -121,15 +121,12 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
             if (target != null)
             {
                 target.Polygon = result.Polygon;
-                target.Centroid = result.Centroid;
                 target.LicenseID = result.LicenseID;
                 target.AreaName = result.AreaName;
                 target.TerritoryID = result.TerritoryID;
-                target.ConvertSpatialToWKT();
             }
             else
             {
-                result.ConvertSpatialToWKT();
                 _allSuburbs.Add(result);
                 _allSuburbs = _allSuburbs.OrderBy(sub => sub.AreaName).ToList();
             }

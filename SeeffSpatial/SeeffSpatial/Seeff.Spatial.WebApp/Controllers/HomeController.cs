@@ -65,7 +65,6 @@ namespace Seeff.Spatial.WebApp.Controllers
             // NB: CHECK RULES!!!!!!
             try
             {
-                suburbFromFrontEnd.ConvertWktToSpatial();
                 var validationResult = ControllerActions.ValidateSuburb(suburbFromFrontEnd);
                 return validationResult;
             }
@@ -81,7 +80,6 @@ namespace Seeff.Spatial.WebApp.Controllers
         {
             try
             {
-                suburbFromFrontEnd.ConvertWktToSpatial();
                 var saveResult = ControllerActions.SaveSuburb(suburbFromFrontEnd);
                 return saveResult;
             }

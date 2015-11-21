@@ -11,8 +11,10 @@ namespace Seeff.Spatial.WebApp
     {
         protected void Application_Start()
         {
+            GlobalConfiguration.Configuration.Services.Replace(typeof(System.Web.Http.Validation.IBodyModelValidator), new Seeff.Spatial.WebApp.BusinessLayer.Utils.CustomBodyModelValidator());
             GlobalConfiguration.Configure(WebApiConfig.Register);
             SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin"));
+            
         }
 
         protected void Application_PostAuthorizeRequest()

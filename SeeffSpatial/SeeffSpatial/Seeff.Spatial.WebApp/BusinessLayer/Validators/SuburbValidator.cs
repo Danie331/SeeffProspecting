@@ -14,7 +14,6 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
         public SuburbValidator(SeeffSuburb suburb)
         {
             _suburb = suburb;
-            _suburb.PrepareCalculations();
         }
 
         public AreaValidationResult Validate()

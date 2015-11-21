@@ -67,5 +67,13 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
 
             return Enumerable.Empty<int>().ToList();
         }
+
+        public class CustomBodyModelValidator : System.Web.Http.Validation.DefaultBodyModelValidator
+        {
+            public override bool ShouldValidateType(Type type)
+            {
+                return type != typeof(DbGeography) && base.ShouldValidateType(type);
+            }
+        }
     }
 }

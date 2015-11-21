@@ -17,7 +17,6 @@ namespace Seeff.Spatial.Service.Controllers
         {
             try
             {
-                suburb.ConvertWktToSpatial();
                 using (var spatialDb = new seeff_spatialEntities())
                 {
                     if (!suburb.SeeffAreaID.HasValue)
@@ -48,13 +47,12 @@ namespace Seeff.Spatial.Service.Controllers
                     var result = new SpatialSuburb
                     {
                         AreaName = existingrecord.area_name,
-                        Centroid = existingrecord.area_center_point,
                         LicenseID = existingrecord.fk_license_id,
                         Polygon = existingrecord.geo_polygon,
                         SeeffAreaID = existingrecord.fkAreaId,
                         TerritoryID = existingrecord.fk_territory_id
                     };
-                    result.ConvertSpatialToWKT();
+       
                     return result;
                 }
             }

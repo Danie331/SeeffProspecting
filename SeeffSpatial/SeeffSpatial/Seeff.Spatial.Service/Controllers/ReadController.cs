@@ -26,10 +26,9 @@ namespace Seeff.Spatial.Service.Controllers
                         SeeffAreaID = rec.fkAreaId,
                         LicenseID = rec.fk_license_id,
                         TerritoryID = rec.fk_territory_id,
-                        Polygon = rec.geo_polygon,
-                        Centroid = rec.area_center_point
+                        Polygon = rec.geo_polygon
                     };
-                    spatialSuburb.ConvertSpatialToWKT();
+              
                     results.Add(spatialSuburb);
                 }
 
@@ -50,10 +49,9 @@ namespace Seeff.Spatial.Service.Controllers
 
                         LicenseID = rec.fk_license_id,
                         TerritoryID = rec.fk_territory_id,
-                        Polygon = rec.geo_polygon,
-                        Centroid = rec.area_center_point
+                        Polygon = rec.geo_polygon
                     };
-                    spatialLicense.ConvertSpatialToWKT();
+            
                     results.Add(spatialLicense);
                 }
 
@@ -75,7 +73,7 @@ namespace Seeff.Spatial.Service.Controllers
                         TerritoryName = rec.territory_name,
                          Polygon = rec.geo_polygon
                     };
-                    spatialTerritory.ConvertSpatialToWKT();
+            
                     results.Add(spatialTerritory);
                 }
                 return results;

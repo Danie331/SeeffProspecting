@@ -11,38 +11,28 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
     public abstract class SpatialModelBase
     {
         [JsonIgnore]
-        public DbGeography Centroid { get; set; }
+        private DbGeography _polygon;
+
+        private string _polygonWKT;
 
         [JsonIgnore]
-        public DbGeography Polygon { get; set; }
-
-        public string PolyWKT { get; set; }
-
-        public string CentroidWKT { get; set; }
-
-        public void ConvertSpatialToWKT()
+        public DbGeography Polygon
         {
-            if (Polygon != null)
+            get { return _polygon; }
+            set
             {
-                PolyWKT = Polygon.WellKnownValue.WellKnownText;
-            }
-
-            if (Centroid != null)
-            {
-                CentroidWKT = Centroid.WellKnownValue.WellKnownText;
+                _polygon = value;
+                _polygonWKT = value.WellKnownValue.WellKnownText;
             }
         }
 
-        public void ConvertWktToSpatial()
+        public string PolyWKT
         {
-            if (!string.IsNullOrEmpty(PolyWKT))
+            get { return _polygonWKT; }
+            set
             {
-                Polygon = CreateGeographyFromStringObject(PolyWKT);
-            }
-
-            if (!string.IsNullOrEmpty(CentroidWKT))
-            {
-                Centroid = CreateGeographyFromStringObject(CentroidWKT);
+                _polygon = CreateGeographyFromStringObject(value);
+                _polygonWKT = _polygon.WellKnownValue.WellKnownText;
             }
         }
 

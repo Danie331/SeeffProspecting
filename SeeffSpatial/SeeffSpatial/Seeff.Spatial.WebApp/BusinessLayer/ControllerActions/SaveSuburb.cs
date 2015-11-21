@@ -25,7 +25,7 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.ControllerActions
             PrepareSuburb(suburb, validationResult);
             SpatialDataWriter spatialWriter = new SpatialDataWriter();
             SeeffSuburb result = spatialWriter.SaveSuburb(suburb);
-            result.ConvertSpatialToWKT();
+ 
             GlobalAreaCache.Instance.UpdateCacheItem(result);
 
             return new SaveSuburbResult
