@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="spatial_web_appModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="spatial_web_appModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="exception_log">
           <Key>
             <PropertyRef Name="exception_log_id" />
@@ -16,11 +16,53 @@
           <Property Name="raw_exception" Type="nvarchar(max)" Nullable="false" />
           <Property Name="state_object_json" Type="nvarchar(max)" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'spatial_web_app.dbo.seeff_areas' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="seeff_areas">
+          <Key>
+            <PropertyRef Name="areaId" />
+          </Key>
+          <Property Name="areaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="areaName" Type="nvarchar" MaxLength="100" />
+          <Property Name="areaParentId" Type="int" />
+          <Property Name="fkAreaTypeId" Type="int" />
+          <Property Name="nDisplayOrder" Type="int" />
+          <Property Name="areaMap" Type="nvarchar" MaxLength="50" />
+          <Property Name="sideMap" Type="nvarchar" MaxLength="50" />
+          <Property Name="areaImageMap" Type="nvarchar" MaxLength="4000" />
+          <Property Name="areaDescription" Type="nvarchar" MaxLength="4000" />
+          <Property Name="areaPropertyCount" Type="int" />
+          <Property Name="areaResidentialPropertyBuyCount" Type="int" />
+          <Property Name="areaResidentialPropertyRentCount" Type="int" />
+          <Property Name="areaCommercialPropertyBuyCount" Type="int" />
+          <Property Name="areaCommercialPropertyRentCount" Type="int" />
+          <Property Name="areaDevelopementPropertyCount" Type="int" />
+          <Property Name="areaAgriculturalPropertyCount" Type="int" />
+        </EntityType>
         <EntityContainer Name="spatial_web_appModelStoreContainer">
           <EntitySet Name="exception_log" EntityType="Self.exception_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="seeff_areas" EntityType="Self.seeff_areas" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [seeff_areas].[areaId] AS [areaId], 
+    [seeff_areas].[areaName] AS [areaName], 
+    [seeff_areas].[areaParentId] AS [areaParentId], 
+    [seeff_areas].[fkAreaTypeId] AS [fkAreaTypeId], 
+    [seeff_areas].[nDisplayOrder] AS [nDisplayOrder], 
+    [seeff_areas].[areaMap] AS [areaMap], 
+    [seeff_areas].[sideMap] AS [sideMap], 
+    [seeff_areas].[areaImageMap] AS [areaImageMap], 
+    [seeff_areas].[areaDescription] AS [areaDescription], 
+    [seeff_areas].[areaPropertyCount] AS [areaPropertyCount], 
+    [seeff_areas].[areaResidentialPropertyBuyCount] AS [areaResidentialPropertyBuyCount], 
+    [seeff_areas].[areaResidentialPropertyRentCount] AS [areaResidentialPropertyRentCount], 
+    [seeff_areas].[areaCommercialPropertyBuyCount] AS [areaCommercialPropertyBuyCount], 
+    [seeff_areas].[areaCommercialPropertyRentCount] AS [areaCommercialPropertyRentCount], 
+    [seeff_areas].[areaDevelopementPropertyCount] AS [areaDevelopementPropertyCount], 
+    [seeff_areas].[areaAgriculturalPropertyCount] AS [areaAgriculturalPropertyCount]
+    FROM [dbo].[seeff_areas] AS [seeff_areas]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="spatial_web_appModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -37,7 +79,29 @@
         </EntityType>
         <EntityContainer Name="spatial_web_appEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="exception_log" EntityType="Self.exception_log" />
+          <EntitySet Name="seeff_areas" EntityType="spatial_web_appModel.seeff_areas" />
         </EntityContainer>
+        <EntityType Name="seeff_areas">
+          <Key>
+            <PropertyRef Name="areaId" />
+          </Key>
+          <Property Name="areaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="areaName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="areaParentId" Type="Int32" />
+          <Property Name="fkAreaTypeId" Type="Int32" />
+          <Property Name="nDisplayOrder" Type="Int32" />
+          <Property Name="areaMap" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sideMap" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="areaImageMap" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="areaDescription" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="areaPropertyCount" Type="Int32" />
+          <Property Name="areaResidentialPropertyBuyCount" Type="Int32" />
+          <Property Name="areaResidentialPropertyRentCount" Type="Int32" />
+          <Property Name="areaCommercialPropertyBuyCount" Type="Int32" />
+          <Property Name="areaCommercialPropertyRentCount" Type="Int32" />
+          <Property Name="areaDevelopementPropertyCount" Type="Int32" />
+          <Property Name="areaAgriculturalPropertyCount" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -53,6 +117,28 @@
                 <ScalarProperty Name="created" ColumnName="created" />
                 <ScalarProperty Name="raw_exception" ColumnName="raw_exception" />
                 <ScalarProperty Name="state_object_json" ColumnName="state_object_json" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="seeff_areas">
+            <EntityTypeMapping TypeName="spatial_web_appModel.seeff_areas">
+              <MappingFragment StoreEntitySet="seeff_areas">
+                <ScalarProperty Name="areaAgriculturalPropertyCount" ColumnName="areaAgriculturalPropertyCount" />
+                <ScalarProperty Name="areaDevelopementPropertyCount" ColumnName="areaDevelopementPropertyCount" />
+                <ScalarProperty Name="areaCommercialPropertyRentCount" ColumnName="areaCommercialPropertyRentCount" />
+                <ScalarProperty Name="areaCommercialPropertyBuyCount" ColumnName="areaCommercialPropertyBuyCount" />
+                <ScalarProperty Name="areaResidentialPropertyRentCount" ColumnName="areaResidentialPropertyRentCount" />
+                <ScalarProperty Name="areaResidentialPropertyBuyCount" ColumnName="areaResidentialPropertyBuyCount" />
+                <ScalarProperty Name="areaPropertyCount" ColumnName="areaPropertyCount" />
+                <ScalarProperty Name="areaDescription" ColumnName="areaDescription" />
+                <ScalarProperty Name="areaImageMap" ColumnName="areaImageMap" />
+                <ScalarProperty Name="sideMap" ColumnName="sideMap" />
+                <ScalarProperty Name="areaMap" ColumnName="areaMap" />
+                <ScalarProperty Name="nDisplayOrder" ColumnName="nDisplayOrder" />
+                <ScalarProperty Name="fkAreaTypeId" ColumnName="fkAreaTypeId" />
+                <ScalarProperty Name="areaParentId" ColumnName="areaParentId" />
+                <ScalarProperty Name="areaName" ColumnName="areaName" />
+                <ScalarProperty Name="areaId" ColumnName="areaId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

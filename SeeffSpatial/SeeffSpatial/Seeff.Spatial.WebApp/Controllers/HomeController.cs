@@ -89,5 +89,20 @@ namespace Seeff.Spatial.WebApp.Controllers
                 return new SaveSuburbResult { Successful = false, SaveMessage = ex.Message };
             }
         }
+
+        [HttpGet]
+        public UnmappedSuburbs RetrieveUnmappedSuburbs()
+        {
+            try
+            {
+                var unmappedSubs = ControllerActions.RetrieveUnmappedSuburbs();
+                return unmappedSubs;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "RetrieveUnmappedSuburbs()", null);
+                return new UnmappedSuburbs { Successful = false, ErrorMessage = ex.Message };
+            }
+        }
     }
 }

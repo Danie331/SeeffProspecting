@@ -19,11 +19,6 @@ namespace Seeff.Spatial.Service.Controllers
             {
                 using (var spatialDb = new seeff_spatialEntities())
                 {
-                    if (!suburb.SeeffAreaID.HasValue)
-                    {
-                        int nextAreaID = spatialDb.spatial_area.Max(sub => sub.fkAreaId).Value + 1;
-                        suburb.SeeffAreaID = nextAreaID;
-                    }
                     var existingrecord = spatialDb.spatial_area.FirstOrDefault(area => area.fkAreaId == suburb.SeeffAreaID);
                     if (existingrecord != null)
                     {

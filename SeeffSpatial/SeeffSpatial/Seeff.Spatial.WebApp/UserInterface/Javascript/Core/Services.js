@@ -17,6 +17,19 @@ $(function () {
                     $.unblockUI();
                 });
             },
+            get: function (URL, loadingMsg, callback) {
+                $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">' + loadingMsg + '</p>' });
+                $.ajax({
+                    url: URL,
+                    type: 'GET',
+                    contentType: "application/json"
+                }).done(function (data) {
+                    if (callback) {
+                        callback(data);
+                    }
+                    $.unblockUI();
+                });
+            },
             serviceControllers: {
                 validateSuburbPolygon: function (suburbModel, callback) {
                     // NB: Consider all the rules for polygon validation!!!
@@ -26,6 +39,10 @@ $(function () {
                 saveSuburb: function (suburbModel, callback) {
                     var endpoint = application.utilities.buildHomeURL('/api/Home/SaveSuburb');
                     application.services.post(endpoint, suburbModel, "Saving. Please wait...", callback);
+                },
+                retrieveUnmappedSuburbs: function (callback) {
+                    var endpoint = application.utilities.buildHomeURL('/api/Home/RetrieveUnmappedSuburbs');
+                    application.services.get(endpoint, "Loading. Please wait...", callback);
                 }
             },
             serviceModels: {

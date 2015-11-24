@@ -13,7 +13,7 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
     /// Common shared cache across all user sessions through which data is read and written, with database being the destination for writing.
     /// Use this class to manage all area state information directly. 
     /// Remember to reload database before go-live
-    /// 
+    /// Get rid of old spatial service and email Scott new connection details
     /// As you scroll - load every polygon in the whole country.
     /// Layers - Suburbs, Licenses, Territories.
     /// Mouse-over highlighting areas.
@@ -32,6 +32,7 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
     /// Validation rules!!!
     /// "No area may overlap a territory"- do we need to check for polygon completely inside another??
     /// Validation checking with different layers, and especiialy territories NB (check for complete containment etc.)
+    /// Handle all "TODO"'s in this code.
     /// </summary>
     public sealed class GlobalAreaCache
     {        

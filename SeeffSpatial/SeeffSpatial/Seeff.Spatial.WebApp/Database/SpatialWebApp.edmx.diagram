@@ -6,6 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="08c995c7a58743bf8ca997006de9f25c" Name="Diagram1">
         <EntityTypeShape EntityType="spatial_web_appModel.exception_log" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="spatial_web_appModel.seeff_areas" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

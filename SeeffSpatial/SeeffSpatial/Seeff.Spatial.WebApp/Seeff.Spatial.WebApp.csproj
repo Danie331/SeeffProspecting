@@ -189,9 +189,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BusinessLayer\ControllerActions\RetrieveUnmappedSuburbs.cs" />
     <Compile Include="BusinessLayer\ControllerActions\SaveSuburb.cs" />
     <Compile Include="BusinessLayer\ControllerActions\ValidateSuburb.cs" />
     <Compile Include="BusinessLayer\GlobalAreaCache.cs" />
+    <Compile Include="BusinessLayer\Interfaces\IServerResult.cs" />
     <Compile Include="BusinessLayer\Models\AreaHierarchy.cs" />
     <Compile Include="BusinessLayer\Models\AreaValidationResult.cs" />
     <Compile Include="BusinessLayer\Models\SaveSuburbResult.cs" />
@@ -199,11 +201,15 @@
     <Compile Include="BusinessLayer\Models\SeeffSuburb.cs" />
     <Compile Include="BusinessLayer\Models\SeeffTerritory.cs" />
     <Compile Include="BusinessLayer\Models\SpatialModelBase.cs" />
+    <Compile Include="BusinessLayer\Models\UnmappedSuburbs.cs" />
     <Compile Include="BusinessLayer\Validators\SuburbValidator.cs" />
     <Compile Include="BusinessLayer\Utils.cs" />
     <Compile Include="BusinessLayer\Validators\ValidatorBase.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Database\exception_log.cs">
+      <DependentUpon>SpatialWebApp.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\seeff_areas.cs">
       <DependentUpon>SpatialWebApp.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\SpatialWebApp.Context.cs">
@@ -252,7 +258,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="BusinessLayer\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

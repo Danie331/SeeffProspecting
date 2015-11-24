@@ -55,14 +55,14 @@ $(function () {
                     if (application.panel.navItemCreateNewArea.newAreaPolygon) {
                         var suburbModel = application.services.serviceModels.buildSuburbModel();
                         suburbModel.PolyWKT = application.Google.getPolyAsGeographyString(application.panel.navItemCreateNewArea.newAreaPolygon);
-                        suburbModel.AreaName = "temp"; // TEMPORARY for validation purposes
-                        suburbModel.LicenseID = -1; // TEMPORARY for validation purposes
+                        suburbModel.AreaName = "temp";
                         application.services.serviceControllers.validateSuburbPolygon(suburbModel, function (result) {
                             var step2Tick = $("#createPolyStep2CompleteTick");
                             var errorTick = $("#createPolyStep2ErrorTick");
                             var errorContainer = $("#newAreaValidationResults");
                             var step3 = $("#createAreaStep3");
                             var validateBtn = $("#ValidateNewPolyBtn");
+                            
                             if (result.IsValid) {
                                 application.panel.navItemCreateNewArea.newAreaPolygon.setOptions({ editable: false });
                                 errorContainer.removeClass('step-active').addClass('step-nonactive');
@@ -81,6 +81,18 @@ $(function () {
                                     licenseIDSelect.val(result.LicenseID);
                                     licenseIDSelect.attr("disabled", true);
                                 }
+
+                                var unmappedSuburbSelector = $("#unmappedSuburbSelector");
+                                unmappedSuburbSelector.empty().append("<option value='' selected='selected'></option>");
+                                application.services.serviceControllers.retrieveUnmappedSuburbs(function (results) {
+                                    if (results.Successful) {
+                                        $.each(results.Suburbs, function (idx, sub) {
+                                            var option = $('<option/>', { value: sub.SeeffAreaID }).text(sub.AreaName + ' (' + sub.SeeffAreaID + ')');
+                                            option.data('areaName', sub.AreaName);
+                                            unmappedSuburbSelector.append(option);
+                                        });
+                                    }
+                                });
                             } else {                                
                                 errorTick.removeClass('step-nonactive').addClass('step-active');
                                 step2Tick.removeClass('step-active').addClass('step-nonactive');
@@ -116,21 +128,24 @@ $(function () {
                     application.panel.navItemCreateNewArea.buildContent();
                 },
                 saveNewPolygon: function () {                  
-                    var areaName = $("#newAreaNameInput").val();
-                    if (!areaName) {
-                        alert("Must enter a name for the new suburb");
+                    var unmappedAreaID = $("#unmappedSuburbSelector").val();
+                    if (!unmappedAreaID) {
+                        alert("Please select an existing unmapped Seeff suburb against which this data will be saved.");
                         return;
                     }
+                    var selectedOption = $("#unmappedSuburbSelector option:selected");
+                    var areaName = selectedOption.data('areaName');
                     var licenseID = $("#licenseIDSelect").val();
-                    if (!licenseID) {
-                        alert("Must specify a Seeff License ID for the new suburb");
-                        return;
-                    }
+                    //if (!licenseID) {
+                    //    alert("Must specify a Seeff License ID for the new suburb");
+                    //    return;
+                    //}
 
                     var suburbModel = application.services.serviceModels.buildSuburbModel();
                     suburbModel.PolyWKT = application.Google.getPolyAsGeographyString(application.panel.navItemCreateNewArea.newAreaPolygon);
                     suburbModel.AreaName = areaName;
                     suburbModel.LicenseID = licenseID;
+                    suburbModel.SeeffAreaID = unmappedAreaID;
                     application.services.serviceControllers.saveSuburb(suburbModel, application.panel.navItemCreateNewArea.controllers.saveSuburbCallback);
                 },
                 saveSuburbCallback: function (result) {

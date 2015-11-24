@@ -38,14 +38,8 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
             int? licenseID = null;
             if (containingLicenses.Count == 0)
             {
-                if (!_suburb.LicenseID.HasValue || _suburb.LicenseID == 0)
-                {
-                    result.IsValid = false;
-                    result.ValidationMessage = "Suburb must belong to a License.";
-                    return result;
-                } else {
-                    licenseID = _suburb.LicenseID; // User-allocated
-                }
+                if (_suburb.LicenseID.HasValue)
+                    licenseID = _suburb.LicenseID;
             }
             if (containingLicenses.Count == 1)
             {

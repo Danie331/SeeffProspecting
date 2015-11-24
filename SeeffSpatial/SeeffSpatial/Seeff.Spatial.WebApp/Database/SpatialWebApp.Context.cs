@@ -26,5 +26,6 @@ namespace Seeff.Spatial.WebApp.Database
         }
     
         public virtual DbSet<exception_log> exception_log { get; set; }
+        public virtual DbSet<seeff_areas> seeff_areas { get; set; }
     }
 }
