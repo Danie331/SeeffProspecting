@@ -13,7 +13,11 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
         [JsonIgnore]
         private DbGeography _polygon;
 
+        [JsonIgnore]
+        private DbGeography _centroid;
+
         private string _polygonWKT;
+        private string _centroidWKT;
 
         [JsonIgnore]
         public DbGeography Polygon
@@ -23,6 +27,7 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
             {
                 _polygon = value;
                 _polygonWKT = value.WellKnownValue.WellKnownText;
+                CalculateCentroid();
             }
         }
 
@@ -33,8 +38,11 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
             {
                 _polygon = CreateGeographyFromStringObject(value);
                 _polygonWKT = _polygon.WellKnownValue.WellKnownText;
+                CalculateCentroid();
             }
         }
+
+        public string CentroidWKT { get { return _centroidWKT; } }
 
         private DbGeography CreateGeographyFromStringObject(string polyString)
         {
@@ -79,6 +87,19 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
             if (!wkt.StartsWith("POLYGON") && !wkt.StartsWith("POINT")) return null;
 
             return polygon;
+        }
+
+        private void CalculateCentroid()
+        {
+            if (_polygon == null) return;
+            string wkt = _polygon.WellKnownValue.WellKnownText;
+            var geog = SqlGeography.STPolyFromText(new System.Data.SqlTypes.SqlChars(wkt), DbGeography.DefaultCoordinateSystemId);
+            geog = geog.EnvelopeCenter();
+            geog = geog.MakeValid();
+            wkt = geog.ToString();
+
+            _centroid = DbGeography.FromText(wkt);
+            _centroidWKT = _centroid.WellKnownValue.WellKnownText;
         }
     }
 }

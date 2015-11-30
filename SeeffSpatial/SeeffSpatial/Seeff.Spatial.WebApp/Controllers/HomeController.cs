@@ -35,6 +35,7 @@ namespace Seeff.Spatial.WebApp.Controllers
                         UserModel user = new UserModel();
                         user.SeeffAreaCollection = GlobalAreaCache.Instance.AllSuburbs; // TODO (user areas only)
                         user.SeeffLicenses = GlobalAreaCache.Instance.SeeffLicenses;
+                        user.SeeffTerritories = GlobalAreaCache.Instance.SeeffTerritories;
                         user.LoginSuccess = true;
 
                         return user;
@@ -102,6 +103,36 @@ namespace Seeff.Spatial.WebApp.Controllers
             {
                 Utils.LogException(ex, "RetrieveUnmappedSuburbs()", null);
                 return new UnmappedSuburbs { Successful = false, ErrorMessage = ex.Message };
+            }
+        }
+
+        [HttpPost]
+        public AreaValidationResult ValidateLicense([FromBody]SeeffLicense licenseFromFrontEnd)
+        {
+            try
+            {
+                var validationResult = ControllerActions.ValidateLicense(licenseFromFrontEnd);
+                return validationResult;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "ValidateLicense()", licenseFromFrontEnd);
+                return new AreaValidationResult { IsValid = false, ValidationMessage = ex.Message };
+            }
+        }
+
+        [HttpPost]
+        public SaveLicenseResult SaveLicense([FromBody]SeeffLicense licenseFromFrontEnd)
+        {
+            try
+            {
+                var saveResult = ControllerActions.SaveLicense(licenseFromFrontEnd);
+                return saveResult;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "SaveLicense()", licenseFromFrontEnd);
+                return new SaveLicenseResult { Successful = false, SaveMessage = ex.Message };
             }
         }
     }

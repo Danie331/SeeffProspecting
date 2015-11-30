@@ -132,5 +132,21 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
                 _allSuburbs = _allSuburbs.OrderBy(sub => sub.AreaName).ToList();
             }
         }
+
+        public void UpdateCacheItem(SeeffLicense result)
+        {
+            var target = _allLicenses.FirstOrDefault(lic => lic.LicenseID == result.LicenseID);
+            if (target != null)
+            {
+                target.Polygon = result.Polygon;
+                target.LicenseID = result.LicenseID;
+                target.TerritoryID = result.TerritoryID;
+            }
+            else
+            {
+                _allLicenses.Add(result);
+                //_allLicenses = _allLicenses.OrderBy(lic => lic.LicenseID).ToList();
+            }
+        }
     }
 }

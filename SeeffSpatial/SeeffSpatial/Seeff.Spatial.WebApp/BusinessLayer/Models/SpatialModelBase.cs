@@ -31,8 +31,11 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.Models
             set 
             {
                 _polygon = value;
-                _polygonWKT = value.WellKnownValue.WellKnownText;
-                CalculateCentroid();
+                if (value != null)
+                {
+                    _polygonWKT = value.WellKnownValue.WellKnownText;
+                    CalculateCentroid();
+                }
             }
         }
 
@@ -42,8 +45,11 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.Models
             set
             {
                 _polygon = CreateGeographyFromStringObject(value);
-                _polygonWKT = _polygon.WellKnownValue.WellKnownText;
-                CalculateCentroid();
+                if (_polygon != null)
+                {
+                    _polygonWKT = _polygon.WellKnownValue.WellKnownText;
+                    CalculateCentroid();
+                }
             }
         }
 
@@ -161,6 +167,28 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.Models
                 DbGeometry containedTest = DbGeometry.PolygonFromText(this.Polygon.WellKnownValue.WellKnownText, DbGeography.DefaultCoordinateSystemId);
                 bool contained = containedTest.Within(containerTest);
                 if (contained)
+                {
+                    results.Add(poly);
+                }
+            }
+            return results;
+        }
+
+        public List<T> GetIntersectingPolysIgnoreTouching<T>(List<T> polys)
+            where T: SpatialModelBase
+        {
+            List<T> results = new List<T>();
+            if (polys == null || this.Polygon == null)
+                return results;
+
+            foreach (var poly in polys)
+            {
+                if (poly.Polygon == null)
+                    continue;
+                var geomToTest = DbGeometry.PolygonFromText(poly.Polygon.WellKnownValue.WellKnownText, DbGeography.DefaultCoordinateSystemId);
+                var sourceGeom = DbGeometry.PolygonFromText(this.Polygon.WellKnownValue.WellKnownText, DbGeography.DefaultCoordinateSystemId);
+                if (sourceGeom.Intersects(geomToTest)) 
+                //if (poly.Polygon..Intersects(this.Polygon) && poly.PolyID != this.PolyID)
                 {
                     results.Add(poly);
                 }

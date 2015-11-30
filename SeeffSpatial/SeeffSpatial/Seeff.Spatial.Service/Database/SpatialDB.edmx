@@ -46,6 +46,10 @@
           <Property Name="territory_name" Type="varchar" MaxLength="50" />
           <Property Name="geo_polygon" Type="geography" />
         </EntityType>
+        <Function Name="get_area_id" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="lat" Type="float" Mode="In" />
+          <Parameter Name="long" Type="float" Mode="In" />
+        </Function>
         <EntityContainer Name="seeff_spatialModelStoreContainer">
           <EntitySet Name="exception_log" EntityType="Self.exception_log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="spatial_area" EntityType="Self.spatial_area" Schema="dbo" store:Type="Tables" />
@@ -57,19 +61,11 @@
     <edmx:ConceptualModels>
       <Schema Namespace="seeff_spatialModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="seeff_spatialEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="spatial_terretory" EntityType="seeff_spatialModel.spatial_terretory" />
           <EntitySet Name="spatial_area" EntityType="seeff_spatialModel.spatial_area" />
           <EntitySet Name="spatial_license" EntityType="seeff_spatialModel.spatial_license" />
+          <EntitySet Name="spatial_terretory" EntityType="seeff_spatialModel.spatial_terretory" />
           <EntitySet Name="exception_log" EntityType="seeff_spatialModel.exception_log" />
         </EntityContainer>
-        <EntityType Name="spatial_terretory">
-          <Key>
-            <PropertyRef Name="territory_id" />
-          </Key>
-          <Property Name="territory_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="territory_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="geo_polygon" Type="Geography" />
-        </EntityType>
         <EntityType Name="spatial_area">
           <Key>
             <PropertyRef Name="id" />
@@ -93,6 +89,14 @@
           <Property Name="fk_territory_id" Type="Int32" />
           <Property Name="area_center_point" Type="Geography" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="spatial_terretory">
+          <Key>
+            <PropertyRef Name="territory_id" />
+          </Key>
+          <Property Name="territory_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="territory_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="geo_polygon" Type="Geography" />
+        </EntityType>
         <EntityType Name="exception_log">
           <Key>
             <PropertyRef Name="exception_log_id" />
@@ -109,15 +113,6 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="seeff_spatialModelStoreContainer" CdmEntityContainer="seeff_spatialEntities">
-          <EntitySetMapping Name="spatial_terretory">
-            <EntityTypeMapping TypeName="seeff_spatialModel.spatial_terretory">
-              <MappingFragment StoreEntitySet="spatial_terretory">
-                <ScalarProperty Name="geo_polygon" ColumnName="geo_polygon" />
-                <ScalarProperty Name="territory_name" ColumnName="territory_name" />
-                <ScalarProperty Name="territory_id" ColumnName="territory_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="spatial_area">
             <EntityTypeMapping TypeName="seeff_spatialModel.spatial_area">
               <MappingFragment StoreEntitySet="spatial_area">
@@ -140,6 +135,15 @@
                 <ScalarProperty Name="geo_polygon" ColumnName="geo_polygon" />
                 <ScalarProperty Name="fk_license_id" ColumnName="fk_license_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="spatial_terretory">
+            <EntityTypeMapping TypeName="seeff_spatialModel.spatial_terretory">
+              <MappingFragment StoreEntitySet="spatial_terretory">
+                <ScalarProperty Name="geo_polygon" ColumnName="geo_polygon" />
+                <ScalarProperty Name="territory_name" ColumnName="territory_name" />
+                <ScalarProperty Name="territory_id" ColumnName="territory_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

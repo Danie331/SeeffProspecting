@@ -12,12 +12,14 @@ namespace Seeff.Spatial.Service.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class exception_log
+    public partial class spatial_area
     {
-        public int exception_log_id { get; set; }
-        public string exception_string { get; set; }
-        public string exception_friendly_msg { get; set; }
-        public string context { get; set; }
-        public System.DateTime created { get; set; }
+        public int id { get; set; }
+        public Nullable<int> fkAreaId { get; set; }
+        public System.Data.Entity.Spatial.DbGeography geo_polygon { get; set; }
+        public Nullable<int> fk_license_id { get; set; }
+        public Nullable<int> fk_territory_id { get; set; }
+        public System.Data.Entity.Spatial.DbGeography area_center_point { get; set; }
+        public string area_name { get; set; }
     }
 }

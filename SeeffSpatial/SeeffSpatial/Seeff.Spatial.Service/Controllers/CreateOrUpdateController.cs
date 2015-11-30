@@ -57,5 +57,47 @@ namespace Seeff.Spatial.Service.Controllers
                 throw;
             }
         }
+
+        [HttpPost]
+        public SpatialLicense SaveLicense([FromBody] SpatialLicense license)
+        {
+            try
+            {
+                using (var spatialDb = new seeff_spatialEntities())
+                {
+                    var existingrecord = spatialDb.spatial_license.FirstOrDefault(lic => lic.fk_license_id == license.LicenseID);
+                    if (existingrecord != null)
+                    {
+                        existingrecord.geo_polygon = license.Polygon;
+                    }
+                    else
+                    {
+                        existingrecord = new spatial_license
+                        {
+                            fk_license_id = license.LicenseID,
+                            fk_territory_id = license.TerritoryID,
+                            geo_polygon = license.Polygon,                             
+                        };
+                        spatialDb.spatial_license.Add(existingrecord);
+                    }
+
+                    spatialDb.SaveChanges();
+
+                    var result = new SpatialLicense
+                    {
+                        LicenseID = existingrecord.fk_license_id,
+                        Polygon = existingrecord.geo_polygon,
+                        TerritoryID = existingrecord.fk_territory_id
+                    };
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "SaveLicense()", license);
+                throw;
+            }
+        }
     }
 }

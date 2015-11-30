@@ -19,6 +19,46 @@ $(function () {
             },
             defaultIfNullOrUndef: function (testValue, defaultValue) {
                 return testValue && testValue != null ? testValue : defaultValue;
+            },
+            handleGetPolygonFromFile: function (evt, callback) {
+                var files = evt.target.files;
+                var file = files[0];
+                var reader = new FileReader();
+                reader.onload = (function (theFile) {
+                    return function (e) {
+                        var poly = application.utilities.readFromKMLFile(e, theFile);
+                        callback(poly);
+                    };
+                })(file);
+                reader.readAsDataURL(file);
+            },
+            parseKMLInputString: function(rawXMLString) {
+                var polyString = rawXMLString.match(/<coordinates>[\s\S]*?<\/coordinates>/)[0];
+                polyString = polyString.replace('<coordinates>','').replace('</coordinates>','');
+                var coords = polyString.split(' ');
+                var result = [];
+                $.each(coords, function (idx, pair) {
+                    var lat = pair.split(',')[1];
+                    var lng = pair.split(',')[0];
+                    result.push({ lat: Number(lat), lng: Number(lng) });
+                });
+                return result;
+            },
+            readFromKMLFile: function (e, file) {
+                var dataStringOffset = e.currentTarget.result.indexOf('base64,');
+                var data = e.currentTarget.result.substring(dataStringOffset + 7, e.currentTarget.result.length);
+                var decodedData = window.atob(data);
+                var coords = application.utilities.parseKMLInputString(decodedData);
+
+                var polygon = new google.maps.Polygon({
+                    paths: coords,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 1.5,
+                    fillColor: '#FF0000',
+                    fillOpacity: 0.0
+                });
+                return polygon;
             }
         }
     });

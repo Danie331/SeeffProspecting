@@ -4,6 +4,9 @@
         <fieldset class="step-content-left">
             <legend>Step 1: Create The Area Shape</legend>
             <input type="button" id="startPolygonBtn" onclick="application.panel.navItemCreateNewArea.controllers.startNewPolygon()" value="Start New Area Shape" />
+            <label style="margin-left:10px;margin-right:10px"> - OR - </label>
+            <input type="button" id="uploadKMLBtn" onclick="application.panel.navItemCreateNewArea.controllers.uploadNewKML()" value="Upload KML" />
+            <input id='attachKMLFile' type='file' accept=".kml" style="display:none" />
         </fieldset>
         <img id="createPolyStep1CompleteTick" src="../Graphics/green_tick.png" class="step-content-right step-nonactive" />
     </div>

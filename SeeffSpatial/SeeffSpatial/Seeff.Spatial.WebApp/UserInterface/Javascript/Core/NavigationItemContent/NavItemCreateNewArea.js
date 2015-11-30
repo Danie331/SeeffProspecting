@@ -46,10 +46,44 @@ $(function () {
                         var startPolygonBtn = $("#startPolygonBtn");
                         startPolygonBtn.prop('disabled', true);
 
+                        var uploadNewKMLBtn = $("#uploadKMLBtn");
+                        uploadNewKMLBtn.prop('disabled', true);
+
                         polygon.setOptions({ editable: true });
                         application.panel.navItemCreateNewArea.newAreaPolygon = polygon;
                         application.Google.drawingManager.setMap(null);
                     });
+                },
+                uploadNewKML: function () {
+                    $('#attachKMLFile').unbind('change').bind('change', function (evt) {
+                        application.utilities.handleGetPolygonFromFile(evt, application.panel.navItemCreateNewArea.controllers.uploadNewKMLCallback);
+                    });
+                    $('#attachKMLFile').trigger('click');
+                },
+                uploadNewKMLCallback: function(polygon) {
+                    polygon.setMap(application.Google.map);
+                    var step1Tick = $("#createPolyStep1CompleteTick");
+                    step1Tick.removeClass('step-nonactive').addClass('step-active');
+
+                    var createAreaStep2 = $("#createAreaStep2");
+                    createAreaStep2.removeClass('step-nonactive').addClass('step-active');
+
+                    var startOverBtn = $("#startNewPolyOverBtn");
+                    startOverBtn.removeClass('step-nonactive').addClass('step-active');
+
+                    var startPolygonBtn = $("#startPolygonBtn");
+                    startPolygonBtn.prop('disabled', true);
+
+                    var uploadNewKMLBtn = $("#uploadKMLBtn");
+                    uploadNewKMLBtn.prop('disabled', true);
+
+                    polygon.setOptions({ editable: true });
+                    application.panel.navItemCreateNewArea.newAreaPolygon = polygon;
+
+                    var infoWindow = new google.maps.InfoWindow();
+                    infoWindow.setContent("KML upload");
+                    infoWindow.setPosition(polygon.getPath().getArray()[0]);
+                    infoWindow.open(application.Google.map);
                 },
                 validateNewPolygon: function () {
                     if (application.panel.navItemCreateNewArea.newAreaPolygon) {
@@ -105,7 +139,7 @@ $(function () {
                                     $.each(result.ConflictingPolys, function (idx, area) {
                                         var targetSuburb = application.user.SeeffAreaCollectionLookup[area.PolyID];
                                         if (targetSuburb) {
-                                            var radioItem = application.panel.navItemSuburbSelection.constructSuburbRadioItem(targetSuburb);
+                                            var radioItem = application.panel.navItemAreaSelection.constructSuburbRadioItem(targetSuburb);
                                             errorContainer.append(radioItem).append('<br />');
                                         } else {
                                             errorContainer.append(area.AreaName + " - restart the application to access.").append('<br />');
@@ -156,12 +190,17 @@ $(function () {
                     var saveBtn = $("#saveNewAreaBtn");
                     if (result.Successful) {
                         application.user.SeeffAreaCollection.push(result.SuburbResult);
+                        application.user.SeeffAreaCollection.sort(function (a, b) {
+                            if (a.AreaName > b.AreaName) return 1;
+                            if (a.AreaName < b.AreaName) return -1;
+                            return 0;
+                        });
                         application.user.SeeffAreaCollectionLookup[result.SuburbResult.SeeffAreaID] = result.SuburbResult;
                         application.panel.navItemCreateNewArea.newAreaPolygon.setMap(null);
                         application.panel.navItemCreateNewArea.newAreaPolygon = null;
                         application.stateManager.handleExitEditPolyMode();
-                        application.Google.drawPoly(result.SuburbResult);
-                        application.panel.navItemSuburbSelection.rebuildContentCache();
+                        application.Google.createSuburbPoly(result.SuburbResult, {render: true});
+                        application.panel.navItemAreaSelection.addSuburbToCache(result.SuburbResult);
                         application.stateManager.setActiveSuburb(result.SuburbResult);
                         result.SuburbResult.PolygonInstance.setOptions({ fillOpacity: 0.5 });
                         application.Google.showSuburbInfoWindow(result.SuburbResult);

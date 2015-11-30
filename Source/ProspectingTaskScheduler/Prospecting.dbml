@@ -82,30 +82,12 @@
       <Column Name="date_time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.prospecting_area" Member="prospecting_areas">
-    <Type Name="prospecting_area">
-      <Column Name="prospecting_area_id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="area_name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Association Name="prospecting_area_prospecting_area_layer" Member="prospecting_area_layers" ThisKey="prospecting_area_id" OtherKey="prospecting_area_id" Type="prospecting_area_layer" />
-      <Association Name="prospecting_area_prospecting_kml_area" Member="prospecting_kml_areas" ThisKey="prospecting_area_id" OtherKey="prospecting_area_id" Type="prospecting_kml_area" />
-    </Type>
-  </Table>
   <Table Name="dbo.prospecting_area_dialing_code" Member="prospecting_area_dialing_codes">
     <Type Name="prospecting_area_dialing_code">
       <Column Name="prospecting_area_dialing_code_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="dialing_code_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="code_desc" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Association Name="prospecting_area_dialing_code_prospecting_contact_detail" Member="prospecting_contact_details" ThisKey="prospecting_area_dialing_code_id" OtherKey="intl_dialing_code_id" Type="prospecting_contact_detail" />
-    </Type>
-  </Table>
-  <Table Name="dbo.prospecting_area_layer" Member="prospecting_area_layers">
-    <Type Name="prospecting_area_layer">
-      <Column Name="area_layer_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="prospecting_area_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="area_type" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
-      <Column Name="province_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="formatted_poly_coords" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Association Name="prospecting_area_prospecting_area_layer" Member="prospecting_area" ThisKey="prospecting_area_id" OtherKey="prospecting_area_id" Type="prospecting_area" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.prospecting_company_property_relationship" Member="prospecting_company_property_relationships">
@@ -205,17 +187,6 @@
       <Association Name="prospecting_contact_person_email_communications_log" Member="email_communications_logs" ThisKey="contact_person_id" OtherKey="target_contact_person_id" Type="email_communications_log" />
       <Association Name="prospecting_contact_person_sms_communications_log" Member="sms_communications_logs" ThisKey="contact_person_id" OtherKey="target_contact_person_id" Type="sms_communications_log" />
       <Association Name="prospecting_person_title_prospecting_contact_person" Member="prospecting_person_title" ThisKey="person_title" OtherKey="prospecting_person_title_id" Type="prospecting_person_title" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.prospecting_kml_area" Member="prospecting_kml_areas">
-    <Type Name="prospecting_kml_area">
-      <Column Name="prospecting_kml_area_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="prospecting_area_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="latitude" Type="System.Decimal" DbType="Decimal(18,10) NOT NULL" CanBeNull="false" />
-      <Column Name="longitude" Type="System.Decimal" DbType="Decimal(18,10) NOT NULL" CanBeNull="false" />
-      <Column Name="area_type" Type="System.Char" DbType="Char(1) NOT NULL" CanBeNull="false" />
-      <Column Name="seq" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="prospecting_area_prospecting_kml_area" Member="prospecting_area" ThisKey="prospecting_area_id" OtherKey="prospecting_area_id" Type="prospecting_area" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.prospecting_person_company_relationship" Member="prospecting_person_company_relationships">

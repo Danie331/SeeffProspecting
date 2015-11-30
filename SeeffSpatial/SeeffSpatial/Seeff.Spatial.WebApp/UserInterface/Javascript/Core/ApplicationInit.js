@@ -12,8 +12,16 @@ application.init = function (userResult) {
         $.each(application.user.SeeffAreaCollection, function (index, area) {
             var areaID = '' + area.SeeffAreaID;
             application.user.SeeffAreaCollectionLookup[areaID] = area;
-            application.Google.drawPoly(area);
+            application.Google.createSuburbPoly(area, {render: true});
+        });
+        $.each(application.user.SeeffLicenses, function (index, poly) {
+            application.Google.createLicensePoly(poly);
+        });
+        $.each(application.user.SeeffTerritories, function (index, poly) {
+            application.Google.createTerritoryPoly(poly);
         });
         application.panel.initPanel();
+
+        application.Google.addRightClickHook();
     });
 }

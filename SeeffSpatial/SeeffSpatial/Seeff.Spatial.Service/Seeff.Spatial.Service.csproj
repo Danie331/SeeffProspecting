@@ -115,6 +115,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BusinessLayer\Models\SpatialModelBase.cs" />
+    <Compile Include="BusinessLayer\Models\SpatialPoint.cs" />
     <Compile Include="BusinessLayer\Utils.cs" />
     <Compile Include="Controllers\CreateOrUpdateController.cs" />
     <Compile Include="Controllers\ReadController.cs" />

@@ -43,6 +43,14 @@ $(function () {
                 retrieveUnmappedSuburbs: function (callback) {
                     var endpoint = application.utilities.buildHomeURL('/api/Home/RetrieveUnmappedSuburbs');
                     application.services.get(endpoint, "Loading. Please wait...", callback);
+                },
+                validateLicensePolygon: function (licenseModel, callback) {
+                    var endpoint = application.utilities.buildHomeURL('/api/Home/ValidateLicense');
+                    application.services.post(endpoint, licenseModel, "Validating. Please wait...", callback);
+                },
+                saveLicense: function (licenseModel, callback) {
+                    var endpoint = application.utilities.buildHomeURL('/api/Home/SaveLicense');
+                    application.services.post(endpoint, licenseModel, "Validating. Please wait...", callback);
                 }
             },
             serviceModels: {
@@ -57,6 +65,16 @@ $(function () {
                     }
 
                     return suburbModel;
+                },
+                buildLicenseModel: function (license) {
+                    var licenseModel = { LicenseID: null, TerritoryID: null, PolyWKT: null, CentroidWKT: null };
+                    if (license) {
+                        licenseModel.PolyWKT = application.Google.getPolyAsGeographyString(license.PolygonInstance);
+                        licenseModel.LicenseID = license.LicenseID;
+                        licenseModel.TerritoryID = license.TerritoryID;
+                    }
+
+                    return licenseModel;
                 }
             }
         }

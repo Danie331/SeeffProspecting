@@ -10,8 +10,8 @@ $(function () {
                     $("#panelContentContainer").css('height', '100%');
 
                     // Build content for the first menu item
-                    application.panel.navItemSuburbSelection.buildContent();
-                    application.stateManager.activeNavItem = application.panel.navItemSuburbSelection;
+                    application.panel.navItemAreaSelection.buildContent(true);
+                    application.stateManager.activeNavItem = application.panel.navItemAreaSelection;
                 });
             },
             dimensions: {
@@ -65,8 +65,8 @@ $(function () {
                         application.panel.navMenu.updateNavItemButtonOnClick();
                         application.stateManager.handleExitEditPolyMode();
                         application.stateManager.handleExitCreateAreaMode();
-                        application.panel.navItemSuburbSelection.buildContent(); //clicking to a new poly must also exit edit mode., delete polypoint, undo create new line when creating new poly.
-                        application.stateManager.activeNavItem = application.panel.navItemSuburbSelection;
+                        application.panel.navItemAreaSelection.buildContent(true); //clicking to a new poly must also exit edit mode., delete polypoint, undo create new line when creating new poly.
+                        application.stateManager.activeNavItem = application.panel.navItemAreaSelection;
                     },
                     createAreaClick: function () {
                         application.panel.navMenu.updateNavItemButtonOnClick();
@@ -83,7 +83,7 @@ $(function () {
                         application.stateManager.activeNavItem = application.panel.navItemAreaInformation;
                     },
                     enterPolyEditModeClick: function () {
-                        if (application.stateManager.activeSuburb) {
+                        if (application.stateManager.activeSuburb || application.stateManager.activeLicense) {
                             application.panel.navMenu.updateNavItemButtonOnClick();
                             application.panel.navItemEditPoly.buildContent();
                             application.stateManager.handleExitCreateAreaMode();

@@ -77,7 +77,7 @@
     <script src="../Javascript/Core/Services.js"></script>
     <script src="../Javascript/Core/NavigationItemContent/NavItemAreaInformation.js"></script>
     <script src="../Javascript/Core/NavigationItemContent/NavItemCreateNewArea.js"></script>
-    <script src="../Javascript/Core/NavigationItemContent/NavItemSuburbSelection.js"></script>
+    <script src="../Javascript/Core/NavigationItemContent/NavItemAreaSelection.js"></script>
     <script src="../Javascript/Core/NavigationItemContent/NavItemEditPoly.js"></script>
 
     <!-- Bootstrap -->

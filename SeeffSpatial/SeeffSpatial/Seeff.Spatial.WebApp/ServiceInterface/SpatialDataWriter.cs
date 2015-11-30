@@ -22,5 +22,19 @@ namespace Seeff.Spatial.WebApp.ServiceInterface
                 throw;
             }
         }
+
+        public SeeffLicense SaveLicense(SeeffLicense license)
+        {
+            try
+            {
+                license = PostToService<SeeffLicense>("api/CreateOrUpdate/SaveLicense", license);
+                return license;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "SaveLicense()", null);
+                throw;
+            }
+        }
     }
 }

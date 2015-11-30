@@ -11,6 +11,7 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.Models
         public string LoginMessage { get; set; }
         public List<SeeffSuburb> SeeffAreaCollection  { get; set; }
         public List<SeeffLicense> SeeffLicenses { get; set; }
+        public List<SeeffTerritory> SeeffTerritories { get; set; }
         //
     }
 }
