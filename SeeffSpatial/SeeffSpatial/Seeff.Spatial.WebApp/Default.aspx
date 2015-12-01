@@ -63,22 +63,22 @@
     <script src="http://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDWHlk3fmGm0oDsqVaoBM3_YocW5xPKtwA&libraries=drawing,geometry,places&sensor=true"></script>
 
     <!-- 3rd party libs -->
-    <script src="../Javascript/3rd_party/jqueryBlockUI.js"></script>
+    <script src="UserInterface/Javascript/3rd_party/jqueryBlockUI.js"></script>
 
     <!-- Styles -->
-    <link href="../Stylesheets/Shared.css" rel="stylesheet" />
+    <link href="UserInterface/Stylesheets/Shared.css" rel="stylesheet" />
 
     <!-- Core functionality -->
-    <script src="../Javascript/Core/Google.js"></script>
-    <script src="../Javascript/Core/Panel.js"></script>
-    <script src="../Javascript/Core/Utilities.js"></script>
-    <script src="../Javascript/Core/ApplicationInit.js"></script>
-    <script src="../Javascript/Core/StateManager.js"></script>
-    <script src="../Javascript/Core/Services.js"></script>
-    <script src="../Javascript/Core/NavigationItemContent/NavItemAreaInformation.js"></script>
-    <script src="../Javascript/Core/NavigationItemContent/NavItemCreateNewArea.js"></script>
-    <script src="../Javascript/Core/NavigationItemContent/NavItemAreaSelection.js"></script>
-    <script src="../Javascript/Core/NavigationItemContent/NavItemEditPoly.js"></script>
+    <script src="UserInterface/Javascript/Core/Google.js"></script>
+    <script src="UserInterface/Javascript/Core/Panel.js"></script>
+    <script src="UserInterface/Javascript/Core/Utilities.js"></script>
+    <script src="UserInterface/Javascript/Core/ApplicationInit.js"></script>
+    <script src="UserInterface/Javascript/Core/StateManager.js"></script>
+    <script src="UserInterface/Javascript/Core/Services.js"></script>
+    <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemAreaInformation.js"></script>
+    <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemCreateNewArea.js"></script>
+    <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemAreaSelection.js"></script>
+    <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemEditPoly.js"></script>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
@@ -90,7 +90,7 @@
             var baseURL = '';
             var debugFlag = application.utilities.getUrlParameter('debug');
             if (!debugFlag) {
-                baseURL = '/Seeff.Spatial.WebApp';
+                baseURL = '';
             }
             application.baseURL = baseURL;
             $.ajax({
@@ -114,7 +114,7 @@
 </head>
 <body>
     <div id="loadingDiv" class="loadingGif">
-        <img src="../Graphics/loading.gif" />
+        <img src="UserInterface/Graphics/loading.gif" />
     </div> 
     <div id="map" style="display:none"></div>
     <div id="panelContainer" class="mainpanel ui-widget-content" style="display:none" />

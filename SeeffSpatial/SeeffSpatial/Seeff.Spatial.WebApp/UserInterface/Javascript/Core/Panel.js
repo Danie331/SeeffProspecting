@@ -4,7 +4,7 @@ $(function () {
         panel: {
             initPanel: function () {
                 var panelContainer = $("#panelContainer");
-                panelContainer.load("../HTML/Panel.html", function (state) {
+                panelContainer.load("UserInterface/HTML/Panel.html", function (state) {
                     panelContainer.resizable();
                     panelContainer.draggable({ containment: 'parent' });
                     $("#panelContentContainer").css('height', '100%');

@@ -15,7 +15,7 @@ $(function () {
                         $("#areaSelectionDiv").css('display', 'none');
                     }
                 } else {
-                    container.load("../HTML/AreaSelection.html", function (content) {
+                    container.load("UserInterface/HTML/AreaSelection.html", function (content) {
                         container.html(content);
 
                         var header = $("#areaSelectorHeader");

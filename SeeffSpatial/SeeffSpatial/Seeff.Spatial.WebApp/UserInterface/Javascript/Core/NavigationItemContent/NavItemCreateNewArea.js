@@ -8,7 +8,7 @@ $(function () {
                 if (application.panel.navItemCreateNewArea.contentCache) {
                     container.html(application.panel.navItemCreateNewArea.contentCache);
                 } else {
-                    container.html('').load("../HTML/CreatePoly.html", function (content) {
+                    container.html('').load("UserInterface/HTML/CreatePoly.html", function (content) {
                         application.panel.navItemCreateNewArea.contentCache = content;
                         container.html(application.panel.navItemCreateNewArea.contentCache);
                     });

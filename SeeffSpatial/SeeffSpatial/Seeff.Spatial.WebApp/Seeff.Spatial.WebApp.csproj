@@ -174,7 +174,7 @@
     <Content Include="UserInterface\Javascript\Core\Services.js" />
     <Content Include="UserInterface\Javascript\Core\StateManager.js" />
     <Content Include="UserInterface\Stylesheets\Shared.css" />
-    <Content Include="UserInterface\WebForms\Default.aspx" />
+    <Content Include="Default.aspx" />
     <Content Include="UserInterface\Graphics\collapse_panel.png" />
     <Content Include="UserInterface\Graphics\expand_panel.png" />
     <Content Include="UserInterface\Graphics\loading.gif" />
@@ -247,11 +247,11 @@
     <Compile Include="ServiceInterface\ServiceBase.cs" />
     <Compile Include="ServiceInterface\SpatialDataWriter.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
-    <Compile Include="UserInterface\WebForms\Default.aspx.cs">
+    <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="UserInterface\WebForms\Default.aspx.designer.cs">
+    <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\WebForms\NotAuthorised.aspx.cs">
