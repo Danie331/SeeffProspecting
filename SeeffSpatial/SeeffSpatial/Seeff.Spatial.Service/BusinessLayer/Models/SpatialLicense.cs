@@ -12,5 +12,12 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
     {
         public int? LicenseID { get; set; }
         public int? TerritoryID { get; set; }
+
+        public override int? PolyID
+        {
+            get { return LicenseID; }
+        }
+
+        public IList<SpatialSuburb> Suburbs { get; set; }
     }
 }

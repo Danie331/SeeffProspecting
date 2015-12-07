@@ -150,5 +150,32 @@ namespace Seeff.Spatial.Service.Controllers
                 return null;
             }
         }
+
+        [HttpPost]
+        public SpatialLicense GetLicenseFromID([FromBody] int licenseID)
+        {
+            using (var spatialDb = new seeff_spatialEntities())
+            {
+                SpatialLicense result = new SpatialLicense();
+                var target = spatialDb.spatial_license.FirstOrDefault(lic => lic.fk_license_id == licenseID);
+                if (target != null)
+                {
+                    result.LicenseID = target.fk_license_id;
+                    result.TerritoryID = target.fk_territory_id;
+
+                    result.Suburbs = (from sub in spatialDb.spatial_area
+                                      where sub.fk_license_id == target.fk_license_id
+                                      select new SpatialSuburb
+                                      {
+                                          SeeffAreaID = sub.fkAreaId,
+                                          AreaName = sub.area_name
+                                      }).ToList();
+
+                    return result;
+                };
+
+                return null;
+            }
+        }
     }
 }

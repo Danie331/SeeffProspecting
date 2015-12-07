@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="seeff_prospectingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="prospecting_property">
+          <Key>
+            <PropertyRef Name="prospecting_property_id" />
+          </Key>
+          <Property Name="prospecting_property_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="licence_id" Type="int" />
+          <Property Name="seeff_area_id" Type="int" />
+          <Property Name="development_id" Type="int" />
+          <Property Name="lightstone_property_id" Type="int" Nullable="false" />
+          <Property Name="propstats_id" Type="int" />
+          <Property Name="windeed_id" Type="int" />
+          <Property Name="erf_no" Type="int" />
+          <Property Name="portion_no" Type="int" />
+          <Property Name="property_address" Type="varchar" MaxLength="255" />
+          <Property Name="street_or_unit_no" Type="varchar" MaxLength="255" />
+          <Property Name="photo_url" Type="nvarchar" MaxLength="256" />
+          <Property Name="latitude" Type="decimal" Precision="13" Scale="8" />
+          <Property Name="longitude" Type="decimal" Precision="13" Scale="8" />
+          <Property Name="age" Type="datetime" />
+          <Property Name="erf_size" Type="int" />
+          <Property Name="dwell_size" Type="int" />
+          <Property Name="condition" Type="varchar" MaxLength="255" />
+          <Property Name="beds" Type="int" />
+          <Property Name="baths" Type="int" />
+          <Property Name="receptions" Type="int" />
+          <Property Name="studies" Type="int" />
+          <Property Name="garages" Type="int" />
+          <Property Name="parking_bays" Type="int" />
+          <Property Name="pool" Type="bit" />
+          <Property Name="staff_accomodation" Type="bit" />
+          <Property Name="created_date" Type="datetime" />
+          <Property Name="updated_date" Type="datetime" />
+          <Property Name="created_by" Type="uniqueidentifier" />
+          <Property Name="lightstone_id_or_ck_no" Type="varchar" MaxLength="255" />
+          <Property Name="lightstone_reg_date" Type="varchar" MaxLength="8" />
+          <Property Name="comments" Type="varchar(max)" />
+          <Property Name="ss_name" Type="varchar" MaxLength="255" />
+          <Property Name="ss_number" Type="varchar" MaxLength="50" />
+          <Property Name="unit" Type="varchar" MaxLength="50" />
+          <Property Name="ss_fh" Type="varchar" MaxLength="3" />
+          <Property Name="last_purch_price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ss_id" Type="varchar" MaxLength="10" />
+          <Property Name="ss_door_number" Type="varchar" MaxLength="50" />
+          <Property Name="prospected" Type="bit" />
+          <Property Name="farm_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="lightstone_suburb" Type="nvarchar" MaxLength="255" />
+          <Property Name="ss_unique_identifier" Type="nvarchar(max)" />
+          <Property Name="locked_by_guid" Type="uniqueidentifier" />
+          <Property Name="locked_datetime" Type="datetime" />
+          <Property Name="latest_reg_date" Type="varchar" MaxLength="8" />
+          <Property Name="is_short_term_rental" Type="bit" />
+          <Property Name="is_long_term_rental" Type="bit" />
+          <Property Name="is_commercial" Type="bit" />
+          <Property Name="is_agricultural" Type="bit" />
+          <Property Name="is_investment" Type="bit" />
+          <Property Name="has_email" Type="bit" />
+          <Property Name="has_cell" Type="bit" />
+          <Property Name="has_landline" Type="bit" />
+          <Property Name="has_primary_email" Type="bit" />
+          <Property Name="has_primary_cell" Type="bit" />
+          <Property Name="has_primary_landline" Type="bit" />
+        </EntityType>
+        <EntityContainer Name="seeff_prospectingModelStoreContainer">
+          <EntitySet Name="prospecting_property" EntityType="Self.prospecting_property" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="seeff_prospectingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="prospecting_property">
+          <Key>
+            <PropertyRef Name="prospecting_property_id" />
+          </Key>
+          <Property Name="prospecting_property_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="licence_id" Type="Int32" />
+          <Property Name="seeff_area_id" Type="Int32" />
+          <Property Name="development_id" Type="Int32" />
+          <Property Name="lightstone_property_id" Type="Int32" Nullable="false" />
+          <Property Name="propstats_id" Type="Int32" />
+          <Property Name="windeed_id" Type="Int32" />
+          <Property Name="erf_no" Type="Int32" />
+          <Property Name="portion_no" Type="Int32" />
+          <Property Name="property_address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="street_or_unit_no" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="photo_url" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="latitude" Type="Decimal" Precision="13" Scale="8" />
+          <Property Name="longitude" Type="Decimal" Precision="13" Scale="8" />
+          <Property Name="age" Type="DateTime" Precision="3" />
+          <Property Name="erf_size" Type="Int32" />
+          <Property Name="dwell_size" Type="Int32" />
+          <Property Name="condition" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="beds" Type="Int32" />
+          <Property Name="baths" Type="Int32" />
+          <Property Name="receptions" Type="Int32" />
+          <Property Name="studies" Type="Int32" />
+          <Property Name="garages" Type="Int32" />
+          <Property Name="parking_bays" Type="Int32" />
+          <Property Name="pool" Type="Boolean" />
+          <Property Name="staff_accomodation" Type="Boolean" />
+          <Property Name="created_date" Type="DateTime" Precision="3" />
+          <Property Name="updated_date" Type="DateTime" Precision="3" />
+          <Property Name="created_by" Type="Guid" />
+          <Property Name="lightstone_id_or_ck_no" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="lightstone_reg_date" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ss_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ss_number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="unit" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ss_fh" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="last_purch_price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ss_id" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ss_door_number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="prospected" Type="Boolean" />
+          <Property Name="farm_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="lightstone_suburb" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ss_unique_identifier" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="locked_by_guid" Type="Guid" />
+          <Property Name="locked_datetime" Type="DateTime" Precision="3" />
+          <Property Name="latest_reg_date" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="is_short_term_rental" Type="Boolean" />
+          <Property Name="is_long_term_rental" Type="Boolean" />
+          <Property Name="is_commercial" Type="Boolean" />
+          <Property Name="is_agricultural" Type="Boolean" />
+          <Property Name="is_investment" Type="Boolean" />
+          <Property Name="has_email" Type="Boolean" />
+          <Property Name="has_cell" Type="Boolean" />
+          <Property Name="has_landline" Type="Boolean" />
+          <Property Name="has_primary_email" Type="Boolean" />
+          <Property Name="has_primary_cell" Type="Boolean" />
+          <Property Name="has_primary_landline" Type="Boolean" />
+        </EntityType>
+        <EntityContainer Name="seeff_prospectingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="prospecting_property" EntityType="Self.prospecting_property" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="seeff_prospectingModelStoreContainer" CdmEntityContainer="seeff_prospectingEntities">
+          <EntitySetMapping Name="prospecting_property">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.prospecting_property">
+              <MappingFragment StoreEntitySet="prospecting_property">
+                <ScalarProperty Name="prospecting_property_id" ColumnName="prospecting_property_id" />
+                <ScalarProperty Name="licence_id" ColumnName="licence_id" />
+                <ScalarProperty Name="seeff_area_id" ColumnName="seeff_area_id" />
+                <ScalarProperty Name="development_id" ColumnName="development_id" />
+                <ScalarProperty Name="lightstone_property_id" ColumnName="lightstone_property_id" />
+                <ScalarProperty Name="propstats_id" ColumnName="propstats_id" />
+                <ScalarProperty Name="windeed_id" ColumnName="windeed_id" />
+                <ScalarProperty Name="erf_no" ColumnName="erf_no" />
+                <ScalarProperty Name="portion_no" ColumnName="portion_no" />
+                <ScalarProperty Name="property_address" ColumnName="property_address" />
+                <ScalarProperty Name="street_or_unit_no" ColumnName="street_or_unit_no" />
+                <ScalarProperty Name="photo_url" ColumnName="photo_url" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="age" ColumnName="age" />
+                <ScalarProperty Name="erf_size" ColumnName="erf_size" />
+                <ScalarProperty Name="dwell_size" ColumnName="dwell_size" />
+                <ScalarProperty Name="condition" ColumnName="condition" />
+                <ScalarProperty Name="beds" ColumnName="beds" />
+                <ScalarProperty Name="baths" ColumnName="baths" />
+                <ScalarProperty Name="receptions" ColumnName="receptions" />
+                <ScalarProperty Name="studies" ColumnName="studies" />
+                <ScalarProperty Name="garages" ColumnName="garages" />
+                <ScalarProperty Name="parking_bays" ColumnName="parking_bays" />
+                <ScalarProperty Name="pool" ColumnName="pool" />
+                <ScalarProperty Name="staff_accomodation" ColumnName="staff_accomodation" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="updated_date" ColumnName="updated_date" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="lightstone_id_or_ck_no" ColumnName="lightstone_id_or_ck_no" />
+                <ScalarProperty Name="lightstone_reg_date" ColumnName="lightstone_reg_date" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="ss_name" ColumnName="ss_name" />
+                <ScalarProperty Name="ss_number" ColumnName="ss_number" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="ss_fh" ColumnName="ss_fh" />
+                <ScalarProperty Name="last_purch_price" ColumnName="last_purch_price" />
+                <ScalarProperty Name="ss_id" ColumnName="ss_id" />
+                <ScalarProperty Name="ss_door_number" ColumnName="ss_door_number" />
+                <ScalarProperty Name="prospected" ColumnName="prospected" />
+                <ScalarProperty Name="farm_name" ColumnName="farm_name" />
+                <ScalarProperty Name="lightstone_suburb" ColumnName="lightstone_suburb" />
+                <ScalarProperty Name="ss_unique_identifier" ColumnName="ss_unique_identifier" />
+                <ScalarProperty Name="locked_by_guid" ColumnName="locked_by_guid" />
+                <ScalarProperty Name="locked_datetime" ColumnName="locked_datetime" />
+                <ScalarProperty Name="latest_reg_date" ColumnName="latest_reg_date" />
+                <ScalarProperty Name="is_short_term_rental" ColumnName="is_short_term_rental" />
+                <ScalarProperty Name="is_long_term_rental" ColumnName="is_long_term_rental" />
+                <ScalarProperty Name="is_commercial" ColumnName="is_commercial" />
+                <ScalarProperty Name="is_agricultural" ColumnName="is_agricultural" />
+                <ScalarProperty Name="is_investment" ColumnName="is_investment" />
+                <ScalarProperty Name="has_email" ColumnName="has_email" />
+                <ScalarProperty Name="has_cell" ColumnName="has_cell" />
+                <ScalarProperty Name="has_landline" ColumnName="has_landline" />
+                <ScalarProperty Name="has_primary_email" ColumnName="has_primary_email" />
+                <ScalarProperty Name="has_primary_cell" ColumnName="has_primary_cell" />
+                <ScalarProperty Name="has_primary_landline" ColumnName="has_primary_landline" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

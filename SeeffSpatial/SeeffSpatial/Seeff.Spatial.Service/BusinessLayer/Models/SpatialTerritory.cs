@@ -12,5 +12,10 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
     {
         public int? TerritoryID { get; set; }
         public string TerritoryName { get; set; }
+
+        public override int? PolyID
+        {
+            get { return TerritoryID; }
+        }
     }
 }

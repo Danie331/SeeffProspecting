@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Seeff.Spatial.Service.BusinessLayer;
+using Seeff.Spatial.Service.SpatialClientOperations;
 
 namespace Seeff.Spatial.Service.Controllers
 {
@@ -38,6 +39,9 @@ namespace Seeff.Spatial.Service.Controllers
                     }
 
                     spatialDb.SaveChanges();
+
+                    // Propogate change to client systems
+                   SpatialClients.PropogateChangesAsync(suburb);
 
                     var result = new SpatialSuburb
                     {
@@ -82,6 +86,9 @@ namespace Seeff.Spatial.Service.Controllers
                     }
 
                     spatialDb.SaveChanges();
+
+                    // Propogate change to client systems
+                    SpatialClients.PropogateChangesAsync(license);
 
                     var result = new SpatialLicense
                     {

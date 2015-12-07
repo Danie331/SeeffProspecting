@@ -44,6 +44,8 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
 
         public string CentroidWKT { get { return _centroidWKT; } }
 
+        public abstract int? PolyID { get; }
+
         private DbGeography CreateGeographyFromStringObject(string polyString)
         {
             if (string.IsNullOrEmpty(polyString))
