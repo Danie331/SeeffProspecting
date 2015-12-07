@@ -356,6 +356,11 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
                 return sub.SuburbId == followup.SeeffAreaId;
             })[0];
 
+            if (!targetSuburb) {
+                alert('The property that this follow-up belongs to has been allocated to a suburb that falls outside of your available suburbs.');
+                return;
+            }
+
             // Load the suburb
             globalZoomLevel = 20;
             $('#suburbLink' + targetSuburb.SuburbId).trigger('click', function () {
@@ -976,6 +981,11 @@ function buildActivityDisplayItem(activity) {
         targetSuburb = $.grep(suburbsInfo, function (sub) {
             return sub.SuburbId == activity.SeeffAreaId;
         })[0];
+
+        if (!targetSuburb) {
+            alert('The property that this activity belongs to has been allocated to a suburb that falls outside of your available suburbs.');
+            return;
+        }
 
         // Load the suburb
         globalZoomLevel = 20;

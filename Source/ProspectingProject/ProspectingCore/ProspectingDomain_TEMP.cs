@@ -370,32 +370,67 @@ namespace ProspectingProject
                 prospecting.CommandTimeout = 60;
                 var areaIds = areaIdList.Split(new[] { ',' }).Select(id => Convert.ToInt32(id));
 
-                var targets = from pp in prospecting.prospecting_properties
-                                  where areaIds.Contains(pp.seeff_area_id.Value)
-                                  group pp by pp.seeff_area_id into gr
-                                  select gr;
+                //var targets = from pp in prospecting.prospecting_properties
+                //                  where areaIds.Contains(pp.seeff_area_id.Value)
+                //                  group pp by pp.seeff_area_id into gr
+                //                  select gr;
 
                 List<UserSuburb> userSuburbs = new List<UserSuburb>();
-                foreach (var area in targets)
+                foreach (var areaId in areaIds)
                 {
-                    var firstProperty = area.First();
-                    var suburbInSuburbsList = ProspectingLookupData.SuburbsListOnly.FirstOrDefault(sub => sub.LocationID == firstProperty.seeff_area_id);
+                    var targetProps = prospecting.prospecting_properties.Where(sub => sub.seeff_area_id == areaId);
+
+                    var suburbInSuburbsList = ProspectingLookupData.SuburbsListOnly.FirstOrDefault(sub => sub.LocationID == areaId);
                     if (suburbInSuburbsList != null)
                     {
-                        var userSuburb = new UserSuburb
-                        {
-                            SuburbId = firstProperty.seeff_area_id.Value,
-                            SuburbName = suburbInSuburbsList.LocationName,
-                            TotalFullyProspected = area.Count(),
-                            PropertiesRequireAttention = area.Where(p => p.latest_reg_date != null).Count()
-                        };
-                        userSuburbs.Add(userSuburb);
+                        userSuburbs.Add(new UserSuburb
+                            {
+                                PropertiesRequireAttention = targetProps.Count(p => p.latest_reg_date != null),
+                                SuburbId = areaId,
+                                SuburbName = suburbInSuburbsList.LocationName,
+                                TotalFullyProspected = targetProps.Count()
+                            });
                     }
                     else
                     {
-
+                        var spatialReader = new SpatialServiceReader();
+                        var spatialSuburb = spatialReader.LoadSuburb(areaId);
+                        if (spatialSuburb != null)
+                        {
+                            if (!ProspectingLookupData.SuburbsListOnly.Any(sub => sub.LocationID == areaId))
+                            {
+                                ProspectingLookupData.SuburbsListOnly.Add(new ProspectingSuburb
+                                    {
+                                        LocationID = spatialSuburb.SeeffAreaID,
+                                        LocationName = spatialSuburb.AreaName
+                                    });
+                                userSuburbs.Add(new UserSuburb
+                                    {
+                                        PropertiesRequireAttention = targetProps.Count(p => p.latest_reg_date != null),
+                                        SuburbId = spatialSuburb.SeeffAreaID.Value,
+                                        SuburbName = spatialSuburb.AreaName,
+                                        TotalFullyProspected = targetProps.Count()
+                                    });
+                            }
+                        }
                     }
                 }
+                //foreach (var area in targets)
+                //{
+                //    var firstProperty = area.First();
+                //    var suburbInSuburbsList = ProspectingLookupData.SuburbsListOnly.FirstOrDefault(sub => sub.LocationID == firstProperty.seeff_area_id);
+                //    if (suburbInSuburbsList != null)
+                //    {
+                //        var userSuburb = new UserSuburb
+                //        {
+                //            SuburbId = firstProperty.seeff_area_id.Value,
+                //            SuburbName = suburbInSuburbsList.LocationName,
+                //            TotalFullyProspected = area.Count(),
+                //            PropertiesRequireAttention = area.Where(p => p.latest_reg_date != null).Count()
+                //        };
+                //        userSuburbs.Add(userSuburb);
+                //    }
+                //}
 
                 return userSuburbs.Distinct().OrderBy(a => a.SuburbName).ToList();
 

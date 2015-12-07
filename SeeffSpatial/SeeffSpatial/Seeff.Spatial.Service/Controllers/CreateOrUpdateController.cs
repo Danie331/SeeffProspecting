@@ -88,7 +88,7 @@ namespace Seeff.Spatial.Service.Controllers
                     spatialDb.SaveChanges();
 
                     // Propogate change to client systems
-                    SpatialClients.PropogateChangesAsync(license);
+                   // SpatialClients.PropogateChangesAsync(license);
 
                     var result = new SpatialLicense
                     {

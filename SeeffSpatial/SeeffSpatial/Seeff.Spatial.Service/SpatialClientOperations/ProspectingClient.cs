@@ -11,15 +11,25 @@ namespace Seeff.Spatial.Service.SpatialClientOperations
     {
         public void ReindexSuburbAreaIDs(int? seeffAreaID)
         {   // test that the method runs async and test for concurrency issues when executing before previous execution finishes + test how activities + folowups are carried over from re-indexed props.
+            // what about creating a new suburb? + uncomment previous calls,.
             if (seeffAreaID.HasValue)
             {
                 using (var prospecting = new seeff_prospectingEntities())
                 {
-                    using (var spatialDb = new seeff_spatialEntities())
+                    using (var spatialDb = new seeff_spatialEntities()) 
                     {
                         var affectedProperties = prospecting.prospecting_property.Where(pp => pp.seeff_area_id == seeffAreaID);
+                        foreach (var pp in affectedProperties)
+                        {
+                            pp.seeff_area_id = -1;
+                        }
+
+                        prospecting.SaveChanges();
+
+                        var orphanedProperties = prospecting.prospecting_property.Where(pp => pp.seeff_area_id == -1 || pp.seeff_area_id == 0 || pp.seeff_area_id == null);
+
                         // FH and FRM..
-                        var freeHolds = affectedProperties.Where(pp => pp.ss_fh == "FH" || pp.ss_fh == "FRM" || pp.ss_fh == null);
+                        var freeHolds = orphanedProperties.Where(pp => pp.ss_fh == "FH" || pp.ss_fh == "FRM" || pp.ss_fh == null);
                         foreach (var record in freeHolds)
                         {
                             string pointStr = "POINT (" + record.longitude + " " + record.latitude + ")";
@@ -32,7 +42,7 @@ namespace Seeff.Spatial.Service.SpatialClientOperations
                         }
 
                         // SS
-                        var sectionalTitleUnits = affectedProperties.Except(freeHolds);
+                        var sectionalTitleUnits = orphanedProperties.Except(freeHolds);
                         var sectionalTitles = sectionalTitleUnits.GroupBy(unit => unit.ss_unique_identifier);
                         Dictionary<string, int?> unitAreaIDLookup = new Dictionary<string, int?>();
                         foreach (var complex in sectionalTitles)
