@@ -22,6 +22,17 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.ControllerActions
                 };
             }
 
+            SpatialDataReader reader = new SpatialDataReader();
+            var suburbUnderMaintenance = reader.GetSuburbUnderMaintenance();
+            if (suburbUnderMaintenance != null)
+            {
+                return new SaveSuburbResult
+                {
+                    Successful = false,
+                    SaveMessage = "One of your suburbs, " + suburbUnderMaintenance.AreaName + ", is currently under maintenance and the operation cannot continue. Please try again after a few minutes."
+                };
+            }
+
             PrepareSuburb(suburb, validationResult);
             SpatialDataWriter spatialWriter = new SpatialDataWriter();
             SeeffSuburb result = spatialWriter.SaveSuburb(suburb);

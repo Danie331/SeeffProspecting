@@ -13,8 +13,9 @@ namespace ProspectingProject
         private decimal _enquiryCost = 14.40M;
         private Guid _userGuid;
 
-        private Guid _tokenGuid;
-        private DracoreETLConsumerService.ETLConsumerServiceClient _client;
+        //private Guid _tokenGuid;
+        private DracoreDataServiceClient _client;
+        private DracoreETLConsumerService.Token _token;
         private prospecting_contact_company _company;
         private int _prospectingPropertyId;
         private CompanyEnquiryResponsePacket _results;
@@ -27,8 +28,7 @@ namespace ProspectingProject
             _prospectingPropertyId = prospectingPropertyId;
             try
             {
-                _client = new DracoreETLConsumerService.ETLConsumerServiceClient();
-                _tokenGuid = _client.Login("danie@learnit.co.za", "KT.iAi)");
+                _client = new DracoreDataServiceClient();                
             }
             catch (Exception e)
             {
@@ -50,6 +50,20 @@ namespace ProspectingProject
             }
         }
 
+        private DracoreETLConsumerService.Token GetToken()
+        {
+            var token = new DracoreETLConsumerService.Token();// DracoreETLConsumerService.Token();
+            token.Username = "seefftest";
+            string reqTime = DateTime.Now.ToString("yyyyMMddHHmmssffff");
+            token.RequestTime = reqTime;
+            string tokenHash = token.Username + reqTime + "S33f!@)(" + "197.229.114.192";
+            var crypto = System.Security.Cryptography.SHA1CryptoServiceProvider.Create();
+            var cryptoBytes = crypto.ComputeHash(System.Text.Encoding.UTF8.GetBytes(tokenHash));
+            token.TokenVerify = Convert.ToBase64String(cryptoBytes);
+
+            return token;
+        }
+
         public decimal DeductEnquiryCost()
         {
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
@@ -64,22 +78,36 @@ namespace ProspectingProject
             if (!string.IsNullOrEmpty(_results.ErrorMsg))
                 return;
             //throw new NotImplementedException();
-            var businessEntities = _client.BusinessEnquiry(_tokenGuid, _company.CK_number, "", "");
-            if (businessEntities != null)
+            var token = GetToken();
+            var companySearch = _client.SearchCompanies(token, "", "", _company.CK_number);//.BusinessEnquiry(_tokenGuid, _company.CK_number, "", "");
+            if (companySearch != null)
             {
-                if (businessEntities.Length == 1)
+                if (companySearch.ResultType == SearchResultType.MatchFound)
                 {
                     _results.EnquirySuccessful = true;
                     _results.ErrorMsg = null;
-                    var searchedCompany = businessEntities[0];
+                    var searchedCompany = companySearch.Results.First();
                     var contacts = CreateCompanyContactPersons(searchedCompany);
                     _results.Contacts = contacts;
                     // Test this in an SS with multiple units owned by same company
                 }
                 else
                 {
-                    _results.ErrorMsg = "Service provider could not find a company with matching criteria.";
-                    if (businessEntities.Length > 1)
+                    string failureReason = string.Empty;
+                    switch (companySearch.ResultType)
+                    {
+                        case SearchResultType.Error:
+                            failureReason = companySearch.ErrorMessage;
+                            break;
+                        case SearchResultType.MultipleMatchesFound:
+                            failureReason = "Multiple matching companies found for this reg. no.";
+                            break;
+                        case SearchResultType.NoMatchesFound:
+                            failureReason = "No matching result found.";
+                            break;
+                    }
+                    _results.ErrorMsg = "Enquiry unsuccessful - Reason: " + failureReason;
+                    if (companySearch.ResultType == SearchResultType.MultipleMatchesFound)
                     {
                         using (var prospectingDb = new ProspectingDataContext())
                         {
@@ -106,32 +134,30 @@ namespace ProspectingProject
         /// </summary>
         /// <param name="targetCompany"></param>
         /// <returns></returns>
-        private List<ProspectingContactPerson> CreateCompanyContactPersons(DracoreETLConsumerService.CompanyInfo targetCompany)
+        private List<ProspectingContactPerson> CreateCompanyContactPersons(DracoreETLConsumerService.Company targetCompany)
         {
             List<ProspectingContactPerson> prospectingContactPersons = new List<ProspectingContactPerson>();
             try
             {
-                if (targetCompany.DirectorsList != null && targetCompany.DirectorsList.Count() > 0)
+                if (targetCompany.Directors != null && targetCompany.Directors.Count() > 0)
                 {
                     int? relationshipToCompany = ProspectingLookupData.PersonCompanyRelationshipTypes.First(kvp => kvp.Value == "Company Director").Key;
-                    foreach (var director in targetCompany.DirectorsList)
+                    foreach (var director in targetCompany.Directors)
                     {
-                        if (director.Consumer != null)
-                        {
-                            var directorPerson = director.Consumer;
-                            if (!string.IsNullOrEmpty(directorPerson.First_Names) &&
-                                !string.IsNullOrEmpty(directorPerson.Surname) && !string.IsNullOrEmpty(directorPerson.IDNo))
+                        var directorPerson = director;
+                            if (!string.IsNullOrEmpty(directorPerson.FirstNames) &&
+                                !string.IsNullOrEmpty(directorPerson.Surname) && !string.IsNullOrEmpty(directorPerson.IdentityNumber))
                             {
-                                if (directorPerson.Gender.HasFlag(DomainConstantsGender.Male) || directorPerson.Gender.HasFlag(DomainConstantsGender.Female))
+                                if (directorPerson.Gender.HasFlag(GenderEnum.Male) || directorPerson.Gender.HasFlag(GenderEnum.Female))
                                 {
-                                    var titleKvp = !string.IsNullOrEmpty(directorPerson.Salutation) ? ProspectingLookupData.ContactPersonTitle.FirstOrDefault(cpt => cpt.Value.ToLower() == directorPerson.Salutation.ToLower()) : default(KeyValuePair<int, string>);
+                                    var titleKvp = /*!string.IsNullOrEmpty(directorPerson.) ? ProspectingLookupData.ContactPersonTitle.FirstOrDefault(cpt => cpt.Value.ToLower() == directorPerson.Salutation.ToLower()) :*/ default(KeyValuePair<int, string>);
                                     ContactDataPacket contactDataPacket = new ContactDataPacket { ContactCompanyId = _company.contact_company_id, ProspectingPropertyId = _prospectingPropertyId };
                                     ProspectingContactPerson newContact = new ProspectingContactPerson
                                     {
-                                        IdNumber = directorPerson.IDNo,
+                                        IdNumber = directorPerson.IdentityNumber,
                                         Title = !Equals(titleKvp, default(KeyValuePair<int, string>)) ? (int?)titleKvp.Key : null,
-                                        Gender = directorPerson.Gender == DracoreETLConsumerService.DomainConstantsGender.Male ? "M" : "F",
-                                        Firstname = directorPerson.First_Names,
+                                        Gender = directorPerson.Gender == GenderEnum.Male ? "M" : "F",
+                                        Firstname = directorPerson.FirstNames,
                                         Surname = directorPerson.Surname,
                                         ContactCompanyId = _company.contact_company_id,
                                         Directorship = "Yes",
@@ -143,7 +169,7 @@ namespace ProspectingProject
                                     prospectingContactPersons.Add(prospectingContactPerson);
                                 }
                             }
-                        }
+
                     }
                 }
                 else

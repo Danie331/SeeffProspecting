@@ -5,10 +5,10 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="9aa94e2c9a0b4dd992e8499d8ad11825" Name="Diagram1">
-        <EntityTypeShape EntityType="seeff_spatialModel.spatial_area" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="seeff_spatialModel.spatial_license" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="seeff_spatialModel.spatial_terretory" Width="1.5" PointX="2.75" PointY="3.75" />
         <EntityTypeShape EntityType="seeff_spatialModel.exception_log" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="seeff_spatialModel.spatial_area" Width="1.5" PointX="5.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

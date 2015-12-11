@@ -50,5 +50,19 @@ namespace Seeff.Spatial.WebApp.ServiceInterface
                 throw;
             }
         }
+
+        public SeeffSuburb GetSuburbUnderMaintenance()
+        {
+            try
+            {
+                SeeffSuburb result = RetrieveFromService<SeeffSuburb>("api/Read/GetSuburbUnderMaintenance");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetSuburbUnderMaintenance()", null);
+                throw;
+            }
+        }
     }
 }

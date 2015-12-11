@@ -12,6 +12,8 @@ namespace Seeff.Spatial.Service.Database
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class seeff_spatialEntities : DbContext
     {
@@ -25,9 +27,18 @@ namespace Seeff.Spatial.Service.Database
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<spatial_area> spatial_area { get; set; }
         public virtual DbSet<spatial_license> spatial_license { get; set; }
         public virtual DbSet<spatial_terretory> spatial_terretory { get; set; }
         public virtual DbSet<exception_log> exception_log { get; set; }
+        public virtual DbSet<spatial_area> spatial_area { get; set; }
+    
+        public virtual int reindex_prospecting_suburb(Nullable<int> area_id)
+        {
+            var area_idParameter = area_id.HasValue ?
+                new ObjectParameter("area_id", area_id) :
+                new ObjectParameter("area_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("reindex_prospecting_suburb", area_idParameter);
+        }
     }
 }

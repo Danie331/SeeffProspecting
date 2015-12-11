@@ -26,5 +26,7 @@ namespace ProspectingProject
         public string ResCommAgri { get; set; }
 
         public List<ProspectingProperty> ProspectingProperties { get; set; }
+
+        public bool UnderMaintenance { get; set; }
     }
 }

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DC.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DC.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="Token">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RequestTime" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SubAccountReference" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TokenVerify" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Token" nillable="true" type="tns:Token" />
+  <xs:complexType name="CompanySearch">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BaseSearchOfCompany_Pd39ncJe">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CompanySearch" nillable="true" type="tns:CompanySearch" />
+  <xs:complexType name="BaseSearchOfCompany_Pd39ncJe">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseSearchOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/DC.Models" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Company" Namespace="http://schemas.datacontract.org/2004/07/DC.Models" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ErrorMessage" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResultType" type="tns:SearchResultType" />
+      <xs:element minOccurs="0" name="Results" nillable="true" type="tns:ArrayOfCompany" />
+      <xs:element minOccurs="0" name="TransactionID" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BaseSearchOfCompany_Pd39ncJe" nillable="true" type="tns:BaseSearchOfCompany_Pd39ncJe" />
+  <xs:simpleType name="SearchResultType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NoMatchesFound" />
+      <xs:enumeration value="MatchFound" />
+      <xs:enumeration value="MultipleMatchesFound">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">99</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Error">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">-1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="SearchResultType" nillable="true" type="tns:SearchResultType" />
+  <xs:complexType name="ArrayOfCompany">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Company" nillable="true" type="tns:Company" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCompany" nillable="true" type="tns:ArrayOfCompany" />
+  <xs:complexType name="Company">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Directors" nillable="true" type="tns:ArrayOfDirector" />
+      <xs:element minOccurs="0" name="RegistrationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="RegistrationNumber" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Company" nillable="true" type="tns:Company" />
+  <xs:complexType name="ArrayOfDirector">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Director" nillable="true" type="tns:Director" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDirector" nillable="true" type="tns:ArrayOfDirector" />
+  <xs:complexType name="Director">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BasePerson">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DateAppointed" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DateResigned" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="StatusCode" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Director" nillable="true" type="tns:Director" />
+  <xs:complexType name="BasePerson">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FirstNames" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Gender" type="tns:GenderEnum" />
+      <xs:element minOccurs="0" name="IdentityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PersonID" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BasePerson" nillable="true" type="tns:BasePerson" />
+  <xs:simpleType name="GenderEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="Male" />
+      <xs:enumeration value="Female" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="GenderEnum" nillable="true" type="tns:GenderEnum" />
+</xs:schema>

@@ -33,6 +33,10 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
     /// "No area may overlap a territory"- do we need to check for polygon completely inside another??
     /// Validation checking with different layers, and especiialy territories NB (check for complete containment etc.)
     /// Handle all "TODO"'s in this code.
+    /// Delete a suburb
+    /// Delete a license
+    /// Upload license from KML
+    /// Reindex all suburbs in newly uploaded license.
     /// </summary>
     public sealed class GlobalAreaCache
     {        
@@ -52,7 +56,26 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
 
         public List<SeeffSuburb> AllSuburbs
         {
-            get { return _allSuburbs; }
+            get {
+                if (_allSuburbs == null)
+                {
+                    SpatialDataReader service = new SpatialDataReader();
+                    var suburbs = service.RetrieveAllSuburbs();
+                    _allSuburbs = suburbs.OrderBy(sub => sub.AreaName).ToList();
+
+                    foreach (var territory in _allTerritories)
+                    {
+                        var targetLicenses = _allLicenses.Where(lic => lic.TerritoryID == territory.TerritoryID).ToList();
+                        territory.Licenses = targetLicenses;
+                        foreach (var license in territory.Licenses)
+                        {
+                            var targetSuburbs = _allSuburbs.Where(sub => sub.LicenseID == license.LicenseID).ToList();
+                            license.Suburbs = targetSuburbs;
+                        }
+                    }
+                }
+                return _allSuburbs; 
+            }
         }
 
         public List<SeeffLicense> SeeffLicenses
@@ -84,13 +107,13 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
                 CacheItemPolicy policy = new CacheItemPolicy();
 
                 SpatialDataReader service = new SpatialDataReader();
-                var suburbs = service.RetrieveAllSuburbs();
+                //var suburbs = service.RetrieveAllSuburbs();
                 var licenses = service.RetrieveAllLicenses();
                 var territories = service.RetrieveAllTerritories();
 
                 _allTerritories = territories;
                 _allLicenses = licenses;
-                _allSuburbs = suburbs.OrderBy(sub => sub.AreaName).ToList();
+                //_allSuburbs = suburbs.OrderBy(sub => sub.AreaName).ToList();
 
                 _areaHierarchy = new AreaHierarchy();
                 _areaHierarchy.Territories = territories;
@@ -98,11 +121,11 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
                 {
                     var targetLicenses = licenses.Where(lic => lic.TerritoryID == territory.TerritoryID).ToList();
                     territory.Licenses = targetLicenses;
-		           foreach (var license in territory.Licenses)
-	                {
-                       var targetSuburbs = suburbs.Where(sub => sub.LicenseID == license.LicenseID).ToList();
-                       license.Suburbs = targetSuburbs;
-                   }
+                   //foreach (var license in territory.Licenses)
+                   // {
+                      // var targetSuburbs = suburbs.Where(sub => sub.LicenseID == license.LicenseID).ToList();
+                       //license.Suburbs = targetSuburbs;
+                   //}
                 }
 
                 _cache.Set("AreaHierarchyCache", _areaHierarchy, policy);

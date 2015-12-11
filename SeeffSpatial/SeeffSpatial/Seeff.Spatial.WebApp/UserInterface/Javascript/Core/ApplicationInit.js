@@ -22,6 +22,6 @@ application.init = function (userResult) {
         });
         application.panel.initPanel();
 
-        application.Google.addRightClickHook();
+        //application.Google.addRightClickHook();
     });
 }

@@ -44,6 +44,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="EverlyticV2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fa745f47915e2da0, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\3rdParty\Everlytics\EverlyticV2.dll</HintPath>
@@ -70,6 +76,8 @@
     </Reference>
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -137,6 +145,7 @@
     <Compile Include="Core\Communication\SMSing\SMSHandler.cs" />
     <Compile Include="Core\Housekeeping\CleanupLockedPropertyRecords.cs" />
     <Compile Include="Core\Housekeeping\StatusNotifier.cs" />
+    <Compile Include="Core\Spatial\ProspectingSuburbMaintenance.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -145,6 +154,24 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Prospecting.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Spatial.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Spatial.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Spatial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Spatial.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Spatial.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Spatial.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="spatial_area.cs">
+      <DependentUpon>Spatial.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +182,23 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Properties\PublishProfiles\1.pubxml" />
+    <EntityDeploy Include="Spatial.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Spatial.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Spatial.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Spatial.edmx</DependentUpon>
+      <LastGenOutput>Spatial.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Spatial.edmx.diagram">
+      <DependentUpon>Spatial.edmx</DependentUpon>
+    </Content>
+    <Content Include="Spatial.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Spatial.edmx</DependentUpon>
+      <LastGenOutput>Spatial.cs</LastGenOutput>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -168,6 +212,7 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Prospecting.dbml.layout">

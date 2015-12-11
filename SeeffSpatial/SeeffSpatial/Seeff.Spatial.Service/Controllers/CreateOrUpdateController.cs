@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Seeff.Spatial.Service.BusinessLayer;
-using Seeff.Spatial.Service.SpatialClientOperations;
 
 namespace Seeff.Spatial.Service.Controllers
 {
@@ -24,6 +23,7 @@ namespace Seeff.Spatial.Service.Controllers
                     if (existingrecord != null)
                     {
                         existingrecord.geo_polygon = suburb.Polygon;
+                        existingrecord.requires_maintenance = true;
                     }
                     else
                     {
@@ -33,15 +33,13 @@ namespace Seeff.Spatial.Service.Controllers
                             fk_license_id = suburb.LicenseID,
                             fk_territory_id = suburb.TerritoryID,
                             fkAreaId = suburb.SeeffAreaID,
-                            geo_polygon = suburb.Polygon
+                            geo_polygon = suburb.Polygon,
+                            requires_maintenance = true
                         };
                         spatialDb.spatial_area.Add(existingrecord);
                     }
 
                     spatialDb.SaveChanges();
-
-                    // Propogate change to client systems
-                   SpatialClients.PropogateChangesAsync(suburb);
 
                     var result = new SpatialSuburb
                     {
@@ -86,9 +84,6 @@ namespace Seeff.Spatial.Service.Controllers
                     }
 
                     spatialDb.SaveChanges();
-
-                    // Propogate change to client systems
-                   // SpatialClients.PropogateChangesAsync(license);
 
                     var result = new SpatialLicense
                     {

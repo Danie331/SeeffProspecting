@@ -1157,19 +1157,20 @@
     <None Include="Properties\PublishProfiles\seeffprospecting - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\seeffprospecting - Web Deploy.pubxml" />
     <Content Include="Scripts\3rdParty\SlickGrid\README.md" />
-    <None Include="Service References\DracoreETLConsumerService\ConsumerService.disco" />
     <None Include="Service References\DracoreETLConsumerService\configuration91.svcinfo" />
     <None Include="Service References\DracoreETLConsumerService\configuration.svcinfo" />
-    <Content Include="Service References\DracoreETLConsumerService\ProspectingProject.DracoreETLConsumerService.AddressInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\DracoreETLConsumerService\ProspectingProject.DracoreETLConsumerService.CompanyInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\DracoreETLConsumerService\ProspectingProject.DracoreETLConsumerService.ConsumerEnquiryResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\DracoreETLConsumerService\ProspectingProject.DracoreETLConsumerService.ConsumerTraceResult.datasource">
+    <None Include="Service References\DracoreETLConsumerService\DracoreDataService.disco" />
+    <None Include="Service References\DracoreETLConsumerService\DracoreDataService.wsdl" />
+    <None Include="Service References\DracoreETLConsumerService\DracoreDataService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\DracoreDataService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\DracoreDataService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Service References\DracoreETLConsumerService\ProspectingProject.DracoreETLConsumerService.CompanySearch.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <None Include="Service References\DracoreETLConsumerService\Reference.svcmap">
@@ -1190,34 +1191,6 @@
     <Content Include="Scripts\3rdParty\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\outputforflash.fla" />
     <Content Include="Scripts\3rdParty\ckeditor\samples\sample_posteddata.php" />
     <Content Include="Scripts\3rdParty\ckeditor\skins\moono\readme.md" />
-    <None Include="Service References\DracoreETLConsumerService\ConsumerService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DracoreETLConsumerService\ConsumerService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DracoreETLConsumerService\ConsumerService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DracoreETLConsumerService\ConsumerService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DracoreETLConsumerService\ConsumerService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DracoreETLConsumerService\ConsumerService5.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DracoreETLConsumerService\ConsumerService6.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DracoreETLConsumerService\ConsumerService7.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DracoreETLConsumerService\ConsumerService8.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DracoreETLConsumerService\ETLConsumerService.wsdl" />
     <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService.wsdl" />
     <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService.xsd">
       <SubType>Designer</SubType>
@@ -1315,6 +1288,9 @@
     <Compile Include="Services\EnquiryServiceManager.cs" />
     <Compile Include="Services\ICompanyEnquiryService.cs" />
     <Compile Include="Services\IPersonEnquiryService.cs" />
+    <Compile Include="Services\SeeffSpatial\SpatialPoint.cs" />
+    <Compile Include="Services\SeeffSpatial\SpatialServiceReader.cs" />
+    <Compile Include="Services\SeeffSpatial\SpatialSuburb.cs" />
     <Compile Include="Services\TracePS\ITracepsService.cs" />
     <Compile Include="Services\TracePS\TracepsLiveService.cs" />
     <Compile Include="Services\TracePS\TracepsPhoneNumberLookup.cs" />

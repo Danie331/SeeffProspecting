@@ -381,6 +381,12 @@ function loadSuburb(suburbId,showSeeffCurrentListings, actionAfterLoad, mustCent
                         return;
                     }
 
+                    if (data.UnderMaintenance == true) {
+                        $.unblockUI();
+                        alert('This suburb is currently under maintenance and not available right now. Please try again in a few minutes.');
+                        return;
+                    }
+
                     if (data.PolyCoords.length > 0) {
                         initialiseAndDisplaySuburb(suburb, data, showSeeffCurrentListings, filterFunction);
 

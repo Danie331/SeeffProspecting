@@ -2,6 +2,7 @@
 using ProspectingTaskScheduler.Core.Communication.Emailing;
 using ProspectingTaskScheduler.Core.Communication.SMSing;
 using ProspectingTaskScheduler.Core.Housekeeping;
+using ProspectingTaskScheduler.Core.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -74,6 +75,9 @@ namespace ProspectingTaskScheduler.App_Start
             RecurringJob.AddOrUpdate("Resetting yesterdays locked properties", () => CleanupLockedPropertyRecords.ResetYesterdaysLockedRecords(), Cron.Daily(1));
 
             RecurringJob.AddOrUpdate("IIS app pool up and running", () => StatusNotifier.SendNotificationEmail(), Cron.Daily(7));
+
+            // Spatial tasks
+            RecurringJob.AddOrUpdate("Reindex Prospecting Suburbs", () => ProspectingSuburbMaintenance.ReindexSuburbsRequiringMaintenance(), Cron.Minutely);
         }
     }
 }

@@ -21,19 +21,19 @@ namespace Seeff.Spatial.WebApp.Controllers
         {
             try
             {
-                //Guid userGuid = Guid.Parse((string)HttpContext.Current.Session["user_guid"]);
-                //Guid sessionKey = Guid.Parse((string)HttpContext.Current.Session["session_key"]);
-                //using (var authService = new SpatialAuthService.SeeffProspectingAuthServiceClient())
-                //{
-                    //var authResult = authService.AuthenticateAndLoadSpatialUser(userGuid, sessionKey);
-                    if (/*authResult.Authenticated*/true)
+                Guid userGuid = Guid.Parse((string)HttpContext.Current.Session["user_guid"]);
+                Guid sessionKey = Guid.Parse((string)HttpContext.Current.Session["session_key"]);
+                using (var authService = new SpatialAuthService.SeeffProspectingAuthServiceClient())
+                {
+                    var authResult = authService.AuthenticateAndLoadSpatialUser(userGuid, sessionKey);
+                    if (authResult.Authenticated)
                     {
                         //var msAreas = Utils.ParseAreaListString(authResult.MarketShareSuburbsList);
                         //var prospectingAreas = Utils.ParseAreaListString(authResult.ProspectingSuburbsList);
                         //var targetAreas = msAreas.Union(prospectingAreas);
 
                         UserModel user = new UserModel();
-                        user.SeeffAreaCollection = GlobalAreaCache.Instance.AllSuburbs; // TODO (user areas only)
+                        user.SeeffAreaCollection = new List<SeeffSuburb>();// GlobalAreaCache.Instance.AllSuburbs; // TODO (user areas only)
                         user.SeeffLicenses = GlobalAreaCache.Instance.SeeffLicenses;
                         user.SeeffTerritories = GlobalAreaCache.Instance.SeeffTerritories;
                         user.LoginSuccess = true;
@@ -42,9 +42,9 @@ namespace Seeff.Spatial.WebApp.Controllers
                     }
                     else
                     {
-                        return new UserModel { LoginSuccess = false, /*LoginMessage = authResult.AuthMessage*/ };
+                        return new UserModel { LoginSuccess = false, LoginMessage = authResult.AuthMessage };
                     }
-                //}
+                }
             }
             catch (Exception ex)
             {
@@ -58,6 +58,12 @@ namespace Seeff.Spatial.WebApp.Controllers
                 Utils.LogException(ex, "Login", ""); // TODO: add exception handling all over the show.
                 return new UserModel { LoginSuccess = false, LoginMessage = ex.ToString() };
             }
+        }
+
+        [HttpGet]
+        public IList<SeeffSuburb> GetSuburbs()
+        {
+            return GlobalAreaCache.Instance.AllSuburbs;
         }
 
         [HttpPost]

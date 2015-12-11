@@ -139,6 +139,15 @@ $(function () {
 
                     application.panel.navItemAreaSelection.selectSuburbFromPolyClick(suburb);
                 });
+
+                polygon.addListener('rightclick', function (event) {
+                    if (event.path != null && event.vertex != null) {
+                        var path = this.getPaths().getAt(event.path);
+                        if (path.getLength() > 3) {
+                            path.removeAt(event.vertex);
+                        }
+                    }
+                });
             },
             createLicensePoly: function(license, drawOptions) {
                 if (!drawOptions) {

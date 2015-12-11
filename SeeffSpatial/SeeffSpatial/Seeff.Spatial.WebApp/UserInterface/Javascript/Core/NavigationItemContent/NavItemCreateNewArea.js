@@ -9,6 +9,9 @@ $(function () {
                     container.html(application.panel.navItemCreateNewArea.contentCache);
                 } else {
                     container.html('').load("UserInterface/HTML/CreatePoly.html", function (content) {
+
+                        application.panel.navItemAreaSelection.getSuburbs();
+
                         application.panel.navItemCreateNewArea.contentCache = content;
                         container.html(application.panel.navItemCreateNewArea.contentCache);
                     });

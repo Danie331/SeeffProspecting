@@ -21,7 +21,12 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
             using (var database = new spatial_web_appEntities()) 
             {
                 string contextJson = JsonConvert.SerializeObject(contextObject ?? "");
-                Guid userGuid = (Guid)HttpContext.Current.Session["user_guid"];
+                Guid userGuid = new Guid();
+                try
+                {
+                    userGuid = (Guid)HttpContext.Current.Session["user_guid"];
+                }
+                catch { }                
                 exception_log error_record = new exception_log
                 {
                     created = DateTime.Now,

@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="seeff_spatialModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="spatial_area">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fkAreaId" Type="int" />
+          <Property Name="geo_polygon" Type="geography" />
+          <Property Name="fk_license_id" Type="int" />
+          <Property Name="fk_territory_id" Type="int" />
+          <Property Name="area_center_point" Type="geography" StoreGeneratedPattern="Computed" />
+          <Property Name="area_name" Type="varchar" MaxLength="255" />
+          <Property Name="requires_maintenance" Type="bit" Nullable="false" />
+          <Property Name="under_maintenance" Type="bit" Nullable="false" />
+        </EntityType>
+        <Function Name="reindex_prospecting_suburb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="area_id" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="seeff_spatialModelStoreContainer">
+          <EntitySet Name="spatial_area" EntityType="Self.spatial_area" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="seeff_spatialModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="seeff_spatialEntities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="reindex_prospecting_suburb">
+          <Parameter Name="area_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="spatial_area" EntityType="seeff_spatialModel.spatial_area" />
+        </EntityContainer>
+        <EntityType Name="spatial_area">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fkAreaId" Type="Int32" />
+          <Property Name="geo_polygon" Type="Geography" />
+          <Property Name="fk_license_id" Type="Int32" />
+          <Property Name="fk_territory_id" Type="Int32" />
+          <Property Name="area_center_point" Type="Geography" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="area_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="requires_maintenance" Type="Boolean" Nullable="false" />
+          <Property Name="under_maintenance" Type="Boolean" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="seeff_spatialModelStoreContainer" CdmEntityContainer="seeff_spatialEntities" >
+          <FunctionImportMapping FunctionImportName="reindex_prospecting_suburb" FunctionName="seeff_spatialModel.Store.reindex_prospecting_suburb" />
+          <EntitySetMapping Name="spatial_area">
+            <EntityTypeMapping TypeName="seeff_spatialModel.spatial_area">
+              <MappingFragment StoreEntitySet="spatial_area">
+                <ScalarProperty Name="under_maintenance" ColumnName="under_maintenance" />
+                <ScalarProperty Name="requires_maintenance" ColumnName="requires_maintenance" />
+                <ScalarProperty Name="area_name" ColumnName="area_name" />
+                <ScalarProperty Name="area_center_point" ColumnName="area_center_point" />
+                <ScalarProperty Name="fk_territory_id" ColumnName="fk_territory_id" />
+                <ScalarProperty Name="fk_license_id" ColumnName="fk_license_id" />
+                <ScalarProperty Name="geo_polygon" ColumnName="geo_polygon" />
+                <ScalarProperty Name="fkAreaId" ColumnName="fkAreaId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

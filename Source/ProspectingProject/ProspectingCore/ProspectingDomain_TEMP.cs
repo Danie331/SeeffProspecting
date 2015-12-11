@@ -1555,6 +1555,7 @@ namespace ProspectingProject
             suburb.PolyCoords = ProspectingCore.LoadPolyCoords(spatialSuburb.PolyWKT);
             suburb.ProspectingProperties = ProspectingCore.CreateProspectableProperties(suburbDataRequest.SuburbId);
             suburb.LocationName = spatialSuburb.AreaName; //ProspectingCore.GetAreaName(suburbDataRequest.SuburbId);
+            suburb.UnderMaintenance = spatialSuburb.UnderMaintenance;
 
             return suburb;
         }

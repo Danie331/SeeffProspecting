@@ -30,6 +30,20 @@ $(function () {
                     $.unblockUI();
                 });
             },
+            getSynchronously: function (URL, loadingMsg, callback) {               
+                setTimeout(function () { $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">' + loadingMsg + '</p>', fadeIn: 0 }); }, 500);
+                    $.ajax({
+                        url: URL,
+                        type: 'GET',
+                        async: false,
+                        contentType: "application/json"
+                    }).done(function (data) {
+                        if (callback) {
+                            callback(data);
+                        }
+                        $.unblockUI();
+                    });
+            },
             serviceControllers: {
                 validateSuburbPolygon: function (suburbModel, callback) {
                     // NB: Consider all the rules for polygon validation!!!
@@ -51,6 +65,10 @@ $(function () {
                 saveLicense: function (licenseModel, callback) {
                     var endpoint = application.utilities.buildHomeURL('/api/Home/SaveLicense');
                     application.services.post(endpoint, licenseModel, "Validating. Please wait...", callback);
+                },
+                getSuburbs: function (callback) {
+                    var endpoint = application.utilities.buildHomeURL('/api/Home/GetSuburbs');
+                    application.services.get(endpoint, "Retrieving Suburbs. Please wait...", callback);
                 }
             },
             serviceModels: {

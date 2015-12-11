@@ -61,7 +61,7 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
             {
                 // Get all records with the same batch_id
                 string batchId = batchItem.batch_id.ToString();
-                batch = prospecting.sms_communications_logs.Where(sms => sms.status == pendingStatus && sms.batch_id.ToString() == batchId).ToList();
+                batch = prospecting.sms_communications_logs.Where(sms => sms.status == pendingStatus && sms.batch_id.ToString() == batchId).Take(150).ToList();
             }
 
             return batch;

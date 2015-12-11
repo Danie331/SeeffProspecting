@@ -102,6 +102,23 @@ namespace Seeff.Spatial.Service.Controllers
             }
         }
 
+        [HttpGet]
+        public SpatialSuburb GetSuburbUnderMaintenance()
+        {
+            using (var spatialDb = new seeff_spatialEntities())
+            {
+                var target = spatialDb.spatial_area.FirstOrDefault(sub => sub.under_maintenance);
+                if (target != null)
+                {
+                    return new SpatialSuburb
+                    {
+                        AreaName = target.area_name
+                    };
+                }
+                return null;
+            }
+        }
+
         [HttpPost]
         public SpatialSuburb GetSuburbFromID([FromBody]int suburbID)
         {
@@ -116,7 +133,8 @@ namespace Seeff.Spatial.Service.Controllers
                         LicenseID = existingRecord.fk_license_id,
                         Polygon = existingRecord.geo_polygon,
                         SeeffAreaID = existingRecord.fkAreaId,
-                        TerritoryID = existingRecord.fk_territory_id
+                        TerritoryID = existingRecord.fk_territory_id,
+                        UnderMaintenance = existingRecord.requires_maintenance || existingRecord.under_maintenance
                     };
                 }
 
@@ -144,7 +162,8 @@ namespace Seeff.Spatial.Service.Controllers
                         LicenseID = containingArea.fk_license_id,
                         Polygon = containingArea.geo_polygon,
                         SeeffAreaID = containingArea.fkAreaId,
-                        TerritoryID = containingArea.fk_territory_id
+                        TerritoryID = containingArea.fk_territory_id,
+                        UnderMaintenance = containingArea.requires_maintenance || containingArea.under_maintenance
                     };
                 }
                 return null;

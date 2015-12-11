@@ -166,6 +166,7 @@
     <Content Include="UserInterface\HTML\AreaSelection.html" />
     <Content Include="UserInterface\HTML\CreatePoly.html" />
     <Content Include="UserInterface\HTML\EditPoly.html" />
+    <Content Include="UserInterface\Javascript\3rd_party\jquery.contextMenu.js" />
     <Content Include="UserInterface\Javascript\3rd_party\jqueryBlockUI.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemAreaInformation.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemCreateNewArea.js" />
@@ -185,7 +186,7 @@
     <Content Include="UserInterface\Javascript\Core\Utilities.js" />
     <Content Include="UserInterface\Javascript\Core\ApplicationInit.js" />
     <Content Include="UserInterface\Javascript\Core\Panel.js" />
-    <Content Include="UserInterface\WebForms\NotAuthorised.aspx" />
+    <Content Include="NotAuthorised.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -254,16 +255,17 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\WebForms\NotAuthorised.aspx.cs">
+    <Compile Include="NotAuthorised.aspx.cs">
       <DependentUpon>NotAuthorised.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="UserInterface\WebForms\NotAuthorised.aspx.designer.cs">
+    <Compile Include="NotAuthorised.aspx.designer.cs">
       <DependentUpon>NotAuthorised.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="UserInterface\WebForms\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

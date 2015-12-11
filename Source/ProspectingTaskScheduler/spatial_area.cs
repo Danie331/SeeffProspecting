@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Seeff.Spatial.Service.Database
+namespace ProspectingTaskScheduler
 {
     using System;
     using System.Collections.Generic;

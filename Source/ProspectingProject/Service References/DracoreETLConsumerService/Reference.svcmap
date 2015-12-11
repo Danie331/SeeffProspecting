@@ -19,20 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://105.27.115.30/DracoreDataService/DracoreDataService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ConsumerService.disco" MetadataType="Disco" ID="5d9816b4-de8f-4c56-8a99-913886851362" SourceId="1" SourceUrl="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?disco" />
-    <MetadataFile FileName="ConsumerService.xsd" MetadataType="Schema" ID="95f444af-afb9-4b72-b6d2-1910dc58ccdd" SourceId="1" SourceUrl="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd0" />
-    <MetadataFile FileName="ConsumerService1.xsd" MetadataType="Schema" ID="201add66-f407-4a0e-8d36-b13c13181013" SourceId="1" SourceUrl="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd1" />
-    <MetadataFile FileName="ConsumerService2.xsd" MetadataType="Schema" ID="9c62b0d6-4192-4573-a5f0-f5108866ccad" SourceId="1" SourceUrl="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd2" />
-    <MetadataFile FileName="ConsumerService3.xsd" MetadataType="Schema" ID="e9b5f716-0ac1-46ff-9b80-1da4d20d0980" SourceId="1" SourceUrl="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd3" />
-    <MetadataFile FileName="ConsumerService4.xsd" MetadataType="Schema" ID="6971005f-aa1c-43a8-a2ae-07d7da980d8a" SourceId="1" SourceUrl="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd4" />
-    <MetadataFile FileName="ConsumerService5.xsd" MetadataType="Schema" ID="d7813449-e3e7-4928-bf69-25d2b1eaf095" SourceId="1" SourceUrl="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd5" />
-    <MetadataFile FileName="ConsumerService6.xsd" MetadataType="Schema" ID="7878238a-c4cd-4133-87c6-9debd807bebb" SourceId="1" SourceUrl="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd6" />
-    <MetadataFile FileName="ConsumerService7.xsd" MetadataType="Schema" ID="9136552c-4a8d-4dec-ae18-3a14ebd4778d" SourceId="1" SourceUrl="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd7" />
-    <MetadataFile FileName="ConsumerService8.xsd" MetadataType="Schema" ID="282ca6ed-ea85-403c-8336-31f9f88f9cc9" SourceId="1" SourceUrl="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?xsd=xsd8" />
-    <MetadataFile FileName="ETLConsumerService.wsdl" MetadataType="Wsdl" ID="da3042f9-19e2-4740-aed2-f55b9820ce18" SourceId="1" SourceUrl="http://data.dracore.co.za/WebServices/EnquiryServices/ConsumerService.svc?wsdl" />
+    <MetadataFile FileName="DracoreDataService.xsd" MetadataType="Schema" ID="e754cc30-0f72-4117-9348-bb5636309c2a" SourceId="1" SourceUrl="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?xsd=xsd0" />
+    <MetadataFile FileName="DracoreDataService1.xsd" MetadataType="Schema" ID="9b2c10db-eaa3-43c9-831e-a75348a425a2" SourceId="1" SourceUrl="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?xsd=xsd1" />
+    <MetadataFile FileName="DracoreDataService.wsdl" MetadataType="Wsdl" ID="c037627d-25c2-42da-abf4-03dac0b5176d" SourceId="1" SourceUrl="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?wsdl" />
+    <MetadataFile FileName="DracoreDataService.disco" MetadataType="Disco" ID="2dec9821-e6eb-4a5b-bd1e-f1816a30d8c8" SourceId="1" SourceUrl="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?disco" />
+    <MetadataFile FileName="DracoreDataService2.xsd" MetadataType="Schema" ID="fccd86b9-0950-495f-b5e6-19523824cd43" SourceId="1" SourceUrl="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

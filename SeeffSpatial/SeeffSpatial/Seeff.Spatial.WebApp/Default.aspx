@@ -64,6 +64,7 @@
 
     <!-- 3rd party libs -->
     <script src="UserInterface/Javascript/3rd_party/jqueryBlockUI.js"></script>
+    <script src="UserInterface/Javascript/3rd_party/jquery.contextMenu.js"></script>
 
     <!-- Styles -->
     <link href="UserInterface/Stylesheets/Shared.css" rel="stylesheet" />

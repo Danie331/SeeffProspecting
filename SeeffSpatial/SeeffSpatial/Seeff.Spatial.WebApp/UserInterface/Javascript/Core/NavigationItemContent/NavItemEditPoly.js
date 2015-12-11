@@ -8,6 +8,9 @@ $(function () {
                     container.html(application.panel.navItemEditPoly.contentCache);
                 } else {
                     container.html('').load("UserInterface/HTML/EditPoly.html", function (content) {
+
+                        application.panel.navItemAreaSelection.getSuburbs();
+
                         application.panel.navItemEditPoly.contentCache = content;
                         container.html(application.panel.navItemEditPoly.contentCache);
                     });

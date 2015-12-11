@@ -18,24 +18,47 @@ $(function () {
                     container.load("UserInterface/HTML/AreaSelection.html", function (content) {
                         container.html(content);
 
-                        var header = $("#areaSelectorHeader");
-                        var suburbsSelector = $("#areaSelectionDiv");
+                        if (application.user.SeeffAreaCollection.length) {
+                            var header = $("#areaSelectorHeader");
+                            var suburbsSelector = $("#areaSelectionDiv");
 
-                        var userSuburbs = application.user.SeeffAreaCollection;
-                        $.each(userSuburbs, function (idx, suburb) {
-                            var radioItem = application.panel.navItemAreaSelection.constructSuburbRadioItem(suburb);
-                            suburbsSelector.append(radioItem);
-                            suburbsSelector.append("<br />");
-                        });
+                            var userSuburbs = application.user.SeeffAreaCollection;//application.panel.navItemAreaSelection.getSuburbs();
+                            $.each(userSuburbs, function (idx, suburb) {
+                                var radioItem = application.panel.navItemAreaSelection.constructSuburbRadioItem(suburb);
+                                suburbsSelector.append(radioItem);
+                                suburbsSelector.append("<br />");
+                            });
 
-                        header = header[0].outerHTML;
-                        suburbsSelector = suburbsSelector[0].outerHTML;
-                        application.panel.navItemAreaSelection.contentCache = header + suburbsSelector;
+                            header = header[0].outerHTML;
+                            suburbsSelector = suburbsSelector[0].outerHTML;
+                            application.panel.navItemAreaSelection.contentCache = header + suburbsSelector;
 
-                        application.panel.navItemAreaSelection.selectActiveSuburb();
-                        application.panel.navItemAreaSelection.toggleCheckboxes();
+                            application.panel.navItemAreaSelection.selectActiveSuburb();
+                            application.panel.navItemAreaSelection.toggleCheckboxes();
+                        }
                     });                    
                 }                
+            },
+            getSuburbs: function (callback) {
+                var result = null;
+                if (!application.user.SeeffAreaCollection.length) {
+                    application.services.serviceControllers.getSuburbs(function (suburbs) {
+                        application.user.SeeffAreaCollection = suburbs;
+                        $.each(application.user.SeeffAreaCollection, function (index, area) {
+                            var areaID = '' + area.SeeffAreaID;
+                            application.user.SeeffAreaCollectionLookup[areaID] = area;
+                            application.Google.createSuburbPoly(area, { render: true });
+                        });
+
+                        result = application.user.SeeffAreaCollection;
+
+                        if (callback) callback(suburbs);
+                    });
+                } else {
+                    result = application.user.SeeffAreaCollection;
+                }
+
+                return result;
             },
         selectActiveSuburb: function() {
             if (application.stateManager.activeSuburb) {
@@ -108,11 +131,39 @@ $(function () {
                 handleSuburbsCheckbox: function () {
                     var checkbox = $("#suburbsCheckbox");
                     if (checkbox.is(":checked")) {
-                        application.stateManager.allSuburbsShown = true;
-                        $.each(application.user.SeeffAreaCollection, function (index, suburb) {
-                            application.Google.createSuburbPoly(suburb, { render: true });
-                        });
-                        application.panel.navItemAreaSelection.buildContent(true);
+
+                        if (!application.user.SeeffAreaCollection.length) {
+                            var header = $("#areaSelectorHeader");
+                            var suburbsSelector = $("#areaSelectionDiv");
+
+                            var userSuburbs = application.panel.navItemAreaSelection.getSuburbs(function (userSuburbs) {
+                                $.each(userSuburbs, function (idx, suburb) {
+                                    var radioItem = application.panel.navItemAreaSelection.constructSuburbRadioItem(suburb);
+                                    suburbsSelector.append(radioItem);
+                                    suburbsSelector.append("<br />");
+                                });
+
+                                header = header[0].outerHTML;
+                                suburbsSelector = suburbsSelector[0].outerHTML;
+                                application.panel.navItemAreaSelection.contentCache = header + suburbsSelector;
+
+                                application.panel.navItemAreaSelection.selectActiveSuburb();
+                                application.panel.navItemAreaSelection.toggleCheckboxes();
+
+                                application.stateManager.allSuburbsShown = true;
+                                $.each(application.user.SeeffAreaCollection, function (index, suburb) {
+                                    application.Google.createSuburbPoly(suburb, { render: true });
+                                });
+                                application.panel.navItemAreaSelection.buildContent(true);
+                            });
+                        }
+                        else {
+                            application.stateManager.allSuburbsShown = true;
+                            $.each(application.user.SeeffAreaCollection, function (index, suburb) {
+                                application.Google.createSuburbPoly(suburb, { render: true });
+                            });
+                            application.panel.navItemAreaSelection.buildContent(true);
+                        }
                     } else {
                         application.stateManager.allSuburbsShown = false;
                         $.each(application.user.SeeffAreaCollection, function (index, suburb) {

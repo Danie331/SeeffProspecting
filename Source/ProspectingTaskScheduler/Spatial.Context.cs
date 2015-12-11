@@ -7,16 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Seeff.Spatial.Service.Database
+namespace ProspectingTaskScheduler
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
-    public partial class seeff_prospectingEntities : DbContext
+    public partial class seeff_spatialEntities : DbContext
     {
-        public seeff_prospectingEntities()
-            : base("name=seeff_prospectingEntities")
+        public seeff_spatialEntities()
+            : base("name=seeff_spatialEntities")
         {
         }
     
@@ -25,6 +27,15 @@ namespace Seeff.Spatial.Service.Database
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<prospecting_property> prospecting_property { get; set; }
+        public virtual DbSet<spatial_area> spatial_area { get; set; }
+    
+        public virtual int reindex_prospecting_suburb(Nullable<int> area_id)
+        {
+            var area_idParameter = area_id.HasValue ?
+                new ObjectParameter("area_id", area_id) :
+                new ObjectParameter("area_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("reindex_prospecting_suburb", area_idParameter);
+        }
     }
 }

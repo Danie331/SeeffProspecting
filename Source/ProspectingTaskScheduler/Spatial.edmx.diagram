@@ -4,8 +4,8 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="599a7b0abb69401d81db445bff8ce38a" Name="Diagram1" ZoomLevel="42">
-        <EntityTypeShape EntityType="seeff_prospectingModel.prospecting_property" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="10000a451b894fd5ac3bb24a9b668df7" Name="Diagram1" >
+        <EntityTypeShape EntityType="seeff_spatialModel.spatial_area" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
