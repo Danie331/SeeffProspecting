@@ -1,5 +1,6 @@
 ﻿using Seeff.Spatial.WebApp.BusinessLayer.Models;
 using Seeff.Spatial.WebApp.Database;
+using Seeff.Spatial.WebApp.ServiceInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,9 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.ControllerActions
                                        AreaName = seeffArea.areaName
                                    }).ToList();
 
+                var spatialSuburbs = new SpatialDataReader().GetSpatialSuburbsListOnly();
                 var mappedSuburbs = from sub in seeffSuburbs
-                                    join area in GlobalAreaCache.Instance.AllSuburbs on sub.SeeffAreaID equals area.SeeffAreaID
+                                    join area in spatialSuburbs.Where(s => !s.IsDeleted) on sub.SeeffAreaID equals area.SeeffAreaID
                                     select sub;
 
                 var unmappedSuburbs = seeffSuburbs.Except(mappedSuburbs);

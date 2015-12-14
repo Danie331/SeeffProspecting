@@ -15,6 +15,7 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
         public int? TerritoryID { get; set; }
         public string AreaName { get; set; }
         public bool UnderMaintenance { get; set; }
+        public bool IsDeleted { get; set; }
 
         public override int? PolyID
         {

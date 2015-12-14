@@ -28,6 +28,7 @@
           <Property Name="area_name" Type="varchar" MaxLength="255" />
           <Property Name="requires_maintenance" Type="bit" Nullable="false" />
           <Property Name="under_maintenance" Type="bit" Nullable="false" />
+          <Property Name="is_deleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="spatial_license">
           <Key>
@@ -117,6 +118,7 @@
           <Property Name="area_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="requires_maintenance" Type="Boolean" Nullable="false" />
           <Property Name="under_maintenance" Type="Boolean" Nullable="false" />
+          <Property Name="is_deleted" Type="Boolean" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -160,6 +162,7 @@
           <EntitySetMapping Name="spatial_area">
             <EntityTypeMapping TypeName="seeff_spatialModel.spatial_area">
               <MappingFragment StoreEntitySet="spatial_area">
+                <ScalarProperty Name="is_deleted" ColumnName="is_deleted" />
                 <ScalarProperty Name="under_maintenance" ColumnName="under_maintenance" />
                 <ScalarProperty Name="requires_maintenance" ColumnName="requires_maintenance" />
                 <ScalarProperty Name="area_name" ColumnName="area_name" />

@@ -18,6 +18,8 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.Models
 
         public int? TerritoryID { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public override int? PolyID
         {
             get { return SeeffAreaID; }

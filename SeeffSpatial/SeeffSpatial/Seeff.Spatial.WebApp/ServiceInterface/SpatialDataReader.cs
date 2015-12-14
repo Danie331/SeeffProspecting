@@ -64,5 +64,19 @@ namespace Seeff.Spatial.WebApp.ServiceInterface
                 throw;
             }
         }
+
+        public List<SeeffSuburb> GetSpatialSuburbsListOnly()
+        {
+            try
+            {
+                List<SeeffSuburb> results = RetrieveFromService<List<SeeffSuburb>>("api/Read/GetSuburbsListOnly");
+                return results;
+            }
+            catch(Exception ex)
+            {
+                Utils.LogException(ex, "GetSpatialSuburbsListOnly() in Spatial web app", null);
+                throw;
+            }
+        }
     }
 }

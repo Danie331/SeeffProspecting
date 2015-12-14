@@ -69,6 +69,10 @@ $(function () {
                 getSuburbs: function (callback) {
                     var endpoint = application.utilities.buildHomeURL('/api/Home/GetSuburbs');
                     application.services.get(endpoint, "Retrieving Suburbs. Please wait...", callback);
+                },
+                deleteSuburb: function (suburbModel, callback) {
+                    var endpoint = application.utilities.buildHomeURL('/api/Home/DeleteSuburb');
+                    application.services.post(endpoint, suburbModel, "Deleting. Please wait...", callback);
                 }
             },
             serviceModels: {

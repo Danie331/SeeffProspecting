@@ -191,6 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BusinessLayer\ControllerActions\DeleteSuburb.cs" />
     <Compile Include="BusinessLayer\ControllerActions\RetrieveUnmappedSuburbs.cs" />
     <Compile Include="BusinessLayer\ControllerActions\SaveLicense.cs" />
     <Compile Include="BusinessLayer\ControllerActions\SaveSuburb.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="BusinessLayer\Interfaces\IServerResult.cs" />
     <Compile Include="BusinessLayer\Models\AreaHierarchy.cs" />
     <Compile Include="BusinessLayer\Models\AreaValidationResult.cs" />
+    <Compile Include="BusinessLayer\Models\DeleteSuburbResult.cs" />
     <Compile Include="BusinessLayer\Models\SaveLicenseResult.cs" />
     <Compile Include="BusinessLayer\Models\SaveSuburbResult.cs" />
     <Compile Include="BusinessLayer\Models\SeeffLicense.cs" />

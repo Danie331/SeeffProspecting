@@ -141,5 +141,20 @@ namespace Seeff.Spatial.WebApp.Controllers
                 return new SaveLicenseResult { Successful = false, SaveMessage = ex.Message };
             }
         }
+
+        [HttpPost]
+        public DeleteSuburbResult DeleteSuburb([FromBody]SeeffSuburb suburb)
+        {
+            try
+            {
+                var result = ControllerActions.DeleteSuburb(suburb);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "DeleteSuburb() from Home Controller", suburb);
+                return new DeleteSuburbResult { Successful = false, Message = ex.Message };
+            }
+        }
     }
 }

@@ -14,13 +14,13 @@ $(function () {
                         application.panel.navItemEditPoly.contentCache = content;
                         container.html(application.panel.navItemEditPoly.contentCache);
                     });
-                }                
+                }
             },
             controllers: {
                 validateArea: function (callback) {
                     var activeSuburb = application.stateManager.activeSuburb;
                     if (activeSuburb) {
-                        var suburbModel = application.services.serviceModels.buildSuburbModel(activeSuburb);           
+                        var suburbModel = application.services.serviceModels.buildSuburbModel(activeSuburb);
                         application.services.serviceControllers.validateSuburbPolygon(suburbModel, function (result) {
                             application.panel.navItemEditPoly.controllers.validateSuburbCallback(result);
                             if (callback) {
@@ -58,7 +58,7 @@ $(function () {
                         }
                     }
                 },
-                validateLicenseCallback: function(result) {
+                validateLicenseCallback: function (result) {
                     var container = $("#areaValidationResult");
                     if (result.IsValid) {
                         container.html('Validation successful');
@@ -79,7 +79,7 @@ $(function () {
                             var licenseModel = application.services.serviceModels.buildLicenseModel(activeLicense);
                             application.services.serviceControllers.saveLicense(licenseModel, application.panel.navItemEditPoly.controllers.saveLicenseCallback);
                         }
-                    });                   
+                    });
                 },
                 saveSuburbCallback: function (result) {
                     var container = $("#areaSaveResult");
@@ -103,6 +103,42 @@ $(function () {
                         //
                     } else {
                         container.html("Error occurred while saving: - " + result.SaveMessage);
+                    }
+                },
+                deleteSuburb: function () {
+                    var activeSuburb = application.stateManager.activeSuburb;
+                    if (activeSuburb) {
+                        var yesNo = window.confirm("Are you sure you want to delete this suburb's polygon?");
+                        if (yesNo == true) {
+                            var suburbModel = application.services.serviceModels.buildSuburbModel(activeSuburb);
+                            application.services.serviceControllers.deleteSuburb(suburbModel, function (result) {
+                                var resultDiv = $("#deleteSuburbResult");
+                                if (result.Successful) {
+                                    var index = -1;
+                                    application.user.SeeffAreaCollectionLookup = {};
+                                    $.each(application.user.SeeffAreaCollection, function (idx, sub) {
+                                        if (sub.SeeffAreaID == activeSuburb.SeeffAreaID) {
+                                            // Find the index of the suburb to remove from the client cache
+                                            index = idx;
+                                        } else {
+                                            // Otherwise just re-index the lookup array again.
+                                            var areaID = '' + sub.SeeffAreaID;
+                                            application.user.SeeffAreaCollectionLookup[areaID] = sub;
+                                        }
+                                    });
+                                    if (index > -1) application.user.SeeffAreaCollection.splice(index, 1);
+
+                                    application.stateManager.handleExitEditPolyMode();
+                                    //application.panel.navItemAreaSelection.contentCache = ''; // needed?
+                                    activeSuburb.PolygonInstance.setMap(null);
+                                    application.stateManager.setActiveSuburb(null);
+
+                                    resultDiv.empty().append("Deleted Successfully.");
+                                } else {
+                                    resultDiv.empty().append("Problem occurred deleting suburb, please contact support - " + result.Message);
+                                }
+                            });
+                        }
                     }
                 }
             }

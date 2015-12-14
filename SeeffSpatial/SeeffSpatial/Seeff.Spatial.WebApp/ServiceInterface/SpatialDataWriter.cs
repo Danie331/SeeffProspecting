@@ -36,5 +36,19 @@ namespace Seeff.Spatial.WebApp.ServiceInterface
                 throw;
             }
         }
+
+        public SeeffSuburb DeleteSuburb(SeeffSuburb suburb)
+        {
+            try
+            {
+                suburb = PostToService<SeeffSuburb>("api/CreateOrUpdate/DeleteSuburb", suburb);
+                return suburb;
+            }
+            catch(Exception ex)
+            {
+                Utils.LogException(ex, "DeleteSuburb() in SpatialWriter", suburb);
+                throw;
+            }
+        }
     }
 }

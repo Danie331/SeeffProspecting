@@ -19,7 +19,8 @@ namespace Seeff.Spatial.Service.Controllers
             using (var spatialDb = new seeff_spatialEntities())
             {
                 List<SpatialSuburb> results = new List<SpatialSuburb>();
-                foreach (var rec in spatialDb.spatial_area)
+                var query = spatialDb.spatial_area.Where(sub => !sub.is_deleted);
+                foreach (var rec in query)
                 {
                     var spatialSuburb = new SpatialSuburb
                     {
@@ -48,7 +49,8 @@ namespace Seeff.Spatial.Service.Controllers
                     var spatialSuburb = new SpatialSuburb
                     {
                         AreaName = rec.area_name,
-                        SeeffAreaID = rec.fkAreaId
+                        SeeffAreaID = rec.fkAreaId,
+                        IsDeleted = rec.is_deleted  
                     };
 
                     results.Add(spatialSuburb);

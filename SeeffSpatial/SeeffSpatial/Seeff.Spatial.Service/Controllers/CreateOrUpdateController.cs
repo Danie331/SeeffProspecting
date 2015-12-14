@@ -23,6 +23,7 @@ namespace Seeff.Spatial.Service.Controllers
                     if (existingrecord != null)
                     {
                         existingrecord.geo_polygon = suburb.Polygon;
+                        existingrecord.is_deleted = false;
                         existingrecord.requires_maintenance = true;
                     }
                     else
@@ -98,6 +99,40 @@ namespace Seeff.Spatial.Service.Controllers
             catch (Exception ex)
             {
                 Utils.LogException(ex, "SaveLicense()", license);
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public SpatialSuburb DeleteSuburb([FromBody]SpatialSuburb suburb)
+        {
+            try
+            {
+                using (var spatialDb = new seeff_spatialEntities())
+                {
+                    var existingrecord = spatialDb.spatial_area.FirstOrDefault(area => area.fkAreaId == suburb.SeeffAreaID);
+                    if (existingrecord != null)
+                    {
+                        existingrecord.is_deleted = true;
+                        existingrecord.requires_maintenance = true;
+                        spatialDb.SaveChanges();
+
+                        return new SpatialSuburb
+                        {
+                            AreaName = existingrecord.area_name,
+                            LicenseID = existingrecord.fk_license_id,
+                            Polygon = existingrecord.geo_polygon,
+                            SeeffAreaID = existingrecord.fkAreaId,
+                            TerritoryID = existingrecord.fk_territory_id
+                        };
+                    }
+
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "DeleteSuburb() in Spatial Service", suburb);
                 throw;
             }
         }

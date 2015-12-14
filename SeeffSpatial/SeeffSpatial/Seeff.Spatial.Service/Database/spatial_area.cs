@@ -23,5 +23,6 @@ namespace Seeff.Spatial.Service.Database
         public string area_name { get; set; }
         public bool requires_maintenance { get; set; }
         public bool under_maintenance { get; set; }
+        public bool is_deleted { get; set; }
     }
 }
