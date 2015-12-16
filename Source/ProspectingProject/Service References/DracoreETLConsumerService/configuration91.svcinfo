@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="3AYHk7mXnShukbJNph5WGHJGP/0=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="kXXpEtXtNfqJljyj4xtE8WDwrnk=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="BasicHttpBinding_IDracoreDataService">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BasicHttpBinding_IDracoreDataService" contract="DracoreETLConsumerService.IDracoreDataService" bindingType="basicHttpBinding" address="http://105.27.115.30/DracoreDataService/DracoreDataService.svc" bindingConfiguration="BasicHttpBinding_IDracoreDataService">
+    <endpoint name="BasicHttpBinding_IDracoreDataService" contract="DracoreETLConsumerService.IDracoreDataService" bindingType="basicHttpBinding" address="http://www.dracorelive.co.za/DracoreDataService/DracoreDataService.svc" bindingConfiguration="BasicHttpBinding_IDracoreDataService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://105.27.115.30/DracoreDataService/DracoreDataService.svc</serializedValue>
+          <serializedValue>http://www.dracorelive.co.za/DracoreDataService/DracoreDataService.svc</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

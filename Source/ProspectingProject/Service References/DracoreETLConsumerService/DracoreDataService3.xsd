@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DC.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DC.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://www.dracorelive.co.za/DracoreDataService/DracoreDataService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:complexType name="Token">
     <xs:sequence>
       <xs:element minOccurs="0" name="RequestTime" nillable="true" type="xs:string" />
@@ -90,6 +90,7 @@
   <xs:element name="Director" nillable="true" type="tns:Director" />
   <xs:complexType name="BasePerson">
     <xs:sequence>
+      <xs:element minOccurs="0" name="Deceased" type="xs:boolean" />
       <xs:element minOccurs="0" name="FirstNames" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Gender" type="tns:GenderEnum" />
       <xs:element minOccurs="0" name="IdentityNumber" nillable="true" type="xs:string" />

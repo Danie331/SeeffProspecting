@@ -383,6 +383,9 @@ namespace ProspectingProject.DracoreETLConsumerService {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool DeceasedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FirstNamesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -404,6 +407,19 @@ namespace ProspectingProject.DracoreETLConsumerService {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Deceased {
+            get {
+                return this.DeceasedField;
+            }
+            set {
+                if ((this.DeceasedField.Equals(value) != true)) {
+                    this.DeceasedField = value;
+                    this.RaisePropertyChanged("Deceased");
+                }
             }
         }
         

@@ -18,6 +18,7 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
 
         private string _polygonWKT;
         private string _centroidWKT;
+        private SpatialPoint _centroidLatLng;
 
         [JsonIgnore]
         public DbGeography Polygon
@@ -43,6 +44,11 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
         }
 
         public string CentroidWKT { get { return _centroidWKT; } }
+
+        public SpatialPoint Centroid 
+        {
+            get { return _centroidLatLng; }
+        }
 
         public abstract int? PolyID { get; }
 
@@ -102,6 +108,7 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
 
             _centroid = DbGeography.FromText(wkt);
             _centroidWKT = _centroid.WellKnownValue.WellKnownText;
+            _centroidLatLng = new SpatialPoint { Lat = _centroid.Latitude.Value, Lng = _centroid.Longitude.Value };
         }
     }
 }

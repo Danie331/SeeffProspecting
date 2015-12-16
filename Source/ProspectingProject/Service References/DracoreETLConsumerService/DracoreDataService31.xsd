@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DC.Models" />
+  <xs:import schemaLocation="http://www.dracorelive.co.za/DracoreDataService/DracoreDataService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DC.Models" />
   <xs:element name="SearchCompanies">
     <xs:complexType>
       <xs:sequence>

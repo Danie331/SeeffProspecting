@@ -1159,20 +1159,20 @@
     <Content Include="Scripts\3rdParty\SlickGrid\README.md" />
     <None Include="Service References\DracoreETLConsumerService\configuration91.svcinfo" />
     <None Include="Service References\DracoreETLConsumerService\configuration.svcinfo" />
-    <None Include="Service References\DracoreETLConsumerService\DracoreDataService.disco" />
-    <None Include="Service References\DracoreETLConsumerService\DracoreDataService.wsdl" />
-    <None Include="Service References\DracoreETLConsumerService\DracoreDataService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DracoreETLConsumerService\DracoreDataService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DracoreETLConsumerService\DracoreDataService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="Service References\DracoreETLConsumerService\DracoreDataService1.disco" />
     <Content Include="Service References\DracoreETLConsumerService\ProspectingProject.DracoreETLConsumerService.CompanySearch.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <None Include="Service References\DracoreETLConsumerService\DracoreDataService1.wsdl" />
+    <None Include="Service References\DracoreETLConsumerService\DracoreDataService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\DracoreDataService31.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DracoreETLConsumerService\DracoreDataService32.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\DracoreETLConsumerService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

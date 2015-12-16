@@ -19,14 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://105.27.115.30/DracoreDataService/DracoreDataService.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://www.dracorelive.co.za/DracoreDataService/DracoreDataService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="DracoreDataService.xsd" MetadataType="Schema" ID="e754cc30-0f72-4117-9348-bb5636309c2a" SourceId="1" SourceUrl="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?xsd=xsd0" />
-    <MetadataFile FileName="DracoreDataService1.xsd" MetadataType="Schema" ID="9b2c10db-eaa3-43c9-831e-a75348a425a2" SourceId="1" SourceUrl="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?xsd=xsd1" />
-    <MetadataFile FileName="DracoreDataService.wsdl" MetadataType="Wsdl" ID="c037627d-25c2-42da-abf4-03dac0b5176d" SourceId="1" SourceUrl="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?wsdl" />
-    <MetadataFile FileName="DracoreDataService.disco" MetadataType="Disco" ID="2dec9821-e6eb-4a5b-bd1e-f1816a30d8c8" SourceId="1" SourceUrl="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?disco" />
-    <MetadataFile FileName="DracoreDataService2.xsd" MetadataType="Schema" ID="fccd86b9-0950-495f-b5e6-19523824cd43" SourceId="1" SourceUrl="http://105.27.115.30/DracoreDataService/DracoreDataService.svc?xsd=xsd2" />
+    <MetadataFile FileName="DracoreDataService3.xsd" MetadataType="Schema" ID="db8936ce-cd35-4a96-b0ca-221de3a52889" SourceId="1" SourceUrl="http://www.dracorelive.co.za/DracoreDataService/DracoreDataService.svc?xsd=xsd2" />
+    <MetadataFile FileName="DracoreDataService1.wsdl" MetadataType="Wsdl" ID="ad8d38cb-fa94-4611-b7ac-8003ec893ce9" SourceId="1" SourceUrl="http://www.dracorelive.co.za/DracoreDataService/DracoreDataService.svc?wsdl" />
+    <MetadataFile FileName="DracoreDataService31.xsd" MetadataType="Schema" ID="a63d8ab2-1213-4904-aa1d-0a88ede6b3c7" SourceId="1" SourceUrl="http://www.dracorelive.co.za/DracoreDataService/DracoreDataService.svc?xsd=xsd0" />
+    <MetadataFile FileName="DracoreDataService32.xsd" MetadataType="Schema" ID="185aef85-76ea-4fd5-942f-9fc6823b4e87" SourceId="1" SourceUrl="http://www.dracorelive.co.za/DracoreDataService/DracoreDataService.svc?xsd=xsd1" />
+    <MetadataFile FileName="DracoreDataService1.disco" MetadataType="Disco" ID="ccff5093-08c1-419e-8bc0-7d7df98b1f33" SourceId="1" SourceUrl="http://www.dracorelive.co.za/DracoreDataService/DracoreDataService.svc?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

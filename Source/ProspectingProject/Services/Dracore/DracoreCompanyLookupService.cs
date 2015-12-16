@@ -53,10 +53,10 @@ namespace ProspectingProject
         private DracoreETLConsumerService.Token GetToken()
         {
             var token = new DracoreETLConsumerService.Token();// DracoreETLConsumerService.Token();
-            token.Username = "seefftest";
-            string reqTime = DateTime.Now.ToString("yyyyMMddHHmmssffff");
+            token.Username = "seefflive";
+            string reqTime = DateTime.Now.ToString();//.ToString("yyyyMMddHHmmssffff");
             token.RequestTime = reqTime;
-            string tokenHash = token.Username + reqTime + "S33f!@)(" + "197.229.114.192";
+            string tokenHash = token.Username + reqTime + "S33f!@)(LIVE" + "169.0.118.143";
             var crypto = System.Security.Cryptography.SHA1CryptoServiceProvider.Create();
             var cryptoBytes = crypto.ComputeHash(System.Text.Encoding.UTF8.GetBytes(tokenHash));
             token.TokenVerify = Convert.ToBase64String(cryptoBytes);
