@@ -2,14 +2,15 @@
 $(function () {
     $.extend(application.panel, {
         navItemAreaSelection: {
-            buildContent: function (enableContent) {
+            buildContent: function () {
                 var container = $("#contentContainerContent");
                 if (application.panel.navItemAreaSelection.contentCache) {
                     container.html(application.panel.navItemAreaSelection.contentCache);
                     application.panel.navItemAreaSelection.selectActiveSuburb();
 
                     application.panel.navItemAreaSelection.toggleCheckboxes();
-                    if (enableContent) {
+                    
+                    if ($("#suburbsCheckbox").is(":checked")) {
                         $("#areaSelectionDiv").css('display', 'block');
                     } else {
                         $("#areaSelectionDiv").css('display', 'none');
@@ -97,15 +98,15 @@ $(function () {
                 if (application.stateManager.activeNavItem == application.panel.navItemAreaSelection) {
                     application.panel.navItemAreaSelection.selectSuburbRadioLink(suburb);
                 }
-                if (application.stateManager.activeNavItem == application.panel.navItemEditPoly) {
-                    application.panel.navItemEditPoly.buildContent();
+                if (application.stateManager.activeNavItem == application.panel.navItemEditSuburb) {
+                    application.panel.navItemEditSuburb.buildContent();
                     application.stateManager.handleEnterPolyEditMode();
                 }
             },
             selectLicenseFromPolyClick: function(license) {
                 application.stateManager.setActiveLicense(license);
-                if (application.stateManager.activeNavItem == application.panel.navItemEditPoly) {
-                    application.panel.navItemEditPoly.buildContent();
+                if (application.stateManager.activeNavItem == application.panel.navItemEditSuburb) {
+                    application.panel.navItemEditSuburb.buildContent();
                     application.stateManager.handleEnterPolyEditMode();
                 }
             },
@@ -154,7 +155,7 @@ $(function () {
                                 $.each(application.user.SeeffAreaCollection, function (index, suburb) {
                                     application.Google.createSuburbPoly(suburb, { render: true });
                                 });
-                                application.panel.navItemAreaSelection.buildContent(true);
+                                application.panel.navItemAreaSelection.buildContent();
                             });
                         }
                         else {
@@ -162,14 +163,15 @@ $(function () {
                             $.each(application.user.SeeffAreaCollection, function (index, suburb) {
                                 application.Google.createSuburbPoly(suburb, { render: true });
                             });
-                            application.panel.navItemAreaSelection.buildContent(true);
+                            application.panel.navItemAreaSelection.buildContent();
                         }
                     } else {
                         application.stateManager.allSuburbsShown = false;
                         $.each(application.user.SeeffAreaCollection, function (index, suburb) {
                             application.Google.createSuburbPoly(suburb, { render: false });
                         });
-                        application.panel.navItemAreaSelection.buildContent(false);
+                        application.panel.navItemAreaSelection.buildContent();
+                        application.stateManager.setActiveSuburb(null);
                     }
                 },
                 handleLicensesCheckbox: function () {
@@ -184,6 +186,7 @@ $(function () {
                         $.each(application.user.SeeffLicenses, function (index, lic) {
                             application.Google.createLicensePoly(lic, { render: false });
                         });
+                        application.stateManager.setActiveLicense(null);
                     }
                 },
                 handleTerritoriesCheckbox: function () {

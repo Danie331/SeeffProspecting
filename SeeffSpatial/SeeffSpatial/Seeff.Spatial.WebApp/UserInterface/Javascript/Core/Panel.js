@@ -10,7 +10,7 @@ $(function () {
                     $("#panelContentContainer").css('height', '100%');
 
                     // Build content for the first menu item
-                    application.panel.navItemAreaSelection.buildContent(true);
+                    application.panel.navItemAreaSelection.buildContent();
                     application.stateManager.activeNavItem = application.panel.navItemAreaSelection;
                 });
             },
@@ -65,11 +65,13 @@ $(function () {
                         application.panel.navMenu.updateNavItemButtonOnClick();
                         application.stateManager.handleExitEditPolyMode();
                         application.stateManager.handleExitCreateAreaMode();
-                        application.panel.navItemAreaSelection.buildContent(true); //clicking to a new poly must also exit edit mode., delete polypoint, undo create new line when creating new poly.
+                        application.panel.navItemAreaSelection.buildContent(); //clicking to a new poly must also exit edit mode., delete polypoint, undo create new line when creating new poly.
                         application.stateManager.activeNavItem = application.panel.navItemAreaSelection;
                     },
                     createAreaClick: function () {
                         application.panel.navMenu.updateNavItemButtonOnClick();
+                        application.stateManager.setActiveSuburb(null);
+                        application.stateManager.setActiveLicense(null);
                         application.stateManager.handleExitEditPolyMode();
                         application.stateManager.handleEnterCreateAreaMode(); // area layering
                         application.panel.navItemCreateNewArea.buildContent();
@@ -82,13 +84,22 @@ $(function () {
                         application.panel.navItemAreaInformation.buildContent();
                         application.stateManager.activeNavItem = application.panel.navItemAreaInformation;
                     },
-                    enterPolyEditModeClick: function () {
-                        if (application.stateManager.activeSuburb || application.stateManager.activeLicense) {
+                    enterSuburbEditModeClick: function () {
+                        if (application.stateManager.activeSuburb) {
                             application.panel.navMenu.updateNavItemButtonOnClick();
-                            application.panel.navItemEditPoly.buildContent();
+                            application.panel.navItemEditSuburb.buildContent();
                             application.stateManager.handleExitCreateAreaMode();
                             application.stateManager.handleEnterPolyEditMode();
-                            application.stateManager.activeNavItem = application.panel.navItemEditPoly;
+                            application.stateManager.activeNavItem = application.panel.navItemEditSuburb;
+                        }
+                    },
+                    enterLicenseEditModeClick: function () {
+                        if (application.stateManager.activeLicense) {
+                            application.panel.navMenu.updateNavItemButtonOnClick();
+                            application.panel.navItemEditLicense.buildContent();
+                            application.stateManager.handleExitCreateAreaMode();
+                            //application.stateManager.handleEnterPolyEditMode();
+                            application.stateManager.activeNavItem = application.panel.navItemEditLicense;
                         }
                     }
                 }

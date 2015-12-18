@@ -8,7 +8,7 @@ $(function () {
             activeSuburbInEditMode: false,
             activeLicenseInEditMode: false,
             createAreaMode: false,
-            allSuburbsShown: true,
+            allSuburbsShown: false,
             allLicensesShown: false,
             allTerritoriesShown: false,
             handleExitEditPolyMode: function () {
@@ -76,12 +76,20 @@ $(function () {
                     application.Google.createLicensePoly(application.stateManager.activeLicense, { render: false });
                     application.stateManager.activeLicense = null;
                 }
+                if (!suburb && application.stateManager.activeSuburb != null) {
+                    application.stateManager.handleExitEditPolyMode();
+                    application.Google.resetPolygonSelection();
+                }
                 application.stateManager.activeSuburb = suburb;
             },
             setActiveLicense: function (license) {
                 if (application.stateManager.activeSuburb) {
                     application.Google.createSuburbPoly(application.stateManager.activeSuburb, { render: false });
                     application.stateManager.activeSuburb = null;
+                }
+                if (!license && application.stateManager.activeLicense != null) {
+                    application.stateManager.handleExitEditPolyMode();
+                    application.Google.resetPolygonSelection();
                 }
                 application.stateManager.activeLicense = license;
             },

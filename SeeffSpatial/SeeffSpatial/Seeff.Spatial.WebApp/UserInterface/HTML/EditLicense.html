@@ -1,0 +1,64 @@
+﻿
+<div>
+    <div id="editLicenseOrUploadKML" class="step-active" style="width:100%">
+        <fieldset class="step-content-left">
+            <legend>Step 1: Reload License From KML</legend>
+            <input type="button" id="uploadKMLForLicenseBtn" onclick="application.panel.navItemEditLicense.controllers.uploadNewKML()" value="Upload KML" />
+            <input id='attachKMLForLicenseFile' type='file' accept=".kml" style="display:none" />
+        </fieldset>
+        <img id="uploadLicenseKMLStep1CompleteTick" src="UserInterface/Graphics/green_tick.png" class="step-content-right step-nonactive" />
+    </div>
+
+    <div id="editLicenseStep2" class="step-nonactive" style="width:100%;float:left;margin-top:20px">
+        <fieldset class="step-content-left">
+            <legend>Step 2: Validate The Polygon</legend>
+            <input type="button" id="validateLicenseKMLPolyBtn" onclick="application.panel.navItemEditLicense.controllers.validateLicensePolygon()" value="Validate Polygon" />
+        </fieldset>
+        <div class="step-content-right">
+            <img id="editLicenseStep2CompleteTick" src="UserInterface/Graphics/green_tick.png" class="step-nonactive" />
+            <img id="editLicenseStep2ErrorTick" src="UserInterface/Graphics/stop.png" class="step-nonactive" />
+        </div>
+        <br />
+        <div id="editLicensePolyValidationResults" style="color:red;width:100%;float:left;margin-top:20px">
+        </div>
+    </div>
+
+    <div id="editLicenseStep3" class="step-nonactive" style="width:100%;float:left;margin-top:20px">
+        <fieldset class="step-content-left">
+            <legend>Step 3: Confirm and Save</legend>
+            <input type="button" id="overwriteLicenseBtn" onclick="application.panel.navItemEditLicense.controllers.saveLicense()" value="Save" />
+        </fieldset>
+        <div class="step-content-right">
+            <img id="editLicenseStep3CompleteTick" src="UserInterface/Graphics/green_tick.png" class="step-nonactive" />
+            <img id="editLicenseStep3ErrorTick" src="UserInterface/Graphics/stop.png" class="step-nonactive" />
+        </div>
+        <br />
+        <div id="saveLicenseResults" style="color:red;width:100%;float:left;margin-top:20px">
+        </div>
+    </div>
+
+    <hr style="width:100%;display:inline-block" />
+    <div id="resetUploadLicenseKMLBtn" class="step-nonactive" style="width:100%;float:left;">
+        <input type="button" value="Reset" onclick="application.panel.navItemEditLicense.controllers.resetForm()" />
+    </div>
+</div>
+
+<style>
+    .step-active {
+        display: block;
+    }
+
+    .step-nonactive {
+        display: none;
+    }
+
+    .step-content-left {
+        display: block;
+        float: left;
+    }
+
+    .step-content-right {
+        /*display: inline-block;*/
+        float: right;
+    }
+</style>

@@ -20,13 +20,13 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.Validators
 
             // #1: This license' boundaries may not intersect with another license boundaries
             // TODO
-            //List<SeeffLicense> intersectingLicenses = _license.GetIntersectingPolysIgnoreTouching(GlobalAreaCache.Instance.SeeffLicenses);
-            //if (intersectingLicenses.Count > 0)
-            //{
-            //    result.IsValid = false;
-            //    result.ValidationMessage = "This license's polygon intersects with one or more licenses.";
-            //    return result;
-            //}
+            List<SeeffLicense> intersectingLicenses = _license.GetIntersectingPolys(GlobalAreaCache.Instance.SeeffLicenses);
+            if (intersectingLicenses.Count > 0)
+            {
+                result.IsValid = false;
+                result.ValidationMessage = "This license's polygon intersects with one or more licenses.";
+                return result;
+            }
 
             // #2: License must be fully contained by a territory
             var territories = _license.GetContainingPolys(GlobalAreaCache.Instance.SeeffTerritories);

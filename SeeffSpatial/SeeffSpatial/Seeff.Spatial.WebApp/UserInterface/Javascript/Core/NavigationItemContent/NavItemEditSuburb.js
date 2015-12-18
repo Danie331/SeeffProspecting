@@ -1,18 +1,18 @@
 ﻿
 $(function () {
     $.extend(application.panel, {
-        navItemEditPoly: {
+        navItemEditSuburb: {
             buildContent: function () {
                 var container = $("#contentContainerContent");
-                if (application.panel.navItemEditPoly.contentCache) {
-                    container.html(application.panel.navItemEditPoly.contentCache);
+                if (application.panel.navItemEditSuburb.contentCache) {
+                    container.html(application.panel.navItemEditSuburb.contentCache);
                 } else {
-                    container.html('').load("UserInterface/HTML/EditPoly.html", function (content) {
+                    container.html('').load("UserInterface/HTML/EditSuburb.html", function (content) {
 
                         application.panel.navItemAreaSelection.getSuburbs();
 
-                        application.panel.navItemEditPoly.contentCache = content;
-                        container.html(application.panel.navItemEditPoly.contentCache);
+                        application.panel.navItemEditSuburb.contentCache = content;
+                        container.html(application.panel.navItemEditSuburb.contentCache);
                     });
                 }
             },
@@ -22,7 +22,7 @@ $(function () {
                     if (activeSuburb) {
                         var suburbModel = application.services.serviceModels.buildSuburbModel(activeSuburb);
                         application.services.serviceControllers.validateSuburbPolygon(suburbModel, function (result) {
-                            application.panel.navItemEditPoly.controllers.validateSuburbCallback(result);
+                            application.panel.navItemEditSuburb.controllers.validateSuburbCallback(result);
                             if (callback) {
                                 callback(result);
                             }
@@ -32,7 +32,7 @@ $(function () {
                     if (activeLicense) {
                         var licenseModel = application.services.serviceModels.buildLicenseModel(activeLicense);
                         application.services.serviceControllers.validateLicensePolygon(licenseModel, function (result) {
-                            application.panel.navItemEditPoly.controllers.validateLicenseCallback(result);
+                            application.panel.navItemEditSuburb.controllers.validateLicenseCallback(result);
                             if (callback) {
                                 callback(result);
                             }
@@ -67,17 +67,17 @@ $(function () {
                     }
                 },
                 saveArea: function () {
-                    application.panel.navItemEditPoly.controllers.validateArea(function (result) {
+                    application.panel.navItemEditSuburb.controllers.validateArea(function (result) {
                         var activeSuburb = application.stateManager.activeSuburb;
                         if (activeSuburb && result.IsValid) {
                             // path: go to server to save via spatial service call, save to DB, reload from DB and save to Glbal Cache (test this properly), reload suburb on front-end with new centroid etc.
                             var suburbModel = application.services.serviceModels.buildSuburbModel(activeSuburb);
-                            application.services.serviceControllers.saveSuburb(suburbModel, application.panel.navItemEditPoly.controllers.saveSuburbCallback);
+                            application.services.serviceControllers.saveSuburb(suburbModel, application.panel.navItemEditSuburb.controllers.saveSuburbCallback);
                         }
                         var activeLicense = application.stateManager.activeLicense;
                         if (activeLicense && result.IsValid) {
                             var licenseModel = application.services.serviceModels.buildLicenseModel(activeLicense);
-                            application.services.serviceControllers.saveLicense(licenseModel, application.panel.navItemEditPoly.controllers.saveLicenseCallback);
+                            application.services.serviceControllers.saveLicense(licenseModel, application.panel.navItemEditSuburb.controllers.saveLicenseCallback);
                         }
                     });
                 },

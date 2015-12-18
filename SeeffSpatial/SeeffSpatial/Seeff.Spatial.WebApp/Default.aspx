@@ -79,7 +79,8 @@
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemAreaInformation.js"></script>
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemCreateNewArea.js"></script>
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemAreaSelection.js"></script>
-    <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemEditPoly.js"></script>
+    <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemEditSuburb.js"></script>
+    <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemEditLicense.js"></script>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
