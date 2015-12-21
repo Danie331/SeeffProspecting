@@ -56,7 +56,7 @@ namespace ProspectingProject
             token.Username = "seefflive";
             string reqTime = DateTime.Now.ToString();//.ToString("yyyyMMddHHmmssffff");
             token.RequestTime = reqTime;
-            string tokenHash = token.Username + reqTime + "S33f!@)(LIVE" + "169.0.118.143";
+            string tokenHash = token.Username + reqTime + "S33f!@)(LIVE" + "154.70.214.213";
             var crypto = System.Security.Cryptography.SHA1CryptoServiceProvider.Create();
             var cryptoBytes = crypto.ComputeHash(System.Text.Encoding.UTF8.GetBytes(tokenHash));
             token.TokenVerify = Convert.ToBase64String(cryptoBytes);
