@@ -6,6 +6,7 @@ $(function () {
                 var container = $("#contentContainerContent");
                 if (application.panel.navItemEditSuburb.contentCache) {
                     container.html(application.panel.navItemEditSuburb.contentCache);
+                    application.panel.navItemEditSuburb.populateLicenseIDTextBox();
                 } else {
                     container.html('').load("UserInterface/HTML/EditSuburb.html", function (content) {
 
@@ -13,7 +14,22 @@ $(function () {
 
                         application.panel.navItemEditSuburb.contentCache = content;
                         container.html(application.panel.navItemEditSuburb.contentCache);
+                        application.panel.navItemEditSuburb.populateLicenseIDTextBox();
                     });
+                }
+            },
+            populateLicenseIDTextBox: function () {
+                var licenseIDSelect = $("#suburbLicenseIDTextbox");
+                licenseIDSelect.empty().append("<option value='' selected='selected'></option>");
+                $.each(application.user.SeeffLicenses, function (idx, lic) {
+                    var option = $('<option/>', { value: lic.LicenseID }).text(lic.LicenseID);
+                    licenseIDSelect.append(option);
+                });
+                var activeSuburb = application.stateManager.activeSuburb;
+                if (activeSuburb) {
+                    if (activeSuburb.LicenseID && activeSuburb.LicenseID > 0) {
+                        licenseIDSelect.val(activeSuburb.LicenseID);
+                    }
                 }
             },
             controllers: {
@@ -21,6 +37,7 @@ $(function () {
                     var activeSuburb = application.stateManager.activeSuburb;
                     if (activeSuburb) {
                         var suburbModel = application.services.serviceModels.buildSuburbModel(activeSuburb);
+                        suburbModel.LicenseID = $("#suburbLicenseIDTextbox").val();
                         application.services.serviceControllers.validateSuburbPolygon(suburbModel, function (result) {
                             application.panel.navItemEditSuburb.controllers.validateSuburbCallback(result);
                             if (callback) {
@@ -71,6 +88,7 @@ $(function () {
                         var activeSuburb = application.stateManager.activeSuburb;
                         if (activeSuburb && result.IsValid) {
                             // path: go to server to save via spatial service call, save to DB, reload from DB and save to Glbal Cache (test this properly), reload suburb on front-end with new centroid etc.
+                            activeSuburb.LicenseID = $("#suburbLicenseIDTextbox").val();
                             var suburbModel = application.services.serviceModels.buildSuburbModel(activeSuburb);
                             application.services.serviceControllers.saveSuburb(suburbModel, application.panel.navItemEditSuburb.controllers.saveSuburbCallback);
                         }

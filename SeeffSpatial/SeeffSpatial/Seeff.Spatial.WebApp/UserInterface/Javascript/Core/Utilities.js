@@ -40,7 +40,9 @@ $(function () {
                 $.each(coords, function (idx, pair) {
                     var lat = pair.split(',')[1];
                     var lng = pair.split(',')[0];
-                    result.push({ lat: Number(lat), lng: Number(lng) });
+                    if (lat && lng) {
+                        result.push({ lat: Number(lat), lng: Number(lng) });
+                    }
                 });
                 return result;
             },

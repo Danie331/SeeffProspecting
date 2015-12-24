@@ -23,6 +23,7 @@ namespace Seeff.Spatial.Service.Controllers
                     if (existingrecord != null)
                     {
                         existingrecord.geo_polygon = suburb.Polygon;
+                        existingrecord.fk_license_id = suburb.LicenseID;
                         existingrecord.is_deleted = false;
                         existingrecord.requires_maintenance = true;
                     }
@@ -92,6 +93,21 @@ namespace Seeff.Spatial.Service.Controllers
                         Polygon = existingrecord.geo_polygon,
                         TerritoryID = existingrecord.fk_territory_id
                     };
+
+                    // find all suburbs in the current territory not allocated to a license
+                    var unallocatedSuburbs = from sub in spatialDb.spatial_area
+                                             where (sub.fk_license_id == null || sub.fk_license_id <= 0)
+                                             && sub.fk_territory_id == result.TerritoryID
+                                             select sub;
+                    foreach(var suburb in unallocatedSuburbs)
+                    {
+                        if (suburb.area_center_point.Intersects(license.Polygon))
+                        {
+                            suburb.fk_license_id = result.LicenseID;
+                        }
+                    }
+
+                    spatialDb.SaveChanges();
 
                     return result;
                 }

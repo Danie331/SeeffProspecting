@@ -24,7 +24,7 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.ControllerActions
             SpatialDataWriter spatialWriter = new SpatialDataWriter();
             SeeffLicense result = spatialWriter.SaveLicense(license);
 
-            GlobalAreaCache.Instance.UpdateCacheItem(result);
+            result = GlobalAreaCache.Instance.UpdateCacheItem(result);
 
             return new SaveLicenseResult
             {

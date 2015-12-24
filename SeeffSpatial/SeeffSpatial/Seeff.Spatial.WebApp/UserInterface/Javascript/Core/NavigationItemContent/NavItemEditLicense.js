@@ -106,11 +106,15 @@ $(function () {
                     if (result.Successful) {
                         application.stateManager.activeLicense.PolyWKT = result.LicenseResult.PolyWKT;
                         application.stateManager.activeLicense.CentroidWKT = result.LicenseResult.CentroidWKT;
+                        application.stateManager.activeLicense.Suburbs = result.LicenseResult.Suburbs;
                         application.panel.navItemEditLicense.newLicensePolygon.setMap(null);
                         application.panel.navItemEditLicense.newLicensePolygon = null;
                         application.stateManager.handleExitEditPolyMode();
                         application.Google.createLicensePoly(application.stateManager.activeLicense, { render: true });
                         application.Google.showLicenseInfoWindow(application.stateManager.activeLicense);
+
+                        application.user.SeeffAreaCollection.length = 0;
+                        application.user.SeeffAreaCollectionLookup = {};
 
                         step3Tick.removeClass('step-nonactive').addClass('step-active');
                         errorTick.removeClass('step-active').addClass('step-nonactive');

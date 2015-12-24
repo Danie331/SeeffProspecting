@@ -79,8 +79,8 @@ $(function () {
                     },
                     areaInformationClick: function () {
                         application.panel.navMenu.updateNavItemButtonOnClick();
-                        application.stateManager.handleExitEditPolyMode();
-                        application.stateManager.handleExitCreateAreaMode();
+                        //application.stateManager.handleExitEditPolyMode();
+                        //application.stateManager.handleExitCreateAreaMode();
                         application.panel.navItemAreaInformation.buildContent();
                         application.stateManager.activeNavItem = application.panel.navItemAreaInformation;
                     },

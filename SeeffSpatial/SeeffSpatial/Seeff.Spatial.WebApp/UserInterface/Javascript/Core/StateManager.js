@@ -25,6 +25,10 @@ $(function () {
                     application.stateManager.activeLicenseInEditMode = false;
                 }
                 if (application.stateManager.activeLicense) {
+                    if (application.panel.navItemEditLicense.newLicensePolygon) {
+                        application.panel.navItemEditLicense.newLicensePolygon.setMap(null);
+                        application.panel.navItemEditLicense.newLicensePolygon = null;
+                    }
                     var license = application.stateManager.activeLicense;
                     var polygon = license.PolygonInstance;
                     application.Google.resetPolygonSelection();
@@ -97,6 +101,7 @@ $(function () {
                 var activeSuburb = application.stateManager.activeSuburb;
                 activeSuburb.PolyWKT = suburbData.PolyWKT;
                 activeSuburb.CentroidWKT = suburbData.CentroidWKT;
+                activeSuburb.LicenseID = suburbData.LicenseID;
                 application.Google.createSuburbPoly(activeSuburb, { render: true });
             },
             updateActiveLicense: function (licenseData) {

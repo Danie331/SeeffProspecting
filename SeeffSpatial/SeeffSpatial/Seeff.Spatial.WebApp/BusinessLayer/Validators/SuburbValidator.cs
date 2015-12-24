@@ -47,14 +47,15 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
                 {
                     if (_suburb.LicenseID != containingLicenses[0].LicenseID)
                     {
-                        result.IsValid = false;
-                        result.ValidationMessage = "This suburb belongs to a different license (" + containingLicenses[0].LicenseID + ") than the one provided.";
-                        return result;
+                        //result.IsValid = false;
+                        //result.ValidationMessage = "This suburb belongs to a different license (" + containingLicenses[0].LicenseID + ") than the one provided.";
+                        //return result;
+                        licenseID = _suburb.LicenseID; 
                     } else{
                         licenseID = containingLicenses[0].LicenseID;
                     }
                 } else {
-                    licenseID = containingLicenses[0].LicenseID;
+                    //licenseID = containingLicenses[0].LicenseID;
                 }
             }
             if (containingLicenses.Count > 1) // TODO: Check this business logic (can a suburb be owned by multiple licenses?)
