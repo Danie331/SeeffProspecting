@@ -156,5 +156,20 @@ namespace Seeff.Spatial.WebApp.Controllers
                 return new DeleteSuburbResult { Successful = false, Message = ex.Message };
             }
         }
+
+        [HttpPost]
+        public LicenseNameResult GetLicenseName([FromBody]SeeffLicense license)
+        {
+            try
+            {
+                var result = ControllerActions.GetLicenseName(license);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetLicenseName() from Home Controller", license);
+                return new LicenseNameResult { Successful = false, Message = ex.Message };
+            }
+        }
     }
 }

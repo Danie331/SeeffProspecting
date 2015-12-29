@@ -23,13 +23,6 @@ $(function () {
                 },
                 uploadNewKMLCallback: function (polygon) {
                     polygon.setMap(application.Google.map);
-                    // set editable..? validation tests, re-positioning relative to old license (diff colour), confirmation dialog before save.
-                    // reindex suburbs whose centroids fall inside new KML to the license (the REVERSE is not true- don't disasociate)
-                    // Btn to re-associate a suburb with a new license (or null)
-                    // Btn show all suburbs belong to this license.
-                    // license not allowed to overlap another license and must be contained within a territory.
-                    // test modify another license before saving so that validation fails on Save btn click.
-                    // commit.
                     var step1Tick = $("#uploadLicenseKMLStep1CompleteTick");
                     step1Tick.removeClass('step-nonactive').addClass('step-active');
 

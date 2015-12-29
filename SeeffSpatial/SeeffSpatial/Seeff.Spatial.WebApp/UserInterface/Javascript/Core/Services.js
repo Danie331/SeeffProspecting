@@ -3,7 +3,9 @@ $(function () {
     $.extend(application, {
         services: {
             post: function (URL, input, loadingMsg, callback) {
-                $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">' + loadingMsg + '</p>' });
+                if (loadingMsg) {
+                    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">' + loadingMsg + '</p>' });
+                }
                 input = JSON.stringify(input);
                 $.ajax({
                     url: URL,
@@ -73,6 +75,10 @@ $(function () {
                 deleteSuburb: function (suburbModel, callback) {
                     var endpoint = application.utilities.buildHomeURL('/api/Home/DeleteSuburb');
                     application.services.post(endpoint, suburbModel, "Deleting. Please wait...", callback);
+                },
+                getLicenseName: function (licenseModel, callback) {
+                    var endpoint = application.utilities.buildHomeURL('/api/Home/GetLicenseName');
+                    application.services.post(endpoint, licenseModel, null, callback);
                 }
             },
             serviceModels: {

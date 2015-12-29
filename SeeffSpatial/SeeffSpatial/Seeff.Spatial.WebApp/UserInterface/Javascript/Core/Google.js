@@ -254,8 +254,13 @@ $(function () {
 
                 suburb.PolygonInstance.infoWindow = infoWindow;
             },
-            showLicenseInfoWindow: function(license) {
-                var contentString = $("<div />").append("License ID: " + license.LicenseID);
+            showLicenseInfoWindow: function (license) {
+                var contentString = $("<div />").append("License ID: " + license.LicenseID + " (<label id='licenseNameLabel'>loading name...</label>)");
+                var model = application.services.serviceModels.buildLicenseModel(license);
+                application.services.serviceControllers.getLicenseName(model, function (result) {
+                    $("#licenseNameLabel").text(result.plicenseName);
+                });
+
                 var infoWindow = new google.maps.InfoWindow();
                 infoWindow.setContent(contentString.html());
                 infoWindow.setPosition(license.CentroidInstance);

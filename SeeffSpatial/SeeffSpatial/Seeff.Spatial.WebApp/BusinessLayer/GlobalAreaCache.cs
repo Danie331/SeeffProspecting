@@ -11,32 +11,6 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
     /// <summary>
     /// Thread-safe singleton
     /// Common shared cache across all user sessions through which data is read and written, with database being the destination for writing.
-    /// Use this class to manage all area state information directly. 
-    /// Remember to reload database before go-live
-    /// Get rid of old spatial service and email Scott new connection details
-    /// As you scroll - load every polygon in the whole country.
-    /// Layers - Suburbs, Licenses, Territories.
-    /// Mouse-over highlighting areas.
-    /// Creating new polygons.
-    /// Test this class for concurrency across multiple user sessions.
-    /// Check if this class is shared concurrently among multiple sessions
-    /// Get prospecting + MS to use the service only.
-    /// Re-area event fires when changes made - affects downstream systems.
-    /// Exception logging on both projects!
-    /// Creating areas, validating areas, checking session conflicts within global cache.
-    /// Area centroid retriever for Scott.
-    /// Validation rules of polygons
-    /// Check that cache persists among sessions.
-    /// Remember to update centroid etc when updating polygon, both in DB and in-memory.
-    /// Remove old spatial service, update Scott, remove it from source control too.
-    /// Validation rules!!!
-    /// "No area may overlap a territory"- do we need to check for polygon completely inside another??
-    /// Validation checking with different layers, and especiialy territories NB (check for complete containment etc.)
-    /// Handle all "TODO"'s in this code.
-    /// Delete a suburb
-    /// Delete a license
-    /// Upload license from KML
-    /// Reindex all suburbs in newly uploaded license.
     /// </summary>
     public sealed class GlobalAreaCache
     {        
