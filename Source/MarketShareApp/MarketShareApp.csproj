@@ -154,6 +154,7 @@
     <Content Include="Database scripts\ls_base\Stored Procedures\sp_update_area_layer_tbl.sql" />
     <Content Include="ListingUpdater.ashx" />
     <Content Include="NotAuthorised.aspx" />
+    <Content Include="Scripts\Core\Administration.js" />
     <Content Include="SuburbDataManager.ashx" />
     <Content Include="packages.config" />
     <Content Include="ApplicationLoad.ashx" />

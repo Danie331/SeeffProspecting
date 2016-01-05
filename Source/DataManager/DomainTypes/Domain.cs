@@ -126,7 +126,7 @@ public class Domain
                                                                  if (b.iregdate != null)
                                                                  {
                                                                      int year = DateTime.ParseExact(b.iregdate, "yyyyMMdd", null).Year;
-                                                                     return year > 2011;
+                                                                     return year > 2012;
                                                                  }
                                                                  return false;
                                                              }).ToList();

@@ -106,10 +106,11 @@ function applyFilter(markersToFilter, filter, isChecked) {
         case "P":
             return filterMarketShareType(markersToFilter, filter, isChecked);
         //case "2011":
-        case "2012":
+        //case "2012":
         case "2013":
         case "2014":
         case "2015":
+        case "2016":
             return filterYear(markersToFilter, filter, isChecked);
         case "Seeff":
         case "PGP":

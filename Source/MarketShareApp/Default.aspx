@@ -33,6 +33,7 @@
     <link href="Scripts/StyleSheets/ContentExpanderWidgetStyles.css" rel="stylesheet" />
 
     <%-- Core functionality / engine --%>
+    <script src="Scripts/Core/Administration.js"></script>
     <script src="Scripts/Core/Default.js"></script>
     <script src="Scripts/Core/MenuBuilder.js"></script>
     <script src="Scripts/Core/Admin/AdminGuiBuilder.js"></script>
