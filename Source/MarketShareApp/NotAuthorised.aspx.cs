@@ -11,7 +11,14 @@ namespace MarketShareApp
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!Page.IsPostBack)
+            {
+                string message = Request.QueryString["error"];
+                if (!string.IsNullOrEmpty(message))
+                {
+                    Response.Write("<h3 style='font-color:red'>" + message + "</h3>");
+                }
+            }
         }
     }
 }

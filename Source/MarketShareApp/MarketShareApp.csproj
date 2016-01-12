@@ -25,6 +25,7 @@
     <SccProvider>SAK</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,14 +46,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.Linq">
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -114,7 +117,6 @@
     <Content Include="..\SharedScripts\StyleSheets\ContentExpanderWidgetStyles.css">
       <Link>Scripts\StyleSheets\ContentExpanderWidgetStyles.css</Link>
     </Content>
-    <Content Include="AdminDataManager.ashx" />
     <Content Include="AgenciesDataManager.ashx" />
     <Content Include="Assets\general_filter.png" />
     <Content Include="Assets\legend.png" />
@@ -155,12 +157,39 @@
     <Content Include="ListingUpdater.ashx" />
     <Content Include="NotAuthorised.aspx" />
     <Content Include="Scripts\Core\Administration.js" />
-    <Content Include="SuburbDataManager.ashx" />
+    <Content Include="Service References\AuthService\MarketShareApp.AuthService.MarketShareUserAuthPacket.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\AuthService\MarketShareApp.AuthService.ProspectingUserAuthPacket.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\AuthService\MarketShareApp.AuthService.SpatialUserAuthPacket.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <Content Include="packages.config" />
+    <None Include="Service References\AuthService\SeeffProspectingAuthService.disco" />
+    <None Include="Service References\AuthService\configuration91.svcinfo" />
+    <None Include="Service References\AuthService\configuration.svcinfo" />
+    <None Include="Service References\AuthService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="SiteDown.aspx" />
+    <Content Include="SuburbDataManager.ashx" />
     <Content Include="ApplicationLoad.ashx" />
     <None Include="Properties\PublishProfiles\1.pubxml" />
     <None Include="Properties\PublishProfiles\Primary.pubxml" />
     <Content Include="RequestHandler.ashx" />
+    <None Include="Service References\AuthService\SeeffProspectingAuthService.wsdl" />
+    <None Include="Service References\AuthService\SeeffProspectingAuthService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AuthService\SeeffProspectingAuthService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AuthService\SeeffProspectingAuthService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -769,8 +798,6 @@
     <Content Include="Readme\Data take-on process.txt" />
     <Content Include="Readme\Google Maps API key.txt" />
     <Content Include="SamplePost.aspx" />
-    <Content Include="Scripts\Core\Admin\AdminCore.js" />
-    <Content Include="Scripts\Core\Admin\AdminGuiBuilder.js" />
     <Content Include="Scripts\StyleSheets\AdminInterface.css" />
     <Content Include="SiteOffline\app_offline.htm" />
     <Content Include="Web.config">
@@ -815,12 +842,30 @@
     <Compile Include="SaveSelectedAgenciesResponsePacket.cs" />
     <Compile Include="SearchInputData.cs" />
     <Compile Include="SearchResultsData.cs" />
+    <Compile Include="Service References\AuthService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="SiteDown.aspx.cs">
+      <DependentUpon>SiteDown.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SiteDown.aspx.designer.cs">
+      <DependentUpon>SiteDown.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataManager\DataManager.csproj">
       <Project>{ad155303-5aa8-4899-80c9-223e10665c7b}</Project>
       <Name>DataManager</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\AuthService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -16,64 +16,35 @@ namespace MarketShareApp
     {
         public void ProcessRequest(HttpContext context)
         {
-            // Determine the user permissions based on the incoming GUID
-            // In debug (dev) mode always look at the incoming querystring for this value, for production this value is expected to be received via a POST
-
-            string userGuid = (string)HttpContext.Current.Session["user_guid"];
-
-            using (var bossDb = DataContextRetriever.GetBossDataContext())
+            AppInitializationData initPacket = new AppInitializationData() { Authenticated = true };
+            try
             {
-                var user = (from ur in bossDb.user_registrations
-                            where ur.user_guid.Equals(userGuid)
-                            select ur).FirstOrDefault();
-                if (user != null)
+                string jsonOutput = "";
+                if (HttpContext.Current.Session["user_guid"] == null || HttpContext.Current.Session["session_key"] == null)
                 {
-                    AppInitializationData initPacket = new AppInitializationData();
-                    //HttpContext.Current.Response.Write("<input type='hidden' id='user_guid' value='" + userGuid + "' />");
-                    initPacket.UserGuid = userGuid;
-
-                    //HttpContext.Current.Response.Write("<input type='hidden' id='app_context' value='marketshare' />");
-                    string jsonOutput = "";
-                    switch (GetUserType(user))
-                    {
-                        // Admin
-                        case "admin":
-                            //HttpContext.Current.Response.Write("<input type='hidden' id='user_designation' value='admin' />");
-                            initPacket.UserDesignation = "admin";
-                            jsonOutput = new JavaScriptSerializer().Serialize(initPacket);
-                            context.Response.Write(jsonOutput);
-                            break;
-                        // Normal user
-                        default:
-                            //HttpContext.Current.Response.Write("<input type='hidden' id='user_designation' value='licensee' />");
-                            initPacket.UserDesignation = "licensee";
-
-                            var availableSuburbs = LoadSuburbInfoForUser(user.ms_area_permissions);
-                            //HttpContext.Current.Response.Write("<input type='hidden' id='user_suburbs' value='" + availableSuburbs + "' />");
-                            initPacket.UserSuburbs = availableSuburbs;
-
-                            var availableAgencies = LoadAllAvailableAgencies();
-                            //HttpContext.Current.Response.Write("<input type='hidden' id='all_agencies' value='" + availableAgencies + "' />");
-                            initPacket.Agencies = availableAgencies;
-
-                            jsonOutput = new JavaScriptSerializer().Serialize(initPacket);
-                            context.Response.Write(jsonOutput);
-                            break;
-                    }
+                    throw new Exception("You are not authorised to access this resource");
                 }
-            }     
-        }
+                string userGuid = (string)HttpContext.Current.Session["user_guid"];
+                string sessionKey = (string)HttpContext.Current.Session["session_key"];
 
-        /// <summary>
-        /// Determine what "type" of user this guid belongs to.
-        /// </summary>
-        private string GetUserType(user_registration user)
-        {
-            string userFullname = user.user_name + " " + user.user_surname;
-            switch (userFullname)
+                // Success
+                initPacket.UserGuid = userGuid;
+                initPacket.UserDesignation = "licensee";
+
+                string areaPermissionsList = (string)HttpContext.Current.Session["area_permissions_list"];
+                var availableSuburbs = LoadSuburbInfoForUser(areaPermissionsList);
+                initPacket.UserSuburbs = availableSuburbs;
+
+                var availableAgencies = LoadAllAvailableAgencies();
+                initPacket.Agencies = availableAgencies;
+                jsonOutput = new JavaScriptSerializer().Serialize(initPacket);
+                context.Response.Write(jsonOutput);
+            }
+            catch (Exception ex)
             {
-                case "Michael Scott": return "admin";
-                default: return "default";
+                initPacket.Authenticated = false;
+                initPacket.AuthMessage = ex.Message;
+                context.Response.Write(new JavaScriptSerializer().Serialize(initPacket));
             }
         }
 
@@ -91,14 +62,13 @@ namespace MarketShareApp
                                      CanEdit = suburbSet[1].Replace("]", "") == "1"
                                  };
 
-                using (var seeffDb = DataContextRetriever.GetSeeffDataContext())
-                {
+
                     using (var lsBase = DataManager.DataContextRetriever.GetLSBaseDataContext())
                     {
                         int baseYear = DateTime.Now.Year - 4;
                         lsBase.update_area_fating(baseYear.ToString());
 
-                        var seeffAreas = (from a in seeffDb.areas select new { a.areaId, a.areaName }).ToList();
+                        var seeffAreas = (from a in lsBase.seeff_areas select new { a.areaId, a.areaName }).ToList();
                         var suburbsInfo = (from a in seeffAreas
                                            join ss in suburbSets on a.areaId equals ss.AreaId
                                            join af in lsBase.area_fatings on a.areaId equals af.area_id
@@ -115,38 +85,21 @@ namespace MarketShareApp
                                                SeeffCurrentListingCount = GetCountSeeffCurrentListings(a.areaId)
                                            }).ToList();
 
-                        //var seeffAreas = (from a in seeffDb.areas select new { a.areaId, a.areaName }).ToList();
-                        //var suburbsInfo = (from a in seeffAreas
-                        //                  join ss in suburbSets on a.areaId equals ss.AreaId    
-                        //                  orderby a.areaName
-                        //                  select new SuburbInfo
-                        //                  {
-                        //                      SuburbId = a.areaId,
-                        //                      SuburbName = a.areaName,
-                        //                      CanEdit = ss.CanEdit,
-                        //                      Fated = AllListingsFated(a.areaId),// Only true when all listings in this suburb are fated
-
-                        //                      FatedCount = GetTotalFatings(a.areaId, true),
-                        //                      UnfatedCount = GetTotalFatings(a.areaId, false),
-                        //                      SeeffCurrentListingCount = GetCountSeeffCurrentListings(a.areaId)
-                        //                  }).ToList();
-
                         HttpContext.Current.Session["user_suburbs"] = suburbsInfo;
 
                         return suburbsInfo;
                     }
                 }
-            }
 
             return null;
         }
 
         private int GetCountSeeffCurrentListings(int areaId)
         {
-            using (var seeff = DataContextRetriever.GetSeeffDataContext())
+            using (var ls_base = DataContextRetriever.GetLSBaseDataContext())
             {
                 int count = 0;
-                foreach (var seeffListing in seeff.searches.Where(item => item.fkAreaId == areaId))
+                foreach (var seeffListing in ls_base.seeff_searches.Where(item => item.fkAreaId == areaId))
                 {
                     Decimal lat, lng;
                     if (Domain.ConvertToLatLng(seeffListing.searchLatitude, seeffListing.searchLongitude, out lat, out lng))

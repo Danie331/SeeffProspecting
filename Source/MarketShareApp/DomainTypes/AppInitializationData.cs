@@ -11,4 +11,7 @@ public class AppInitializationData
     public string UserDesignation { get; set; }
     public List<SuburbInfo> UserSuburbs { get; set; }
     public List<Agency> Agencies { get; set; }
+
+    public bool Authenticated { get; set; }
+    public string AuthMessage { get; set; }
 }

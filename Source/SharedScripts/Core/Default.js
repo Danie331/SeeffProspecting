@@ -971,13 +971,13 @@ function buildContentForInfoWindowForCurrentSeeffListing(listing) {
             case "Agricultural": propertyType = "agricultural"; break;
         }
 
-        var url = "http://www.seeff.com/" + rentOrBuy + "/" + propertyType + "/details.php?pref=" + listing.CurrentSeeffSearchReference;
+        var url = "http://www.seeff.com/" + rentOrBuy + "/" + propertyType + "/details.php?pref=" + listing.CurrentSeeffSearchReference; //here?
         return url;
     }
 
     var linkToSeeffWebsite = buildLinkToSeeffWebsite(listing);
     function buildPathToImage(listing) {
-        var imgUrl = "http://newimages1.seeff.com/images/" + listing.CurrentSeeffSearchReference + "/" + listing.CurrentSeeffSearchImage + "_213.jpg";
+        var imgUrl = "http://newimages1.seeff.com/images/" + listing.CurrentSeeffSearchReference + "/" + listing.CurrentSeeffSearchImage + "_213.jpg"; // and here?
         var imgLink = "<a href='" + linkToSeeffWebsite + "' target='_blank'><img src='" + imgUrl + "' width='150' onerror=\"this.src='Assets/img_not_found.png';\" /></a>";
         return imgLink;
     }

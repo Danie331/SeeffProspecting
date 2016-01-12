@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 12.625" name="LightStone">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 12, 18" name="LightStone">
   <DataContextMoniker Name="/LightStoneDataContext" />
   <nestedChildShapes>
     <classShape Id="bdccb5d3-668f-4b21-ab6d-7fb41d35ca7f" absoluteBounds="4.125, 1, 2, 1.1939925130208333">
@@ -27,22 +27,28 @@
         <elementListCompartment Id="06e01b1a-1ab0-4db0-a0de-e7ccd18d7e57" absoluteBounds="1.7650000000000001, 3.335, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="a9bed179-17e5-4ea2-a273-26bcf0cbb49e" absoluteBounds="1.5, 0.5, 2, 1.7708968098958331">
-      <DataClassMoniker Name="/LightStoneDataContext/area_layer" />
-      <nestedChildShapes>
-        <elementListCompartment Id="21c6ccee-5fc3-4391-ad65-718e5fc50e8c" absoluteBounds="1.5150000000000001, 0.96, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
-    <classShape Id="b0dc5d75-d555-49d6-a299-e0e103ffcdc7" absoluteBounds="1.5, 5.375, 2, 1.5785953776041666">
-      <DataClassMoniker Name="/LightStoneDataContext/area_parent_lookup" />
-      <nestedChildShapes>
-        <elementListCompartment Id="5cf9f0ec-fede-4106-8d47-311f03f973ec" absoluteBounds="1.5150000000000001, 5.835, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
     <classShape Id="8bf15a6c-aefc-411e-b7f1-4afdb52b74c3" absoluteBounds="5.375, 2.875, 2, 9.4629541015625">
       <DataClassMoniker Name="/LightStoneDataContext/base_data" />
       <nestedChildShapes>
         <elementListCompartment Id="e76a1d80-3292-4269-8b27-a264e542119e" absoluteBounds="5.39, 3.335, 1.9700000000000002, 8.9029541015625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="71755069-e77c-4737-919e-817c63a9fa6e" absoluteBounds="8.75, 3.625, 2, 14.0781884765625">
+      <DataClassMoniker Name="/LightStoneDataContext/seeff_search" />
+      <nestedChildShapes>
+        <elementListCompartment Id="de3224d8-3822-4a74-ac18-cd85a47e3ade" absoluteBounds="8.765, 4.085, 1.9700000000000002, 13.5181884765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="47c6454e-2195-496d-99d9-c3e18e4110bf" absoluteBounds="9.75, 0.75, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/LightStoneDataContext/seeff_category" />
+      <nestedChildShapes>
+        <elementListCompartment Id="43cb893d-eb4a-437f-aadf-8421b17d8698" absoluteBounds="9.765, 1.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6ab66904-1a42-41c3-94c1-64a0d8207513" absoluteBounds="2, 8, 2, 3.8862125651041666">
+      <DataClassMoniker Name="/LightStoneDataContext/seeff_area" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6b9a9b27-8101-4bcd-8408-cb2e0d82f4db" absoluteBounds="2.015, 8.46, 1.9700000000000002, 3.3262125651041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

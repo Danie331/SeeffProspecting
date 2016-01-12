@@ -259,6 +259,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "other", "other", "{39AB49BB
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketShareApp", "MarketShareApp\MarketShareApp.csproj", "{29D5DD20-7FAF-489E-BA92-6BCCB00965E0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{083AD503-D7B6-4507-A117-193B1E13F185} = {083AD503-D7B6-4507-A117-193B1E13F185}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdParty", "3rdParty", "{103F53C2-08F3-4B27-B767-8C8EA26BA95C}"
 	ProjectSection(SolutionItems) = preProject

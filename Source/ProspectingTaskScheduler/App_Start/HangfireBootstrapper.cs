@@ -77,7 +77,7 @@ namespace ProspectingTaskScheduler.App_Start
             RecurringJob.AddOrUpdate("IIS app pool up and running", () => StatusNotifier.SendNotificationEmail(), Cron.Daily(7));
 
             // Spatial tasks
-            RecurringJob.AddOrUpdate("Reindex Prospecting Suburbs", () => ProspectingSuburbMaintenance.ReindexSuburbsRequiringMaintenance(), Cron.Minutely);
+            RecurringJob.AddOrUpdate("Reindexing Suburbs", () => SuburbMaintenance.ReindexSuburbsRequiringMaintenance(), Cron.Minutely);
         }
     }
 }

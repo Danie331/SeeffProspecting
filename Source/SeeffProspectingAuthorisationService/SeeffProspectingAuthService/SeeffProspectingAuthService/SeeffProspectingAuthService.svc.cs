@@ -206,5 +206,38 @@ namespace SeeffProspectingAuthService
                 }
             }
         }
+
+
+        public MarketShareUserAuthPacket AuthenticateMSUser(Guid userGuid, Guid sessionKey)
+        {
+            using (var boss = new BossDataContext())
+            {
+                // We only need to authenticate in the live environment
+                if (!HttpContext.Current.IsDebuggingEnabled)
+                {
+                    if (boss.user_auth(userGuid.ToString(), sessionKey, "MARKET SHARE") != 1)
+                    {
+                        return new MarketShareUserAuthPacket { Authenticated = false, AuthMessage = "Failed to authenticate user GUID with BOSS" };
+                    }
+                }
+
+                 var userRecord = boss.user_registrations.FirstOrDefault(u => u.user_guid == userGuid.ToString());
+                 if (userRecord != null)
+                 {
+                     return new MarketShareUserAuthPacket
+                     {
+                         AreaPermissionsList = userRecord.ms_area_permissions,
+                         Authenticated = true
+                     };
+                 }
+
+                // Failure
+                 return new MarketShareUserAuthPacket
+                 {
+                      Authenticated = false,
+                      AuthMessage = "Unable to find user in the database."
+                 };
+            }
+        }
     }
 }

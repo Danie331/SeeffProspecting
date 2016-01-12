@@ -25,5 +25,8 @@ namespace SeeffProspectingAuthService
 
         [OperationContract]
         SpatialUserAuthPacket AuthenticateAndLoadSpatialUser(Guid userGuid, Guid sessionKey);
+
+        [OperationContract]
+        MarketShareUserAuthPacket AuthenticateMSUser(Guid userGuid, Guid sessionKey);
     }
 }

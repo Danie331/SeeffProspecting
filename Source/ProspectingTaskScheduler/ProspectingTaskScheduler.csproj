@@ -25,6 +25,7 @@
     <SccProvider>SAK</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -145,7 +146,8 @@
     <Compile Include="Core\Communication\SMSing\SMSHandler.cs" />
     <Compile Include="Core\Housekeeping\CleanupLockedPropertyRecords.cs" />
     <Compile Include="Core\Housekeeping\StatusNotifier.cs" />
-    <Compile Include="Core\Spatial\ProspectingSuburbMaintenance.cs" />
+    <Compile Include="Core\Spatial\SuburbMaintenance.cs" />
+    <Compile Include="Core\Utils.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class AppStartup : System.Web.UI.Page
 {
@@ -15,6 +11,11 @@ public partial class AppStartup : System.Web.UI.Page
             {
                 Session["user_guid"] = Request.QueryString["user_guid"];
                 Session["session_key"] = Guid.NewGuid().ToString();
+                using (var authService = new MarketShareApp.AuthService.SeeffProspectingAuthServiceClient())
+                {
+                    var userAuthPacket = authService.AuthenticateMSUser(Guid.Parse((string)Session["user_guid"]), Guid.Parse((string)Session["session_key"]));
+                    Session["area_permissions_list"] = userAuthPacket.AreaPermissionsList;
+                }
             }
             else
             {
@@ -26,19 +27,25 @@ public partial class AppStartup : System.Web.UI.Page
                     string sessionKey = userGuidSessionKey.Split(new[] { ':' })[1];
 
                     Session["user_guid"] = userGuid;
-                    //Session["session_key"] = sessionKey;
+                    Session["session_key"] = sessionKey;
 
-                    using (var boss = DataManager.DataContextRetriever.GetBossDataContext())
+                    using (var authService = new MarketShareApp.AuthService.SeeffProspectingAuthServiceClient())
                     {
-                        if (boss.user_auth(userGuid, Guid.Parse(sessionKey), "MARKET SHARE") != 1)
+                        var userAuthPacket = authService.AuthenticateMSUser(Guid.Parse(userGuid), Guid.Parse(sessionKey));
+                        if (!userAuthPacket.Authenticated)
                         {
-                            throw new Exception("Not authenticated.");
+                            throw new Exception(userAuthPacket.AuthMessage);
+                        }
+                        else
+                        {
+                            Session["area_permissions_list"] = userAuthPacket.AreaPermissionsList;
                         }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Response.Redirect("NotAuthorised.aspx", true);
+                    string errMessage = ex.Message;
+                    Response.Redirect("NotAuthorised.aspx?error=" + errMessage, true);
                 }
             }
 

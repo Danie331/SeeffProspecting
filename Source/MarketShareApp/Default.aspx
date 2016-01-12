@@ -83,6 +83,12 @@
                     dataType:"json"
                 }).done(function (data) {
                     initializationData = data;
+                    $.unblockUI();
+
+                    if (!data.Authenticated) {
+                        window.location = "NotAuthorised.aspx?error=" + data.AuthMessage;
+                        return;
+                    }
 
                     loadApplication();
                     adjustHtml();
@@ -97,7 +103,6 @@
                         currentMousePos.x = e.clientX;
                         currentMousePos.y = e.clientY;
                     });
-                    $.unblockUI();
                 });
             });
         }
