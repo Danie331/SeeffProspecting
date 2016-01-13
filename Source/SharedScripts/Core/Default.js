@@ -1293,6 +1293,13 @@ function loadSuburb(suburbId, typeOfFating, showSeeffCurrentListings, showPopup,
             data: suburbId,
             success: function (data, textStatus, jqXHR) {
                 if (textStatus == "success" && data.PolyCoords.length > 0) {
+
+                    if (data.UnderMaintenance == true) {
+                        $.unblockUI();
+                        alert("This suburb is currently under maintenance and not available right now. Please try again in a few minutes...");
+                        return;
+                    }
+
                     initialiseAndDisplaySuburb(suburb, data, typeOfFating, showSeeffCurrentListings, undefined, true);
                     centreMap(suburb);
                     generateStatisticsMenu(true);

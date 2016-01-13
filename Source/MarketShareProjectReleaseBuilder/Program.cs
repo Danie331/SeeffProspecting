@@ -21,8 +21,8 @@ namespace MarketShareAppReleaseOptimiser
 
         // These paths must correspond to the way your development environment is set up.
         private static string srcDirectory = @"C:\Users\Adam\Google Drive\Code2013\MarketShare\MarketShareApp";
-        private static string destReleaseFolder = @"C:\Users\Adam\Google Drive\Code2013\MarketShare\MarketShareProjectReleaseBuilder\ReleaseOutput";
-        private static string minifierPath = @"C:\Users\Adam\Google Drive\Code2013\MarketShare\MarketShareProjectReleaseBuilder\closure-compiler\compiler.jar";
+        private static string destReleaseFolder = @"C:\Users\Louise\Desktop\ms_deploy";
+        private static string minifierPath = @"C:\Users\Louise\Desktop\WORK\MarketShare\MarketShareProjectReleaseBuilder\closure-compiler\compiler.jar";
         //
         // The primary purpose of this executable is to do create a deployable package for the MarketShare frontend
         // The following actions are taken and results copied to an output folder:

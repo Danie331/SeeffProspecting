@@ -161,6 +161,13 @@
             IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), year_after);
             return ((int)(result.ReturnValue));
         }
+
+        [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.auto_fate_transactions")]
+        public int auto_fate_transactions([global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "VarChar(MAX)")] string areas_list)
+        {
+            IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), areas_list);
+            return ((int)(result.ReturnValue));
+        }
     }
 
     [global::System.Data.Linq.Mapping.TableAttribute(Name = "dbo.agency")]

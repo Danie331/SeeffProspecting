@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
 using System.Web.SessionState;
 
 namespace MarketShareApp
@@ -19,7 +20,33 @@ namespace MarketShareApp
                     string searchResults = Search(searchData);
                     context.Response.Write(searchResults);
                     break;
+                case "auto_fate_all":
+                    bool operationSuccess = AutoFateTransactionsForLicense();
+                    string jsonOut = new JavaScriptSerializer().Serialize(operationSuccess);
+                    context.Response.Write(jsonOut);
+                    break;
                 default: break;
+            }
+        }
+
+        private bool AutoFateTransactionsForLicense()
+        {
+            try
+            {
+                List<SuburbInfo> userSuburbs = (List<SuburbInfo>)HttpContext.Current.Session["user_suburbs"];
+                using (var lsBase = DataManager.DataContextRetriever.GetLSBaseDataContext())
+                {
+                    var suburbIDs = userSuburbs.Select(u => u.SuburbId.ToString()).ToList();
+                    string areasList = suburbIDs.Aggregate((x,y) => x.ToString() + "," + y.ToString());
+
+                    lsBase.auto_fate_transactions(areasList);
+                }                 
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
 

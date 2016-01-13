@@ -67,4 +67,10 @@ public class GenericArea : ILocation
         get;
         set;
     }
+
+    public bool UnderMaintenance
+    {
+        get;
+        set;
+    }
 }

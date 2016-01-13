@@ -837,19 +837,21 @@ function updateSuburbStats(suburb) {
 
     if (!suburb) return;
 
-    suburb.FatedCount = 0;
     suburb.UnfatedCount = 0;
-    for (var i = 0; i < suburb.Listings.length; i++) {
+    if (suburb.Listings) {
+        suburb.FatedCount = 0;
+        for (var i = 0; i < suburb.Listings.length; i++) {
 
-        if (suburb.Listings[i].IsCurrentSeeffListing) {
-            continue; // do not take current listings into consideration
-        }
+            if (suburb.Listings[i].IsCurrentSeeffListing) {
+                continue; // do not take current listings into consideration
+            }
 
-        if (suburb.Listings[i].Fated) {
-            suburb.FatedCount += 1;
-        }
-        else {
-            suburb.UnfatedCount += 1;
+            if (suburb.Listings[i].Fated) {
+                suburb.FatedCount += 1;
+            }
+            else {
+                suburb.UnfatedCount += 1;
+            }
         }
     }
 

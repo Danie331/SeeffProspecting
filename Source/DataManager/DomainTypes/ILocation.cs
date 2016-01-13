@@ -22,4 +22,6 @@ public interface ILocation
     int? AreaTypeId { get; set; }
 
     string ResCommAgri { get; set; }
+
+    bool UnderMaintenance { get; set; }
 }

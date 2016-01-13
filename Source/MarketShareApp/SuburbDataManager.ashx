@@ -17,24 +17,25 @@ public class SuburbDataManager : IHttpHandler {
         suburb.LocationID = suburbId;
 
         var spatialReader = new DataManager.SeeffSpatial.SpatialServiceReader();
-        var spatialSuburb = spatialReader.LoadSuburb(suburbId);              
-        
+        var spatialSuburb = spatialReader.LoadSuburb(suburbId);
+
         suburb.PolyCoords = Domain.LoadPolyCoords(spatialSuburb.PolyWKT);
+            suburb.UnderMaintenance = spatialSuburb.UnderMaintenance;
         List<LightstoneListing> lightstoneListings = Domain.LoadLightstoneListingsForSuburb(suburbId);
         List<SeeffListing> currentSeeffListings = Domain.LoadCurrentSeeffListings(suburbId);
 
         // The Listings property expects only a List<IListing> so we need to upcast both lists here
         suburb.Listings = lightstoneListings.Cast<IListing>().Union(currentSeeffListings.Cast<IListing>()).ToList<IListing>();
         //suburb.Listings.AddRange(currentSeeffListings);
-        //suburb.LocationName = Domain.GetAreaName(suburbId);
-        
+        //suburb.LocationName = spatialSuburb.AreaName;
+
         var serializer = new JavaScriptSerializer();
         serializer.MaxJsonLength = Int32.MaxValue;
         string json = serializer.Serialize(suburb);
 
         context.Response.Write(json);
     }
- 
+
     public bool IsReusable {
         get {
             return false;
