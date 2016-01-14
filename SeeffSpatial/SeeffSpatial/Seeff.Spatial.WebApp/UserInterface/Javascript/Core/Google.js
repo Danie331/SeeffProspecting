@@ -4,6 +4,7 @@ $(function () {
         Google: {
             map: null,
             drawingManager: null,
+            markerClusterer: null,
             initMap: function () {
                 application.Google.map = new google.maps.Map(document.getElementById('map'), {
                     zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_TOP },
@@ -167,6 +168,7 @@ $(function () {
                     strokeColor: drawOptions.outline,
                     strokeOpacity: 0.8,
                     strokeWeight: 1.5,
+                    fillColor: "#B0B0B0",
                     fillOpacity: 0.0
                 });
                 if (drawOptions.render) {
@@ -255,11 +257,7 @@ $(function () {
                 suburb.PolygonInstance.infoWindow = infoWindow;
             },
             showLicenseInfoWindow: function (license) {
-                var contentString = $("<div />").append("License ID: " + license.LicenseID + " (<label id='licenseNameLabel'>loading name...</label>)");
-                var model = application.services.serviceModels.buildLicenseModel(license);
-                application.services.serviceControllers.getLicenseName(model, function (result) {
-                    $("#licenseNameLabel").text(result.plicenseName);
-                });
+                var contentString = $("<div />").append("License ID: " + license.LicenseID + " (<label id='licenseNameLabel'>" + license.LicenseName + "</label>)");
 
                 var infoWindow = new google.maps.InfoWindow();
                 infoWindow.setContent(contentString.html());

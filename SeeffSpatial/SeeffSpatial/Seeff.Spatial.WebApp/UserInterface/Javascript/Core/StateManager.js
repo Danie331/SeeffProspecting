@@ -75,9 +75,26 @@ $(function () {
                     application.Google.drawingManager.setMap(null);
                 // rollback the create steps
             },
-            setActiveSuburb: function (suburb) {
+            handleExitLicenseInfoScreen: function () {
                 if (application.stateManager.activeLicense) {
                     application.Google.createLicensePoly(application.stateManager.activeLicense, { render: false });
+                }
+                application.stateManager.activeLicense = null;
+                if (application.user.SeeffAreaCollection) {
+                    $.each(application.user.SeeffAreaCollection, function (index, suburb) {
+                        if (application.stateManager.activeSuburb != suburb) {
+                            application.Google.createSuburbPoly(suburb, { render: false });
+                        }
+                    });
+                }
+                var mc = application.Google.markerClusterer;
+                if (mc) {
+                    mc.clearMarkers();
+                }
+            },
+            setActiveSuburb: function (suburb) {
+                if (application.stateManager.activeLicense) {
+                    application.Google.createLicensePoly(application.stateManager.activeLicense, { render: true });
                     application.stateManager.activeLicense = null;
                 }
                 if (!suburb && application.stateManager.activeSuburb != null) {
@@ -88,7 +105,7 @@ $(function () {
             },
             setActiveLicense: function (license) {
                 if (application.stateManager.activeSuburb) {
-                    application.Google.createSuburbPoly(application.stateManager.activeSuburb, { render: false });
+                    application.Google.createSuburbPoly(application.stateManager.activeSuburb, { render: true });
                     application.stateManager.activeSuburb = null;
                 }
                 if (!license && application.stateManager.activeLicense != null) {

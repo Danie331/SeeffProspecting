@@ -50,7 +50,7 @@ $(function () {
                             application.user.SeeffAreaCollectionLookup[areaID] = area;
                             application.Google.createSuburbPoly(area, { render: true });
                         });
-
+                        application.stateManager.allSuburbsShown = true;
                         result = application.user.SeeffAreaCollection;
 
                         if (callback) callback(suburbs);

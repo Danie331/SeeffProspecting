@@ -21,7 +21,7 @@ application.init = function (userResult) {
             application.Google.createTerritoryPoly(poly);
         });
         application.panel.initPanel();
-
+        application.Google.markerClusterer = new MarkerClusterer(application.Google.map, [], { maxZoom: 15, minimumClusterSize: 1 });
         //application.Google.addRightClickHook();
     });
 }

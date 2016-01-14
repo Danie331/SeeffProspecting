@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Data.Entity.Spatial;
+using System.Net.Http.Headers;
 
 namespace Seeff.Spatial.Service.Controllers
 {
@@ -63,6 +64,25 @@ namespace Seeff.Spatial.Service.Controllers
         [HttpGet]
         public List<SpatialLicense> GetAllLicenses()
         {
+            List<SeeffLicense> licenseNames = null;
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.BaseAddress = new Uri("http://bossservices.seeff.com/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage response = client.GetAsync("api/BOSS/GetLicenseList").Result;
+                    response.EnsureSuccessStatusCode();
+                    licenseNames = response.Content.ReadAsAsync<List<SeeffLicense>>().Result;
+                }
+                catch
+                {
+                    // Supress: this code is only used to get license names
+                }
+            }
+
             using (var spatialDb = new seeff_spatialEntities())
             {
                 List<SpatialLicense> results = new List<SpatialLicense>();
@@ -71,12 +91,21 @@ namespace Seeff.Spatial.Service.Controllers
                     var spatialLicense = new SpatialLicense
                     {
 
-                        LicenseID = rec.fk_license_id,
+                        LicenseID = rec.fk_license_id,                         
                         TerritoryID = rec.fk_territory_id,
                         Polygon = rec.geo_polygon
                     };
-            
+
                     results.Add(spatialLicense);
+                }
+
+                if (licenseNames != null)
+                {
+                    foreach (var item in results)
+                    {
+                        var targetLicense = licenseNames.FirstOrDefault(lic => lic.LicenseID == item.LicenseID);
+                        item.LicenseName = targetLicense != null ? targetLicense.LicenseName : "(not available)";
+                    }
                 }
 
                 return results;

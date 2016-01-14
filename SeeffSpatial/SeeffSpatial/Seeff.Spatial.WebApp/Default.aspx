@@ -65,6 +65,7 @@
     <!-- 3rd party libs -->
     <script src="UserInterface/Javascript/3rd_party/jqueryBlockUI.js"></script>
     <script src="UserInterface/Javascript/3rd_party/jquery.contextMenu.js"></script>
+    <script src="UserInterface/Javascript/3rd_party/MarkerClustererPlus.js"></script>
 
     <!-- Styles -->
     <link href="UserInterface/Stylesheets/Shared.css" rel="stylesheet" />
@@ -81,6 +82,7 @@
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemAreaSelection.js"></script>
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemEditSuburb.js"></script>
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemEditLicense.js"></script>
+    <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemLicenseInformation.js"></script>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />

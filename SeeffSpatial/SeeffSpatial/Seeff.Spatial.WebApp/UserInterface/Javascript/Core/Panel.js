@@ -64,6 +64,7 @@ $(function () {
                     suburbSelectionClick: function () {
                         application.panel.navMenu.updateNavItemButtonOnClick();
                         application.stateManager.handleExitEditPolyMode();
+                        application.stateManager.handleExitLicenseInfoScreen();
                         application.stateManager.handleExitCreateAreaMode();
                         application.panel.navItemAreaSelection.buildContent(); //clicking to a new poly must also exit edit mode., delete polypoint, undo create new line when creating new poly.
                         application.stateManager.activeNavItem = application.panel.navItemAreaSelection;
@@ -73,6 +74,7 @@ $(function () {
                         application.stateManager.setActiveSuburb(null);
                         application.stateManager.setActiveLicense(null);
                         application.stateManager.handleExitEditPolyMode();
+                        application.stateManager.handleExitLicenseInfoScreen();
                         application.stateManager.handleEnterCreateAreaMode(); // area layering
                         application.panel.navItemCreateNewArea.buildContent();
                         application.stateManager.activeNavItem = application.panel.navItemCreateNewArea;
@@ -81,6 +83,7 @@ $(function () {
                         application.panel.navMenu.updateNavItemButtonOnClick();
                         //application.stateManager.handleExitEditPolyMode();
                         //application.stateManager.handleExitCreateAreaMode();
+                        application.stateManager.handleExitLicenseInfoScreen();
                         application.panel.navItemAreaInformation.buildContent();
                         application.stateManager.activeNavItem = application.panel.navItemAreaInformation;
                     },
@@ -90,6 +93,7 @@ $(function () {
                             application.panel.navItemEditSuburb.buildContent();
                             application.stateManager.handleExitCreateAreaMode();
                             application.stateManager.handleEnterPolyEditMode();
+                            application.stateManager.handleExitLicenseInfoScreen();
                             application.stateManager.activeNavItem = application.panel.navItemEditSuburb;
                         }
                     },
@@ -101,6 +105,30 @@ $(function () {
                             //application.stateManager.handleEnterPolyEditMode();
                             application.stateManager.activeNavItem = application.panel.navItemEditLicense;
                         }
+                    },
+                    licenseInformationClick: function () {
+                        application.panel.navMenu.updateNavItemButtonOnClick();
+                        application.stateManager.setActiveSuburb(null);
+                        application.stateManager.setActiveLicense(null);
+                        application.stateManager.handleExitEditPolyMode();
+                        application.stateManager.handleExitCreateAreaMode();
+
+                        if (application.stateManager.allLicensesShown) {
+                            application.stateManager.allLicensesShown = false;
+                            $.each(application.user.SeeffLicenses, function (index, lic) {
+                                application.Google.createLicensePoly(lic, { render: false });
+                            });
+                        }
+
+                        if (application.stateManager.allSuburbsShown) {
+                            application.stateManager.allSuburbsShown = false;
+                            $.each(application.user.SeeffAreaCollection, function (index, suburb) {
+                                application.Google.createSuburbPoly(suburb, { render: false });
+                            });
+                        }
+
+                        application.panel.navItemLicenseInformation.buildContent();
+                        application.stateManager.activeNavItem = application.panel.navItemLicenseInformation;
                     }
                 }
             }

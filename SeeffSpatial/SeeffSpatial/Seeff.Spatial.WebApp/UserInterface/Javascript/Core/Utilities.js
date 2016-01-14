@@ -61,6 +61,20 @@ $(function () {
                     fillOpacity: 0.0
                 });
                 return polygon;
+            },
+            yieldingLoop: function (count, chunksize, callback, finished) {
+                var i = 0;
+                (function chunk() {
+                    var end = Math.min(i + chunksize, count);
+                    for (; i < end; ++i) {
+                        callback.call(null, i);
+                    }
+                    if (i < count) {
+                        setTimeout(chunk, 0);
+                    } else {
+                        finished.call(null);
+                    }
+                })();
             }
         }
     });

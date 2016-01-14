@@ -171,5 +171,20 @@ namespace Seeff.Spatial.WebApp.Controllers
                 return new LicenseNameResult { Successful = false, Message = ex.Message };
             }
         }
+
+        [HttpPost]
+        public OrphanedPropertiesResult GetOrphanedProperties([FromBody]SeeffLicense license)
+        {
+            try
+            {
+                var result = ControllerActions.GetOrphanedProperties(license);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetOrphanedProperties() from HomeController", license);
+                return new OrphanedPropertiesResult { Successful = false, Message = ex.Message };
+            }
+        }
     }
 }

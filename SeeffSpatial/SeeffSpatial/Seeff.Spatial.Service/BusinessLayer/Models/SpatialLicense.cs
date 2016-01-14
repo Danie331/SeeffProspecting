@@ -11,6 +11,7 @@ namespace Seeff.Spatial.Service.BusinessLayer.Models
     public class SpatialLicense: SpatialModelBase
     {
         public int? LicenseID { get; set; }
+        public string LicenseName { get; set; }
         public int? TerritoryID { get; set; }
 
         public override int? PolyID

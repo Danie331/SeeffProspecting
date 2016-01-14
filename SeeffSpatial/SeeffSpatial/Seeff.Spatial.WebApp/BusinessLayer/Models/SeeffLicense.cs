@@ -9,6 +9,8 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.Models
 {
     public class SeeffLicense: SpatialModelBase
     {
+        public string LicenseName { get; set; }
+
         public int LicenseID { get; set; }
 
         public int TerritoryID { get; set; }

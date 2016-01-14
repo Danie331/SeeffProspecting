@@ -1,0 +1,13 @@
+﻿
+<div>
+
+    <label for='licenseSelector'>Select License:</label>
+    <select name='licenseSelector' id='licenseSelector' onchange="application.panel.navItemLicenseInformation.handleLicenseItemSelect()" />
+
+    <p />
+
+    <label><input type="checkbox" id="showAssociatedSuburbsCheckbox" onclick="application.panel.navItemLicenseInformation.handleShowAssociatedSuburbsClick()" disabled />Show Suburbs For License</label>
+    <br/>
+    <label><input type="checkbox" id="showOrphansForLicense" onclick="application.panel.navItemLicenseInformation.handleShowOrphansForLicenseClick()" disabled />Show Orphan Records For License (per base_data)</label>
+
+</div>

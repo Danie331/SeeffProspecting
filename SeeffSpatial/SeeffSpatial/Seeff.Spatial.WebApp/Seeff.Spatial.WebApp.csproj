@@ -23,6 +23,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -109,6 +110,26 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Database\create_scripts.sql" />
+    <Content Include="Database\Marketshare.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Marketshare.edmx</DependentUpon>
+      <LastGenOutput>Marketshare.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Database\Marketshare.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Marketshare.edmx</DependentUpon>
+      <LastGenOutput>Marketshare.cs</LastGenOutput>
+    </Content>
+    <Content Include="Database\Prospecting.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Prospecting.edmx</DependentUpon>
+      <LastGenOutput>Prospecting.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Database\Prospecting.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Prospecting.edmx</DependentUpon>
+      <LastGenOutput>Prospecting.cs</LastGenOutput>
+    </Content>
     <Content Include="packages.config" />
     <Content Include="Service References\SpatialAuthService\Seeff.Spatial.WebApp.SpatialAuthService.ProspectingUserAuthPacket.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -132,6 +153,20 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>SpatialWebApp.edmx</DependentUpon>
       <LastGenOutput>SpatialWebApp.cs</LastGenOutput>
+    </Content>
+    <EntityDeploy Include="Database\Marketshare.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Marketshare.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Database\Marketshare.edmx.diagram">
+      <DependentUpon>Marketshare.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Database\Prospecting.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Prospecting.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Database\Prospecting.edmx.diagram">
+      <DependentUpon>Prospecting.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\default_live.pubxml" />
     <None Include="Service References\SpatialAuthService\SeeffProspectingAuthService.wsdl" />
@@ -167,13 +202,16 @@
     <Content Include="UserInterface\HTML\CreateSuburb.html" />
     <Content Include="UserInterface\HTML\EditLicense.html" />
     <Content Include="UserInterface\HTML\EditSuburb.html" />
+    <Content Include="UserInterface\HTML\LicenseInformation.html" />
     <Content Include="UserInterface\Javascript\3rd_party\jquery.contextMenu.js" />
     <Content Include="UserInterface\Javascript\3rd_party\jqueryBlockUI.js" />
+    <Content Include="UserInterface\Javascript\3rd_party\MarkerClustererPlus.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemAreaInformation.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemCreateNewArea.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemEditLicense.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemEditSuburb.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemAreaSelection.js" />
+    <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemLicenseInformation.js" />
     <Content Include="UserInterface\Javascript\Core\Services.js" />
     <Content Include="UserInterface\Javascript\Core\StateManager.js" />
     <Content Include="UserInterface\Stylesheets\Shared.css" />
@@ -189,12 +227,15 @@
     <Content Include="UserInterface\Javascript\Core\ApplicationInit.js" />
     <Content Include="UserInterface\Javascript\Core\Panel.js" />
     <Content Include="NotAuthorised.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BusinessLayer\ControllerActions\DeleteSuburb.cs" />
     <Compile Include="BusinessLayer\ControllerActions\GetLicenseName.cs" />
+    <Compile Include="BusinessLayer\ControllerActions\GetOrphanedProperties.cs" />
     <Compile Include="BusinessLayer\ControllerActions\RetrieveUnmappedSuburbs.cs" />
     <Compile Include="BusinessLayer\ControllerActions\SaveLicense.cs" />
     <Compile Include="BusinessLayer\ControllerActions\SaveSuburb.cs" />
@@ -206,6 +247,8 @@
     <Compile Include="BusinessLayer\Models\AreaValidationResult.cs" />
     <Compile Include="BusinessLayer\Models\DeleteSuburbResult.cs" />
     <Compile Include="BusinessLayer\Models\LicenseNameResult.cs" />
+    <Compile Include="BusinessLayer\Models\OrphanedPropertiesResult.cs" />
+    <Compile Include="BusinessLayer\Models\OrphanedProperty.cs" />
     <Compile Include="BusinessLayer\Models\SaveLicenseResult.cs" />
     <Compile Include="BusinessLayer\Models\SaveSuburbResult.cs" />
     <Compile Include="BusinessLayer\Models\SeeffLicense.cs" />
@@ -219,8 +262,44 @@
     <Compile Include="BusinessLayer\Utils.cs" />
     <Compile Include="BusinessLayer\Validators\ValidatorBase.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Database\base_data.cs">
+      <DependentUpon>Marketshare.tt</DependentUpon>
+    </Compile>
     <Compile Include="Database\exception_log.cs">
       <DependentUpon>SpatialWebApp.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Marketshare.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Marketshare.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Marketshare.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Marketshare.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Marketshare.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Marketshare.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Prospecting.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Prospecting.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Prospecting.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Prospecting.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Prospecting.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Prospecting.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Database\prospecting_property.cs">
+      <DependentUpon>Prospecting.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\seeff_areas.cs">
       <DependentUpon>SpatialWebApp.tt</DependentUpon>
