@@ -13,10 +13,11 @@ $(function () {
                     data: input,
                     contentType: "application/json"
                 }).done(function (data) {
+                    $.unblockUI();
                     if (callback) {
                         callback(data);
                     }
-                    $.unblockUI();
+                    //$.unblockUI();
                 });
             },
             get: function (URL, loadingMsg, callback) {

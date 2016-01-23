@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Seeff_DeedsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Seeff_Deeds.dbo.SEEFF_Deeds_Monthly' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="SEEFF_Deeds_Monthly">
+          <Key>
+            <PropertyRef Name="property_id" />
+          </Key>
+          <Property Name="LS_Area_id" Type="int" />
+          <Property Name="Seeff_LIC_Area" Type="varchar" MaxLength="100" />
+          <Property Name="property_id" Type="int" Nullable="false" />
+          <Property Name="iregdate" Type="varchar" MaxLength="8" />
+          <Property Name="ipurchdate" Type="numeric" Precision="11" Scale="0" />
+          <Property Name="TITLE_DEED_NO" Type="varchar" MaxLength="20" />
+          <Property Name="NON_GAR_PROPS_ON_TITLE" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="PURCH_PRICE" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="erf_key" Type="varchar" MaxLength="60" />
+          <Property Name="ea_code" Type="varchar" MaxLength="10" />
+          <Property Name="suburb" Type="varchar" MaxLength="40" />
+          <Property Name="munic_name" Type="varchar" MaxLength="40" />
+          <Property Name="province" Type="varchar" MaxLength="40" />
+          <Property Name="property_type" Type="varchar" MaxLength="3" />
+          <Property Name="ss_fh" Type="varchar" MaxLength="4" />
+          <Property Name="PROPERTY_CURRENTLY_IN_PVT_HANDS" Type="varchar" MaxLength="10" />
+          <Property Name="PRIVATE_REGISTRATION" Type="varchar" MaxLength="10" />
+          <Property Name="bonded_transfer" Type="varchar" MaxLength="20" />
+          <Property Name="suburb_id" Type="int" />
+          <Property Name="erf_size" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="BUYER_NAME" Type="varchar" MaxLength="70" />
+          <Property Name="SELLER_NAME" Type="varchar" MaxLength="70" />
+          <Property Name="SECT_SCHEME_NAME" Type="varchar" MaxLength="60" />
+          <Property Name="Unit" Type="int" />
+          <Property Name="LS_ResFlg" Type="bit" />
+          <Property Name="Estate_Name" Type="varchar" MaxLength="100" />
+          <Property Name="BUYER_NAME_2" Type="varchar" MaxLength="100" />
+          <Property Name="MultiBuyer" Type="varchar" MaxLength="10" />
+          <Property Name="SEEFF_SUBURB" Type="varchar" MaxLength="100" />
+          <Property Name="Seeff_Suburb_ID" Type="int" />
+          <Property Name="Seeff_Suburb_Type" Type="varchar" MaxLength="10" />
+          <Property Name="Seeff_LIC_ID" Type="int" />
+          <Property Name="X" Type="decimal" Precision="13" Scale="8" />
+          <Property Name="Y" Type="decimal" Precision="13" Scale="8" />
+        </EntityType>
+        <EntityContainer Name="Seeff_DeedsModelStoreContainer">
+          <EntitySet Name="SEEFF_Deeds_Monthly" EntityType="Self.SEEFF_Deeds_Monthly" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [SEEFF_Deeds_Monthly].[LS_Area_id] AS [LS_Area_id], 
+    [SEEFF_Deeds_Monthly].[Seeff_LIC_Area] AS [Seeff_LIC_Area], 
+    [SEEFF_Deeds_Monthly].[property_id] AS [property_id], 
+    [SEEFF_Deeds_Monthly].[iregdate] AS [iregdate], 
+    [SEEFF_Deeds_Monthly].[ipurchdate] AS [ipurchdate], 
+    [SEEFF_Deeds_Monthly].[TITLE_DEED_NO] AS [TITLE_DEED_NO], 
+    [SEEFF_Deeds_Monthly].[NON_GAR_PROPS_ON_TITLE] AS [NON_GAR_PROPS_ON_TITLE], 
+    [SEEFF_Deeds_Monthly].[PURCH_PRICE] AS [PURCH_PRICE], 
+    [SEEFF_Deeds_Monthly].[erf_key] AS [erf_key], 
+    [SEEFF_Deeds_Monthly].[ea_code] AS [ea_code], 
+    [SEEFF_Deeds_Monthly].[suburb] AS [suburb], 
+    [SEEFF_Deeds_Monthly].[munic_name] AS [munic_name], 
+    [SEEFF_Deeds_Monthly].[province] AS [province], 
+    [SEEFF_Deeds_Monthly].[property_type] AS [property_type], 
+    [SEEFF_Deeds_Monthly].[ss_fh] AS [ss_fh], 
+    [SEEFF_Deeds_Monthly].[PROPERTY_CURRENTLY_IN_PVT_HANDS] AS [PROPERTY_CURRENTLY_IN_PVT_HANDS], 
+    [SEEFF_Deeds_Monthly].[PRIVATE_REGISTRATION] AS [PRIVATE_REGISTRATION], 
+    [SEEFF_Deeds_Monthly].[bonded_transfer] AS [bonded_transfer], 
+    [SEEFF_Deeds_Monthly].[suburb_id] AS [suburb_id], 
+    [SEEFF_Deeds_Monthly].[erf_size] AS [erf_size], 
+    [SEEFF_Deeds_Monthly].[BUYER_NAME] AS [BUYER_NAME], 
+    [SEEFF_Deeds_Monthly].[SELLER_NAME] AS [SELLER_NAME], 
+    [SEEFF_Deeds_Monthly].[SECT_SCHEME_NAME] AS [SECT_SCHEME_NAME], 
+    [SEEFF_Deeds_Monthly].[Unit] AS [Unit], 
+    [SEEFF_Deeds_Monthly].[LS_ResFlg] AS [LS_ResFlg], 
+    [SEEFF_Deeds_Monthly].[Estate_Name] AS [Estate_Name], 
+    [SEEFF_Deeds_Monthly].[BUYER_NAME_2] AS [BUYER_NAME_2], 
+    [SEEFF_Deeds_Monthly].[MultiBuyer] AS [MultiBuyer], 
+    [SEEFF_Deeds_Monthly].[SEEFF_SUBURB] AS [SEEFF_SUBURB], 
+    [SEEFF_Deeds_Monthly].[Seeff_Suburb_ID] AS [Seeff_Suburb_ID], 
+    [SEEFF_Deeds_Monthly].[Seeff_Suburb_Type] AS [Seeff_Suburb_Type], 
+    [SEEFF_Deeds_Monthly].[Seeff_LIC_ID] AS [Seeff_LIC_ID], 
+    [SEEFF_Deeds_Monthly].[X] AS [X], 
+    [SEEFF_Deeds_Monthly].[Y] AS [Y]
+    FROM [dbo].[SEEFF_Deeds_Monthly] AS [SEEFF_Deeds_Monthly]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Seeff_DeedsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="SEEFF_Deeds_Monthly">
+          <Key>
+            <PropertyRef Name="property_id" />
+          </Key>
+          <Property Name="LS_Area_id" Type="Int32" />
+          <Property Name="Seeff_LIC_Area" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="property_id" Type="Int32" Nullable="false" />
+          <Property Name="iregdate" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="ipurchdate" Type="Decimal" Precision="11" Scale="0" />
+          <Property Name="TITLE_DEED_NO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="NON_GAR_PROPS_ON_TITLE" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="PURCH_PRICE" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="erf_key" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="ea_code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="suburb" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="munic_name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="province" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="property_type" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="ss_fh" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="PROPERTY_CURRENTLY_IN_PVT_HANDS" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PRIVATE_REGISTRATION" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="bonded_transfer" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="suburb_id" Type="Int32" />
+          <Property Name="erf_size" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="BUYER_NAME" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="SELLER_NAME" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="SECT_SCHEME_NAME" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="Unit" Type="Int32" />
+          <Property Name="LS_ResFlg" Type="Boolean" />
+          <Property Name="Estate_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BUYER_NAME_2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MultiBuyer" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SEEFF_SUBURB" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Seeff_Suburb_ID" Type="Int32" />
+          <Property Name="Seeff_Suburb_Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Seeff_LIC_ID" Type="Int32" />
+          <Property Name="X" Type="Decimal" Precision="13" Scale="8" />
+          <Property Name="Y" Type="Decimal" Precision="13" Scale="8" />
+        </EntityType>
+        <EntityContainer Name="Seeff_DeedsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SEEFF_Deeds_Monthly" EntityType="Self.SEEFF_Deeds_Monthly" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Seeff_DeedsModelStoreContainer" CdmEntityContainer="Seeff_DeedsEntities">
+          <EntitySetMapping Name="SEEFF_Deeds_Monthly">
+            <EntityTypeMapping TypeName="Seeff_DeedsModel.SEEFF_Deeds_Monthly">
+              <MappingFragment StoreEntitySet="SEEFF_Deeds_Monthly">
+                <ScalarProperty Name="LS_Area_id" ColumnName="LS_Area_id" />
+                <ScalarProperty Name="Seeff_LIC_Area" ColumnName="Seeff_LIC_Area" />
+                <ScalarProperty Name="property_id" ColumnName="property_id" />
+                <ScalarProperty Name="iregdate" ColumnName="iregdate" />
+                <ScalarProperty Name="ipurchdate" ColumnName="ipurchdate" />
+                <ScalarProperty Name="TITLE_DEED_NO" ColumnName="TITLE_DEED_NO" />
+                <ScalarProperty Name="NON_GAR_PROPS_ON_TITLE" ColumnName="NON_GAR_PROPS_ON_TITLE" />
+                <ScalarProperty Name="PURCH_PRICE" ColumnName="PURCH_PRICE" />
+                <ScalarProperty Name="erf_key" ColumnName="erf_key" />
+                <ScalarProperty Name="ea_code" ColumnName="ea_code" />
+                <ScalarProperty Name="suburb" ColumnName="suburb" />
+                <ScalarProperty Name="munic_name" ColumnName="munic_name" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="property_type" ColumnName="property_type" />
+                <ScalarProperty Name="ss_fh" ColumnName="ss_fh" />
+                <ScalarProperty Name="PROPERTY_CURRENTLY_IN_PVT_HANDS" ColumnName="PROPERTY_CURRENTLY_IN_PVT_HANDS" />
+                <ScalarProperty Name="PRIVATE_REGISTRATION" ColumnName="PRIVATE_REGISTRATION" />
+                <ScalarProperty Name="bonded_transfer" ColumnName="bonded_transfer" />
+                <ScalarProperty Name="suburb_id" ColumnName="suburb_id" />
+                <ScalarProperty Name="erf_size" ColumnName="erf_size" />
+                <ScalarProperty Name="BUYER_NAME" ColumnName="BUYER_NAME" />
+                <ScalarProperty Name="SELLER_NAME" ColumnName="SELLER_NAME" />
+                <ScalarProperty Name="SECT_SCHEME_NAME" ColumnName="SECT_SCHEME_NAME" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="LS_ResFlg" ColumnName="LS_ResFlg" />
+                <ScalarProperty Name="Estate_Name" ColumnName="Estate_Name" />
+                <ScalarProperty Name="BUYER_NAME_2" ColumnName="BUYER_NAME_2" />
+                <ScalarProperty Name="MultiBuyer" ColumnName="MultiBuyer" />
+                <ScalarProperty Name="SEEFF_SUBURB" ColumnName="SEEFF_SUBURB" />
+                <ScalarProperty Name="Seeff_Suburb_ID" ColumnName="Seeff_Suburb_ID" />
+                <ScalarProperty Name="Seeff_Suburb_Type" ColumnName="Seeff_Suburb_Type" />
+                <ScalarProperty Name="Seeff_LIC_ID" ColumnName="Seeff_LIC_ID" />
+                <ScalarProperty Name="X" ColumnName="X" />
+                <ScalarProperty Name="Y" ColumnName="Y" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

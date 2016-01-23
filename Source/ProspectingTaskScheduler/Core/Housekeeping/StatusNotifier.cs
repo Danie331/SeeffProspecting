@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Web;
 
 namespace ProspectingTaskScheduler.Core.Housekeeping
 {
     public class StatusNotifier
     {
-        public static void SendNotificationEmail()
+        public static void SendHealthStatusEmail()
         {
             string body = "ProspectingTaskScheduler service alive and well as at " + DateTime.Now + " (local time on server)";
             SendEmail("danie.vdm@seeff.com", "ProspectingTaskScheduler", "reports@seeff.com", "adam.roberts@learnit.co.za", "Notification from ProspectingTaskScheduler service", body);
-        }
+        }        
 
-        private static void SendEmail(string toAddress, string displayName, string fromAddress, string ccAddress, string subject, string body)
+        public static void SendEmail(string toAddress, string displayName, string fromAddress, string ccAddress, string subject, string body)
         {
             MailAddress from = new MailAddress(fromAddress, fromAddress, System.Text.Encoding.UTF8);
             MailAddress to = new MailAddress(toAddress, displayName);
@@ -32,6 +34,7 @@ namespace ProspectingTaskScheduler.Core.Housekeeping
             message.BodyEncoding = System.Text.Encoding.UTF8;
             message.Body = body;
 
+            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(customCertValidation);
             try
             {
                 using (var smtpClient = new SmtpClient())
@@ -48,6 +51,11 @@ namespace ProspectingTaskScheduler.Core.Housekeeping
             {
                 // Add logging code later.
             }
+        }
+
+        private static bool customCertValidation(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors errors)
+        {
+            return true;
         }
     }
 }

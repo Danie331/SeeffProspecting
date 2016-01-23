@@ -62,6 +62,7 @@ $(function () {
                 }
             },
             handleShowAssociatedSuburbsClick: function () {
+                application.stateManager.allSuburbsShown = true;
                 if (application.user.SeeffAreaCollection.length) {
                     $.each(application.user.SeeffAreaCollection, function (index, suburb) {
                         application.Google.createSuburbPoly(suburb, { render: false });

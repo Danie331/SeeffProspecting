@@ -76,17 +76,17 @@ $(function () {
                 // rollback the create steps
             },
             handleExitLicenseInfoScreen: function () {
-                if (application.stateManager.activeLicense) {
-                    application.Google.createLicensePoly(application.stateManager.activeLicense, { render: false });
-                }
-                application.stateManager.activeLicense = null;
-                if (application.user.SeeffAreaCollection) {
-                    $.each(application.user.SeeffAreaCollection, function (index, suburb) {
-                        if (application.stateManager.activeSuburb != suburb) {
-                            application.Google.createSuburbPoly(suburb, { render: false });
-                        }
-                    });
-                }
+                //if (application.stateManager.activeLicense) {
+                //    application.Google.createLicensePoly(application.stateManager.activeLicense, { render: false });
+                //}
+                //application.stateManager.activeLicense = null;
+                //if (application.user.SeeffAreaCollection) {
+                //    $.each(application.user.SeeffAreaCollection, function (index, suburb) {
+                //        if (application.stateManager.activeSuburb != suburb) {
+                //            application.Google.createSuburbPoly(suburb, { render: false });
+                //        }
+                //    });
+                //}
                 var mc = application.Google.markerClusterer;
                 if (mc) {
                     mc.clearMarkers();

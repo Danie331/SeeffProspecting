@@ -2,6 +2,7 @@
 using ProspectingTaskScheduler.Core.Communication.Emailing;
 using ProspectingTaskScheduler.Core.Communication.SMSing;
 using ProspectingTaskScheduler.Core.Housekeeping;
+using ProspectingTaskScheduler.Core.LightstoneTakeOn;
 using ProspectingTaskScheduler.Core.Spatial;
 using System;
 using System.Collections.Generic;
@@ -74,10 +75,13 @@ namespace ProspectingTaskScheduler.App_Start
             // Housekeeping tasks
             RecurringJob.AddOrUpdate("Resetting yesterdays locked properties", () => CleanupLockedPropertyRecords.ResetYesterdaysLockedRecords(), Cron.Daily(1));
 
-            RecurringJob.AddOrUpdate("IIS app pool up and running", () => StatusNotifier.SendNotificationEmail(), Cron.Daily(7));
+            RecurringJob.AddOrUpdate("IIS app pool up and running", () => StatusNotifier.SendHealthStatusEmail(), Cron.Daily(7));
 
             // Spatial tasks
             RecurringJob.AddOrUpdate("Reindexing Suburbs", () => SuburbMaintenance.ReindexSuburbsRequiringMaintenance(), Cron.Minutely);
+
+
+            RecurringJob.AddOrUpdate("Lightstone base_data take-on", () => LightstoneTakeOn.PerformBaseDataTakeOn(), Cron.Daily(20), TimeZoneInfo.Local);
         }
     }
 }

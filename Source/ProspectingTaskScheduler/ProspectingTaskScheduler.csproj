@@ -108,17 +108,57 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="base_data.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>base_data.edmx</DependentUpon>
+      <LastGenOutput>base_data.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="base_data.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>base_data.edmx</DependentUpon>
+      <LastGenOutput>base_data1.cs</LastGenOutput>
+    </Content>
     <Content Include="bin\System.Net.Http.Formatting.dll" />
     <Content Include="bin\System.Web.Http.dll" />
     <Content Include="bin\System.Web.Http.WebHost.dll" />
+    <Content Include="SeeffDeeds.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SeeffDeeds.edmx</DependentUpon>
+      <LastGenOutput>SeeffDeeds.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="SeeffDeeds.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SeeffDeeds.edmx</DependentUpon>
+      <LastGenOutput>SeeffDeeds.cs</LastGenOutput>
+    </Content>
     <Content Include="UnsubscribeEmail.html" />
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationPreload.cs" />
     <Compile Include="App_Start\HangfireBootstrapper.cs" />
     <Compile Include="App_Start\Startup.cs" />
+    <Compile Include="base_data.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>base_data.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="base_data.cs">
+      <DependentUpon>base_data.tt</DependentUpon>
+    </Compile>
+    <Compile Include="base_data.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>base_data.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="base_data1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>base_data.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\SMSController.cs" />
     <Compile Include="Core\Communication\Emailing\EmailHandler.cs" />
@@ -146,6 +186,21 @@
     <Compile Include="Core\Communication\SMSing\SMSHandler.cs" />
     <Compile Include="Core\Housekeeping\CleanupLockedPropertyRecords.cs" />
     <Compile Include="Core\Housekeeping\StatusNotifier.cs" />
+    <Compile Include="Core\LightstoneTakeOn\BOSSWebService.cs" />
+    <Compile Include="Core\LightstoneTakeOn\LightstoneService.cs" />
+    <Compile Include="Core\LightstoneTakeOn\LightstoneTakeOn.cs" />
+    <Compile Include="Core\LightstoneTakeOn\PropertyAddressParser.cs" />
+    <Compile Include="Core\LightstoneTakeOn\Step1.cs" />
+    <Compile Include="Core\LightstoneTakeOn\Step2.cs" />
+    <Compile Include="Core\LightstoneTakeOn\Step3.cs" />
+    <Compile Include="Core\LightstoneTakeOn\Step4.cs" />
+    <Compile Include="Core\LightstoneTakeOn\Step5.cs" />
+    <Compile Include="Core\LightstoneTakeOn\Step6.cs" />
+    <Compile Include="Core\LightstoneTakeOn\Step7.cs" />
+    <Compile Include="Core\LightstoneTakeOn\Step8.cs" />
+    <Compile Include="Core\LightstoneTakeOn\Step9.cs" />
+    <Compile Include="Core\LightstoneTakeOn\TransactionRequest.cs" />
+    <Compile Include="Core\LightstoneTakeOn\TransactionResult.cs" />
     <Compile Include="Core\Spatial\SuburbMaintenance.cs" />
     <Compile Include="Core\Utils.cs" />
     <Compile Include="Global.asax.cs">
@@ -156,6 +211,24 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Prospecting.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="SeeffDeeds.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SeeffDeeds.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SeeffDeeds.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SeeffDeeds.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SeeffDeeds.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SeeffDeeds.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="SEEFF_Deeds_Monthly.cs">
+      <DependentUpon>SeeffDeeds.tt</DependentUpon>
     </Compile>
     <Compile Include="Spatial.Context.cs">
       <AutoGen>True</AutoGen>
@@ -183,6 +256,13 @@
       <LastGenOutput>Prospecting.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <EntityDeploy Include="base_data.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>base_data.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="base_data.edmx.diagram">
+      <DependentUpon>base_data.edmx</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\1.pubxml" />
     <EntityDeploy Include="Spatial.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -200,6 +280,13 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Spatial.edmx</DependentUpon>
       <LastGenOutput>Spatial.cs</LastGenOutput>
+    </Content>
+    <EntityDeploy Include="SeeffDeeds.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SeeffDeeds.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="SeeffDeeds.edmx.diagram">
+      <DependentUpon>SeeffDeeds.edmx</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
