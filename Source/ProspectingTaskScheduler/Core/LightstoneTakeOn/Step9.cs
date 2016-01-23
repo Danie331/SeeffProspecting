@@ -13,13 +13,14 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
         {
             try
             {
-                using (var seeffDeeds = new Seeff_DeedsEntities())
+                using (var lsBase = new ls_baseEntities())
                 {
-                    var seeffDeedsConnection = seeffDeeds.Database.Connection as SqlConnection;
-                    seeffDeedsConnection.Open();
+                    var connection = lsBase.Database.Connection as SqlConnection;
+                    connection.Open();
 
-                    string cmdText = @"use [master]; DROP DATABASE Seeff_Deeds;";
-                    SqlCommand cmd = new SqlCommand(cmdText, seeffDeedsConnection);
+                    string cmdText = @"ALTER DATABASE Seeff_Deeds SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+                                       DROP DATABASE [Seeff_Deeds]";
+                    SqlCommand cmd = new SqlCommand(cmdText, connection);
                     cmd.CommandTimeout = 60 * 5;
                     cmd.ExecuteNonQuery();
                 }
