@@ -179,8 +179,8 @@ function buildCommunicationMenuItems() {
         menu.append(separator);
     }
 
-    var smsMessage = buildCommMenuItem("comm_menu_sms", buildSMSMenuItemContent(), handleSMSMessageClick);
-    menu.append(smsMessage);
+    //var smsMessage = buildCommMenuItem("comm_menu_sms", buildSMSMenuItemContent(), handleSMSMessageClick);
+    //menu.append(smsMessage);
 
     var emailMessage = buildCommMenuItem("comm_menu_email", buildEmailMenuItemContent(), handleEmailMessageClick);
     menu.append(emailMessage);
@@ -298,7 +298,7 @@ function buildPolyMenuItemContent() {
     var container = $("<div />");
     var iconDiv = $("<div style='display:inline-block;float:left'/>");
     iconDiv.append("<img src='Assets/poly_menu_item.png' />");
-    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Shape");
+    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Shape Selector");
 
     return container.append(iconDiv).append(textDiv);
 }
