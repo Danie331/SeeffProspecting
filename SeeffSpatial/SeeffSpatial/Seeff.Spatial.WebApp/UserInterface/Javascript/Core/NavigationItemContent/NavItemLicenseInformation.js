@@ -123,6 +123,27 @@ $(function () {
                         mc.clearMarkers();
                     }
                 }
+            },
+            handleExportToKMLClick: function () {
+                var selectedValue = $("#licenseSelector").val();
+                if (selectedValue) {
+                    var includeSuburbs = $("#showAssociatedSuburbsCheckbox").is(":checked");
+                    var includeOrphanedRecords = $("#showOrphansForLicense").is(":checked");
+                    application.services.serviceControllers.exportLicenseToKML(
+                        {   LicenseID: selectedValue, 
+                            IncludeSuburbs: includeSuburbs, 
+                            IncludeOrphanedRecords: includeOrphanedRecords
+                        }, application.panel.navItemLicenseInformation.handleExportToKMLCallback);
+                } else {
+                    alert('No license selected');
+                }
+            },
+            handleExportToKMLCallback: function (fileData) {
+                if (fileData.Successful) {
+                    application.utilities.download(fileData.SeeffLicense.LicenseName);
+                } else {
+                    alert(fileData.Message);
+                }
             }
         }
     });

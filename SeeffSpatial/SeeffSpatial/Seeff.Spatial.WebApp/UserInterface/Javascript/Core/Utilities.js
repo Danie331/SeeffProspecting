@@ -75,6 +75,13 @@ $(function () {
                         finished.call(null);
                     }
                 })();
+            },
+            download: function (filename) {
+                var downloadURL = application.baseURL + '/KMLExports/' + filename + '.kml';
+                var form = $('<form method="get" action="' + downloadURL + '"><input type="hidden" value="" /></form>');
+                $('body').append(form);
+                $(form).submit();
+                form.remove();
             }
         }
     });

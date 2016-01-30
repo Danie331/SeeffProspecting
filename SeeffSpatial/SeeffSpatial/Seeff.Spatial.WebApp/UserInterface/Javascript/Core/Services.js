@@ -84,6 +84,10 @@ $(function () {
                 retrieveOrphanRecords: function (licenseModel, callback) {
                     var endpoint = application.utilities.buildHomeURL('/api/Home/GetOrphanedProperties');
                     application.services.post(endpoint, licenseModel, "Loading. Please wait...", callback);
+                },
+                exportLicenseToKML: function (exportLicenseModel, callback) {
+                    var endpoint = application.utilities.buildHomeURL('/api/Home/ExportLicenseToKML');
+                    application.services.post(endpoint, exportLicenseModel, "Generating Model. Please wait...", callback);
                 }
             },
             serviceModels: {

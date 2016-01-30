@@ -8,6 +8,7 @@ using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Http;
 using System.Web.SessionState;
@@ -48,13 +49,6 @@ namespace Seeff.Spatial.WebApp.Controllers
             }
             catch (Exception ex)
             {
-                //var userCredentails = new
-                //{
-                //    UserGuid = userGuid,
-                //    SessionKey = sessionKey
-                //};
-                while (ex.InnerException != null) ex = ex.InnerException;
-
                 Utils.LogException(ex, "Login", ""); // TODO: add exception handling all over the show.
                 return new UserModel { LoginSuccess = false, LoginMessage = ex.ToString() };
             }
@@ -184,6 +178,21 @@ namespace Seeff.Spatial.WebApp.Controllers
             {
                 Utils.LogException(ex, "GetOrphanedProperties() from HomeController", license);
                 return new OrphanedPropertiesResult { Successful = false, Message = ex.Message };
+            }
+        }
+
+        [HttpPost]
+        public ExportLicenseModelResult ExportLicenseToKML([FromBody] ExportLicenseModel exportModel)
+        {
+            try
+            {
+                var result = ControllerActions.GenerateKMLExport(exportModel);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "ExportLicenseToKML() from HomeController", exportModel);
+                return new ExportLicenseModelResult { Successful = false, Message = ex.Message + " " + WindowsIdentity.GetCurrent().Name };
             }
         }
     }

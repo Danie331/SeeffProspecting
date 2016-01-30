@@ -14,7 +14,7 @@
     <RootNamespace>Seeff.Spatial.WebApp</RootNamespace>
     <AssemblyName>Seeff.Spatial.WebApp</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -33,6 +33,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <IncludeIisSettings>false</IncludeIisSettings>
+    <FilesToIncludeForPublish>OnlyFilesToRunTheApp</FilesToIncludeForPublish>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -234,6 +236,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BusinessLayer\ControllerActions\DeleteSuburb.cs" />
+    <Compile Include="BusinessLayer\ControllerActions\GenerateKMLExport.cs" />
     <Compile Include="BusinessLayer\ControllerActions\GetLicenseName.cs" />
     <Compile Include="BusinessLayer\ControllerActions\GetOrphanedProperties.cs" />
     <Compile Include="BusinessLayer\ControllerActions\RetrieveUnmappedSuburbs.cs" />
@@ -246,6 +249,8 @@
     <Compile Include="BusinessLayer\Models\AreaHierarchy.cs" />
     <Compile Include="BusinessLayer\Models\AreaValidationResult.cs" />
     <Compile Include="BusinessLayer\Models\DeleteSuburbResult.cs" />
+    <Compile Include="BusinessLayer\Models\ExportLicenseModel.cs" />
+    <Compile Include="BusinessLayer\Models\ExportLicenseModelResult.cs" />
     <Compile Include="BusinessLayer\Models\LicenseNameResult.cs" />
     <Compile Include="BusinessLayer\Models\OrphanedPropertiesResult.cs" />
     <Compile Include="BusinessLayer\Models\OrphanedProperty.cs" />
@@ -376,7 +381,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>51406</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:51406/</IISUrl>
+          <IISUrl>http://localhost/Seeff.Spatial.WebApp</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

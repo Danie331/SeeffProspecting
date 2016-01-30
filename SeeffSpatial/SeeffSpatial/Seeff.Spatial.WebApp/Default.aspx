@@ -91,7 +91,7 @@
 
     <script type="text/javascript">
         $(function () {
-            var baseURL = '';
+            var baseURL = 'http://localhost/Seeff.Spatial.WebApp/';
             var debugFlag = application.utilities.getUrlParameter('debug');
             if (!debugFlag) {
                 baseURL = '';
