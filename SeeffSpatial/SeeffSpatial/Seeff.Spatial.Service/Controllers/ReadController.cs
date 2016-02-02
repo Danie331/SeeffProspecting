@@ -17,214 +17,278 @@ namespace Seeff.Spatial.Service.Controllers
         [HttpGet]
         public List<SpatialSuburb> GetAllSuburbs()
         {
-            using (var spatialDb = new seeff_spatialEntities())
+            try
             {
-                List<SpatialSuburb> results = new List<SpatialSuburb>();
-                var query = spatialDb.spatial_area.Where(sub => !sub.is_deleted);
-                foreach (var rec in query)
+                using (var spatialDb = new seeff_spatialEntities())
                 {
-                    var spatialSuburb = new SpatialSuburb
+                    List<SpatialSuburb> results = new List<SpatialSuburb>();
+                    var query = spatialDb.spatial_area.Where(sub => !sub.is_deleted);
+                    foreach (var rec in query)
                     {
-                        AreaName = rec.area_name,
-                        SeeffAreaID = rec.fkAreaId,
-                        LicenseID = rec.fk_license_id,
-                        TerritoryID = rec.fk_territory_id,
-                        Polygon = rec.geo_polygon
-                    };
-              
-                    results.Add(spatialSuburb);
-                }
+                        var spatialSuburb = new SpatialSuburb
+                        {
+                            AreaName = rec.area_name,
+                            SeeffAreaID = rec.fkAreaId,
+                            LicenseID = rec.fk_license_id,
+                            TerritoryID = rec.fk_territory_id,
+                            Polygon = rec.geo_polygon
+                        };
 
-                return results;
+                        results.Add(spatialSuburb);
+                    }
+
+                    return results;
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetAllSuburbs()", null);
+                throw;
             }
         }
 
         [HttpGet]
         public List<SpatialSuburb> GetSuburbsListOnly()
         {
-            using (var spatialDb = new seeff_spatialEntities())
+            try
             {
-                List<SpatialSuburb> results = new List<SpatialSuburb>();
-                foreach (var rec in spatialDb.spatial_area)
+                using (var spatialDb = new seeff_spatialEntities())
                 {
-                    var spatialSuburb = new SpatialSuburb
+                    List<SpatialSuburb> results = new List<SpatialSuburb>();
+                    foreach (var rec in spatialDb.spatial_area)
                     {
-                        AreaName = rec.area_name,
-                        SeeffAreaID = rec.fkAreaId,
-                        IsDeleted = rec.is_deleted  
-                    };
+                        var spatialSuburb = new SpatialSuburb
+                        {
+                            AreaName = rec.area_name,
+                            SeeffAreaID = rec.fkAreaId,
+                            IsDeleted = rec.is_deleted
+                        };
 
-                    results.Add(spatialSuburb);
+                        results.Add(spatialSuburb);
+                    }
+
+                    return results;
                 }
-
-                return results;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetSuburbsListOnly()", null);
+                throw;
             }
         }
 
         [HttpGet]
         public List<SpatialLicense> GetAllLicenses()
         {
-            List<SeeffLicense> licenseNames = null;
-            using (var client = new HttpClient())
+            try
             {
-                try
+                List<SeeffLicense> licenseNames = null;
+                using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://bossservices.seeff.com/");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    HttpResponseMessage response = client.GetAsync("api/BOSS/GetLicenseList").Result;
-                    response.EnsureSuccessStatusCode();
-                    licenseNames = response.Content.ReadAsAsync<List<SeeffLicense>>().Result;
-                }
-                catch
-                {
-                    // Supress: this code is only used to get license names
-                }
-            }
-
-            using (var spatialDb = new seeff_spatialEntities())
-            {
-                List<SpatialLicense> results = new List<SpatialLicense>();
-                foreach (var rec in spatialDb.spatial_license)
-                {
-                    var spatialLicense = new SpatialLicense
+                    try
                     {
+                        client.BaseAddress = new Uri("http://bossservices.seeff.com/");
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                        LicenseID = rec.fk_license_id,                         
-                        TerritoryID = rec.fk_territory_id,
-                        Polygon = rec.geo_polygon
-                    };
-
-                    results.Add(spatialLicense);
-                }
-
-                if (licenseNames != null)
-                {
-                    foreach (var item in results)
+                        HttpResponseMessage response = client.GetAsync("api/BOSS/GetLicenseList").Result;
+                        response.EnsureSuccessStatusCode();
+                        licenseNames = response.Content.ReadAsAsync<List<SeeffLicense>>().Result;
+                    }
+                    catch
                     {
-                        var targetLicense = licenseNames.FirstOrDefault(lic => lic.LicenseID == item.LicenseID);
-                        item.LicenseName = targetLicense != null ? targetLicense.LicenseName : "(not available)";
+                        // Supress: this code is only used to get license names
                     }
                 }
 
-                return results;
+                using (var spatialDb = new seeff_spatialEntities())
+                {
+                    List<SpatialLicense> results = new List<SpatialLicense>();
+                    foreach (var rec in spatialDb.spatial_license)
+                    {
+                        var spatialLicense = new SpatialLicense
+                        {
+
+                            LicenseID = rec.fk_license_id,
+                            TerritoryID = rec.fk_territory_id,
+                            Polygon = rec.geo_polygon
+                        };
+
+                        results.Add(spatialLicense);
+                    }
+
+                    if (licenseNames != null)
+                    {
+                        foreach (var item in results)
+                        {
+                            var targetLicense = licenseNames.FirstOrDefault(lic => lic.LicenseID == item.LicenseID);
+                            item.LicenseName = targetLicense != null ? targetLicense.LicenseName : "(not available)";
+                        }
+                    }
+
+                    return results;
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetAllLicenses()", null);
+                throw;
             }
         }
 
         [HttpGet]
         public List<SpatialTerritory> GetAllTerritories()
         {
-            using (var spatialDb = new seeff_spatialEntities())
+            try
             {
-                List<SpatialTerritory> results = new List<SpatialTerritory>();
-                foreach (var rec in spatialDb.spatial_terretory)
+                using (var spatialDb = new seeff_spatialEntities())
                 {
-                    var spatialTerritory = new SpatialTerritory
+                    List<SpatialTerritory> results = new List<SpatialTerritory>();
+                    foreach (var rec in spatialDb.spatial_terretory)
                     {
-                        TerritoryID = rec.territory_id,
-                        TerritoryName = rec.territory_name,
-                         Polygon = rec.geo_polygon
-                    };
-            
-                    results.Add(spatialTerritory);
+                        var spatialTerritory = new SpatialTerritory
+                        {
+                            TerritoryID = rec.territory_id,
+                            TerritoryName = rec.territory_name,
+                            Polygon = rec.geo_polygon
+                        };
+
+                        results.Add(spatialTerritory);
+                    }
+                    return results;
                 }
-                return results;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetAllTerritories()", null);
+                throw;
             }
         }
 
         [HttpGet]
         public SpatialSuburb GetSuburbUnderMaintenance()
         {
-            using (var spatialDb = new seeff_spatialEntities())
+            try
             {
-                var target = spatialDb.spatial_area.FirstOrDefault(sub => sub.under_maintenance);
-                if (target != null)
+                using (var spatialDb = new seeff_spatialEntities())
                 {
-                    return new SpatialSuburb
+                    var target = spatialDb.spatial_area.FirstOrDefault(sub => sub.under_maintenance);
+                    if (target != null)
                     {
-                        AreaName = target.area_name
-                    };
+                        return new SpatialSuburb
+                        {
+                            AreaName = target.area_name
+                        };
+                    }
+                    return null;
                 }
-                return null;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetSuburbUnderMaintenance()", null);
+                throw;
             }
         }
 
         [HttpPost]
         public SpatialSuburb GetSuburbFromID([FromBody]int suburbID)
         {
-            using (var spatialDb = new seeff_spatialEntities())
+            try
             {
-                var existingRecord = spatialDb.spatial_area.FirstOrDefault(sub => sub.fkAreaId == suburbID);
-                if (existingRecord != null)
+                using (var spatialDb = new seeff_spatialEntities())
                 {
-                    return new SpatialSuburb
+                    var existingRecord = spatialDb.spatial_area.FirstOrDefault(sub => sub.fkAreaId == suburbID);
+                    if (existingRecord != null)
                     {
-                        AreaName = existingRecord.area_name,
-                        LicenseID = existingRecord.fk_license_id,
-                        Polygon = existingRecord.geo_polygon,
-                        SeeffAreaID = existingRecord.fkAreaId,
-                        TerritoryID = existingRecord.fk_territory_id,
-                        UnderMaintenance = existingRecord.requires_maintenance || existingRecord.under_maintenance
-                    };
-                }
+                        return new SpatialSuburb
+                        {
+                            AreaName = existingRecord.area_name,
+                            LicenseID = existingRecord.fk_license_id,
+                            Polygon = existingRecord.geo_polygon,
+                            SeeffAreaID = existingRecord.fkAreaId,
+                            TerritoryID = existingRecord.fk_territory_id,
+                            UnderMaintenance = existingRecord.requires_maintenance || existingRecord.under_maintenance
+                        };
+                    }
 
-                return null;
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetSuburbFromID()", null);
+                throw;
             }
         }
 
         [HttpPost]
         public SpatialSuburb GetSuburbFromPoint([FromBody] SpatialPoint latLng)
-        { // TEST THIS!!!
-            if (latLng == null)
-                return null;
-            using (var spatialDb = new seeff_spatialEntities())
+        {
+            try
             {
-                string pointStr = "POINT (" + latLng.Lng + " " + latLng.Lat + ")";
-                DbGeography point = DbGeography.PointFromText(pointStr, DbGeography.DefaultCoordinateSystemId);
-                var containingArea = (from area in spatialDb.spatial_area
-                                      where area.geo_polygon.Intersects(point)
-                                      select area).FirstOrDefault();
-                if (containingArea != null)
+                if (latLng == null)
+                    return null;
+                using (var spatialDb = new seeff_spatialEntities())
                 {
-                    return new SpatialSuburb
+                    string pointStr = "POINT (" + latLng.Lng + " " + latLng.Lat + ")";
+                    DbGeography point = DbGeography.PointFromText(pointStr, DbGeography.DefaultCoordinateSystemId);
+                    var containingArea = (from area in spatialDb.spatial_area
+                                          where area.geo_polygon.Intersects(point)
+                                          select area).FirstOrDefault();
+                    if (containingArea != null)
                     {
-                        AreaName = containingArea.area_name,
-                        LicenseID = containingArea.fk_license_id,
-                        Polygon = containingArea.geo_polygon,
-                        SeeffAreaID = containingArea.fkAreaId,
-                        TerritoryID = containingArea.fk_territory_id,
-                        UnderMaintenance = containingArea.requires_maintenance || containingArea.under_maintenance
-                    };
+                        return new SpatialSuburb
+                        {
+                            AreaName = containingArea.area_name,
+                            LicenseID = containingArea.fk_license_id,
+                            Polygon = containingArea.geo_polygon,
+                            SeeffAreaID = containingArea.fkAreaId,
+                            TerritoryID = containingArea.fk_territory_id,
+                            UnderMaintenance = containingArea.requires_maintenance || containingArea.under_maintenance
+                        };
+                    }
+                    return null;
                 }
-                return null;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetSuburbFromPoint()", null);
+                throw;
             }
         }
 
         [HttpPost]
         public SpatialLicense GetLicenseFromID([FromBody] int licenseID)
         {
-            using (var spatialDb = new seeff_spatialEntities())
+            try
             {
-                SpatialLicense result = new SpatialLicense();
-                var target = spatialDb.spatial_license.FirstOrDefault(lic => lic.fk_license_id == licenseID);
-                if (target != null)
+                using (var spatialDb = new seeff_spatialEntities())
                 {
-                    result.LicenseID = target.fk_license_id;
-                    result.TerritoryID = target.fk_territory_id;
+                    SpatialLicense result = new SpatialLicense();
+                    var target = spatialDb.spatial_license.FirstOrDefault(lic => lic.fk_license_id == licenseID);
+                    if (target != null)
+                    {
+                        result.LicenseID = target.fk_license_id;
+                        result.TerritoryID = target.fk_territory_id;
 
-                    result.Suburbs = (from sub in spatialDb.spatial_area
-                                      where sub.fk_license_id == target.fk_license_id
-                                      select new SpatialSuburb
-                                      {
-                                          SeeffAreaID = sub.fkAreaId,
-                                          AreaName = sub.area_name
-                                      }).ToList();
+                        result.Suburbs = (from sub in spatialDb.spatial_area
+                                          where sub.fk_license_id == target.fk_license_id
+                                          select new SpatialSuburb
+                                          {
+                                              SeeffAreaID = sub.fkAreaId,
+                                              AreaName = sub.area_name
+                                          }).ToList();
 
-                    return result;
-                };
+                        return result;
+                    };
 
-                return null;
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetLicenseFromID()", null);
+                throw;
             }
         }
     }
