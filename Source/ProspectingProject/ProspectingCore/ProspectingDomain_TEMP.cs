@@ -375,13 +375,23 @@ namespace ProspectingProject
                 //                  group pp by pp.seeff_area_id into gr
                 //                  select gr;
 
+                var spatialReader = new SpatialServiceReader();
+                var spatialList = spatialReader.SuburbsListOnly();
+                var suburbsList = (from sub in spatialList
+                                   select new ProspectingSuburb
+                                   {
+                                       LocationID = sub.SeeffAreaID,
+                                       LocationName = sub.AreaName,
+                                       IsDeleted = sub.IsDeleted
+                                   }).Distinct().ToList();
+
                 List<UserSuburb> userSuburbs = new List<UserSuburb>();
                 foreach (var areaId in areaIds)
                 {
                     var targetProps = prospecting.prospecting_properties.Where(sub => sub.seeff_area_id == areaId);
 
-                    var suburbInSuburbsList = ProspectingLookupData.SuburbsListOnly.FirstOrDefault(sub => sub.LocationID == areaId);
-                    if (suburbInSuburbsList != null)
+                    var suburbInSuburbsList = suburbsList.FirstOrDefault(sub => sub.LocationID == areaId);
+                    if (suburbInSuburbsList != null && !suburbInSuburbsList.IsDeleted)
                     {
                         userSuburbs.Add(new UserSuburb
                             {
@@ -391,30 +401,8 @@ namespace ProspectingProject
                                 TotalFullyProspected = targetProps.Count()
                             });
                     }
-                    else
-                    {
-                        var spatialReader = new SpatialServiceReader();
-                        var spatialSuburb = spatialReader.LoadSuburb(areaId);
-                        if (spatialSuburb != null)
-                        {
-                            if (!ProspectingLookupData.SuburbsListOnly.Any(sub => sub.LocationID == areaId))
-                            {
-                                ProspectingLookupData.SuburbsListOnly.Add(new ProspectingSuburb
-                                    {
-                                        LocationID = spatialSuburb.SeeffAreaID,
-                                        LocationName = spatialSuburb.AreaName
-                                    });
-                                userSuburbs.Add(new UserSuburb
-                                    {
-                                        PropertiesRequireAttention = targetProps.Count(p => p.latest_reg_date != null),
-                                        SuburbId = spatialSuburb.SeeffAreaID.Value,
-                                        SuburbName = spatialSuburb.AreaName,
-                                        TotalFullyProspected = targetProps.Count()
-                                    });
-                            }
-                        }
-                    }
                 }
+
                 //foreach (var area in targets)
                 //{
                 //    var firstProperty = area.First();
@@ -564,7 +552,8 @@ namespace ProspectingProject
                 else
                 {
                     var spatial = new SpatialServiceReader();
-                    areaId = spatial.GetSuburbID(standaloneUnit.LatLng.Lat, standaloneUnit.LatLng.Lng);
+                    var spatialSuburb = spatial.GetSuburbFromID(standaloneUnit.LatLng.Lat, standaloneUnit.LatLng.Lng);
+                    areaId = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
                     if (areaId == null)
                     {
                         throw new Exception("Cannot create new prospect: The system cannot allocate a Seeff ID to the area, please contact support for further information.");
@@ -704,7 +693,8 @@ namespace ProspectingProject
         {
              var availableSuburbs = (List<UserSuburb>)HttpContext.Current.Session["user_suburbs"];
             var spatial = new SpatialServiceReader();
-            var suburbID = spatial.GetSuburbID(geoLocation.Lat, geoLocation.Lng);
+            var spatialSuburb = spatial.GetSuburbFromID(geoLocation.Lat, geoLocation.Lng);
+            var suburbID = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
 
             return suburbID == null ? false : availableSuburbs.Any(sub => sub.SuburbId == suburbID);        
         }
@@ -2054,7 +2044,8 @@ namespace ProspectingProject
                 List<LightstonePropertyMatch> results = new List<LightstonePropertyMatch>();
                 foreach (var match in distinctMatches)
                 {
-                    var suburbID = spatial.GetSuburbID(match.LatLng.Lat, match.LatLng.Lng);
+                    var spatialSuburb = spatial.GetSuburbFromID(match.LatLng.Lat, match.LatLng.Lng);
+                    var suburbID = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
                     if (suburbID != null && suburbID == suburbId)
                     {
                         results.Add(match);
@@ -2152,7 +2143,8 @@ namespace ProspectingProject
                 else
                 {
                     var spatial = new SpatialServiceReader();
-                    areaId = spatial.GetSuburbID(latLng.Lat, latLng.Lng);
+                    var spatialSuburb = spatial.GetSuburbFromID(latLng.Lat, latLng.Lng);
+                    areaId = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
                     if (areaId == null)
                     {
                         throw new Exception("Cannot create new prospect: The system cannot allocate a Seeff ID to the area, please contact support for further information.");
@@ -2601,15 +2593,19 @@ namespace ProspectingProject
             //}
 
             var spatial = new SpatialServiceReader();
-            var suburbID = spatial.GetSuburbID(location.Lat, location.Lng);
+            var spatialSuburb = spatial.GetSuburbFromID(location.Lat, location.Lng);
+            var suburbID = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
 
-            return suburbID != null ?
-                new UserSuburb
+            if (suburbID != null)
+            {
+                return new UserSuburb
                 {
-                     SuburbId = suburbID.Value,
-                    SuburbName = ProspectingLookupData.SuburbsListOnly.First(sub => sub.LocationID == suburbID).LocationName
-                }
-                : null;
+                    SuburbId = suburbID.Value,
+                    SuburbName = spatialSuburb.AreaName
+                };
+            }
+
+            return null;
         }
 
         public static List<ProspectingProperty> LoadProperties(int[] inputProperties)

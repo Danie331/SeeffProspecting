@@ -224,16 +224,17 @@ namespace Seeff.Spatial.Service.Controllers
         [HttpPost]
         public SpatialSuburb GetSuburbFromPoint([FromBody] SpatialPoint latLng)
         {
+            string pointStr = null;
             try
             {
                 if (latLng == null)
                     return null;
                 using (var spatialDb = new seeff_spatialEntities())
                 {
-                    string pointStr = "POINT (" + latLng.Lng + " " + latLng.Lat + ")";
+                    pointStr = "POINT (" + latLng.Lng + " " + latLng.Lat + ")";
                     DbGeography point = DbGeography.PointFromText(pointStr, DbGeography.DefaultCoordinateSystemId);
                     var containingArea = (from area in spatialDb.spatial_area
-                                          where area.geo_polygon.Intersects(point)
+                                          where area.geo_polygon.Intersects(point) && !area.is_deleted
                                           select area).FirstOrDefault();
                     if (containingArea != null)
                     {
@@ -252,8 +253,8 @@ namespace Seeff.Spatial.Service.Controllers
             }
             catch (Exception ex)
             {
-                Utils.LogException(ex, "GetSuburbFromPoint()", null);
-                throw;
+                Utils.LogException(ex, "GetSuburbFromPoint()", pointStr);
+                return null;
             }
         }
 

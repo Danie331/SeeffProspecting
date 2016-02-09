@@ -68,21 +68,23 @@ namespace MarketShareApp
                         int baseYear = DateTime.Now.Year - 4;
                         lsBase.update_area_fating(baseYear.ToString());
 
-                        var seeffAreas = (from a in lsBase.seeff_areas select new { a.areaId, a.areaName }).ToList();
-                        var suburbsInfo = (from a in seeffAreas
-                                           join ss in suburbSets on a.areaId equals ss.AreaId
-                                           join af in lsBase.area_fatings on a.areaId equals af.area_id
-                                           orderby a.areaName
-                                           select new SuburbInfo
+                    var spatialReader = new DataManager.SeeffSpatial.SpatialServiceReader();
+                    var spatialSuburbsList = spatialReader.SuburbsListOnly();
+                    var suburbsInfo = (from a in spatialSuburbsList
+                                           join ss in suburbSets on a.SeeffAreaID equals ss.AreaId
+                                           join af in lsBase.area_fatings on a.SeeffAreaID equals af.area_id
+                                           orderby a.AreaName
+                                           let suburbID = a.SeeffAreaID.HasValue ? a.SeeffAreaID.Value : -1
+                                       where !a.IsDeleted
+                                       select new SuburbInfo
                                            {
-                                               SuburbId = a.areaId,
-                                               SuburbName = a.areaName,
+                                               SuburbId = suburbID,
+                                               SuburbName = a.AreaName,
                                                CanEdit = ss.CanEdit,
                                                Fated = af.unfated == 0,
                                                FatedCount = af.fated,
                                                UnfatedCount = af.unfated,
-
-                                               SeeffCurrentListingCount = GetCountSeeffCurrentListings(a.areaId)
+                                               SeeffCurrentListingCount = GetCountSeeffCurrentListings(suburbID)
                                            }).ToList();
 
                         HttpContext.Current.Session["user_suburbs"] = suburbsInfo;
@@ -96,6 +98,9 @@ namespace MarketShareApp
 
         private int GetCountSeeffCurrentListings(int areaId)
         {
+            if (areaId == -1)
+                return 0;
+
             using (var ls_base = DataContextRetriever.GetLSBaseDataContext())
             {
                 int count = 0;

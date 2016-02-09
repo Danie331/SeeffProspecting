@@ -82,6 +82,8 @@ namespace ProspectingTaskScheduler.App_Start
 
 
             RecurringJob.AddOrUpdate("Lightstone base_data take-on", () => LightstoneTakeOn.PerformBaseDataTakeOn(), Cron.Daily(20), TimeZoneInfo.Local);
+
+            RecurringJob.AddOrUpdate("Synchronising spatial areas with seeff.com", () => SuburbMaintenance.SynchroniseSuburbNames(), Cron.Hourly());
         }
     }
 }

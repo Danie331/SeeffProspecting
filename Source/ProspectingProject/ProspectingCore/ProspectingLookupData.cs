@@ -40,7 +40,6 @@ namespace ProspectingProject
         public static Func<ProspectingDataContext, ProspectingContactPerson, IQueryable<ProspectingContactDetail>> PropertyContactEmailRetriever { get; private set; }
         public static Func<ProspectingDataContext, prospecting_property, bool, IQueryable<ProspectingContactPerson>> PropertyCompanyContactsRetriever { get; private set; }
 
-        public static List<ProspectingSuburb> SuburbsListOnly { get; set; }
         
         static ProspectingLookupData()
         {
@@ -55,7 +54,6 @@ namespace ProspectingProject
             LoadSystemActivityTypes();
             LoadActivityFollowupTypes();
             LoadCommunicationStatusTypes();
-            LoadSuburbList();
 
             PhoneTypeIds = ProspectingLookupData.ContactPhoneTypes.Select(k => k.Key);
             EmailTypeIds = ProspectingLookupData.ContactEmailTypes.Select(k => k.Key);
@@ -159,18 +157,6 @@ namespace ProspectingProject
                                                                              IntDialingCode = det.intl_dialing_code_id,
                                                                              EleventhDigit = det.eleventh_digit
                                                                          }));
-        }
-
-        private static void LoadSuburbList()
-        {
-            var spatialReader = new SpatialServiceReader();
-            var suburbsList = spatialReader.SuburbsListOnly();
-            SuburbsListOnly = (from sub in suburbsList
-                               select new ProspectingSuburb
-                               {
-                                   LocationID = sub.SeeffAreaID,
-                                   LocationName = sub.AreaName
-                               }).Distinct().ToList();
         }
 
         private static void LoadSystemActivityTypes()

@@ -28,5 +28,6 @@ namespace ProspectingProject
         public List<ProspectingProperty> ProspectingProperties { get; set; }
 
         public bool UnderMaintenance { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

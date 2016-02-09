@@ -32,5 +32,29 @@ namespace ProspectingTaskScheduler.Core.Spatial
                 Utils.LogException(e);
             }
         }
+
+        public static void SynchroniseSuburbNames()
+        {
+            try
+            {
+                using (var spatial = new seeff_spatialEntities())
+                {
+                    var spatialConnection = spatial.Database.Connection as SqlConnection;
+                    spatialConnection.Open();
+
+                    SqlCommand cmd = new SqlCommand(@"update sa
+                                                    set sa.area_name = seeff.areaName
+                                                    from seeff_spatial.dbo.spatial_area sa
+                                                    join [41.222.226.215].seeff.dbo.area seeff on sa.fkAreaId = seeff.areaId", spatialConnection);
+                    cmd.CommandTimeout = int.MaxValue;
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex);
+            }
+        }
     }
 }

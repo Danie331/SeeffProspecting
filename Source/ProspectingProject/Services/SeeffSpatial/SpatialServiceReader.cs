@@ -48,7 +48,7 @@ namespace ProspectingProject.Services.SeeffSpatial
             }
         }
 
-        public int? GetSuburbID(decimal lat, decimal lng)
+        public SpatialSuburb GetSuburbFromID(decimal lat, decimal lng)
         {
             var spatialPoint = new SpatialPoint { Lat = Convert.ToDouble(lat), Lng = Convert.ToDouble(lng) };
             using (var client = new HttpClient())
@@ -61,7 +61,7 @@ namespace ProspectingProject.Services.SeeffSpatial
                 response.EnsureSuccessStatusCode();
                 SpatialSuburb result = response.Content.ReadAsAsync<SpatialSuburb>().Result;
 
-                return result.SeeffAreaID.HasValue ? result.SeeffAreaID.Value : (int?)null;
+                return result;
             }
         }
     }

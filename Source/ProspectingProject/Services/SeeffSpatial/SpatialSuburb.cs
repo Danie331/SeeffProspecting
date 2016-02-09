@@ -13,5 +13,6 @@ namespace ProspectingProject.Services.SeeffSpatial
         public int? TerritoryID { get; set; }
         public string AreaName { get; set; }
         public bool UnderMaintenance { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
