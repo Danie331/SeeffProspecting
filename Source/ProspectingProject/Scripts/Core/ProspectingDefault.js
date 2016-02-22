@@ -56,7 +56,7 @@ function initEventHandlers() {
             var items = { "Add Activity": { name: "Add Activity", icon: "add_activity" } };
             if (prospectingContext.UserHasCommAccess) {
                 if (rightClickedProperty.Prospected) {
-                    //items["New SMS Message"] = { name: "New SMS Message", icon: "new_sms_message" };
+                    items["New SMS Message"] = { name: "New SMS Message", icon: "new_sms_message" };
                     items["New Email Message"] = { name: "New Email Message", icon: "new_email_message" };
                 }
             }

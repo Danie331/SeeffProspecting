@@ -179,8 +179,8 @@ function buildCommunicationMenuItems() {
         menu.append(separator);
     }
 
-    //var smsMessage = buildCommMenuItem("comm_menu_sms", buildSMSMenuItemContent(), handleSMSMessageClick);
-    //menu.append(smsMessage);
+    var smsMessage = buildCommMenuItem("comm_menu_sms", buildSMSMenuItemContent(), handleSMSMessageClick);
+    menu.append(smsMessage);
 
     var emailMessage = buildCommMenuItem("comm_menu_email", buildEmailMenuItemContent(), handleEmailMessageClick);
     menu.append(emailMessage);

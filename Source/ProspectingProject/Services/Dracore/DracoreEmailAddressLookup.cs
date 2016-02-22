@@ -64,7 +64,7 @@ namespace ProspectingProject
                 }
                 else
                 {
-                    _results.ErrorMsg = dracoreResult.SERVICE_ERROR;
+                    _results.ErrorMsg = "Dracore service not available. Enquiry failed with message: " + dracoreResult.SERVICE_ERROR;
                 }
                 return;
             }
@@ -110,13 +110,24 @@ namespace ProspectingProject
                 bool successful = _results.EnquirySuccessful;
                 string statusMessage = successful ? "OK" : _results.ErrorMsg;
                 string exceptionMessage = _exception != null ? _exception.ToString() : null;
+
+                string idNumber = _results.IdNumber;
+                if (idNumber.Length > 13 )
+                {
+                    idNumber = idNumber.Substring(0, 13);
+                }
+                if (statusMessage != null && statusMessage.Length > 255)
+                {
+                    statusMessage = statusMessage.Substring(0, 255);
+                }
+
                 service_enquiry_log logEntry = new service_enquiry_log
                 {
                     prospecting_property_id = _inputData.ProspectingPropertyId.HasValue ? _inputData.ProspectingPropertyId.Value : -1,
                     user = _userGuid,
                     date_of_enquiry = DateTime.Now,
                     successful = successful,
-                    id_number = _results.IdNumber,
+                    id_number = idNumber,
                     HWCE_indicator = _results.HWCE_indicator,
                     //
                     service_type_name = _results.LookupType,

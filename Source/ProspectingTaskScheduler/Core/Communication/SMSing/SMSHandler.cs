@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using ProspectingTaskScheduler.Core.Housekeeping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
 
@@ -12,205 +16,109 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
     {
         public static void SendSMS()
         {
-            using (var prospecting = new ProspectingDataContext())
-            {
-                var batch = GetBatch(prospecting);
-                int awaitingStatus = CommunicationHelpers.GetCommunicationStatusId("AWAITING_RESPONSE_FROM_API");
-                if (batch.Count > 0)
-                {
-                    foreach (var item in batch)
-                    {
-                        item.status = awaitingStatus;
-                        try
-                        {
-                            prospecting.SubmitChanges();
-                        }
-                        catch (Exception e)
-                        {
-                            LogRecordUpdateException("Error occurred updating status of SMS item to AWAITING_RESPONSE_FROM_API. item_id: " + item.sms_communications_log_id, e);
-                        }
-                    }
-                    SMSBatchResult result = SubmitBatch(prospecting, batch);
-                    if (!result.Success)
-                    {
-                        //ResetBatchToPending(batch);
-                        exception_log errorRecord = new exception_log
-                        {
-                            friendly_error_msg = "Unexpected error occurred when submitting batch of SMS's (batch_id:" + batch.First().batch_id + ")",
-                            date_time = DateTime.Now,
-                            exception_string = result.ErrorMessage,
-                            user = batch.First().created_by_user_guid
-                        };
-                        prospecting.exception_logs.InsertOnSubmit(errorRecord);
-                        try
-                        {
-                            prospecting.SubmitChanges();
-                        }
-                        catch { }
-                    }
-                }
-            }
-        }
-
-        private static List<sms_communications_log> GetBatch(ProspectingDataContext prospecting)
-        {
-            List<sms_communications_log> batch = new List<sms_communications_log>();
-            int pendingStatus = CommunicationHelpers.GetCommunicationStatusId("PENDING_SUBMIT_TO_API");
-            var batchItem = prospecting.sms_communications_logs.FirstOrDefault(sms => sms.status == pendingStatus);
-            if (batchItem != null)
-            {
-                // Get all records with the same batch_id
-                string batchId = batchItem.batch_id.ToString();
-                batch = prospecting.sms_communications_logs.Where(sms => sms.status == pendingStatus && sms.batch_id.ToString() == batchId).Take(150).ToList();
-            }
-
-            return batch;
-        }
-
-        private static string BuildBatch(List<sms_communications_log> batch)
-        {
-            XDocument doc = new XDocument();
-            var root = new XElement("SmsQueue");
-            var accountElement = new XElement("Account");
-            var user = new XElement("User");
-            user.Value = "SanAcc00006";
-            accountElement.Add(user);
-            var password = new XElement("Password");
-            password.Value = "A78BfEPK";
-            accountElement.Add(password);
-            root.Add(accountElement);
-            var messageDataElement = new XElement("MessageData");
-            var senderId = new XElement("SenderId");
-            senderId.Value = "438292";
-            messageDataElement.Add(senderId);
-            var dataCoding = new XElement("DataCoding");
-            dataCoding.Value = "0";
-            messageDataElement.Add(dataCoding);
-            root.Add(messageDataElement);
-            var messagesElement = new XElement("Messages");
-
-            foreach (var item in batch)
-            {
-                var messageElement = new XElement("Message");
-                var number = new XElement("Number");
-                number.Value = item.target_cellphone_no;
-                var text = new XElement("Text");
-                text.Value = item.msg_body_or_link_id;
-
-                messageElement.Add(number);
-                messageElement.Add(text);
-
-                messagesElement.Add(messageElement);
-            }
-            root.Add(messagesElement);
-            doc.Add(root);
-
-            string batchString = doc.ToString();
-            return batchString;
-        }
-
-        private static SMSBatchResult SubmitBatch(ProspectingDataContext prospecting, List<sms_communications_log> batch)
-        {
-            string smsBatchXML = BuildBatch(batch);
-
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://client.sancustelecom.com/");
-            var httpContent = new StringContent(smsBatchXML, Encoding.UTF8, "application/xml");
-            HttpResponseMessage response = null;
-            SMSBatchResult result = new SMSBatchResult();
             try
             {
-                response = client.PostAsync("/Rest/Messaging.svc/mtsms?data=", httpContent).Result;
+                var batch = GetBatch10();
+                Task.WaitAll(SubmitBatch(batch));
             }
             catch (Exception ex)
             {
-                result.Success = false;
-                result.ErrorMessage = ex.Message;
-                return result;
+                StatusNotifier.SendEmail("danie.vdm@seeff.com", "Task Scheduler", "reports@seeff.com", null, "Exception in SMSHandler.SendSMS()", ex.ToString() + " --- Stack-trace --- " + ex.StackTrace);
             }
-            // Interrogate response here..
-            if (response.IsSuccessStatusCode)
-            {
-                try
-                {
-                    string content = response.Content.ReadAsStringAsync().Result;
-                    XDocument responseXml = XDocument.Parse(content);
-                    var ns = responseXml.Root.Name.Namespace;
-                    string errorCode = responseXml.Root.Element(ns + "ErrorCode").Value;
-                    string errorMessage = responseXml.Root.Element(ns + "ErrorMessage").Value;
+        }
 
-                    if (errorCode == "000")
+        private static List<sms_communications_log> GetBatch10()
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                List<sms_communications_log> batch = new List<sms_communications_log>();
+                if (DateTime.Now.Hour > 19 || DateTime.Now.Hour < 8)
+                {
+                    return batch;
+                }
+
+                int pendingStatus = CommunicationHelpers.GetCommunicationStatusId("PENDING_SUBMIT_TO_API");
+
+                batch = prospecting.sms_communications_logs.Where(sms => sms.status == pendingStatus)
+                                                            .OrderBy(item => item.created_datetime)
+                                                            .Take(10)
+                                                            .ToList();
+
+                return batch;
+            }
+        }
+
+        private static KeyValuePair<int, string> GetMessageStatus(MessageSendResult result)
+        {
+            int prospectingSmsStatus;
+            switch (result.status)
+            {
+                case 1:
+                case 2:
+                    prospectingSmsStatus = CommunicationHelpers.GetCommunicationStatusId("SMS_SUBMITTED");
+                    break;
+                case 4:
+                    prospectingSmsStatus = CommunicationHelpers.GetCommunicationStatusId("SMS_DELIVERED");
+                    break;
+                default:
+                    prospectingSmsStatus = CommunicationHelpers.GetCommunicationStatusId("SMS_OTHER");
+                    break;
+            }
+
+            KeyValuePair<int, string> statusDesc = new KeyValuePair<int, string>(prospectingSmsStatus, result.message);
+
+            return statusDesc;
+        }
+
+        private static async Task SubmitBatch(List<sms_communications_log> batch)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://api.panaceamobile.com/");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage response = null;
+                    foreach (var item in batch)
                     {
-                        result.Success = true;
                         try
                         {
-                            UpdateBatchWithResponse(prospecting, batch, responseXml); 
+                            string encodedMsg = HttpUtility.UrlEncode(item.msg_body_or_link_id);
+                            string encodedCallbackURL = HttpUtility.UrlEncode("http://154.70.214.213/ProspectingTaskScheduler/api/SMS/UpdateDeliveryStatus?recordID=" + item.sms_communications_log_id + "&status=%d");
+                            string targetURI = string.Format("json?action=message_send&username=seeffnational&password=Zaq12wsXc&to={0}&text={1}&from={2}&report_mask=31&report_url={3}",
+                                                            item.target_cellphone_no,
+                                                            encodedMsg,
+                                                            "27724707471",
+                                                            encodedCallbackURL);
+
+                            var targetRecord = prospecting.sms_communications_logs.First(rec => rec.sms_communications_log_id == item.sms_communications_log_id);
+
+                            if (targetRecord.status != CommunicationHelpers.GetCommunicationStatusId("PENDING_SUBMIT_TO_API"))
+                                continue;
+
+                            response = await client.GetAsync(targetURI);
+                            var responseContent = await response.Content.ReadAsStringAsync();
+
+                            MessageSendResult messageResult = JsonConvert.DeserializeObject<MessageSendResult>(responseContent);
+
+                            var messageStatus = GetMessageStatus(messageResult);
+
+                            targetRecord.api_delivery_status = messageStatus.Value;
+                            targetRecord.updated_datetime = DateTime.Now;
+                            targetRecord.status = messageStatus.Key;
+                            targetRecord.api_tracking_id = messageResult.details;
+                            targetRecord.msg_body_or_link_id = null;
+
+                            prospecting.SubmitChanges();
                         }
-                        catch  (Exception e)
+                        catch (Exception ex)
                         {
-                            // In this scenario the batch was submitted successfully and we can expect to be billed for it.
-                            // Therefore: if an exception occurs on our side subsequent to successful submission of a batch, we cannot regard this as an error.
-                            // Set the status of each item in the batch to "Submitted"
-                            LogRecordUpdateException("Exception occurred updating SMS records after successful submission - batch id:" + batch.First().batch_id +  " was submitted successfully.", e);
+                            StatusNotifier.SendEmail("danie.vdm@seeff.com", "Task Scheduler", "reports@seeff.com", null, "Exception whilst submitting SMS record", ex.ToString());
                         }
                     }
-                    else
-                    {
-                        result.Success = false;
-                        result.ErrorMessage = errorMessage;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    result.Success = false;
-                    result.ErrorMessage = ex.Message;
-                    return result;
-                }
-            }
-            else
-            {
-                result.Success = false;
-                result.ErrorMessage = response.ReasonPhrase + " StatusCode: " + response.StatusCode;
-            }
-
-            return result;
-        }
-
-        private static void UpdateBatchWithResponse(ProspectingDataContext prospecting, List<sms_communications_log> batch, XDocument responseXml)
-        {
-            var ns = responseXml.Root.Name.Namespace;
-            var messages = responseXml.Root.Element(ns + "MessageData").Descendants(ns + "Messages");
-            foreach (var message in messages)
-            {
-                var firstMessagePart = message.Descendants(ns + "MessageParts").Descendants(ns + "MessagePart").First();
-                string msgId = firstMessagePart.Descendants(ns + "MsgId").First().Value;
-
-                string cellphoneNumber = msgId.Split(new[] { '-' })[0];
-
-                var affectedRecords = batch.Where(item => item.target_cellphone_no == cellphoneNumber);
-                foreach (var record in affectedRecords)
-                {
-                    record.updated_datetime = DateTime.Now;
-                    record.status = CommunicationHelpers.GetCommunicationStatusId("SMS_SUBMITTED");
-                    record.api_tracking_id = msgId;
-                    record.msg_body_or_link_id = null;
-                    try
-                    {
-                        prospecting.SubmitChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        LogRecordUpdateException("Error updating SMS record to SMS_SUBMITTED status. Record id: " + record.sms_communications_log_id, e);
-                    }
                 }
             }
         }
-
-
-        // Follow-up: when we receive a reply
-
-
-        // If they reply STOP opt out.
 
         private static void LogRecordUpdateException(string context, Exception e)
         {
@@ -228,58 +136,7 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
             }
         }
 
-        public static void UpdateDeliveryStatuses()
-        {
-            int submittedStatus = CommunicationHelpers.GetCommunicationStatusId("SMS_SUBMITTED");
-            using (var prospecting = new ProspectingDataContext())
-            {
-                var yesterday = DateTime.Now.AddDays(-1);
-                var submittedItems = prospecting.sms_communications_logs.Where(item => item.status == submittedStatus && item.created_datetime >= yesterday);
-                foreach (var record in submittedItems)
-                {
-                    string trackingId = record.api_tracking_id;
-                    string deliveryUri = "http://client.sancustelecom.com/vendorsms/checkdelivery.aspx?user=SanAcc00006&password=A78BfEPK&messageid=" + trackingId;
-                    var httpClient = new HttpClient();
-                    string content = "";
-                    try
-                    {
-                        content = httpClient.GetStringAsync(deliveryUri).Result;
-                    }
-                    catch (Exception e)
-                    {
-                        LogRecordUpdateException("Error while calling SMS delivery API for record id: " + record.sms_communications_log_id, e);
-                        return;
-                    }
-                    record.updated_datetime = DateTime.Now;
-                    record.api_delivery_status = content;
-                    switch (content)
-                    {
-                        case "#DELIVRD":
-                            record.status = CommunicationHelpers.GetCommunicationStatusId("SMS_DELIVERED");
-                            record.activity_log_id = CreateActivityForRecord(record);
-                            break;
-                        case "#Submitted": // do absolutely nothing
-                          case  "#Pending":
-                           case  "#Accepted":
-                        case "#StatusUnknown":
-                            break;
-                        default:
-                            record.status = CommunicationHelpers.GetCommunicationStatusId("SMS_OTHER");
-                            break;
-                    }
-                    try
-                    {
-                        prospecting.SubmitChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        LogRecordUpdateException("Error updating delivery status of SMS record id:" + record.sms_communications_log_id, e);
-                    }
-                }
-            }
-        }
-
-        private static long CreateActivityForRecord(sms_communications_log smsItem)
+        public static long CreateActivityForRecord(sms_communications_log smsItem)
         {
             using (var prospecting = new ProspectingDataContext())
             {

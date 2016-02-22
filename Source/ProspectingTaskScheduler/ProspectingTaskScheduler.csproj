@@ -55,11 +55,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\3rdParty\Everlytics\EverlyticV2.dll</HintPath>
     </Reference>
-    <Reference Include="Hangfire.Core">
-      <HintPath>..\packages\Hangfire.Core.1.4.3\lib\net45\Hangfire.Core.dll</HintPath>
+    <Reference Include="Hangfire.Core, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.Core.1.5.3\lib\net45\Hangfire.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Hangfire.SqlServer">
-      <HintPath>..\packages\Hangfire.SqlServer.1.4.3\lib\net45\Hangfire.SqlServer.dll</HintPath>
+    <Reference Include="Hangfire.SqlServer, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.SqlServer.1.5.3\lib\net45\Hangfire.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin">
@@ -182,6 +184,7 @@
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillRecipientMetaDataValues.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillSendRequest.cs" />
     <Compile Include="Core\Communication\Emailing\Mandrill\MandrillSuccessfulResponse.cs" />
+    <Compile Include="Core\Communication\SMSing\MessageSendResult.cs" />
     <Compile Include="Core\Communication\SMSing\SMSBatchResult.cs" />
     <Compile Include="Core\Communication\SMSing\SMSHandler.cs" />
     <Compile Include="Core\Housekeeping\CleanupLockedPropertyRecords.cs" />
@@ -250,7 +253,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Prospecting.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>Prospecting.designer.cs</LastGenOutput>

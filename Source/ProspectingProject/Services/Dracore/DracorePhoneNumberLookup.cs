@@ -64,7 +64,7 @@ namespace ProspectingProject
                 }
                 else
                 {
-                    _results.ErrorMsg = dracoreResult.SERVICE_ERROR;
+                    _results.ErrorMsg = "Dracore service not available. Enquiry failed with message: " + dracoreResult.SERVICE_ERROR;
                 }
                 return;
             }

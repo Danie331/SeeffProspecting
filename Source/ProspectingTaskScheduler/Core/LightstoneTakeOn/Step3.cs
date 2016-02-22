@@ -110,13 +110,37 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                             int portionNo = TryGetItem<int>(lightstoneResult.Tables["Properties"], "PORTION");
 
                             spatialCmd.CommandText = @"SELECT dbo.get_area_id(" + record.Y + "," + record.X + "," + -1 + ")";
-                            int seeff_area_id = (int)spatialCmd.ExecuteScalar();
+                            int seeff_area_id;
+                            try {
+                                seeff_area_id = (int)spatialCmd.ExecuteScalar();
+                            }
+                            catch
+                            {
+                                Thread.Sleep(15000);
+                                seeff_area_id = (int)spatialCmd.ExecuteScalar();
+                            }
 
                             spatialCmd.CommandText = @"SELECT dbo.get_license_id(" + record.Y + "," + record.X + ")";
-                            int seeff_lic_id = (int)spatialCmd.ExecuteScalar();
+                            int seeff_lic_id;
+                            try {
+                               seeff_lic_id = (int)spatialCmd.ExecuteScalar();
+                            }
+                            catch
+                            {
+                                Thread.Sleep(15000);
+                                seeff_lic_id = (int)spatialCmd.ExecuteScalar();
+                            }
 
                             spatialCmd.CommandText = @"SELECT dbo.get_territory_id(" + record.Y + "," + record.X + ")";
-                            int territory_id = (int)spatialCmd.ExecuteScalar();
+                            int territory_id;
+                            try {
+                                territory_id = (int)spatialCmd.ExecuteScalar();
+                            }
+                            catch
+                            {
+                                Thread.Sleep(15000);
+                                territory_id = (int)spatialCmd.ExecuteScalar();
+                            }
 
                             bool seeffDeal = false;
                             string division = string.Empty;
