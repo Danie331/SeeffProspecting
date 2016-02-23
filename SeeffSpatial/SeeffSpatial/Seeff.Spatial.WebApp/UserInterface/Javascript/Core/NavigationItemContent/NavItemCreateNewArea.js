@@ -3,6 +3,8 @@ $(function () {
     $.extend(application.panel, {
         navItemCreateNewArea: {
             newAreaPolygon: null,
+            unmappedSuburbArray: null,
+            targetSuburb: null,
             buildContent: function () {
                 var container = $("#contentContainerContent");
                 if (application.panel.navItemCreateNewArea.contentCache) {
@@ -119,14 +121,34 @@ $(function () {
                                     licenseIDSelect.attr("disabled", true);
                                 }
 
-                                var unmappedSuburbSelector = $("#unmappedSuburbSelector");
-                                unmappedSuburbSelector.empty().append("<option value='' selected='selected'></option>");
                                 application.services.serviceControllers.retrieveUnmappedSuburbs(function (results) {
                                     if (results.Successful) {
+                                        application.panel.navItemCreateNewArea.unmappedSuburbArray = results.Suburbs;
+
+                                        var items = [];
                                         $.each(results.Suburbs, function (idx, sub) {
-                                            var option = $('<option/>', { value: sub.SeeffAreaID }).text(sub.AreaName + ' (' + sub.SeeffAreaID + ')');
-                                            option.data('areaName', sub.AreaName);
-                                            unmappedSuburbSelector.append(option);
+                                            items.push({ label: sub.AreaName + ' (' + sub.SeeffAreaID + ')', value: sub.SeeffAreaID });
+                                        });
+
+                                        var unmappedSuburbSelector = $("#unmappedSuburbSelector");
+                                        unmappedSuburbSelector.autocomplete({
+                                            source: items,
+                                            change: function (event, ui) {
+                                                if (ui.item == null) {
+                                                    $(this).val('');
+                                                    $(this).focus();
+                                                } else {
+                                                    application.panel.navItemCreateNewArea.targetSuburb = ui.item;
+                                                }
+                                            },
+                                            select: function (event, ui) {
+                                                event.preventDefault();
+                                                $(this).val(ui.item.label);
+                                            },
+                                            focus: function (event, ui) {
+                                                event.preventDefault();
+                                                $(this).val(ui.item.label);
+                                            }                                            
                                         });
                                     }
                                 });
@@ -163,15 +185,18 @@ $(function () {
                     application.stateManager.handleExitCreateAreaMode();
                     application.stateManager.handleEnterCreateAreaMode();
                     application.panel.navItemCreateNewArea.buildContent();
+                    application.panel.navItemCreateNewArea.targetSuburb = null;
                 },
-                saveNewPolygon: function () {                  
-                    var unmappedAreaID = $("#unmappedSuburbSelector").val();
-                    if (!unmappedAreaID) {
+                saveNewPolygon: function () {
+                    if (application.panel.navItemCreateNewArea.targetSuburb == null)
+                    {
                         alert("Please select an existing unmapped Seeff suburb against which this data will be saved.");
                         return;
                     }
-                    var selectedOption = $("#unmappedSuburbSelector option:selected");
-                    var areaName = selectedOption.data('areaName');
+                    
+                    var areaName = $.grep(application.panel.navItemCreateNewArea.unmappedSuburbArray, function (sub) {
+                        return sub.SeeffAreaID == application.panel.navItemCreateNewArea.targetSuburb.value;
+                    })[0].AreaName;
                     var licenseID = $("#licenseIDSelect").val();
                     //if (!licenseID) {
                     //    alert("Must specify a Seeff License ID for the new suburb");
@@ -182,7 +207,7 @@ $(function () {
                     suburbModel.PolyWKT = application.Google.getPolyAsGeographyString(application.panel.navItemCreateNewArea.newAreaPolygon);
                     suburbModel.AreaName = areaName;
                     suburbModel.LicenseID = licenseID;
-                    suburbModel.SeeffAreaID = unmappedAreaID;
+                    suburbModel.SeeffAreaID = application.panel.navItemCreateNewArea.targetSuburb.value;
                     application.services.serviceControllers.saveSuburb(suburbModel, application.panel.navItemCreateNewArea.controllers.saveSuburbCallback);
                 },
                 saveSuburbCallback: function (result) {

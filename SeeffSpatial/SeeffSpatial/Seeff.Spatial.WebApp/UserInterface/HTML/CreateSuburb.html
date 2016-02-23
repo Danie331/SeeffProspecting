@@ -29,7 +29,12 @@
     <div id="createAreaStep3" class="step-nonactive" style="width:100%;float:left;margin-top:20px">
         <fieldset class="step-content-left">
             <legend>Step 3: Capture And Save Area Details</legend>
-            Available Suburbs: <select id="unmappedSuburbSelector"> </select> <br/>
+            <div class="ui-widget">
+                <label for="unmappedSuburbSelector">Available Suburbs: </label>
+                <input id="unmappedSuburbSelector">
+                <!--Available Suburbs: <select id="unmappedSuburbSelector"> </select>--> 
+                <br />
+            </div>
             License ID: <select id="licenseIDSelect"> </select>  <br />
             <input type="button" id="saveNewAreaBtn" onclick="application.panel.navItemCreateNewArea.controllers.saveNewPolygon()" value="Save Suburb" />
         </fieldset>
@@ -66,6 +71,16 @@
     .step-content-right {
         /*display: inline-block;*/
         float: right;
+    }
+
+    .ui-autocomplete {
+        z-index: 1000 !important;
+        max-height: 300px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 20px;
     }
 
 </style>
