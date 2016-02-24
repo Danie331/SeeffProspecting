@@ -83,6 +83,7 @@
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemEditSuburb.js"></script>
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemEditLicense.js"></script>
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemLicenseInformation.js"></script>
+    <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemReports.js"></script>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />

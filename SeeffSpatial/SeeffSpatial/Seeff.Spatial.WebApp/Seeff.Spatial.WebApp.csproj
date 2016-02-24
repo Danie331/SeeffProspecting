@@ -205,6 +205,7 @@
     <Content Include="UserInterface\HTML\EditLicense.html" />
     <Content Include="UserInterface\HTML\EditSuburb.html" />
     <Content Include="UserInterface\HTML\LicenseInformation.html" />
+    <Content Include="UserInterface\HTML\Reporting.html" />
     <Content Include="UserInterface\Javascript\3rd_party\jquery.contextMenu.js" />
     <Content Include="UserInterface\Javascript\3rd_party\jqueryBlockUI.js" />
     <Content Include="UserInterface\Javascript\3rd_party\MarkerClustererPlus.js" />
@@ -214,6 +215,7 @@
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemEditSuburb.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemAreaSelection.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemLicenseInformation.js" />
+    <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemReports.js" />
     <Content Include="UserInterface\Javascript\Core\Services.js" />
     <Content Include="UserInterface\Javascript\Core\StateManager.js" />
     <Content Include="UserInterface\Stylesheets\Shared.css" />
@@ -239,6 +241,7 @@
     <Compile Include="BusinessLayer\ControllerActions\GenerateKMLExport.cs" />
     <Compile Include="BusinessLayer\ControllerActions\GetLicenseName.cs" />
     <Compile Include="BusinessLayer\ControllerActions\GetOrphanedProperties.cs" />
+    <Compile Include="BusinessLayer\ControllerActions\GetSuburbsUnderMaintenance.cs" />
     <Compile Include="BusinessLayer\ControllerActions\RetrieveUnmappedSuburbs.cs" />
     <Compile Include="BusinessLayer\ControllerActions\SaveLicense.cs" />
     <Compile Include="BusinessLayer\ControllerActions\SaveSuburb.cs" />
@@ -261,6 +264,7 @@
     <Compile Include="BusinessLayer\Models\SeeffTerritory.cs" />
     <Compile Include="BusinessLayer\Models\SpatialModelBase.cs" />
     <Compile Include="BusinessLayer\Models\SpatialPoint.cs" />
+    <Compile Include="BusinessLayer\Models\SuburbsUnderMaintenanceResult.cs" />
     <Compile Include="BusinessLayer\Models\UnmappedSuburbs.cs" />
     <Compile Include="BusinessLayer\Validators\LicenseValidator.cs" />
     <Compile Include="BusinessLayer\Validators\SuburbValidator.cs" />

@@ -22,7 +22,7 @@ $(function () {
                 var licenseIDSelect = $("#suburbLicenseIDTextbox");
                 licenseIDSelect.empty().append("<option value='' selected='selected'></option>");
                 $.each(application.user.SeeffLicenses, function (idx, lic) {
-                    var option = $('<option/>', { value: lic.LicenseID }).text(lic.LicenseID);
+                    var option = $('<option/>', { value: lic.LicenseID }).text(lic.LicenseName + ' (' + lic.LicenseID + ')');
                     licenseIDSelect.append(option);
                 });
                 var activeSuburb = application.stateManager.activeSuburb;

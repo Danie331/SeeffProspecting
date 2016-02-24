@@ -11,6 +11,7 @@ $(function () {
             allSuburbsShown: false,
             allLicensesShown: false,
             allTerritoriesShown: false,
+            fileUploadCounter: [],
             handleExitEditPolyMode: function () {
                 if (application.stateManager.activeSuburb) {
                     var suburb = application.stateManager.activeSuburb;

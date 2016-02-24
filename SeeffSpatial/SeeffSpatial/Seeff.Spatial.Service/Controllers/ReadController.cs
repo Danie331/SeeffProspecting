@@ -190,6 +190,29 @@ namespace Seeff.Spatial.Service.Controllers
             }
         }
 
+        [HttpGet]
+        public List<SpatialSuburb> GetSuburbsUnderMaintenance()
+        {
+            try
+            {
+                using (var spatialDb = new seeff_spatialEntities())
+                {
+                    var targets = spatialDb.spatial_area.Where(sub => sub.requires_maintenance || sub.under_maintenance);
+                    return (from sub in targets
+                            select new SpatialSuburb
+                            {
+                                AreaName = sub.area_name,
+                                SeeffAreaID = sub.fkAreaId
+                            }).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetSuburbsUnderMaintenance()", null);
+                throw;
+            }
+        }
+
         [HttpPost]
         public SpatialSuburb GetSuburbFromID([FromBody]int suburbID)
         {

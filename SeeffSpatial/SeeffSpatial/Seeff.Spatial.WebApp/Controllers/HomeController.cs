@@ -195,5 +195,20 @@ namespace Seeff.Spatial.WebApp.Controllers
                 return new ExportLicenseModelResult { Successful = false, Message = ex.Message + " " + WindowsIdentity.GetCurrent().Name };
             }
         }
+
+        [HttpGet]
+        public SuburbsUnderMaintenanceResult GetSuburbsUnderMaintenance()
+        {
+            try
+            {
+                var result = ControllerActions.GetSuburbsUnderMaintenance();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "GetSuburbsUnderMaintenance() from HomeController", null);
+                return new SuburbsUnderMaintenanceResult { Successful = false, Message = ex.Message };
+            }
+        }
     }
 }

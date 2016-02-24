@@ -96,6 +96,9 @@ namespace ProspectingTaskScheduler.Controllers
                                 string cellMatch = null;
                                 foreach (var cd in targetContactPersonRecord.prospecting_contact_details)
                                 {
+                                    if (cd.intl_dialing_code_id == null)
+                                        continue;
+
                                     string testNumber = cd.prospecting_area_dialing_code.dialing_code_id + cd.contact_detail.Remove(0, 1);
                                     if (testNumber == targetRecord.target_cellphone_no)
                                     {

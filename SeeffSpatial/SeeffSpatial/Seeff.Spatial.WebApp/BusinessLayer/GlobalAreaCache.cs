@@ -86,7 +86,7 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
                 var territories = service.RetrieveAllTerritories();
 
                 _allTerritories = territories;
-                _allLicenses = licenses.OrderBy(lic => lic.LicenseID).ToList();
+                _allLicenses = licenses.OrderBy(lic => lic.LicenseName).ToList();
                 //_allSuburbs = suburbs.OrderBy(sub => sub.AreaName).ToList();
 
                 _areaHierarchy = new AreaHierarchy();
@@ -141,7 +141,8 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
             }
             else
             {
-                _allLicenses.Add(result);                
+                _allLicenses.Add(result);
+                _allLicenses = _allLicenses.OrderBy(lic => lic.LicenseName).ToList();          
             }
 
             // Must ensure that any unallocated suburbs whose centroids fall within this license's poly must be incorporated into this license

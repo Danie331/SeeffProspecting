@@ -88,6 +88,10 @@ $(function () {
                 exportLicenseToKML: function (exportLicenseModel, callback) {
                     var endpoint = application.utilities.buildHomeURL('/api/Home/ExportLicenseToKML');
                     application.services.post(endpoint, exportLicenseModel, "Generating Model. Please wait...", callback);
+                },
+                getSuburbsUnderMaintenance: function (callback) {
+                    var endpoint = application.utilities.buildHomeURL('/api/Home/GetSuburbsUnderMaintenance');
+                    application.services.get(endpoint, "Refreshing. Please wait...", callback);
                 }
             },
             serviceModels: {

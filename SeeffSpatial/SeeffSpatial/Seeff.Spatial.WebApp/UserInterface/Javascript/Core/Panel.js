@@ -129,6 +129,11 @@ $(function () {
 
                         application.panel.navItemLicenseInformation.buildContent();
                         application.stateManager.activeNavItem = application.panel.navItemLicenseInformation;
+                    },
+                    reportsClick: function () {
+                        application.panel.navMenu.updateNavItemButtonOnClick();
+                        application.panel.navItemReports.buildContent();
+                        application.stateManager.activeNavItem = application.panel.navItemReports;
                     }
                 }
             }

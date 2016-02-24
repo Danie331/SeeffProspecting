@@ -28,6 +28,8 @@ $(function () {
                     return function (e) {
                         var poly = application.utilities.readFromKMLFile(e, theFile);
                         callback(poly);
+                        // Add statistics
+                        application.stateManager.fileUploadCounter.push({ FileName: theFile.name, When: new Date() });
                     };
                 })(file);
                 reader.readAsDataURL(file);

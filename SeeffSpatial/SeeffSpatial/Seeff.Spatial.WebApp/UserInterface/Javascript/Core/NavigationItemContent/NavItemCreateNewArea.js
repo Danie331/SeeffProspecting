@@ -113,7 +113,7 @@ $(function () {
                                 var licenseIDSelect = $("#licenseIDSelect");
                                 licenseIDSelect.empty().append("<option value='' selected='selected'></option>");
                                 $.each(application.user.SeeffLicenses, function (idx, lic) {
-                                    var option = $('<option/>', { value: lic.LicenseID }).text(lic.LicenseID);
+                                    var option = $('<option/>', { value: lic.LicenseID }).text(lic.LicenseName + ' (' + lic.LicenseID + ')');
                                     licenseIDSelect.append(option);
                                 });
                                 if (result.LicenseID && result.LicenseID > -1) {

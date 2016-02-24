@@ -17,7 +17,7 @@ $(function () {
 
                         var licenseSelector = $("#licenseSelector").append("<option value='' />");
                         $.each(application.user.SeeffLicenses, function (idx, lic) {
-                            var option = $('<option />', { value: lic.LicenseID }).text(lic.LicenseID + " - " + lic.LicenseName);
+                            var option = $('<option />', { value: lic.LicenseID }).text(lic.LicenseName + ' (' + lic.LicenseID + ')');
                             licenseSelector.append(option);
                         });
 
