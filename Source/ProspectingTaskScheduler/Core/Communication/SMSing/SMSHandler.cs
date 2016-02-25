@@ -18,7 +18,7 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
         {
             try
             {
-                var batch = GetBatch10();
+                var batch = GetBatch5();
                 Task.WaitAll(SubmitBatch(batch));
             }
             catch (Exception ex)
@@ -27,7 +27,7 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
             }
         }
 
-        private static List<sms_communications_log> GetBatch10()
+        private static List<sms_communications_log> GetBatch5()
         {
             using (var prospecting = new ProspectingDataContext())
             {
@@ -41,7 +41,7 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
 
                 batch = prospecting.sms_communications_logs.Where(sms => sms.status == pendingStatus)
                                                             .OrderBy(item => item.created_datetime)
-                                                            .Take(10)
+                                                            .Take(5)
                                                             .ToList();
 
                 return batch;

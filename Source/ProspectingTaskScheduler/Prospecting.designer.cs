@@ -7929,7 +7929,7 @@ namespace ProspectingTaskScheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_activity_log_id", DbType="BigInt")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_activity_log_id", DbType="BigInt", UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<long> activity_log_id
 		{
 			get
@@ -7953,7 +7953,7 @@ namespace ProspectingTaskScheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_followup_activity_id", DbType="BigInt")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_followup_activity_id", DbType="BigInt", UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<long> followup_activity_id
 		{
 			get
@@ -8017,7 +8017,7 @@ namespace ProspectingTaskScheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_datetime", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_datetime", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> updated_datetime
 		{
 			get
@@ -8105,7 +8105,7 @@ namespace ProspectingTaskScheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="Int NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public int status
 		{
 			get
@@ -8129,7 +8129,7 @@ namespace ProspectingTaskScheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_api_tracking_id", DbType="VarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_api_tracking_id", DbType="VarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string api_tracking_id
 		{
 			get
@@ -8149,7 +8149,7 @@ namespace ProspectingTaskScheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_api_delivery_status", DbType="VarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_api_delivery_status", DbType="VarChar(50)", UpdateCheck=UpdateCheck.Never)]
 		public string api_delivery_status
 		{
 			get
@@ -8169,7 +8169,7 @@ namespace ProspectingTaskScheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_msg_body_or_link_id", DbType="NVarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_msg_body_or_link_id", DbType="NVarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string msg_body_or_link_id
 		{
 			get
@@ -8189,7 +8189,7 @@ namespace ProspectingTaskScheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_reply", DbType="NVarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_reply", DbType="NVarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string reply
 		{
 			get
@@ -8209,7 +8209,7 @@ namespace ProspectingTaskScheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_error_msg", DbType="NVarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_error_msg", DbType="NVarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string error_msg
 		{
 			get

@@ -345,20 +345,20 @@
       <Column Name="batch_id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
       <Column Name="batch_friendly_name" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Column Name="batch_activity_type_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="activity_log_id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
-      <Column Name="followup_activity_id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="activity_log_id" Type="System.Int64" DbType="BigInt" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="followup_activity_id" Type="System.Int64" DbType="BigInt" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="created_by_user_guid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
       <Column Name="created_datetime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="updated_datetime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="updated_datetime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="target_contact_person_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="target_cellphone_no" Type="System.String" DbType="VarChar(13) NOT NULL" CanBeNull="false" />
       <Column Name="target_lightstone_property_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="api_tracking_id" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
-      <Column Name="api_delivery_status" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="msg_body_or_link_id" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="reply" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="error_msg" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="api_tracking_id" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="api_delivery_status" Type="System.String" DbType="VarChar(50)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="msg_body_or_link_id" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="reply" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="error_msg" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="user_business_unit_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="activity_log_sms_communications_log" Member="activity_log" ThisKey="activity_log_id" OtherKey="activity_log_id" Type="activity_log" IsForeignKey="true" />
       <Association Name="activity_type_sms_communications_log" Member="activity_type" ThisKey="batch_activity_type_id" OtherKey="activity_type_id" Type="activity_type" IsForeignKey="true" />
