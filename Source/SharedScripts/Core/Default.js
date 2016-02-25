@@ -1092,7 +1092,15 @@ function buildUnitContentRow(unit) {
     unitContent += 'Owner: ' + unit.Listings[0].BuyerName + '<br />';
     unitContent += 'Seller: ' + unit.Listings[0].SellerName;
 
-    tr.append($("<td id='" + id + "' class='unittd' data-color='" + color + "' style='cursor:pointer;width:150px;text-align:left;" + bgcolor + "' />").append(unitContent));
+    var td = $("<td id='" + id + "' class='unittd' data-color='" + color + "' style='cursor:pointer;width:150px;text-align:left;" + bgcolor + "' />").append(unitContent);
+
+    tr.append(td);
+
+    $.each(unit.Listings, function (idx, u) {
+        if (u.SeeffDeal) {
+            td.addClass('seeff_sale_ss_unit');
+        }
+    });
 
     $('body').unbind('mouseover.' + id).on('mouseover.' + id, '#' + id, function () {
         var row = $('#' + id);

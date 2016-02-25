@@ -173,3 +173,20 @@ textarea
      /*table-layout: fixed;*/
      /*text-align:left;*/
 }
+
+.seeff_sale_ss_unit {
+     position: relative;
+}
+
+.seeff_sale_ss_unit:after {
+     content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+	width: 0; 
+	height: 0; 
+    display: block;
+	border-left: 40px solid transparent;
+	border-bottom: 40px solid transparent;	
+	border-top: 40px solid #000070;
+}
