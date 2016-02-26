@@ -62,7 +62,7 @@ function saveUserTemplate(templateName) {
     if (communicationsMode == "EMAIL") {
         var emailSubject = $('#emailSubject').val().trim();
         var emailBody = $('#emailMessageBody').val().trim();
-        emailBody = encodeURIComponent(btoa(emailBody));
+        emailBody = encodeURIComponent(btoa(unescape(encodeURIComponent(emailBody))));//encodeURIComponent(btoa(emailBody));
 
         payload.TemplateName = emailSubject;
         payload.TemplateContent = emailBody;
