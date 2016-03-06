@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 12, 18" name="LightStone">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 14.75, 18" name="LightStone">
   <DataContextMoniker Name="/LightStoneDataContext" />
   <nestedChildShapes>
     <classShape Id="bdccb5d3-668f-4b21-ab6d-7fb41d35ca7f" absoluteBounds="4.125, 1, 2, 1.1939925130208333">
@@ -49,6 +49,12 @@
       <DataClassMoniker Name="/LightStoneDataContext/seeff_area" />
       <nestedChildShapes>
         <elementListCompartment Id="6b9a9b27-8101-4bcd-8408-cb2e0d82f4db" absoluteBounds="2.015, 8.46, 1.9700000000000002, 3.3262125651041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8c86348c-1478-4b56-8e5a-206c4dcc49c4" absoluteBounds="12.5, 3.375, 2, 1.3862939453125">
+      <DataClassMoniker Name="/LightStoneDataContext/developer" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c65b2b0c-d6bb-4fa5-9c17-d645a141d3d3" absoluteBounds="12.515, 3.835, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

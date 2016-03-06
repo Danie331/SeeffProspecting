@@ -62,7 +62,11 @@ function showMenuForUser(userCanEdit, unfatedTransactions) {
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Administration", "administration", msApp.administration.buildAdminMenuHtml());
+    menuItem = createMenuItem("Administration", "administration", msApp.administration.buildAdminMenuHtml(), function () {
+        var adminExpander = msApp.administration.expanderWidget;
+        adminExpander.open("autoFateOption");
+        adminExpander.open("manageDevelopersOption");
+    });
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 

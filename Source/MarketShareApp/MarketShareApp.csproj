@@ -819,6 +819,9 @@
     </Compile>
     <Compile Include="DomainTypes\Agency.cs" />
     <Compile Include="DomainTypes\AppInitializationData.cs" />
+    <Compile Include="DomainTypes\DeveloperSearchText.cs" />
+    <Compile Include="DomainTypes\DevelopersToSaveList.cs" />
+    <Compile Include="DomainTypes\SearchCandidateDeveloperResult.cs" />
     <Compile Include="DomainTypes\SuburbInfo.cs" />
     <Compile Include="Logout.aspx.cs">
       <DependentUpon>Logout.aspx</DependentUpon>

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MarketShareApp.DomainTypes;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
@@ -25,7 +27,137 @@ namespace MarketShareApp
                     string jsonOut = new JavaScriptSerializer().Serialize(operationSuccess);
                     context.Response.Write(jsonOut);
                     break;
+                case "retrieve_list_of_developers":
+                    var developersList = RetrieveDevelopersList();
+                    string developersListJSON = new JavaScriptSerializer().Serialize(developersList);
+                    context.Response.Write(developersListJSON);
+                    break;
+                case "search_candidate_developers":
+                    DeveloperSearchText searchObject = Newtonsoft.Json.JsonConvert.DeserializeObject<DeveloperSearchText>(json);
+                    List<SearchCandidateDeveloperResult> candidateDevelopers = SearchCandidateDevelopers(searchObject.SearchText);
+                    string candidateDevelopersJSON = new JavaScriptSerializer().Serialize(candidateDevelopers);
+                    context.Response.Write(candidateDevelopersJSON);
+                    break;
+                case "save_developers":
+                    DevelopersToSaveList listObject = Newtonsoft.Json.JsonConvert.DeserializeObject<DevelopersToSaveList>(json);
+                    bool saveResult = SaveDevelopers(listObject.DevelopersToSave);
+                    context.Response.Write(new JavaScriptSerializer().Serialize(saveResult));
+                    break;
                 default: break;
+            }
+        }
+
+        private bool SaveDevelopers(List<string> developersToSave)
+        {
+            try
+            {
+                using (var lsBase = DataManager.DataContextRetriever.GetLSBaseDataContext())
+                {
+                    bool changesMade = false;
+                    foreach (var developerName in developersToSave)
+                    {
+                        var existingDeveloper = lsBase.developers.FirstOrDefault(dev => dev.fk_seller_name.ToUpper() == developerName.ToUpper());
+                        if (existingDeveloper == null)
+                        {
+                            developer newDeveloper = new developer
+                            {
+                                fk_seller_name = developerName,
+                                fk_registration_id = -1
+                            };
+                            lsBase.developers.InsertOnSubmit(newDeveloper);
+                            lsBase.SubmitChanges();
+                            changesMade = true;
+                        }
+                    }
+
+                    if (!changesMade)
+                        return true;
+
+                    //
+                    string commandText = @"update bd
+                                            set bd.fated = 1, bd.market_share_type = 'D'
+                                            from ls_base.dbo.base_data bd
+                                            where bd.seller_name in (select fk_seller_name from ls_base.dbo.developers)";
+
+                    SqlConnection conn = lsBase.Connection as SqlConnection;
+                    SqlCommand cmd = new SqlCommand(commandText, conn);
+                    conn.Open();
+                    cmd.CommandTimeout = 300;
+                    cmd.ExecuteNonQuery();
+                    //
+
+                    int baseYear = DateTime.Now.Year - 4;
+                    lsBase.update_area_fating(baseYear.ToString());
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private List<SearchCandidateDeveloperResult> SearchCandidateDevelopers(string searchText)
+        {
+            try
+            {
+                List<SearchCandidateDeveloperResult> results = new List<SearchCandidateDeveloperResult>();
+                using (var lsBase = DataManager.DataContextRetriever.GetLSBaseDataContext())
+                {
+                    string commandText = @"SELECT [seller_name], COUNT([seller_name])   
+                                    FROM [ls_base].[dbo].[base_data] 
+                                    WHERE [seller_name] LIKE '%" + searchText + @"%'
+                                    AND seller_name NOT IN (SELECT [fk_seller_name] FROM [ls_base].[dbo].[developers]) 
+                                    GROUP BY [seller_name] 
+                                    HAVING COUNT([seller_name]) > 10 
+                                    ORDER BY [seller_name]";
+
+                    SqlConnection conn = lsBase.Connection as SqlConnection;
+                    SqlCommand cmd = new SqlCommand(commandText, conn);
+                    conn.Open();
+                    cmd.CommandTimeout = 120;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                string sellerName = reader.GetString(0);
+                                int numReg = reader.GetInt32(1);
+
+                                SearchCandidateDeveloperResult result = new SearchCandidateDeveloperResult();
+                                result.CandidateDeveloperName = sellerName;
+                                result.NumRegistrations = numReg;
+                                results.Add(result);
+                            }
+                        }
+                    }
+                    return results;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        private List<string> RetrieveDevelopersList()
+        {
+            try
+            {
+                using (var lsBase = DataManager.DataContextRetriever.GetLSBaseDataContext())
+                {
+                    List<string> results = new List<string>();
+                    results = lsBase.developers.Select(dev => dev.fk_seller_name).OrderBy(name => name).ToList();
+
+                    return results;
+                }
+            }
+            catch
+            {
+                return null;
             }
         }
 
