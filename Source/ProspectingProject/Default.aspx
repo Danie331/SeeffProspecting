@@ -136,6 +136,7 @@
         </div>
         <div id="commSendMessageDialog" title="Preview Message" class="errorDialog"> 
         </div>
+        <div id="referralsDialog" title="Create Referral" style="font-family: Verdana; font-size: 12px;"></div>
     </form>
         <div id="googleMap"></div>
 </body>

@@ -2596,3 +2596,218 @@ function validateIdNumberFromService(value, callbackFn) {
         callbackFn(data);
     });
 }
+
+
+function handleCreateReferral() {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Generating Referral Details...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({
+            Instruction: 'generate_referral_details', Target: {
+                ContactPerson: {
+                    ContactPersonId: currentPersonContact.ContactPersonId
+                },
+                ProspectingPropertyId: currentProperty.ProspectingPropertyId,
+                ContactCompanyId: currentPersonContact.ContactCompanyId
+            }
+        }),
+        dataType: "json",
+    }).done(function (data) {
+        var summaryDialog = $("#referralsDialog");
+        summaryDialog.empty();
+        summaryDialog.append("Details of referral to be created:<p /><hr />");
+        var deptTypeRadiogroup = $("<div style='display:inline-block' />");
+        deptTypeRadiogroup.append($("<input type='radio' name='referralDeptType' id='salesReferral' style='display:inline-block;vertical-align:middle;margin-left:30px' /><label for='salesReferral' style='display:inline-block;vertical-align:middle;margin-right:50px'>Seller</label>"));
+        deptTypeRadiogroup.append($("<input type='radio' name='referralDeptType' id='rentalsReferral' style='display:inline-block;vertical-align:middle' /><label for='rentalsReferral' style='display:inline-block;vertical-align:middle'>Landlord</label>"));
+        summaryDialog.append("<label style='display:inline-block'>Select Type:</label>");
+        summaryDialog.append(deptTypeRadiogroup);
+        summaryDialog.append('<br /><hr />');
+        var createdBy = "<label class='fieldAlignment'>Referral Created By: </label>" + "<label>" + prospectingContext.LoggedInUsername + "</label>";
+        summaryDialog.append(createdBy);
+        summaryDialog.append('<br />');
+        var propertyDesc = "<label class='fieldAlignment' style='vertical-align:top;margin-top:3px'>Property Description: </label>" + "<label class='fieldAlignmentExtendedWidth' style='margin-top:3px'>" + data.property_desc + "</label>";
+        summaryDialog.append(propertyDesc);
+        summaryDialog.append('<br />');
+        var propertyID = "<label class='fieldAlignment' style='margin-top:3px'>Lightstone Property ID: </label>" + "<label style='margin-top:3px'>" + data.property_id + "</label>";
+        summaryDialog.append(propertyID);
+        summaryDialog.append('<p />');
+        var title = "<label class='fieldAlignment' style='margin-top:3px'>Contact's Title: </label>" + "<label style='margin-top:3px'>" + data.smart_pass_title + "</label>";
+        summaryDialog.append(title);
+        summaryDialog.append('<br />');
+        var name = "<label class='fieldAlignment' style='margin-top:3px'>Contact's Name: </label>" + "<label style='margin-top:3px'>" + data.smart_pass_name + "</label>";
+        summaryDialog.append(name);
+        summaryDialog.append('<br />');
+        var surname = "<label class='fieldAlignment' style='margin-top:3px'>Contact's Surname: </label>" + "<label style='margin-top:3px'>" + data.smart_pass_surname + "</label>";
+        summaryDialog.append(surname);
+        summaryDialog.append('<br />');
+        var idNo = "<label class='fieldAlignment' style='margin-top:3px'>Contact's ID no.: </label>" + "<label style='margin-top:3px'>" + data.smart_pass_id_no + "</label>";
+        summaryDialog.append(idNo);
+        summaryDialog.append('<br />');
+        var selectContactNoLabel = "<label class='fieldAlignment' style='margin-top:3px'>Contact Number: </label>";
+        var contactNoSelector = $("<select id='referralPhoneSelector' style='margin-top:3px' />").empty().append("<option />");
+        if (currentPersonContact.PhoneNumbers && currentPersonContact.PhoneNumbers.length) {
+            $.each(currentPersonContact.PhoneNumbers, function (idx, ph) {
+                var itemId = 'ph_' + ph.ItemId;
+                // cell - intl dialing code - number - primary?
+                var type = $.grep(prospectingContext.ContactPhoneTypes, function (i) {
+                    return i.Key == ph.ItemType;
+                })[0];
+                var dialingCode = $.grep(prospectingContext.IntlDialingCodes, function (i) {
+                    return i.Key == ph.IntDialingCode;
+                })[0];
+                var itemDesc = type.Value + ' (' + dialingCode.Value + ') - ' + ph.ItemContent;
+                var option;
+                if (ph.IsPrimary) {
+                    itemDesc += " - primary";
+                    option = $("<option value='" + itemId + "' style='color:red;' >" + itemDesc + "</option>");
+                } else {
+                    option = $("<option value='" + itemId + "'>" + itemDesc + "</option>");
+                }
+                contactNoSelector.append(option);
+            });
+
+            if (currentPersonContact.PhoneNumbers.length == 1) {
+                var value = 'ph_' + currentPersonContact.PhoneNumbers[0].ItemId;
+                contactNoSelector.find("option[value='" + value + "']").attr("selected", true);
+            }
+        }
+
+        var selectEmailLabel = "<label class='fieldAlignment' style='margin-top:3px'>Email Address: </label>";
+        var contactEmailSelector = $("<select id='referralEmailSelector' style='margin-top:3px' />").empty().append("<option />");
+        if (currentPersonContact.EmailAddresses && currentPersonContact.EmailAddresses.length) {
+            $.each(currentPersonContact.EmailAddresses, function (idx, em) {
+                var itemId = 'em_' + em.ItemId;
+                var type = $.grep(prospectingContext.ContactEmailTypes, function (i) {
+                    return i.Key == em.ItemType;
+                })[0];
+                var itemDesc = type.Value + ' - ' + em.ItemContent;
+                var option;
+                if (em.IsPrimary) {
+                    itemDesc += " - primary";
+                    option = $("<option value='" + itemId + "' style='color:red;' >" + itemDesc + "</option>");
+                } else {
+                    option = $("<option value='" + itemId + "'>" + itemDesc + "</option>");
+                }
+                contactEmailSelector.append(option);
+            });
+            if (currentPersonContact.EmailAddresses.length == 1) {
+                var value = 'em_' + currentPersonContact.EmailAddresses[0].ItemId;
+                contactEmailSelector.find("option[value='" + value + "']").attr("selected", true);
+            }
+        }
+
+        summaryDialog.append(selectContactNoLabel).append(contactNoSelector);
+        summaryDialog.append('<br />');
+        if (currentPersonContact.EmailAddresses && currentPersonContact.EmailAddresses.length) {
+            summaryDialog.append(selectEmailLabel).append(contactEmailSelector);
+            summaryDialog.append('<br />');
+        }
+
+        if (data.smart_pass_company) {
+            var companyName = "<label class='fieldAlignment' style='margin-top:3px'>Company Name: </label>" + "<label style='margin-top:3px'>" + data.smart_pass_company + "</label>";
+            summaryDialog.append(companyName);
+        }
+        summaryDialog.append('<p />');
+
+        var commentLabel = "<label>Comment:</label>";
+        summaryDialog.append(commentLabel);
+        summaryDialog.append('<br />');
+
+        var commentBox = $("<textarea id='referralComment' style='width:98%' rows='8' />").empty();
+        summaryDialog.append(commentBox);
+        summaryDialog.append('<br />');
+
+        summaryDialog.append("<hr />");
+        summaryDialog.append('<br />');
+
+        var errorDiv = $("<div id='referralErrors' />");
+        summaryDialog.append(errorDiv);
+
+        summaryDialog.dialog(
+                        {
+                            modal: true,
+                            closeOnEscape: false,
+                            width: '600',
+                            buttons: {
+                                "Create": function () {
+                                    createClick(function () {
+                                        $(summaryDialog).dialog("close");
+                                        var successDialog = $("<div title='Success' style='font-family: Verdana; font-size: 12px;' />");
+                                        successDialog.append("Referral created successfully. A corresponding activity containing a SmartPass link has been added to the property.");
+                                        successDialog.dialog(
+                                                            {
+                                                                modal: true,
+                                                                closeOnEscape: true,
+                                                                width: '400',
+                                                                buttons: {
+                                                                    "OK": function () { $(this).dialog("close"); }
+                                                                },
+                                                                position: ['center', 'center']
+                                                            });
+
+                                    }); },
+                                "Cancel": function () { $(this).dialog("close"); }
+                            },
+                            position: ['top', 'top']
+                        });
+
+        $.unblockUI();
+    });
+
+    function createClick(callback) {       
+        var departmentRadioGroup = $('input[name=referralDeptType]').filter(':checked');
+        var departmentType = null;
+        if (departmentRadioGroup.length) {
+            var test = departmentRadioGroup.attr('id');
+            switch (test)
+            {
+                case "salesReferral": departmentType = "S"; break;
+                case "rentalsReferral": departmentType = "R"; break;
+            }
+        }
+        var comment = $("#referralComment").val();
+
+        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Creating Referral...</p>' });
+        var phoneContactDetailId = $('#referralPhoneSelector').val();
+        if (phoneContactDetailId)
+            phoneContactDetailId = phoneContactDetailId.replace('ph_', '');
+
+        var emailContactDetailId = $('#referralEmailSelector').val();
+        if (emailContactDetailId)
+            emailContactDetailId = emailContactDetailId.replace('em_', '');
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify({
+                Instruction: 'create_referral', Target: {
+                    ContactPerson: {
+                        ContactPersonId: currentPersonContact.ContactPersonId,
+                        PhoneNumbers: [{ ItemId: phoneContactDetailId }],
+                        EmailAddresses: [{ ItemId: emailContactDetailId }]
+                    },
+                    ProspectingPropertyId: currentProperty.ProspectingPropertyId,
+                    ContactCompanyId: currentPersonContact.ContactCompanyId
+                },
+                DepartmentType: departmentType,
+                Comment: comment
+            }),
+            dataType: "json",
+        }).done(function (result) {
+            $.unblockUI();
+            if (result.InstanceValidationErrors && result.InstanceValidationErrors.length) {
+                var errorDiv = $('#referralErrors').empty();
+                errorDiv.append("The following validation errors occurred. Please fix these or contact support:");
+                errorDiv.append('<br />');
+                $.each(result.InstanceValidationErrors, function (idx, err) {
+                    var errLabel = $("<label style='color:red' />").append(err);
+                    errorDiv.append(" - ").append(errLabel);
+                    errorDiv.append('<br />');
+                });
+                return;
+            }
+            // Success!
+            callback();
+        });
+    }
+}

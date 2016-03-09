@@ -185,6 +185,14 @@ namespace ProspectingProject
                     case "update_suburb_statistics":
                         UpdateStatisticsForSuburb(json);
                         break;
+                    case "generate_referral_details":
+                        string referralDetails = GenerateReferralDetails(json);
+                        context.Response.Write(referralDetails);
+                        break;
+                    case "create_referral":
+                        string referralOutput = CreateReferral(json);
+                        context.Response.Write(referralOutput);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -217,6 +225,20 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string CreateReferral(string json)
+        {
+            var inputPacket = ProspectingCore.Deserialise<ReferralInputDetails>(json);
+            ReferralResponseObject details = ProspectingCore.CreateReferral(inputPacket);
+            return ProspectingCore.SerializeToJsonWithDefaults(details);
+        }
+
+        private string GenerateReferralDetails(string json)
+        {
+            var inputPacket = ProspectingCore.Deserialise<ReferralInputDetails>(json);
+            ReferralResponseObject details = ProspectingCore.GenerateReferralDetails(inputPacket);
+            return ProspectingCore.SerializeToJsonWithDefaults(details);
         }
 
         private void UpdateStatisticsForSuburb(string json)

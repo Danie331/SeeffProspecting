@@ -258,6 +258,14 @@ function buildGeneralInfoHtml(contact, context) {
                 handleAddActivityFromContact();
             });
         }
+
+        // Referrals
+        var newReferralBtn = $("<button type='button' id='newReferralBtn' style='cursor:pointer;display:inline-block;vertical-align:middle;float:right'><img src='Assets/create_referral.png' style='display:inline-block;vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>Create Referral</label></button>");
+        html.append(newReferralBtn);
+        newReferralBtn.click(function (e) {
+            e.preventDefault();
+            handleCreateReferral();
+        });
     }
 
     html.append("<p />");

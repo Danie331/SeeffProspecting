@@ -28,7 +28,7 @@ namespace ProspectingProject
     /// Do not inherit off this type.
     /// </summary>
     public sealed partial class ProspectingCore
-    {        
+    {
         public static List<ProspectingProperty> CreateProspectableProperties(int seeffAreaId)
         {
             List<ProspectingProperty> prospectables = new List<ProspectingProperty>();
@@ -36,8 +36,8 @@ namespace ProspectingProject
             using (var prospectingDB = new ProspectingDataContext())
             {
                 var prospects = from p in prospectingDB.prospecting_properties
-                                             where p.seeff_area_id == seeffAreaId
-                                             select p;
+                                where p.seeff_area_id == seeffAreaId
+                                select p;
                 foreach (var prospectable in prospects)
                 {
                     //ProspectingProperty prop = LoadProspectingProperty(prospectingDB, prospectable, false);
@@ -46,7 +46,7 @@ namespace ProspectingProject
                 }
 
             }
-           
+
             return prospectables;
         }
 
@@ -91,12 +91,12 @@ namespace ProspectingProject
 
         private static ProspectingProperty CreateProspectingProperty(ProspectingDataContext prospectingContext, prospecting_property prospectingRecord, bool loadContactsOnly, bool loadContactsAndCompanies, bool loadOwnedProperties, bool loadActivities)
         {
-            var latLng = new GeoLocation { Lat= prospectingRecord.latitude.Value, Lng = prospectingRecord.longitude.Value};
+            var latLng = new GeoLocation { Lat = prospectingRecord.latitude.Value, Lng = prospectingRecord.longitude.Value };
             ProspectingProperty prop = new ProspectingProperty
             {
                 ProspectingPropertyId = prospectingRecord.prospecting_property_id,
-                LightstonePropertyId = prospectingRecord.lightstone_property_id,                              
-                 LatLng = latLng,
+                LightstonePropertyId = prospectingRecord.lightstone_property_id,
+                LatLng = latLng,
                 PropertyAddress = prospectingRecord.property_address,
                 StreetOrUnitNo = prospectingRecord.street_or_unit_no,
                 SeeffAreaId = prospectingRecord.seeff_area_id.HasValue ? prospectingRecord.seeff_area_id.Value : (int?)null,
@@ -111,12 +111,12 @@ namespace ProspectingProject
                 Unit = prospectingRecord.unit,
                 SSDoorNo = prospectingRecord.ss_door_number,
                 LastPurchPrice = prospectingRecord.last_purch_price,
-                Prospected =  Convert.ToBoolean(prospectingRecord.prospected),
+                Prospected = Convert.ToBoolean(prospectingRecord.prospected),
                 FarmName = prospectingRecord.farm_name,
                 Portion = prospectingRecord.portion_no != null ? prospectingRecord.portion_no.ToString() : "n/a",
-                 LightstoneSuburb = prospectingRecord.lightstone_suburb,
-                  SS_UNIQUE_IDENTIFIER = prospectingRecord.ss_unique_identifier,
-                   LatestRegDateForUpdate = prospectingRecord.latest_reg_date,
+                LightstoneSuburb = prospectingRecord.lightstone_suburb,
+                SS_UNIQUE_IDENTIFIER = prospectingRecord.ss_unique_identifier,
+                LatestRegDateForUpdate = prospectingRecord.latest_reg_date,
 
                 Baths = prospectingRecord.baths,
                 Condition = prospectingRecord.condition,
@@ -204,11 +204,11 @@ namespace ProspectingProject
                     relatedToContactPersonName = relatedToContactPerson.firstname + " " + relatedToContactPerson.surname;
                 }
                 var activityFollowupType = prospectingContext.activity_followup_types.FirstOrDefault(t => t.activity_followup_type_id == activity.activity_followup_type_id);
-               string activityFollowupTypeName = "";
-               if (activityFollowupType != null) 
-               {
-                   activityFollowupTypeName = activityFollowupType.activity_name;
-               }
+                string activityFollowupTypeName = "";
+                if (activityFollowupType != null)
+                {
+                    activityFollowupTypeName = activityFollowupType.activity_name;
+                }
                 var propertyRecord = prospectingContext.prospecting_properties.First(pp => pp.lightstone_property_id == activity.lightstone_property_id);
                 ProspectingActivity act = new ProspectingActivity
                 {
@@ -277,7 +277,7 @@ namespace ProspectingProject
                 Portion = prospectingRecord.portion_no.HasValue ? prospectingRecord.portion_no.ToString() : null,
                 LightstoneSuburb = prospectingRecord.lightstone_suburb,
                 SS_UNIQUE_IDENTIFIER = prospectingRecord.ss_unique_identifier,
-                 LatestRegDateForUpdate = prospectingRecord.latest_reg_date,
+                LatestRegDateForUpdate = prospectingRecord.latest_reg_date,
 
                 Baths = prospectingRecord.baths,
                 Condition = prospectingRecord.condition,
@@ -344,15 +344,15 @@ namespace ProspectingProject
 
                 foreach (Match match in matches)
                 {
-                   string prospectingAreas = match.Value;
-                   prospectingAreas = prospectingAreas.Replace(" ", "").Replace("],[", "|").Replace("[", "").Replace("]", "");
-                   prospectingAreas = prospectingAreas.Replace("[", "");
-                   prospectingAreas = prospectingAreas.Replace("]", "");
-                   prospectingAreas = prospectingAreas.Replace(",1", "");
-                   prospectingAreas = prospectingAreas.Replace(",0", "");
-                   if (areasClause == ""){ areasClause = prospectingAreas;}
-                   else
-                   { areasClause += "," + prospectingAreas; };
+                    string prospectingAreas = match.Value;
+                    prospectingAreas = prospectingAreas.Replace(" ", "").Replace("],[", "|").Replace("[", "").Replace("]", "");
+                    prospectingAreas = prospectingAreas.Replace("[", "");
+                    prospectingAreas = prospectingAreas.Replace("]", "");
+                    prospectingAreas = prospectingAreas.Replace(",1", "");
+                    prospectingAreas = prospectingAreas.Replace(",0", "");
+                    if (areasClause == "") { areasClause = prospectingAreas; }
+                    else
+                    { areasClause += "," + prospectingAreas; };
                 };
 
                 var suburbsInfo = GetAreaData(areasClause);
@@ -394,12 +394,12 @@ namespace ProspectingProject
                     if (suburbInSuburbsList != null && !suburbInSuburbsList.IsDeleted)
                     {
                         userSuburbs.Add(new UserSuburb
-                            {
-                                PropertiesRequireAttention = targetProps.Count(p => p.latest_reg_date != null),
-                                SuburbId = areaId,
-                                SuburbName = suburbInSuburbsList.LocationName,
-                                TotalFullyProspected = targetProps.Count()
-                            });
+                        {
+                            PropertiesRequireAttention = targetProps.Count(p => p.latest_reg_date != null),
+                            SuburbId = areaId,
+                            SuburbName = suburbInSuburbsList.LocationName,
+                            TotalFullyProspected = targetProps.Count()
+                        });
                     }
                 }
 
@@ -434,8 +434,8 @@ namespace ProspectingProject
                 //            TotalFullyProspected = sr.Select(p => p.prospecting_property_id).Count(),
                 //            PropertiesRequireAttention = sr.Where(p => p.latest_reg_date != null).Count()
                 //        }).Distinct().OrderBy(a => a.SuburbName).ToList();
-            }            
-        } 
+            }
+        }
 
         public static string SerialiseStaticProspectingData()
         {
@@ -487,30 +487,30 @@ namespace ProspectingProject
             if (pcp != null)
             {
                 var contactPerson = new ProspectingContactPerson
-                  {
-                      ContactPersonId = pcp.contact_person_id,
-                      PersonCompanyRelationshipType = null,
-                      Firstname = pcp.firstname,
-                      Surname = pcp.surname,
-                      IdNumber = pcp.id_number,
-                      Title = pcp.person_title,
-                      Gender = pcp.person_gender,
-                      Comments = pcp.comments_notes,
-                      IsPOPIrestricted = pcp.is_popi_restricted,
-                      AgeGroup = pcp.age_group,
-                      BureauAdverseIndicator = pcp.bureau_adverse_indicator,
-                      Citizenship = pcp.citizenship,
-                      DeceasedStatus = pcp.deceased_status,
-                      Directorship = pcp.directorship,
-                      Occupation = pcp.occupation,
-                      Employer = pcp.employer,
-                      PhysicalAddress = pcp.physical_address,
-                      HomeOwnership = pcp.home_ownership,
-                      MaritalStatus = pcp.marital_status,
-                      Location = pcp.location,
-                       EmailOptout = pcp.optout_emails,
-                       SMSOptout = pcp.optout_sms
-                  };
+                {
+                    ContactPersonId = pcp.contact_person_id,
+                    PersonCompanyRelationshipType = null,
+                    Firstname = pcp.firstname,
+                    Surname = pcp.surname,
+                    IdNumber = pcp.id_number,
+                    Title = pcp.person_title,
+                    Gender = pcp.person_gender,
+                    Comments = pcp.comments_notes,
+                    IsPOPIrestricted = pcp.is_popi_restricted,
+                    AgeGroup = pcp.age_group,
+                    BureauAdverseIndicator = pcp.bureau_adverse_indicator,
+                    Citizenship = pcp.citizenship,
+                    DeceasedStatus = pcp.deceased_status,
+                    Directorship = pcp.directorship,
+                    Occupation = pcp.occupation,
+                    Employer = pcp.employer,
+                    PhysicalAddress = pcp.physical_address,
+                    HomeOwnership = pcp.home_ownership,
+                    MaritalStatus = pcp.marital_status,
+                    Location = pcp.location,
+                    EmailOptout = pcp.optout_emails,
+                    SMSOptout = pcp.optout_sms
+                };
 
                 contactPerson.PhoneNumbers = ProspectingLookupData.PropertyContactPhoneNumberRetriever(prospecting, contactPerson).ToList();
                 contactPerson.EmailAddresses = ProspectingLookupData.PropertyContactEmailRetriever(prospecting, contactPerson).ToList();
@@ -526,7 +526,7 @@ namespace ProspectingProject
             return (from rel in prospecting.prospecting_person_property_relationships
                     where rel.contact_person_id == contactPersonId
                     select new KeyValuePair<int, int>(rel.prospecting_property_id, rel.relationship_to_property)).ToList();
-        }     
+        }
 
         /// <summary>
         /// Creates a new prospect for an entirely new prospected location
@@ -559,7 +559,7 @@ namespace ProspectingProject
                         throw new Exception("Cannot create new prospect: The system cannot allocate a Seeff ID to the area, please contact support for further information.");
                     }
                 }
-            
+
                 var newPropRecord = new prospecting_property
                 {
                     lightstone_property_id = standaloneUnit.LightstonePropId.Value,
@@ -581,7 +581,7 @@ namespace ProspectingProject
 
                     // Farms
                     farm_name = !string.IsNullOrEmpty(standaloneUnit.FarmName) ? standaloneUnit.FarmName : null,
-                    portion_no =!string.IsNullOrEmpty(standaloneUnit.Portion) ? int.Parse(standaloneUnit.Portion) : (int?)null,
+                    portion_no = !string.IsNullOrEmpty(standaloneUnit.Portion) ? int.Parse(standaloneUnit.Portion) : (int?)null,
                     lightstone_suburb = !string.IsNullOrEmpty(standaloneUnit.LightstoneSuburb) ? standaloneUnit.LightstoneSuburb : null,
 
                     created_by = Guid.Parse((string)HttpContext.Current.Session["user_guid"]),
@@ -637,9 +637,9 @@ namespace ProspectingProject
                 {
                     // A company with this CK number already exists, we must ensure that they are linked to the property
                     var existingRelationshipToProperty = (from ppr in prospecting.prospecting_company_property_relationships
-                                                         where ppr.contact_company_id == companyWithExistingCKNumber.contact_company_id
-                                                         && ppr.prospecting_property_id == contactCompanyDataPacket.ProspectingPropertyId
-                                                         select ppr).FirstOrDefault();
+                                                          where ppr.contact_company_id == companyWithExistingCKNumber.contact_company_id
+                                                          && ppr.prospecting_property_id == contactCompanyDataPacket.ProspectingPropertyId
+                                                          select ppr).FirstOrDefault();
 
                     // TODO: This code will need to change to accomodate multiple records for the same person who changed their relationship to the property over time.
                     if (existingRelationshipToProperty == null)
@@ -691,12 +691,12 @@ namespace ProspectingProject
 
         private static bool ProspectWithinOwnedSuburbs(GeoLocation geoLocation)
         {
-             var availableSuburbs = (List<UserSuburb>)HttpContext.Current.Session["user_suburbs"];
+            var availableSuburbs = (List<UserSuburb>)HttpContext.Current.Session["user_suburbs"];
             var spatial = new SpatialServiceReader();
             var spatialSuburb = spatial.GetSuburbFromID(geoLocation.Lat, geoLocation.Lng);
             var suburbID = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
 
-            return suburbID == null ? false : availableSuburbs.Any(sub => sub.SuburbId == suburbID);        
+            return suburbID == null ? false : availableSuburbs.Any(sub => sub.SuburbId == suburbID);
         }
 
 
@@ -806,9 +806,9 @@ namespace ProspectingProject
                         from bu in userAuthPacket.BusinessUnitUsers
                         select new UserDataResponsePacket
                         {
-                             UserGuid = Guid.Parse(bu.Guid),
-                             UserName = bu.UserName,
-                             UserSurname = bu.UserSurname
+                            UserGuid = Guid.Parse(bu.Guid),
+                            UserName = bu.UserName,
+                            UserSurname = bu.UserSurname
                         });
 
                 var followupBundle = LoadFollowups(userGuid, businessUnitUsers, new List<long>());
@@ -833,7 +833,7 @@ namespace ProspectingProject
                     FollowupActivities = followupBundle.Followups,
                     TotalFollowups = followupBundle.TotalCount,
                     HasCommAccess = userAuthPacket.CommunicationEnabled.Value,
-                      BusinessUnitID = userAuthPacket.BusinessUnitID
+                    BusinessUnitID = userAuthPacket.BusinessUnitID
                 };
 
                 return userPacket;
@@ -857,7 +857,7 @@ namespace ProspectingProject
             {
                 IEnumerable<activity_log> activities = from act in prospecting.activity_logs
                                                        where act.allocated_to == userGuid && act.followup_date != null && act.followup_date <= DateTime.Now
-                                                       orderby act.followup_date 
+                                                       orderby act.followup_date
                                                        select act;
 
                 activities = activities.OrderByDescending(d => d.followup_date);
@@ -866,7 +866,7 @@ namespace ProspectingProject
                 activities = activities.Where(a => !parentIds.Contains(a.activity_log_id));
 
                 // Only load follow ups that do not have children
-      //Where(a => !prospecting.activity_logs.Any(t => t.parent_activity_id == a.activity_log_id));
+                //Where(a => !prospecting.activity_logs.Any(t => t.parent_activity_id == a.activity_log_id));
                 fb.TotalCount = activities.Count();
 
                 // Exclude followups that have already been loaded
@@ -883,35 +883,36 @@ namespace ProspectingProject
 
                     var activityType = prospecting.activity_types.FirstOrDefault(t => t.activity_type_id == act.activity_type_id);
                     string activityTypeName = "";
-                    if (activityType != null) 
+                    if (activityType != null)
                     {
                         activityTypeName = activityType.activity_name;
                     }
-                    var activityFollowupType =prospecting.activity_followup_types.FirstOrDefault(t => t.activity_followup_type_id == act.activity_followup_type_id);
+                    var activityFollowupType = prospecting.activity_followup_types.FirstOrDefault(t => t.activity_followup_type_id == act.activity_followup_type_id);
                     string activityFollowupTypeName = "";
-                    if (activityFollowupType != null) {
+                    if (activityFollowupType != null)
+                    {
                         activityFollowupTypeName = activityFollowupType.activity_name;
                     }
                     int? seeffAreaId = prospecting.prospecting_properties.First(pp => pp.lightstone_property_id == act.lightstone_property_id).seeff_area_id;
                     var followup = new FollowUpActivity
-                                        {
-                                            ActivityLogId = act.activity_log_id,
-                                            ActivityTypeId = act.activity_type_id,
-                                            ActivityTypeName = activityTypeName,
-                                            FollowupActivityTypeName = activityFollowupTypeName,
-                                            Comment = act.comment,
-                                            CreatedBy = act.created_by,
-                                            CreatedByUsername = createdBy,
-                                            FollowupDate = act.followup_date,
-                                            LightstonePropertyId = act.lightstone_property_id,
-                                            ParentActivityId = act.parent_activity_id,
-                                            RelatedToContactPersonId = act.contact_person_id,
-                                            RelatedToContactPerson = LoadContactForFollowup(prospecting, act.contact_person_id),
-                                            ActivityFollowupTypeId = act.activity_followup_type_id,
-                                            PropertyAddress = propAddress,
-                                            SeeffAreaId = seeffAreaId,
-                                            PropertyType = propertyRecord.ss_fh
-                                        };
+                    {
+                        ActivityLogId = act.activity_log_id,
+                        ActivityTypeId = act.activity_type_id,
+                        ActivityTypeName = activityTypeName,
+                        FollowupActivityTypeName = activityFollowupTypeName,
+                        Comment = act.comment,
+                        CreatedBy = act.created_by,
+                        CreatedByUsername = createdBy,
+                        FollowupDate = act.followup_date,
+                        LightstonePropertyId = act.lightstone_property_id,
+                        ParentActivityId = act.parent_activity_id,
+                        RelatedToContactPersonId = act.contact_person_id,
+                        RelatedToContactPerson = LoadContactForFollowup(prospecting, act.contact_person_id),
+                        ActivityFollowupTypeId = act.activity_followup_type_id,
+                        PropertyAddress = propAddress,
+                        SeeffAreaId = seeffAreaId,
+                        PropertyType = propertyRecord.ss_fh
+                    };
                     followups.Add(followup);
                 }
             }
@@ -943,17 +944,17 @@ namespace ProspectingProject
                     contact.comments_notes = incomingContact.Comments;
                     contact.is_popi_restricted = incomingContact.IsPOPIrestricted;
 
-                   contact.deceased_status =  incomingContact.DeceasedStatus;
-                   contact.age_group = incomingContact.AgeGroup;
-                   contact.location = incomingContact.Location;
-                   contact.marital_status = incomingContact.MaritalStatus;
-                   contact.home_ownership = incomingContact.HomeOwnership;
-                   contact.directorship = incomingContact.Directorship;
-                   contact.physical_address = incomingContact.PhysicalAddress;
-                   contact.employer = incomingContact.Employer;
-                   contact.occupation = incomingContact.Occupation;
-                   contact.bureau_adverse_indicator = incomingContact.BureauAdverseIndicator;
-                   contact.citizenship = incomingContact.Citizenship;
+                    contact.deceased_status = incomingContact.DeceasedStatus;
+                    contact.age_group = incomingContact.AgeGroup;
+                    contact.location = incomingContact.Location;
+                    contact.marital_status = incomingContact.MaritalStatus;
+                    contact.home_ownership = incomingContact.HomeOwnership;
+                    contact.directorship = incomingContact.Directorship;
+                    contact.physical_address = incomingContact.PhysicalAddress;
+                    contact.employer = incomingContact.Employer;
+                    contact.occupation = incomingContact.Occupation;
+                    contact.bureau_adverse_indicator = incomingContact.BureauAdverseIndicator;
+                    contact.citizenship = incomingContact.Citizenship;
 
                     contact.optout_emails = incomingContact.EmailOptout;
                     contact.optout_sms = incomingContact.SMSOptout;
@@ -989,14 +990,14 @@ namespace ProspectingProject
                                                       where r.contact_person_id == contact.contact_person_id &&
                                                       r.prospecting_property_id == dataPacket.ProspectingPropertyId
                                                       select r).FirstOrDefault();
-                        if (personPropertyRelation != null) 
+                        if (personPropertyRelation != null)
                         {
                             prospecting.prospecting_person_property_relationships.DeleteOnSubmit(personPropertyRelation);
                             prospecting.SubmitChanges();
                         }
                     }
                     else
-                    { 
+                    {
                         // This contact has a direct relationship to a property. Update the person-property relationship table
                         var personPropertyRelation = (from r in prospecting.prospecting_person_property_relationships
                                                       where r.contact_person_id == contact.contact_person_id &&
@@ -1005,7 +1006,7 @@ namespace ProspectingProject
                         if (incomingContact.PersonPropertyRelationships == null || incomingContact.PersonPropertyRelationships.Count == 0)
                         {
                             // TODO: this line makes an incorrect assumption: that the existing contact linked to the new property is an "owner". Fix this.
-                            incomingContact.PersonPropertyRelationships = new List<KeyValuePair<int, int>> { new KeyValuePair<int, int>(dataPacket.ProspectingPropertyId.Value,ProspectingLookupData.PersonPropertyRelationshipTypes.First().Key) };
+                            incomingContact.PersonPropertyRelationships = new List<KeyValuePair<int, int>> { new KeyValuePair<int, int>(dataPacket.ProspectingPropertyId.Value, ProspectingLookupData.PersonPropertyRelationshipTypes.First().Key) };
                         }
                         // If a relationship already exists against this property just update it. TODO
                         if (personPropertyRelation != null)
@@ -1043,7 +1044,7 @@ namespace ProspectingProject
                     // If not null, then we must assume there is valid data in the list. An empty list indicates
                     // that we should delete records. Same logic applies to email addresses.
                     var existingContactItems = from phoneOrEmail in prospecting.prospecting_contact_details
-                                               where phoneOrEmail.contact_person_id == incomingContact.ContactPersonId     
+                                               where phoneOrEmail.contact_person_id == incomingContact.ContactPersonId
                                                && !phoneOrEmail.deleted
                                                select phoneOrEmail;
                     // Update contact info
@@ -1142,7 +1143,7 @@ namespace ProspectingProject
                             job_title = "",
                             comments_notes = incomingContact.Comments,
                             created_by = Guid.Parse((string)HttpContext.Current.Session["user_guid"]),
-                             created_date = DateTime.Now,
+                            created_date = DateTime.Now,
                             deceased_status = incomingContact.DeceasedStatus,
                             age_group = incomingContact.AgeGroup,
                             location = incomingContact.Location,
@@ -1187,7 +1188,7 @@ namespace ProspectingProject
                             prospecting.prospecting_person_property_relationships.InsertOnSubmit(personPropertyRelation);
                             prospecting.SubmitChanges();
                         }
-                    }                                       
+                    }
                 }
 
                 prospecting.SubmitChanges();
@@ -1381,7 +1382,7 @@ namespace ProspectingProject
 
                     }
                 }
-                catch 
+                catch
                 { /* Do nothing here, an empty set will be returned to front-end */ }
             }
 
@@ -1419,7 +1420,7 @@ namespace ProspectingProject
                     existingContactWithDetail = (from cp in prospecting.prospecting_contact_persons
                                                  join cd in prospecting.prospecting_contact_details on cp.contact_person_id equals cd.contact_person_id
                                                  where (contactDetails.PhoneNumbers.Contains(cd.contact_detail.ToLower()) ||
-                                                    contactDetails.EmailAddresses.Contains(cd.contact_detail.ToLower())) 
+                                                    contactDetails.EmailAddresses.Contains(cd.contact_detail.ToLower()))
                                                     && cp.id_number != contactDetails.IdNumber
                                                     && !cd.deleted
                                                  select cp).FirstOrDefault();
@@ -1464,8 +1465,8 @@ namespace ProspectingProject
                         BureauAdverseIndicator = existingContactWithDetail.bureau_adverse_indicator,
                         Citizenship = existingContactWithDetail.citizenship,
 
-                         EmailOptout = existingContactWithDetail.optout_emails,
-                         SMSOptout = existingContactWithDetail.optout_sms,
+                        EmailOptout = existingContactWithDetail.optout_emails,
+                        SMSOptout = existingContactWithDetail.optout_sms,
 
                         PhoneNumbers = (from det in prospecting.prospecting_contact_details
                                         where det.contact_person_id == existingContactWithDetail.contact_person_id
@@ -1480,7 +1481,7 @@ namespace ProspectingProject
                                             ItemType = det.contact_detail_type,
                                             IsValid = true,
                                             IntDialingCode = det.intl_dialing_code_id,
-                                             IntDialingCodePrefix = det.prospecting_area_dialing_code.dialing_code_id,
+                                            IntDialingCodePrefix = det.prospecting_area_dialing_code.dialing_code_id,
                                             EleventhDigit = det.eleventh_digit
                                         }).ToList(),
 
@@ -1525,7 +1526,7 @@ namespace ProspectingProject
                 {
                     if (!prospectables.Any(p => p.LightstonePropertyId == prospectable.lightstone_property_id))
                     {
-                        ProspectingProperty prop = CreateProspectingProperty(prospectingDB, prospectable, false, false, false,false);
+                        ProspectingProperty prop = CreateProspectingProperty(prospectingDB, prospectable, false, false, false, false);
                         prospectables.Add(prop);
                     }
                 }
@@ -1538,7 +1539,7 @@ namespace ProspectingProject
         {
             var spatialReader = new SpatialServiceReader();
             var spatialSuburb = spatialReader.LoadSuburb(suburbDataRequest.SuburbId);
-              
+
             ProspectingSuburb suburb = new ProspectingSuburb();
             suburb.LocationID = suburbDataRequest.SuburbId;
 
@@ -1564,7 +1565,7 @@ namespace ProspectingProject
         }
 
         public static List<NewProspectingEntity> GetMatchingAddresses(ProspectingInputData dataPacket)
-        {            
+        {
             List<LightstonePropertyMatch> matches = new List<LightstonePropertyMatch>();
             using (lightstoneSeeffService.Seeff service = new lightstoneSeeffService.Seeff())
             {
@@ -1586,7 +1587,7 @@ namespace ProspectingProject
                         {
                             AddLightstonePropertyRow(row, matches, existingLightstoneProps);
                         }
-                    }                    
+                    }
                 }
             }
 
@@ -1653,7 +1654,7 @@ namespace ProspectingProject
                     SSName = row["SECTIONAL_TITLE"] != null ? row["SECTIONAL_TITLE"].ToString() : string.Empty,
                     SS_FH = row["property_type"] != null ? row["property_type"].ToString() : string.Empty,
                     PurchPrice = row["PURCHASE_PRICE"] != null ? row["PURCHASE_PRICE"].ToString() : string.Empty,
-                    Unit = row["UNIT"] != null ? row["UNIT"].ToString(): string.Empty,
+                    Unit = row["UNIT"] != null ? row["UNIT"].ToString() : string.Empty,
                     SSNumber = row["SS_NUMBER"] != null ? row["SS_NUMBER"].ToString() : string.Empty,
                     SS_UnitNoFrom = row["SS_UnitNoFrom"] != null ? row["SS_UnitNoFrom"].ToString() : string.Empty,
                     SS_UnitTo = row["SS_UnitTo"] != null ? row["SS_UnitTo"].ToString() : string.Empty,
@@ -1718,7 +1719,7 @@ namespace ProspectingProject
             };
         }
 
-        
+
         private static List<NewProspectingEntity> GenerateOutputForProspectingEntity(List<LightstonePropertyMatch> matchesForSuburb, int? seeffAreaId)
         {
             List<NewProspectingEntity> prospectingEntities = new List<NewProspectingEntity>();
@@ -1732,24 +1733,25 @@ namespace ProspectingProject
             List<LightstonePropertyMatch> ssMatches = new List<LightstonePropertyMatch>(ssUnits);
             foreach (var ssUnitCollection in ssUnits.GroupBy(ss => ss.SS_ID))
             {
-                    var groupsByLatLng = ssUnitCollection.GroupBy(ss => ss.LatLng);
-                    if (groupsByLatLng.Count() > 1)
+                var groupsByLatLng = ssUnitCollection.GroupBy(ss => ss.LatLng);
+                if (groupsByLatLng.Count() > 1)
+                {
+                    // Find the exceptional record
+                    var outcastGroup = groupsByLatLng.FirstOrDefault(gr => gr.Count() == 1);
+                    if (outcastGroup != null)
                     {
-                        // Find the exceptional record
-                        var outcastGroup = groupsByLatLng.FirstOrDefault(gr => gr.Count() == 1);
-                        if (outcastGroup != null)
-                        {
-                            // Find a 'normal' unit and apply its lat/lng to the outcast
-                            var normalUnit = groupsByLatLng.FirstOrDefault(gr => gr.Count() > 1).First();
-                            var outcast = outcastGroup.First();
-                            outcast.LatLng = new GeoLocation { Lat = normalUnit.LatLng.Lat, Lng = normalUnit.LatLng.Lng };
-                            outcast.SS_UNIQUE_IDENTIFIER = CreateSSUniqueId(outcast); 
-                        }
+                        // Find a 'normal' unit and apply its lat/lng to the outcast
+                        var normalUnit = groupsByLatLng.FirstOrDefault(gr => gr.Count() > 1).First();
+                        var outcast = outcastGroup.First();
+                        outcast.LatLng = new GeoLocation { Lat = normalUnit.LatLng.Lat, Lng = normalUnit.LatLng.Lng };
+                        outcast.SS_UNIQUE_IDENTIFIER = CreateSSUniqueId(outcast);
                     }
+                }
 
                 string erfNo = ssUnitCollection.First().ErfNo;
                 string ss_id = ssUnitCollection.Key;
-                var unitsToInclude = matchesForSuburb.Where(m => {
+                var unitsToInclude = matchesForSuburb.Where(m =>
+                {
                     if (m.SS_FH == "FH" && m.ErfNo == erfNo)
                         return true;
                     if (m.SS_FH == "FRM" && m.ErfNo == erfNo && m.LatLng.Equals(ssUnitCollection.First().LatLng))
@@ -1775,23 +1777,23 @@ namespace ProspectingProject
                     prospectingEntities.Add(new NewProspectingEntity
                     {
                         IsSectionalScheme = false,
-                        PropertyMatches = new[] {match}.ToList(),
+                        PropertyMatches = new[] { match }.ToList(),
                         Exists = match.LightstoneIdExists,
                         SeeffAreaId = seeffAreaId
                     });
-                } 
-           
+                }
+
                 // Farms
                 if (match.SS_FH == "FRM")
                 {
                     prospectingEntities.Add(new NewProspectingEntity
-                                       {
-                                           IsSectionalScheme = false,
-                                           IsFarm = true,
-                                           PropertyMatches = new[] { match }.ToList(),
-                                           Exists = match.LightstoneIdExists,
-                                           SeeffAreaId = seeffAreaId
-                                       });
+                    {
+                        IsSectionalScheme = false,
+                        IsFarm = true,
+                        PropertyMatches = new[] { match }.ToList(),
+                        Exists = match.LightstoneIdExists,
+                        SeeffAreaId = seeffAreaId
+                    });
                 }
             }
 
@@ -1827,10 +1829,10 @@ namespace ProspectingProject
                 IdNumber = idNumber,
                 ContactPersonId = -1,
                 Gender = DetermineOwnerGender(idNumber),
-                PersonPropertyRelationships = new List<KeyValuePair<int,int>>(),//ProspectingStaticData.PersonPropertyRelationshipTypes.First(t => t.Value == "Owner").Key,
-                 PersonCompanyRelationshipType = null,
+                PersonPropertyRelationships = new List<KeyValuePair<int, int>>(),//ProspectingStaticData.PersonPropertyRelationshipTypes.First(t => t.Value == "Owner").Key,
+                PersonCompanyRelationshipType = null,
                 //PropertiesOwned = LoadPropertiesOwnedByThisContact(idNumber, null),
-                 ContactEntityType = ContactEntityType.NaturalPerson
+                ContactEntityType = ContactEntityType.NaturalPerson
             };
         }
 
@@ -1848,7 +1850,7 @@ namespace ProspectingProject
                 CompanyType = dr["PERSON_TYPE_ID"].ToString(),
                 //CompanyContacts = LoadCompanyContacts(ckNo),
                 //ProspectingProperties = LoadPropertiesOwnedByCompany(ckNo),
-                 ContactEntityType = ContactEntityType.JuristicEntity
+                ContactEntityType = ContactEntityType.JuristicEntity
             };
 
             return pcc;
@@ -1932,7 +1934,7 @@ namespace ProspectingProject
                                        {
                                            ContactPersonId = cc.contact_person_id,
                                            PersonCompanyRelationshipType = cpr.person_company_relationship_id,
-                                            ContactCompanyId = cpr.contact_company_id,
+                                           ContactCompanyId = cpr.contact_company_id,
                                            Firstname = cc.firstname,
                                            Surname = cc.surname,
                                            IdNumber = cc.id_number,
@@ -1959,7 +1961,7 @@ namespace ProspectingProject
                                                                ItemType = det.contact_detail_type,
                                                                IsValid = true,
                                                                IntDialingCode = det.intl_dialing_code_id,
-                                                                IntDialingCodePrefix = det.prospecting_area_dialing_code.dialing_code_id,
+                                                               IntDialingCodePrefix = det.prospecting_area_dialing_code.dialing_code_id,
                                                                EleventhDigit = det.eleventh_digit
                                                            }),
                                            EmailAddresses = (from det in prospecting.prospecting_contact_details
@@ -2019,7 +2021,7 @@ namespace ProspectingProject
                 {
                     surname = surname.Substring(0, 7);
                 }
-                
+
                 string result = string.Concat(idNumber, surname);
                 if (result.Length > 13)
                 {
@@ -2136,12 +2138,12 @@ namespace ProspectingProject
                 prospecting.CommandTimeout = 4 * 60;
 
                 int? areaId = null;
-                if (sectionalTitle.SeeffAreaId.HasValue)
-                {
-                    areaId = sectionalTitle.SeeffAreaId.Value;
-                }
-                else
-                {
+                //if (sectionalTitle.SeeffAreaId.HasValue)
+                //{
+                //    areaId = sectionalTitle.SeeffAreaId.Value;
+                //}
+                //else
+                //{
                     var spatial = new SpatialServiceReader();
                     var spatialSuburb = spatial.GetSuburbFromID(latLng.Lat, latLng.Lng);
                     areaId = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
@@ -2149,7 +2151,7 @@ namespace ProspectingProject
                     {
                         throw new Exception("Cannot create new prospect: The system cannot allocate a Seeff ID to the area, please contact support for further information.");
                     }
-                }
+                //}
 
                 // Ensure that we are creating ALL units for this sectional title, not just one
                 using (lightstoneSeeffService.Seeff service = new lightstoneSeeffService.Seeff())
@@ -2172,7 +2174,7 @@ namespace ProspectingProject
                         sectionalTitle = completeSS;
                     }
                 }
-                
+
                 List<ProspectingProperty> units = new List<ProspectingProperty>();
                 foreach (var unit in sectionalTitle.PropertyMatches)
                 {
@@ -2183,7 +2185,7 @@ namespace ProspectingProject
                         longitude = unit.LatLng.Lng,
                         property_address = string.Concat(unit.StreetName + ", " + unit.Suburb + ", " + unit.City),// dataPacket.PropertyAddress,
                         street_or_unit_no = unit.StreetOrUnitNo,// dataPacket.StreetOrUnitNo,
-                        seeff_area_id = areaId,                       
+                        seeff_area_id = areaId,
                         lightstone_reg_date = unit.RegDate,// dataPacket.LightstoneRegDate,
                         erf_no = int.Parse(unit.ErfNo, CultureInfo.InvariantCulture),// dataPacket.ErfNo,
                         ss_fh = unit.SS_FH,// dataPacket.SS_FH,
@@ -2279,20 +2281,20 @@ namespace ProspectingProject
         public static void UnlockCurrentProspectingRecord()
         {
             var currentUser = RequestHandler.GetUserSessionObject();
-                using (var prospectingDB = new ProspectingDataContext())
+            using (var prospectingDB = new ProspectingDataContext())
+            {
+                var propertiesLockedByUser = prospectingDB.prospecting_properties.Where(pp => pp.locked_by_guid == currentUser.UserGuid);
+                foreach (var pp in propertiesLockedByUser)
                 {
-                    var propertiesLockedByUser = prospectingDB.prospecting_properties.Where(pp => pp.locked_by_guid == currentUser.UserGuid);
-                    foreach (var pp in propertiesLockedByUser)
+                    pp.locked_by_guid = null;
+                    pp.locked_datetime = null;
+                    try
                     {
-                        pp.locked_by_guid = null;
-                        pp.locked_datetime = null;
-                        try
-                        {
-                            prospectingDB.SubmitChanges();
-                        }
-                        catch (ChangeConflictException) { }
+                        prospectingDB.SubmitChanges();
                     }
+                    catch (ChangeConflictException) { }
                 }
+            }
         }
 
         public static void MarkAsProspected(int propertyId)
@@ -2303,7 +2305,7 @@ namespace ProspectingProject
                 var targetProp = prospecting.prospecting_properties.First(pp => pp.prospecting_property_id == propertyId);
                 targetProp.prospected = contactableContactCount > 0;
                 prospecting.SubmitChanges();
-            }            
+            }
         }
 
         public static ProspectingEntityOutputBundle CreateNewProspectingEntities(ProspectingEntityInputBundle prospectingEntityBundle, List<NewProspectingEntity> searchResults)
@@ -2615,7 +2617,7 @@ namespace ProspectingProject
 
             using (var prospecting = new ProspectingDataContext())
             {
-                string params_ = (from n in inputProperties select n.ToString()).Aggregate( (s1, s2) => s1 + "," + s2);
+                string params_ = (from n in inputProperties select n.ToString()).Aggregate((s1, s2) => s1 + "," + s2);
                 var queryResults = prospecting.ExecuteQuery<FlattenedPropertyRecord>(@"SELECT        pp.prospecting_property_id, pp.lightstone_property_id, pp.latitude, pp.longitude, pp.property_address, pp.street_or_unit_no, pp.seeff_area_id, pp.lightstone_id_or_ck_no, pp.lightstone_reg_date, pp.erf_no, 
                          pp.comments, pp.ss_name, pp.ss_number, pp.ss_id, pp.unit, pp.ss_door_number, pp.last_purch_price, pp.prospected, pp.farm_name, pp.portion_no, pp.lightstone_suburb, pp.ss_fh, pp.ss_unique_identifier, 
                          pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays,
@@ -2645,11 +2647,11 @@ FROM            prospecting_property AS pp LEFT OUTER JOIN
                          prospecting_contact_person AS pcp ON pcp.contact_person_id = ppcr.contact_person_id LEFT OUTER JOIN
                          prospecting_contact_detail AS pcd ON pcd.contact_person_id = pcp.contact_person_id LEFT OUTER JOIN
                          prospecting_area_dialing_code AS padc ON padc.prospecting_area_dialing_code_id = pcd.intl_dialing_code_id
-WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] { });
+WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { });
 
                 // Performance: tolist() or not?
                 var propertyGroupings = queryResults.GroupBy(fpr => fpr.lightstone_property_id);
-                                                   // .Select(g => new { LightstonePropID = g.Key, Properties = g.Select(t => t) });
+                // .Select(g => new { LightstonePropID = g.Key, Properties = g.Select(t => t) });
                 foreach (var sameLightstoneIDGroup in propertyGroupings)
                 {
                     var prospectingRecord = sameLightstoneIDGroup.First();
@@ -2731,35 +2733,35 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
                             personPropertyrelationships.Add(new KeyValuePair<int, int>(contactRecord.prospecting_property_id, contactRecord.relationship_to_property.Value));
                         }
                         var newContactPerson = new ProspectingContactPerson
-                         {
-                             ContactPersonId = contactRecord.contact_person_id,
-                             PersonPropertyRelationships = personPropertyrelationships,
-                             PersonCompanyRelationshipType = contactRecord.relationship_to_company,
-                             ContactCompanyId = contactRecord.contact_company_id,
-                             Firstname = contactRecord.firstname,
-                             Surname = contactRecord.surname,
-                             IdNumber = contactRecord.id_number,
-                             Title = contactRecord.person_title,
-                             Gender = contactRecord.person_gender,
-                             Comments = contactRecord.comments_notes,
-                             IsPOPIrestricted = contactRecord.is_popi_restricted.HasValue ? contactRecord.is_popi_restricted.Value : false,
-                             PropertiesOwned = null,
-                             EmailOptout = contactRecord.optout_emails.HasValue ? contactRecord.optout_emails.Value : false,
-                             SMSOptout = contactRecord.optout_sms.HasValue ? contactRecord.optout_sms.Value : false,
+                        {
+                            ContactPersonId = contactRecord.contact_person_id,
+                            PersonPropertyRelationships = personPropertyrelationships,
+                            PersonCompanyRelationshipType = contactRecord.relationship_to_company,
+                            ContactCompanyId = contactRecord.contact_company_id,
+                            Firstname = contactRecord.firstname,
+                            Surname = contactRecord.surname,
+                            IdNumber = contactRecord.id_number,
+                            Title = contactRecord.person_title,
+                            Gender = contactRecord.person_gender,
+                            Comments = contactRecord.comments_notes,
+                            IsPOPIrestricted = contactRecord.is_popi_restricted.HasValue ? contactRecord.is_popi_restricted.Value : false,
+                            PropertiesOwned = null,
+                            EmailOptout = contactRecord.optout_emails.HasValue ? contactRecord.optout_emails.Value : false,
+                            SMSOptout = contactRecord.optout_sms.HasValue ? contactRecord.optout_sms.Value : false,
 
-                             // Dracore fields
-                             AgeGroup = contactRecord.age_group,
-                             BureauAdverseIndicator = contactRecord.bureau_adverse_indicator,
-                             Citizenship = contactRecord.citizenship,
-                             DeceasedStatus = contactRecord.deceased_status,
-                             Directorship = contactRecord.directorship,
-                             Occupation = contactRecord.occupation,
-                             Employer = contactRecord.employer,
-                             PhysicalAddress = contactRecord.physical_address,
-                             HomeOwnership = contactRecord.home_ownership,
-                             MaritalStatus = contactRecord.marital_status,
-                             Location = contactRecord.location
-                         };
+                            // Dracore fields
+                            AgeGroup = contactRecord.age_group,
+                            BureauAdverseIndicator = contactRecord.bureau_adverse_indicator,
+                            Citizenship = contactRecord.citizenship,
+                            DeceasedStatus = contactRecord.deceased_status,
+                            Directorship = contactRecord.directorship,
+                            Occupation = contactRecord.occupation,
+                            Employer = contactRecord.employer,
+                            PhysicalAddress = contactRecord.physical_address,
+                            HomeOwnership = contactRecord.home_ownership,
+                            MaritalStatus = contactRecord.marital_status,
+                            Location = contactRecord.location
+                        };
 
                         var contactDetailGroupings = sameContactPersonIdGroup.GroupBy(cp => cp.contact_detail_type);
                         List<ProspectingContactDetail> phoneNumbers = new List<ProspectingContactDetail>();
@@ -2808,7 +2810,7 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
                     }
                     prop.Contacts = propertyContacts;
                     results.Add(prop);
-                }                                
+                }
 
                 return results;
             }
@@ -2859,7 +2861,7 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
                     }
 
                     return "Unit " + property.unit + " " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.ss_name.ToLower()).Replace("Ss ", "SS ");
-                 }
+                }
 
                 return property.street_or_unit_no + " " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.property_address.ToLower());
             }
@@ -2927,7 +2929,7 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
                 contact_person_id = null,
                 // Add the rest later
                 parent_activity_id = null,
-                activity_followup_type_id = null                 
+                activity_followup_type_id = null
             };
             prospecting.activity_logs.InsertOnSubmit(activityRecord);
             prospecting.SubmitChanges();
@@ -2990,21 +2992,21 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
                 prospecting.SubmitChanges();
             }
 
-                foreach (var owner in propertyMatch.Owners)
+            foreach (var owner in propertyMatch.Owners)
+            {
+                if (owner.ContactEntityType == ContactEntityType.NaturalPerson)
                 {
-                    if (owner.ContactEntityType == ContactEntityType.NaturalPerson)
-                    {
-                        var newContact = new ContactDataPacket { ContactPerson = (ProspectingContactPerson)owner, ProspectingPropertyId = propertyRecord.prospecting_property_id, ContactCompanyId = null };
-                        SaveContactPerson(newContact);
-                    }
-                    if (owner.ContactEntityType == ContactEntityType.JuristicEntity)
-                    {
-                        var newContact = new CompanyContactDataPacket { ContactCompany = (ProspectingContactCompany)owner, ProspectingPropertyId = propertyRecord.prospecting_property_id };
-                        SaveContactCompany(newContact);
-                    }
+                    var newContact = new ContactDataPacket { ContactPerson = (ProspectingContactPerson)owner, ProspectingPropertyId = propertyRecord.prospecting_property_id, ContactCompanyId = null };
+                    SaveContactPerson(newContact);
                 }
+                if (owner.ContactEntityType == ContactEntityType.JuristicEntity)
+                {
+                    var newContact = new CompanyContactDataPacket { ContactCompany = (ProspectingContactCompany)owner, ProspectingPropertyId = propertyRecord.prospecting_property_id };
+                    SaveContactCompany(newContact);
+                }
+            }
 
-                return true;
+            return true;
         }
 
         public static void CreateValuation(PropertyValuation valuation)
@@ -3016,8 +3018,8 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
                 if (valuation.CreateActivity)
                 {
                     string comment = "A new valuation has been created for this property:" + Environment.NewLine +
-                                    "New value: R" + valuation.Value + Environment.NewLine + 
-                                    "Valuation date: " + valuation.ValuationDate + Environment.NewLine + 
+                                    "New value: R" + valuation.Value + Environment.NewLine +
+                                    "Valuation date: " + valuation.ValuationDate + Environment.NewLine +
                                     "Is this its current Lightstone value? " + (valuation.IsCurrentValue ? "Yes" : "No");
 
                     var activityType = ProspectingLookupData.ActivityTypes.First(act => act.Value == "Valuation Done").Key;
@@ -3042,13 +3044,13 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
 
                 property_valuation newValuation = new property_valuation
                 {
-                     prospecting_property_id = propertyRecord.prospecting_property_id,
-                     created_date = DateTime.Now,
-                     created_by_user_guid = RequestHandler.GetUserSessionObject().UserGuid,
-                     activity_log_id = activityRecordId,
-                     value_estimate = valuation.Value,
-                     date_valued = valuation.ValuationDate,
-                     current_value = valuation.IsCurrentValue
+                    prospecting_property_id = propertyRecord.prospecting_property_id,
+                    created_date = DateTime.Now,
+                    created_by_user_guid = RequestHandler.GetUserSessionObject().UserGuid,
+                    activity_log_id = activityRecordId,
+                    value_estimate = valuation.Value,
+                    date_valued = valuation.ValuationDate,
+                    current_value = valuation.IsCurrentValue
                 };
 
                 prospecting.property_valuations.InsertOnSubmit(newValuation);
@@ -3224,7 +3226,7 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
                                 case "statusPendingMessages":
                                     int pendingSubmit = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "PENDING_SUBMIT_TO_API").Key;
                                     int awaitingResponse = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "AWAITING_RESPONSE_FROM_API").Key;
-                                    emailResults = emailResults.Where(em => new[] { pendingSubmit, awaitingResponse}.Contains(em.status));
+                                    emailResults = emailResults.Where(em => new[] { pendingSubmit, awaitingResponse }.Contains(em.status));
                                     break;
                                 case "statusFailedMessages":
                                     int failedStatus = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "EMAIL_UNSENT").Key;
@@ -3286,7 +3288,7 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
                                 case "statusSuccessfulMessages":
                                     int successStatus = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "SMS_DELIVERED").Key;
                                     int reply = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "SMS_REPLY").Key;
-                                    smsResults = smsResults.Where(em => new[] {successStatus, reply}.Contains(em.status));
+                                    smsResults = smsResults.Where(em => new[] { successStatus, reply }.Contains(em.status));
                                     break;
                                 case "statusPendingMessages":
                                     int pendingSubmit = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "PENDING_SUBMIT_TO_API").Key;
@@ -3435,11 +3437,264 @@ WHERE        (pp.lightstone_property_id IN (" +  params_ + @"))", new object[] {
 
                 result.Result = resultType.Valid;
             }
-            catch (Exception) 
+            catch (Exception)
             {
                 result.ErrorMessage = "Service not available. Please try again later.";
             }
             return result;
+        }
+
+        public static ReferralResponseObject GenerateReferralDetails(ReferralInputDetails inputDetails)
+        {
+            ReferralResponseObject result = new ReferralResponseObject { InstanceValidationErrors = new List<string>() };
+            try
+            {
+                using (var prospectingDb = new ProspectingDataContext())
+                {
+
+                    int propertyRecordID = inputDetails.Target.ProspectingPropertyId.Value;
+                    var propertyRecord = prospectingDb.prospecting_properties.First(pp => pp.prospecting_property_id == propertyRecordID);
+                    int seeffAreaID = propertyRecord.seeff_area_id.Value;
+
+                    SpatialServiceReader spatialReader = new SpatialServiceReader();
+                    var suburb = spatialReader.LoadSuburb(seeffAreaID);
+
+                    if (suburb == null)
+                    {
+                        result.InstanceValidationErrors.Add("Unable to find the Seeff suburb for this property. Please contact support and quote this property ID.");
+                        return result;
+                    }
+
+                    result.department = inputDetails.DepartmentType;
+                    if (string.IsNullOrEmpty(result.department))
+                    {
+                        result.InstanceValidationErrors.Add("Please select a Referral Type");
+                    }
+
+                    if (!suburb.LicenseID.HasValue)
+                    {
+                        result.InstanceValidationErrors.Add("Unable to find a License ID for this property. Please contact support and quote this property ID.");
+                    }
+                    else
+                    {
+                        result.license_id_from = result.license_id_to = suburb.LicenseID.Value;
+                    }
+
+                    result.property_id = propertyRecord.lightstone_property_id;
+                    result.property_desc = ProspectingCore.GetFormattedAddress(propertyRecord.lightstone_property_id);
+                    result.property_lat = propertyRecord.latitude.Value;
+                    result.property_long = propertyRecord.longitude.Value;
+                    result.user_guid = RequestHandler.GetUserSessionObject().UserGuid.ToString();
+
+                    var targetContactPerson = prospectingDb.prospecting_contact_persons.First(cp => cp.contact_person_id == inputDetails.Target.ContactPerson.ContactPersonId);
+                    result.ContactPersonID = targetContactPerson.contact_person_id;
+
+                    string personTitle = "";
+                    if (targetContactPerson.person_title.HasValue)
+                    {
+                        personTitle = ProspectingLookupData.ContactPersonTitle.First(cpt => cpt.Key == targetContactPerson.person_title.Value).Value;
+                    }
+                    result.smart_pass_title = personTitle;
+                    result.smart_pass_name = targetContactPerson.firstname;
+                    result.smart_pass_surname = targetContactPerson.surname;
+                    result.smart_pass_id_no = targetContactPerson.id_number;
+
+                    string companyName = "";
+                    if (inputDetails.Target.ContactCompanyId.HasValue)
+                    {
+                        var company = prospectingDb.prospecting_contact_companies.First(cc => cc.contact_company_id == inputDetails.Target.ContactCompanyId.Value);
+                        companyName = company.company_name;
+                    }
+                    result.smart_pass_company = companyName;
+
+                    string contactType = "", countryCode = "", contactNo = "";
+                    if (inputDetails.Target.ContactPerson.PhoneNumbers != null && 
+                        inputDetails.Target.ContactPerson.PhoneNumbers.Count() > 0 &&
+                        !string.IsNullOrEmpty(inputDetails.Target.ContactPerson.PhoneNumbers.First().ItemId))
+                    {
+                        var contactPhoneContainer = inputDetails.Target.ContactPerson.PhoneNumbers.First();
+                        int detailID = Convert.ToInt32(contactPhoneContainer.ItemId);
+                        var contactNoRecord = prospectingDb.prospecting_contact_details.FirstOrDefault(cd => cd.prospecting_contact_detail_id == detailID);
+                        if (contactNoRecord != null)
+                        {
+
+                            var contactItemTypeRecord = prospectingDb.prospecting_contact_detail_types.First(cdt => cdt.contact_detail_type_id == contactNoRecord.contact_detail_type);
+                            contactType = contactItemTypeRecord.type_desc;
+
+                            countryCode = contactNoRecord.prospecting_area_dialing_code.dialing_code_id.ToString();
+
+                            contactNo = contactNoRecord.contact_detail;
+                        }
+                        else
+                        {
+                            result.InstanceValidationErrors.Add("This contact detail has been changed by another user. Please restart and try again.");
+                        }
+                    } else
+                    {
+                        result.InstanceValidationErrors.Add("No contact number specified.");
+                    }
+                    result.smart_pass_contact_type = contactType;
+                    result.smart_pass_country_code = countryCode;
+                    result.smart_pass_contact_no = contactNo;
+
+                    string emailAddress = "";
+                    if (inputDetails.Target.ContactPerson.EmailAddresses != null)
+                    {
+                        var emailAddressItem = inputDetails.Target.ContactPerson.EmailAddresses.FirstOrDefault();
+                        if (emailAddressItem != null && !string.IsNullOrEmpty(emailAddressItem.ItemId))
+                        {
+                            int detailID = Convert.ToInt32(emailAddressItem.ItemId);
+                            var emailRecord = prospectingDb.prospecting_contact_details.FirstOrDefault(cd => cd.prospecting_contact_detail_id == detailID);
+                            if (emailRecord != null)
+                            {
+                                emailAddress = emailRecord.contact_detail;
+                            }
+                            else
+                            {
+                                result.InstanceValidationErrors.Add("This contact detail has been changed by another user. Please restart and try again.");
+                            }
+                        }
+                    }
+                    result.smart_pass_email_address = emailAddress;
+
+                    result.smart_pass_comment = inputDetails.Comment ?? ""; // Might need to escape this.
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                result.InstanceValidationErrors.Add(message);
+            }
+            return result;
+        }
+
+        public static ReferralResponseObject CreateReferral(ReferralInputDetails inputDetails)
+        {
+            ReferralResponseObject referralDetails = GenerateReferralDetails(inputDetails);
+            if (referralDetails.InstanceValidationErrors.Count > 0)
+            {
+                return referralDetails;
+            }
+
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.BaseAddress = new Uri("http://bossservices.seeff.com/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage response = client.PostAsJsonAsync<ReferralResponseObject>("api/BOSS/CreatePropertyReferral", referralDetails).Result;
+                    response.EnsureSuccessStatusCode();
+                    ReferralResponseObject referralResponse = new ReferralResponseObject();
+                    referralResponse = response.Content.ReadAsAsync<ReferralResponseObject>().Result;
+
+                    if (referralResponse.pErrorNo != -1)
+                    {
+                        string internalError = "Error creating referral: ";
+                        switch (referralResponse.pErrorNo)
+                        {
+                            case 1:
+                                internalError += "Service Failed";
+                                break;
+                            case 2:
+                                internalError += "Please indicate if this referral is a Sale (S) or a Rental (R).";
+                                break;
+                            case 3:
+                                internalError += "Please indicate the license id of the license this referral is from.";
+                                break;
+                            case 4:
+                                internalError += "Please indicate the license id of the license this referral is going to.";
+                                break;
+                            case 5:
+                                internalError += "No property id was passed to the service.";
+                                break;
+                            case 6:
+                                internalError += "No property description was passed to the service.";
+                                break;
+                            case 7:
+                                internalError += "No user guid found.";
+                                break;
+                            case 8:
+                                internalError += "Failed to locate a user id for 'Guid Passed In'";
+                                break;
+                            case 9:
+                                internalError += "Please give this contact person a title";
+                                break;
+                            case 10:
+                                internalError += "Please enter the contact person's name";
+                                break;
+                            case 11:
+                                internalError += "Please enter the contact person's surname";
+                                break;
+                            case 12:
+                                internalError += "Please enter the contact person's contact no. type";
+                                break;
+                            case 13:
+                                internalError += "Please enter the contact person's contact no. country code";
+                                break;
+                            case 14:
+                                internalError += "Please enter the contact person's contact no.";
+                                break;
+                            case 101:
+                                internalError += "Add New Person Exception";
+                                break;
+                            case 102:
+                                internalError += "Update Person Exception";
+                                break;
+                            case 103:
+                                internalError += "Adding smart_pass_participants Exception";
+                                break;
+                            case 104:
+                                internalError += "Adding smart_pass_comment Exception";
+                                break;
+                            case 105:
+                                internalError += "Sending the email Exception";
+                                break;
+                            case 106:
+                                internalError += "Catch All Error Exception";
+                                break;
+                        }
+
+                        referralDetails.InstanceValidationErrors.Add(internalError);
+                        return referralDetails;
+                    } else
+                    {
+                        using (var prospecting = new ProspectingDataContext())
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            sb.AppendLine("A new referral has been created for this property");
+                            sb.AppendLine("Click <a target='_blank' href='http://boss.seeff.com/smart_pass_update.aspx?id=" + referralResponse.pSmart_pass_id + "'>here</a> to view the referral.");
+
+                            var activityType = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "Referral").Key;
+                            var activityRecord = new activity_log
+                            {
+                                lightstone_property_id = referralDetails.property_id,
+                                followup_date = null,
+                                allocated_to = null,
+                                activity_type_id = activityType,
+                                comment = sb.ToString(),
+                                created_by = RequestHandler.GetUserSessionObject().UserGuid,
+                                created_date = DateTime.Now,
+                                contact_person_id = referralDetails.ContactPersonID,
+                                // Add the rest later
+                                parent_activity_id = null,
+                                activity_followup_type_id = null
+                            };
+                            prospecting.activity_logs.InsertOnSubmit(activityRecord);
+                            prospecting.SubmitChanges();
+                        }
+                    }
+
+                    return referralResponse;
+                }
+                catch (Exception ex)
+                {
+                    string message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                    referralDetails.InstanceValidationErrors.Add(message);
+                    return referralDetails;
+                }
+            }
         }
     }
 }

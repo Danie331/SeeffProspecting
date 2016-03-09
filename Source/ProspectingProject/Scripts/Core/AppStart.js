@@ -33,6 +33,7 @@ function initialize() {
 
                 prospectingContext = JSON.parse(data.StaticProspectingData);
                 prospectingContext.LoggedInUser = data.UserGuid;
+                prospectingContext.LoggedInUsername = data.Fullname;
                 prospectingContext.UserHasCommAccess = data.HasCommAccess;
 
                 userIsProspectingManager = data.IsProspectingManager;

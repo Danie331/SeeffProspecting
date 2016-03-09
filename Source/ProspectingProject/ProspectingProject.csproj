@@ -26,6 +26,7 @@
     <SccProvider>SAK</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -715,6 +716,7 @@
     <Content Include="Assets\comm_report_filters.png" />
     <Content Include="Assets\comm_sms.png" />
     <Content Include="Assets\contact.png" />
+    <Content Include="Assets\create_referral.png" />
     <Content Include="Assets\dracore_email_lookup.png" />
     <Content Include="Assets\edit_link.png" />
     <Content Include="Assets\email_icon.png" />
@@ -1330,6 +1332,8 @@
     <Compile Include="Types\DefaultProspectingDataResponsePacket.cs" />
     <Compile Include="Types\ContactDetails.cs" />
     <Compile Include="Types\PropertyCommentsNotes.cs" />
+    <Compile Include="Types\ReferralResponseObject.cs" />
+    <Compile Include="Types\ReferralInputDetails.cs" />
     <Compile Include="Types\SearchInputPacket.cs" />
     <Compile Include="Types\SentEmailLogItem.cs" />
     <Compile Include="Types\SentSMSLogItem.cs" />
