@@ -793,7 +793,7 @@ namespace ProspectingProject
         /// *** Prospecting user authorisation web methods ***
         /// </summary>
 
-        public static UserDataResponsePacket LoadUser(Guid userGuid, Guid sessionKey)
+        public static UserDataResponsePacket LoadUser(Guid userGuid, Guid sessionKey, bool impersonate)
         {
             using (var authService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
@@ -3451,6 +3451,10 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
             {
                 using (var prospectingDb = new ProspectingDataContext())
                 {
+                    if (inputDetails.CreateFollowup && inputDetails.FollowupDate == null)
+                    {
+                        result.InstanceValidationErrors.Add("If you selected 'Create a Follow-up' then you need to select a follow-up date.");
+                    } 
 
                     int propertyRecordID = inputDetails.Target.ProspectingPropertyId.Value;
                     var propertyRecord = prospectingDb.prospecting_properties.First(pp => pp.prospecting_property_id == propertyRecordID);
@@ -3663,10 +3667,10 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                         using (var prospecting = new ProspectingDataContext())
                         {
                             StringBuilder sb = new StringBuilder();
-                            sb.AppendLine("A new referral has been created for this property");
-                            sb.AppendLine("Click <a target='_blank' href='http://boss.seeff.com/smart_pass_update.aspx?id=" + referralResponse.pSmart_pass_id + "'>here</a> to view the referral.");
+                            sb.AppendLine("A new referral has been created for this property (Smart Pass ID: " + referralResponse.pSmart_pass_id + ")");
+                            sb.AppendLine("<a target='_blank' style='text-decoration: underline;' href='http://boss.seeff.com/smart_pass_update.aspx?id=" + referralResponse.pSmart_pass_id + "'>Click here to view referral</a>");
 
-                            var activityType = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "Referral").Key;
+                            var activityType = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "New Referral").Key;
                             var activityRecord = new activity_log
                             {
                                 lightstone_property_id = referralDetails.property_id,
@@ -3683,6 +3687,30 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                             };
                             prospecting.activity_logs.InsertOnSubmit(activityRecord);
                             prospecting.SubmitChanges();
+
+                            // Next create a follow-up if specified
+                            if (inputDetails.CreateFollowup && inputDetails.FollowupDate != null)
+                            {
+                                var followupType = ProspectingLookupData.ActivityFollowupTypes.First(act => act.Value == "Referral Follow-up").Key;
+                                string comment = "Follow-up for Referral created on " + activityRecord.created_date.ToString(System.Threading.Thread.CurrentThread.CurrentCulture)
+                                    + Environment.NewLine + Environment.NewLine;
+                                comment += "Referral Details: " + Environment.NewLine;
+                                comment += sb.ToString();
+                                var followupActivity = new ProspectingActivity
+                                {
+                                    ActivityFollowupTypeId = followupType,
+                                    ActivityTypeId = activityType,
+                                    Comment = comment,
+                                    ContactPersonId = referralDetails.ContactPersonID,
+                                    FollowUpDate = inputDetails.FollowupDate,
+                                    LightstonePropertyId = referralDetails.property_id,
+                                    ParentActivityId = activityRecord.activity_log_id,
+                                    IsForInsert = true,
+                                    IsForUpdate = false
+                                };
+
+                                UpdateInsertActivity(followupActivity);
+                            }
                         }
                     }
 
@@ -3693,6 +3721,34 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                     string message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                     referralDetails.InstanceValidationErrors.Add(message);
                     return referralDetails;
+                }
+            }
+        }
+
+        public static ReferralsHistory RetrieveReferralsHistoryForProperty(ProspectingPropertyId input)
+        {
+            using (var client = new HttpClient())
+            {
+                ReferralsHistory referralsHistory = new ReferralsHistory();
+                try
+                {
+                    client.BaseAddress = new Uri("http://bossservices.seeff.com/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage response = client.PostAsJsonAsync<int>("api/BOSS/GetReferralDetails", input.LightstonePropertyId).Result;
+                    response.EnsureSuccessStatusCode();
+                    List<ReferralItem> referralResponse = response.Content.ReadAsAsync<List<ReferralItem>>().Result;
+
+                    referralsHistory.ListOfReferrals = referralResponse;
+                    referralsHistory.ListOfReferrals = referralsHistory.ListOfReferrals.OrderByDescending(rf => rf.SmartPassId).ToList();
+                    return referralsHistory;
+                }
+                catch (Exception ex)
+                {
+                    string message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                    referralsHistory.ErrorMessage = message;
+                    return referralsHistory;
                 }
             }
         }

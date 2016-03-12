@@ -748,6 +748,7 @@
     <Content Include="Assets\poly_menu_item.png" />
     <Content Include="Assets\poly_menu_remove.png" />
     <Content Include="Assets\primary_contact.png" />
+    <Content Include="Assets\property_referrals_history.png" />
     <Content Include="Assets\remove_filter.png" />
     <Content Include="Assets\seeff_logo.png" />
     <Content Include="Assets\set_signature_boss.png" />
@@ -1332,8 +1333,10 @@
     <Compile Include="Types\DefaultProspectingDataResponsePacket.cs" />
     <Compile Include="Types\ContactDetails.cs" />
     <Compile Include="Types\PropertyCommentsNotes.cs" />
+    <Compile Include="Types\ReferralItem.cs" />
     <Compile Include="Types\ReferralResponseObject.cs" />
     <Compile Include="Types\ReferralInputDetails.cs" />
+    <Compile Include="Types\ReferralsHistory.cs" />
     <Compile Include="Types\SearchInputPacket.cs" />
     <Compile Include="Types\SentEmailLogItem.cs" />
     <Compile Include="Types\SentSMSLogItem.cs" />

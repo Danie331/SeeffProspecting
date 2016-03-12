@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Constructor function - pass this function an array of items built using buildContentExpanderItem()
-function ContentExpanderWidget(containerElementId, contentExpanderItemArray, elementId) {
+function ContentExpanderWidget(containerElementId, contentExpanderItemArray, elementId, afterClickCallback) {
 
     this.construct = function () {
 
@@ -15,10 +15,14 @@ function ContentExpanderWidget(containerElementId, contentExpanderItemArray, ele
             mainDiv.append(item);
 
             var itemHeader = item.find('.expanderItemHeader');
-            $(containerElementId).on('click', '#' + itemHeader.attr('id'), function () {
+            $(containerElementId).off('click', '#' + itemHeader.attr('id')).on('click', '#' + itemHeader.attr('id'), function () {
                 // Animate this item
                 var contentItem = item.find('.expanderItemContent').first();
                 contentItem.slideToggle();
+
+                if (afterClickCallback) {
+                    afterClickCallback();
+                }
             });
         });        
 

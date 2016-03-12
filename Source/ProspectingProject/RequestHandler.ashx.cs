@@ -193,6 +193,10 @@ namespace ProspectingProject
                         string referralOutput = CreateReferral(json);
                         context.Response.Write(referralOutput);
                         break;
+                    case "get_referrals_history_for_property":
+                        string referralsHistoryForProperty = GetReferralsHistoryForProperty(json);
+                        context.Response.Write(referralsHistoryForProperty);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -225,6 +229,13 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string GetReferralsHistoryForProperty(string json)
+        {
+            var inputPacket = ProspectingCore.Deserialise<ProspectingPropertyId>(json);
+            ReferralsHistory referralsHistory = ProspectingCore.RetrieveReferralsHistoryForProperty(inputPacket);
+            return ProspectingCore.SerializeToJsonWithDefaults(referralsHistory);
         }
 
         private string CreateReferral(string json)
@@ -501,10 +512,12 @@ namespace ProspectingProject
 
         private string LoadApplication()
         {
+            bool impersonate = HttpContext.Current.Session["target_guid"] != null;
+
             var guid = Guid.Parse((string)HttpContext.Current.Session["user_guid"]);
             var sessionKey = Guid.Parse((string)HttpContext.Current.Session["session_key"]);
 
-            UserDataResponsePacket user = ProspectingCore.LoadUser(guid, sessionKey);
+            UserDataResponsePacket user = ProspectingCore.LoadUser(guid, sessionKey, impersonate);
             HttpContext.Current.Session["user"] = user;
             HttpContext.Current.Session["deleted_item_count"] = 0;
             return ProspectingCore.SerializeToJsonWithDefaults(user);

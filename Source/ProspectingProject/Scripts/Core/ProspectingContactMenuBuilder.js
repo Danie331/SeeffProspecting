@@ -889,6 +889,99 @@ function buildPropertyAddressEditor(property) {
     return new ContentExpanderWidget('#contentarea', [addressEditorSection], "propertyEditorExpander");
 }
 
+function buildPropertyReferralsHistory(property) {
+
+    function buildReferralsContent(property) {                
+        var referralsHistoryContainerDiv = $("<div id='referralsHistoryContainerDiv' class='contentdiv' style='height:100%' />");
+        referralsHistoryContainerDiv.append("Loading...");
+        return referralsHistoryContainerDiv;
+    }
+
+    //$('#propertyReferralsHistoryExpander').remove();
+    //var container = $("#referralsHistoryContainerDiv");
+    //container.empty().append("Loading...");
+
+    var headerHtml = "<label style='cursor:pointer;'>Smart Pass Referrals For Property</label>";
+    var referralsSection = buildContentExpanderItem('referralsHistory', 'Assets/property_referrals_history.png', headerHtml, buildReferralsContent(property));
+    return new ContentExpanderWidget('#contentarea', [referralsSection], "propertyReferralsHistoryExpander", function () {
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify({ Instruction: 'get_referrals_history_for_property', LightstonePropertyId: currentProperty.LightstonePropertyId }),
+            dataType: "json"
+        }).done(function (data) {
+            var container = $("#referralsHistoryContainerDiv");
+            container.empty();
+            if (data.ErrorMessage == null) {
+                if (data.ListOfReferrals.length) {
+                    buildSlickGridFromResults(data);
+                } else {
+                    container.append('No Smart Pass referrals found for this property.');
+                }
+            } else {
+                container.append('Error occurred retrieving referrals for property: ' + data.ErrorMessage);
+            }
+        });
+    });
+}
+
+function buildSlickGridFromResults(results) {
+    var options = {
+        forceFitColumns: true,
+        enableCellNavigation: true,
+        enableColumnReorder: false,
+        multiColumnSort: true,
+        autoHeight: true
+    };
+    var grid;
+    var columns;
+    var sortcol;
+    var sortdir = 1;
+    var dataView = new Slick.Data.DataView(/*{ inlineFilters: true }*/);
+
+    function smartPassLinkFormatter(row, cell, value, columnDef, dataContext) {
+        //var id = 'smart_pass_link_' + dataContext.SmartPassId;
+        var url = 'http://boss.seeff.com/smart_pass_update.aspx?id=' + dataContext.SmartPassId;
+        var smartPassLink = $("<a href='" + url + "' target='_blank' style='cursor:pointer;text-decoration: underline;'>" + url + "</a>");
+        return smartPassLink[0].outerHTML;
+    }
+
+    columns = [
+                 { id: "col_SmartPassID", name: "Smart Pass ID", field: "SmartPassId", sortable: true },
+                 { id: "col_CurrentStatus", name: "Current Status", field: "CurrentStatus", sortable: true },
+                 { id: "col_SmartPassLink", name: "Smart Pass Link", width: 120, formatter: smartPassLinkFormatter }
+    ];
+    grid = new Slick.Grid("#referralsHistoryContainerDiv", dataView, columns, options);
+    grid.setSelectionModel(new Slick.RowSelectionModel());
+   // grid.registerPlugin(new Slick.AutoTooltips());
+
+    function comparer(a, b) {
+        var x = a[sortcol].toLowerCase(), y = b[sortcol].toLowerCase();
+        return (x == y ? 0 : (x > y ? 1 : -1));
+    }
+
+    grid.onSort.subscribe(function (e, args) {
+        sortcol = args.sortCols[0].sortCol.field;
+        sortdir = args.sortCols[0].sortAsc ? true : false;
+        dataView.sort(comparer, sortdir);
+    });
+
+    dataView.onRowCountChanged.subscribe(function (e, args) {
+        grid.updateRowCount();
+        grid.render();
+    });
+
+    dataView.onRowsChanged.subscribe(function (e, args) {
+        grid.invalidateRows(args.rows);
+        grid.render();
+    });
+
+    dataView.beginUpdate();
+    dataView.setItems(results.ListOfReferrals);
+    dataView.endUpdate();
+    dataView.syncGridSelection(grid, true);
+}
+
 // Represents the view that enables a user view/edit all owners (and/or other contacts) associated with the property
 function buildContactDashboard(contacts, context) {
 
@@ -896,6 +989,11 @@ function buildContactDashboard(contacts, context) {
     var propertyDetailsEditor = buildPropertyAddressEditor(currentProperty);
     var propertyDetailsEditorContent = propertyDetailsEditor.construct();
     container.append(propertyDetailsEditorContent);
+
+    var propertyReferralsHistory = buildPropertyReferralsHistory(currentProperty);
+    var propertyReferralsHistoryContent = propertyReferralsHistory.construct();
+    container.append(propertyReferralsHistoryContent);
+
     container.append("<hr /><p />");
 
     if (context && context.FromFollowup && !context.FromFollowup.RelatedToContactPersonId) {

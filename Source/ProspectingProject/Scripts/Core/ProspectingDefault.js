@@ -2716,9 +2716,30 @@ function handleCreateReferral() {
 
         var commentBox = $("<textarea id='referralComment' style='width:98%' rows='8' />").empty();
         summaryDialog.append(commentBox);
-        summaryDialog.append('<br />');
+        summaryDialog.append('<p />');
+        //summaryDialog.append("<hr />");
 
-        summaryDialog.append("<hr />");
+        //
+        var referralFollowupContainer = $("<div />");
+        var createReferralFollowupOption = $("<label style='display:inline-block;vertical-align:middle;padding-right:10px'><input type='checkbox' id='createReferralFollowupOption' />Create a Follow-up</label>");
+        var referralFollowupDate = $("<input type='text' name='referralFollowupDateInput' id='referralFollowupDateInput' style='width:200px;display:inline-block;vertical-align:middle;' readonly='readonly' disabled /><p style='margin:6px;' />");
+        referralFollowupDate.datepicker({ dateFormat: 'DD, d MM yy', minDate: 0 });
+        referralFollowupContainer.append(createReferralFollowupOption)
+                                 .append(referralFollowupDate);
+        summaryDialog.append(referralFollowupContainer);
+        createReferralFollowupOption.change(function () {
+            var checkOption = $('#createReferralFollowupOption').is(':checked');
+            if (checkOption) {
+                $('#referralFollowupDateInput').prop('disabled', false);
+                $('#referralFollowupDateInput').datepicker("show");
+            } else {
+                $('#referralFollowupDateInput').prop('disabled', true);
+                $('#referralFollowupDateInput').datepicker("hide");
+                $('#referralFollowupDateInput').datepicker('setDate', null);
+            }
+        });
+
+        //summaryDialog.append("<hr />");
         summaryDialog.append('<br />');
 
         var errorDiv = $("<div id='referralErrors' />");
@@ -2790,13 +2811,16 @@ function handleCreateReferral() {
                     ContactCompanyId: currentPersonContact.ContactCompanyId
                 },
                 DepartmentType: departmentType,
-                Comment: comment
+                Comment: comment,
+                CreateFollowup: $('#createReferralFollowupOption').is(':checked'),
+                FollowupDate: $('#referralFollowupDateInput').val()
             }),
             dataType: "json",
         }).done(function (result) {
             $.unblockUI();
             if (result.InstanceValidationErrors && result.InstanceValidationErrors.length) {
                 var errorDiv = $('#referralErrors').empty();
+                errorDiv.append("<hr />");
                 errorDiv.append("The following validation errors occurred. Please fix these or contact support:");
                 errorDiv.append('<br />');
                 $.each(result.InstanceValidationErrors, function (idx, err) {

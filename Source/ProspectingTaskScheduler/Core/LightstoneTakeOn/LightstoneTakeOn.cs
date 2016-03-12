@@ -65,7 +65,12 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                 // Step 9: Drop the Seeff_Deeds database
                 DropSeeffDeeds(reportBuilder);
 
-                SendEmailReport("<br /> Step9 completed successfully.<p /><p />------------ Take-on completed succesfully at: " + DateTime.Now + " ------------", reportBuilder);
+                SendEmailReport("<br /> Step 9 completed successfully. Starting Step 10 at: " + DateTime.Now, reportBuilder);
+
+                // Step 10: base_data - fate transactions that belong to property developers as Developments.
+                AutoFateDevelopments(reportBuilder);
+
+                SendEmailReport("<br /> Step 10 completed successfully.<p /><p />------------ Take-on completed succesfully at: " + DateTime.Now + " ------------", reportBuilder);
             }
             catch (Exception ex)
             {

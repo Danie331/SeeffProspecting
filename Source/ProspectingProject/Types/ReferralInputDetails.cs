@@ -10,5 +10,7 @@ namespace ProspectingProject
         public ContactDataPacket Target { get; set; }
         public string DepartmentType { get; set; }
         public string Comment { get; set; }
+        public bool CreateFollowup { get; set; }
+        public DateTime? FollowupDate { get; set; }
     }
 }

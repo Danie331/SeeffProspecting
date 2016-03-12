@@ -194,6 +194,7 @@
     <Compile Include="Core\LightstoneTakeOn\LightstoneTakeOn.cs" />
     <Compile Include="Core\LightstoneTakeOn\PropertyAddressParser.cs" />
     <Compile Include="Core\LightstoneTakeOn\Step1.cs" />
+    <Compile Include="Core\LightstoneTakeOn\Step10.cs" />
     <Compile Include="Core\LightstoneTakeOn\Step2.cs" />
     <Compile Include="Core\LightstoneTakeOn\Step3.cs" />
     <Compile Include="Core\LightstoneTakeOn\Step4.cs" />
