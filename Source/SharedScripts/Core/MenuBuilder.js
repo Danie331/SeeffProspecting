@@ -66,6 +66,9 @@ function showMenuForUser(userCanEdit, unfatedTransactions) {
         var adminExpander = msApp.administration.expanderWidget;
         adminExpander.open("autoFateOption");
         adminExpander.open("manageDevelopersOption");
+        adminExpander.open("manageAddNewAgenciesOption");
+
+        msApp.administration.initManageAgencies();
     });
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);

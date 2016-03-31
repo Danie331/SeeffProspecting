@@ -4,6 +4,7 @@ var msApp = msApp || {};
 msApp.administration = {
     expanderWidget: null,
     candidateDeveloperResults: null,
+    selectedAgency: null,
     buildAdminMenuHtml: function () {
         var container = $("<div style='padding:15px' />");
 
@@ -11,7 +12,14 @@ msApp.administration = {
         var autoFateOption = buildContentExpanderItem('autoFateOption', '', "Auto-Fate All Unfated Transactions", msApp.administration.buildAutoFatingHtml());
         $('#manageDevelopersOption').empty();
         var manageDevelopersOption = buildContentExpanderItem('manageDevelopersOption', '', "Manage Property Developers", msApp.administration.buildManageDevelopersHtml());
-        msApp.administration.expanderWidget = new ContentExpanderWidget('#contentarea', [autoFateOption, manageDevelopersOption], "adminExpander");
+
+        if (initializationData.UserGuid == '62a85a9d-be7a-4fad-b704-a55edb1d338f' || initializationData.UserGuid == 'a2c48f98-14fb-425e-bbd2-312cfb89980c') {
+            $('#manageAddNewAgenciesOption').empty();
+            var manageAddNewAgenciesOption = buildContentExpanderItem('manageAddNewAgenciesOption', '', "Manage Agencies", msApp.administration.buildManageAddNewAgenciesHtml());
+            msApp.administration.expanderWidget = new ContentExpanderWidget('#contentarea', [autoFateOption, manageDevelopersOption, manageAddNewAgenciesOption], "adminExpander");
+        } else {
+            msApp.administration.expanderWidget = new ContentExpanderWidget('#contentarea', [autoFateOption, manageDevelopersOption], "adminExpander");
+        }
        
         container.empty();
         container.append(msApp.administration.expanderWidget.construct());
@@ -49,6 +57,96 @@ msApp.administration = {
         viewDevelopersBtn.click(msApp.administration.eventHandlers.viewDevelopersList);
 
         return div;
+    },
+    initManageAgencies: function() {
+        var items = [];
+        $.each(initializationData.Agencies, function (idx, ag) {
+            items.push({ label: ag.agency_name, value: ag.agency_id });
+        });
+        var x = $('#competingAgencySelector');
+        var addBtn = $("#addNewAgencyBtn");
+        x.bind("change keyup", function () {
+            var value = $(this).val();
+            var target = $.grep(items, function (i) {
+                return i.label.toLowerCase() == value.toLowerCase();
+            })[0];
+            addBtn.prop('disabled', target !== undefined);
+        });
+        addBtn.unbind('click').bind('click', function () {
+            var value = msApp.administration.selectedAgency;
+            if (!value) return;
+            // Save here
+            $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Saving. Please wait...</p>' });
+            $.ajax({
+                type: "POST",
+                url: "RequestHandler.ashx",
+                data: JSON.stringify({ Instruction: "save_new_agency", agency_name: value })
+            }).done(function (result) {
+                $.unblockUI();
+                if (result != null) {
+                    result = JSON.parse(result);
+                    // Now add to in-memory cache
+                    initializationData.Agencies.push(result);
+                    // Update the control
+                    items.push({ label: result.agency_name, value: result.agency_id });
+                    x.autocomplete({
+                        source: items
+                    });
+                    // splash screen
+                    showSavedSplashDialog('Agency successfully added!');
+                    // test in chrome, test that in-memory cache updated immediately and after restart.
+                } else {
+                    alert('Error occurred saving new agency. Please contact support.');
+                }
+                msApp.administration.selectedAgency = null;
+            });
+        });
+       x.autocomplete({
+               source: items,
+               change: function (event, ui) {
+                if (ui.item == null) {
+                    //$(this).val('');
+                    //$(this).focus();
+                    //msApp.administration.selectedAgency = null;
+                    //addBtn.prop('disabled', true);
+                } else {
+                    //addBtn.prop('disabled', false);
+               }
+       },
+               select: function (event, ui) {
+                event.preventDefault();
+                $(this).val(ui.item.label);
+                msApp.administration.selectedAgency = ui.item.value;
+                addBtn.prop('disabled', true);
+       },
+               focus: function (event, ui) {
+                event.preventDefault();
+                $(this).val(ui.item.label);
+               },
+               search: function (event, ui) {
+                   msApp.administration.selectedAgency = event.currentTarget.value;
+               }
+       });
+    },
+    buildManageAddNewAgenciesHtml: function() {
+        var divContainer = $("<div />");
+        divContainer.append($("<label><i>Use the searchbox below to search for existing competing agencies, and add them if they don't already exist.</i></label>"));
+        divContainer.append('<p />');
+
+        var competingAgencySelector = $("<label for='competingAgencySelector'>Search Agencies: </label><input id='competingAgencySelector' size=30 />");
+
+        var divSelector = $("<div id='manageAgencyContainer' class='ui-widget'></div>");
+        divSelector.append(competingAgencySelector);
+
+        divContainer.append(divSelector);                            
+
+        divContainer.append("<p />");
+        var matchesFound = $("<div id='agencyMatchResultDiv' />");
+        var addAgencyBtn = $("<input type='button' value='Add Agency' id='addNewAgencyBtn' disabled />");
+        matchesFound.append(addAgencyBtn);
+        divContainer.append(matchesFound);
+
+        return divContainer;
     },
     eventHandlers: {
         autoFateBtnClick: function () {
@@ -116,7 +214,7 @@ msApp.administration = {
                     }
                     resultsDiv.dialog({
                         show: 'fade',
-                        position: ['center', 'center'],
+                        //position: ['center', 'center'],
                         hide: { effect: "fadeOut", duration: 500 },
                         width: '400',
                         height: '360',
@@ -205,7 +303,7 @@ function showSavedSplashDialog(text) {
     container.dialog({
         show: 'fade',
         width: '350',
-        position: ['center', 'right'],
+        //position: ['center', 'right'],
         hide: { effect: "fadeOut", duration: 2000 },
         buttons: { "OK": function () { container.dialog("close"); } },
         open: function (event, ui) {

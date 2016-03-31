@@ -1560,7 +1560,7 @@ function showManageAgenciesDialog() {
     function showAgencySavedScreen() {
         $('#agenciesSavedSplashScreen').dialog({
             show: 'fade',
-            position: ['center', 'center'],
+            //position: ['center', 'center'],
             hide: { effect: "fadeOut", duration: 500 },
             open: function (event, ui) {
                 $('#agenciesSavedSplashScreen').siblings(".ui-dialog-titlebar").hide();
@@ -1601,7 +1601,7 @@ function showManageAgenciesDialog() {
                     open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); },
                     width: 'auto',
                     buttons: { "Ok": function () { $(this).dialog("close"); } },
-                    position: ['center', 'center']
+                    //position: ['center', 'center']
                 });
     }
 }

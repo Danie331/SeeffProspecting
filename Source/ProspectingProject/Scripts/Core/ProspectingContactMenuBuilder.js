@@ -942,7 +942,8 @@ function buildSlickGridFromResults(results) {
     function smartPassLinkFormatter(row, cell, value, columnDef, dataContext) {
         //var id = 'smart_pass_link_' + dataContext.SmartPassId;
         var url = 'http://boss.seeff.com/smart_pass_update.aspx?id=' + dataContext.SmartPassId;
-        var smartPassLink = $("<a href='" + url + "' target='_blank' style='cursor:pointer;text-decoration: underline;'>" + url + "</a>");
+        var friendlyName = "View Referral (" + dataContext.SmartPassId + ")";
+        var smartPassLink = $("<a href='" + url + "' target='_blank' style='cursor:pointer;text-decoration: underline;'>" + friendlyName + "</a>");
         return smartPassLink[0].outerHTML;
     }
 

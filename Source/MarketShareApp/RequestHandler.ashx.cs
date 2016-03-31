@@ -43,7 +43,38 @@ namespace MarketShareApp
                     bool saveResult = SaveDevelopers(listObject.DevelopersToSave);
                     context.Response.Write(new JavaScriptSerializer().Serialize(saveResult));
                     break;
+                case "save_new_agency":
+                    Agency agencyName = Newtonsoft.Json.JsonConvert.DeserializeObject<Agency>(json);
+                    var saveAgencyResult = AddNewAgency(agencyName);
+                    context.Response.Write(new JavaScriptSerializer().Serialize(saveAgencyResult));
+                    break;
                 default: break;
+            }
+        }
+
+        private Agency AddNewAgency(Agency agencyNameHolder)
+        {
+            if (string.IsNullOrWhiteSpace( agencyNameHolder.agency_name))
+            {
+                return null;
+            }
+            try
+            {
+                using (var lsBase = DataManager.DataContextRetriever.GetLSBaseDataContext())
+                {
+                    agency newAgency = new agency
+                    {
+                         agency_name = agencyNameHolder.agency_name
+                    };
+                    lsBase.agencies.InsertOnSubmit(newAgency);
+                    lsBase.SubmitChanges();
+
+                    return new Agency { agency_name = newAgency.agency_name, agency_id = newAgency.agency_id };
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
 

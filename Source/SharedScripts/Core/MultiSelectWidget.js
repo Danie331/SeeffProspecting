@@ -78,7 +78,7 @@ function MultiSelectWidget(anchorElementId,   // The id of the element that will
             height: 540,
             resizable: false,
             buttons: { "Save changes": executeSave, "Close": function () { $(this).dialog("close"); } },
-            position: ['center', 'center']
+            //position: ['center', 'center']
         });
     }
 

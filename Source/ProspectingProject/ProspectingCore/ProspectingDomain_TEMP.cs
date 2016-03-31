@@ -3692,7 +3692,7 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                             if (inputDetails.CreateFollowup && inputDetails.FollowupDate != null)
                             {
                                 var followupType = ProspectingLookupData.ActivityFollowupTypes.First(act => act.Value == "Referral Follow-up").Key;
-                                string comment = "Follow-up for Referral created on " + activityRecord.created_date.ToString(System.Threading.Thread.CurrentThread.CurrentCulture)
+                                string comment = "Follow-up on referral created on " + activityRecord.created_date.ToString(System.Threading.Thread.CurrentThread.CurrentCulture)
                                     + Environment.NewLine + Environment.NewLine;
                                 comment += "Referral Details: " + Environment.NewLine;
                                 comment += sb.ToString();

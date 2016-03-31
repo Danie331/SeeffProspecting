@@ -166,12 +166,12 @@ $(function () {
                             application.panel.navItemAreaSelection.buildContent();
                         }
                     } else {
-                        application.stateManager.allSuburbsShown = false;
+                        application.stateManager.allSuburbsShown = false;                       
+                        application.panel.navItemAreaSelection.buildContent();
+                        application.stateManager.setActiveSuburb(null);
                         $.each(application.user.SeeffAreaCollection, function (index, suburb) {
                             application.Google.createSuburbPoly(suburb, { render: false });
                         });
-                        application.panel.navItemAreaSelection.buildContent();
-                        application.stateManager.setActiveSuburb(null);
                     }
                 },
                 handleLicensesCheckbox: function () {
@@ -182,11 +182,11 @@ $(function () {
                             application.Google.createLicensePoly(lic, {render: true});
                         });
                     } else {
-                        application.stateManager.allLicensesShown = false;
+                        application.stateManager.allLicensesShown = false;                        
+                        application.stateManager.setActiveLicense(null);
                         $.each(application.user.SeeffLicenses, function (index, lic) {
                             application.Google.createLicensePoly(lic, { render: false });
                         });
-                        application.stateManager.setActiveLicense(null);
                     }
                 },
                 handleTerritoriesCheckbox: function () {
