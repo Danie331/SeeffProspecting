@@ -119,7 +119,7 @@ textarea
 .ui-dialog
 { 
     margin-right: 100px;
-    overflow: inherit;
+    /*overflow: inherit;*/
 }
 
 /* loading - the AJAX indicator */

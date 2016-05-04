@@ -146,11 +146,33 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                             string division = string.Empty;
                             if (unregisteredProperties.Contains(record.property_id))
                             {
-                                TransactionResult tresult = bossService.IsSeeffRegistered(record.property_id, record.iregdate);
-                                if (string.IsNullOrEmpty(tresult.pErrorMessage) && !string.IsNullOrEmpty(tresult.unique_id))
+                                TransactionResult tresult = null;
+                                try {
+                                    tresult = bossService.IsSeeffRegistered(record.property_id, record.iregdate);
+                                    if (string.IsNullOrEmpty(tresult.pErrorMessage) && !string.IsNullOrEmpty(tresult.unique_id))
+                                    {
+                                        seeffDeal = true;
+                                        division = tresult.division;
+                                    }
+                                }
+                                catch
                                 {
-                                    seeffDeal = true;
-                                    division = tresult.division;
+                                    Thread.Sleep(15000);
+                                    try
+                                    {
+                                        tresult = bossService.IsSeeffRegistered(record.property_id, record.iregdate);
+                                        if (string.IsNullOrEmpty(tresult.pErrorMessage) && !string.IsNullOrEmpty(tresult.unique_id))
+                                        {
+                                            seeffDeal = true;
+                                            division = tresult.division;
+                                        }
+                                    }
+                                    catch(Exception ex)
+                                    {
+                                        string msg = "The following non-fatal error occurred while calling bossService.IsSeeffRegistered(" + record.property_id + ", " + record.iregdate + ") -- error: " + ex.Message;
+                                        msg = msg + " -- PLEASE MANUALLY FIX THIS RECORD.";
+                                        reportBuilder.AppendLine("<br /> " + msg);
+                                    }
                                 }
                             }
 
@@ -177,6 +199,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                                                                  seeffDeal ? "'" + division + "'" : "NULL",
                                                                  record.unique_id);
                             SqlCommand updateTarget = new SqlCommand(sqlText, seeffDeedsConnection);
+                            updateTarget.CommandTimeout = 120;
                             updateTarget.ExecuteNonQuery();
                         }
                         catch

@@ -711,10 +711,13 @@ function loadFollowups(callbackFn, mustBlockUI) {
     }
 
     var existingFollowups = [];
-    $('.followup-item-container').each(function (idx, fu) {
-        var id = $(fu).attr('id');
-        var activityLogId = id.replace('followup_','');
-        existingFollowups.push(activityLogId);
+    //$('.followup-item-container').each(function (idx, fu) {
+    //    var id = $(fu).attr('id');
+    //    var activityLogId = id.replace('followup_','');
+    //    existingFollowups.push(activityLogId);
+    //});
+    $.each(globalFollowUps, function (idx, fol) {
+        existingFollowups.push(fol.ActivityLogId);
     });
     $.ajax({
         type: "POST",
@@ -760,9 +763,12 @@ function showDialogAddActivity(inputPacket, defaultSelection, callback) {
     var allocatedTo = $("<select id='allocatedToInput' style='width:300px;' /><p style='margin:6px;' />");
     div.append(allocatedTo);
     div.append("<label class='fieldAlignmentShortWidth' for='followupDateInput'>Follow-up Date</label>");
-    var followupDate = $("<input type='text' name='followupDateInput' id='followupDateInput' style='height:12px;font-size:12px;width:295px;' /><p style='margin:6px;' />");
+    var followupDate = $("<input type='text' name='followupDateInput' id='followupDateInput' style='height:12px;font-size:12px;width:295px;' readonly='true' /><p style='margin:6px;' />");
     div.append(followupDate);
-    followupDate.datepicker({ dateFormat: 'DD, d MM yy', minDate: 0 });
+    followupDate.datepicker({
+        dateFormat: 'DD, d MM yy', minDate: 0, changeMonth: true,
+        changeYear: true
+    });
     div.append("<label class='fieldAlignmentShortWidth' for='relatedToInput'>Related To</label>");
     var relatedTo = $("<select id='relatedToInput' style='width:300px;' /><p style='margin:6px;' />");
     div.append(relatedTo);

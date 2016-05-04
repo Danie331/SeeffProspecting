@@ -16,17 +16,21 @@ public class ListingUpdater : IHttpHandler {
         {
             case "update_market_share":
                 UpdateMarketShareAndAgency(dataPacket);
+                context.Response.Write(new JavaScriptSerializer().Serialize("success"));
                 break;
             case "update_agency":
                 UpdateMarketShareAndAgency(dataPacket);
+                context.Response.Write(new JavaScriptSerializer().Serialize("success"));
                 break;
             case "update_parent_prop_id":
                 UpdateParentPropertyId(dataPacket);
+                context.Response.Write(new JavaScriptSerializer().Serialize("success"));
                 break;
             case "update_property_address":
                 UpdatePropertyAddress(dataPacket);
-                break;                            
-        } 
+                context.Response.Write(new JavaScriptSerializer().Serialize("success"));
+                break;
+        }
     }
 
     private void UpdatePropertyAddress(ListingUpdatableFields dataPacket)
@@ -37,12 +41,12 @@ public class ListingUpdater : IHttpHandler {
             foreach (var listing in matchedListings)
             {
                 listing.property_address = dataPacket.streetName;
-                listing.street_or_unit_no = dataPacket.streetOrUnitNo;                                
+                listing.street_or_unit_no = dataPacket.streetOrUnitNo;
             }
-            
+
             ls_base.SubmitChanges();
         }
-    }    
+    }
 
     private void UpdateParentPropertyId(ListingUpdatableFields dataPacket)
     {
@@ -96,7 +100,7 @@ public class ListingUpdater : IHttpHandler {
 
         if (listing != null)
         {
-            var fatedCount = lsBase.base_datas.Where(tran => tran.seeff_area_id == listing.seeff_area_id 
+            var fatedCount = lsBase.base_datas.Where(tran => tran.seeff_area_id == listing.seeff_area_id
                                                     && tran.fated.HasValue && tran.market_share_type != null).Count();
             var unfatedCount = lsBase.base_datas.Where(tran => tran.seeff_area_id == listing.seeff_area_id
                                                         && (tran.fated == null || tran.market_share_type == null)).Count();
@@ -109,9 +113,9 @@ public class ListingUpdater : IHttpHandler {
             }
 
             lsBase.SubmitChanges();
-        }   
+        }
     }
- 
+
     public bool IsReusable {
         get {
             return false;
@@ -121,7 +125,7 @@ public class ListingUpdater : IHttpHandler {
     private struct ListingUpdatableFields
     {
         public string instruction;
-        
+
         public string uniqueid;
         public string marketShareType;
         public int? agencyid;

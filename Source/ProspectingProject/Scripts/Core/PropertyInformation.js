@@ -56,7 +56,13 @@ function togglePropertyInformationMenu(hide) {
         });
 
         // New valuation
-        $("#dateValuedInput").datepicker({ dateFormat: 'DD, d MM yy', maxDate: 0, beforeShow: function (i) { if ($(i).attr('readonly')) { return false; } } });
+        $("#dateValuedInput").datepicker({
+            dateFormat: 'DD, d MM yy',
+            maxDate: 0,
+            changeMonth: true,
+            changeYear: true,
+            beforeShow: function (i) { if ($('#isCurrentValueInput').is(':checked')) { return false; } }
+        });
         $('#saveNewValuationBtn').click(function () {
             if (validateNewValuationInputs()) {
                 saveValuation();
@@ -68,10 +74,10 @@ function togglePropertyInformationMenu(hide) {
             var checked = $(this).is(':checked');
             if (checked) {
                 $('#valueEstimateInput').val(currentPropertyForPropertyInformation.LastPurchPrice).attr('readonly', true);
-                $("#dateValuedInput").datepicker('setDate', new Date()).attr('readonly','readonly');
+                $("#dateValuedInput").datepicker('setDate', new Date());
             } else {
                 $('#valueEstimateInput').val('').attr('readonly', false);
-                $("#dateValuedInput").datepicker('setDate', '').attr('readonly', false);
+                $("#dateValuedInput").datepicker('setDate', '');
             }
         });
 
@@ -208,7 +214,7 @@ function buildNewValuationTab() {
                 .empty()
                 .append("<label class='fieldAlignment' style='width:185px'>Value estimate (R) </label><input type='number' id='valueEstimateInput' size='6' />")
                 .append("<br />")
-                .append("<label class='fieldAlignment' style='width:185px'>Date valued </label><input type='text' id='dateValuedInput' />")
+                .append("<label class='fieldAlignment' style='width:185px'>Date valued </label><input type='text' id='dateValuedInput' readonly='true' />")
                 .append("<br />")
                 .append("<label class='fieldAlignment' style='width:185px'>Use current Lightstone value </label><input type='checkbox' id='isCurrentValueInput' />")
                 .append("<br />")

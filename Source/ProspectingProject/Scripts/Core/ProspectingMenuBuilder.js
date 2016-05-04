@@ -141,10 +141,26 @@ function buildFollowupReport(followups) {
 
         function buildFollowupFilter() {
             var filterDiv = $("<div />");
-            var followupTypeFilter = $("<label class='fieldAlignment'>Followup Activity Type: </label><select id='followupActivityTypeSelect' />");
+            var followupTypeFilter = $("<label class='fieldAlignment'>Follow-up Activity Type: </label><select id='followupActivityTypeSelect' style='margin:2px' />");
             filterDiv.append(followupTypeFilter);
 
+            var createdDatesFilter = $("<div  />");
+            var createdfrom = $("<label class='fieldAlignment' for='followupCreatedFromDateFilter'>Follow-up Date From: </label><input type='text' id='followupCreatedFromDateFilter' style='margin:2px' />");
+            var createdto = $("<label class='fieldAlignment' for='followupCreatedToDateFilter'>Follow-up Date To: </label><input type='text' id='followupCreatedToDateFilter' style='margin:2px' />");
+            createdDatesFilter.append(createdfrom).append("<br />").append(createdto);
+            createdfrom.datepicker({ dateFormat: 'DD, d MM yy', maxDate: '0', changeMonth: true, changeYear: true });
+            createdto.datepicker({ dateFormat: 'DD, d MM yy', maxDate: '0', changeMonth: true, changeYear: true });
+            filterDiv.append('<br />').append(createdDatesFilter);
+
             followupTypeFilter.change(function () {
+                performFollowupFiltering(globalFollowUps, $('#followupContent'));
+            });
+
+            createdfrom.change(function () {
+                performFollowupFiltering(globalFollowUps, $('#followupContent'));
+            });
+
+            createdto.change(function () {
                 performFollowupFiltering(globalFollowUps, $('#followupContent'));
             });
 
@@ -190,6 +206,10 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
 
     var followupTypeSelect = $('#followupActivityTypeSelect').val();
     var followupTypeText = $('#followupActivityTypeSelect option:selected').text();
+
+    var followupFrom = $("#followupCreatedFromDateFilter").val();
+    var followupTo = $("#followupCreatedToDateFilter").val();
+
     // Perform filtering
    var displayItems = $.grep(sourceFollowups, function (fol) {
         var meetsCriteria = true;
@@ -203,6 +223,21 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
                 // TODO: fix this.
                 meetsCriteria = fol.ActivityTypeName == followupTypeText;
             }
+            if (!meetsCriteria) return false;
+        }
+
+       // From - To ranges
+        var followupDate = new Date(fol.FollowupDate);
+        followupDate.setHours(0, 0, 0, 0);
+        if (followupFrom) {
+            var fromDate = new Date(followupFrom);
+            meetsCriteria = followupDate >= fromDate;
+            if (!meetsCriteria) return false;
+        }
+
+        if (followupTo) {
+            var toDate = new Date(followupTo);
+            meetsCriteria = followupDate <= toDate;
             if (!meetsCriteria) return false;
         }
 
