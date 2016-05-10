@@ -145,31 +145,35 @@ namespace ProspectingProject
                     foreach (var director in targetCompany.Directors)
                     {
                         var directorPerson = director;
-                            if (!string.IsNullOrEmpty(directorPerson.FirstNames) &&
-                                !string.IsNullOrEmpty(directorPerson.Surname) && !string.IsNullOrEmpty(directorPerson.IdentityNumber))
+                        if (!string.IsNullOrEmpty(directorPerson.FirstNames) &&
+                            !string.IsNullOrEmpty(directorPerson.Surname) && !string.IsNullOrEmpty(directorPerson.IdentityNumber))
+                        {
+                            string gender;
+                            switch (directorPerson.Gender)
                             {
-                                if (directorPerson.Gender.HasFlag(GenderEnum.Male) || directorPerson.Gender.HasFlag(GenderEnum.Female))
-                                {
-                                    var titleKvp = /*!string.IsNullOrEmpty(directorPerson.) ? ProspectingLookupData.ContactPersonTitle.FirstOrDefault(cpt => cpt.Value.ToLower() == directorPerson.Salutation.ToLower()) :*/ default(KeyValuePair<int, string>);
-                                    ContactDataPacket contactDataPacket = new ContactDataPacket { ContactCompanyId = _company.contact_company_id, ProspectingPropertyId = _prospectingPropertyId };
-                                    ProspectingContactPerson newContact = new ProspectingContactPerson
-                                    {
-                                        IdNumber = directorPerson.IdentityNumber,
-                                        Title = !Equals(titleKvp, default(KeyValuePair<int, string>)) ? (int?)titleKvp.Key : null,
-                                        Gender = directorPerson.Gender == GenderEnum.Male ? "M" : "F",
-                                        Firstname = directorPerson.FirstNames,
-                                        Surname = directorPerson.Surname,
-                                        ContactCompanyId = _company.contact_company_id,
-                                        Directorship = "Yes",
-                                        PersonCompanyRelationshipType = relationshipToCompany
-                                        // TODO: Rem to add phone no's + email addresses if they are available???
-                                    };
-                                    contactDataPacket.ContactPerson = newContact;
-                                    var prospectingContactPerson = ProspectingCore.SaveContactPerson(contactDataPacket);
-                                    prospectingContactPersons.Add(prospectingContactPerson);
-                                }
+                                case GenderEnum.Male: gender = "M"; break;
+                                case GenderEnum.Female: gender = "F"; break;
+                                default: gender = ProspectingCore.DetermineOwnerGender(directorPerson.IdentityNumber); break;
                             }
 
+                            var titleKvp = /*!string.IsNullOrEmpty(directorPerson.) ? ProspectingLookupData.ContactPersonTitle.FirstOrDefault(cpt => cpt.Value.ToLower() == directorPerson.Salutation.ToLower()) :*/ default(KeyValuePair<int, string>);
+                            ContactDataPacket contactDataPacket = new ContactDataPacket { ContactCompanyId = _company.contact_company_id, ProspectingPropertyId = _prospectingPropertyId };
+                            ProspectingContactPerson newContact = new ProspectingContactPerson
+                            {
+                                IdNumber = directorPerson.IdentityNumber,
+                                Title = !Equals(titleKvp, default(KeyValuePair<int, string>)) ? (int?)titleKvp.Key : null,
+                                Gender = gender,
+                                Firstname = directorPerson.FirstNames,
+                                Surname = directorPerson.Surname,
+                                ContactCompanyId = _company.contact_company_id,
+                                Directorship = "Yes",
+                                PersonCompanyRelationshipType = relationshipToCompany
+                                // TODO: Rem to add phone no's + email addresses if they are available???
+                            };
+                            contactDataPacket.ContactPerson = newContact;
+                            var prospectingContactPerson = ProspectingCore.SaveContactPerson(contactDataPacket);
+                            prospectingContactPersons.Add(prospectingContactPerson);
+                        }
                     }
                 }
                 else
