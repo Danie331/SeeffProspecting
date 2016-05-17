@@ -204,6 +204,7 @@
     <Content Include="UserInterface\HTML\CreateSuburb.html" />
     <Content Include="UserInterface\HTML\EditLicense.html" />
     <Content Include="UserInterface\HTML\EditSuburb.html" />
+    <Content Include="UserInterface\HTML\EditTerritory.html" />
     <Content Include="UserInterface\HTML\LicenseInformation.html" />
     <Content Include="UserInterface\HTML\Reporting.html" />
     <Content Include="UserInterface\Javascript\3rd_party\jquery.contextMenu.js" />
@@ -214,6 +215,7 @@
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemEditLicense.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemEditSuburb.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemAreaSelection.js" />
+    <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemEditTerritory.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemLicenseInformation.js" />
     <Content Include="UserInterface\Javascript\Core\NavigationItemContent\NavItemReports.js" />
     <Content Include="UserInterface\Javascript\Core\Services.js" />
@@ -245,8 +247,10 @@
     <Compile Include="BusinessLayer\ControllerActions\RetrieveUnmappedSuburbs.cs" />
     <Compile Include="BusinessLayer\ControllerActions\SaveLicense.cs" />
     <Compile Include="BusinessLayer\ControllerActions\SaveSuburb.cs" />
+    <Compile Include="BusinessLayer\ControllerActions\SaveTerritory.cs" />
     <Compile Include="BusinessLayer\ControllerActions\ValidateLicense.cs" />
     <Compile Include="BusinessLayer\ControllerActions\ValidateSuburb.cs" />
+    <Compile Include="BusinessLayer\ControllerActions\ValidateTerritory.cs" />
     <Compile Include="BusinessLayer\GlobalAreaCache.cs" />
     <Compile Include="BusinessLayer\Interfaces\IServerResult.cs" />
     <Compile Include="BusinessLayer\Models\AreaHierarchy.cs" />
@@ -259,6 +263,7 @@
     <Compile Include="BusinessLayer\Models\OrphanedProperty.cs" />
     <Compile Include="BusinessLayer\Models\SaveLicenseResult.cs" />
     <Compile Include="BusinessLayer\Models\SaveSuburbResult.cs" />
+    <Compile Include="BusinessLayer\Models\SaveTerritoryResult.cs" />
     <Compile Include="BusinessLayer\Models\SeeffLicense.cs" />
     <Compile Include="BusinessLayer\Models\SeeffSuburb.cs" />
     <Compile Include="BusinessLayer\Models\SeeffTerritory.cs" />
@@ -269,6 +274,7 @@
     <Compile Include="BusinessLayer\Validators\LicenseValidator.cs" />
     <Compile Include="BusinessLayer\Validators\SuburbValidator.cs" />
     <Compile Include="BusinessLayer\Utils.cs" />
+    <Compile Include="BusinessLayer\Validators\TerritoryValidator.cs" />
     <Compile Include="BusinessLayer\Validators\ValidatorBase.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Database\base_data.cs">

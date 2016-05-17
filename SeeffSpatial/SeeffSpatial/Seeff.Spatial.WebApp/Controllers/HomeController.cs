@@ -210,5 +210,35 @@ namespace Seeff.Spatial.WebApp.Controllers
                 return new SuburbsUnderMaintenanceResult { Successful = false, Message = ex.Message };
             }
         }
+
+        [HttpPost]
+        public AreaValidationResult ValidateTerritory([FromBody]SeeffTerritory territoryFromFrontEnd)
+        {
+            try
+            {
+                var validationResult = ControllerActions.ValidateTerritory(territoryFromFrontEnd);
+                return validationResult;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "ValidateTerritory()", territoryFromFrontEnd);
+                return new AreaValidationResult { IsValid = false, ValidationMessage = ex.Message };
+            }
+        }
+
+        [HttpPost]
+        public SaveTerritoryResult SaveTerritory([FromBody]SeeffTerritory territoryFromFrontEnd)
+        {
+            try
+            {
+                var saveResult = ControllerActions.SaveTerritory(territoryFromFrontEnd);
+                return saveResult;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "SaveTerritory()", territoryFromFrontEnd);
+                return new SaveTerritoryResult { Successful = false, SaveMessage = ex.Message };
+            }
+        }
     }
 }

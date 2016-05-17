@@ -92,6 +92,14 @@ $(function () {
                 getSuburbsUnderMaintenance: function (callback) {
                     var endpoint = application.utilities.buildHomeURL('/api/Home/GetSuburbsUnderMaintenance');
                     application.services.get(endpoint, "Refreshing. Please wait...", callback);
+                },
+                validateTerritoryPolygon: function (territoryModel, callback) {
+                    var endpoint = application.utilities.buildHomeURL('/api/Home/ValidateTerritory');
+                    application.services.post(endpoint, territoryModel, "Validating. Please wait...", callback);
+                },
+                saveTerritory: function (territoryModel, callback) {
+                    var endpoint = application.utilities.buildHomeURL('/api/Home/SaveTerritory');
+                    application.services.post(endpoint, territoryModel, "Saving. Please wait...", callback);
                 }
             },
             serviceModels: {
@@ -116,6 +124,15 @@ $(function () {
                     }
 
                     return licenseModel;
+                },
+                buildTerritoryModel: function (territory) {
+                    var territoryModel = { TerritoryID: null, PolyWKT: null, CentroidWKT: null };
+                    if (territory) {
+                        territoryModel.PolyWKT = application.Google.getPolyAsGeographyString(territory.PolygonInstance);
+                        territoryModel.TerritoryID = territory.TerritoryID;
+                    }
+
+                    return territoryModel;
                 }
             }
         }

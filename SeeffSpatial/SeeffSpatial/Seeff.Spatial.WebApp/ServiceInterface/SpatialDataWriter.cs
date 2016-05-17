@@ -37,6 +37,20 @@ namespace Seeff.Spatial.WebApp.ServiceInterface
             }
         }
 
+        public SeeffTerritory SaveTerritory(SeeffTerritory territory)
+        {
+            try
+            {
+                territory = PostToService<SeeffTerritory>("api/CreateOrUpdate/SaveTerritory", territory);
+                return territory;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "SaveTerritory()", null);
+                throw;
+            }
+        }
+
         public SeeffSuburb DeleteSuburb(SeeffSuburb suburb)
         {
             try

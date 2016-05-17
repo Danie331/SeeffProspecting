@@ -161,6 +161,16 @@ namespace Seeff.Spatial.WebApp.BusinessLayer
             return result;
         }
 
+        public SeeffTerritory UpdateCacheItem(SeeffTerritory result)
+        {
+            var target = _allTerritories.FirstOrDefault(terr => terr.TerritoryID == result.TerritoryID);
+            if (target != null)
+            {
+                target.Polygon = result.Polygon;
+            }
+            return target;
+        }
+
         public void RemoveCacheItem(SeeffSuburb result)
         {
             var target = _allSuburbs.FirstOrDefault(sub => sub.SeeffAreaID == result.SeeffAreaID);

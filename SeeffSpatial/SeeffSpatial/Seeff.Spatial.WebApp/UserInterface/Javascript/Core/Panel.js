@@ -73,6 +73,7 @@ $(function () {
                         application.panel.navMenu.updateNavItemButtonOnClick();
                         application.stateManager.setActiveSuburb(null);
                         application.stateManager.setActiveLicense(null);
+                        application.stateManager.setActiveTerritory(null);
                         application.stateManager.handleExitEditPolyMode();
                         application.stateManager.handleExitLicenseInfoScreen();
                         application.stateManager.handleEnterCreateAreaMode(); // area layering
@@ -106,10 +107,21 @@ $(function () {
                             application.stateManager.activeNavItem = application.panel.navItemEditLicense;
                         }
                     },
+                    enterTerritoryEditModeClick: function() {
+                        if (application.stateManager.activeTerritory) {
+                            application.panel.navMenu.updateNavItemButtonOnClick();
+                            application.panel.navItemEditTerritory.buildContent();
+                            application.stateManager.handleExitCreateAreaMode();
+                            application.stateManager.handleEnterPolyEditMode();
+                            application.stateManager.handleExitLicenseInfoScreen();
+                            application.stateManager.activeNavItem = application.panel.navItemEditTerritory;
+                        }
+                    },
                     licenseInformationClick: function () {
                         application.panel.navMenu.updateNavItemButtonOnClick();
                         application.stateManager.setActiveSuburb(null);
                         application.stateManager.setActiveLicense(null);
+                        application.stateManager.setActiveTerritory(null);
                         application.stateManager.handleExitEditPolyMode();
                         application.stateManager.handleExitCreateAreaMode();
 

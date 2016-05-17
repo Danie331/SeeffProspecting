@@ -82,6 +82,7 @@
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemAreaSelection.js"></script>
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemEditSuburb.js"></script>
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemEditLicense.js"></script>
+    <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemEditTerritory.js"></script>
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemLicenseInformation.js"></script>
     <script src="UserInterface/Javascript/Core/NavigationItemContent/NavItemReports.js"></script>
 

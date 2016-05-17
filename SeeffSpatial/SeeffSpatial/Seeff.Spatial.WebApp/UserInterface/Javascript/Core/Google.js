@@ -214,6 +214,22 @@ $(function () {
                 }
                 territory.PolygonInstance = polygon;
                 territory.CentroidInstance = application.Google.createPointFromWKT(territory.CentroidWKT);
+
+                google.maps.event.addListener(polygon, "click", function () {
+                    //if (application.stateManager.allLicensesShown || application.stateManager.allTerritoriesShown)
+                    //    return;
+                    if (application.stateManager.createAreaMode)
+                        return;
+                    if (application.stateManager.activeTerritory != territory) {
+                        application.stateManager.handleExitEditPolyMode();
+                        application.Google.resetPolygonSelection();
+                        application.Google.showTerritoryInfoWindow(territory);
+                    }
+                    this.selected = true;
+                    this.setOptions({ fillOpacity: 0.5 });
+
+                    application.panel.navItemAreaSelection.selectTerritoryFromPolyClick(territory);
+                });
             },
             resetPolygonSelection: function () {
                 if (application.stateManager.activeSuburb) {
@@ -235,6 +251,17 @@ $(function () {
                         if (license.PolygonInstance.infoWindow) {
                             license.PolygonInstance.infoWindow.close();
                             license.PolygonInstance.infoWindow = null;
+                        }
+                    }
+                }
+                if (application.stateManager.activeTerritory) {
+                    var territory = application.stateManager.activeTerritory;
+                    if (territory && territory.PolygonInstance.selected) {
+                        territory.PolygonInstance.selected = false;
+                        territory.PolygonInstance.setOptions({ fillOpacity: 0.0 });
+                        if (territory.PolygonInstance.infoWindow) {
+                            territory.PolygonInstance.infoWindow.close();
+                            territory.PolygonInstance.infoWindow = null;
                         }
                     }
                 }
@@ -265,6 +292,17 @@ $(function () {
                 infoWindow.open(application.Google.map);
 
                 license.PolygonInstance.infoWindow = infoWindow;
+            },
+            showTerritoryInfoWindow: function(territory) {
+                var contentString = $("<div />")
+                                   .append("Territory ID: " + territory.TerritoryID);
+
+                var infoWindow = new google.maps.InfoWindow();
+                infoWindow.setContent(contentString.html());
+                infoWindow.setPosition(territory.CentroidInstance);
+                infoWindow.open(application.Google.map);
+
+                territory.PolygonInstance.infoWindow = infoWindow;
             },
             getPolyAsGeographyString: function (polygon) {
                 var path = polygon.getPath().getArray();

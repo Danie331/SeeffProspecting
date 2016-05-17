@@ -110,6 +110,13 @@ $(function () {
                     application.stateManager.handleEnterPolyEditMode();
                 }
             },
+            selectTerritoryFromPolyClick: function(territory) {
+                application.stateManager.setActiveTerritory(territory);
+                if (application.stateManager.activeNavItem == application.panel.navItemEditTerritory) {
+                    application.panel.navItemEditTerritory.buildContent();
+                    application.stateManager.handleEnterPolyEditMode();
+                }
+            },
             handleSuburbLinkItemClick: function (e) {
                 e.stopPropagation();
                 var id = $(e.target).attr('id');

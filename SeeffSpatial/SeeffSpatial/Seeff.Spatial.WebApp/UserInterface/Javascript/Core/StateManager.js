@@ -5,8 +5,10 @@ $(function () {
             activeNavItem: null,
             activeSuburb: null,
             activeLicense: null,
+            activeTerritory: null,
             activeSuburbInEditMode: false,
             activeLicenseInEditMode: false,
+            activeTerritoryInEditMode: false,
             createAreaMode: false,
             allSuburbsShown: false,
             allLicensesShown: false,
@@ -41,6 +43,19 @@ $(function () {
                     application.stateManager.activeSuburbInEditMode = false;
                     application.stateManager.activeLicenseInEditMode = false;
                 }
+                if (application.stateManager.activeTerritory) {
+                    var territory = application.stateManager.activeTerritory;
+                    var polygon = territory.PolygonInstance;
+                    application.Google.resetPolygonSelection();
+                    polygon.setMap(null);
+                    polygon = null;
+
+                    application.Google.createTerritoryPoly(territory, { render: true });
+
+                    application.stateManager.activeSuburbInEditMode = false;
+                    application.stateManager.activeLicenseInEditMode = false;
+                    application.stateManager.activeTerritoryInEditMode = false;
+                }
             },
             handleEnterPolyEditMode: function () {
                 if (application.stateManager.activeSuburb) {
@@ -56,6 +71,13 @@ $(function () {
                     license.PolygonInstance.setOptions({ fillOpacity: 0.5 });
                     license.PolygonInstance.selected = true;
                     application.stateManager.activeLicenseInEditMode = true;
+                }
+                if (application.stateManager.activeTerritory) {
+                    var territory = application.stateManager.activeTerritory;
+                    territory.PolygonInstance.setOptions({ editable: true });
+                    territory.PolygonInstance.setOptions({ fillOpacity: 0.5 });
+                    territory.PolygonInstance.selected = true;
+                    application.stateManager.activeTerritoryInEditMode = true;
                 }
             },
             handleEnterCreateAreaMode: function () {
@@ -98,6 +120,10 @@ $(function () {
                     application.Google.createLicensePoly(application.stateManager.activeLicense, { render: true });
                     application.stateManager.activeLicense = null;
                 }
+                if (application.stateManager.activeTerritory) {
+                    application.Google.createTerritoryPoly(application.stateManager.activeTerritory, { render: true });
+                    application.stateManager.activeTerritory = null;
+                }
                 if (!suburb && application.stateManager.activeSuburb != null) {
                     application.stateManager.handleExitEditPolyMode();
                     application.Google.resetPolygonSelection();
@@ -109,11 +135,30 @@ $(function () {
                     application.Google.createSuburbPoly(application.stateManager.activeSuburb, { render: true });
                     application.stateManager.activeSuburb = null;
                 }
+                if (application.stateManager.activeTerritory) {
+                    application.Google.createTerritoryPoly(application.stateManager.activeTerritory, { render: true });
+                    application.stateManager.activeTerritory = null;
+                }
                 if (!license && application.stateManager.activeLicense != null) {
                     application.stateManager.handleExitEditPolyMode();
                     application.Google.resetPolygonSelection();
                 }
                 application.stateManager.activeLicense = license;
+            },
+            setActiveTerritory: function(territory) {
+                if (application.stateManager.activeLicense) {
+                    application.Google.createLicensePoly(application.stateManager.activeLicense, { render: true });
+                    application.stateManager.activeLicense = null;
+                }
+                if (application.stateManager.activeSuburb) {
+                    application.Google.createSuburbPoly(application.stateManager.activeSuburb, { render: true });
+                    application.stateManager.activeSuburb = null;
+                }
+                if (!territory && application.stateManager.activeTerritory != null) {
+                    application.stateManager.handleExitEditPolyMode();
+                    application.Google.resetPolygonSelection();
+                }
+                application.stateManager.activeTerritory = territory;
             },
             updateActiveSuburb: function (suburbData) {
                 var activeSuburb = application.stateManager.activeSuburb;
@@ -127,6 +172,13 @@ $(function () {
                 activeLicense.PolyWKT = licenseData.PolyWKT;
                 activeLicense.CentroidWKT = licenseData.CentroidWKT;
                 application.Google.createLicensePoly(activeLicense, {render: true});
+            },
+            updateActiveTerritory: function (territoryData) {
+                var activeTerritory = application.stateManager.activeTerritory;
+                activeTerritory.PolyWKT = territoryData.PolyWKT;
+                activeTerritory.CentroidWKT = territoryData.CentroidWKT;
+
+                application.Google.createTerritoryPoly(activeTerritory, { render: true });
             }
         }
     });

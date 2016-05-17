@@ -152,5 +152,28 @@ namespace Seeff.Spatial.Service.Controllers
                 throw;
             }
         }
+
+        [HttpPost]
+        public SpatialTerritory SaveTerritory([FromBody]SpatialTerritory territory)
+        {
+            try
+            {
+                using (var spatialDb = new seeff_spatialEntities())
+                {
+                    var existingrecord = spatialDb.spatial_terretory.FirstOrDefault(terr => terr.territory_id == territory.TerritoryID);
+                    if (existingrecord != null)
+                    {
+                        existingrecord.geo_polygon = territory.Polygon;
+                        spatialDb.SaveChanges();
+                    }
+                    return territory;
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex, "SaveTerritory() in Spatial Service", territory);
+                throw;
+            }
+        }
     }
 }
