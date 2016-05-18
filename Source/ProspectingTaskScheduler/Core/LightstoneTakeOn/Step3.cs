@@ -155,8 +155,15 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                                         division = tresult.division;
                                     }
                                 }
-                                catch
+                                catch (Exception e)
                                 {
+                                    StringBuilder sb = new StringBuilder();
+                                    sb.AppendLine("property_id:" + record.property_id);
+                                    sb.AppendLine("<br />");
+                                    sb.AppendLine("iregdate:" + record.iregdate);
+                                    sb.AppendLine("<br />");
+                                    sb.AppendLine(e.ToString());
+                                    LightstoneTakeOn.SendEmailReport("Exception occurred while calling IsSeeffRegistered(). Check status of this record....retrying.", sb);
                                     Thread.Sleep(15000);
                                     try
                                     {

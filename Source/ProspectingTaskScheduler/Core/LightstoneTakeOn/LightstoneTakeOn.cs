@@ -80,7 +80,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
             }
         }
 
-        private static void SendEmailReport(string message, StringBuilder reportBuilder)
+        public static void SendEmailReport(string message, StringBuilder reportBuilder)
         {
             reportBuilder.AppendLine(message);
 
