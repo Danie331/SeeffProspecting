@@ -1074,6 +1074,9 @@ function buildContentForInfoWindow(listing) {
 
 function buildUnitContentRow(unit) {
     function getBGColourForRow(unit) {
+        if (hasUnfatedListings(unit.Listings)) {
+            return '#58FF33';
+        }
         return 'white';
     }
     // Sort the listings in this unit by last reg date
@@ -1242,6 +1245,11 @@ function updateMarketShareForListing(uniqueId, selectedValue) {
                         $.each(allMarkersForSS, function (idx, el) {
                             el.setIcon(iconPath);
                         });
+                        if (listing.Fated) {
+                            var targetElement = $("#unit" + listing.PropertyId);
+                            targetElement.data('color', 'white');
+                            targetElement.data('color2', 'white');
+                        }
                     } else {
                         listing.Marker.setIcon(getIconForMarker(listing.Marker));
                     }

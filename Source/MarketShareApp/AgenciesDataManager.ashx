@@ -35,9 +35,15 @@ public class AgenciesDataManager : IHttpHandler, System.Web.SessionState.IRequir
         {
             List<SuburbInfo> userSuburbs = HttpContext.Current.Session["user_suburbs"] as List<SuburbInfo>;
             var suburbIds = userSuburbs.Select(s => s.SuburbId);
-            return (from b in lsbase.agencies_user_suburbs
-                    where b.suburb_id != null && suburbIds.Contains(b.suburb_id) && b.agency_id != null
-                    select b.agency_id.Value).Distinct().ToArray();
+            var resultSet1 = (from b in lsbase.agencies_user_suburbs
+                             where suburbIds.Contains(b.suburb_id) && b.agency_id != null
+                             select b.agency_id.Value).Distinct();
+
+            var resultSet2 = (from b in lsbase.base_datas
+                             where b.seeff_area_id != null && suburbIds.Contains(b.seeff_area_id.Value) && b.agency_id != null
+                             select b.agency_id.Value).Distinct();
+
+            return resultSet1.Union(resultSet2).ToArray();
         }
     }
 
