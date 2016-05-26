@@ -197,6 +197,9 @@ namespace ProspectingProject
                         string referralsHistoryForProperty = GetReferralsHistoryForProperty(json);
                         context.Response.Write(referralsHistoryForProperty);
                         break;
+                    case "update_do_not_contact_status":
+                        UpdateDoNotContactStatusForContact(json);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -229,6 +232,12 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private void UpdateDoNotContactStatusForContact(string json)
+        {
+            var inputPacket = ProspectingCore.Deserialise<ProspectingContactPerson>(json);
+            ProspectingCore.UpdateDoNotContactStatusForContact(inputPacket);
         }
 
         private string GetReferralsHistoryForProperty(string json)

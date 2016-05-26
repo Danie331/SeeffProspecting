@@ -76,6 +76,7 @@ namespace ProspectingProject
                                                                                                                                                             PropertiesOwned = loadOwnedProperties ? ProspectingCore.LoadPropertiesOwnedByThisContact(pcp.id_number, ctx) : null,
                                                                                                                                                             EmailOptout = pcp.optout_emails,
                                                                                                                                                             SMSOptout = pcp.optout_sms,
+                                                                                                                                                            DoNotContact = pcp.do_not_contact,
 
                                                                                                                                                             // Dracore fields
                                                                                                                                                             AgeGroup = pcp.age_group,
@@ -110,6 +111,7 @@ namespace ProspectingProject
                                                 PropertiesOwned = loadOwnedProperties ? ProspectingCore.LoadPropertiesOwnedByThisContact(pcp.id_number, ctx) : null,
                                                 EmailOptout = pcp.optout_emails,
                                                 SMSOptout = pcp.optout_sms,
+                                                DoNotContact = pcp.do_not_contact,
 
                                                 // Dracore fields
                                                 AgeGroup = pcp.age_group,

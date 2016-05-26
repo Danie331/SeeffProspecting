@@ -27,6 +27,10 @@ function openExpanderWidget(contact, context) {
     div.append(expanderWidget.construct());
     contactDetailsDiv.append(div);
 
+    if (contact && contact.DoNotContact) {
+        $(".phoneContactSection").hide();
+    }
+
     // "Click" the first div
     expanderWidget.open("personGeneral");
     expanderWidget.open("personContact");
@@ -125,6 +129,33 @@ function buildGeneralInfoHtml(contact, context) {
         }
         optoutFieldset.append("<label style='cursor:pointer;vertical-align:middle' title='Select this option to indicate that this person is not to be contacted by SMS'>Opt-out from SMS<input type='checkbox' name='smsOptoutCheckbox' id='smsOptoutCheckbox' style='cursor:pointer;vertical-align:middle;margin-right:20px' " + smsChecked + " " + smsDisabledOption + "  /></label>");
     }
+    // Database changes.
+    var doNotContactChecked = '';
+    if (contact && contact.DoNotContact) {
+        doNotContactChecked = 'checked';
+        html.prepend("<label id='doNotContactInfoLabel' style='color:red;font-size:14px;'>This person has requested not to be contacted.</label><br />");
+    }
+    optoutFieldset.append('<br />');
+    var doNotContactInput = $("<input type='checkbox' name='doNotContactCheckbox' id='doNotContactCheckbox' style='cursor:pointer;vertical-align:middle;margin-right:20px' " + doNotContactChecked + " />");
+    var doNotContactLabel = $("<label style='cursor:pointer;vertical-align:middle' title='Select this option to indicate that this person is not to be contacted telephonically'>Do not contact</label>");
+    optoutFieldset.append(doNotContactLabel.append(doNotContactInput));
+
+    doNotContactInput.on('change', function (e) {
+        var selected = $(e.target).is(':checked');
+        handleDoNotContactSelect(selected, function () {
+            contact.DoNotContact = selected;
+            if (!contact.IsPOPIrestricted) {
+                if (selected) {
+                    html.prepend("<label id='doNotContactInfoLabel' style='color:red;font-size:14px;'>This person has requested not to be contacted.</label>");
+                    $(".phoneContactSection").hide();
+                } else {
+                    $("#doNotContactInfoLabel").remove();
+                    $(".phoneContactSection").show();
+                }
+            }
+        });
+    });
+
     optoutDiv.append(optoutFieldset);
     html.append(optoutDiv);
 
@@ -313,6 +344,23 @@ function buildGeneralInfoHtml(contact, context) {
     return html;
 }
 
+function handleDoNotContactSelect(checked, callback) {
+    if (!currentPersonContact) return;
+
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({
+            Instruction: 'update_do_not_contact_status', ContactPersonId: currentPersonContact.ContactPersonId,
+            DoNotContact: checked,
+            TargetLightstonePropertyIdForComms: currentProperty.LightstonePropertyId
+        }),
+        dataType: "json"
+    }).done(function () {
+        callback();
+    });
+}
+
 function buildRelationshipsToContact(contacts) {
     var relatedContactRows = $("div />");
     $.each(contacts, function (index, contact) {
@@ -419,6 +467,7 @@ function buildContactDetailsHtml(contact, context) {
 function (ph, em) {
     handleSaveContactDetails(ph, em, context);
 }, canEdit);
+
     return contactDetailsWidget.construct();
 }
 
@@ -611,10 +660,10 @@ function handleSaveContactPerson(saveDetailsFunction, context) {
             else {
                 // Must be a new contact
                 if (propertyRelationship) {
-                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, propertyRelationship, null, null, popiOptionSelected, gender, null, null, emailOptout, smsOptout);
+                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, propertyRelationship, null, null, popiOptionSelected, gender, null, null, emailOptout, smsOptout, false);
                 }
                 else if (companyRelationship) {
-                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, null, null, null, popiOptionSelected, gender, companyRelationship, contactCompanyId, emailOptout, smsOptout);
+                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, null, null, null, popiOptionSelected, gender, companyRelationship, contactCompanyId, emailOptout, smsOptout, false);
                 }
             }
             saveContact(currentPersonContact, currentProperty, function (data) {

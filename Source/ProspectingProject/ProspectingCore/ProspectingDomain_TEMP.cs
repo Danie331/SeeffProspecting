@@ -509,7 +509,8 @@ namespace ProspectingProject
                     MaritalStatus = pcp.marital_status,
                     Location = pcp.location,
                     EmailOptout = pcp.optout_emails,
-                    SMSOptout = pcp.optout_sms
+                    SMSOptout = pcp.optout_sms,
+                    DoNotContact = pcp.do_not_contact
                 };
 
                 contactPerson.PhoneNumbers = ProspectingLookupData.PropertyContactPhoneNumberRetriever(prospecting, contactPerson).ToList();
@@ -958,6 +959,7 @@ namespace ProspectingProject
 
                     contact.optout_emails = incomingContact.EmailOptout;
                     contact.optout_sms = incomingContact.SMSOptout;
+                    contact.do_not_contact = incomingContact.DoNotContact;
 
                     if (dataPacket.ContactCompanyId.HasValue)
                     {
@@ -1158,6 +1160,7 @@ namespace ProspectingProject
                             is_popi_restricted = incomingContact.IsPOPIrestricted,
                             optout_emails = incomingContact.EmailOptout,
                             optout_sms = incomingContact.SMSOptout,
+                            do_not_contact = incomingContact.DoNotContact,
                         };
                         prospecting.prospecting_contact_persons.InsertOnSubmit(newContact);
                         prospecting.SubmitChanges();
@@ -1467,6 +1470,7 @@ namespace ProspectingProject
 
                         EmailOptout = existingContactWithDetail.optout_emails,
                         SMSOptout = existingContactWithDetail.optout_sms,
+                        DoNotContact = existingContactWithDetail.do_not_contact,
 
                         PhoneNumbers = (from det in prospecting.prospecting_contact_details
                                         where det.contact_person_id == existingContactWithDetail.contact_person_id
@@ -1945,6 +1949,7 @@ namespace ProspectingProject
 
                                            EmailOptout = cc.optout_emails,
                                            SMSOptout = cc.optout_sms,
+                                           DoNotContact = cc.do_not_contact,
 
                                            // In due course may need to add the Dracore fields here
 
@@ -2623,7 +2628,7 @@ namespace ProspectingProject
                          pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays,
                          pp.has_cell, pp.has_primary_cell, pp.has_email, pp.has_primary_email, pp.has_landline, pp.has_primary_landline, pcp.contact_person_id, 
                          ppr.relationship_to_property, NULL AS 'relationship_to_company', NULL AS 'contact_company_id', pcp.firstname, pcp.surname, pcp.id_number, pcp.person_title, pcp.person_gender, pcp.comments_notes, 
-                         pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
+                         pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.do_not_contact, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
                          pcp.physical_address, pcp.home_ownership, pcp.marital_status, pcp.location, pcd.contact_detail_type, pcd.prospecting_contact_detail_id, pcd.contact_detail, pcd.is_primary_contact, pcd.intl_dialing_code_id, 
                          padc.dialing_code_id, pcd.eleventh_digit, pcd.deleted
 FROM            prospecting_property AS pp LEFT OUTER JOIN
@@ -2638,7 +2643,7 @@ SELECT        pp.prospecting_property_id, pp.lightstone_property_id, pp.latitude
                          pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays,
                          pp.has_cell, pp.has_primary_cell, pp.has_email, pp.has_primary_email, pp.has_landline, pp.has_primary_landline, pcp.contact_person_id, NULL 
                          AS 'relationship_to_property', ppcr.relationship_to_company, ppcr.contact_company_id, pcp.firstname, pcp.surname, pcp.id_number, pcp.person_title, pcp.person_gender, pcp.comments_notes, 
-                         pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
+                         pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.do_not_contact, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
                          pcp.physical_address, pcp.home_ownership, pcp.marital_status, pcp.location, pcd.contact_detail_type, pcd.prospecting_contact_detail_id, pcd.contact_detail, pcd.is_primary_contact, pcd.intl_dialing_code_id, 
                          padc.dialing_code_id, pcd.eleventh_digit, pcd.deleted
 FROM            prospecting_property AS pp LEFT OUTER JOIN
@@ -2748,6 +2753,7 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                             PropertiesOwned = null,
                             EmailOptout = contactRecord.optout_emails.HasValue ? contactRecord.optout_emails.Value : false,
                             SMSOptout = contactRecord.optout_sms.HasValue ? contactRecord.optout_sms.Value : false,
+                            DoNotContact = contactRecord.do_not_contact.HasValue ? contactRecord.do_not_contact.Value  : false,
 
                             // Dracore fields
                             AgeGroup = contactRecord.age_group,
@@ -3750,6 +3756,36 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                     referralsHistory.ErrorMessage = message;
                     return referralsHistory;
                 }
+            }
+        }
+
+        public static void UpdateDoNotContactStatusForContact(ProspectingContactPerson contactToUpdate)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                var targetContactPerson = prospecting.prospecting_contact_persons.First(cp => cp.contact_person_id == contactToUpdate.ContactPersonId);
+                targetContactPerson.do_not_contact = contactToUpdate.DoNotContact;
+
+                prospecting.SubmitChanges();
+
+                var activityType = ProspectingLookupData.ActivityTypes.First(act => act.Value == "General").Key;
+                string comment;
+                if (contactToUpdate.DoNotContact)
+                {
+                    comment = "The 'Do not contact' option has been set for the related contact person, indicating that they are not to be contacted telephonically.";
+                } else
+                {
+                    comment = "The related contact person may be contacted telephonically. The 'Do not contact' option for this contact has been removed.";
+                }
+                ProspectingActivity pa = new ProspectingActivity
+                {
+                    IsForInsert = true,
+                    LightstonePropertyId = contactToUpdate.TargetLightstonePropertyIdForComms.Value,
+                    ActivityTypeId = activityType,
+                    Comment = comment,
+                    ContactPersonId = contactToUpdate.ContactPersonId
+                };
+                UpdateInsertActivity(pa);
             }
         }
     }

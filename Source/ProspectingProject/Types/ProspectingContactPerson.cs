@@ -44,6 +44,7 @@ namespace ProspectingProject
 
         public bool EmailOptout { get; set; }
         public bool SMSOptout { get; set; }
+        public bool DoNotContact { get; set; }
 
         public int? TargetLightstonePropertyIdForComms { get; set; }
 

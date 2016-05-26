@@ -55,6 +55,7 @@ namespace ProspectingProject
         public bool? is_popi_restricted { get; set; }
         public bool? optout_emails { get; set; }
         public bool? optout_sms { get; set; }
+        public bool? do_not_contact { get; set; }
         public string age_group { get; set; }
         public string bureau_adverse_indicator { get; set; }
         public string citizenship { get; set; }
