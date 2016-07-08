@@ -1153,6 +1153,7 @@
       <LastGenOutput>Prospecting.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Properties\DataSources\System.Data.DataSet.datasource" />
     <None Include="Properties\PublishProfiles\1.pubxml" />
     <None Include="Properties\PublishProfiles\2.pubxml" />
     <None Include="Properties\PublishProfiles\3.pubxml" />
@@ -1194,6 +1195,12 @@
     <Content Include="Scripts\3rdParty\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\outputforflash.fla" />
     <Content Include="Scripts\3rdParty\ckeditor\samples\sample_posteddata.php" />
     <Content Include="Scripts\3rdParty\ckeditor\skins\moono\readme.md" />
+    <Content Include="Service References\ProspectingUserAuthService\ProspectingProject.ProspectingUserAuthService.MarketShareUserAuthPacket.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\ProspectingUserAuthService\ProspectingProject.ProspectingUserAuthService.SpatialUserAuthPacket.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService.wsdl" />
     <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService.xsd">
       <SubType>Designer</SubType>
@@ -1204,6 +1211,13 @@
     <None Include="Service References\ProspectingUserAuthService\SeeffProspectingAuthService2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\SearchWorksAPI\configuration91.svcinfo" />
+    <None Include="Service References\SearchWorksAPI\configuration.svcinfo" />
+    <None Include="Service References\SearchWorksAPI\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\SearchWorksAPI\SearchWorksAPIService1.disco" />
     <Content Include="Web References\IdValidatorService\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -1211,6 +1225,26 @@
     <Content Include="Web References\IdValidatorService\saidType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </Content>
+    <None Include="Service References\SearchWorksAPI\SearchWorksAPIService2.wsdl" />
+    <None Include="Service References\SearchWorksAPI\SearchWorksAPIService21.wsdl" />
+    <None Include="Service References\SearchWorksAPI\SearchWorksAPIService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SearchWorksAPI\SearchWorksAPIService61.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SearchWorksAPI\SearchWorksAPIService62.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SearchWorksAPI\SearchWorksAPIService63.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SearchWorksAPI\SearchWorksAPIService64.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SearchWorksAPI\SearchWorksAPIService65.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web References\IdValidatorService\saidvalidator.wsdl" />
     <None Include="Web References\lightstoneSeeffService\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
@@ -1280,6 +1314,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service References\SearchWorksAPI\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Services\Dracore\DracoreCompanyLookupService.cs" />
     <Compile Include="Services\Dracore\DracoreEmailAddressLookup.cs" />
     <Compile Include="Services\Dracore\DracoreLiveService.cs" />
@@ -1298,6 +1337,7 @@
     <Compile Include="Services\TracePS\TracepsLiveService.cs" />
     <Compile Include="Services\TracePS\TracepsPhoneNumberLookup.cs" />
     <Compile Include="Services\TracePS\TracepsTestService.cs" />
+    <Compile Include="Services\Trusts\TrustEntityEnquiryService.cs" />
     <Compile Include="Types\ActivityBundle.cs" />
     <Compile Include="Types\CommReportFilters.cs" />
     <Compile Include="Types\CommReportResults.cs" />
@@ -1341,6 +1381,7 @@
     <Compile Include="Types\SentEmailLogItem.cs" />
     <Compile Include="Types\SentSMSLogItem.cs" />
     <Compile Include="Types\SmsBatch.cs" />
+    <Compile Include="Services\Trusts\TrustAPIResult.cs" />
     <Compile Include="Types\UserDataResponsePacket.cs" />
     <Compile Include="Types\UserSuburb.cs" />
     <Compile Include="Types\JsonNetPropertyNameResolverForSerialization.cs" />
@@ -1454,6 +1495,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\DracoreETLConsumerService\" />
     <WCFMetadataStorage Include="Service References\ProspectingUserAuthService\" />
+    <WCFMetadataStorage Include="Service References\SearchWorksAPI\" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

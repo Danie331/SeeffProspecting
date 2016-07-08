@@ -565,6 +565,8 @@ namespace SeeffProspectingAuthService
 		
 		private bool _mapping;
 		
+		private bool _trust_lookup;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -701,6 +703,8 @@ namespace SeeffProspectingAuthService
     partial void Onprospecting_communicationChanged();
     partial void OnmappingChanging(bool value);
     partial void OnmappingChanged();
+    partial void Ontrust_lookupChanging(bool value);
+    partial void Ontrust_lookupChanged();
     #endregion
 		
 		public user_registration()
@@ -2024,6 +2028,26 @@ namespace SeeffProspectingAuthService
 					this._mapping = value;
 					this.SendPropertyChanged("mapping");
 					this.OnmappingChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_trust_lookup", DbType="Bit NOT NULL")]
+		public bool trust_lookup
+		{
+			get
+			{
+				return this._trust_lookup;
+			}
+			set
+			{
+				if ((this._trust_lookup != value))
+				{
+					this.Ontrust_lookupChanging(value);
+					this.SendPropertyChanging();
+					this._trust_lookup = value;
+					this.SendPropertyChanged("trust_lookup");
+					this.Ontrust_lookupChanged();
 				}
 			}
 		}

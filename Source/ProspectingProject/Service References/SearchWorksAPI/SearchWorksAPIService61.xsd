@@ -1,0 +1,3067 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="https://api.searchworks.co.za/SearchWorksAPIService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/" />
+  <xs:import schemaLocation="https://api.searchworks.co.za/SearchWorksAPIService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="https://api.searchworks.co.za/SearchWorksAPIService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/CompuScan" />
+  <xs:element name="CSITrustInformationSearch">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q1:ResponseFormat" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="TrustName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="TrustNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSITrustInformationSearchResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CSITrustInformationSearchResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIPersonVerificationSearch">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q2:ResponseFormat" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="SearchOnType" type="q3:CSIPersonVerificationSearchOnTypes" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DateOfBirth" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIPersonVerificationSearchResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CSIPersonVerificationSearchResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchCSIPersonTraceByIDNumbers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q4:XDSTraceEnquiryReasons" />
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="IDNumbers" nillable="true" type="q5:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchCSIPersonTraceByIDNumbersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="BulkSearchCSIPersonTraceByIDNumbersResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchCSIPersonVerificationByIDNumbers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q6:XDSTraceEnquiryReasons" />
+        <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="IDNumbers" nillable="true" type="q7:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchCSIPersonVerificationByIDNumbersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="BulkSearchCSIPersonVerificationByIDNumbersResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchDeedsOfficePersonByIDNumbers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="deedsOffice" type="q8:DeedsOffices" />
+        <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="IDNumbers" nillable="true" type="q9:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchDeedsOfficePersonByIDNumbersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="BulkSearchDeedsOfficePersonByIDNumbersResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchCIPCDirectorByIDNumbers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="IDNumbers" nillable="true" type="q10:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchCIPCDirectorByIDNumbersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="BulkSearchCIPCDirectorByIDNumbersResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchPersonPropertyHistoryByIDNumbers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="IDNumbers" nillable="true" type="q11:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchPersonPropertyHistoryByIDNumbersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="BulkSearchPersonPropertyHistoryByIDNumbersResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchCSICompanyTraceByCompanyRegistrationNumber">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q12:XDSTraceEnquiryReasons" />
+        <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="CompanyRegistrationNumbers" nillable="true" type="q13:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchCSICompanyTraceByCompanyRegistrationNumberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="BulkSearchCSICompanyTraceByCompanyRegistrationNumberResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumber">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="CompanyRegistrationNumbers" nillable="true" type="q14:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumberResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchDOTSByBarcode">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q15:DeedsOffices" />
+        <xs:element xmlns:q16="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Barcodes" nillable="true" type="q16:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BulkSearchDOTSByBarcodeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="BulkSearchDOTSByBarcodeResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExportBulkSearchToPDF">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="GroupGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExportBulkSearchToPDFResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ExportBulkSearchToPDFResult" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExportBulkSearchToExcel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DocumentName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="GroupGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExportBulkSearchToExcelResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ExportBulkSearchToExcelResult" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateSearchGroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="GroupName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="GroupDescription" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PublicGroup" type="xs:boolean" />
+        <xs:element minOccurs="0" name="AutoUpdateGroup" type="xs:boolean" />
+        <xs:element minOccurs="0" name="AutoSearchReference" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateSearchGroupResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CreateSearchGroupResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AssociateSearchToGroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="GroupGUID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AssociateSearchToGroupResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AssociateSearchToGroupResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RemoveSearchFromGroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="GroupGUID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RemoveSearchFromGroupResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RemoveSearchFromGroupResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteGroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="GroupGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteGroupResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteGroupResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUserAllowedSearchTypes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUserAllowedSearchTypesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetUserAllowedSearchTypesResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPriceList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPriceListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetPriceListResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SelectSearchGroups">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FilterText" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SelectSearchGroupsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SelectSearchGroupsResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SelectSearchGroupDetailByGroupID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="GroupGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SelectSearchGroupDetailByGroupIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SelectSearchGroupDetailByGroupIDResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SelectSearchGroupSearchesByGroupID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="GroupGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SelectSearchGroupSearchesByGroupIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SelectSearchGroupSearchesByGroupIDResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsDeedsOfficeOnline">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsDeedsOfficeOnlineResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsDeedsOfficeOnlineResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTraceByIDNumber">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q17:ResponseFormat" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q18:XDSTraceEnquiryReasons" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTraceByIDNumberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSConsumerTraceByIDNumberResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTraceAddress">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q19:ResponseFormat" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q20:XDSTraceEnquiryReasons" />
+        <xs:element minOccurs="0" name="Suburb" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="StreetNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="StreetName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTraceAddressResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSConsumerTraceAddressResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTraceName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q21:ResponseFormat" />
+        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q22:XDSTraceEnquiryReasons" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DateOfBirth" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTraceNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSConsumerTraceNameResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTracePassportNumber">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q23:ResponseFormat" />
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q24:XDSTraceEnquiryReasons" />
+        <xs:element minOccurs="0" name="PassportNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTracePassportNumberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSConsumerTracePassportNumberResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTraceTelephoneNumber">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q25:ResponseFormat" />
+        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q26:XDSTraceEnquiryReasons" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="TelephoneCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTraceTelephoneNumberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSConsumerTraceTelephoneNumberResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTraceByAddressID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q27:ResponseFormat" />
+        <xs:element minOccurs="0" name="AddressID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTraceByAddressIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSConsumerTraceByAddressIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSAccountVerificationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DocumentGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSAccountVerificationResponseResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSAccountVerificationResponseResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTraceByTelephoneID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q28:ResponseFormat" />
+        <xs:element minOccurs="0" name="TelephoneID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerTraceByTelephoneIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSConsumerTraceByTelephoneIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerContactInformation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q29:ResponseFormat" />
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q30:XDSTraceEnquiryReasons" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerContactInformationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSConsumerContactInformationResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerIDVerification">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q31:ResponseFormat" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerIDVerificationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSConsumerIDVerificationResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerCreditProfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q32:ResponseFormat" />
+        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q33:XDSEnquiryReasons" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PassportNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DateOfBirth" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerCreditProfileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSConsumerCreditProfileResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerByEnquiryID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q34:ResponseFormat" />
+        <xs:element minOccurs="0" name="EnquiryID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="EnquiryResultID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSConsumerByEnquiryIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSConsumerByEnquiryIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSBusinessReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q35:ResponseFormat" />
+        <xs:element minOccurs="0" name="RegistrationNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DetailedReport" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSBusinessReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSBusinessReportResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSBusinessReportByEnquiryID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q36:ResponseFormat" />
+        <xs:element minOccurs="0" name="EnquiryID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="EnquiryResultID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DetailedReport" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSBusinessReportByEnquiryIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSBusinessReportByEnquiryIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CIPCDirector">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q37:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CIPCDirectorResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CIPCDirectorResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CIPCDirectorByDirectorID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q38:ResponseFormat" />
+        <xs:element minOccurs="0" name="DirectorID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CIPCDirectorByDirectorIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CIPCDirectorByDirectorIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CIPCCompany">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q39:ResponseFormat" />
+        <xs:element xmlns:q40="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="CIPCCompanySearchOnType" type="q40:CIPCSearchOnType" />
+        <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CompanyRegistrationNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CIPCCompanyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CIPCCompanyResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CIPCCompanyByCompanyID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q41="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q41:ResponseFormat" />
+        <xs:element minOccurs="0" name="CompanyID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CIPCCompanyByCompanyIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CIPCCompanyByCompanyIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExperianConsumerCreditProfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q42="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q42:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element xmlns:q43="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q43:ExperianConsumerEnquiryReasons" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExperianConsumerCreditProfileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ExperianConsumerCreditProfileResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePerson">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q44="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q44:ResponseFormat" />
+        <xs:element xmlns:q45="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q45:DeedsOffices" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Sequestration" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePersonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficePersonResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeTrust">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q46="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q46:ResponseFormat" />
+        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q47:DeedsOffices" />
+        <xs:element minOccurs="0" name="TrustName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Sequestration" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeTrustResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficeTrustResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeTrustDBID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q48="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q48:ResponseFormat" />
+        <xs:element xmlns:q49="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q49:DeedsOffices" />
+        <xs:element minOccurs="0" name="DBKey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeTrustDBIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficeTrustDBIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeCompany">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q50="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q50:ResponseFormat" />
+        <xs:element xmlns:q51="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q51:DeedsOffices" />
+        <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CompanyRegistrationNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Sequestration" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeCompanyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficeCompanyResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePersonDBID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q52="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q52:ResponseFormat" />
+        <xs:element xmlns:q53="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q53:DeedsOffices" />
+        <xs:element minOccurs="0" name="DBKey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePersonDBIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficePersonDBIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeCompanyDBID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q54="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q54:ResponseFormat" />
+        <xs:element xmlns:q55="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q55:DeedsOffices" />
+        <xs:element minOccurs="0" name="DBKey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeCompanyDBIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficeCompanyDBIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertyErf">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q56="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q56:ResponseFormat" />
+        <xs:element xmlns:q57="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q57:DeedsOffices" />
+        <xs:element minOccurs="0" name="Township" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ErfNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PortionNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="RemainingExtent" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertyErfResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficePropertyErfResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertyFarm">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q58="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q58:ResponseFormat" />
+        <xs:element xmlns:q59="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q59:DeedsOffices" />
+        <xs:element minOccurs="0" name="RegistrationDivision" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FarmName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FarmNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PortionNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="RemainingExtent" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertyFarmResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficePropertyFarmResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertyAgriculturalHolding">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q60="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q60:ResponseFormat" />
+        <xs:element xmlns:q61="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q61:DeedsOffices" />
+        <xs:element minOccurs="0" name="HoldingName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="HoldingNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PortionNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="RemainingExtent" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertyAgriculturalHoldingResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficePropertyAgriculturalHoldingResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertySchemeSearch">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q62="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q62:ResponseFormat" />
+        <xs:element xmlns:q63="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q63:DeedsOffices" />
+        <xs:element minOccurs="0" name="SchemeName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SchemeNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="UnitNumber" nillable="true" type="xs:string" />
+        <xs:element xmlns:q64="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="UnitType" type="q64:SchemeUnitTypes" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertySchemeSearchResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficePropertySchemeSearchResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertyTownship">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q65="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q65:ResponseFormat" />
+        <xs:element xmlns:q66="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q66:DeedsOffices" />
+        <xs:element minOccurs="0" name="TownshipName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertyTownshipResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficePropertyTownshipResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertyDBKey">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q67="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q67:ResponseFormat" />
+        <xs:element xmlns:q68="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q68:DeedsOffices" />
+        <xs:element minOccurs="0" name="DBKey" nillable="true" type="xs:string" />
+        <xs:element xmlns:q69="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="PropertyTypeCode" type="q69:PropertyType" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertyDBKeyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficePropertyDBKeyResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertyDocumentSearch">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q70="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q70:ResponseFormat" />
+        <xs:element xmlns:q71="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q71:DeedsOffices" />
+        <xs:element minOccurs="0" name="DocumentNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePropertyDocumentSearchResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficePropertyDocumentSearchResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeCompanyCrossDeedsOfficeSearch">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q72="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q72:ResponseFormat" />
+        <xs:element xmlns:q73="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DeedsOfficeIDs" nillable="true" type="q73:ArrayOfstring" />
+        <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CompanyRegistrationNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Sequestration" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeCompanyCrossDeedsOfficeSearchResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficeCompanyCrossDeedsOfficeSearchResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePersonCrossDeedsOfficeSearch">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q74="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q74:ResponseFormat" />
+        <xs:element xmlns:q75="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DeedsOfficeIDs" nillable="true" type="q75:ArrayOfstring" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Sequestration" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficePersonCrossDeedsOfficeSearchResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficePersonCrossDeedsOfficeSearchResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeTrustCrossDeedsOfficeSearch">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q76="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q76:ResponseFormat" />
+        <xs:element xmlns:q77="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DeedsOfficeIDs" nillable="true" type="q77:ArrayOfstring" />
+        <xs:element minOccurs="0" name="TrustName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Sequestration" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeTrustCrossDeedsOfficeSearchResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficeTrustCrossDeedsOfficeSearchResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CompuScanConsumerCreditProfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q78="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q78:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element xmlns:q79="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q79:CompuScanConsumerEnquiryReasons" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CompuScanConsumerCreditProfileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CompuScanConsumerCreditProfileResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CompuscanEmploymentConfidenceIndex">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q80="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q80:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CompuscanEmploymentConfidenceIndexResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CompuscanEmploymentConfidenceIndexResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CompuscanConsumerContactInformation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q81="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q81:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CompuscanConsumerContactInformationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CompuscanConsumerContactInformationResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertyValuationErf">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q82="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q82:ResponseFormat" />
+        <xs:element minOccurs="0" name="Township" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ErfNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PortionNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertyValuationErfResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStonePropertyValuationErfResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertyValuationFarm">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q83="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q83:ResponseFormat" />
+        <xs:element minOccurs="0" name="FarmName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FarmNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PortionNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertyValuationFarmResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStonePropertyValuationFarmResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertyValuationScheme">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q84="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q84:ResponseFormat" />
+        <xs:element minOccurs="0" name="Township" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SchemeName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SchemeNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="UnitNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertyValuationSchemeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStonePropertyValuationSchemeResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertyValuationStreet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q85="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q85:ResponseFormat" />
+        <xs:element minOccurs="0" name="Suburb" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="StreetType" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="StreetName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="StreetNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertyValuationStreetResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStonePropertyValuationStreetResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertyValuationByPropertyID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q86="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q86:ResponseFormat" />
+        <xs:element minOccurs="0" name="PropertyID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertyValuationByPropertyIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStonePropertyValuationByPropertyIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneBusinessSearchCompany">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q87="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q87:ResponseFormat" />
+        <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CompanyRegistrationNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="VATNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LevelOfDetail" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneBusinessSearchCompanyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStoneBusinessSearchCompanyResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneBusinessSearchCompanyByCompanyID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q88="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q88:ResponseFormat" />
+        <xs:element minOccurs="0" name="CompanyID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LevelOfDetail" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneBusinessSearchCompanyByCompanyIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStoneBusinessSearchCompanyByCompanyIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneCompanyPropertyHistory">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q89="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q89:ResponseFormat" />
+        <xs:element minOccurs="0" name="CompanyRegistrationNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneCompanyPropertyHistoryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStoneCompanyPropertyHistoryResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePersonPropertyHistory">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q90="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q90:ResponseFormat" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePersonPropertyHistoryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStonePersonPropertyHistoryResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneOwnersInEstate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q91="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q91:ResponseFormat" />
+        <xs:element minOccurs="0" name="Estate" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="EstateID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneOwnersInEstateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStoneOwnersInEstateResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneOwnersInScheme">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q92="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q92:ResponseFormat" />
+        <xs:element minOccurs="0" name="SchemeName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SchemeNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SchemeID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneOwnersInSchemeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStoneOwnersInSchemeResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneLookupEstateName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="EstateName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneLookupEstateNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStoneLookupEstateNameResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneLookupSuburbName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="EstateName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneLookupSuburbNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStoneLookupSuburbNameResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PropertyErfToStreetConversion">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q93="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q93:ResponseFormat" />
+        <xs:element xmlns:q94="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q94:DeedsOffices" />
+        <xs:element minOccurs="0" name="Township" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ErfNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PortionNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PropertyErfToStreetConversionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="PropertyErfToStreetConversionResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PropertySchemeToStreetConversion">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q95="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q95:ResponseFormat" />
+        <xs:element xmlns:q96="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q96:DeedsOffices" />
+        <xs:element minOccurs="0" name="SchemeName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SchemeNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PropertySchemeToStreetConversionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="PropertySchemeToStreetConversionResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PropertyStreetToErfConversion">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q97="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q97:ResponseFormat" />
+        <xs:element minOccurs="0" name="Suburb" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="StreetType" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="StreetName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="StreetNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PropertyStreetToErfConversionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="PropertyStreetToErfConversionResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PropertyConversionByPropertyID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q98="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q98:ResponseFormat" />
+        <xs:element minOccurs="0" name="PropertyID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PropertyConversionByPropertyIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="PropertyConversionByPropertyIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupStreetTypes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupStreetTypesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupStreetTypesResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertyEstateReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q99="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q99:ResponseFormat" />
+        <xs:element minOccurs="0" name="Estate" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="EstateID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertyEstateReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStonePropertyEstateReportResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertySchemeReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q100="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q100:ResponseFormat" />
+        <xs:element minOccurs="0" name="SchemeName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SchemeNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SchemeID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertySchemeReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStonePropertySchemeReportResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertySuburbReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q101="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q101:ResponseFormat" />
+        <xs:element minOccurs="0" name="Suburb" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeedID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStonePropertySuburbReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStonePropertySuburbReportResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CourtLibraryEnquiry">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q102="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q102:ResponseFormat" />
+        <xs:element xmlns:q103="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="CourtDocumentSearchOn" type="q103:CourtDocumentSearchOnType" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CompanyRegistrationNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CourtName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CaseNumber" nillable="true" type="xs:string" />
+        <xs:element xmlns:q104="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DefendantType" type="q104:DefendantType" />
+        <xs:element xmlns:q105="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DocumentRequestType" type="q105:CourtDocumentDocumentRequestType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CourtLibraryEnquiryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CourtLibraryEnquiryResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupCourtNames">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FilterText" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupCourtNamesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupCourtNamesResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionConsumerCreditProfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q106="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q106:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element xmlns:q107="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q107:TransUnionConsumerEnquiryReasons" />
+        <xs:element minOccurs="0" name="ClientContactName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ClientContactNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionConsumerCreditProfileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TransUnionConsumerCreditProfileResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionConsumerContactInformation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q108="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q108:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element xmlns:q109="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q109:TransUnionConsumerEnquiryReasons" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionConsumerContactInformationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TransUnionConsumerContactInformationResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionConsumerIDVerification">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q110="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q110:ResponseFormat" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionConsumerIDVerificationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TransUnionConsumerIDVerificationResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionCommercialCreditProfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q111="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q111:ResponseFormat" />
+        <xs:element xmlns:q112="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryType" type="q112:TransUnionCommercialSearchOnTypes" />
+        <xs:element xmlns:q113="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q113:TransUnionCompanyEnquiryReasons" />
+        <xs:element minOccurs="0" name="EntityNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="EntityName" nillable="true" type="xs:string" />
+        <xs:element xmlns:q114="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ModuleCodes" nillable="true" type="q114:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionCommercialCreditProfileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TransUnionCommercialCreditProfileResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionCommercialProfileByCompanyID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q115="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q115:ResponseFormat" />
+        <xs:element minOccurs="0" name="CompanyID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+        <xs:element xmlns:q116="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ModuleCodes" nillable="true" type="q116:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionCommercialProfileByCompanyIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TransUnionCommercialProfileByCompanyIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionDefaultList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q117="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q117:ResponseFormat" />
+        <xs:element xmlns:q118="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ActionTaken" type="q118:TransUnionDefaultActionTypes" />
+        <xs:element minOccurs="0" name="LoaderContactName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LoaderContactTelephoneCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LoaderContactTelephoneNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="AddressField1" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="AddressField2" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Suburb" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="City" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PostalCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DefaulterAccountNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DefaultAmount" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CompanyRegistrationNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NonRSAIDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IsConsumer" type="xs:boolean" />
+        <xs:element xmlns:q119="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DefaultStatus" type="q119:DefaultStatusCodes" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionDefaultListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TransUnionDefaultListResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionDefaultDelist">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DefaultListingGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionDefaultDelistResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TransUnionDefaultDelistResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CompanyLookup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FilterText" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CompanyLookupResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CompanyLookupResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeDocumentCopyRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q120="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q120:ResponseFormat" />
+        <xs:element xmlns:q121="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q121:DeedsOffices" />
+        <xs:element minOccurs="0" name="DocumentNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="MicroFilmReferenceNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeedsOfficeDocumentCopyRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeedsOfficeDocumentCopyRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CIPCDocumentRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q122="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q122:ResponseFormat" />
+        <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="RegistrationNumber" nillable="true" type="xs:string" />
+        <xs:element xmlns:q123="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DocumentTypes" nillable="true" type="q123:ArrayOfstring" />
+        <xs:element minOccurs="0" name="Certified" type="xs:boolean" />
+        <xs:element minOccurs="0" name="IsCloseCorporation" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CIPCDocumentRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CIPCDocumentRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SGDiagramRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q124="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q124:ResponseFormat" />
+        <xs:element minOccurs="0" name="SGOffice" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SGNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LPINumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SGDiagramRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SGDiagramRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CourtDocumentRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q125="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q125:ResponseFormat" />
+        <xs:element minOccurs="0" name="DefendantData1" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DefendantData2" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CaseNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CourtWorksID" nillable="true" type="xs:string" />
+        <xs:element xmlns:q126="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DocumentType" type="q126:CourtDocumentDocumentRequestType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CourtDocumentRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CourtDocumentRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionBankCodeRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q127="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q127:ResponseFormat" />
+        <xs:element minOccurs="0" name="DocumentDescription" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ITNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="UserOnTicket" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ContactFirstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ContactSurname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ContactTelNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="AccountHolder" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="AccountNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="BankAbbreviation" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="BranchName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="BranchCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CreditAmount" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="TermsGiven" nillable="true" type="xs:string" />
+        <xs:element xmlns:q128="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="PrescribedPurpose" type="q128:TransUnionCompanyEnquiryReasons" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionBankCodeRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TransUnionBankCodeRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InoxicoQualificationCheckRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q129="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q129:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="QualificationName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="YearReceived" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="InstitutionName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Consent" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InoxicoQualificationCheckRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="InoxicoQualificationCheckRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InoxicoDriversLicenseCheckRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q130="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q130:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Consent" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InoxicoDriversLicenseCheckRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="InoxicoDriversLicenseCheckRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MIEQualificationCheckRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q131="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q131:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="QualificationName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="YearReceived" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="InstitutionName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Consent" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MIEQualificationCheckRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="MIEQualificationCheckRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MIEInternationalQualificationCheckRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q132="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q132:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="QualificationName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="YearReceived" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="InstitutionName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Consent" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MIEInternationalQualificationCheckRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="MIEInternationalQualificationCheckRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MIEDriversLicenseCheckRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q133="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q133:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Consent" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MIEDriversLicenseCheckRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="MIEDriversLicenseCheckRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MIEProfessionalDriversLicenseCheckRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q134="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q134:ResponseFormat" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Consent" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MIEProfessionalDriversLicenseCheckRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="MIEProfessionalDriversLicenseCheckRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LetterOfDemandRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q135="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q135:ResponseFormat" />
+        <xs:element minOccurs="0" name="LoaderCompany" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LoaderBranch" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LoaderBranchTelNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LoaderBranchFaxNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LoaderBranchAddress" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LoaderContact" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LoaderContactTelNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LoaderContactEmailAddress" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CreditGrantor" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CreditGrantorTelephone" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DefaulterName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DefaulterEmailAddress" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DefaulterNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DefaulterAddress" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DefaulterAccountNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DefaultAmount" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IsConsumer" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LetterOfDemandRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LetterOfDemandRequestResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupSchemes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FilterText" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeedsOfficeIDs" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupSchemesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupSchemesResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupAgriculturalHoldingAreas">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FilterText" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeedsOfficeIDs" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupAgriculturalHoldingAreasResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupAgriculturalHoldingAreasResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupFarms">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FilterText" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeedsOfficeIDs" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupFarmsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupFarmsResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupMunicipalities">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FilterText" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeedsOfficeIDs" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupMunicipalitiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupMunicipalitiesResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupRegistrationDivisions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FilterText" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeedsOfficeIDs" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupRegistrationDivisionsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupRegistrationDivisionsResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupTownships">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FilterText" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeedsOfficeIDs" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupTownshipsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupTownshipsResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Login">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LoginResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LoginResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ValidateToken">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ValidateTokenResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ValidateTokenResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPreviousSearch">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchGUID" nillable="true" type="xs:string" />
+        <xs:element xmlns:q136="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q136:ResponseFormat" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPreviousSearchResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetPreviousSearchResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSearchHistory">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FilterText" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NumberOfResults" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DateFrom" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="DateTo" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSearchHistoryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetSearchHistoryResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDocumentBytesByDocumentGUID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DocumentGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDocumentBytesByDocumentGUIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetDocumentBytesByDocumentGUIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSBarcode">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q137="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q137:ResponseFormat" />
+        <xs:element xmlns:q138="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q138:DeedsOffices" />
+        <xs:element minOccurs="0" name="Barcode" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSBarcodeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DOTSBarcodeResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSCompany">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q139="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q139:ResponseFormat" />
+        <xs:element xmlns:q140="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q140:DeedsOffices" />
+        <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CompanyRegistrationNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSCompanyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DOTSCompanyResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSPerson">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q141="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q141:ResponseFormat" />
+        <xs:element xmlns:q142="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q142:DeedsOffices" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSPersonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DOTSPersonResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSTrust">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q143="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q143:ResponseFormat" />
+        <xs:element xmlns:q144="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q144:DeedsOffices" />
+        <xs:element minOccurs="0" name="TrustName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSTrustResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DOTSTrustResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSPropertyErf">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q145="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q145:ResponseFormat" />
+        <xs:element xmlns:q146="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q146:DeedsOffices" />
+        <xs:element minOccurs="0" name="Township" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ErfNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PortionNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSPropertyErfResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DOTSPropertyErfResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSPropertyFarm">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q147="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q147:ResponseFormat" />
+        <xs:element xmlns:q148="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q148:DeedsOffices" />
+        <xs:element minOccurs="0" name="RegistrationDivision" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FarmName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FarmNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PortionNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSPropertyFarmResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DOTSPropertyFarmResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSPropertyAgriculturalHolding">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q149="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q149:ResponseFormat" />
+        <xs:element xmlns:q150="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q150:DeedsOffices" />
+        <xs:element minOccurs="0" name="AgriculturalHoldingName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="HoldingNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PortionNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSPropertyAgriculturalHoldingResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DOTSPropertyAgriculturalHoldingResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSPropertyScheme">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q151="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q151:ResponseFormat" />
+        <xs:element xmlns:q152="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="DeedsOffice" type="q152:DeedsOffices" />
+        <xs:element minOccurs="0" name="SchemeName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SchemeNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="UnitNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IsUnit" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOTSPropertySchemeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DOTSPropertySchemeResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSAccountVerificationRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q153="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q153:ResponseFormat" />
+        <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="RegistrationNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Initials" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="AccountNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="BranchCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="AccountType" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="BankName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ClientFirstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ClientSurname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ClientEmailAddress" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IsCompany" type="xs:boolean" />
+        <xs:element minOccurs="0" name="Consent" type="xs:boolean" />
+        <xs:element minOccurs="0" name="IsRealTime" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XDSAccountVerificationRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="XDSAccountVerificationRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CompuScanAccountVerificationRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q154="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q154:ResponseFormat" />
+        <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="RegistrationNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="AccountNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="BranchCode" nillable="true" type="xs:string" />
+        <xs:element xmlns:q155="http://schemas.datacontract.org/2004/07/CompuScan" minOccurs="0" name="AccountType" type="q155:BankAccountType" />
+        <xs:element minOccurs="0" name="IsCompany" type="xs:boolean" />
+        <xs:element minOccurs="0" name="Consent" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CompuScanAccountVerificationRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CompuScanAccountVerificationRequestResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetResponseTypeLongTextFromEnum">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element xmlns:q156="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ResponseTypeText" type="q156:ResponseTypes" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetResponseTypeLongTextFromEnumResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetResponseTypeLongTextFromEnumResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIVehicleReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q157="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q157:ResponseFormat" />
+        <xs:element minOccurs="0" name="MakeID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ModelID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="YearID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIVehicleReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CSIVehicleReportResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupVehicleMake">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupVehicleMakeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupVehicleMakeResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupVehicleModel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="MakeID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupVehicleModelResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupVehicleModelResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupVehicleModelYears">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ModelID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupVehicleModelYearsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupVehicleModelYearsResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsumerWatchAddConsumer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ConsumerFirstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ConsumerSurname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ConsumerIDNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsumerWatchAddConsumerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ConsumerWatchAddConsumerResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsumerWatchGetConsumerList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsumerWatchGetConsumerListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ConsumerWatchGetConsumerListResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsumerWatchDeleteConsumerFromList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ConsumerGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsumerWatchDeleteConsumerFromListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ConsumerWatchDeleteConsumerFromListResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsumerWatchGetConsumerJudgementList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ConsumerGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsumerWatchGetConsumerJudgementListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ConsumerWatchGetConsumerJudgementListResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIAffordabilityReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q158="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q158:ResponseFormat" />
+        <xs:element minOccurs="0" name="Year" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="VehicleBodyShapeID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="InstalmentPeriod" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="InterestRate" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="InstalmentAmount" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DepositAmount" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIAffordabilityReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CSIAffordabilityReportResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIDepreciationReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q159="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q159:ResponseFormat" />
+        <xs:element minOccurs="0" name="Year" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="VehicleBodyShapeID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PriceRangeID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIDepreciationReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CSIDepreciationReportResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneVVIReportByVINNumber">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q160="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q160:ResponseFormat" />
+        <xs:element minOccurs="0" name="VINNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneVVIReportByVINNumberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStoneVVIReportByVINNumberResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneVVIReportByRegistrationNumber">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q161="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q161:ResponseFormat" />
+        <xs:element minOccurs="0" name="RegistrationNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LightStoneVVIReportByRegistrationNumberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LightStoneVVIReportByRegistrationNumberResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionAutoReportByVINNumberTrace">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q162="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q162:ResponseFormat" />
+        <xs:element minOccurs="0" name="VINNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="RegistrationYear" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionAutoReportByVINNumberTraceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TransUnionAutoReportByVINNumberTraceResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionAutoReportByMMCodeTrace">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q163="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q163:ResponseFormat" />
+        <xs:element minOccurs="0" name="MMCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="RegistrationYear" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionAutoReportByMMCodeTraceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TransUnionAutoReportByMMCodeTraceResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionAutoReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q164="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q164:ResponseFormat" />
+        <xs:element minOccurs="0" name="VINNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="MMCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="RegistrationNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="RegistrationYear" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Condition" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Mileage" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransUnionAutoReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TransUnionAutoReportResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupVehicleBodyShape">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Year" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupVehicleBodyShapeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupVehicleBodyShapeResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupVehiclePriceRangeByYear">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Year" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="VehicleBodyShapeID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupVehiclePriceRangeByYearResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupVehiclePriceRangeByYearResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupVehicleYearRange">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LookupVehicleYearRangeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupVehicleYearRangeResult" nillable="true">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:appinfo>
+                <ActualType Name="DataSet" Namespace="http://schemas.datacontract.org/2004/07/System.Data" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ref="xs:schema" />
+              <xs:any />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TenantWatchProfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q165="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q165:ResponseFormat" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TenantWatchProfileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TenantWatchProfileResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsumerTraceByIDNumberSurnameVerified">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q166="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q166:ResponseFormat" />
+        <xs:element xmlns:q167="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q167:XDSTraceEnquiryReasons" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsumerTraceByIDNumberSurnameVerifiedResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ConsumerTraceByIDNumberSurnameVerifiedResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PropertyCoordinateSearch">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q168="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q168:ResponseFormat" />
+        <xs:element minOccurs="0" name="Latitude" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Longitude" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PropertyCoordinateSearchResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="PropertyCoordinateSearchResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIPersonTraceByIDNumber">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q169="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q169:ResponseFormat" />
+        <xs:element xmlns:q170="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q170:XDSTraceEnquiryReasons" />
+        <xs:element minOccurs="0" name="IDNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIPersonTraceByIDNumberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CSIPersonTraceByIDNumberResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIPersonTraceByEnquiryID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q171="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q171:ResponseFormat" />
+        <xs:element minOccurs="0" name="EnquiryID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="EnquiryResultID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SearchDescription" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIPersonTraceByEnquiryIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CSIPersonTraceByEnquiryIDResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIPersonTraceByName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q172="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q172:ResponseFormat" />
+        <xs:element xmlns:q173="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReson" type="q173:XDSTraceEnquiryReasons" />
+        <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DateOfBirth" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIPersonTraceByNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CSIPersonTraceByNameResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIPersonTraceByTelephoneNumber">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserSessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+        <xs:element xmlns:q174="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="ReturnFormat" type="q174:ResponseFormat" />
+        <xs:element xmlns:q175="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="EnquiryReason" type="q175:XDSTraceEnquiryReasons" />
+        <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CSIPersonTraceByTelephoneNumberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CSIPersonTraceByTelephoneNumberResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

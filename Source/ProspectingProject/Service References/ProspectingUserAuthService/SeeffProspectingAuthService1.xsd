@@ -61,4 +61,34 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="AuthenticateAndLoadSpatialUser">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="userGuid" type="q7:guid" />
+        <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="sessionKey" type="q8:guid" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AuthenticateAndLoadSpatialUserResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/SeeffProspectingAuthService" minOccurs="0" name="AuthenticateAndLoadSpatialUserResult" nillable="true" type="q9:SpatialUserAuthPacket" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AuthenticateMSUser">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="userGuid" type="q10:guid" />
+        <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="sessionKey" type="q11:guid" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AuthenticateMSUserResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/SeeffProspectingAuthService" minOccurs="0" name="AuthenticateMSUserResult" nillable="true" type="q12:MarketShareUserAuthPacket" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

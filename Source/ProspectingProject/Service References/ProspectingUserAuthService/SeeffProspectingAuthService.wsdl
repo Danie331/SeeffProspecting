@@ -31,6 +31,18 @@
   <wsdl:message name="ISeeffProspectingAuthService_RetrieveUserSignature_OutputMessage">
     <wsdl:part name="parameters" element="tns:RetrieveUserSignatureResponse" />
   </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_AuthenticateAndLoadSpatialUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateAndLoadSpatialUser" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_AuthenticateAndLoadSpatialUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateAndLoadSpatialUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_AuthenticateMSUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateMSUser" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_AuthenticateMSUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateMSUserResponse" />
+  </wsdl:message>
   <wsdl:portType name="ISeeffProspectingAuthService">
     <wsdl:operation name="AuthenticateAndGetUserInfo">
       <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfo" message="tns:ISeeffProspectingAuthService_AuthenticateAndGetUserInfo_InputMessage" />
@@ -47,6 +59,14 @@
     <wsdl:operation name="RetrieveUserSignature">
       <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignature" message="tns:ISeeffProspectingAuthService_RetrieveUserSignature_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignatureResponse" message="tns:ISeeffProspectingAuthService_RetrieveUserSignature_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticateAndLoadSpatialUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndLoadSpatialUser" message="tns:ISeeffProspectingAuthService_AuthenticateAndLoadSpatialUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndLoadSpatialUserResponse" message="tns:ISeeffProspectingAuthService_AuthenticateAndLoadSpatialUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticateMSUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateMSUser" message="tns:ISeeffProspectingAuthService_AuthenticateMSUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateMSUserResponse" message="tns:ISeeffProspectingAuthService_AuthenticateMSUser_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ISeeffProspectingAuthService" type="tns:ISeeffProspectingAuthService">
@@ -80,6 +100,24 @@
     </wsdl:operation>
     <wsdl:operation name="RetrieveUserSignature">
       <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/RetrieveUserSignature" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticateAndLoadSpatialUser">
+      <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndLoadSpatialUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticateMSUser">
+      <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateMSUser" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

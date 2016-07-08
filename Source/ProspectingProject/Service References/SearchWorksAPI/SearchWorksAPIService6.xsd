@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/CompuScan" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/CompuScan" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="BankAccountType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Current" />
+      <xs:enumeration value="Savings" />
+      <xs:enumeration value="Transmission" />
+      <xs:enumeration value="Bond" />
+      <xs:enumeration value="SubscriptionShare" />
+      <xs:enumeration value="Unknown" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BankAccountType" nillable="true" type="tns:BankAccountType" />
+</xs:schema>

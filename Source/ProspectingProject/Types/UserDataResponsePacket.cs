@@ -18,7 +18,7 @@ namespace ProspectingProject
         public string EmailAddress { get; set; }
         public bool HasCommAccess { get; set; }
         public int? BusinessUnitID { get; set; }
-
+        public bool TrustLookupsEnabled { get; set; }
         public UserDataResponsePacket ProspectingManager { get; set; }
 
         public List<UserDataResponsePacket> BusinessUnitUsers { get; set; }

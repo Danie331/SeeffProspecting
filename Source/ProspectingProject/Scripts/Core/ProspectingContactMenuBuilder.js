@@ -249,7 +249,7 @@ function buildGeneralInfoHtml(contact, context) {
     });
     html.append("<br />");
 
-    var relationshipText = currentProperty.ContactCompanies.length > 0 ? "Relationship to property/company: " : "Relationship to property: ";
+    var relationshipText = currentProperty.ContactCompanies.length > 0 ? "Relationship to property/entity: " : "Relationship to property: ";
     html.append("<label class='fieldAlignment'>" + relationshipText + "</label>");
     var relationshipToPropertySelect = buildRelationshipToPropertyTypesCombo();
     html.append(relationshipToPropertySelect);
@@ -407,7 +407,7 @@ function buildPersonGenderCombo() {
 }
 
 function buildCompanySelectorCombo() {
-    var selectorDiv = $("<div id='companySelectorContainer' style='display:none;'><label class='fieldAlignment'>Associated company: </label><select id='companySelector' /></div>");
+    var selectorDiv = $("<div id='companySelectorContainer' style='display:none;'><label class='fieldAlignment'>Associated entity: </label><select id='companySelector' /></div>");
     var selector = selectorDiv.find('#companySelector');
     $.each(currentProperty.ContactCompanies, function (idx, c) {
         var option = $("<option value='" + c.ContactCompanyId + "'>" + c.CompanyName + "</option>");
@@ -1107,12 +1107,24 @@ function buildContactDashboard(contacts, context) {
             }
 
             var companyEnquiryBtn = $("<input type='button' id='companyEnquiryBtn' value='Lookup Company Directors' style='display:inline-block;float:right' />");
+            var trustEntityEnquiryBtn = $("<input type='button' id='trustEnquiryBtn' value='Lookup Trustees' style='display:inline-block;float:right' />");
             var regNo = cc.CKNumber && cc.CKNumber.indexOf("UNKNOWN_CK_") == -1 ? "(" + cc.CKNumber + ")" : '';
             container.append(cc.CompanyName + regNo);
             if (cc.CompanyType != 'TR' && regNo) {
                 container.append(companyEnquiryBtn);
                 companyEnquiryBtn.click(function () {
                     performCompanyEnquiry(cc.ContactCompanyId);
+                });
+            }
+
+            if (cc.CompanyType == 'TR') {
+                container.append(trustEntityEnquiryBtn);
+                trustEntityEnquiryBtn.click(function () {
+                    if (!prospectingContext.TrustLookupsEnabled) {
+                        alert('You need extra permissions to access this feature, please request this from your Prospecting manager or contact support.');
+                        return;
+                    }
+                    performTrustEnquiry(cc.ContactCompanyId);
                 });
             }
 
@@ -1199,6 +1211,63 @@ function buildContactDashboard(contacts, context) {
     });
 
     return container;
+}
+
+function performTrustEnquiry(contactCompanyId) {
+    var trustEnquiryInfoDiv = $("<div title='Trust Enquiry Service Request' style='font-family:Verdana;font-size:12px;' />").empty()
+      .append('You are about to perform an enquiry that will attempt to retrieve the trustees of this trust. Please note there are cost implications that will affect your Prospecting balance:')
+      .append("<p />")
+      .append('The cost of a successful enquiry for which trustees are found and retrieved, is <b>R 8.50</b>')
+      .append("<p />")
+        .append('The cost of an enquiry for which the trust is not found or has incomplete information, is <b>R 4.00</b>')
+        .append("<p />")
+      .append('Enquiries that fail for other reasons will not be billed. Prices are excl. VAT and will be deducted from your Prospecting balance.');
+
+    trustEnquiryInfoDiv.dialog(
+               {
+                   modal: true,
+                   closeOnEscape: false,
+                   width: '550',
+                   buttons: {
+                       "Proceed": function () {
+                           $(this).dialog("close");
+
+                           $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Performing Enquiry...</p>' });
+                           $.ajax({
+                               type: "POST",
+                               url: "RequestHandler.ashx",
+                               data: JSON.stringify({ Instruction: 'perform_trust_enquiry', ContactCompanyId: contactCompanyId, ProspectingPropertyId: currentProperty.ProspectingPropertyId }),
+                               dataType: "json"
+                           }).done(function (data) {
+                               $.unblockUI();
+                               if (!handleResponseIfServerError(data)) {
+                                   return;
+                               }
+
+                               if (data.WalletBalance != null) {
+                                   // If the AvailableTracePsCredits is not null, then update the availableCredit variable
+                                   availableCredit = data.WalletBalance;
+                                   $('#availableCreditLabel').text(availableCredit.toFixed(2));
+                               }
+                               if (data.EnquirySuccessful) {
+                                   currentPersonContact = null;
+                                   $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Refreshing Contacts...</p>' });
+                                   setCurrentMarker(currentSuburb, currentProperty, function (data) {
+                                       updateExistingPropertyFromProperty(currentProperty, data);
+                                       buildPersonContactMenu(currentProperty.Contacts, false);
+                                       updateProspectedStatus();
+                                       $.unblockUI();
+                                   });
+                               } else {
+                                   // feedback to user
+                                   alert(data.ErrorMsg);
+                               }
+                           });
+                       },
+                       "Cancel": function () { $(this).dialog("close"); }
+                   },
+                   position: ['center', 'center']
+               });
 }
 
 function performCompanyEnquiry(contactCompanyId) {

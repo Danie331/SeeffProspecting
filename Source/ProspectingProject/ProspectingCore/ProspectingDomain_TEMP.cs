@@ -834,7 +834,8 @@ namespace ProspectingProject
                     FollowupActivities = followupBundle.Followups,
                     TotalFollowups = followupBundle.TotalCount,
                     HasCommAccess = userAuthPacket.CommunicationEnabled.Value,
-                    BusinessUnitID = userAuthPacket.BusinessUnitID
+                    BusinessUnitID = userAuthPacket.BusinessUnitID,
+                    TrustLookupsEnabled = userAuthPacket.TrustLookupsEnabled,
                 };
 
                 return userPacket;
@@ -3162,6 +3163,69 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                 if (companyService != null)
                 {
                     companyService.LogEnquiry();
+                }
+            }
+
+            return results;
+        }
+
+        public static CompanyEnquiryResponsePacket PerformTrustEnquiry(CompanyEnquiryInputPacket inputPacket)
+        {
+            prospecting_contact_company prospectingTargetCompany;
+            using (var prospecting = new ProspectingDataContext())
+            {
+                prospectingTargetCompany = prospecting.prospecting_contact_companies.First(cc => cc.contact_company_id == inputPacket.ContactCompanyId);
+            }
+
+            CompanyEnquiryResponsePacket results = new CompanyEnquiryResponsePacket();
+
+            decimal? walletBalance = null;
+            // Variables to keep track of the state of the transaction
+            bool enquirySuccessful = false, deductionMade = false, deductionReimbursed = false;
+            ICompanyEnquiryService lookupService = null;
+            try
+            {
+                lookupService = new TrustEntityEnquiryService(prospectingTargetCompany, inputPacket.ProspectingPropertyId);
+                lookupService.InitResponsePacket(results);
+                walletBalance = lookupService.DeductEnquiryCost(); // NB: Will return a value < 0 if insufficient funds
+                if (walletBalance >= decimal.Zero)
+                {
+                    deductionMade = true;
+                    lookupService.DoEnquiry();
+                    if (results.EnquirySuccessful && string.IsNullOrEmpty(results.ErrorMsg))
+                    {
+                        enquirySuccessful = true;
+                    }
+                    else
+                    {
+                        walletBalance = lookupService.ReverseEnquiryCost();
+                        deductionReimbursed = true;
+                    }
+                    results.WalletBalance = walletBalance;
+                }
+                else
+                {
+                    results.ErrorMsg = "Insufficient funds to perform enquiry.";
+                }
+            }
+            catch (Exception ex)
+            {
+                results.ErrorMsg = "Error occurred performing enquiry: " + ex.Message;
+                if (lookupService != null)
+                {
+                    lookupService.SetError(ex);
+                }
+            }
+            finally
+            {
+                // Double check here that if enquiry failed we do not accidently bill the user.
+                if (!enquirySuccessful && deductionMade && !deductionReimbursed)
+                {
+                    results.WalletBalance = lookupService.ReverseEnquiryCost();
+                }
+                if (lookupService != null)
+                {
+                    lookupService.LogEnquiry();
                 }
             }
 

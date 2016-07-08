@@ -44,5 +44,8 @@ namespace SeeffProspectingAuthService
 
         [DataMember]
         public int? BusinessUnitID { get; set; }
+
+        [DataMember]
+        public bool TrustLookupsEnabled { get; set; }
     }
 }

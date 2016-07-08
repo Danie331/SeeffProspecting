@@ -1,0 +1,1524 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:i0="https://api.searchworks.co.za/SearchWorksAPI" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SearchWorksAPIService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="https://api.searchworks.co.za/SearchWorksAPI" location="https://api.searchworks.co.za/SearchWorksAPIService.svc?wsdl=wsdl0" />
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="https://api.searchworks.co.za/SearchWorksAPIService.svc?xsd=xsd2" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="https://api.searchworks.co.za/SearchWorksAPIService.svc?xsd=xsd0" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="https://api.searchworks.co.za/SearchWorksAPIService.svc?xsd=xsd1" />
+      <xsd:import schemaLocation="https://api.searchworks.co.za/SearchWorksAPIService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/" />
+      <xsd:import schemaLocation="https://api.searchworks.co.za/SearchWorksAPIService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="https://api.searchworks.co.za/SearchWorksAPIService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/CompuScan" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ISearchWorksAPIService_CSITrustInformationSearch_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSITrustInformationSearch" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSITrustInformationSearch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSITrustInformationSearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIPersonVerificationSearch_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSIPersonVerificationSearch" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIPersonVerificationSearch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSIPersonVerificationSearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchCSIPersonTraceByIDNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchCSIPersonTraceByIDNumbers" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchCSIPersonTraceByIDNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchCSIPersonTraceByIDNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchCSIPersonVerificationByIDNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchCSIPersonVerificationByIDNumbers" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchCSIPersonVerificationByIDNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchCSIPersonVerificationByIDNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchDeedsOfficePersonByIDNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchDeedsOfficePersonByIDNumbers" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchDeedsOfficePersonByIDNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchDeedsOfficePersonByIDNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchCIPCDirectorByIDNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchCIPCDirectorByIDNumbers" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchCIPCDirectorByIDNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchCIPCDirectorByIDNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchPersonPropertyHistoryByIDNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchPersonPropertyHistoryByIDNumbers" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchPersonPropertyHistoryByIDNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchPersonPropertyHistoryByIDNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchCSICompanyTraceByCompanyRegistrationNumber_InputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchCSICompanyTraceByCompanyRegistrationNumber" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchCSICompanyTraceByCompanyRegistrationNumber_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchCSICompanyTraceByCompanyRegistrationNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumber_InputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumber" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumber_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchDOTSByBarcode_InputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchDOTSByBarcode" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_BulkSearchDOTSByBarcode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BulkSearchDOTSByBarcodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ExportBulkSearchToPDF_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExportBulkSearchToPDF" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ExportBulkSearchToPDF_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExportBulkSearchToPDFResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ExportBulkSearchToExcel_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExportBulkSearchToExcel" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ExportBulkSearchToExcel_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExportBulkSearchToExcelResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CreateSearchGroup_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateSearchGroup" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CreateSearchGroup_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateSearchGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_AssociateSearchToGroup_InputMessage">
+    <wsdl:part name="parameters" element="tns:AssociateSearchToGroup" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_AssociateSearchToGroup_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AssociateSearchToGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_RemoveSearchFromGroup_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveSearchFromGroup" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_RemoveSearchFromGroup_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveSearchFromGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeleteGroup_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteGroup" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeleteGroup_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_GetUserAllowedSearchTypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserAllowedSearchTypes" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_GetUserAllowedSearchTypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserAllowedSearchTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_GetPriceList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPriceList" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_GetPriceList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPriceListResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_SelectSearchGroups_InputMessage">
+    <wsdl:part name="parameters" element="tns:SelectSearchGroups" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_SelectSearchGroups_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SelectSearchGroupsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_SelectSearchGroupDetailByGroupID_InputMessage">
+    <wsdl:part name="parameters" element="tns:SelectSearchGroupDetailByGroupID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_SelectSearchGroupDetailByGroupID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SelectSearchGroupDetailByGroupIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_SelectSearchGroupSearchesByGroupID_InputMessage">
+    <wsdl:part name="parameters" element="tns:SelectSearchGroupSearchesByGroupID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_SelectSearchGroupSearchesByGroupID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SelectSearchGroupSearchesByGroupIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_IsDeedsOfficeOnline_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsDeedsOfficeOnline" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_IsDeedsOfficeOnline_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsDeedsOfficeOnlineResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTraceByIDNumber_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTraceByIDNumber" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTraceByIDNumber_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTraceByIDNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTraceAddress_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTraceAddress" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTraceAddress_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTraceAddressResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTraceName_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTraceName" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTraceName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTraceNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTracePassportNumber_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTracePassportNumber" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTracePassportNumber_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTracePassportNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTraceTelephoneNumber_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTraceTelephoneNumber" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTraceTelephoneNumber_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTraceTelephoneNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTraceByAddressID_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTraceByAddressID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTraceByAddressID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTraceByAddressIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSAccountVerificationResponse_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSAccountVerificationResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSAccountVerificationResponse_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSAccountVerificationResponseResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTraceByTelephoneID_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTraceByTelephoneID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerTraceByTelephoneID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerTraceByTelephoneIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerContactInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerContactInformation" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerContactInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerContactInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerIDVerification_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerIDVerification" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerIDVerification_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerIDVerificationResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerCreditProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerCreditProfile" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerCreditProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerCreditProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerByEnquiryID_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerByEnquiryID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSConsumerByEnquiryID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSConsumerByEnquiryIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSBusinessReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSBusinessReport" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSBusinessReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSBusinessReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSBusinessReportByEnquiryID_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSBusinessReportByEnquiryID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSBusinessReportByEnquiryID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSBusinessReportByEnquiryIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CIPCDirector_InputMessage">
+    <wsdl:part name="parameters" element="tns:CIPCDirector" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CIPCDirector_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CIPCDirectorResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CIPCDirectorByDirectorID_InputMessage">
+    <wsdl:part name="parameters" element="tns:CIPCDirectorByDirectorID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CIPCDirectorByDirectorID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CIPCDirectorByDirectorIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CIPCCompany_InputMessage">
+    <wsdl:part name="parameters" element="tns:CIPCCompany" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CIPCCompany_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CIPCCompanyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CIPCCompanyByCompanyID_InputMessage">
+    <wsdl:part name="parameters" element="tns:CIPCCompanyByCompanyID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CIPCCompanyByCompanyID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CIPCCompanyByCompanyIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ExperianConsumerCreditProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExperianConsumerCreditProfile" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ExperianConsumerCreditProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExperianConsumerCreditProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePerson" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeTrust_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeTrust" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeTrust_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeTrustResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeTrustDBID_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeTrustDBID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeTrustDBID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeTrustDBIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeCompany_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeCompany" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeCompany_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeCompanyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePersonDBID_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePersonDBID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePersonDBID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePersonDBIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeCompanyDBID_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeCompanyDBID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeCompanyDBID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeCompanyDBIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertyErf_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertyErf" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertyErf_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertyErfResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertyFarm_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertyFarm" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertyFarm_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertyFarmResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertyAgriculturalHolding_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertyAgriculturalHolding" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertyAgriculturalHolding_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertyAgriculturalHoldingResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertySchemeSearch_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertySchemeSearch" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertySchemeSearch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertySchemeSearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertyTownship_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertyTownship" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertyTownship_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertyTownshipResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertyDBKey_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertyDBKey" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertyDBKey_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertyDBKeyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertyDocumentSearch_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertyDocumentSearch" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePropertyDocumentSearch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePropertyDocumentSearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeCompanyCrossDeedsOfficeSearch_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeCompanyCrossDeedsOfficeSearch" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeCompanyCrossDeedsOfficeSearch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeCompanyCrossDeedsOfficeSearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePersonCrossDeedsOfficeSearch_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePersonCrossDeedsOfficeSearch" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficePersonCrossDeedsOfficeSearch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficePersonCrossDeedsOfficeSearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeTrustCrossDeedsOfficeSearch_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeTrustCrossDeedsOfficeSearch" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeTrustCrossDeedsOfficeSearch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeTrustCrossDeedsOfficeSearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CompuScanConsumerCreditProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:CompuScanConsumerCreditProfile" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CompuScanConsumerCreditProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CompuScanConsumerCreditProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CompuscanEmploymentConfidenceIndex_InputMessage">
+    <wsdl:part name="parameters" element="tns:CompuscanEmploymentConfidenceIndex" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CompuscanEmploymentConfidenceIndex_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CompuscanEmploymentConfidenceIndexResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CompuscanConsumerContactInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:CompuscanConsumerContactInformation" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CompuscanConsumerContactInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CompuscanConsumerContactInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertyValuationErf_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertyValuationErf" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertyValuationErf_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertyValuationErfResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertyValuationFarm_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertyValuationFarm" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertyValuationFarm_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertyValuationFarmResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertyValuationScheme_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertyValuationScheme" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertyValuationScheme_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertyValuationSchemeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertyValuationStreet_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertyValuationStreet" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertyValuationStreet_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertyValuationStreetResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertyValuationByPropertyID_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertyValuationByPropertyID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertyValuationByPropertyID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertyValuationByPropertyIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneBusinessSearchCompany_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneBusinessSearchCompany" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneBusinessSearchCompany_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneBusinessSearchCompanyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneBusinessSearchCompanyByCompanyID_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneBusinessSearchCompanyByCompanyID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneBusinessSearchCompanyByCompanyID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneBusinessSearchCompanyByCompanyIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneCompanyPropertyHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneCompanyPropertyHistory" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneCompanyPropertyHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneCompanyPropertyHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePersonPropertyHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePersonPropertyHistory" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePersonPropertyHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePersonPropertyHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneOwnersInEstate_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneOwnersInEstate" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneOwnersInEstate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneOwnersInEstateResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneOwnersInScheme_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneOwnersInScheme" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneOwnersInScheme_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneOwnersInSchemeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneLookupEstateName_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneLookupEstateName" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneLookupEstateName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneLookupEstateNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneLookupSuburbName_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneLookupSuburbName" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneLookupSuburbName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneLookupSuburbNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_PropertyErfToStreetConversion_InputMessage">
+    <wsdl:part name="parameters" element="tns:PropertyErfToStreetConversion" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_PropertyErfToStreetConversion_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PropertyErfToStreetConversionResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_PropertySchemeToStreetConversion_InputMessage">
+    <wsdl:part name="parameters" element="tns:PropertySchemeToStreetConversion" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_PropertySchemeToStreetConversion_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PropertySchemeToStreetConversionResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_PropertyStreetToErfConversion_InputMessage">
+    <wsdl:part name="parameters" element="tns:PropertyStreetToErfConversion" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_PropertyStreetToErfConversion_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PropertyStreetToErfConversionResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_PropertyConversionByPropertyID_InputMessage">
+    <wsdl:part name="parameters" element="tns:PropertyConversionByPropertyID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_PropertyConversionByPropertyID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PropertyConversionByPropertyIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupStreetTypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupStreetTypes" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupStreetTypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupStreetTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertyEstateReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertyEstateReport" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertyEstateReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertyEstateReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertySchemeReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertySchemeReport" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertySchemeReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertySchemeReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertySuburbReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertySuburbReport" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStonePropertySuburbReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStonePropertySuburbReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CourtLibraryEnquiry_InputMessage">
+    <wsdl:part name="parameters" element="tns:CourtLibraryEnquiry" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CourtLibraryEnquiry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CourtLibraryEnquiryResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupCourtNames_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupCourtNames" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupCourtNames_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupCourtNamesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionConsumerCreditProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionConsumerCreditProfile" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionConsumerCreditProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionConsumerCreditProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionConsumerContactInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionConsumerContactInformation" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionConsumerContactInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionConsumerContactInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionConsumerIDVerification_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionConsumerIDVerification" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionConsumerIDVerification_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionConsumerIDVerificationResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionCommercialCreditProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionCommercialCreditProfile" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionCommercialCreditProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionCommercialCreditProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionCommercialProfileByCompanyID_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionCommercialProfileByCompanyID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionCommercialProfileByCompanyID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionCommercialProfileByCompanyIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionDefaultList_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionDefaultList" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionDefaultList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionDefaultListResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionDefaultDelist_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionDefaultDelist" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionDefaultDelist_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionDefaultDelistResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CompanyLookup_InputMessage">
+    <wsdl:part name="parameters" element="tns:CompanyLookup" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CompanyLookup_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CompanyLookupResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeDocumentCopyRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeDocumentCopyRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DeedsOfficeDocumentCopyRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeedsOfficeDocumentCopyRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CIPCDocumentRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:CIPCDocumentRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CIPCDocumentRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CIPCDocumentRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_SGDiagramRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:SGDiagramRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_SGDiagramRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SGDiagramRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CourtDocumentRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:CourtDocumentRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CourtDocumentRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CourtDocumentRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionBankCodeRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionBankCodeRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionBankCodeRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionBankCodeRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_InoxicoQualificationCheckRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:InoxicoQualificationCheckRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_InoxicoQualificationCheckRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InoxicoQualificationCheckRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_InoxicoDriversLicenseCheckRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:InoxicoDriversLicenseCheckRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_InoxicoDriversLicenseCheckRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InoxicoDriversLicenseCheckRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_MIEQualificationCheckRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:MIEQualificationCheckRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_MIEQualificationCheckRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MIEQualificationCheckRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_MIEInternationalQualificationCheckRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:MIEInternationalQualificationCheckRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_MIEInternationalQualificationCheckRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MIEInternationalQualificationCheckRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_MIEDriversLicenseCheckRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:MIEDriversLicenseCheckRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_MIEDriversLicenseCheckRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MIEDriversLicenseCheckRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_MIEProfessionalDriversLicenseCheckRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:MIEProfessionalDriversLicenseCheckRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_MIEProfessionalDriversLicenseCheckRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MIEProfessionalDriversLicenseCheckRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LetterOfDemandRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:LetterOfDemandRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LetterOfDemandRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LetterOfDemandRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupSchemes_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupSchemes" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupSchemes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupSchemesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupAgriculturalHoldingAreas_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupAgriculturalHoldingAreas" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupAgriculturalHoldingAreas_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupAgriculturalHoldingAreasResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupFarms_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupFarms" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupFarms_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupFarmsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupMunicipalities_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupMunicipalities" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupMunicipalities_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupMunicipalitiesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupRegistrationDivisions_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupRegistrationDivisions" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupRegistrationDivisions_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupRegistrationDivisionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupTownships_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupTownships" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupTownships_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupTownshipsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_Login_InputMessage">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_Login_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ValidateToken_InputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateToken" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ValidateToken_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateTokenResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_GetPreviousSearch_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPreviousSearch" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_GetPreviousSearch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPreviousSearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_GetSearchHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSearchHistory" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_GetSearchHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSearchHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_GetDocumentBytesByDocumentGUID_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDocumentBytesByDocumentGUID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_GetDocumentBytesByDocumentGUID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDocumentBytesByDocumentGUIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSBarcode_InputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSBarcode" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSBarcode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSBarcodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSCompany_InputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSCompany" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSCompany_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSCompanyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSPerson" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSPersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSTrust_InputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSTrust" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSTrust_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSTrustResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSPropertyErf_InputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSPropertyErf" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSPropertyErf_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSPropertyErfResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSPropertyFarm_InputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSPropertyFarm" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSPropertyFarm_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSPropertyFarmResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSPropertyAgriculturalHolding_InputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSPropertyAgriculturalHolding" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSPropertyAgriculturalHolding_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSPropertyAgriculturalHoldingResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSPropertyScheme_InputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSPropertyScheme" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_DOTSPropertyScheme_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DOTSPropertySchemeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSAccountVerificationRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDSAccountVerificationRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_XDSAccountVerificationRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDSAccountVerificationRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CompuScanAccountVerificationRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:CompuScanAccountVerificationRequest" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CompuScanAccountVerificationRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CompuScanAccountVerificationRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_GetResponseTypeLongTextFromEnum_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetResponseTypeLongTextFromEnum" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_GetResponseTypeLongTextFromEnum_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetResponseTypeLongTextFromEnumResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIVehicleReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSIVehicleReport" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIVehicleReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSIVehicleReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupVehicleMake_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupVehicleMake" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupVehicleMake_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupVehicleMakeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupVehicleModel_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupVehicleModel" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupVehicleModel_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupVehicleModelResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupVehicleModelYears_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupVehicleModelYears" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupVehicleModelYears_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupVehicleModelYearsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ConsumerWatchAddConsumer_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerWatchAddConsumer" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ConsumerWatchAddConsumer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerWatchAddConsumerResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ConsumerWatchGetConsumerList_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerWatchGetConsumerList" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ConsumerWatchGetConsumerList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerWatchGetConsumerListResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ConsumerWatchDeleteConsumerFromList_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerWatchDeleteConsumerFromList" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ConsumerWatchDeleteConsumerFromList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerWatchDeleteConsumerFromListResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ConsumerWatchGetConsumerJudgementList_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerWatchGetConsumerJudgementList" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ConsumerWatchGetConsumerJudgementList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerWatchGetConsumerJudgementListResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIAffordabilityReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSIAffordabilityReport" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIAffordabilityReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSIAffordabilityReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIDepreciationReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSIDepreciationReport" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIDepreciationReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSIDepreciationReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneVVIReportByVINNumber_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneVVIReportByVINNumber" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneVVIReportByVINNumber_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneVVIReportByVINNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneVVIReportByRegistrationNumber_InputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneVVIReportByRegistrationNumber" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LightStoneVVIReportByRegistrationNumber_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LightStoneVVIReportByRegistrationNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionAutoReportByVINNumberTrace_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionAutoReportByVINNumberTrace" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionAutoReportByVINNumberTrace_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionAutoReportByVINNumberTraceResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionAutoReportByMMCodeTrace_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionAutoReportByMMCodeTrace" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionAutoReportByMMCodeTrace_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionAutoReportByMMCodeTraceResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionAutoReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionAutoReport" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TransUnionAutoReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransUnionAutoReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupVehicleBodyShape_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupVehicleBodyShape" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupVehicleBodyShape_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupVehicleBodyShapeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupVehiclePriceRangeByYear_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupVehiclePriceRangeByYear" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupVehiclePriceRangeByYear_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupVehiclePriceRangeByYearResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupVehicleYearRange_InputMessage">
+    <wsdl:part name="parameters" element="tns:LookupVehicleYearRange" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_LookupVehicleYearRange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LookupVehicleYearRangeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TenantWatchProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:TenantWatchProfile" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_TenantWatchProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TenantWatchProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ConsumerTraceByIDNumberSurnameVerified_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerTraceByIDNumberSurnameVerified" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_ConsumerTraceByIDNumberSurnameVerified_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsumerTraceByIDNumberSurnameVerifiedResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_PropertyCoordinateSearch_InputMessage">
+    <wsdl:part name="parameters" element="tns:PropertyCoordinateSearch" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_PropertyCoordinateSearch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PropertyCoordinateSearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIPersonTraceByIDNumber_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSIPersonTraceByIDNumber" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIPersonTraceByIDNumber_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSIPersonTraceByIDNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIPersonTraceByEnquiryID_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSIPersonTraceByEnquiryID" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIPersonTraceByEnquiryID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSIPersonTraceByEnquiryIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIPersonTraceByName_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSIPersonTraceByName" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIPersonTraceByName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSIPersonTraceByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIPersonTraceByTelephoneNumber_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSIPersonTraceByTelephoneNumber" />
+  </wsdl:message>
+  <wsdl:message name="ISearchWorksAPIService_CSIPersonTraceByTelephoneNumber_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSIPersonTraceByTelephoneNumberResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ISearchWorksAPIService">
+    <wsdl:operation name="CSITrustInformationSearch">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSITrustInformationSearch" message="tns:ISearchWorksAPIService_CSITrustInformationSearch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSITrustInformationSearchResponse" message="tns:ISearchWorksAPIService_CSITrustInformationSearch_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSIPersonVerificationSearch">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIPersonVerificationSearch" message="tns:ISearchWorksAPIService_CSIPersonVerificationSearch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIPersonVerificationSearchResponse" message="tns:ISearchWorksAPIService_CSIPersonVerificationSearch_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchCSIPersonTraceByIDNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchCSIPersonTraceByIDNumbers" message="tns:ISearchWorksAPIService_BulkSearchCSIPersonTraceByIDNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchCSIPersonTraceByIDNumbersResponse" message="tns:ISearchWorksAPIService_BulkSearchCSIPersonTraceByIDNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchCSIPersonVerificationByIDNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchCSIPersonVerificationByIDNumbers" message="tns:ISearchWorksAPIService_BulkSearchCSIPersonVerificationByIDNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchCSIPersonVerificationByIDNumbersResponse" message="tns:ISearchWorksAPIService_BulkSearchCSIPersonVerificationByIDNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchDeedsOfficePersonByIDNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchDeedsOfficePersonByIDNumbers" message="tns:ISearchWorksAPIService_BulkSearchDeedsOfficePersonByIDNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchDeedsOfficePersonByIDNumbersResponse" message="tns:ISearchWorksAPIService_BulkSearchDeedsOfficePersonByIDNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchCIPCDirectorByIDNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchCIPCDirectorByIDNumbers" message="tns:ISearchWorksAPIService_BulkSearchCIPCDirectorByIDNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchCIPCDirectorByIDNumbersResponse" message="tns:ISearchWorksAPIService_BulkSearchCIPCDirectorByIDNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchPersonPropertyHistoryByIDNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchPersonPropertyHistoryByIDNumbers" message="tns:ISearchWorksAPIService_BulkSearchPersonPropertyHistoryByIDNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchPersonPropertyHistoryByIDNumbersResponse" message="tns:ISearchWorksAPIService_BulkSearchPersonPropertyHistoryByIDNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchCSICompanyTraceByCompanyRegistrationNumber">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchCSICompanyTraceByCompanyRegistrationNumber" message="tns:ISearchWorksAPIService_BulkSearchCSICompanyTraceByCompanyRegistrationNumber_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchCSICompanyTraceByCompanyRegistrationNumberResponse" message="tns:ISearchWorksAPIService_BulkSearchCSICompanyTraceByCompanyRegistrationNumber_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumber">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumber" message="tns:ISearchWorksAPIService_BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumber_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumberResponse" message="tns:ISearchWorksAPIService_BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumber_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchDOTSByBarcode">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchDOTSByBarcode" message="tns:ISearchWorksAPIService_BulkSearchDOTSByBarcode_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/BulkSearchDOTSByBarcodeResponse" message="tns:ISearchWorksAPIService_BulkSearchDOTSByBarcode_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ExportBulkSearchToPDF">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ExportBulkSearchToPDF" message="tns:ISearchWorksAPIService_ExportBulkSearchToPDF_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ExportBulkSearchToPDFResponse" message="tns:ISearchWorksAPIService_ExportBulkSearchToPDF_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ExportBulkSearchToExcel">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ExportBulkSearchToExcel" message="tns:ISearchWorksAPIService_ExportBulkSearchToExcel_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ExportBulkSearchToExcelResponse" message="tns:ISearchWorksAPIService_ExportBulkSearchToExcel_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateSearchGroup">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CreateSearchGroup" message="tns:ISearchWorksAPIService_CreateSearchGroup_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CreateSearchGroupResponse" message="tns:ISearchWorksAPIService_CreateSearchGroup_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AssociateSearchToGroup">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/AssociateSearchToGroup" message="tns:ISearchWorksAPIService_AssociateSearchToGroup_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/AssociateSearchToGroupResponse" message="tns:ISearchWorksAPIService_AssociateSearchToGroup_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveSearchFromGroup">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/RemoveSearchFromGroup" message="tns:ISearchWorksAPIService_RemoveSearchFromGroup_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/RemoveSearchFromGroupResponse" message="tns:ISearchWorksAPIService_RemoveSearchFromGroup_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteGroup">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeleteGroup" message="tns:ISearchWorksAPIService_DeleteGroup_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeleteGroupResponse" message="tns:ISearchWorksAPIService_DeleteGroup_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserAllowedSearchTypes">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/GetUserAllowedSearchTypes" message="tns:ISearchWorksAPIService_GetUserAllowedSearchTypes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/GetUserAllowedSearchTypesResponse" message="tns:ISearchWorksAPIService_GetUserAllowedSearchTypes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPriceList">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/GetPriceList" message="tns:ISearchWorksAPIService_GetPriceList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/GetPriceListResponse" message="tns:ISearchWorksAPIService_GetPriceList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SelectSearchGroups">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/SelectSearchGroups" message="tns:ISearchWorksAPIService_SelectSearchGroups_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/SelectSearchGroupsResponse" message="tns:ISearchWorksAPIService_SelectSearchGroups_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SelectSearchGroupDetailByGroupID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/SelectSearchGroupDetailByGroupID" message="tns:ISearchWorksAPIService_SelectSearchGroupDetailByGroupID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/SelectSearchGroupDetailByGroupIDResponse" message="tns:ISearchWorksAPIService_SelectSearchGroupDetailByGroupID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SelectSearchGroupSearchesByGroupID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/SelectSearchGroupSearchesByGroupID" message="tns:ISearchWorksAPIService_SelectSearchGroupSearchesByGroupID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/SelectSearchGroupSearchesByGroupIDResponse" message="tns:ISearchWorksAPIService_SelectSearchGroupSearchesByGroupID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsDeedsOfficeOnline">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/IsDeedsOfficeOnline" message="tns:ISearchWorksAPIService_IsDeedsOfficeOnline_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/IsDeedsOfficeOnlineResponse" message="tns:ISearchWorksAPIService_IsDeedsOfficeOnline_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTraceByIDNumber">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceByIDNumber" message="tns:ISearchWorksAPIService_XDSConsumerTraceByIDNumber_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceByIDNumberResponse" message="tns:ISearchWorksAPIService_XDSConsumerTraceByIDNumber_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTraceAddress">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceAddress" message="tns:ISearchWorksAPIService_XDSConsumerTraceAddress_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceAddressResponse" message="tns:ISearchWorksAPIService_XDSConsumerTraceAddress_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTraceName">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceName" message="tns:ISearchWorksAPIService_XDSConsumerTraceName_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceNameResponse" message="tns:ISearchWorksAPIService_XDSConsumerTraceName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTracePassportNumber">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTracePassportNumber" message="tns:ISearchWorksAPIService_XDSConsumerTracePassportNumber_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTracePassportNumberResponse" message="tns:ISearchWorksAPIService_XDSConsumerTracePassportNumber_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTraceTelephoneNumber">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceTelephoneNumber" message="tns:ISearchWorksAPIService_XDSConsumerTraceTelephoneNumber_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceTelephoneNumberResponse" message="tns:ISearchWorksAPIService_XDSConsumerTraceTelephoneNumber_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTraceByAddressID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceByAddressID" message="tns:ISearchWorksAPIService_XDSConsumerTraceByAddressID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceByAddressIDResponse" message="tns:ISearchWorksAPIService_XDSConsumerTraceByAddressID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSAccountVerificationResponse">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSAccountVerificationResponse" message="tns:ISearchWorksAPIService_XDSAccountVerificationResponse_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSAccountVerificationResponseResponse" message="tns:ISearchWorksAPIService_XDSAccountVerificationResponse_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTraceByTelephoneID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceByTelephoneID" message="tns:ISearchWorksAPIService_XDSConsumerTraceByTelephoneID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceByTelephoneIDResponse" message="tns:ISearchWorksAPIService_XDSConsumerTraceByTelephoneID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerContactInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerContactInformation" message="tns:ISearchWorksAPIService_XDSConsumerContactInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerContactInformationResponse" message="tns:ISearchWorksAPIService_XDSConsumerContactInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerIDVerification">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerIDVerification" message="tns:ISearchWorksAPIService_XDSConsumerIDVerification_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerIDVerificationResponse" message="tns:ISearchWorksAPIService_XDSConsumerIDVerification_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerCreditProfile">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerCreditProfile" message="tns:ISearchWorksAPIService_XDSConsumerCreditProfile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerCreditProfileResponse" message="tns:ISearchWorksAPIService_XDSConsumerCreditProfile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerByEnquiryID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerByEnquiryID" message="tns:ISearchWorksAPIService_XDSConsumerByEnquiryID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSConsumerByEnquiryIDResponse" message="tns:ISearchWorksAPIService_XDSConsumerByEnquiryID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSBusinessReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSBusinessReport" message="tns:ISearchWorksAPIService_XDSBusinessReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSBusinessReportResponse" message="tns:ISearchWorksAPIService_XDSBusinessReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSBusinessReportByEnquiryID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSBusinessReportByEnquiryID" message="tns:ISearchWorksAPIService_XDSBusinessReportByEnquiryID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSBusinessReportByEnquiryIDResponse" message="tns:ISearchWorksAPIService_XDSBusinessReportByEnquiryID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CIPCDirector">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CIPCDirector" message="tns:ISearchWorksAPIService_CIPCDirector_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CIPCDirectorResponse" message="tns:ISearchWorksAPIService_CIPCDirector_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CIPCDirectorByDirectorID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CIPCDirectorByDirectorID" message="tns:ISearchWorksAPIService_CIPCDirectorByDirectorID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CIPCDirectorByDirectorIDResponse" message="tns:ISearchWorksAPIService_CIPCDirectorByDirectorID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CIPCCompany">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CIPCCompany" message="tns:ISearchWorksAPIService_CIPCCompany_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CIPCCompanyResponse" message="tns:ISearchWorksAPIService_CIPCCompany_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CIPCCompanyByCompanyID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CIPCCompanyByCompanyID" message="tns:ISearchWorksAPIService_CIPCCompanyByCompanyID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CIPCCompanyByCompanyIDResponse" message="tns:ISearchWorksAPIService_CIPCCompanyByCompanyID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ExperianConsumerCreditProfile">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ExperianConsumerCreditProfile" message="tns:ISearchWorksAPIService_ExperianConsumerCreditProfile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ExperianConsumerCreditProfileResponse" message="tns:ISearchWorksAPIService_ExperianConsumerCreditProfile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePerson" message="tns:ISearchWorksAPIService_DeedsOfficePerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePersonResponse" message="tns:ISearchWorksAPIService_DeedsOfficePerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeTrust">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeTrust" message="tns:ISearchWorksAPIService_DeedsOfficeTrust_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeTrustResponse" message="tns:ISearchWorksAPIService_DeedsOfficeTrust_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeTrustDBID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeTrustDBID" message="tns:ISearchWorksAPIService_DeedsOfficeTrustDBID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeTrustDBIDResponse" message="tns:ISearchWorksAPIService_DeedsOfficeTrustDBID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeCompany">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeCompany" message="tns:ISearchWorksAPIService_DeedsOfficeCompany_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeCompanyResponse" message="tns:ISearchWorksAPIService_DeedsOfficeCompany_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePersonDBID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePersonDBID" message="tns:ISearchWorksAPIService_DeedsOfficePersonDBID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePersonDBIDResponse" message="tns:ISearchWorksAPIService_DeedsOfficePersonDBID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeCompanyDBID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeCompanyDBID" message="tns:ISearchWorksAPIService_DeedsOfficeCompanyDBID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeCompanyDBIDResponse" message="tns:ISearchWorksAPIService_DeedsOfficeCompanyDBID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertyErf">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyErf" message="tns:ISearchWorksAPIService_DeedsOfficePropertyErf_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyErfResponse" message="tns:ISearchWorksAPIService_DeedsOfficePropertyErf_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertyFarm">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyFarm" message="tns:ISearchWorksAPIService_DeedsOfficePropertyFarm_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyFarmResponse" message="tns:ISearchWorksAPIService_DeedsOfficePropertyFarm_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertyAgriculturalHolding">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyAgriculturalHolding" message="tns:ISearchWorksAPIService_DeedsOfficePropertyAgriculturalHolding_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyAgriculturalHoldingResponse" message="tns:ISearchWorksAPIService_DeedsOfficePropertyAgriculturalHolding_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertySchemeSearch">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertySchemeSearch" message="tns:ISearchWorksAPIService_DeedsOfficePropertySchemeSearch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertySchemeSearchResponse" message="tns:ISearchWorksAPIService_DeedsOfficePropertySchemeSearch_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertyTownship">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyTownship" message="tns:ISearchWorksAPIService_DeedsOfficePropertyTownship_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyTownshipResponse" message="tns:ISearchWorksAPIService_DeedsOfficePropertyTownship_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertyDBKey">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyDBKey" message="tns:ISearchWorksAPIService_DeedsOfficePropertyDBKey_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyDBKeyResponse" message="tns:ISearchWorksAPIService_DeedsOfficePropertyDBKey_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertyDocumentSearch">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyDocumentSearch" message="tns:ISearchWorksAPIService_DeedsOfficePropertyDocumentSearch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyDocumentSearchResponse" message="tns:ISearchWorksAPIService_DeedsOfficePropertyDocumentSearch_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeCompanyCrossDeedsOfficeSearch">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeCompanyCrossDeedsOfficeSearch" message="tns:ISearchWorksAPIService_DeedsOfficeCompanyCrossDeedsOfficeSearch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeCompanyCrossDeedsOfficeSearchResponse" message="tns:ISearchWorksAPIService_DeedsOfficeCompanyCrossDeedsOfficeSearch_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePersonCrossDeedsOfficeSearch">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePersonCrossDeedsOfficeSearch" message="tns:ISearchWorksAPIService_DeedsOfficePersonCrossDeedsOfficeSearch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePersonCrossDeedsOfficeSearchResponse" message="tns:ISearchWorksAPIService_DeedsOfficePersonCrossDeedsOfficeSearch_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeTrustCrossDeedsOfficeSearch">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeTrustCrossDeedsOfficeSearch" message="tns:ISearchWorksAPIService_DeedsOfficeTrustCrossDeedsOfficeSearch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeTrustCrossDeedsOfficeSearchResponse" message="tns:ISearchWorksAPIService_DeedsOfficeTrustCrossDeedsOfficeSearch_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CompuScanConsumerCreditProfile">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CompuScanConsumerCreditProfile" message="tns:ISearchWorksAPIService_CompuScanConsumerCreditProfile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CompuScanConsumerCreditProfileResponse" message="tns:ISearchWorksAPIService_CompuScanConsumerCreditProfile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CompuscanEmploymentConfidenceIndex">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CompuscanEmploymentConfidenceIndex" message="tns:ISearchWorksAPIService_CompuscanEmploymentConfidenceIndex_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CompuscanEmploymentConfidenceIndexResponse" message="tns:ISearchWorksAPIService_CompuscanEmploymentConfidenceIndex_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CompuscanConsumerContactInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CompuscanConsumerContactInformation" message="tns:ISearchWorksAPIService_CompuscanConsumerContactInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CompuscanConsumerContactInformationResponse" message="tns:ISearchWorksAPIService_CompuscanConsumerContactInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertyValuationErf">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationErf" message="tns:ISearchWorksAPIService_LightStonePropertyValuationErf_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationErfResponse" message="tns:ISearchWorksAPIService_LightStonePropertyValuationErf_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertyValuationFarm">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationFarm" message="tns:ISearchWorksAPIService_LightStonePropertyValuationFarm_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationFarmResponse" message="tns:ISearchWorksAPIService_LightStonePropertyValuationFarm_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertyValuationScheme">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationScheme" message="tns:ISearchWorksAPIService_LightStonePropertyValuationScheme_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationSchemeResponse" message="tns:ISearchWorksAPIService_LightStonePropertyValuationScheme_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertyValuationStreet">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationStreet" message="tns:ISearchWorksAPIService_LightStonePropertyValuationStreet_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationStreetResponse" message="tns:ISearchWorksAPIService_LightStonePropertyValuationStreet_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertyValuationByPropertyID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationByPropertyID" message="tns:ISearchWorksAPIService_LightStonePropertyValuationByPropertyID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationByPropertyIDResponse" message="tns:ISearchWorksAPIService_LightStonePropertyValuationByPropertyID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneBusinessSearchCompany">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneBusinessSearchCompany" message="tns:ISearchWorksAPIService_LightStoneBusinessSearchCompany_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneBusinessSearchCompanyResponse" message="tns:ISearchWorksAPIService_LightStoneBusinessSearchCompany_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneBusinessSearchCompanyByCompanyID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneBusinessSearchCompanyByCompanyID" message="tns:ISearchWorksAPIService_LightStoneBusinessSearchCompanyByCompanyID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneBusinessSearchCompanyByCompanyIDResponse" message="tns:ISearchWorksAPIService_LightStoneBusinessSearchCompanyByCompanyID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneCompanyPropertyHistory">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneCompanyPropertyHistory" message="tns:ISearchWorksAPIService_LightStoneCompanyPropertyHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneCompanyPropertyHistoryResponse" message="tns:ISearchWorksAPIService_LightStoneCompanyPropertyHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePersonPropertyHistory">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePersonPropertyHistory" message="tns:ISearchWorksAPIService_LightStonePersonPropertyHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePersonPropertyHistoryResponse" message="tns:ISearchWorksAPIService_LightStonePersonPropertyHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneOwnersInEstate">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneOwnersInEstate" message="tns:ISearchWorksAPIService_LightStoneOwnersInEstate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneOwnersInEstateResponse" message="tns:ISearchWorksAPIService_LightStoneOwnersInEstate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneOwnersInScheme">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneOwnersInScheme" message="tns:ISearchWorksAPIService_LightStoneOwnersInScheme_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneOwnersInSchemeResponse" message="tns:ISearchWorksAPIService_LightStoneOwnersInScheme_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneLookupEstateName">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneLookupEstateName" message="tns:ISearchWorksAPIService_LightStoneLookupEstateName_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneLookupEstateNameResponse" message="tns:ISearchWorksAPIService_LightStoneLookupEstateName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneLookupSuburbName">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneLookupSuburbName" message="tns:ISearchWorksAPIService_LightStoneLookupSuburbName_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneLookupSuburbNameResponse" message="tns:ISearchWorksAPIService_LightStoneLookupSuburbName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PropertyErfToStreetConversion">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/PropertyErfToStreetConversion" message="tns:ISearchWorksAPIService_PropertyErfToStreetConversion_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/PropertyErfToStreetConversionResponse" message="tns:ISearchWorksAPIService_PropertyErfToStreetConversion_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PropertySchemeToStreetConversion">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/PropertySchemeToStreetConversion" message="tns:ISearchWorksAPIService_PropertySchemeToStreetConversion_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/PropertySchemeToStreetConversionResponse" message="tns:ISearchWorksAPIService_PropertySchemeToStreetConversion_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PropertyStreetToErfConversion">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/PropertyStreetToErfConversion" message="tns:ISearchWorksAPIService_PropertyStreetToErfConversion_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/PropertyStreetToErfConversionResponse" message="tns:ISearchWorksAPIService_PropertyStreetToErfConversion_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PropertyConversionByPropertyID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/PropertyConversionByPropertyID" message="tns:ISearchWorksAPIService_PropertyConversionByPropertyID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/PropertyConversionByPropertyIDResponse" message="tns:ISearchWorksAPIService_PropertyConversionByPropertyID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupStreetTypes">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupStreetTypes" message="tns:ISearchWorksAPIService_LookupStreetTypes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupStreetTypesResponse" message="tns:ISearchWorksAPIService_LookupStreetTypes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertyEstateReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyEstateReport" message="tns:ISearchWorksAPIService_LightStonePropertyEstateReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyEstateReportResponse" message="tns:ISearchWorksAPIService_LightStonePropertyEstateReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertySchemeReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertySchemeReport" message="tns:ISearchWorksAPIService_LightStonePropertySchemeReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertySchemeReportResponse" message="tns:ISearchWorksAPIService_LightStonePropertySchemeReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertySuburbReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertySuburbReport" message="tns:ISearchWorksAPIService_LightStonePropertySuburbReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStonePropertySuburbReportResponse" message="tns:ISearchWorksAPIService_LightStonePropertySuburbReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CourtLibraryEnquiry">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CourtLibraryEnquiry" message="tns:ISearchWorksAPIService_CourtLibraryEnquiry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CourtLibraryEnquiryResponse" message="tns:ISearchWorksAPIService_CourtLibraryEnquiry_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupCourtNames">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupCourtNames" message="tns:ISearchWorksAPIService_LookupCourtNames_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupCourtNamesResponse" message="tns:ISearchWorksAPIService_LookupCourtNames_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionConsumerCreditProfile">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionConsumerCreditProfile" message="tns:ISearchWorksAPIService_TransUnionConsumerCreditProfile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionConsumerCreditProfileResponse" message="tns:ISearchWorksAPIService_TransUnionConsumerCreditProfile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionConsumerContactInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionConsumerContactInformation" message="tns:ISearchWorksAPIService_TransUnionConsumerContactInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionConsumerContactInformationResponse" message="tns:ISearchWorksAPIService_TransUnionConsumerContactInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionConsumerIDVerification">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionConsumerIDVerification" message="tns:ISearchWorksAPIService_TransUnionConsumerIDVerification_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionConsumerIDVerificationResponse" message="tns:ISearchWorksAPIService_TransUnionConsumerIDVerification_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionCommercialCreditProfile">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionCommercialCreditProfile" message="tns:ISearchWorksAPIService_TransUnionCommercialCreditProfile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionCommercialCreditProfileResponse" message="tns:ISearchWorksAPIService_TransUnionCommercialCreditProfile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionCommercialProfileByCompanyID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionCommercialProfileByCompanyID" message="tns:ISearchWorksAPIService_TransUnionCommercialProfileByCompanyID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionCommercialProfileByCompanyIDResponse" message="tns:ISearchWorksAPIService_TransUnionCommercialProfileByCompanyID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionDefaultList">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionDefaultList" message="tns:ISearchWorksAPIService_TransUnionDefaultList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionDefaultListResponse" message="tns:ISearchWorksAPIService_TransUnionDefaultList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionDefaultDelist">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionDefaultDelist" message="tns:ISearchWorksAPIService_TransUnionDefaultDelist_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionDefaultDelistResponse" message="tns:ISearchWorksAPIService_TransUnionDefaultDelist_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CompanyLookup">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CompanyLookup" message="tns:ISearchWorksAPIService_CompanyLookup_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CompanyLookupResponse" message="tns:ISearchWorksAPIService_CompanyLookup_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeDocumentCopyRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeDocumentCopyRequest" message="tns:ISearchWorksAPIService_DeedsOfficeDocumentCopyRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeDocumentCopyRequestResponse" message="tns:ISearchWorksAPIService_DeedsOfficeDocumentCopyRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CIPCDocumentRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CIPCDocumentRequest" message="tns:ISearchWorksAPIService_CIPCDocumentRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CIPCDocumentRequestResponse" message="tns:ISearchWorksAPIService_CIPCDocumentRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SGDiagramRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/SGDiagramRequest" message="tns:ISearchWorksAPIService_SGDiagramRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/SGDiagramRequestResponse" message="tns:ISearchWorksAPIService_SGDiagramRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CourtDocumentRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CourtDocumentRequest" message="tns:ISearchWorksAPIService_CourtDocumentRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CourtDocumentRequestResponse" message="tns:ISearchWorksAPIService_CourtDocumentRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionBankCodeRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionBankCodeRequest" message="tns:ISearchWorksAPIService_TransUnionBankCodeRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionBankCodeRequestResponse" message="tns:ISearchWorksAPIService_TransUnionBankCodeRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InoxicoQualificationCheckRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/InoxicoQualificationCheckRequest" message="tns:ISearchWorksAPIService_InoxicoQualificationCheckRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/InoxicoQualificationCheckRequestResponse" message="tns:ISearchWorksAPIService_InoxicoQualificationCheckRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InoxicoDriversLicenseCheckRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/InoxicoDriversLicenseCheckRequest" message="tns:ISearchWorksAPIService_InoxicoDriversLicenseCheckRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/InoxicoDriversLicenseCheckRequestResponse" message="tns:ISearchWorksAPIService_InoxicoDriversLicenseCheckRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MIEQualificationCheckRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/MIEQualificationCheckRequest" message="tns:ISearchWorksAPIService_MIEQualificationCheckRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/MIEQualificationCheckRequestResponse" message="tns:ISearchWorksAPIService_MIEQualificationCheckRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MIEInternationalQualificationCheckRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/MIEInternationalQualificationCheckRequest" message="tns:ISearchWorksAPIService_MIEInternationalQualificationCheckRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/MIEInternationalQualificationCheckRequestResponse" message="tns:ISearchWorksAPIService_MIEInternationalQualificationCheckRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MIEDriversLicenseCheckRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/MIEDriversLicenseCheckRequest" message="tns:ISearchWorksAPIService_MIEDriversLicenseCheckRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/MIEDriversLicenseCheckRequestResponse" message="tns:ISearchWorksAPIService_MIEDriversLicenseCheckRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MIEProfessionalDriversLicenseCheckRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/MIEProfessionalDriversLicenseCheckRequest" message="tns:ISearchWorksAPIService_MIEProfessionalDriversLicenseCheckRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/MIEProfessionalDriversLicenseCheckRequestResponse" message="tns:ISearchWorksAPIService_MIEProfessionalDriversLicenseCheckRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LetterOfDemandRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LetterOfDemandRequest" message="tns:ISearchWorksAPIService_LetterOfDemandRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LetterOfDemandRequestResponse" message="tns:ISearchWorksAPIService_LetterOfDemandRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupSchemes">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupSchemes" message="tns:ISearchWorksAPIService_LookupSchemes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupSchemesResponse" message="tns:ISearchWorksAPIService_LookupSchemes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupAgriculturalHoldingAreas">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupAgriculturalHoldingAreas" message="tns:ISearchWorksAPIService_LookupAgriculturalHoldingAreas_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupAgriculturalHoldingAreasResponse" message="tns:ISearchWorksAPIService_LookupAgriculturalHoldingAreas_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupFarms">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupFarms" message="tns:ISearchWorksAPIService_LookupFarms_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupFarmsResponse" message="tns:ISearchWorksAPIService_LookupFarms_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupMunicipalities">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupMunicipalities" message="tns:ISearchWorksAPIService_LookupMunicipalities_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupMunicipalitiesResponse" message="tns:ISearchWorksAPIService_LookupMunicipalities_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupRegistrationDivisions">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupRegistrationDivisions" message="tns:ISearchWorksAPIService_LookupRegistrationDivisions_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupRegistrationDivisionsResponse" message="tns:ISearchWorksAPIService_LookupRegistrationDivisions_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupTownships">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupTownships" message="tns:ISearchWorksAPIService_LookupTownships_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupTownshipsResponse" message="tns:ISearchWorksAPIService_LookupTownships_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/Login" message="tns:ISearchWorksAPIService_Login_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LoginResponse" message="tns:ISearchWorksAPIService_Login_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateToken">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ValidateToken" message="tns:ISearchWorksAPIService_ValidateToken_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ValidateTokenResponse" message="tns:ISearchWorksAPIService_ValidateToken_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPreviousSearch">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/GetPreviousSearch" message="tns:ISearchWorksAPIService_GetPreviousSearch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/GetPreviousSearchResponse" message="tns:ISearchWorksAPIService_GetPreviousSearch_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSearchHistory">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/GetSearchHistory" message="tns:ISearchWorksAPIService_GetSearchHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/GetSearchHistoryResponse" message="tns:ISearchWorksAPIService_GetSearchHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentBytesByDocumentGUID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/GetDocumentBytesByDocumentGUID" message="tns:ISearchWorksAPIService_GetDocumentBytesByDocumentGUID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/GetDocumentBytesByDocumentGUIDResponse" message="tns:ISearchWorksAPIService_GetDocumentBytesByDocumentGUID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DOTSBarcode">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSBarcode" message="tns:ISearchWorksAPIService_DOTSBarcode_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSBarcodeResponse" message="tns:ISearchWorksAPIService_DOTSBarcode_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DOTSCompany">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSCompany" message="tns:ISearchWorksAPIService_DOTSCompany_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSCompanyResponse" message="tns:ISearchWorksAPIService_DOTSCompany_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DOTSPerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSPerson" message="tns:ISearchWorksAPIService_DOTSPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSPersonResponse" message="tns:ISearchWorksAPIService_DOTSPerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DOTSTrust">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSTrust" message="tns:ISearchWorksAPIService_DOTSTrust_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSTrustResponse" message="tns:ISearchWorksAPIService_DOTSTrust_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DOTSPropertyErf">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSPropertyErf" message="tns:ISearchWorksAPIService_DOTSPropertyErf_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSPropertyErfResponse" message="tns:ISearchWorksAPIService_DOTSPropertyErf_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DOTSPropertyFarm">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSPropertyFarm" message="tns:ISearchWorksAPIService_DOTSPropertyFarm_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSPropertyFarmResponse" message="tns:ISearchWorksAPIService_DOTSPropertyFarm_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DOTSPropertyAgriculturalHolding">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSPropertyAgriculturalHolding" message="tns:ISearchWorksAPIService_DOTSPropertyAgriculturalHolding_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSPropertyAgriculturalHoldingResponse" message="tns:ISearchWorksAPIService_DOTSPropertyAgriculturalHolding_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DOTSPropertyScheme">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSPropertyScheme" message="tns:ISearchWorksAPIService_DOTSPropertyScheme_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/DOTSPropertySchemeResponse" message="tns:ISearchWorksAPIService_DOTSPropertyScheme_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDSAccountVerificationRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSAccountVerificationRequest" message="tns:ISearchWorksAPIService_XDSAccountVerificationRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/XDSAccountVerificationRequestResponse" message="tns:ISearchWorksAPIService_XDSAccountVerificationRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CompuScanAccountVerificationRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CompuScanAccountVerificationRequest" message="tns:ISearchWorksAPIService_CompuScanAccountVerificationRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CompuScanAccountVerificationRequestResponse" message="tns:ISearchWorksAPIService_CompuScanAccountVerificationRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResponseTypeLongTextFromEnum">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/GetResponseTypeLongTextFromEnum" message="tns:ISearchWorksAPIService_GetResponseTypeLongTextFromEnum_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/GetResponseTypeLongTextFromEnumResponse" message="tns:ISearchWorksAPIService_GetResponseTypeLongTextFromEnum_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSIVehicleReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIVehicleReport" message="tns:ISearchWorksAPIService_CSIVehicleReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIVehicleReportResponse" message="tns:ISearchWorksAPIService_CSIVehicleReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupVehicleMake">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupVehicleMake" message="tns:ISearchWorksAPIService_LookupVehicleMake_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupVehicleMakeResponse" message="tns:ISearchWorksAPIService_LookupVehicleMake_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupVehicleModel">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupVehicleModel" message="tns:ISearchWorksAPIService_LookupVehicleModel_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupVehicleModelResponse" message="tns:ISearchWorksAPIService_LookupVehicleModel_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupVehicleModelYears">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupVehicleModelYears" message="tns:ISearchWorksAPIService_LookupVehicleModelYears_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupVehicleModelYearsResponse" message="tns:ISearchWorksAPIService_LookupVehicleModelYears_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerWatchAddConsumer">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ConsumerWatchAddConsumer" message="tns:ISearchWorksAPIService_ConsumerWatchAddConsumer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ConsumerWatchAddConsumerResponse" message="tns:ISearchWorksAPIService_ConsumerWatchAddConsumer_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerWatchGetConsumerList">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ConsumerWatchGetConsumerList" message="tns:ISearchWorksAPIService_ConsumerWatchGetConsumerList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ConsumerWatchGetConsumerListResponse" message="tns:ISearchWorksAPIService_ConsumerWatchGetConsumerList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerWatchDeleteConsumerFromList">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ConsumerWatchDeleteConsumerFromList" message="tns:ISearchWorksAPIService_ConsumerWatchDeleteConsumerFromList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ConsumerWatchDeleteConsumerFromListResponse" message="tns:ISearchWorksAPIService_ConsumerWatchDeleteConsumerFromList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerWatchGetConsumerJudgementList">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ConsumerWatchGetConsumerJudgementList" message="tns:ISearchWorksAPIService_ConsumerWatchGetConsumerJudgementList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ConsumerWatchGetConsumerJudgementListResponse" message="tns:ISearchWorksAPIService_ConsumerWatchGetConsumerJudgementList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSIAffordabilityReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIAffordabilityReport" message="tns:ISearchWorksAPIService_CSIAffordabilityReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIAffordabilityReportResponse" message="tns:ISearchWorksAPIService_CSIAffordabilityReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSIDepreciationReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIDepreciationReport" message="tns:ISearchWorksAPIService_CSIDepreciationReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIDepreciationReportResponse" message="tns:ISearchWorksAPIService_CSIDepreciationReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneVVIReportByVINNumber">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneVVIReportByVINNumber" message="tns:ISearchWorksAPIService_LightStoneVVIReportByVINNumber_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneVVIReportByVINNumberResponse" message="tns:ISearchWorksAPIService_LightStoneVVIReportByVINNumber_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneVVIReportByRegistrationNumber">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneVVIReportByRegistrationNumber" message="tns:ISearchWorksAPIService_LightStoneVVIReportByRegistrationNumber_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LightStoneVVIReportByRegistrationNumberResponse" message="tns:ISearchWorksAPIService_LightStoneVVIReportByRegistrationNumber_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionAutoReportByVINNumberTrace">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionAutoReportByVINNumberTrace" message="tns:ISearchWorksAPIService_TransUnionAutoReportByVINNumberTrace_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionAutoReportByVINNumberTraceResponse" message="tns:ISearchWorksAPIService_TransUnionAutoReportByVINNumberTrace_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionAutoReportByMMCodeTrace">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionAutoReportByMMCodeTrace" message="tns:ISearchWorksAPIService_TransUnionAutoReportByMMCodeTrace_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionAutoReportByMMCodeTraceResponse" message="tns:ISearchWorksAPIService_TransUnionAutoReportByMMCodeTrace_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionAutoReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionAutoReport" message="tns:ISearchWorksAPIService_TransUnionAutoReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TransUnionAutoReportResponse" message="tns:ISearchWorksAPIService_TransUnionAutoReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupVehicleBodyShape">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupVehicleBodyShape" message="tns:ISearchWorksAPIService_LookupVehicleBodyShape_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupVehicleBodyShapeResponse" message="tns:ISearchWorksAPIService_LookupVehicleBodyShape_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupVehiclePriceRangeByYear">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupVehiclePriceRangeByYear" message="tns:ISearchWorksAPIService_LookupVehiclePriceRangeByYear_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupVehiclePriceRangeByYearResponse" message="tns:ISearchWorksAPIService_LookupVehiclePriceRangeByYear_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LookupVehicleYearRange">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupVehicleYearRange" message="tns:ISearchWorksAPIService_LookupVehicleYearRange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/LookupVehicleYearRangeResponse" message="tns:ISearchWorksAPIService_LookupVehicleYearRange_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TenantWatchProfile">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TenantWatchProfile" message="tns:ISearchWorksAPIService_TenantWatchProfile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/TenantWatchProfileResponse" message="tns:ISearchWorksAPIService_TenantWatchProfile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerTraceByIDNumberSurnameVerified">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ConsumerTraceByIDNumberSurnameVerified" message="tns:ISearchWorksAPIService_ConsumerTraceByIDNumberSurnameVerified_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/ConsumerTraceByIDNumberSurnameVerifiedResponse" message="tns:ISearchWorksAPIService_ConsumerTraceByIDNumberSurnameVerified_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PropertyCoordinateSearch">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/PropertyCoordinateSearch" message="tns:ISearchWorksAPIService_PropertyCoordinateSearch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/PropertyCoordinateSearchResponse" message="tns:ISearchWorksAPIService_PropertyCoordinateSearch_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSIPersonTraceByIDNumber">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIPersonTraceByIDNumber" message="tns:ISearchWorksAPIService_CSIPersonTraceByIDNumber_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIPersonTraceByIDNumberResponse" message="tns:ISearchWorksAPIService_CSIPersonTraceByIDNumber_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSIPersonTraceByEnquiryID">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIPersonTraceByEnquiryID" message="tns:ISearchWorksAPIService_CSIPersonTraceByEnquiryID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIPersonTraceByEnquiryIDResponse" message="tns:ISearchWorksAPIService_CSIPersonTraceByEnquiryID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSIPersonTraceByName">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIPersonTraceByName" message="tns:ISearchWorksAPIService_CSIPersonTraceByName_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIPersonTraceByNameResponse" message="tns:ISearchWorksAPIService_CSIPersonTraceByName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSIPersonTraceByTelephoneNumber">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIPersonTraceByTelephoneNumber" message="tns:ISearchWorksAPIService_CSIPersonTraceByTelephoneNumber_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISearchWorksAPIService/CSIPersonTraceByTelephoneNumberResponse" message="tns:ISearchWorksAPIService_CSIPersonTraceByTelephoneNumber_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:service name="SearchWorksAPIService">
+    <wsdl:port name="WSHttpBinding_ISearchWorksAPIService" binding="i0:WSHttpBinding_ISearchWorksAPIService">
+      <soap12:address location="https://api.searchworks.co.za/SearchWorksAPIService.svc" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>https://api.searchworks.co.za/SearchWorksAPIService.svc</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

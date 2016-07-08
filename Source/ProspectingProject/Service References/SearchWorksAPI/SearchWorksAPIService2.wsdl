@@ -1,0 +1,1385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="https://api.searchworks.co.za/SearchWorksAPI" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:i0="http://tempuri.org/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://api.searchworks.co.za/SearchWorksAPI" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="WSHttpBinding_ISearchWorksAPIService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:import namespace="http://tempuri.org/" location="https://api.searchworks.co.za/SearchWorksAPIService.svc?wsdl" />
+  <wsdl:types />
+  <wsdl:binding name="WSHttpBinding_ISearchWorksAPIService" type="i0:ISearchWorksAPIService">
+    <wsp:PolicyReference URI="#WSHttpBinding_ISearchWorksAPIService_policy" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CSITrustInformationSearch">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CSITrustInformationSearch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSIPersonVerificationSearch">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CSIPersonVerificationSearch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchCSIPersonTraceByIDNumbers">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/BulkSearchCSIPersonTraceByIDNumbers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchCSIPersonVerificationByIDNumbers">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/BulkSearchCSIPersonVerificationByIDNumbers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchDeedsOfficePersonByIDNumbers">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/BulkSearchDeedsOfficePersonByIDNumbers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchCIPCDirectorByIDNumbers">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/BulkSearchCIPCDirectorByIDNumbers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchPersonPropertyHistoryByIDNumbers">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/BulkSearchPersonPropertyHistoryByIDNumbers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchCSICompanyTraceByCompanyRegistrationNumber">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/BulkSearchCSICompanyTraceByCompanyRegistrationNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumber">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/BulkSearchCompanyPropertyHistoryByCompanyRegistrationNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BulkSearchDOTSByBarcode">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/BulkSearchDOTSByBarcode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExportBulkSearchToPDF">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/ExportBulkSearchToPDF" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExportBulkSearchToExcel">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/ExportBulkSearchToExcel" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateSearchGroup">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CreateSearchGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AssociateSearchToGroup">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/AssociateSearchToGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveSearchFromGroup">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/RemoveSearchFromGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteGroup">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeleteGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserAllowedSearchTypes">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/GetUserAllowedSearchTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPriceList">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/GetPriceList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SelectSearchGroups">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/SelectSearchGroups" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SelectSearchGroupDetailByGroupID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/SelectSearchGroupDetailByGroupID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SelectSearchGroupSearchesByGroupID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/SelectSearchGroupSearchesByGroupID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsDeedsOfficeOnline">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/IsDeedsOfficeOnline" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTraceByIDNumber">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceByIDNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTraceAddress">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceAddress" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTraceName">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTracePassportNumber">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTracePassportNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTraceTelephoneNumber">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceTelephoneNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTraceByAddressID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceByAddressID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSAccountVerificationResponse">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSAccountVerificationResponse" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerTraceByTelephoneID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSConsumerTraceByTelephoneID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerContactInformation">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSConsumerContactInformation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerIDVerification">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSConsumerIDVerification" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerCreditProfile">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSConsumerCreditProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSConsumerByEnquiryID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSConsumerByEnquiryID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSBusinessReport">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSBusinessReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSBusinessReportByEnquiryID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSBusinessReportByEnquiryID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CIPCDirector">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CIPCDirector" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CIPCDirectorByDirectorID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CIPCDirectorByDirectorID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CIPCCompany">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CIPCCompany" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CIPCCompanyByCompanyID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CIPCCompanyByCompanyID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExperianConsumerCreditProfile">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/ExperianConsumerCreditProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePerson">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePerson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeTrust">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeTrust" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeTrustDBID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeTrustDBID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeCompany">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeCompany" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePersonDBID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePersonDBID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeCompanyDBID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeCompanyDBID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertyErf">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyErf" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertyFarm">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyFarm" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertyAgriculturalHolding">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyAgriculturalHolding" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertySchemeSearch">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertySchemeSearch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertyTownship">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyTownship" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertyDBKey">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyDBKey" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePropertyDocumentSearch">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePropertyDocumentSearch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeCompanyCrossDeedsOfficeSearch">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeCompanyCrossDeedsOfficeSearch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficePersonCrossDeedsOfficeSearch">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficePersonCrossDeedsOfficeSearch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeTrustCrossDeedsOfficeSearch">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeTrustCrossDeedsOfficeSearch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CompuScanConsumerCreditProfile">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CompuScanConsumerCreditProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CompuscanEmploymentConfidenceIndex">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CompuscanEmploymentConfidenceIndex" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CompuscanConsumerContactInformation">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CompuscanConsumerContactInformation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertyValuationErf">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationErf" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertyValuationFarm">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationFarm" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertyValuationScheme">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationScheme" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertyValuationStreet">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationStreet" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertyValuationByPropertyID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyValuationByPropertyID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneBusinessSearchCompany">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStoneBusinessSearchCompany" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneBusinessSearchCompanyByCompanyID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStoneBusinessSearchCompanyByCompanyID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneCompanyPropertyHistory">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStoneCompanyPropertyHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePersonPropertyHistory">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStonePersonPropertyHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneOwnersInEstate">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStoneOwnersInEstate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneOwnersInScheme">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStoneOwnersInScheme" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneLookupEstateName">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStoneLookupEstateName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneLookupSuburbName">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStoneLookupSuburbName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PropertyErfToStreetConversion">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/PropertyErfToStreetConversion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PropertySchemeToStreetConversion">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/PropertySchemeToStreetConversion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PropertyStreetToErfConversion">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/PropertyStreetToErfConversion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PropertyConversionByPropertyID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/PropertyConversionByPropertyID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupStreetTypes">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupStreetTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertyEstateReport">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStonePropertyEstateReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertySchemeReport">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStonePropertySchemeReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStonePropertySuburbReport">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStonePropertySuburbReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CourtLibraryEnquiry">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CourtLibraryEnquiry" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupCourtNames">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupCourtNames" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionConsumerCreditProfile">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/TransUnionConsumerCreditProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionConsumerContactInformation">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/TransUnionConsumerContactInformation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionConsumerIDVerification">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/TransUnionConsumerIDVerification" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionCommercialCreditProfile">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/TransUnionCommercialCreditProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionCommercialProfileByCompanyID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/TransUnionCommercialProfileByCompanyID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionDefaultList">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/TransUnionDefaultList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionDefaultDelist">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/TransUnionDefaultDelist" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CompanyLookup">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CompanyLookup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeedsOfficeDocumentCopyRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DeedsOfficeDocumentCopyRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CIPCDocumentRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CIPCDocumentRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SGDiagramRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/SGDiagramRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CourtDocumentRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CourtDocumentRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionBankCodeRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/TransUnionBankCodeRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InoxicoQualificationCheckRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/InoxicoQualificationCheckRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InoxicoDriversLicenseCheckRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/InoxicoDriversLicenseCheckRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MIEQualificationCheckRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/MIEQualificationCheckRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MIEInternationalQualificationCheckRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/MIEInternationalQualificationCheckRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MIEDriversLicenseCheckRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/MIEDriversLicenseCheckRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MIEProfessionalDriversLicenseCheckRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/MIEProfessionalDriversLicenseCheckRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LetterOfDemandRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LetterOfDemandRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupSchemes">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupSchemes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupAgriculturalHoldingAreas">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupAgriculturalHoldingAreas" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupFarms">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupFarms" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupMunicipalities">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupMunicipalities" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupRegistrationDivisions">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupRegistrationDivisions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupTownships">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupTownships" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/Login" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateToken">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/ValidateToken" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPreviousSearch">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/GetPreviousSearch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSearchHistory">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/GetSearchHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentBytesByDocumentGUID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/GetDocumentBytesByDocumentGUID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DOTSBarcode">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DOTSBarcode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DOTSCompany">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DOTSCompany" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DOTSPerson">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DOTSPerson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DOTSTrust">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DOTSTrust" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DOTSPropertyErf">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DOTSPropertyErf" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DOTSPropertyFarm">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DOTSPropertyFarm" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DOTSPropertyAgriculturalHolding">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DOTSPropertyAgriculturalHolding" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DOTSPropertyScheme">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/DOTSPropertyScheme" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDSAccountVerificationRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/XDSAccountVerificationRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CompuScanAccountVerificationRequest">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CompuScanAccountVerificationRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResponseTypeLongTextFromEnum">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/GetResponseTypeLongTextFromEnum" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSIVehicleReport">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CSIVehicleReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupVehicleMake">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupVehicleMake" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupVehicleModel">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupVehicleModel" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupVehicleModelYears">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupVehicleModelYears" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerWatchAddConsumer">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/ConsumerWatchAddConsumer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerWatchGetConsumerList">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/ConsumerWatchGetConsumerList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerWatchDeleteConsumerFromList">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/ConsumerWatchDeleteConsumerFromList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerWatchGetConsumerJudgementList">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/ConsumerWatchGetConsumerJudgementList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSIAffordabilityReport">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CSIAffordabilityReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSIDepreciationReport">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CSIDepreciationReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneVVIReportByVINNumber">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStoneVVIReportByVINNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LightStoneVVIReportByRegistrationNumber">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LightStoneVVIReportByRegistrationNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionAutoReportByVINNumberTrace">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/TransUnionAutoReportByVINNumberTrace" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionAutoReportByMMCodeTrace">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/TransUnionAutoReportByMMCodeTrace" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransUnionAutoReport">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/TransUnionAutoReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupVehicleBodyShape">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupVehicleBodyShape" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupVehiclePriceRangeByYear">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupVehiclePriceRangeByYear" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LookupVehicleYearRange">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/LookupVehicleYearRange" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TenantWatchProfile">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/TenantWatchProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsumerTraceByIDNumberSurnameVerified">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/ConsumerTraceByIDNumberSurnameVerified" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PropertyCoordinateSearch">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/PropertyCoordinateSearch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSIPersonTraceByIDNumber">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CSIPersonTraceByIDNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSIPersonTraceByEnquiryID">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CSIPersonTraceByEnquiryID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSIPersonTraceByName">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CSIPersonTraceByName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSIPersonTraceByTelephoneNumber">
+      <soap12:operation soapAction="http://tempuri.org/ISearchWorksAPIService/CSIPersonTraceByTelephoneNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+</wsdl:definitions>

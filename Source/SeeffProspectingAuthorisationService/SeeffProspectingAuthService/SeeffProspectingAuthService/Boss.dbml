@@ -93,6 +93,7 @@
       <Column Name="license_control" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Column Name="prospecting_communication" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="mapping" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="trust_lookup" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
   <Function Name="dbo.user_auth" Method="user_auth">

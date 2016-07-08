@@ -12,6 +12,7 @@
       <xs:element minOccurs="0" name="IsProspectingManager" type="xs:boolean" />
       <xs:element minOccurs="0" name="ManagerDetails" nillable="true" type="tns:ArrayOfProspectingUserAuthPacket" />
       <xs:element minOccurs="0" name="SuburbsList" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TrustLookupsEnabled" type="xs:boolean" />
       <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="UserSurname" nillable="true" type="xs:string" />
     </xs:sequence>
@@ -23,4 +24,21 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfProspectingUserAuthPacket" nillable="true" type="tns:ArrayOfProspectingUserAuthPacket" />
+  <xs:complexType name="SpatialUserAuthPacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AuthMessage" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Authenticated" type="xs:boolean" />
+      <xs:element minOccurs="0" name="MarketShareSuburbsList" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProspectingSuburbsList" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SpatialUserAuthPacket" nillable="true" type="tns:SpatialUserAuthPacket" />
+  <xs:complexType name="MarketShareUserAuthPacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AreaPermissionsList" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AuthMessage" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Authenticated" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MarketShareUserAuthPacket" nillable="true" type="tns:MarketShareUserAuthPacket" />
 </xs:schema>

@@ -200,6 +200,10 @@ namespace ProspectingProject
                     case "update_do_not_contact_status":
                         UpdateDoNotContactStatusForContact(json);
                         break;
+                    case "perform_trust_enquiry":
+                        string trustEnquiryResponse = PerformTrustEnquiry(json);
+                        context.Response.Write(trustEnquiryResponse);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -232,6 +236,13 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string PerformTrustEnquiry(string json)
+        {
+            var enquiryPacket = ProspectingCore.Deserialise<CompanyEnquiryInputPacket>(json);
+            var responsePacket = ProspectingCore.PerformTrustEnquiry(enquiryPacket);
+            return ProspectingCore.SerializeToJsonWithDefaults(responsePacket);
         }
 
         private void UpdateDoNotContactStatusForContact(string json)
