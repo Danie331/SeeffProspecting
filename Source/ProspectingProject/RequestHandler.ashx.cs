@@ -204,6 +204,14 @@ namespace ProspectingProject
                         string trustEnquiryResponse = PerformTrustEnquiry(json);
                         context.Response.Write(trustEnquiryResponse);
                         break;
+                    case "perform_trust_enquiry_get_trustees":
+                        string trusteesResponse = PerformTrustEnquiryGetTrustees(json);
+                        context.Response.Write(trusteesResponse);
+                        break;
+                    case "update_company_reg_no":
+                        string updatedCompany = UpdateCompanyRegNo(json);
+                        context.Response.Write(updatedCompany);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -238,10 +246,24 @@ namespace ProspectingProject
             }
         }
 
+        private string UpdateCompanyRegNo(string json)
+        {
+            var companyWithNewReg = ProspectingCore.Deserialise<ProspectingContactCompany>(json);
+            companyWithNewReg = ProspectingCore.UpdateCompanyRegNo(companyWithNewReg);
+            return ProspectingCore.SerializeToJsonWithDefaults(companyWithNewReg);
+        }
+
+        private string PerformTrustEnquiryGetTrustees(string json)
+        {
+            var trustHash = ProspectingCore.Deserialise<TrustHashcodeInput>(json);
+            var responsePacket = ProspectingCore.GetTrustees(trustHash);
+            return ProspectingCore.SerializeToJsonWithDefaults(responsePacket);
+        }
+
         private string PerformTrustEnquiry(string json)
         {
             var enquiryPacket = ProspectingCore.Deserialise<CompanyEnquiryInputPacket>(json);
-            var responsePacket = ProspectingCore.PerformTrustEnquiry(enquiryPacket);
+            var responsePacket = ProspectingCore.PerformTrustSearch(enquiryPacket);
             return ProspectingCore.SerializeToJsonWithDefaults(responsePacket);
         }
 

@@ -2390,7 +2390,7 @@ namespace ProspectingProject
             }
         }
 
-        private static void SendEmail(string toAddress, string displayName, string fromAddress, string ccAddress, string bccAddress, string subject, string body)
+        internal static void SendEmail(string toAddress, string displayName, string fromAddress, string ccAddress, string bccAddress, string subject, string body, bool htmlBody = true)
         {
             MailAddress from = new MailAddress(fromAddress, fromAddress, System.Text.Encoding.UTF8);
             MailAddress to = new MailAddress(toAddress, displayName);
@@ -2408,7 +2408,7 @@ namespace ProspectingProject
             message.SubjectEncoding = System.Text.Encoding.UTF8;
             message.Subject = subject;
 
-            message.IsBodyHtml = true;
+            message.IsBodyHtml = htmlBody;
             message.BodyEncoding = System.Text.Encoding.UTF8;
             message.Body = body;
 
@@ -3169,7 +3169,7 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
             return results;
         }
 
-        public static CompanyEnquiryResponsePacket PerformTrustEnquiry(CompanyEnquiryInputPacket inputPacket)
+        public static TrustEnquiryResultPacket PerformTrustSearch(CompanyEnquiryInputPacket inputPacket)
         {
             prospecting_contact_company prospectingTargetCompany;
             using (var prospecting = new ProspectingDataContext())
@@ -3177,28 +3177,72 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                 prospectingTargetCompany = prospecting.prospecting_contact_companies.First(cc => cc.contact_company_id == inputPacket.ContactCompanyId);
             }
 
+            TrustEnquiryResultPacket results = new TrustEnquiryResultPacket();
+            results.CurrentInfo = inputPacket;
+
+            TrustEntityEnquiryService lookupService = null;
+            HttpContext.Current.Session["trust_search_results"] = null;
+            try
+            {
+                lookupService = new TrustEntityEnquiryService(prospectingTargetCompany, inputPacket.ProspectingPropertyId);
+                lookupService.InitResponsePacket(results);
+                lookupService.DoEnquiry();
+                HttpContext.Current.Session["trust_search_results"] = results;
+            }
+            catch (Exception ex)
+            {
+                results.ErrorMsg = "Error occurred performing enquiry: " + ex.Message;
+                if (lookupService != null)
+                {
+                    lookupService.SetError(ex);
+                }
+            }
+            finally
+            {
+                if (lookupService != null)
+                {
+                    lookupService.LogEnquiry();
+                }
+            }
+
+            return results;
+        }
+
+        public static CompanyEnquiryResponsePacket GetTrustees(TrustHashcodeInput trustHashcode)
+        {
+            TrustEnquiryResultPacket searchResults = HttpContext.Current.Session["trust_search_results"] as TrustEnquiryResultPacket;
+            if (searchResults == null)
+            {
+                return new CompanyEnquiryResponsePacket
+                {
+                    EnquirySuccessful = false,
+                    ErrorMsg = "Your session has expired for the current search request. Please log in again and retry."
+                };
+            }
+
+            TrustSearchResult targetTrust = searchResults.Results.First(tr => tr.id == trustHashcode.TrustHashcode);
             CompanyEnquiryResponsePacket results = new CompanyEnquiryResponsePacket();
 
             decimal? walletBalance = null;
             // Variables to keep track of the state of the transaction
             bool enquirySuccessful = false, deductionMade = false, deductionReimbursed = false;
-            ICompanyEnquiryService lookupService = null;
+            ICompanyEnquiryService trustService = null;
             try
             {
-                lookupService = new TrustEntityEnquiryService(prospectingTargetCompany, inputPacket.ProspectingPropertyId);
-                lookupService.InitResponsePacket(results);
-                walletBalance = lookupService.DeductEnquiryCost(); // NB: Will return a value < 0 if insufficient funds
+                trustService = new TrustEnquiryServiceGetTrustees(targetTrust);
+                trustService.InitResponsePacket(results);
+                walletBalance = trustService.DeductEnquiryCost(); // NB: Will return a value < 0 if insufficient funds
                 if (walletBalance >= decimal.Zero)
                 {
                     deductionMade = true;
-                    lookupService.DoEnquiry();
+                    trustService.DoEnquiry();
                     if (results.EnquirySuccessful && string.IsNullOrEmpty(results.ErrorMsg))
                     {
                         enquirySuccessful = true;
                     }
                     else
                     {
-                        walletBalance = lookupService.ReverseEnquiryCost();
+                        walletBalance = trustService.ReverseEnquiryCost();
                         deductionReimbursed = true;
                     }
                     results.WalletBalance = walletBalance;
@@ -3211,9 +3255,9 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
             catch (Exception ex)
             {
                 results.ErrorMsg = "Error occurred performing enquiry: " + ex.Message;
-                if (lookupService != null)
+                if (trustService != null)
                 {
-                    lookupService.SetError(ex);
+                    trustService.SetError(ex);
                 }
             }
             finally
@@ -3221,11 +3265,11 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                 // Double check here that if enquiry failed we do not accidently bill the user.
                 if (!enquirySuccessful && deductionMade && !deductionReimbursed)
                 {
-                    results.WalletBalance = lookupService.ReverseEnquiryCost();
+                    results.WalletBalance = trustService.ReverseEnquiryCost();
                 }
-                if (lookupService != null)
+                if (trustService != null)
                 {
-                    lookupService.LogEnquiry();
+                    trustService.LogEnquiry();
                 }
             }
 
@@ -3850,6 +3894,18 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                     ContactPersonId = contactToUpdate.ContactPersonId
                 };
                 UpdateInsertActivity(pa);
+            }
+        }
+
+        public static ProspectingContactCompany UpdateCompanyRegNo(ProspectingContactCompany companyWithNewRegNo)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                var targetCompany = prospecting.prospecting_contact_companies.First(cc => cc.contact_company_id == companyWithNewRegNo.ContactCompanyId);
+                targetCompany.CK_number = companyWithNewRegNo.CKNumber;
+                prospecting.SubmitChanges();
+
+                return new ProspectingContactCompany { CKNumber = targetCompany.CK_number };
             }
         }
     }

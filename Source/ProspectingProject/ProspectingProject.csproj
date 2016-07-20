@@ -718,6 +718,7 @@
     <Content Include="Assets\contact.png" />
     <Content Include="Assets\create_referral.png" />
     <Content Include="Assets\dracore_email_lookup.png" />
+    <Content Include="Assets\edit.png" />
     <Content Include="Assets\edit_link.png" />
     <Content Include="Assets\email_icon.png" />
     <Content Include="Assets\fh_edit.png" />
@@ -1337,7 +1338,10 @@
     <Compile Include="Services\TracePS\TracepsLiveService.cs" />
     <Compile Include="Services\TracePS\TracepsPhoneNumberLookup.cs" />
     <Compile Include="Services\TracePS\TracepsTestService.cs" />
+    <Compile Include="Services\Trusts\TrustEnquiryResultPacket.cs" />
+    <Compile Include="Services\Trusts\TrustEnquiryServiceGetTrustees.cs" />
     <Compile Include="Services\Trusts\TrustEntityEnquiryService.cs" />
+    <Compile Include="Services\Trusts\TrustHashcodeInput.cs" />
     <Compile Include="Types\ActivityBundle.cs" />
     <Compile Include="Types\CommReportFilters.cs" />
     <Compile Include="Types\CommReportResults.cs" />
@@ -1381,7 +1385,7 @@
     <Compile Include="Types\SentEmailLogItem.cs" />
     <Compile Include="Types\SentSMSLogItem.cs" />
     <Compile Include="Types\SmsBatch.cs" />
-    <Compile Include="Services\Trusts\TrustAPIResult.cs" />
+    <Compile Include="Services\Trusts\TrustSearchResult.cs" />
     <Compile Include="Types\UserDataResponsePacket.cs" />
     <Compile Include="Types\UserSuburb.cs" />
     <Compile Include="Types\JsonNetPropertyNameResolverForSerialization.cs" />

@@ -1103,21 +1103,26 @@ function buildContactDashboard(contacts, context) {
         var counter = 1;
         $.each(currentProperty.ContactCompanies, function (idx, cc) {
             if (counter > 1 && counter <= currentProperty.ContactCompanies.length) {
-                container.append("<br />");
+                container.append("<p />");
             }
 
-            var companyEnquiryBtn = $("<input type='button' id='companyEnquiryBtn' value='Lookup Company Directors' style='display:inline-block;float:right' />");
-            var trustEntityEnquiryBtn = $("<input type='button' id='trustEnquiryBtn' value='Lookup Trustees' style='display:inline-block;float:right' />");
-            var regNo = cc.CKNumber && cc.CKNumber.indexOf("UNKNOWN_CK_") == -1 ? "(" + cc.CKNumber + ")" : '';
-            container.append(cc.CompanyName + regNo);
+            var companyEnquiryBtn = $("<input type='button' id='companyEnquiryBtn' value='Lookup Company Directors' style='float:right' />");
+            var trustEntityEnquiryBtn = $("<input type='button' id='trustEnquiryBtn' value='Search Trusts' style='float:right' />");
+            var regNo = cc.CKNumber && cc.CKNumber.indexOf("UNKNOWN_CK_") == -1 ? cc.CKNumber : '';
+            var regNoLink = $("<a href='#' onclick='javascript:void(0);return false;' style='text-decoration:underline;' >" + regNo + "</a>");
+            container.append(cc.CompanyName);
             if (cc.CompanyType != 'TR' && regNo) {
+                container.append(" (").append(regNoLink).append(")");
                 container.append(companyEnquiryBtn);
                 companyEnquiryBtn.click(function () {
                     performCompanyEnquiry(cc.ContactCompanyId);
                 });
+
+                regNoLink.click(function (e) { handleCompanyRegNoClick(e, cc); });
             }
 
             if (cc.CompanyType == 'TR') {
+                container.append(" (").append(regNo).append(")");
                 container.append(trustEntityEnquiryBtn);
                 trustEntityEnquiryBtn.click(function () {
                     if (!prospectingContext.TrustLookupsEnabled) {
@@ -1213,15 +1218,68 @@ function buildContactDashboard(contacts, context) {
     return container;
 }
 
+function handleCompanyRegNoClick(e, company) {
+    var editCompanyRegNoMsg = 'You may edit the company registration no. in the text-box below. Please note that changing this value will propagate to all properties owned by this company.';
+    var editRegNoLabel = $("<span style='display:inline-block;vertical-align:middle;'>Registration no.: </span>");
+    var editRegNoInput = $("<input type='text' size=30 style='display:inline-block;vertical-align:middle;margin-left:10px' />").val(company.CKNumber);
+    var contentElement = $("<div />").append(editRegNoLabel).append(editRegNoInput);
+    var editCompanyRegNoDialog = $("<div id='editCompanyRegNoDialog' title='Edit Registration no.' style='font-family:Verdana;font-size:12px;overflow:hidden' />").empty();
+    editCompanyRegNoDialog.append(editCompanyRegNoMsg)
+                          .append("<p />")
+                          .append(contentElement);
+
+    editCompanyRegNoDialog.dialog(
+        {
+            modal: true,
+            closeOnEscape: false,
+            width: '400',
+            buttons: {
+                "Save And Close": function () {
+                    var newRegNo = editRegNoInput.val().trim();
+                    if (newRegNo == '') {
+                        alert('Registration no. cannot be blank!');
+                        return;
+                    }
+                    if (newRegNo == company.CKNumber) {
+                        return;
+                    }
+                    $(this).dialog("close");
+                    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Saving Changes...</p>' });
+                    $.ajax({
+                        type: "POST",
+                        url: "RequestHandler.ashx",
+                        data: JSON.stringify({ Instruction: 'update_company_reg_no', ContactCompanyId: company.ContactCompanyId, CKNumber: newRegNo }),
+                        dataType: "json"
+                    }).done(function (data) {
+                        $.unblockUI();
+                        if (!handleResponseIfServerError(data)) {
+                            return;
+                        }
+
+                        //
+                        var targetElement = $(e.target);
+                        targetElement.text(data.CKNumber);
+                        company.CKNumber = data.CKNumber;
+                    });
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            },
+            position: ['center', 'center']
+        });
+}
+
 function performTrustEnquiry(contactCompanyId) {
-    var trustEnquiryInfoDiv = $("<div title='Trust Enquiry Service Request' style='font-family:Verdana;font-size:12px;' />").empty()
-      .append('You are about to perform an enquiry that will attempt to retrieve the trustees of this trust. Please note there are cost implications that will affect your Prospecting balance:')
+    var trustEnquiryInfoDiv = $("<div id='trustResultsContainerDiv' title='Trust Enquiry Service Request' style='font-family:Verdana;font-size:12px;overflow:hidden' />").empty()
+      .append('This operation will search for trusts that match this trust number:')
       .append("<p />")
-      .append('The cost of a successful enquiry for which trustees are found and retrieved, is <b>R 8.50</b>')
-      .append("<p />")
-        .append('The cost of an enquiry for which the trust is not found or has incomplete information, is <b>R 4.00</b>')
-        .append("<p />")
-      .append('Enquiries that fail for other reasons will not be billed. Prices are excl. VAT and will be deducted from your Prospecting balance.');
+        .append('There is no cost incurred by performing the search. If matches are found, you will be able to select a match and billing will occur at that point.')
+        .append('<p />')
+        .append('*** IMPORTANT: Please ensure that you select the result that most closely matches the trust in question, as the system will not infer this directly and might result in the incorrect trustees being saved against this trust.')
+        .append(' The system will only show results for which trustees are present.')
+        .append('<p />')
+      .append('The cost incurred by selecting a result is <b>R 8.50</b> and will be deducted from your Prospecting balance.');
 
     trustEnquiryInfoDiv.dialog(
                {
@@ -1229,10 +1287,9 @@ function performTrustEnquiry(contactCompanyId) {
                    closeOnEscape: false,
                    width: '550',
                    buttons: {
-                       "Proceed": function () {
+                       "Search Trusts": function () {
                            $(this).dialog("close");
-
-                           $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Performing Enquiry...</p>' });
+                           $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Searching...</p>' });
                            $.ajax({
                                type: "POST",
                                url: "RequestHandler.ashx",
@@ -1243,21 +1300,10 @@ function performTrustEnquiry(contactCompanyId) {
                                if (!handleResponseIfServerError(data)) {
                                    return;
                                }
-
-                               if (data.WalletBalance != null) {
-                                   // If the AvailableTracePsCredits is not null, then update the availableCredit variable
-                                   availableCredit = data.WalletBalance;
-                                   $('#availableCreditLabel').text(availableCredit.toFixed(2));
-                               }
-                               if (data.EnquirySuccessful) {
-                                   currentPersonContact = null;
-                                   $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Refreshing Contacts...</p>' });
-                                   setCurrentMarker(currentSuburb, currentProperty, function (data) {
-                                       updateExistingPropertyFromProperty(currentProperty, data);
-                                       buildPersonContactMenu(currentProperty.Contacts, false);
-                                       updateProspectedStatus();
-                                       $.unblockUI();
-                                   });
+           
+                               if (data.EnquirySuccessful) {                                  
+                                   $.unblockUI();
+                                   buildTrustResultsGrid(data);
                                } else {
                                    // feedback to user
                                    alert(data.ErrorMsg);
@@ -1268,6 +1314,130 @@ function performTrustEnquiry(contactCompanyId) {
                    },
                    position: ['center', 'center']
                });
+}
+
+function selectTrustResult(item) {
+    var link = $(item);
+    // corresponding fee dedicted from your balance and trustees saved.
+    var message = 'Are you sure that this result is the same as the target trust?\n\n' +
+                  'The trustees will be retrieved and saved against your trust. The corresponding fee will be deducted from your balance.\n\n' +
+                  'Click \'OK\' to proceed';
+    if (!confirm(message)) {
+        return false;
+    }
+
+    var hashcode = link.attr('id').replace('trusthash_', '');
+    $('#trustResultsContainerDiv').dialog("close");
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Retrieving Trustees...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: 'perform_trust_enquiry_get_trustees', TrustHashcode: hashcode }),
+        dataType: "json"
+    }).done(function (data) {
+        $.unblockUI();
+        if (!handleResponseIfServerError(data)) {
+            return;
+        }
+
+        if (data.WalletBalance != null) {
+            // If the AvailableTracePsCredits is not null, then update the availableCredit variable
+            availableCredit = data.WalletBalance;
+            $('#availableCreditLabel').text(availableCredit.toFixed(2));
+        }
+        if (data.EnquirySuccessful) {
+            currentPersonContact = null;
+            $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Refreshing Contacts...</p>' });
+            setCurrentMarker(currentSuburb, currentProperty, function (data) {
+                updateExistingPropertyFromProperty(currentProperty, data);
+                buildPersonContactMenu(currentProperty.Contacts, false);
+                updateProspectedStatus();
+                $.unblockUI();
+            });
+        } else {
+            // feedback to user
+            alert(data.ErrorMsg);
+        }
+    });
+
+    return false;
+}
+
+function buildTrustResultsGrid(data) {
+    $('#trustResultsContainerDiv').empty().dialog({
+        modal: true,
+        title: 'Search Results',
+        width: '700',
+        //minHeight: 200,
+        autoResize: true,
+        height: '300',
+        //maxWidth: 800,
+        //maxHeight: 400,
+        closeOnEscape: false,
+        buttons: {
+            "Cancel": function () {
+                $(this).dialog("close");
+            }
+        },
+        position: ['center', 'center'],
+        open: function () {
+            var options = {
+                forceFitColumns: true,
+                enableCellNavigation: true,
+                enableColumnReorder: false,
+                multiColumnSort: true
+            };
+            var grid;
+            var columns;
+            var sortcol;
+            var sortdir = 1;
+            var dataView = new Slick.Data.DataView(/*{ inlineFilters: true }*/);
+
+            function smartPassLinkFormatter(row, cell, value, columnDef, dataContext) {
+                var id = 'trusthash_' + dataContext.id;
+                var selectTrustLink = $("<a href='#' style='cursor:pointer;color:red;text-decoration:underline' id='" + id + "' onclick='selectTrustResult(this);'>Select</a>");
+                return selectTrustLink[0].outerHTML;
+            }
+
+            columns = [
+                         { id: "col_TrustName", name: "Trust Name", width: 120, field: "TrustName", sortable: true },
+                         { id: "col_TrustNumber", name: "Trust Number", field: "TrustNumber", sortable: true },
+                         { id: "col_HighCourt", name: "High Court", field: "TrustHighCourt", sortable: true },
+                         { id: "col_SelectTrustLink", name: " ", width: 60, formatter: smartPassLinkFormatter }
+            ];
+            grid = new Slick.Grid("#trustResultsContainerDiv", dataView, columns, options);
+            grid.setSelectionModel(new Slick.RowSelectionModel());
+            // grid.registerPlugin(new Slick.AutoTooltips());
+
+            function comparer(a, b) {
+                var x = a[sortcol].toLowerCase(), y = b[sortcol].toLowerCase();
+                return (x == y ? 0 : (x > y ? 1 : -1));
+            }
+
+            grid.onSort.subscribe(function (e, args) {
+                sortcol = args.sortCols[0].sortCol.field;
+                sortdir = args.sortCols[0].sortAsc ? true : false;
+                dataView.sort(comparer, sortdir);
+            });
+
+            dataView.onRowCountChanged.subscribe(function (e, args) {
+                grid.updateRowCount();
+                grid.render();
+            });
+
+            dataView.onRowsChanged.subscribe(function (e, args) {
+                grid.invalidateRows(args.rows);
+                grid.render();
+            });
+
+            dataView.beginUpdate();
+            dataView.setItems(data.Results);
+            dataView.endUpdate();
+            dataView.syncGridSelection(grid, true);
+            grid.resizeCanvas();
+            $("#trustResultsContainerDiv .slick-viewport").css('overflow-x', 'hidden');
+        }
+    });    
 }
 
 function performCompanyEnquiry(contactCompanyId) {

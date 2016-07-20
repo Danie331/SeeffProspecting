@@ -86,6 +86,10 @@ classes should alter those!
   width: 100%;
 }
 
+.slick-row:hover {
+    color: red;
+}
+
 .slick-cell, .slick-headerrow-column {
   position: absolute;
   border: 1px solid transparent;
