@@ -651,7 +651,7 @@ function handleShowFileUploadDialog() {
 }
 
 function handleMyTemplatesItemClick() {
-    removeMarkersFromSelection();
+    //removeMarkersFromSelection();
     commCustomSelectionEnabled = true;
     buildTemplateItemOptionsDiv('my_template');
     $('#allSuburbsOptionContainer').hide();
@@ -689,7 +689,7 @@ function handleMyTemplatesItemClick() {
 }
 
 function handleStandardTemplatesItemClick() {
-    removeMarkersFromSelection();
+    //removeMarkersFromSelection();
     commCustomSelectionEnabled = true;
     buildTemplateItemOptionsDiv();
     $('#allSuburbsOptionContainer').hide();
@@ -760,7 +760,7 @@ function showDialogSpecialTemplateSelected() {
 }
 
 function handleNewsletterTemplateItemClick() {
-    removeMarkersFromSelection();
+    //removeMarkersFromSelection();
     commCustomSelectionEnabled = true;
     buildTemplateItemOptionsDiv();
     $('#allSuburbsOptionContainer').hide();

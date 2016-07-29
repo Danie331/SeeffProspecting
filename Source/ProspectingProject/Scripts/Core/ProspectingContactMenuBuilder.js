@@ -1123,14 +1123,16 @@ function buildContactDashboard(contacts, context) {
 
             if (cc.CompanyType == 'TR') {
                 container.append(" (").append(regNo).append(")");
-                container.append(trustEntityEnquiryBtn);
-                trustEntityEnquiryBtn.click(function () {
-                    if (!prospectingContext.TrustLookupsEnabled) {
-                        alert('You need extra permissions to access this feature, please request this from your Prospecting manager or contact support.');
-                        return;
-                    }
-                    performTrustEnquiry(cc.ContactCompanyId);
-                });
+                if (prospectingContext.TrustLookupsEnabled) {
+                    container.append(trustEntityEnquiryBtn);
+                    trustEntityEnquiryBtn.click(function () {
+                        if (!prospectingContext.TrustLookupsEnabled) {
+                            alert('You need extra permissions to access this feature, please request this from your Prospecting manager or contact support.');
+                            return;
+                        }
+                        performTrustEnquiry(cc.ContactCompanyId);
+                    });
+                }
             }
 
             counter++;
