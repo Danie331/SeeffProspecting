@@ -1079,6 +1079,22 @@ namespace ProspectingProject
                                                        select c).FirstOrDefault();
                     if (contactWithExistingIDNumber != null)
                     {
+                        if (contactWithExistingIDNumber.firstname == "(unknown firstname)" && 
+                            !string.IsNullOrWhiteSpace(dataPacket.ContactPerson.Firstname) && 
+                            dataPacket.ContactPerson.Firstname != "(unknown firstname)")
+                        {
+                            contactWithExistingIDNumber.firstname = dataPacket.ContactPerson.Firstname;
+                            prospecting.SubmitChanges();
+                        }
+
+                        if (contactWithExistingIDNumber.surname == "(unknown surname)" &&
+                            !string.IsNullOrWhiteSpace(dataPacket.ContactPerson.Surname) &&
+                            dataPacket.ContactPerson.Surname != "(unknown surname)")
+                        {
+                            contactWithExistingIDNumber.surname = dataPacket.ContactPerson.Surname;
+                            prospecting.SubmitChanges();
+                        }
+
                         if (dataPacket.ContactCompanyId.HasValue)
                         {
                             // This contact has a relationship with a company as opposed to a property

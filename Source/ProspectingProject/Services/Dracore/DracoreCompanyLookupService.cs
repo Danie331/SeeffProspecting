@@ -139,14 +139,25 @@ namespace ProspectingProject
             List<ProspectingContactPerson> prospectingContactPersons = new List<ProspectingContactPerson>();
             try
             {
+                bool atLeastOneDirectorSaved = false;
                 if (targetCompany.Directors != null && targetCompany.Directors.Count() > 0)
                 {
                     int? relationshipToCompany = ProspectingLookupData.PersonCompanyRelationshipTypes.First(kvp => kvp.Value == "Company Director").Key;
                     foreach (var director in targetCompany.Directors)
                     {
                         var directorPerson = director;
-                        if (!string.IsNullOrEmpty(directorPerson.FirstNames) &&
-                            !string.IsNullOrEmpty(directorPerson.Surname) && !string.IsNullOrEmpty(directorPerson.IdentityNumber))
+
+                        string firstname = directorPerson.FirstNames;
+                        if (string.IsNullOrWhiteSpace(firstname))
+                        {
+                            firstname = "(unknown firstname)";
+                        }
+                        string surname = directorPerson.Surname;
+                        if (string.IsNullOrWhiteSpace(surname))
+                        {
+                            surname = "(unknown surname)";
+                        }
+                        if (!string.IsNullOrEmpty(directorPerson.IdentityNumber))
                         {
                             string gender;
                             switch (directorPerson.Gender)
@@ -163,8 +174,8 @@ namespace ProspectingProject
                                 IdNumber = directorPerson.IdentityNumber,
                                 Title = !Equals(titleKvp, default(KeyValuePair<int, string>)) ? (int?)titleKvp.Key : null,
                                 Gender = gender,
-                                Firstname = directorPerson.FirstNames,
-                                Surname = directorPerson.Surname,
+                                Firstname = firstname,
+                                Surname = surname,
                                 ContactCompanyId = _company.contact_company_id,
                                 Directorship = "Yes",
                                 PersonCompanyRelationshipType = relationshipToCompany
@@ -173,6 +184,7 @@ namespace ProspectingProject
                             contactDataPacket.ContactPerson = newContact;
                             var prospectingContactPerson = ProspectingCore.SaveContactPerson(contactDataPacket);
                             prospectingContactPersons.Add(prospectingContactPerson);
+                            atLeastOneDirectorSaved = true;
                         }
                     }
                 }
@@ -181,6 +193,11 @@ namespace ProspectingProject
                     // Ensure enquiry not billed, that it is not successful, and front-end reflects accordingly.
                     _results.EnquirySuccessful = false;
                     _results.ErrorMsg = "No Directorship information was found for this company - the transaction will not be billed.";
+                }
+                if (!atLeastOneDirectorSaved)
+                {
+                    _results.EnquirySuccessful = false;
+                    _results.ErrorMsg = "A Dracore match was found but has missing or incomplete information - the transaction will not be billed.";
                 }
             }
             catch(Exception ex)
