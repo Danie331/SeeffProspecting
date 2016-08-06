@@ -157,7 +157,7 @@ namespace ProspectingProject
                         {
                             surname = "(unknown surname)";
                         }
-                        if (!string.IsNullOrEmpty(directorPerson.IdentityNumber))
+                        if (!string.IsNullOrEmpty(directorPerson.IdentityNumber) && directorPerson.IdentityNumber.Length == 13)
                         {
                             string gender;
                             switch (directorPerson.Gender)
