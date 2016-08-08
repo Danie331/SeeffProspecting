@@ -36,14 +36,18 @@ public class AgenciesDataManager : IHttpHandler, System.Web.SessionState.IRequir
             List<SuburbInfo> userSuburbs = HttpContext.Current.Session["user_suburbs"] as List<SuburbInfo>;
             var suburbIds = userSuburbs.Select(s => s.SuburbId);
             var resultSet1 = (from b in lsbase.agencies_user_suburbs
-                             where suburbIds.Contains(b.suburb_id) && b.agency_id != null
-                             select b.agency_id.Value).Distinct();
+                              where suburbIds.Contains(b.suburb_id) && b.agency_id != null
+                              select b.agency_id.Value).Distinct();
 
             var resultSet2 = (from b in lsbase.base_datas
-                             where b.seeff_area_id != null && suburbIds.Contains(b.seeff_area_id.Value) && b.agency_id != null
-                             select b.agency_id.Value).Distinct();
+                              where b.seeff_area_id != null && suburbIds.Contains(b.seeff_area_id.Value) && b.agency_id != null
+                              select b.agency_id.Value).Distinct();
 
-            return resultSet1.Union(resultSet2).ToArray();
+            var agenciesToExclude = lsbase.agencies.Where(a => new[] { "Seeff", "Private sale", "Auction" }.Contains(a.agency_name)).Select(a => a.agency_id);
+
+            var netResult = resultSet1.Union(resultSet2).Except(agenciesToExclude).ToArray();
+
+            return netResult;
         }
     }
 
