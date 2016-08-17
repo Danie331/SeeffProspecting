@@ -150,63 +150,66 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                 }
             }
 
-            private static EmailResult SendEmail(email_communications_log pendingItem)
+        private static EmailResult SendEmail(email_communications_log pendingItem)
+        {
+            EmailResult result = new EmailResult { Success = true };
+            try
             {
-                EmailResult result = new EmailResult { Success = true };
+                var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
+                string contactFullname = titlecaser.ToTitleCase(pendingItem.prospecting_contact_person.firstname.ToLower()) + " " + titlecaser.ToTitleCase(pendingItem.prospecting_contact_person.surname.ToLower());
+
+                MandrillMessageBuilder builder = new MandrillMessageBuilder(pendingItem.email_body_or_link_id,
+                    pendingItem.email_subject_or_link_id,
+                    pendingItem.created_by_user_email_address,
+                    pendingItem.created_by_user_name,
+                    pendingItem.target_email_address,
+                    contactFullname,
+                    pendingItem.attachment1_name,
+                    pendingItem.attachment1_type,
+                    pendingItem.attachment1_content,
+                    pendingItem.user_business_unit_id);
+
+                var req = builder.BuildMandrillSendRequest();
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(req);
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri("https://mandrillapp.com/");
+                var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = null;
                 try
                 {
-                    var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
-                    string contactFullname = titlecaser.ToTitleCase(pendingItem.prospecting_contact_person.firstname.ToLower()) + " " + titlecaser.ToTitleCase(pendingItem.prospecting_contact_person.surname.ToLower());
-                    
-                    MandrillMessageBuilder builder = new MandrillMessageBuilder(pendingItem.email_body_or_link_id,
-                        pendingItem.email_subject_or_link_id,
-                        pendingItem.created_by_user_email_address,
-                        pendingItem.created_by_user_name,
-                        pendingItem.target_email_address,
-                        contactFullname,
-                        pendingItem.attachment1_name,
-                        pendingItem.attachment1_type,
-                        pendingItem.attachment1_content,
-                        pendingItem.user_business_unit_id);
+                    response = client.PostAsync("/api/1.0/messages/send.json", httpContent).Result;
 
-                    var req = builder.BuildMandrillSendRequest();
-                    string json = Newtonsoft.Json.JsonConvert.SerializeObject(req);
-                    HttpClient client = new HttpClient();
-                    client.BaseAddress = new Uri("https://mandrillapp.com/");
-                    var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = null;
-                    try
-                    {
-                        response = client.PostAsync("/api/1.0/messages/send.json", httpContent).Result;
-
-                        var mandrillResponseArray = response.Content.ReadAsAsync<MandrillSuccessfulResponse[]>().Result;
-                        MandrillSuccessfulResponse successResponse = mandrillResponseArray[0];
-                        result.ApiTrackingKey = successResponse._id;
-                        if (successResponse.status != "sent" && !string.IsNullOrEmpty(successResponse.reject_reason))
-                        {
-                            result.Success = false;
-                            result.ErrorMessage = successResponse.status + ": " + successResponse.reject_reason;
-                        }
-                    }
-                    catch (Exception e)
+                    var mandrillResponseArray = response.Content.ReadAsAsync<MandrillSuccessfulResponse[]>().Result;
+                    MandrillSuccessfulResponse successResponse = mandrillResponseArray[0];
+                    result.ApiTrackingKey = successResponse._id;
+                    if (successResponse.status != "sent" && !string.IsNullOrEmpty(successResponse.reject_reason))
                     {
                         result.Success = false;
-                        result.ErrorMessage = "Error occurred during POST req to emailing API for message id: " + pendingItem.email_communications_log_id + " -- detailed exception: " + e.ToString();
+                        result.ErrorMessage = successResponse.status + ": " + successResponse.reject_reason;
                     }
-                    // NB: we do not as yet check any statuses from the API response, only whether an exception occured during the POST.
+                }
+                catch (Exception e)
+                {
+                    result.Success = false;
+                    result.ErrorMessage = "Error occurred during POST req to emailing API for message id: " + pendingItem.email_communications_log_id + " -- detailed exception: " + e.ToString();
+                }
+                // NB: we do not as yet check any statuses from the API response, only whether an exception occured during the POST.
+                if (response != null)
+                {
                     if (!response.IsSuccessStatusCode)
                     {
                         result.Success = false;
                         result.ErrorMessage = "The POST req while sending an email to the API failed - " + response.ReasonPhrase;
                     }
                 }
-                catch (Exception ex)
-                {
-                    result.Success = false;
-                    result.ErrorMessage = "Error occurred while building the email message id: " + pendingItem.email_communications_log_id + " -- detailed exception: " + ex.ToString();
-                }
-
-                return result;
             }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.ErrorMessage = "Error occurred while building the email message id: " + pendingItem.email_communications_log_id + " -- detailed exception: " + ex.ToString();
+            }
+
+            return result;
+        }
     }
 }
