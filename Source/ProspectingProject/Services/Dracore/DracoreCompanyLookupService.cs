@@ -147,6 +147,11 @@ namespace ProspectingProject
                     {
                         var directorPerson = director;
 
+                        if (directorPerson.Deceased)
+                        {
+                            continue;
+                        }
+
                         string firstname = directorPerson.FirstNames;
                         if (string.IsNullOrWhiteSpace(firstname))
                         {
@@ -192,7 +197,7 @@ namespace ProspectingProject
                 {
                     // Ensure enquiry not billed, that it is not successful, and front-end reflects accordingly.
                     _results.EnquirySuccessful = false;
-                    _results.ErrorMsg = "No Directorship information was found for this company - the transaction will not be billed.";
+                    _results.ErrorMsg = "No valid Directors were found for this company - the transaction will not be billed.";
                 }
                 if (!atLeastOneDirectorSaved)
                 {
