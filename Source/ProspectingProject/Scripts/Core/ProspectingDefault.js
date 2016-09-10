@@ -206,7 +206,7 @@ function generateOutputFromLightstone(data) {
 
             if (selectedEntities.length > 0) {
                 closeInfoWindow();
-                $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Creating new prospects...</p>' });
+                $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Creating new prospects. Please wait...</p>' });
 
                 createProspectingEntities(selectedEntities, function (data) {
                     var dataObject = $.parseJSON(data);

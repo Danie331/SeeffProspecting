@@ -17,6 +17,8 @@ function toggleFilteringMenu() {
     var container = $("#filteringDiv");
     if (currentSuburb == null) {
         container.empty();
+        container.append('Load a suburb to see available filtering options.');
+        container.css('display', 'block');
         return;
     }
     if (currentSuburbForFiltering != currentSuburb) {
@@ -25,19 +27,198 @@ function toggleFilteringMenu() {
 
         var expander = buildContentExpanderForFiltering();
         container.append(expander.construct());
-        expander.open('filterByContactDetailsTab');
+        expander.open('filterByActivitiesAndFollowups');
     }
     container.css('display', 'block');
 }
 
 function buildContentExpanderForFiltering() {
+    $('#filterByActivitiesAndFollowups').empty();
+    var filterByActivitiesAndFollowups = buildContentExpanderItem('filterByActivitiesAndFollowups', 'Assets/activities-followups-filtering.png', "Activities & Follow-ups For Suburb", buildActivitiesAndFollowupsFilterTab());
+
     $('#filterByContactDetailsTab').empty();
-    var filterByContactDetailsTab = buildContentExpanderItem('filterByContactDetailsTab', 'Assets/contact.png', "Filter By Contact Details", buildContactsFilterTab());
+    var filterByContactDetailsTab = buildContentExpanderItem('filterByContactDetailsTab', 'Assets/contact.png', "Contact Details Filters", buildContactsFilterTab());
 
     $('#filterByPropertyDetailsTab').empty();
-    var filterByPropertyDetailsTab = buildContentExpanderItem('filterByPropertyDetailsTab', 'Assets/fh_edit.png', "Filter By Property Details", buildPropertyDetailsFilterTab());
+    var filterByPropertyDetailsTab = buildContentExpanderItem('filterByPropertyDetailsTab', 'Assets/fh_edit.png', "Property Details Filters", buildPropertyDetailsFilterTab());
 
-    return new ContentExpanderWidget('#contentarea', [filterByContactDetailsTab, filterByPropertyDetailsTab], "filteringExpander");
+    return new ContentExpanderWidget('#contentarea', [filterByActivitiesAndFollowups, filterByContactDetailsTab, filterByPropertyDetailsTab], "filteringExpander");
+}
+
+function buildActivitiesAndFollowupsFilterTab() {
+    var container = $("<div />");
+
+    var activityTypesCombo = new app.comboSelect('Activity Types', 'activityTypesComboFilter', prospectingContext.UserActivityTypes, function (item) { return item.Key; }, function (item) { return item.Value; });
+    var followupActivityTypesCombo = new app.comboSelect('Follow-up Types', 'followupTypesComboFilter', prospectingContext.UserFollowupTypes, function (item) { return item.Key; }, function (item) { return item.Value; });
+
+    var filterTypesContainer = $("<div style='margin-bottom:10px' />");
+    var rb1 = $("<input type='radio' name='rg1' checked />");
+    filterTypesContainer.append(rb1).append($("<div style='display:inline-block;margin-left:10px' />").append(activityTypesCombo.getElement()));
+    var rb2 = $("<input type='radio' name='rg1' style='margin-left:30px' />");
+    filterTypesContainer.append(rb2).append($("<div style='display:inline-block;margin-left:10px' />").append(followupActivityTypesCombo.getElement()));
+    container.append(filterTypesContainer);
+    followupActivityTypesCombo.enable(false);
+
+    rb1.change(function () {
+        activityTypesCombo.enable(this.checked);
+        followupActivityTypesCombo.enable(!this.checked);
+    });
+
+    rb2.change(function () {
+        followupActivityTypesCombo.enable(this.checked);
+        activityTypesCombo.enable(!this.checked);
+    });
+
+    var filterUsersContainer = $("<div />");
+    var createdBy = $("<label class='fieldAlignmentMediumWidth'>Created By: </label><select><option /></select>");
+    var allocatedTo = $("<label class='fieldAlignmentMediumWidth'>Allocated To: </label><select><option /></select>");
+    filterUsersContainer.append(createdBy);
+    filterUsersContainer.append('<br />');
+    filterUsersContainer.append(allocatedTo);
+    container.append(filterUsersContainer);
+
+    var followupDateContainer = $("<div />");
+    var followupFromInput = $("<input size='17' readonly='true' />");
+    var followupDateFrom = $("<label class='fieldAlignmentMediumWidth'>Follow-up From: </label>");
+    var followupToInput = $("<input size='17' readonly='true' />");
+    var followupDateTo = $("<label>To: </label>");
+    followupDateContainer.append($("<div  style='display:inline-block;'>").append(followupDateFrom).append(followupFromInput));
+    followupDateContainer.append($("<div style='display:inline-block;margin-left:12px'>").append(followupDateTo).append(followupToInput));
+    container.append(followupDateContainer);
+
+    followupFromInput.datepicker({ dateFormat: 'd MM yy', changeMonth: true, changeYear: true });
+    followupToInput.datepicker({ dateFormat: 'd MM yy', changeMonth: true, changeYear: true });
+
+    $.each(prospectingContext.BusinessUnitUsers, function (idx, el) {
+        createdBy.next().append($("<option />").val(el.UserGuid).text(el.UserName + " " + el.UserSurname));
+        allocatedTo.next().append($("<option />").val(el.UserGuid).text(el.UserName + " " + el.UserSurname));
+    });
+
+    var createdDatesContainer = $("<div />");
+    var createdFromInput = $("<input size='17' readonly='true' />");
+    var createdFrom = $("<label class='fieldAlignmentMediumWidth'>Created From: </label>");
+    var createdToInput = $("<input size='17' readonly='true' />");
+    var createdTo = $("<label>To: </label>");
+    createdDatesContainer.append($("<div  style='display:inline-block;'>").append(createdFrom).append(createdFromInput));
+    createdDatesContainer.append($("<div style='display:inline-block;margin-left:12px'>").append(createdTo).append(createdToInput));
+    container.append(createdDatesContainer);
+
+    createdFromInput.datepicker({ dateFormat: 'd MM yy', changeMonth: true, changeYear: true });
+    createdToInput.datepicker({ dateFormat: 'd MM yy', changeMonth: true, changeYear: true });
+    
+    var filterBtn = $("<input type='button' value='Filter' style='cursor:pointer;display:inline-block;float:left' />");
+    var resetBtn = $("<input type='button' value='Reset' style='cursor:pointer;display:inline-block;float:right' />");
+    var buttonContainer = $("<div />");
+    buttonContainer.append(filterBtn).append(resetBtn);
+    container.append('<br />').append(buttonContainer);
+    container.append('<br />').append('<hr style="margin-top:12px" />');
+
+    resetBtn.click(function () {
+        activityTypesCombo.setDefault();
+        followupActivityTypesCombo.setDefault();
+        createdBy.next()[0].selectedIndex = 0;
+        allocatedTo.next()[0].selectedIndex = 0;
+        followupFromInput.datepicker('setDate', null);
+        followupToInput.datepicker('setDate', null);
+        createdFromInput.datepicker('setDate', null);
+        createdToInput.datepicker('setDate', null);
+
+        handleResetSuburbFiltering(true);
+    });
+
+    var outputGrid = $("<div id='pivotTable' style='display:block;width:100%;overflow-x:auto' />");
+    container.append(outputGrid);
+
+    filterBtn.click(function () {
+        if (!activityTypesCombo.hasSelectedOption() && !followupActivityTypesCombo.hasSelectedOption()) {
+            tooltip.pop(followupActivityTypesCombo.getElement()[0], 'At least one option from either Activity Types or Follow-up Types must be selected', { showDelay: 1, hideDelay: 100, calloutPosition: 0.5, maxWidth: 500 });
+            return;
+        }
+        var followupFromDate = followupFromInput.val();
+        var followupToDate = followupToInput.val();
+        if (followupFromDate && followupToDate && new Date(followupToDate) < new Date(followupFromDate)) {
+            tooltip.pop(followupToInput[0], 'To date must be greater than From date', { showDelay: 1, hideDelay: 100, calloutPosition: 0.5, maxWidth: 500 });
+            return;
+        }
+        var createdFromDate = createdFromInput.val();
+        var createdToDate = createdToInput.val();
+        if (createdFromDate && createdToDate && new Date(createdToDate) < new Date(createdFromDate)) {
+            tooltip.pop(createdToInput[0], 'To date must be greater than From date', { showDelay: 1, hideDelay: 100, calloutPosition: 0.5, maxWidth: 500 });
+            return;
+        }
+
+        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Generating Data Model. Please wait...</p>' });
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify({
+                Instruction: 'filter_activities_followups_for_business_unit',
+                ShowingActivityTypes: rb1.is(':checked'),
+                ActivityTypes: activityTypesCombo.getSelection(),
+                ActivityFollowupTypes: followupActivityTypesCombo.getSelection(),
+                CreatedBy: createdBy.next().val(),
+                AllocatedTo: allocatedTo.next().val(),
+                FollowupDateFrom: followupFromInput.val(),
+                FollowupDateTo: followupToInput.val(),
+                CreatedDateFrom: createdFromInput.val(),
+                CreatedDateTo: createdToInput.val(),
+                CurrentSuburbID: currentSuburb.SuburbId
+            }),
+            dataType: "json"
+        }).done(function (data) {
+            handleFilterByActivityFollowupTypes(rb1.is(':checked'), data.OutputRows, data.FilteredProperties);
+        });
+    });            
+
+    return container;
+}
+
+function handleFilterByActivityFollowupTypes(activityTypesOnly, rows, filteredProperties) {
+    handleResetSuburbFiltering(false);
+    var outputGrid = $("#pivotTable");
+    if (!rows.length) {
+        outputGrid.append("No results found.");
+    } else {
+        if (activityTypesOnly) {
+            // activity types
+            outputGrid.pivotUI(
+                            rows,
+                            {
+                                rows: ["Created By"],
+                                cols: ["Activity Type"]
+                            },
+                            true);
+        }
+        else {
+            outputGrid.pivotUI(
+                            rows,
+                            {
+                                rows: ["Allocated To"],
+                                cols: ["Followup Type"]
+                            },
+                            true);
+        }
+    }
+
+    clearSuburbBySuburbId(currentSuburb.SuburbId);
+    if (currentSuburb.RequiresStatsUpdate) {
+        currentSuburb.RequiresStatsUpdate = false;
+        currentSuburb.IsInitialised = false;
+    }
+
+    loadSuburb(currentSuburb.SuburbId, false, function () {
+        currentProperty = null;
+        $.unblockUI();
+    }, false, function (markers) {
+        var filteredMarkers = [];
+        $.each(markers, function (idx, marker) {
+            if (filteredProperties.indexOf(marker.LightstonePropertyId) > -1) {
+                marker.ProspectingProperty.Whence = 'from_filter';
+                filteredMarkers.push(marker);
+            }
+        });
+        return filteredMarkers;
+    });
 }
 
 function buildPropertyDetailsFilterTab() {
@@ -196,6 +377,9 @@ function toggleFilterMode(value) {
         closeInfoWindow();
     } else {
         filterSticker.css('display', 'none');
+        if ($("#pivotTable").length) {
+            $("#pivotTable").empty();
+        }
     }
 }
 
@@ -207,7 +391,8 @@ function prepareDataForFiltering(callbackFn) {
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "update_suburb_statistics", SuburbId: currentSuburb.SuburbId })
+        data: JSON.stringify({ Instruction: "enable_suburb_filtering", SuburbId: currentSuburb.SuburbId }),
+        dataType: "json"
     }).done(function() {
         $.unblockUI();
         if (callbackFn) {

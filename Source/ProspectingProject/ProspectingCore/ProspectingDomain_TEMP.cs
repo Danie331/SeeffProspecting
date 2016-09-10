@@ -836,6 +836,8 @@ namespace ProspectingProject
                     HasCommAccess = userAuthPacket.CommunicationEnabled.Value,
                     BusinessUnitID = userAuthPacket.BusinessUnitID,
                     TrustLookupsEnabled = userAuthPacket.TrustLookupsEnabled,
+                    ActivityTypes = ProspectingLookupData.ActivityTypes,
+                    ActivityFollowupTypes = ProspectingLookupData.ActivityFollowupTypes
                 };
 
                 return userPacket;
@@ -1079,8 +1081,8 @@ namespace ProspectingProject
                                                        select c).FirstOrDefault();
                     if (contactWithExistingIDNumber != null)
                     {
-                        if (contactWithExistingIDNumber.firstname == "(unknown firstname)" && 
-                            !string.IsNullOrWhiteSpace(dataPacket.ContactPerson.Firstname) && 
+                        if (contactWithExistingIDNumber.firstname == "(unknown firstname)" &&
+                            !string.IsNullOrWhiteSpace(dataPacket.ContactPerson.Firstname) &&
                             dataPacket.ContactPerson.Firstname != "(unknown firstname)")
                         {
                             contactWithExistingIDNumber.firstname = dataPacket.ContactPerson.Firstname;
@@ -2166,13 +2168,13 @@ namespace ProspectingProject
                 //}
                 //else
                 //{
-                    var spatial = new SpatialServiceReader();
-                    var spatialSuburb = spatial.GetSuburbFromID(latLng.Lat, latLng.Lng);
-                    areaId = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
-                    if (areaId == null)
-                    {
-                        throw new Exception("Cannot create new prospect: The system cannot allocate a Seeff ID to the area, please contact support for further information.");
-                    }
+                var spatial = new SpatialServiceReader();
+                var spatialSuburb = spatial.GetSuburbFromID(latLng.Lat, latLng.Lng);
+                areaId = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
+                if (areaId == null)
+                {
+                    throw new Exception("Cannot create new prospect: The system cannot allocate a Seeff ID to the area, please contact support for further information.");
+                }
                 //}
 
                 // Ensure that we are creating ALL units for this sectional title, not just one
@@ -2770,7 +2772,7 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                             PropertiesOwned = null,
                             EmailOptout = contactRecord.optout_emails.HasValue ? contactRecord.optout_emails.Value : false,
                             SMSOptout = contactRecord.optout_sms.HasValue ? contactRecord.optout_sms.Value : false,
-                            DoNotContact = contactRecord.do_not_contact.HasValue ? contactRecord.do_not_contact.Value  : false,
+                            DoNotContact = contactRecord.do_not_contact.HasValue ? contactRecord.do_not_contact.Value : false,
 
                             // Dracore fields
                             AgeGroup = contactRecord.age_group,
@@ -3584,7 +3586,7 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                     if (inputDetails.CreateFollowup && inputDetails.FollowupDate == null)
                     {
                         result.InstanceValidationErrors.Add("If you selected 'Create a Follow-up' then you need to select a follow-up date.");
-                    } 
+                    }
 
                     int propertyRecordID = inputDetails.Target.ProspectingPropertyId.Value;
                     var propertyRecord = prospectingDb.prospecting_properties.First(pp => pp.prospecting_property_id == propertyRecordID);
@@ -3642,7 +3644,7 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                     result.smart_pass_company = companyName;
 
                     string contactType = "", countryCode = "", contactNo = "";
-                    if (inputDetails.Target.ContactPerson.PhoneNumbers != null && 
+                    if (inputDetails.Target.ContactPerson.PhoneNumbers != null &&
                         inputDetails.Target.ContactPerson.PhoneNumbers.Count() > 0 &&
                         !string.IsNullOrEmpty(inputDetails.Target.ContactPerson.PhoneNumbers.First().ItemId))
                     {
@@ -3663,7 +3665,8 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                         {
                             result.InstanceValidationErrors.Add("This contact detail has been changed by another user. Please restart and try again.");
                         }
-                    } else
+                    }
+                    else
                     {
                         result.InstanceValidationErrors.Add("No contact number specified.");
                     }
@@ -3792,7 +3795,8 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
 
                         referralDetails.InstanceValidationErrors.Add(internalError);
                         return referralDetails;
-                    } else
+                    }
+                    else
                     {
                         using (var prospecting = new ProspectingDataContext())
                         {
@@ -3897,7 +3901,8 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                 if (contactToUpdate.DoNotContact)
                 {
                     comment = "The 'Do not contact' option has been set for the related contact person, indicating that they are not to be contacted telephonically.";
-                } else
+                }
+                else
                 {
                     comment = "The related contact person may be contacted telephonically. The 'Do not contact' option for this contact has been removed.";
                 }
@@ -3922,6 +3927,140 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                 prospecting.SubmitChanges();
 
                 return new ProspectingContactCompany { CKNumber = targetCompany.CK_number };
+            }
+        }
+
+        public static ActivitiesFollowupsFilterResponse FilterActivitiesFollowupsForBusinessUnit(ActivitiesFollowupsFilterInputs filterPacket)
+        {
+            if (filterPacket.ActivityTypes.Count == 1 && filterPacket.ActivityTypes.First() == 0)
+            {
+                filterPacket.ActivityTypes = ProspectingLookupData.ActivityTypes.Select(item => item.Key).ToList();
+            }
+
+            if (filterPacket.ActivityFollowupTypes.Count == 1 && filterPacket.ActivityFollowupTypes.First() == 0)
+            {
+                filterPacket.ActivityFollowupTypes = ProspectingLookupData.ActivityFollowupTypes.Select(item => item.Key).ToList();
+            }
+
+            using (var prospecting = new ProspectingDataContext())
+            {
+                // localise to entire BU and suburb., what about no activity types/followup types
+                // reset when navigating away from filter mode
+                // test/impersonate Debbie, and corrobarate counts by logging in as different users
+
+                UserDataResponsePacket user = RequestHandler.GetUserSessionObject();
+                var businessUnitUsers = user.BusinessUnitUsers.Select(bu => bu.UserGuid).ToList();
+                var propertiesInSuburb = prospecting.prospecting_properties.Where(pp => pp.seeff_area_id == filterPacket.CurrentSuburbID)
+                                                                           .Select(pp => pp.lightstone_property_id);
+
+                var baseSet = prospecting.activity_logs.Where(al => businessUnitUsers.Contains(al.created_by) &&
+                                                                    propertiesInSuburb.Contains(al.lightstone_property_id));
+
+                IEnumerable<activity_log> filteredSet = null;
+                if (filterPacket.ShowingActivityTypes)
+                {
+                    // activity types only
+                    filteredSet = baseSet.Where(al => filterPacket.ActivityTypes.Contains(al.activity_type_id));
+                }
+                 else
+                {
+                    // else follow-up types only
+                    var filterTypes = filterPacket.ActivityFollowupTypes.Select(i => (int?)i);
+                    filteredSet = baseSet.Where(al => filterTypes.Contains(al.activity_followup_type_id));
+                }
+
+                if (filterPacket.CreatedBy.HasValue)
+                {
+                    filteredSet = filteredSet.Where(al => al.created_by == filterPacket.CreatedBy.Value);
+                }
+
+                if (filterPacket.AllocatedTo.HasValue)
+                {
+                    filteredSet = filteredSet.Where(al => al.allocated_to == filterPacket.AllocatedTo.Value);
+                }
+
+                if (filterPacket.FollowupDateFrom.HasValue)
+                {
+                    filteredSet = filteredSet.Where(al =>
+                    {
+                        if (al.followup_date.HasValue)
+                        {
+                            return al.followup_date.Value.Date >= filterPacket.FollowupDateFrom.Value.Date;
+                        }
+                        return false;
+                    });
+                }
+
+                if (filterPacket.FollowupDateTo.HasValue)
+                {
+                    filteredSet = filteredSet.Where(al =>
+                    {
+                        if (al.followup_date.HasValue)
+                        {
+                            return al.followup_date.Value.Date <= filterPacket.FollowupDateTo.Value.Date;
+                        }
+                        return false;
+                    });
+                }
+
+                if (filterPacket.CreatedDateFrom.HasValue)
+                {
+                    filteredSet = filteredSet.Where(al => al.created_date.Date >= filterPacket.CreatedDateFrom.Value.Date);
+                }
+
+                if (filterPacket.CreatedDateTo.HasValue)
+                {
+                    filteredSet = filteredSet.Where(al => al.created_date.Date <= filterPacket.CreatedDateTo.Value.Date);
+                }
+
+                List<ActivitiesFollowupsPivotRow> rows = new List<ActivitiesFollowupsPivotRow>();
+                if (filterPacket.ShowingActivityTypes)
+                {
+                    // activity types
+                    foreach (var item in filteredSet)
+                    {
+                        UserDataResponsePacket createdByUser = user.BusinessUnitUsers.FirstOrDefault(bu => bu.UserGuid == item.created_by);
+                        ActivitiesFollowupsPivotRow row = new ActivitiesFollowupsPivotRow();
+
+                        row.CreatedBy = createdByUser.Fullname;
+                        row.ActivityType = ProspectingLookupData.ActivityTypes.First(at => at.Key == item.activity_type_id).Value;
+
+                        UserDataResponsePacket allocatedToUser = user.BusinessUnitUsers.FirstOrDefault(bu => bu.UserGuid == item.allocated_to);
+                        row.AllocatedTo = allocatedToUser != null ? allocatedToUser.Fullname : "n/a";
+                        row.FollowupType = item.activity_followup_type_id.HasValue ? ProspectingLookupData.ActivityFollowupTypes.First(aft => aft.Key == item.activity_followup_type_id).Value : "n/a";
+
+                        rows.Add(row);
+                    }
+                }
+                else
+                {
+                    // followup types
+                    foreach (var item in filteredSet)
+                    {
+                        UserDataResponsePacket allocatedToUser = user.BusinessUnitUsers.FirstOrDefault(bu => bu.UserGuid == item.allocated_to.Value);
+                        ActivitiesFollowupsPivotRow row = new ActivitiesFollowupsPivotRow();
+                       
+                            row.AllocatedTo = allocatedToUser != null ? allocatedToUser.Fullname : "n/a";
+                            row.FollowupType = ProspectingLookupData.ActivityFollowupTypes.First(aft => aft.Key == item.activity_followup_type_id).Value;
+                       
+
+                        UserDataResponsePacket createdByUser = user.BusinessUnitUsers.FirstOrDefault(bu => bu.UserGuid == item.created_by);
+                        row.CreatedBy = createdByUser.Fullname;
+                        row.ActivityType = ProspectingLookupData.ActivityTypes.First(at => at.Key == item.activity_type_id).Value;
+
+                        rows.Add(row);
+                    }
+                }
+
+                ActivitiesFollowupsFilterResponse response = new ActivitiesFollowupsFilterResponse()
+                {
+                    OutputRows = new List<ActivitiesFollowupsPivotRow>(),
+                    FilteredProperties = new List<int>()
+                };
+                response.OutputRows = rows;
+                response.FilteredProperties = filteredSet.Select(i => i.lightstone_property_id).ToList();
+
+                return response;
             }
         }
     }

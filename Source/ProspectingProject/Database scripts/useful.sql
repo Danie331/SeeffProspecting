@@ -4,19 +4,21 @@
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////*/
 delete pr from dbo.prospecting_person_property_relationship pr
 join prospecting_property pp on pp.prospecting_property_id = pr.prospecting_property_id
-where pp.ss_name = 'SS BIRCHFIELD'  --67 rows
+where ss_name = 'SS AQUILA' and property_address = 'GRANITE ROAD, FOURWAYS, CITY OF JOHANNESBURG' and street_or_unit_no = '28'
 
 delete cpr from [dbo].[prospecting_company_property_relationship] cpr
 join prospecting_property pp on pp.prospecting_property_id = cpr.prospecting_property_id
-where pp.ss_name = 'SS BIRCHFIELD'
+where ss_name = 'SS AQUILA' and property_address = 'GRANITE ROAD, FOURWAYS, CITY OF JOHANNESBURG' and street_or_unit_no = '28'
 
-delete from dbo.service_enquiry_log where [prospecting_property_id] in (select [prospecting_property_id] from prospecting_property where ss_name = 'SS HAZELMERE')
+alter table dbo.service_enquiry_log nocheck constraint all
 
 ALTER TABLE [dbo].[activity_log] NOCHECK CONSTRAINT FK_lightstone_property_id
 
-delete from prospecting_property where ss_name = 'SS BIRCHFIELD' -- 55 rows
+delete from prospecting_property where ss_name = 'SS AQUILA' and property_address = 'GRANITE ROAD, FOURWAYS, CITY OF JOHANNESBURG' and street_or_unit_no = '28'
 
 ALTER TABLE  [dbo].[activity_log]CHECK CONSTRAINT FK_lightstone_property_id
+
+alter table  dbo.service_enquiry_log check constraint all
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 // Paul Kruger query to remove "ownerless" properties

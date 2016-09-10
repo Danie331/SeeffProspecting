@@ -182,8 +182,8 @@ namespace ProspectingProject
                         string valid = ValidatePersonIdNumber(json);
                         context.Response.Write(valid);
                         break;
-                    case "update_suburb_statistics":
-                        UpdateStatisticsForSuburb(json);
+                    case "enable_suburb_filtering":
+                        EnableFilteringForSuburb(json);
                         break;
                     case "generate_referral_details":
                         string referralDetails = GenerateReferralDetails(json);
@@ -211,6 +211,10 @@ namespace ProspectingProject
                     case "update_company_reg_no":
                         string updatedCompany = UpdateCompanyRegNo(json);
                         context.Response.Write(updatedCompany);
+                        break;
+                    case "filter_activities_followups_for_business_unit":
+                        string activitiesFollowupsFilteringResult = FilterActivitiesFollowupsForBusinessUnit(json);
+                        context.Response.Write(activitiesFollowupsFilteringResult);
                         break;
                 }
             }
@@ -244,6 +248,13 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string FilterActivitiesFollowupsForBusinessUnit(string json)
+        {
+            var activitiesFollowupsFilterInput = ProspectingCore.Deserialise<ActivitiesFollowupsFilterInputs>(json);
+            var responsePacket = ProspectingCore.FilterActivitiesFollowupsForBusinessUnit(activitiesFollowupsFilterInput);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(responsePacket);
         }
 
         private string UpdateCompanyRegNo(string json)
@@ -294,7 +305,7 @@ namespace ProspectingProject
             return ProspectingCore.SerializeToJsonWithDefaults(details);
         }
 
-        private void UpdateStatisticsForSuburb(string json)
+        private void EnableFilteringForSuburb(string json)
         {
             var suburbContainer = ProspectingCore.Deserialise<UserSuburb>(json);
             ProspectingCore.UpdateStatisticsForSuburb(suburbContainer.SuburbId);

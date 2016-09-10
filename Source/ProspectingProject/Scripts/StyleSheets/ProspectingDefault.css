@@ -68,6 +68,13 @@ text-align:left;
     text-align: left; 
 }
 
+.fieldAlignmentMediumWidth {
+    display: inline-block;
+    width: 110px;
+    text-align: left; 
+    padding-top:5px
+}
+
 .fieldAlignmentExtendedWidth {
     display: inline-block;
     width: 400px;

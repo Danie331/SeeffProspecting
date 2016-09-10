@@ -32,7 +32,6 @@ function createProspectingMenu(userData) {
 
     menuItem = createMenuItem("Activity Report", "activityreport", buildActivityReport(), function () {
         toggleMultiSelectMode(false);
-        toggleFilterMode(false);
         handleActivityReportClick();
     }, null);
     appendMenuItemContent(menuItem.MenuItemContent);
@@ -493,7 +492,8 @@ function handleActivityReportClick() {
             }
             performActivityFiltering();
         });
-    } else {        
+    } else {
+        toggleFilterMode(false);
          $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Recent Activities...</p>' });
          $.ajax({
              type: "POST",

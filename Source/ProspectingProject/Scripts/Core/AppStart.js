@@ -36,6 +36,9 @@ function initialize() {
                 prospectingContext.LoggedInUsername = data.Fullname;
                 prospectingContext.UserHasCommAccess = data.HasCommAccess;
                 prospectingContext.TrustLookupsEnabled = data.TrustLookupsEnabled;
+                prospectingContext.UserActivityTypes = data.ActivityTypes;
+                prospectingContext.UserFollowupTypes = data.ActivityFollowupTypes;
+                prospectingContext.BusinessUnitUsers = data.BusinessUnitUsers;
 
                 userIsProspectingManager = data.IsProspectingManager;
                 availableCredit = data.AvailableCredit;
@@ -66,6 +69,11 @@ function initialize() {
         if (!templatesMenu.is(e.target)) {
             templatesMenu.hide();
         }
+
+        //var activityFilterMenu = document.getElementsByClassName('filterMenuCombo')[0];
+        //if (activityFilterMenu && !$.contains(activityFilterMenu, e.target)) {
+        //    $(activityFilterMenu).find('#checkboxes').hide();
+        //}
     });
 }
 

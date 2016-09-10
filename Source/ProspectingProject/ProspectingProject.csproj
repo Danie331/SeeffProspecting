@@ -706,6 +706,7 @@
     <Content Include="..\SharedScripts\StyleSheets\jquery.contextMenu.css">
       <Link>Scripts\StyleSheets\jquery.contextMenu.css</Link>
     </Content>
+    <Content Include="Assets\activities-followups-filtering.png" />
     <Content Include="Assets\add_activity.png" />
     <Content Include="Assets\bin.png" />
     <Content Include="Assets\capture_address.png" />
@@ -1041,6 +1042,13 @@
     <Content Include="Scripts\3rdParty\ckeditor\styles.js" />
     <Content Include="Scripts\3rdParty\CrossDomainRequestPlugin.js" />
     <Content Include="Scripts\3rdParty\jqueryBlockUI.js" />
+    <Content Include="Scripts\3rdParty\PivotTable.js\c3_renderers.min.js" />
+    <Content Include="Scripts\3rdParty\PivotTable.js\d3_renderers.min.js" />
+    <Content Include="Scripts\3rdParty\PivotTable.js\export_renderers.min.js" />
+    <Content Include="Scripts\3rdParty\PivotTable.js\gchart_renderers.min.js" />
+    <Content Include="Scripts\3rdParty\PivotTable.js\pivot.js" />
+    <Content Include="Scripts\3rdParty\PivotTable.js\pivot.min.css" />
+    <Content Include="Scripts\3rdParty\PivotTable.js\tips_data.min.js" />
     <Content Include="Scripts\3rdParty\SlickGrid\controls\slick.columnpicker.css" />
     <Content Include="Scripts\3rdParty\SlickGrid\controls\slick.columnpicker.js" />
     <Content Include="Scripts\3rdParty\SlickGrid\controls\slick.pager.css" />
@@ -1126,6 +1134,7 @@
     <Content Include="Scripts\3rdParty\SlickGrid\slick.groupitemmetadataprovider.js" />
     <Content Include="Scripts\3rdParty\SlickGrid\slick.remotemodel.js" />
     <Content Include="Scripts\3rdParty\waitForImage.js" />
+    <Content Include="Scripts\Core\ComboSelect.js" />
     <Content Include="Scripts\Core\CommReports.js" />
     <Content Include="Scripts\Core\CommunicationTemplates.js" />
     <Content Include="Scripts\Core\DocumentVault.js" />
@@ -1134,6 +1143,7 @@
     <Content Include="Scripts\Core\Extensions.js" />
     <Content Include="Scripts\Core\Filtering.js" />
     <Content Include="Scripts\Core\PropertyInformation.js" />
+    <Content Include="Scripts\StyleSheets\ComboSelect.css" />
     <Content Include="Scripts\StyleSheets\OpenTip.css" />
     <Content Include="Scripts\3rdParty\OpenTip.js" />
     <Content Include="Scripts\StyleSheets\tooltip.css" />
@@ -1342,6 +1352,9 @@
     <Compile Include="Services\Trusts\TrustEnquiryServiceGetTrustees.cs" />
     <Compile Include="Services\Trusts\TrustEntityEnquiryService.cs" />
     <Compile Include="Services\Trusts\TrustHashcodeInput.cs" />
+    <Compile Include="Types\ActivitiesFollowupsFilterInputs.cs" />
+    <Compile Include="Types\ActivitiesFollowupsFilterResponse.cs" />
+    <Compile Include="Types\ActivitiesFollowupsPivotRow.cs" />
     <Compile Include="Types\ActivityBundle.cs" />
     <Compile Include="Types\CommReportFilters.cs" />
     <Compile Include="Types\CommReportResults.cs" />
