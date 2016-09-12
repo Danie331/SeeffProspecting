@@ -3966,7 +3966,8 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                 {
                     // else follow-up types only
                     var filterTypes = filterPacket.ActivityFollowupTypes.Select(i => (int?)i);
-                    filteredSet = baseSet.Where(al => filterTypes.Contains(al.activity_followup_type_id));
+                    filteredSet = baseSet.Where(al => filterTypes.Contains(al.activity_followup_type_id) &&
+                                                    filterPacket.ActivityTypes.Contains(al.activity_type_id)); // must have been initially user-created.
                 }
 
                 if (filterPacket.CreatedBy.HasValue)
@@ -4023,11 +4024,11 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                         ActivitiesFollowupsPivotRow row = new ActivitiesFollowupsPivotRow();
 
                         row.CreatedBy = createdByUser.Fullname;
-                        row.ActivityType = ProspectingLookupData.ActivityTypes.First(at => at.Key == item.activity_type_id).Value;
+                        row.ActivityType = ProspectingLookupData.ActivityTypes.First(at => at.Key == item.activity_type_id).Value; // NB only user types - not system types
 
                         UserDataResponsePacket allocatedToUser = user.BusinessUnitUsers.FirstOrDefault(bu => bu.UserGuid == item.allocated_to);
                         row.AllocatedTo = allocatedToUser != null ? allocatedToUser.Fullname : "n/a";
-                        row.FollowupType = item.activity_followup_type_id.HasValue ? ProspectingLookupData.ActivityFollowupTypes.First(aft => aft.Key == item.activity_followup_type_id).Value : "n/a";
+                        row.FollowupType = item.activity_followup_type_id.HasValue ? ProspectingLookupData.ActivityFollowupTypes.First(aft => aft.Key == item.activity_followup_type_id).Value : "system";
 
                         rows.Add(row);
                     }
@@ -4041,12 +4042,12 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                         ActivitiesFollowupsPivotRow row = new ActivitiesFollowupsPivotRow();
                        
                             row.AllocatedTo = allocatedToUser != null ? allocatedToUser.Fullname : "n/a";
-                            row.FollowupType = ProspectingLookupData.ActivityFollowupTypes.First(aft => aft.Key == item.activity_followup_type_id).Value;
+                        row.FollowupType = item.activity_followup_type_id.HasValue ? ProspectingLookupData.ActivityFollowupTypes.First(aft => aft.Key == item.activity_followup_type_id).Value : "system";
                        
 
                         UserDataResponsePacket createdByUser = user.BusinessUnitUsers.FirstOrDefault(bu => bu.UserGuid == item.created_by);
                         row.CreatedBy = createdByUser.Fullname;
-                        row.ActivityType = ProspectingLookupData.ActivityTypes.First(at => at.Key == item.activity_type_id).Value;
+                        row.ActivityType = ProspectingLookupData.ActivityTypes.First(at => at.Key == item.activity_type_id).Value; // NB only user types - not system types
 
                         rows.Add(row);
                     }
