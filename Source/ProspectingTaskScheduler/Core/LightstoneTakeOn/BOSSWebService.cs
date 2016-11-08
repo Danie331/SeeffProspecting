@@ -9,7 +9,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
 {
     public class BOSSWebService
     {
-        private string _wsBaseAddress = "http://bossservices.seeff.com/";
+        private string _wsBaseAddress = "http://localhost/bossservices/";
 
         public List<int> GetListUnregisteredProperties()
         {
@@ -31,7 +31,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://bossservices.seeff.com/");
+                client.BaseAddress = new Uri(_wsBaseAddress);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

@@ -87,7 +87,7 @@ namespace Seeff.Spatial.Service.Controllers
                 {
                     try
                     {
-                        client.BaseAddress = new Uri("http://bossservices.seeff.com/");
+                        client.BaseAddress = new Uri("http://localhost/bossservices/");
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

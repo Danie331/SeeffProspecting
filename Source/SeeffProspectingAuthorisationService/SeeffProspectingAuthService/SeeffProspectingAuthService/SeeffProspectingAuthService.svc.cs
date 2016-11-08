@@ -144,6 +144,7 @@ namespace SeeffProspectingAuthService
 
                 users = (from ur in boss.user_registrations.Where(b => branchIds.Contains(b.branch_id))
                                                            .Where(b => b.prospecting_areas != null)
+                                                           .Where(b => b.active)
                          select new ProspectingUserAuthPacket
                          {
                              UserName = ur.user_preferred_name,
