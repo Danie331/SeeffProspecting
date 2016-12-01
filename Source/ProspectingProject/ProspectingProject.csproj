@@ -1414,7 +1414,6 @@
     <Compile Include="Types\CompanyEnquiryInputPacket.cs" />
     <Compile Include="Types\CompanyEnquiryResponsePacket.cs" />
     <Compile Include="Types\CostOfBatch.cs" />
-    <Compile Include="Types\DefaultContactDetail.cs" />
     <Compile Include="Types\EmailAttachment.cs" />
     <Compile Include="Types\EmailBatch.cs" />
     <Compile Include="Types\FlattenedPropertyRecord.cs" />
