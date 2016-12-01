@@ -183,7 +183,7 @@ namespace ProspectingReleaseBuilder
         public static string _3rdPartyStylesheetSectionName = "3RD_PARTY_STYLESHEETS";
         public static string _coreStylesheetSectionName = "CORE_STYLESHEETS";
 
-        public static string _jsMinifierPostData = "js_code={0}&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS&language=ECMASCRIPT5";
+        public static string _jsMinifierPostData = "js_code={0}&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS&language=ECMASCRIPT6";
         public static string _jsMinifierAPI = "http://closure-compiler.appspot.com/compile";
 
         public static string _cssMiniferAPI = "http://cssminifier.com/raw";

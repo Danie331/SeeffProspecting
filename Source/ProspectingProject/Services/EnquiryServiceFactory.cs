@@ -36,7 +36,8 @@ namespace ProspectingProject
 
         private static ITracepsService GetTracePsService()
         {
-            return IsTestEnvironment ? (ITracepsService)new TracepsTestService() : (ITracepsService)new TracepsLiveService();
+            bool testingMode = IsTestEnvironment;
+            return testingMode ? (ITracepsService)new TracepsTestService() : (ITracepsService)new TracepsLiveService();
         }
 
         private static IDracoreService GetDracoreService()

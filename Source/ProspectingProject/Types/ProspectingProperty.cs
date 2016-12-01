@@ -99,5 +99,6 @@ namespace ProspectingProject
 
         public bool? HasContactWithLandline { get; set; }
         public bool? HasContactWithPrimaryLandline { get; set; }
+        //public bool HasMandate { get; internal set; }
     }
 }

@@ -155,6 +155,8 @@ namespace ProspectingProject
                 default: prop.SS_FH = "FH"; break;
             }
 
+            //prop.HasMandate = PropertyHasActiveMandate(prospectingContext, prospectingRecord);
+
             if (loadContactsOnly)
             {
                 prop.Contacts = LoadContacts(prospectingContext, prospectingRecord, loadOwnedProperties);
@@ -173,6 +175,53 @@ namespace ProspectingProject
 
             return prop;
         }
+
+        //private static bool PropertyHasActiveMandate(ProspectingDataContext prospectingContext, prospecting_property prospectingRecord)
+        //{
+        //    bool result = prospectingRecord.property_mandates.SelectMany(i => i.property_mandate_agencies).Any(i => !i.deleted);
+        //    return result;
+        //}
+
+        //public static MandateSet LoadCurrentMandateSet(int lightstonePropertyId)
+        //{
+        //    MandateSet results = new MandateSet();
+        //    try
+        //    {
+        //        using (var prospecting = new ProspectingDataContext())
+        //        using (var ls_base = new ls_baseEntities())
+        //        {
+        //            var propertyMandates = prospecting.property_mandates.Where(pm => pm.lightstone_property_id == lightstonePropertyId);
+        //            var propertyMandatesIDs = propertyMandates.Select(d => d.property_mandate_id);
+        //                var pmas = prospecting.property_mandate_agencies.Where(pm => propertyMandatesIDs.Contains(pm.property_mandate_id) && !pm.deleted);
+        //                if (pmas.Any()) {
+        //                    foreach (var item in pmas.OrderByDescending(c => c.created_date))
+        //                    {
+        //                        var followup = item.activity_log;
+        //                        var agency = ls_base.agency.FirstOrDefault(a => a.agency_id == item.agency_id)?.agency_name;
+        //                        PropertyMandateAgency pma = new PropertyMandateAgency
+        //                        {
+        //                            PropertyMandateAgencyID = item.property_mandate_agency_id,
+        //                            Agency = agency,
+        //                            MandateType = item.property_mandate_type.type_description,
+        //                            Status = item.property_mandate_status.status_description,
+        //                            ListingPrice = FormatSalePrice(item.listing_price),
+        //                            ExpiryDate = item.mandate_expiry_date?.ToShortDateString(),
+        //                            FollowupDate = followup != null ? followup.followup_date?.ToShortDateString() : "n/a",
+        //                            FollowupType = followup != null ? followup.activity_followup_type.activity_name : "n/a",
+        //                            Agents = agency == "Seeff" ? item.seeff_agents : item.agents
+        //                        };
+        //                        results.ListOfMandates.Add(pma);
+        //                    }
+        //                }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        results.ErrorMessage = ex.Message;
+        //    }
+
+        //    return results;
+        //}
 
         private static ActivityBundle LoadProspectingActivities(ProspectingDataContext prospectingContext, int? lightstonePropertyId)
         {
@@ -798,7 +847,7 @@ namespace ProspectingProject
         {
             using (var authService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
-                var userAuthPacket = authService.AuthenticateAndGetUserInfo(userGuid, sessionKey);
+                var userAuthPacket = authService.AuthenticateAndGetUserInfo(userGuid, sessionKey, impersonate);
                 if (!userAuthPacket.Authenticated)
                 {
                     throw new UserSessionExpiredException(); // This is not a true "expired session" but we can treat it as such.
@@ -4064,6 +4113,169 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                 return response;
             }
         }
+
+        //public static MandateSaveResult SaveMandate(NewMandateInputs newMandateData)
+        //{
+        //    MandateSaveResult result = new MandateSaveResult();
+        //    try
+        //    {
+        //        var user = RequestHandler.GetUserSessionObject();
+        //        string agentNamesList = null;
+
+        //        var lookupData = LoadMandateLookupData();
+        //        int seeffAgencyID = lookupData.MarketshareAgencies.First(ag => ag.AgencyName == "Seeff").AgencyID; // SHOULD ALWAYS BE "1"
+        //        if (newMandateData.MandateAgencyID == seeffAgencyID)
+        //        {
+        //            string[] agencyIDStrings = !string.IsNullOrWhiteSpace(newMandateData.MandateAgents) ? newMandateData.MandateAgents.Split(new[] { ',' }) : null;
+        //            if (agencyIDStrings != null)
+        //            {
+        //                int[] agencyIDs = agencyIDStrings.Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => int.Parse(s.Trim())).ToArray();
+        //                string[] agentNames = lookupData.SeeffAgents.Where(a => agencyIDs.Any(sa => sa == a.AgentID)).Select(a => a.AgentName).ToArray();
+
+        //                agentNamesList = string.Join(", ", agentNames);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            agentNamesList = newMandateData.MandateAgents;
+        //        }
+
+        //        using (var prospecting = new ProspectingDataContext())
+        //        {
+        //            var newRecord = new property_mandate { lightstone_property_id = newMandateData.LightstonePropertyId };
+        //            prospecting.property_mandates.InsertOnSubmit(newRecord);
+        //            prospecting.SubmitChanges();
+
+        //            int propertyMandateID = newRecord.property_mandate_id;
+
+        //            ProspectingActivity activity = new ProspectingActivity();
+        //            activity.IsForInsert = true;
+        //            activity.FollowUpDate = newMandateData.MandateFollowupDate;
+        //            activity.LightstonePropertyId = newMandateData.LightstonePropertyId;
+        //            var activityType = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "New Mandate").Key;
+        //            activity.ActivityTypeId = activityType;
+        //            StringBuilder sb = new StringBuilder();
+        //            sb.AppendLine("*** New Mandate Created For Property ***");
+        //            if (newMandateData.MandateFollowupDate.HasValue)
+        //            {
+        //                sb.AppendLine("");
+        //                UserDataResponsePacket allocatedToUser = user.BusinessUnitUsers.FirstOrDefault(bu => bu.UserGuid == newMandateData.FollowupAllocatedTo);
+        //                string allocatedToUserName = "";
+        //                if (allocatedToUser != null)
+        //                {
+        //                    allocatedToUserName = allocatedToUser.Fullname;
+        //                }
+        //                else
+        //                {
+        //                    allocatedToUserName = user.Fullname;
+        //                }
+        //                sb.AppendLine("A follow up is scheduled to be sent to " + allocatedToUserName + " on " + newMandateData.MandateFollowupDate.Value.ToString("dddd dd MMMM yyyy"));
+        //            }
+        //            activity.Comment = sb.ToString();
+        //            long activityID = UpdateInsertActivity(activity);
+        //            long? followupActivityID = null;
+        //            if (newMandateData.MandateFollowupDate.HasValue)
+        //            {
+        //                var followupType = ProspectingLookupData.ActivityFollowupTypes.First(act => act.Value == newMandateData.MandateFollowupTypeText).Key;
+        //                string comment = newMandateData.FollowupComment;
+        //                var followupActivity = new ProspectingActivity
+        //                {
+        //                    ActivityFollowupTypeId = followupType,
+        //                    AllocatedTo = newMandateData.FollowupAllocatedTo,
+        //                    ActivityTypeId = activityType,
+        //                    Comment = comment,
+        //                    FollowUpDate = newMandateData.MandateFollowupDate,
+        //                    LightstonePropertyId = newMandateData.LightstonePropertyId,
+        //                    ParentActivityId = activityID,
+        //                    IsForInsert = true,
+        //                    IsForUpdate = false
+        //                };
+        //                followupActivityID = UpdateInsertActivity(followupActivity);
+        //            }
+
+        //            var newMandateAgency = new property_mandate_agency
+        //            {
+        //                property_mandate_id = propertyMandateID,
+        //                agency_id = newMandateData.MandateAgencyID,
+        //                mandate_type = newMandateData.MandateType,
+        //                mandate_status = newMandateData.MandateStatus,
+        //                listing_price = newMandateData.ListingPrice,
+        //                mandate_expiry_date = null,
+        //                followup_activity_id = followupActivityID,
+        //                created_by = user.UserGuid,
+        //                created_date = DateTime.Now,
+        //                agents = agentNamesList,
+        //                seeff_agents = agentNamesList
+        //            };
+        //            prospecting.property_mandate_agencies.InsertOnSubmit(newMandateAgency);
+        //            prospecting.SubmitChanges();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        using (var prospectingDb = new ProspectingDataContext())
+        //        {
+        //            var errorRec = new exception_log
+        //            {
+        //                friendly_error_msg = ex.Message,
+        //                exception_string = ex.ToString(),
+        //                user = RequestHandler.GetUserSessionObject().UserGuid,
+        //                date_time = DateTime.Now
+        //            };
+        //            prospectingDb.exception_logs.InsertOnSubmit(errorRec);
+        //            prospectingDb.SubmitChanges();
+        //        }
+        //        result.ErrorMessage = ex.Message;
+        //    }
+
+        //    return result;
+        //}
+
+        //public static MandateLookupDataPacket LoadMandateLookupData()
+        //{
+        //    MandateLookupDataPacket results = new MandateLookupDataPacket();
+        //    try
+        //    {
+        //        using (var lsBase = new ls_baseEntities())
+        //        {
+        //            foreach (var agency in lsBase.agency)
+        //            {
+        //                results.MarketshareAgencies.Add(new MarketShareAgency { AgencyID = agency.agency_id, AgencyName = agency.agency_name });
+        //            }
+
+        //            foreach (var seeffAgent in lsBase.seeff_agents)
+        //            {
+        //                results.SeeffAgents.Add(new SeeffAgent { AgentID = seeffAgent.agentId, AgentName = seeffAgent.agentName });
+        //            }
+        //        }
+
+        //        using (var prospecting = new ProspectingDataContext())
+        //        {
+        //            foreach (var item in prospecting.property_mandate_types)
+        //            {
+        //                results.MandateTypes.Add(new MandateType { MandateTypeID = item.property_mandate_type_id, TypeDescription = item.type_description });
+        //            }
+        //            foreach (var item in prospecting.property_mandate_status)
+        //            {
+        //                results.MandateStatuses.Add(new MandateStatus { MandateStatusID = item.property_mandate_status_id, StatusDescription = item.status_description });
+        //            }
+        //            var mandateFollowupTypeNames = new[] { "Mandate Expiry", "Lease Expiry", "After Sales Service", "Short-term Rental Client Care" };
+        //            foreach (var item in ProspectingLookupData.ActivityFollowupTypes)
+        //            {
+        //                if (mandateFollowupTypeNames.Any(mft => mft == item.Value))
+        //                {
+        //                    results.MandateFollowupTypes.Add(new KeyValuePair<int, string>(item.Key, item.Value));
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        results.ErrorMessage = ex.Message;
+        //    }
+
+        //    return results;
+        //}
     }
 }
 

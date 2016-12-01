@@ -48,6 +48,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Google.Apis">
       <HintPath>..\packages\Google.Apis.1.9.0\lib\net40\Google.Apis.dll</HintPath>
     </Reference>
@@ -130,6 +138,7 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Spatial, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -708,6 +717,7 @@
     </Content>
     <Content Include="Assets\activities-followups-filtering.png" />
     <Content Include="Assets\add_activity.png" />
+    <Content Include="Assets\add_mandate.png" />
     <Content Include="Assets\bin.png" />
     <Content Include="Assets\capture_address.png" />
     <Content Include="Assets\comm_anniversary.png" />
@@ -731,6 +741,7 @@
     <Content Include="Assets\lightstone.png" />
     <Content Include="Assets\log_off.png" />
     <Content Include="Assets\make_primary_contact.png" />
+    <Content Include="Assets\mandate_info.png" />
     <Content Include="Assets\marker_icons\prospecting\prospected.png" />
     <Content Include="Assets\marker_icons\prospecting\prospected_attention_required.png" />
     <Content Include="Assets\marker_icons\prospecting\prospected_bulk_select.png" />
@@ -771,6 +782,16 @@
     <Content Include="Database scripts\useful.sql" />
     <Content Include="Default.aspx" />
     <Content Include="LogOut.aspx" />
+    <Content Include="ls_base.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ls_base.edmx</DependentUpon>
+      <LastGenOutput>ls_base.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ls_base.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ls_base.edmx</DependentUpon>
+      <LastGenOutput>ls_base.cs</LastGenOutput>
+    </Content>
     <Content Include="NotAuthorised.aspx" />
     <Content Include="Scripts\3rdParty\ckeditor\adapters\jquery.js" />
     <Content Include="Scripts\3rdParty\ckeditor\build-config.js" />
@@ -1165,6 +1186,13 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Properties\DataSources\System.Data.DataSet.datasource" />
+    <EntityDeploy Include="ls_base.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ls_base.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="ls_base.edmx.diagram">
+      <DependentUpon>ls_base.edmx</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\1.pubxml" />
     <None Include="Properties\PublishProfiles\2.pubxml" />
     <None Include="Properties\PublishProfiles\3.pubxml" />
@@ -1275,6 +1303,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="agency.cs">
+      <DependentUpon>ls_base.tt</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1287,6 +1318,21 @@
     </Compile>
     <Compile Include="LogOut.aspx.designer.cs">
       <DependentUpon>LogOut.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ls_base.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ls_base.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ls_base.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ls_base.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ls_base.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ls_base.edmx</DependentUpon>
     </Compile>
     <Compile Include="NotAuthorised.aspx.cs">
       <DependentUpon>NotAuthorised.aspx</DependentUpon>
@@ -1314,6 +1360,9 @@
     <Compile Include="ProspectingCore\Communication\SmsRecipient.cs" />
     <Compile Include="RequestHandler.ashx.cs">
       <DependentUpon>RequestHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="seeff_agents.cs">
+      <DependentUpon>ls_base.tt</DependentUpon>
     </Compile>
     <Compile Include="Service References\DracoreETLConsumerService\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -1356,6 +1405,7 @@
     <Compile Include="Types\ActivitiesFollowupsFilterResponse.cs" />
     <Compile Include="Types\ActivitiesFollowupsPivotRow.cs" />
     <Compile Include="Types\ActivityBundle.cs" />
+    <Compile Include="Types\MandateLookupDataPacket.cs" />
     <Compile Include="Types\CommReportFilters.cs" />
     <Compile Include="Types\CommReportResults.cs" />
     <Compile Include="Types\CommTemplateRequest.cs" />
@@ -1382,6 +1432,13 @@
     <Compile Include="Types\ExistingFollowupItems.cs" />
     <Compile Include="Types\FollowupBundle.cs" />
     <Compile Include="Types\LightstonePropertyIDPacket.cs" />
+    <Compile Include="Types\MandateSaveResult.cs" />
+    <Compile Include="Types\MandateSet.cs" />
+    <Compile Include="Types\MandateStatus.cs" />
+    <Compile Include="Types\MandateType.cs" />
+    <Compile Include="Types\MarketShareAgency.cs" />
+    <Compile Include="Types\NewMandateInputs.cs" />
+    <Compile Include="Types\PropertyMandateAgency.cs" />
     <Compile Include="Types\PropertyProspectedStatus.cs" />
     <Compile Include="Types\PropertyValuation.cs" />
     <Compile Include="Types\ProspectingEntityInputBundle.cs" />
@@ -1395,6 +1452,7 @@
     <Compile Include="Types\ReferralInputDetails.cs" />
     <Compile Include="Types\ReferralsHistory.cs" />
     <Compile Include="Types\SearchInputPacket.cs" />
+    <Compile Include="Types\SeeffAgent.cs" />
     <Compile Include="Types\SentEmailLogItem.cs" />
     <Compile Include="Types\SentSMSLogItem.cs" />
     <Compile Include="Types\SmsBatch.cs" />
@@ -1472,6 +1530,7 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

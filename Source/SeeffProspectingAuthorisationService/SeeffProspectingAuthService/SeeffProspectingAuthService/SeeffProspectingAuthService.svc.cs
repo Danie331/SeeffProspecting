@@ -11,16 +11,19 @@ namespace SeeffProspectingAuthService
 {
     public class SeeffProspectingAuthService : ISeeffProspectingAuthService
     {
-        public ProspectingUserAuthPacket AuthenticateAndGetUserInfo(Guid userGuid, Guid sessionKey)
+        public ProspectingUserAuthPacket AuthenticateAndGetUserInfo(Guid userGuid, Guid sessionKey, bool impersonate)
         {
             using (var boss = new BossDataContext())
             {
                 // We only need to authenticate in the live environment
                 if (!HttpContext.Current.IsDebuggingEnabled)
                 {
-                    if (boss.user_auth(userGuid.ToString(), sessionKey, "PROSPECTING") != 1)
+                    if (!impersonate)
                     {
-                        return new ProspectingUserAuthPacket { Authenticated = false };
+                        if (boss.user_auth(userGuid.ToString(), sessionKey, "PROSPECTING") != 1)
+                        {
+                            return new ProspectingUserAuthPacket { Authenticated = false };
+                        }
                     }
                 }
 

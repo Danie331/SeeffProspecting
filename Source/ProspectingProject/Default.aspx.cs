@@ -22,6 +22,7 @@ public partial class Prospecting : System.Web.UI.Page
             {
                 Session["user_guid"] = Request.QueryString["user_guid"];
                 Session["session_key"] = Guid.NewGuid().ToString();
+                Session["target_guid"] = Request.QueryString["user_guid"];
             }
             else
             {

@@ -215,6 +215,18 @@ namespace ProspectingProject
                     case "filter_activities_followups_for_business_unit":
                         string activitiesFollowupsFilteringResult = FilterActivitiesFollowupsForBusinessUnit(json);
                         context.Response.Write(activitiesFollowupsFilteringResult);
+                    //    break;
+                    //case "load_current_mandate_set":
+                    //    string mandateSet = LoadCurrentMandateSet(json);
+                    //    context.Response.Write(mandateSet);
+                    //    break;
+                    //case "load_mandate_lookup_data":
+                    //    string mandateData = LoadMandateLookupData();
+                    //    context.Response.Write(mandateData);
+                    //    break;
+                    //case "save_mandate":
+                    //    string mandateSaveResult = SaveMandate(json);
+                    //    context.Response.Write(mandateSaveResult);
                         break;
                 }
             }
@@ -249,6 +261,26 @@ namespace ProspectingProject
                 }
             }
         }
+
+        //private string SaveMandate(string json)
+        //{
+        //    var mandateInputs = ProspectingCore.Deserialise<NewMandateInputs>(json);
+        //    var responseData = ProspectingCore.SaveMandate(mandateInputs);
+        //    return Newtonsoft.Json.JsonConvert.SerializeObject(responseData);
+        //}
+
+        //private string LoadMandateLookupData()
+        //{
+        //    var mandateLookupDataPacket = ProspectingCore.LoadMandateLookupData();
+        //    return Newtonsoft.Json.JsonConvert.SerializeObject(mandateLookupDataPacket);
+        //}
+
+        //private string LoadCurrentMandateSet(string json)
+        //{
+        //    var lightstoneRecord = ProspectingCore.Deserialise<ProspectingPropertyId>(json);
+        //    var responsePacket = ProspectingCore.LoadCurrentMandateSet(lightstoneRecord.LightstonePropertyId);
+        //    return Newtonsoft.Json.JsonConvert.SerializeObject(responsePacket);
+        //}
 
         private string FilterActivitiesFollowupsForBusinessUnit(string json)
         {

@@ -426,11 +426,11 @@ namespace ProspectingProject.ProspectingUserAuthService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfo", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfoRespons" +
             "e")]
-        ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket AuthenticateAndGetUserInfo(System.Guid userGuid, System.Guid sessionKey);
+        ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket AuthenticateAndGetUserInfo(System.Guid userGuid, System.Guid sessionKey, bool impersonate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfo", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfoRespons" +
             "e")]
-        System.Threading.Tasks.Task<ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket> AuthenticateAndGetUserInfoAsync(System.Guid userGuid, System.Guid sessionKey);
+        System.Threading.Tasks.Task<ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket> AuthenticateAndGetUserInfoAsync(System.Guid userGuid, System.Guid sessionKey, bool impersonate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/DebitUserBalance", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/DebitUserBalanceResponse")]
         decimal DebitUserBalance(decimal amount, System.Guid userGuid);
@@ -492,12 +492,12 @@ namespace ProspectingProject.ProspectingUserAuthService {
                 base(binding, remoteAddress) {
         }
         
-        public ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket AuthenticateAndGetUserInfo(System.Guid userGuid, System.Guid sessionKey) {
-            return base.Channel.AuthenticateAndGetUserInfo(userGuid, sessionKey);
+        public ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket AuthenticateAndGetUserInfo(System.Guid userGuid, System.Guid sessionKey, bool impersonate) {
+            return base.Channel.AuthenticateAndGetUserInfo(userGuid, sessionKey, impersonate);
         }
         
-        public System.Threading.Tasks.Task<ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket> AuthenticateAndGetUserInfoAsync(System.Guid userGuid, System.Guid sessionKey) {
-            return base.Channel.AuthenticateAndGetUserInfoAsync(userGuid, sessionKey);
+        public System.Threading.Tasks.Task<ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket> AuthenticateAndGetUserInfoAsync(System.Guid userGuid, System.Guid sessionKey, bool impersonate) {
+            return base.Channel.AuthenticateAndGetUserInfoAsync(userGuid, sessionKey, impersonate);
         }
         
         public decimal DebitUserBalance(decimal amount, System.Guid userGuid) {

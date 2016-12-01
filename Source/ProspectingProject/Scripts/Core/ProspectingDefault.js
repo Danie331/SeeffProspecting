@@ -1852,6 +1852,7 @@ function updateExistingPropertyFromProperty(existingProp, newProp) {
     existingProp.LightstoneSuburb = newProp.LightstoneSuburb;
     existingProp.ActivityBundle = newProp.ActivityBundle;
     existingProp.LatestRegDateForUpdate = newProp.LatestRegDateForUpdate;
+   // existingProp.HasMandate = newProp.HasMandate;
 
     updateExistingPropertyStats(existingProp, newProp);
 }
