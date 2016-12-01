@@ -29,8 +29,8 @@ namespace Seeff.Spatial.Service.Database
     
         public virtual DbSet<spatial_license> spatial_license { get; set; }
         public virtual DbSet<spatial_terretory> spatial_terretory { get; set; }
-        public virtual DbSet<exception_log> exception_log { get; set; }
         public virtual DbSet<spatial_area> spatial_area { get; set; }
+        public virtual DbSet<exception_log> exception_log { get; set; }
     
         public virtual int reindex_prospecting_suburb(Nullable<int> area_id)
         {

@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Louise\Desktop\WORK\Seeff.Spatial\SeeffSpatial\Seeff.Spatial.Service\Database\SpatialDB.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\Louise\Source\Repos\Prospecting\SeeffSpatial\SeeffSpatial\Seeff.Spatial.Service\Database\SpatialDB.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

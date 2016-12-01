@@ -49,14 +49,6 @@
           <Property Name="territory_name" Type="varchar" MaxLength="50" />
           <Property Name="geo_polygon" Type="geography" />
         </EntityType>
-        <Function Name="get_area_id" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
-          <Parameter Name="lat" Type="float" Mode="In" />
-          <Parameter Name="long" Type="float" Mode="In" />
-          <Parameter Name="territory_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="reindex_prospecting_suburb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="area_id" Type="int" Mode="In" />
-        </Function>
         <EntityContainer Name="seeff_spatialModelStoreContainer">
           <EntitySet Name="exception_log" EntityType="Self.exception_log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="spatial_area" EntityType="Self.spatial_area" Schema="dbo" store:Type="Tables" />
@@ -70,11 +62,11 @@
         <EntityContainer Name="seeff_spatialEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="spatial_license" EntityType="seeff_spatialModel.spatial_license" />
           <EntitySet Name="spatial_terretory" EntityType="seeff_spatialModel.spatial_terretory" />
-          <EntitySet Name="exception_log" EntityType="seeff_spatialModel.exception_log" />
           <FunctionImport Name="reindex_prospecting_suburb">
           <Parameter Name="area_id" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="spatial_area" EntityType="seeff_spatialModel.spatial_area" />
+          <EntitySet Name="exception_log" EntityType="seeff_spatialModel.exception_log" />
         </EntityContainer>
         <EntityType Name="spatial_license">
           <Key>
@@ -95,16 +87,6 @@
           <Property Name="territory_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="geo_polygon" Type="Geography" />
         </EntityType>
-        <EntityType Name="exception_log">
-          <Key>
-            <PropertyRef Name="exception_log_id" />
-          </Key>
-          <Property Name="exception_log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="exception_string" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="exception_friendly_msg" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="context" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
         <EntityType Name="spatial_area">
           <Key>
             <PropertyRef Name="id" />
@@ -119,6 +101,16 @@
           <Property Name="requires_maintenance" Type="Boolean" Nullable="false" />
           <Property Name="under_maintenance" Type="Boolean" Nullable="false" />
           <Property Name="is_deleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="exception_log">
+          <Key>
+            <PropertyRef Name="exception_log_id" />
+          </Key>
+          <Property Name="exception_log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="exception_string" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="exception_friendly_msg" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="context" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -147,18 +139,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="exception_log">
-            <EntityTypeMapping TypeName="seeff_spatialModel.exception_log">
-              <MappingFragment StoreEntitySet="exception_log">
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="context" ColumnName="context" />
-                <ScalarProperty Name="exception_friendly_msg" ColumnName="exception_friendly_msg" />
-                <ScalarProperty Name="exception_string" ColumnName="exception_string" />
-                <ScalarProperty Name="exception_log_id" ColumnName="exception_log_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="reindex_prospecting_suburb" FunctionName="seeff_spatialModel.Store.reindex_prospecting_suburb" />
           <EntitySetMapping Name="spatial_area">
             <EntityTypeMapping TypeName="seeff_spatialModel.spatial_area">
               <MappingFragment StoreEntitySet="spatial_area">
@@ -172,6 +152,17 @@
                 <ScalarProperty Name="geo_polygon" ColumnName="geo_polygon" />
                 <ScalarProperty Name="fkAreaId" ColumnName="fkAreaId" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="exception_log">
+            <EntityTypeMapping TypeName="seeff_spatialModel.exception_log">
+              <MappingFragment StoreEntitySet="exception_log">
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="context" ColumnName="context" />
+                <ScalarProperty Name="exception_friendly_msg" ColumnName="exception_friendly_msg" />
+                <ScalarProperty Name="exception_string" ColumnName="exception_string" />
+                <ScalarProperty Name="exception_log_id" ColumnName="exception_log_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
