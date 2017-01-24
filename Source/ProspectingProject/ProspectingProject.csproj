@@ -728,7 +728,6 @@
     <Content Include="Assets\comm_sms.png" />
     <Content Include="Assets\contact.png" />
     <Content Include="Assets\create_referral.png" />
-    <Content Include="Assets\dracore_email_lookup.png" />
     <Content Include="Assets\edit.png" />
     <Content Include="Assets\edit_link.png" />
     <Content Include="Assets\email_icon.png" />
@@ -770,7 +769,6 @@
     <Content Include="Assets\titlecase_icon.png" />
     <Content Include="Assets\titlecase_link.png" />
     <Content Include="Assets\tps_info.png" />
-    <Content Include="Assets\traceps_lookup.png" />
     <Content Include="Assets\validate_id.png" />
     <Content Include="Assets\valuations_history.png" />
     <Content Include="Assets\view_btn.png" />
