@@ -1110,7 +1110,15 @@ function buildContactDashboard(contacts, context) {
             var trustEntityEnquiryBtn = $("<input type='button' id='trustEnquiryBtn' value='Search Trusts' style='float:right' />");
             var regNo = cc.CKNumber && cc.CKNumber.indexOf("UNKNOWN_CK_") == -1 ? cc.CKNumber : '';
             var regNoLink = $("<a href='#' onclick='javascript:void(0);return false;' style='text-decoration:underline;' >" + regNo + "</a>");
-            container.append(cc.CompanyName);
+            var companyNameLink = $("<a href='#' onclick='javascript:void(0);return false;' style='text-decoration:underline;' >" + cc.CompanyName + "</a>");
+            if (cc.CompanyType != 'TR') {
+                container.append(companyNameLink);
+            } else {
+                container.append(cc.CompanyName);
+            }
+
+            companyNameLink.click(function (e) { handleCompanyNameClick(e, cc); });
+
             if (cc.CompanyType != 'TR' && regNo) {
                 container.append(" (").append(regNoLink).append(")");
                 container.append(companyEnquiryBtn);
@@ -1218,6 +1226,58 @@ function buildContactDashboard(contacts, context) {
     });
 
     return container;
+}
+
+function handleCompanyNameClick(e, company) {
+    var editCompanyNameMsg = 'You may edit the company name in the textbox below. Please note that changing this value will propagate to all properties owned by this company.';
+    var editNameLabel = $("<span style='display:inline-block;vertical-align:middle;'>Company Name: </span>");
+    var editNameInput = $("<input type='text' size=70 style='display:inline-block;vertical-align:middle;margin-left:10px' />").val(company.CompanyName);
+    var contentElement = $("<div />").append(editNameLabel).append(editNameInput);
+    var editCompanyNameDialog = $("<div id='editCompanyNameDialog' title='Edit Company Name' style='font-family:Verdana;font-size:12px;overflow:hidden' />").empty();
+    editCompanyNameDialog.append(editCompanyNameMsg)
+                          .append("<p />")
+                          .append(contentElement);
+
+    editCompanyNameDialog.dialog(
+        {
+            modal: true,
+            closeOnEscape: false,
+            width: '600',
+            buttons: {
+                "Save And Close": function () {
+                    var newName = editNameInput.val().trim();
+                    if (newName == '') {
+                        alert('Company name cannot be blank!');
+                        return;
+                    }
+                    if (newName == company.CompanyName) {
+                        return;
+                    }
+                    $(this).dialog("close");
+                    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Saving Changes...</p>' });
+                    $.ajax({
+                        type: "POST",
+                        url: "RequestHandler.ashx",
+                        data: JSON.stringify({ Instruction: 'update_company_name', ContactCompanyId: company.ContactCompanyId, CompanyName: newName }),
+                        dataType: "json"
+                    }).done(function (data) {
+                        $.unblockUI();
+                        if (!handleResponseIfServerError(data)) {
+                            return;
+                        }
+
+                        //
+                        var targetElement = $(e.target);
+                        targetElement.text(data.CompanyName);
+                        company.CompanyName = data.CompanyName;
+                    });
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            },
+            position: ['center', 'center']
+        });
 }
 
 function handleCompanyRegNoClick(e, company) {
