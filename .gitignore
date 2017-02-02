@@ -3,3 +3,15 @@
 ################################################################################
 
 /Source/.vs
+/Source/DataManager/obj/Debug
+/Source/MarketShareApp/obj/Debug
+/Source/MarketShareProjectReleaseBuilder/bin/Debug
+/Source/MarketShareProjectReleaseBuilder/obj/Debug
+/Source/packages
+/Source/ProspectingProject/bin
+/Source/ProspectingProject/obj/Debug
+/Source/ProspectingReleaseBuilder/bin/Debug
+/Source/ProspectingReleaseBuilder/obj/Debug
+/Source/ProspectingTaskScheduler/obj/Debug
+/Source/SeeffProspectingAuthorisationService/SeeffProspectingAuthService/SeeffProspectingAuthService/bin
+/Source/SeeffProspectingAuthorisationService/SeeffProspectingAuthService/SeeffProspectingAuthService/obj/Debug

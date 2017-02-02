@@ -88,11 +88,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Client.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DataContexts\Client1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Client.tt</DependentUpon>
-    </Compile>
     <Compile Include="DataContexts\client_system.cs">
       <DependentUpon>Client.tt</DependentUpon>
     </Compile>
