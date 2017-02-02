@@ -1356,7 +1356,6 @@
     <Compile Include="ProspectingCore\Communication\ContactPersonSmsComparer.cs" />
     <Compile Include="ProspectingCore\Communication\EmailRecipient.cs" />
     <Compile Include="ProspectingCore\Communication\SmsRecipient.cs" />
-    <Compile Include="ProspectingCore\ContactsManager.cs" />
     <Compile Include="RequestHandler.ashx.cs">
       <DependentUpon>RequestHandler.ashx</DependentUpon>
     </Compile>

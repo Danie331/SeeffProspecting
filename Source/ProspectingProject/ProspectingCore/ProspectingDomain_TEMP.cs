@@ -533,6 +533,7 @@ namespace ProspectingProject
         {
             if (contactPersonId == null) return null;
             var pcp = prospecting.prospecting_contact_persons.FirstOrDefault(p => p.contact_person_id == contactPersonId);
+            var seeffClient = ClientManager.RetrieveClient(contactPersonId);
             if (pcp != null)
             {
                 var contactPerson = new ProspectingContactPerson
