@@ -19,10 +19,5 @@ namespace DataManager
         {
             return new LightStoneDataContext(_liveConnectionStringLSBase);
         }
-
-        public static Entities GetClientEntities()
-        {
-            return new Entities(_clientDatabase);
-        }
     }    
 }

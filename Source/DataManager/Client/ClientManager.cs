@@ -3,6 +3,10 @@ using DataManager.DataContexts;
 using DataManager.DomainTypes;
 using System;
 using System.Linq;
+using System.Collections.Generic;
+using System.Web.Caching;
+using System.Web;
+using SmartAdmin.Client.SharedTypes;
 
 namespace DataManager.Client
 {
@@ -13,62 +17,74 @@ namespace DataManager.Client
     {
         private int _clientSystemID;
         private Guid? _user;
+        private IClientRepository _clientRepository;
 
         /// <summary>
         /// Use this contructor by default
         /// </summary>
         /// <param name="applicationID">the client system ID of the calling application as listed in the dbo.client_system table</param>
         /// <param name="user">the logged-in user (if applicable)</param>
-        public ClientManager(ClientSystemContext clientApplication, Guid? user)
+        public ClientManager(ClientSystemContext clientApplication, IClientRepository clientRepository, Guid? user)
         {
             _clientSystemID = (int)clientApplication;
+            _clientRepository = clientRepository;
             _user = user;
+
+            clientRepository.InitUserSessionInfo(_clientSystemID, user);
         }
 
         #region public methods
 
-        public Client RetrieveClientByID(int localSystemID)
+        public IClientModel RetrieveClientByIdThrowIfNull(int? localSystemID)
         {
             try
             {
-                using (var client = DataContextRetriever.GetClientEntities())
-                {
-                    var targetClient = client.search_client.FirstOrDefault(c => c.fk_client_system_id == _clientSystemID && c.fk_system_client_id == localSystemID);
-                    ThrowIfNull(targetClient, "targetClient");
+                var client = _clientRepository.RetrieveClientByID(_clientSystemID, localSystemID);
+                LogAndThrowIfNull(client, "client");
 
-                    Client result = RetrieveClient(targetClient, false);
-                }
+                return client;
             }
-            catch(ClientException ce)
+            catch (ClientException ce)
             {
+                // TODO Log here
                 throw new Exception(ce.Message);
             }
-            catch (Exception ex)
+        }
+
+        public IClientModel RetrieveClientById(int? localSystemID)
+        {
+            try
             {
-                // log ... 
-                throw ex; // let the caller handle the exception normally.
+                var client = _clientRepository.RetrieveClientByID(_clientSystemID, localSystemID);
+
+                return client;
             }
+            catch (ClientException ce)
+            {
+                // TODO Log here
+                throw new Exception(ce.Message);
+            }
+        }
+
+        public void SaveClient(IClientModel clientToSave)
+        {
+
         }
 
         #endregion
 
-        private Client RetrieveClient(search_client targetClient, bool retrieveContactDetails)
+        private DomainTypes.Client RetrieveClient(search_client searchClient, bool retrieveContactDetails)
         {
-            Client client = new DataManager.Client
-            {
-                LocalRecordID = targetClient.fk_system_client_id,
-                Firstname = targetClient.client.first_name,
-                Surname = targetClient.client.last_name,
-            };
+           // -- TODO: check if the take on of deleted items is working
         }
 
         /// <summary>
         /// Use this method to throw an exception back to the caller if the input parameter is expected to have a valid value.
-        /// A record will be written to the error_log containing the stacktrace.
+        /// A record will be written to the client.dbo.error_log containing the stacktrace.
         /// </summary>
         /// <param name="value">value to be tested for null</param>
         /// <param name="variableName">name of the variable as per the source code</param>
-        private void ThrowIfNull(object value, string variableName)
+        private void LogAndThrowIfNull(object value, string variableName)
         {
             if (value == null)
             {
@@ -88,7 +104,7 @@ namespace DataManager.Client
                     errorLogID = error.error_log_id;
                 }
 
-                throw new ClientException("ClientManager threw an exception while executing the request - client.dbo.error_log -> id = " + errorLogID);
+                throw new ClientException("Exception in ClientManager - value cannot be null - client.dbo.error_log -> id = " + errorLogID);
             }
         }
     }

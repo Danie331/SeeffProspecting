@@ -130,9 +130,6 @@
     <Reference Include="System.Net.Http.Extensions">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\net45\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Net.Http.Primitives">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\net45\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
@@ -1422,7 +1419,6 @@
     <Compile Include="Types\CommunicationRecord.cs" />
     <Compile Include="Types\CompanyContactDataPacket.cs" />
     <Compile Include="Types\ContactDataPacket.cs" />
-    <Compile Include="Types\GeoLocation.cs" />
     <Compile Include="Types\IListing.cs" />
     <Compile Include="Types\ILocation.cs" />
     <Compile Include="Types\ContactRow.cs" />
@@ -1456,7 +1452,6 @@
     <Compile Include="Services\Trusts\TrustSearchResult.cs" />
     <Compile Include="Types\UserDataResponsePacket.cs" />
     <Compile Include="Types\UserSuburb.cs" />
-    <Compile Include="Types\JsonNetPropertyNameResolverForSerialization.cs" />
     <Compile Include="Types\LightstonePropertyMatch.cs" />
     <Compile Include="Types\PropertySearchResults.cs" />
     <Compile Include="Types\NewProspectingLocation.cs" />
@@ -1570,7 +1565,16 @@
     <WCFMetadataStorage Include="Service References\ProspectingUserAuthService\" />
     <WCFMetadataStorage Include="Service References\SearchWorksAPI\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SmartAdminNew\SmartAdmin\SmartAdmin\SmartAdmin.csproj">
+      <Project>{7f820608-e3cf-4330-ad42-07e205359c83}</Project>
+      <Name>SmartAdmin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataManager\DataManager.csproj">
+      <Project>{ad155303-5aa8-4899-80c9-223e10665c7b}</Project>
+      <Name>DataManager</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
