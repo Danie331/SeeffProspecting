@@ -229,10 +229,6 @@ namespace ProspectingProject
                     //    string mandateSaveResult = SaveMandate(json);
                     //    context.Response.Write(mandateSaveResult);
                         break;
-                    case "update_company_name":
-                        string updatedCompanyName = UpdateCompanyName(json);
-                        context.Response.Write(updatedCompanyName);
-                        break;
                 }
             }
             catch (Exception ex)
@@ -286,14 +282,6 @@ namespace ProspectingProject
         //    var responsePacket = ProspectingCore.LoadCurrentMandateSet(lightstoneRecord.LightstonePropertyId);
         //    return Newtonsoft.Json.JsonConvert.SerializeObject(responsePacket);
         //}
-
-
-        private string UpdateCompanyName(string json)
-        {
-            var companyWithNewName = ProspectingCore.Deserialise<ProspectingContactCompany>(json);
-            companyWithNewName = ProspectingCore.UpdateCompanyName(companyWithNewName);
-            return ProspectingCore.SerializeToJsonWithDefaults(companyWithNewName);
-        }
 
         private string FilterActivitiesFollowupsForBusinessUnit(string json)
         {
