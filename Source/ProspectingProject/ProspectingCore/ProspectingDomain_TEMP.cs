@@ -3679,6 +3679,18 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
             }
         }
 
+        public static ProspectingContactCompany UpdateCompanyName(ProspectingContactCompany companyWithNewName)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                var targetCompany = prospecting.prospecting_contact_companies.First(cc => cc.contact_company_id == companyWithNewName.ContactCompanyId);
+                targetCompany.company_name = companyWithNewName.CompanyName;
+                prospecting.SubmitChanges();
+
+                return new ProspectingContactCompany { CKNumber = targetCompany.CK_number, CompanyName = targetCompany.company_name };
+            }
+        }
+
         public static ActivitiesFollowupsFilterResponse FilterActivitiesFollowupsForBusinessUnit(ActivitiesFollowupsFilterInputs filterPacket)
         {
             if (filterPacket.ActivityTypes.Count == 1 && filterPacket.ActivityTypes.First() == 0)
