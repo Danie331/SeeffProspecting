@@ -82,6 +82,14 @@
       <Column Name="date_time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
+  <Table Name="dbo.prospecting_area_dialing_code" Member="prospecting_area_dialing_codes">
+    <Type Name="prospecting_area_dialing_code">
+      <Column Name="prospecting_area_dialing_code_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="dialing_code_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="code_desc" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="prospecting_area_dialing_code_prospecting_contact_detail" Member="prospecting_contact_details" ThisKey="prospecting_area_dialing_code_id" OtherKey="intl_dialing_code_id" Type="prospecting_contact_detail" />
+    </Type>
+  </Table>
   <Table Name="dbo.prospecting_company_property_relationship" Member="prospecting_company_property_relationships">
     <Type Name="prospecting_company_property_relationship">
       <Column Name="company_property_relationship_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -114,6 +122,30 @@
       <Column Name="company_type" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Association Name="prospecting_contact_company_prospecting_company_property_relationship" Member="prospecting_company_property_relationships" ThisKey="contact_company_id" OtherKey="contact_company_id" Type="prospecting_company_property_relationship" />
       <Association Name="prospecting_contact_company_prospecting_person_company_relationship" Member="prospecting_person_company_relationships" ThisKey="contact_company_id" OtherKey="contact_company_id" Type="prospecting_person_company_relationship" />
+    </Type>
+  </Table>
+  <Table Name="dbo.prospecting_contact_detail" Member="prospecting_contact_details">
+    <Type Name="prospecting_contact_detail">
+      <Column Name="prospecting_contact_detail_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="contact_detail_type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="contact_person_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="contact_detail" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="intl_dialing_code_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="eleventh_digit" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="is_primary_contact" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="deleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="deleted_by" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="deleted_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="prospecting_area_dialing_code_prospecting_contact_detail" Member="prospecting_area_dialing_code" ThisKey="intl_dialing_code_id" OtherKey="prospecting_area_dialing_code_id" Type="prospecting_area_dialing_code" IsForeignKey="true" />
+      <Association Name="prospecting_contact_detail_type_prospecting_contact_detail" Member="prospecting_contact_detail_type" ThisKey="contact_detail_type" OtherKey="contact_detail_type_id" Type="prospecting_contact_detail_type" IsForeignKey="true" />
+      <Association Name="prospecting_contact_person_prospecting_contact_detail" Member="prospecting_contact_person" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_contact_person" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.prospecting_contact_detail_type" Member="prospecting_contact_detail_types">
+    <Type Name="prospecting_contact_detail_type">
+      <Column Name="contact_detail_type_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="type_desc" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="prospecting_contact_detail_type_prospecting_contact_detail" Member="prospecting_contact_details" ThisKey="contact_detail_type_id" OtherKey="contact_detail_type" Type="prospecting_contact_detail" />
     </Type>
   </Table>
   <Table Name="dbo.prospecting_person_company_relationship" Member="prospecting_person_company_relationships">
@@ -179,6 +211,13 @@
       <Column Name="person_property_relationship_type_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="relationship_desc" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Association Name="prospecting_person_property_relationship_type_prospecting_person_property_relationship" Member="prospecting_person_property_relationships" ThisKey="person_property_relationship_type_id" OtherKey="relationship_to_property" Type="prospecting_person_property_relationship" />
+    </Type>
+  </Table>
+  <Table Name="dbo.prospecting_person_title" Member="prospecting_person_titles">
+    <Type Name="prospecting_person_title">
+      <Column Name="prospecting_person_title_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="person_title" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
+      <Association Name="prospecting_person_title_prospecting_contact_person" Member="prospecting_contact_persons" ThisKey="prospecting_person_title_id" OtherKey="person_title" Type="prospecting_contact_person" />
     </Type>
   </Table>
   <Table Name="dbo.service_enquiry_log" Member="service_enquiry_logs">
@@ -359,26 +398,43 @@
   <Table Name="dbo.prospecting_contact_person" Member="prospecting_contact_persons">
     <Type Name="prospecting_contact_person">
       <Column Name="contact_person_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="person_title" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="person_gender" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="id_number" Type="System.String" DbType="VarChar(14) NOT NULL" CanBeNull="false" />
+      <Column Name="firstname" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="surname" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="job_title" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="propcntrl_buyer_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="referral_network" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="investor" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="is_popi_restricted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="created_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="updated_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="created_by" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="comments_notes" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="deceased_status" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="age_group" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="location" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="marital_status" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="home_ownership" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="directorship" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="physical_address" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="employer" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="occupation" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="bureau_adverse_indicator" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="citizenship" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="optout_emails" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="optout_sms" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="do_not_contact" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="prospecting_contact_person_activity_log" Member="activity_logs" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="activity_log" />
+      <Association Name="prospecting_contact_person_prospecting_contact_detail" Member="prospecting_contact_details" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_contact_detail" />
       <Association Name="prospecting_contact_person_prospecting_person_company_relationship" Member="prospecting_person_company_relationships" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_person_company_relationship" />
       <Association Name="prospecting_contact_person_prospecting_person_person_relationship" Member="prospecting_person_person_relationships" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_person_person_relationship" />
       <Association Name="prospecting_contact_person_prospecting_person_person_relationship1" Member="prospecting_person_person_relationships1" ThisKey="contact_person_id" OtherKey="related_contacted_person_id" Type="prospecting_person_person_relationship" />
       <Association Name="prospecting_contact_person_prospecting_person_property_relationship" Member="prospecting_person_property_relationships" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_person_property_relationship" />
       <Association Name="prospecting_contact_person_email_communications_log" Member="email_communications_logs" ThisKey="contact_person_id" OtherKey="target_contact_person_id" Type="email_communications_log" />
       <Association Name="prospecting_contact_person_sms_communications_log" Member="sms_communications_logs" ThisKey="contact_person_id" OtherKey="target_contact_person_id" Type="sms_communications_log" />
+      <Association Name="prospecting_person_title_prospecting_contact_person" Member="prospecting_person_title" ThisKey="person_title" OtherKey="prospecting_person_title_id" Type="prospecting_person_title" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.update_property_contact_detail_statistics" Method="update_property_contact_detail_statistics">

@@ -10,7 +10,6 @@ using System.Web.SessionState;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using System.Threading;
-using DataManager.Client;
 
 namespace ProspectingProject
 {
@@ -618,10 +617,6 @@ namespace ProspectingProject
             UserDataResponsePacket user = ProspectingCore.LoadUser(guid, sessionKey, impersonate);
             HttpContext.Current.Session["user"] = user;
             HttpContext.Current.Session["deleted_item_count"] = 0;
-
-            ClientManager clientManager = new ClientManager(DataManager.DomainTypes.ClientSystemContext.Prospecting, new SmartAdmin.Data.DataRepository(), user.UserGuid);
-            HttpContext.Current.Session["client_manager"] = clientManager;
-
             return ProspectingCore.SerializeToJsonWithDefaults(user);
         }
 
