@@ -14,7 +14,7 @@ namespace ProspectingTaskScheduler.Core.Housekeeping
         public static void SendHealthStatusEmail()
         {
             string body = "ProspectingTaskScheduler service running at " + DateTime.Now + " (local time on server)";
-            SendEmail("danie.vdm@seeff.com", "ProspectingTaskScheduler", "reports@seeff.com", "adam.roberts@seeff.com", "Notification from ProspectingTaskScheduler service", body);
+            SendEmail("danie.vdm@seeff.com", "ProspectingTaskScheduler", "reports@seeff.com", null, "Notification from ProspectingTaskScheduler service", body);
         }        
 
         public static void SendEmail(string toAddress, string displayName, string fromAddress, string ccAddress, string subject, string body)

@@ -104,7 +104,7 @@ namespace ProspectingProject
             if (contacts.Count == 0)
             {
                 string message = BuildReportsMessageForNoTrustees(result);
-                ProspectingCore.SendEmail("danie.vdm@seeff.com", "Prospecting Support", "reports@seeff.com", "adam.roberts@seeff.com", "reports@seeff.com", "Prospecting system notification", message, false);
+                ProspectingCore.SendEmail("danie.vdm@seeff.com", "Prospecting Support", "reports@seeff.com",null, "reports@seeff.com", "Prospecting system notification", message, false);
                 _results.EnquirySuccessful = false;
                 _results.ErrorMsg = "There was an issue retrieving trustees for this trust, Prospecting support has been notified about the issue.";
                 return;
