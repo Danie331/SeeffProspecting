@@ -311,6 +311,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProspectingReleaseBuilder",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProspectingTaskScheduler", "ProspectingTaskScheduler\ProspectingTaskScheduler.csproj", "{71927360-25E0-4990-9CD9-E91562C7249E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartAdmin", "..\..\SmartAdminNew\SmartAdmin\SmartAdmin\SmartAdmin.csproj", "{7F820608-E3CF-4330-AD42-07E205359C83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -345,6 +347,10 @@ Global
 		{71927360-25E0-4990-9CD9-E91562C7249E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71927360-25E0-4990-9CD9-E91562C7249E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71927360-25E0-4990-9CD9-E91562C7249E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F820608-E3CF-4330-AD42-07E205359C83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F820608-E3CF-4330-AD42-07E205359C83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F820608-E3CF-4330-AD42-07E205359C83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F820608-E3CF-4330-AD42-07E205359C83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

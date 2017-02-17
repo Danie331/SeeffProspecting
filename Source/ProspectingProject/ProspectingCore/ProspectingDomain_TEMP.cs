@@ -1232,6 +1232,10 @@ namespace ProspectingProject
                         };
                         prospecting.prospecting_contact_persons.InsertOnSubmit(newContact);
                         prospecting.SubmitChanges();
+
+                        // Submit record to the CMS
+                        //ClientIntegration.ClientSynchronizer.InsertNewClient(newContact.person_title, newContact.person_gender, newContact.firstname, newContact.surname, newContact.id_number, newContact.created_by);
+
                         incomingContact.ContactPersonId = newContact.contact_person_id;
 
                         if (dataPacket.ContactCompanyId.HasValue)
