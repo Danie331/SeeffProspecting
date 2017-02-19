@@ -15,53 +15,70 @@ namespace ProspectingProject.ClientIntegration
             try
             {
                 _dr = new SmartAdmin.Data.DataRepository();
-                using (var clientDB = new SmartAdmin.Data.ClientModule.clientEntities())
-                {
-                    _clientSystemID = clientDB.client_system.First(cs => cs.system_name == "Prospecting").pk_client_system_id;
-                }
+                _clientSystemID = _dr.GetProspectingClientSystemID();
             }
             catch (Exception ex)
             {
-                // Log
+                LogException(ex, "ClientSynchronizer()");
             }
         }
 
-        //public static void UpsertNewClient(int contactPersonID, int? personTitle, string personGender, string firstname, string surname, string idNumber, Guid? createdBy)
-        //{
-        //    // this method must go through the whole save and merge process and identify the client as coming from "Prospecting client system" + log error
-        //    try
-        //    {
-        //        int? registrationID = null;
-        //        if (createdBy.HasValue)
-        //        {
-        //            var user = _dr.FetchUserRegistrationByUserGuid(createdBy.Value.ToString());
-        //            registrationID = Convert.ToInt32(user.RegistrationId);
-        //        }
-        //        SmartAdmin.Models.ClientModels.Client newClient = new SmartAdmin.Models.ClientModels.Client() { ClientId = -1 };
-        //        newClient.Title = MapToClientTitle(personTitle);
-        //        newClient.Gender = MapToClientGender(personGender);
-        //        newClient.FirstName = firstname;
-        //        newClient.LastName = surname;
-        //        newClient.IDNumber = idNumber;
-        //        newClient.CreatedBy = registrationID;
+        public static void AddOrUpdateClientToCMS(int contactPersonID, int? personTitle, string personGender, string firstname, string surname, string idNumber, Guid? userGuid)
+        {
+            // this method must go through the whole save and merge process and identify the client as coming from "Prospecting client system" + log error
+            // check when adding new client with exiting ID number - OR- editing existing client to an ID number that already exists in CMS
+            //
+            try
+            {
+                int? title = MapToClientTitle(personTitle);
+                int? gender = MapToClientGender(personGender);
 
-        //        // check for existing client-system relationship and manually add one here if not found
-        //        using (var clientDB = new SmartAdmin.Data.ClientModule.clientEntities())
-        //        {
-        //            var clientExists = clientDB.search_client.FirstOrDefault(sc => sc.fk_client_system_id == _clientSystemID && sc.fk_system_client_id == contactPersonID);
-        //            if (clientExists != null)
-        //            {
-        //                int clientClientID = 
-        //            }
-        //        }
+                _dr.ExternalSaveClient(_clientSystemID, contactPersonID, title, gender, firstname, surname, idNumber, userGuid, true);
+            }
+            catch (Exception ex)
+            {
+                LogException(ex, "AddClientToCMS()");
+            }
+        }
 
-        //            var result = _dr.SaveClient(newClient, true);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // log
-        //    }
-        //}       
+        private static int? MapToClientGender(string personGender)
+        {
+            switch (personGender)
+            {
+                case "M": return 1;
+                default: return 2;
+            }
+        }
+
+        private static int? MapToClientTitle(int? personTitle)
+        {
+            if (personTitle == null) return null;
+
+            switch (personTitle)
+            {
+                case 1: return 2;
+                case 2: return 3;
+                case 3: return 4;
+                case 4: return 1;
+                default: return null;
+            }
+        }
+
+        private static void LogException(Exception ex, string invokingMethod)
+        {
+            using (var prospectingDb = new ProspectingDataContext())
+            {
+                var errorRec = new exception_log
+                {
+                    friendly_error_msg = "Error occurred in ClientSynchronizer." + invokingMethod,
+                    exception_string = ex.ToString(),
+                    user = RequestHandler.GetUserSessionObject().UserGuid,
+                    date_time = DateTime.Now
+                };
+                prospectingDb.exception_logs.InsertOnSubmit(errorRec);
+                prospectingDb.SubmitChanges();
+            }
+        }
 
     }
 }

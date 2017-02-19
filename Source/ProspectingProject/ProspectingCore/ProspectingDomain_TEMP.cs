@@ -1037,7 +1037,12 @@ namespace ProspectingProject
                             };
                             prospecting.prospecting_person_company_relationships.InsertOnSubmit(personCompanyRelation);
                         }
+
                         prospecting.SubmitChanges();
+
+                        // Update the client record
+                        var createdBy = contact.created_by != null ? contact.created_by : Guid.Parse((string)HttpContext.Current.Session["user_guid"]);
+                        ClientIntegration.ClientSynchronizer.AddOrUpdateClientToCMS(contact.contact_person_id, contact.person_title, contact.person_gender, contact.firstname, contact.surname, contact.id_number, createdBy);
 
                         // *** delete any existing relationship person-property relationship 
                         var personPropertyRelation = (from r in prospecting.prospecting_person_property_relationships
@@ -1052,6 +1057,10 @@ namespace ProspectingProject
                     }
                     else
                     {
+                        // Update the client record
+                        var createdBy = contact.created_by != null ? contact.created_by : Guid.Parse((string)HttpContext.Current.Session["user_guid"]);
+                        ClientIntegration.ClientSynchronizer.AddOrUpdateClientToCMS(contact.contact_person_id, contact.person_title, contact.person_gender, contact.firstname, contact.surname, contact.id_number, createdBy);
+
                         // This contact has a direct relationship to a property. Update the person-property relationship table
                         var personPropertyRelation = (from r in prospecting.prospecting_person_property_relationships
                                                       where r.contact_person_id == contact.contact_person_id &&
@@ -1198,6 +1207,10 @@ namespace ProspectingProject
                                 prospecting.SubmitChanges();
                             }
                         }
+
+                        // Update the client record
+                        var createdBy = contactWithExistingIDNumber.created_by != null ? contactWithExistingIDNumber.created_by : Guid.Parse((string)HttpContext.Current.Session["user_guid"]);
+                        ClientIntegration.ClientSynchronizer.AddOrUpdateClientToCMS(contactWithExistingIDNumber.contact_person_id, contactWithExistingIDNumber.person_title, contactWithExistingIDNumber.person_gender, contactWithExistingIDNumber.firstname, contactWithExistingIDNumber.surname, contactWithExistingIDNumber.id_number, createdBy);
                     }
                     else
                     {
@@ -1234,7 +1247,7 @@ namespace ProspectingProject
                         prospecting.SubmitChanges();
 
                         // Submit record to the CMS
-                        //ClientIntegration.ClientSynchronizer.InsertNewClient(newContact.person_title, newContact.person_gender, newContact.firstname, newContact.surname, newContact.id_number, newContact.created_by);
+                        ClientIntegration.ClientSynchronizer.AddOrUpdateClientToCMS(newContact.contact_person_id, newContact.person_title, newContact.person_gender, newContact.firstname, newContact.surname, newContact.id_number, newContact.created_by);
 
                         incomingContact.ContactPersonId = newContact.contact_person_id;
 
