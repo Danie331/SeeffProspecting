@@ -1579,12 +1579,6 @@
     <WCFMetadataStorage Include="Service References\ProspectingUserAuthService\" />
     <WCFMetadataStorage Include="Service References\SearchWorksAPI\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\SmartAdminNew\SmartAdmin\SmartAdmin\SmartAdmin.csproj">
-      <Project>{7f820608-e3cf-4330-ad42-07e205359c83}</Project>
-      <Name>SmartAdmin</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
