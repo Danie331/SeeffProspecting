@@ -1312,7 +1312,6 @@
     <Compile Include="agency.cs">
       <DependentUpon>ls_base.tt</DependentUpon>
     </Compile>
-    <Compile Include="ClientIntegration\ClientSynchronizer.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
