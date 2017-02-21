@@ -1,0 +1,217 @@
+﻿html, body, #googleMap {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y:hidden;
+}
+#googleMap {
+    position: relative;
+}
+
+#menu .ui-accordion-content
+{
+    padding: 10px;
+}
+
+.fieldAlignmentShortWidth {
+    display: inline-block;
+    width: 110px;
+    text-align: left; 
+}
+
+.fieldAlignmentExtraShortWidth {
+    display: inline-block;
+    width: 80px;
+    text-align: left; 
+}
+
+.legendIconStyle {
+    display: inline-block;
+    width:15px;
+    vertical-align:middle;
+    padding-left:10px;
+}
+
+.legendCaptionTextStyle {
+    padding-left: 2px;
+    padding-top:2px;
+    font-family: Verdana;
+    font-size: 11px;
+    font-weight:800;
+}
+
+.legendTextStyle {
+    display: inline-block;
+    padding-left: 22px;
+    font-family: Verdana;
+    font-size: 11px;
+}
+
+table {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+    white-space: nowrap;
+}
+table td {
+	border-width: 1px;
+	padding: 4px;
+	border-style: solid;
+	border-color: #666666;
+	/*background-color: #ffffff;*/
+    text-align:center; 
+    vertical-align:middle;
+}
+
+textarea
+{
+    resize: none;
+    cursor: pointer;
+}
+
+.contentdiv
+{
+    font-family: Verdana;
+    font-size: 12px;
+    margin: 10px 10px;
+}
+
+    .contentdiv > br
+    {
+        line-height:10px;
+        content: " ";
+    }
+
+#suburbsDiv > br
+{
+    line-height:8px;
+    content: " ";
+}
+
+.dialog > p
+{
+    font-family: Verdana;
+    font-size: 14px;  
+}
+
+.errorDialog
+{
+    font-family: Verdana;
+    font-size: 12px;  
+}
+
+.ui-dialog-title
+{
+    font-family: Verdana;
+    font-size: 14px;  
+}
+.ui-dialog
+{ 
+    margin-right: 100px;
+    /*overflow: inherit;*/
+}
+
+/* loading - the AJAX indicator */
+.ui-autocomplete-loading {
+    background: white url('../../Assets/autocompleteloader.gif') right center no-repeat;
+}
+ 
+/* scroll results */
+.ui-autocomplete {
+    max-height: 250px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding for vertical scrollbar */
+    padding-right: 5px;
+
+    z-index: 1000 !important;
+}
+ 
+.ui-autocomplete li {
+    font-size: 16px;
+}
+
+.suburbsContentTbl
+{
+    /*width:75%;*/
+    /*text-align:left;*/
+}
+.suburbsContentTbl  td
+{
+     text-align:left;
+     width:100px;
+     padding-left: 10px;
+	border-style: none;
+}
+
+.suburbsHeaderTbl td
+{
+    /*width:75%;*/
+    width: 100px;
+    /*text-align: left;*/
+    /*padding: 10px;*/
+    /*word-wrap:break-word;*/
+    /*border-style: none;*/
+    font: bold;
+    border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+
+.suburbsHeaderTbl
+{
+     /*width:75%;*/
+     /*table-layout: fixed;*/
+     /*text-align:left;*/
+}
+
+.seeff_sale_ss_unit {
+     position: relative;
+}
+
+.seeff_sale_ss_unit:after {
+     content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+	width: 0; 
+	height: 0; 
+    display: block;
+	border-left: 40px solid transparent;
+	border-bottom: 40px solid transparent;	
+	border-top: 40px solid #000070;
+}
+
+.cool_btn_style {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #ffffff;
+    padding: 10px 20px;
+    background: -moz-linear-gradient( top, #6b6b6b 0%, #000000);
+    background: -webkit-gradient( linear, left top, left bottom, from(#6b6b6b), to(#000000));
+    -moz-border-radius: 30px;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
+    border: 1px solid #000000;
+    -moz-box-shadow: 0px 1px 3px rgba(000,000,000,0.5), inset 0px 0px 1px rgba(255,255,255,0.7);
+    -webkit-box-shadow: 0px 1px 3px rgba(000,000,000,0.5), inset 0px 0px 1px rgba(255,255,255,0.7);
+    box-shadow: 0px 1px 3px rgba(000,000,000,0.5), inset 0px 0px 1px rgba(255,255,255,0.7);
+    text-shadow: 0px -1px 0px rgba(000,000,000,0.4), 0px 1px 0px rgba(255,255,255,0.3);
+    cursor: pointer;
+}
+
+.cool_btn_style:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
