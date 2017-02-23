@@ -1,0 +1,71 @@
+﻿
+             a
+            {
+                cursor:pointer;
+                text-decoration:none;
+            }
+                a:hover
+                {
+                    color: red;
+                }
+
+            #map_canvas
+            {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                float: right;
+            }
+
+          #mainpanel
+            {
+                 position: absolute;
+                 height: 100%;
+                 width: 50%;
+                 background: white;
+                 float: left;  
+                 color: black;
+                 z-index: 999;
+                 border-radius:10px;
+                 border-right:1px solid grey;
+                 overflow: hidden;                
+                 /*min-height: 50%;*/
+            }
+
+            #openpanelbutton
+            {
+                position: absolute;
+                height: 25px;
+                 width: 25px;
+                 float: left;  
+                 z-index: 999;
+                 border-radius:10px;
+                 cursor: pointer;
+            }
+
+            #panelheader
+            {
+                height:80px;
+                border: 1px solid #E0E0E0;
+            }
+
+            #menuitempanel
+            {
+                /*display:inline-block;*/
+                float:left;
+                height:100%;
+                border-right: 2px solid #E0E0E0;
+                padding-right: 5px;
+            }
+
+            #contentarea
+            {
+                overflow-y:auto;
+                height:90%;
+            }
+
+            #menuitempanel
+            {
+                font-family:Verdana;
+                font-size: 12px;
+            }

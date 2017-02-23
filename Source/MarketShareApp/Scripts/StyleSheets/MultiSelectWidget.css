@@ -1,0 +1,75 @@
+﻿
+.multiSelectDialogDiv
+{
+    display: none;
+    overflow-y: hidden;
+}
+
+
+.multiSelectCaptionsDiv
+{
+    font-family: Verdana;
+    font-size: 14px;
+}
+
+.multiSelectLeftPanelCaption
+{
+    display: inline;
+    float: left;
+}
+
+.multiSelectRightPanelCaption
+{
+    display: inline;
+    float: right;
+    /*padding-right: 110px;*/
+    width: 200px;
+}
+
+.multiSelectLeftSelectorDiv
+{
+    display: inline-block;
+    position: relative;
+    float:left;
+    vertical-align: top;
+    overflow: hidden;
+    width: 200px;
+    border: 1px silver solid;
+}
+
+select.multiSelectLeftSelect
+{
+    border: none;
+    font-family: Verdana;
+    font-size: 12px;
+    width: 100%;
+}
+
+.multiSelectControlsDiv
+{
+    display: inline-block;
+    position: absolute;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    left: 46%;
+    margin-top: 15%;
+}
+
+.multiSelectRightSelectorDiv
+{
+    display: inline-block;
+    position: relative;
+    float: right;
+    overflow: hidden;
+    width: 200px;
+    border: 1px silver solid;
+}
+
+select.multiSelectRightSelect
+{
+    border: none;
+    font-family: Verdana;
+    font-size: 12px;
+    width: 100%;
+}
