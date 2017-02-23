@@ -10,6 +10,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Hosting;
+using ProspectingTaskScheduler.Core.ClientSynchronisation;
 
 namespace ProspectingTaskScheduler.App_Start
 {
@@ -84,6 +85,8 @@ namespace ProspectingTaskScheduler.App_Start
             RecurringJob.AddOrUpdate("Lightstone base_data take-on", () => LightstoneTakeOn.PerformBaseDataTakeOn(), Cron.Daily(22), TimeZoneInfo.Local);
 
             RecurringJob.AddOrUpdate("Synchronising spatial areas with seeff.com", () => SuburbMaintenance.SynchroniseSuburbNames(), Cron.Daily(6), TimeZoneInfo.Local);
+
+            RecurringJob.AddOrUpdate("Synchronising Prospecting contact information to CMS", () => ProspectingToCmsClientSynchroniser.Synchronise(), Cron.MinuteInterval(30));
         }
     }
 }
