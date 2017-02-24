@@ -46,6 +46,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
         private static void AddNewContactDetailsToCMS()
         {
             bool success = true;
+            int recordCount = 0;
             try
             {
                 using (var prospecting = new ProspectingDataContext())
@@ -82,6 +83,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
                     var resultSet = clientDb.Database.SqlQuery<ProspectingContactDetailRecord>(query).ToList();
                     foreach (var item in resultSet)
                     {
+                        string contactValue = item.contact_detail + (item.eleventh_digit.HasValue ? item.eleventh_digit.ToString() : "");
                         int contactDetailType = MapToClientContactDetailType(item.contact_detail_type);
                         int contactDetailLocationType = MapToClientContactDetailLocationType(item.contact_detail_type);
                         int? dialingCode = item.intl_dialing_code_id == 1 ? 205 : (int?)null;
@@ -93,7 +95,8 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
                         {
                             createdByUserGuid = createdByUser.Value;
                         }
-                        dr.ExternalAddClientContactDetail(prospectingClientSystemID, item.contact_person_id, item.contact_detail, contactDetailType, contactDetailLocationType, dialingCode, item.is_primary_contact, createdByUserGuid, clientDb);
+                        dr.ExternalAddClientContactDetail(prospectingClientSystemID, item.contact_person_id, contactValue, contactDetailType, contactDetailLocationType, dialingCode, item.is_primary_contact, createdByUserGuid);
+                        recordCount++;
                     }
                 }
             }
@@ -106,13 +109,14 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
 
             if (success)
             {
-                LogSucess("AddNewContactDetailsToCMS() completed successfully.");
+                LogSucess("AddNewContactDetailsToCMS() completed successfully: " + recordCount + " records added.");
             }
         }
 
         private static void UpdateExistingClientsOnCMS()
         {
             bool success = true;
+            int recordCount = 0;
             try
             {
                 using (var prospecting = new ProspectingDataContext())
@@ -133,7 +137,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
 		                                        (case c.gender
 		                                           when 1 then 'M'
 		                                           when 2 then 'F'
-		                                           else null
+		                                           else ''
 		                                           end) person_gender, -- special case here ignore if null
 		                                          c.first_name firstname,
 		                                          c.middle_name,
@@ -145,7 +149,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
                                         select distinct pcp.contact_person_id
                                         from seeff_prospecting.dbo.prospecting_contact_person pcp
                                         join cte c on c.contact_person_id = pcp.contact_person_id
-                                        where c.person_title != pcp.person_title OR 
+                                        where isnull(c.person_title,0) != isnull(pcp.person_title,0) OR 
 	                                          c.person_gender != pcp.person_gender OR
 	                                          concat(ltrim(rtrim(c.firstname)), ' ', ltrim(rtrim(c.middle_name)))  != ltrim(rtrim(pcp.firstname)) OR
 	                                          ltrim(rtrim(c.surname)) != ltrim(rtrim(pcp.surname)) OR
@@ -176,6 +180,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
                             createdByUserGuid = createdByUser.Value;
                         }
                         dr.ExternalSaveClient(prospectingClientSystemID, contactPersonID, title, gender, firstName, middleName, surname, contactRecord.id_number, createdByUserGuid);
+                        recordCount++;
                     }
                 }
             }
@@ -188,13 +193,14 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
 
             if (success)
             {
-                LogSucess("UpdateExistingClientsOnCMS() completed successfully.");
+                LogSucess("UpdateExistingClientsOnCMS() completed successfully: " + recordCount + " existing clients updated.");
             }
         }
 
         private static void AddNewClientsToCMS()
         {
             bool success = true;
+            int recordCount = 0;
             try
             {
                 using (var prospecting = new ProspectingDataContext())
@@ -206,7 +212,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
                     string deltaQuery = @"select contact_person_id from seeff_prospecting.dbo.prospecting_contact_person
                                             left join client.dbo.client on id_number = identity_number
                                             where identity_number is null and (deleted is null or deleted = 0)";
-                    var resultSet = clientDb.Database.SqlQuery<int>(deltaQuery);
+                    var resultSet = clientDb.Database.SqlQuery<int>(deltaQuery).ToList();
                     foreach (var contactPersonID in resultSet)
                     {
                         var contactRecord = prospecting.prospecting_contact_persons.First(cp => cp.contact_person_id == contactPersonID);
@@ -231,6 +237,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
                             createdByUserGuid = createdByUser.Value;
                         }
                         dr.ExternalSaveClient(prospectingClientSystemID, contactPersonID, title, gender, firstName, middleName, surname, contactRecord.id_number, createdByUserGuid);
+                        recordCount++;
                     }
                 }
             }
@@ -243,7 +250,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
 
             if (success)
             {
-                LogSucess("AddNewClientsToCMS() completed successfully.");
+                LogSucess("AddNewClientsToCMS() completed successfully: " + recordCount + " new clients added.");
             }
         }
 
@@ -348,7 +355,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
             string emailFromAddress = "reports@seeff.com";
             string emaiLSubject = "Exception occurred in ProspectingToCmsClientSynchroniser." + methodName;
 
-            StatusNotifier.SendEmail(emailToAddress, emailDisplayName, emailFromAddress, null, emaiLSubject, message);
+            //StatusNotifier.SendEmail(emailToAddress, emailDisplayName, emailFromAddress, null, emaiLSubject, message);
         }
     }
 
