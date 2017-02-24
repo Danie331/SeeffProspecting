@@ -30,3 +30,11 @@
 /SeeffSpatial/SeeffSpatial/.vs/config
 /SeeffSpatial/SeeffSpatial/.vs/SeeffSpatial/v14/.suo
 /Source/ProspectingTaskScheduler/ProspectingTaskScheduler.csproj.user
+/Source/DataManager/obj/Release
+/Source/MarketShareApp/obj/Release
+/Source/MarketShareProjectReleaseBuilder/obj/Release
+/Source/ProspectingProject/obj/Release
+/Source/ProspectingReleaseBuilder/obj/Release
+/Source/ProspectingTaskScheduler/obj/Release
+/Source/ProspectingTaskScheduler/Properties/PublishProfiles
+/Source/SeeffProspectingAuthorisationService/SeeffProspectingAuthService/SeeffProspectingAuthService/obj/Release

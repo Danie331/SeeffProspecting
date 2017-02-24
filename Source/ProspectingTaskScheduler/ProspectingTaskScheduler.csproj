@@ -299,6 +299,7 @@
     <Content Include="SeeffDeeds.edmx.diagram">
       <DependentUpon>SeeffDeeds.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\Default_seeff_work.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
