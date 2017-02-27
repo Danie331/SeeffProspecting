@@ -13,7 +13,8 @@ msApp.administration = {
         $('#manageDevelopersOption').empty();
         var manageDevelopersOption = buildContentExpanderItem('manageDevelopersOption', '', "Manage Property Developers", msApp.administration.buildManageDevelopersHtml());
 
-        if (initializationData.UserGuid == '62a85a9d-be7a-4fad-b704-a55edb1d338f' || initializationData.UserGuid == 'a2c48f98-14fb-425e-bbd2-312cfb89980c') {
+        var adminUsers = initializationData.AdminUserList.split(',');
+        if (adminUsers.indexOf(initializationData.UserGuid) > -1) {
             $('#manageAddNewAgenciesOption').empty();
             var manageAddNewAgenciesOption = buildContentExpanderItem('manageAddNewAgenciesOption', '', "Manage Agencies", msApp.administration.buildManageAddNewAgenciesHtml());
             msApp.administration.expanderWidget = new ContentExpanderWidget('#contentarea', [autoFateOption, manageDevelopersOption, manageAddNewAgenciesOption], "adminExpander");

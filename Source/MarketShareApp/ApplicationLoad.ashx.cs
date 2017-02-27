@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.SessionState;
+using System.Configuration;
 
 namespace MarketShareApp
 {
@@ -28,6 +29,8 @@ namespace MarketShareApp
                 string sessionKey = (string)HttpContext.Current.Session["session_key"];
 
                 // Success
+                initPacket.AdminUserList = System.Configuration.ConfigurationManager.AppSettings["add_agency_permission"]; ;
+
                 initPacket.UserGuid = userGuid;
                 initPacket.UserDesignation = "licensee";
 

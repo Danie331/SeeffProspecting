@@ -38,3 +38,6 @@
 /Source/ProspectingTaskScheduler/obj/Release
 /Source/ProspectingTaskScheduler/Properties/PublishProfiles
 /Source/SeeffProspectingAuthorisationService/SeeffProspectingAuthService/SeeffProspectingAuthService/obj/Release
+/Source/DataManager/bin/Release
+/Source/MarketShareApp/Properties/PublishProfiles
+/Source/MarketShareApp/MarketShareApp.csproj.user

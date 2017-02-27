@@ -14,4 +14,5 @@ public class AppInitializationData
 
     public bool Authenticated { get; set; }
     public string AuthMessage { get; set; }
+    public string AdminUserList { get; internal set; }
 }

@@ -167,6 +167,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\MS_publish.pubxml" />
     <None Include="Service References\AuthService\SeeffProspectingAuthService.disco" />
     <None Include="Service References\AuthService\configuration91.svcinfo" />
     <None Include="Service References\AuthService\configuration.svcinfo" />
