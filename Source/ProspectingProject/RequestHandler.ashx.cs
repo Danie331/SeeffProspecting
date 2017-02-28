@@ -358,7 +358,7 @@ namespace ProspectingProject
         private string ValidatePersonIdNumber(string json)
         {
             string idNumber = ProspectingCore.Deserialise<ProspectingContactPerson>(json).IdNumber;
-            var validationResult = ProspectingCore.ValidatePersonIdNumber(idNumber);
+            var validationResult = ProspectingCore.HasValidSAIdentityNumber(idNumber);
             return ProspectingCore.SerializeToJsonWithDefaults(validationResult);
         }
 

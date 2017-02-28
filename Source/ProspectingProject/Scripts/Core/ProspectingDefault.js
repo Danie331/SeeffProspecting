@@ -1418,7 +1418,8 @@ function drawPolygonForSuburb(suburb) {
     var poly = new google.maps.Polygon({
         paths: coords,
         editable: false,
-        fillOpacity: '0.0'
+        //fillOpacity: '0.0',
+        strokeColor: '#FF0000'
     });
 
     poly.setMap(map);

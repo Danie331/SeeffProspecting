@@ -3610,23 +3610,6 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
             return items.OrderByDescending(f => f.DateSent).ToList();
         }
 
-        public static IDValidationResult ValidatePersonIdNumber(string json)
-        {
-            IDValidationResult result = new IDValidationResult();
-            try
-            {
-                IdValidatorService.SAIDValidator client = new IdValidatorService.SAIDValidator();
-                var resultType = client.ValidateIdString(null, json);
-
-                result.Result = resultType.Valid;
-            }
-            catch (Exception)
-            {
-                result.ErrorMessage = "Service not available. Please try again later.";
-            }
-            return result;
-        }
-
         public static ReferralResponseObject GenerateReferralDetails(ReferralInputDetails inputDetails)
         {
             ReferralResponseObject result = new ReferralResponseObject { InstanceValidationErrors = new List<string>() };
@@ -4126,6 +4109,50 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
 
                 return response;
             }
+        }
+
+        public static IDValidationResult HasValidSAIdentityNumber(string idNumber)
+        {
+            int d = -1;
+            try
+            {
+                if (string.IsNullOrWhiteSpace(idNumber) || idNumber.Length != 13)
+                    return new IDValidationResult { Result = false };
+                string dob = idNumber.Substring(0, 6);
+                DateTime dobResult;
+                if (!DateTime.TryParseExact(dob, "yyMMdd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dobResult))
+                    return new IDValidationResult { Result = false };
+                if (!new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }.Any(ch => ch == idNumber[6]))
+                    return new IDValidationResult { Result = false };
+                if (!new char[] { '0', '1' }.Any(ch => ch == idNumber[10]))
+                    return new IDValidationResult { Result = false };
+
+                int a = 0;
+                for (int i = 0; i < 6; i++)
+                {
+                    a += int.Parse(idNumber[2 * i].ToString());
+                }
+                int b = 0;
+                for (int i = 0; i < 6; i++)
+                {
+                    b = b * 10 + int.Parse(idNumber[2 * i + 1].ToString());
+                }
+                b *= 2;
+                int c = 0;
+                do
+                {
+                    c += b % 10;
+                    b = b / 10;
+                }
+                while (b > 0);
+                c += a;
+                d = 10 - (c % 10);
+                if (d == 10) d = 0;
+            }
+            catch {/*ignore*/}
+            bool result = d != -1 && idNumber[12].ToString() == d.ToString();
+
+            return new IDValidationResult { Result = result };
         }
 
         //public static MandateSaveResult SaveMandate(NewMandateInputs newMandateData)

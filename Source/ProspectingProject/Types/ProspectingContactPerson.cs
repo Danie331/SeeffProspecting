@@ -8,6 +8,7 @@ namespace ProspectingProject
     // Update DB diagram + S
     public class ProspectingContactPerson : IProspectingContactEntity
     {
+        private string _idNumber;
         public ProspectingContactPerson()
         {
             PersonPropertyRelationships = new List<KeyValuePair<int, int>>();
@@ -16,7 +17,15 @@ namespace ProspectingProject
         private ContactEntityType entityType;
 
         public int? ContactPersonId { get; set; }
-        public string IdNumber { get; set; }
+        public string IdNumber
+        {
+            get { return _idNumber; }
+            set
+            {
+                _idNumber = value;
+                HasValidID = ProspectingCore.HasValidSAIdentityNumber(value).Result;
+            }
+        }
         public string Firstname { get; set; }
         public string Surname { get; set; }
         public string Company { get; set; }
@@ -81,5 +90,7 @@ namespace ProspectingProject
 
         public string TargetContactEmailAddress { get; set; }
         public string TargetContactCellphoneNumber { get; set; }
+
+        public bool HasValidID { get; private set; }
     }
 }
