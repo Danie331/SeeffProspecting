@@ -1413,6 +1413,7 @@
     <Compile Include="Types\ActivitiesFollowupsFilterResponse.cs" />
     <Compile Include="Types\ActivitiesFollowupsPivotRow.cs" />
     <Compile Include="Types\ActivityBundle.cs" />
+    <Compile Include="Types\GeneratedIdentifier.cs" />
     <Compile Include="Types\MandateLookupDataPacket.cs" />
     <Compile Include="Types\CommReportFilters.cs" />
     <Compile Include="Types\CommReportResults.cs" />

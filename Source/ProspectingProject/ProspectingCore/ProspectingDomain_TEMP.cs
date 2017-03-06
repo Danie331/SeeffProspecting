@@ -982,43 +982,51 @@ namespace ProspectingProject
             using (var prospecting = new ProspectingDataContext())
             {
                 var incomingContact = dataPacket.ContactPerson;
-                var contact = (from c in prospecting.prospecting_contact_persons
+                var contactRecord = (from c in prospecting.prospecting_contact_persons
                                where c.contact_person_id == dataPacket.ContactPerson.ContactPersonId
                                select c).FirstOrDefault();
-                if (contact != null)
+                int uniqueContactsByIDForNewID = 1;
+                if (contactRecord != null)
+                {
+                    // Find all existing contacts with the ID number of the source contact
+                    uniqueContactsByIDForNewID = prospecting.prospecting_contact_persons.Count(cp => cp.id_number == incomingContact.IdNumber);
+                }
+                if (contactRecord != null && (uniqueContactsByIDForNewID == 1 || uniqueContactsByIDForNewID == 0))
                 {
                     // Update contact person
-                    contact.person_title = incomingContact.Title.HasValue ? (int?)incomingContact.Title.Value : null;
-                    contact.firstname = incomingContact.Firstname;
-                    contact.surname = incomingContact.Surname;
-                    contact.id_number = incomingContact.IdNumber;
-                    contact.person_gender = incomingContact.Gender;
-                    contact.updated_date = DateTime.Now;
-                    contact.comments_notes = incomingContact.Comments;
-                    contact.is_popi_restricted = incomingContact.IsPOPIrestricted;
+                    contactRecord.person_title = incomingContact.Title.HasValue ? (int?)incomingContact.Title.Value : null;
+                    contactRecord.firstname = incomingContact.Firstname;
+                    contactRecord.surname = incomingContact.Surname;
+                    contactRecord.id_number = incomingContact.IdNumber;
+                    contactRecord.person_gender = incomingContact.Gender;
+                    contactRecord.updated_date = DateTime.Now;
+                    contactRecord.comments_notes = incomingContact.Comments;
+                    contactRecord.is_popi_restricted = incomingContact.IsPOPIrestricted;
 
-                    contact.deceased_status = incomingContact.DeceasedStatus;
-                    contact.age_group = incomingContact.AgeGroup;
-                    contact.location = incomingContact.Location;
-                    contact.marital_status = incomingContact.MaritalStatus;
-                    contact.home_ownership = incomingContact.HomeOwnership;
-                    contact.directorship = incomingContact.Directorship;
-                    contact.physical_address = incomingContact.PhysicalAddress;
-                    contact.employer = incomingContact.Employer;
-                    contact.occupation = incomingContact.Occupation;
-                    contact.bureau_adverse_indicator = incomingContact.BureauAdverseIndicator;
-                    contact.citizenship = incomingContact.Citizenship;
+                    contactRecord.deceased_status = incomingContact.DeceasedStatus;
+                    contactRecord.age_group = incomingContact.AgeGroup;
+                    contactRecord.location = incomingContact.Location;
+                    contactRecord.marital_status = incomingContact.MaritalStatus;
+                    contactRecord.home_ownership = incomingContact.HomeOwnership;
+                    contactRecord.directorship = incomingContact.Directorship;
+                    contactRecord.physical_address = incomingContact.PhysicalAddress;
+                    contactRecord.employer = incomingContact.Employer;
+                    contactRecord.occupation = incomingContact.Occupation;
+                    contactRecord.bureau_adverse_indicator = incomingContact.BureauAdverseIndicator;
+                    contactRecord.citizenship = incomingContact.Citizenship;
 
-                    contact.optout_emails = incomingContact.EmailOptout;
-                    contact.optout_sms = incomingContact.SMSOptout;
-                    contact.do_not_contact = incomingContact.DoNotContact;
+                    contactRecord.optout_emails = incomingContact.EmailOptout;
+                    contactRecord.optout_sms = incomingContact.SMSOptout;
+                    contactRecord.do_not_contact = incomingContact.DoNotContact;
+
+                    prospecting.SubmitChanges();
 
                     if (dataPacket.ContactCompanyId.HasValue)
                     {
                         // This contact has a relationship with a company as opposed to a property
                         var personCompanyRelation = (from r in prospecting.prospecting_person_company_relationships
                                                      join q in prospecting.prospecting_company_property_relationships on r.contact_company_id equals q.contact_company_id
-                                                     where r.contact_person_id == contact.contact_person_id && q.prospecting_property_id == dataPacket.ProspectingPropertyId
+                                                     where r.contact_person_id == contactRecord.contact_person_id && q.prospecting_property_id == dataPacket.ProspectingPropertyId
                                                      select r).FirstOrDefault();
                         if (personCompanyRelation != null)
                         {
@@ -1030,7 +1038,7 @@ namespace ProspectingProject
                         {
                             personCompanyRelation = new prospecting_person_company_relationship
                             {
-                                contact_person_id = contact.contact_person_id,
+                                contact_person_id = contactRecord.contact_person_id,
                                 contact_company_id = dataPacket.ContactCompanyId,
                                 relationship_to_company = incomingContact.PersonCompanyRelationshipType,
                                 created_date = DateTime.Now
@@ -1042,7 +1050,7 @@ namespace ProspectingProject
 
                         // *** delete any existing relationship person-property relationship 
                         var personPropertyRelation = (from r in prospecting.prospecting_person_property_relationships
-                                                      where r.contact_person_id == contact.contact_person_id &&
+                                                      where r.contact_person_id == contactRecord.contact_person_id &&
                                                       r.prospecting_property_id == dataPacket.ProspectingPropertyId
                                                       select r).FirstOrDefault();
                         if (personPropertyRelation != null)
@@ -1055,7 +1063,7 @@ namespace ProspectingProject
                     {
                         // This contact has a direct relationship to a property. Update the person-property relationship table
                         var personPropertyRelation = (from r in prospecting.prospecting_person_property_relationships
-                                                      where r.contact_person_id == contact.contact_person_id &&
+                                                      where r.contact_person_id == contactRecord.contact_person_id &&
                                                       r.prospecting_property_id == dataPacket.ProspectingPropertyId
                                                       select r).FirstOrDefault();
                         if (incomingContact.PersonPropertyRelationships == null || incomingContact.PersonPropertyRelationships.Count == 0)
@@ -1075,7 +1083,7 @@ namespace ProspectingProject
                             // New person-property relationship
                             personPropertyRelation = new prospecting_person_property_relationship
                             {
-                                contact_person_id = contact.contact_person_id,
+                                contact_person_id = contactRecord.contact_person_id,
                                 prospecting_property_id = dataPacket.ProspectingPropertyId.Value,
                                 relationship_to_property = GetPersonRelationshipToProperty(dataPacket.ProspectingPropertyId, incomingContact.PersonPropertyRelationships),
                                 created_date = DateTime.Now
@@ -1087,7 +1095,7 @@ namespace ProspectingProject
                         // Delete an existing company relationship if exists
                         var personCompanyRelation = (from r in prospecting.prospecting_person_company_relationships
                                                      join q in prospecting.prospecting_company_property_relationships on r.contact_company_id equals q.contact_company_id
-                                                     where r.contact_person_id == contact.contact_person_id && q.prospecting_property_id == dataPacket.ProspectingPropertyId
+                                                     where r.contact_person_id == contactRecord.contact_person_id && q.prospecting_property_id == dataPacket.ProspectingPropertyId
                                                      select r).FirstOrDefault();
                         if (personCompanyRelation != null)
                         {
@@ -1146,6 +1154,32 @@ namespace ProspectingProject
                             contactWithExistingIDNumber.surname = dataPacket.ContactPerson.Surname;
                             prospecting.SubmitChanges();
                         }
+
+                        // Update contact person (should we overwrite here??)
+                        //contactWithExistingIDNumber.person_title = incomingContact.Title.HasValue ? (int?)incomingContact.Title.Value : null;
+                        //contactWithExistingIDNumber.firstname = incomingContact.Firstname;
+                        //contactWithExistingIDNumber.surname = incomingContact.Surname;
+                        //contactWithExistingIDNumber.id_number = incomingContact.IdNumber;
+                        //contactWithExistingIDNumber.person_gender = incomingContact.Gender;
+                        //contactWithExistingIDNumber.updated_date = DateTime.Now;
+                        //contactWithExistingIDNumber.comments_notes = incomingContact.Comments;
+                        //contactWithExistingIDNumber.is_popi_restricted = incomingContact.IsPOPIrestricted;
+                        //contactWithExistingIDNumber.deceased_status = incomingContact.DeceasedStatus;
+                        //contactWithExistingIDNumber.age_group = incomingContact.AgeGroup;
+                        //contactWithExistingIDNumber.location = incomingContact.Location;
+                        //contactWithExistingIDNumber.marital_status = incomingContact.MaritalStatus;
+                        //contactWithExistingIDNumber.home_ownership = incomingContact.HomeOwnership;
+                        //contactWithExistingIDNumber.directorship = incomingContact.Directorship;
+                        //contactWithExistingIDNumber.physical_address = incomingContact.PhysicalAddress;
+                        //contactWithExistingIDNumber.employer = incomingContact.Employer;
+                        //contactWithExistingIDNumber.occupation = incomingContact.Occupation;
+                        //contactWithExistingIDNumber.bureau_adverse_indicator = incomingContact.BureauAdverseIndicator;
+                        //contactWithExistingIDNumber.citizenship = incomingContact.Citizenship;
+                        //contactWithExistingIDNumber.optout_emails = incomingContact.EmailOptout;
+                        //contactWithExistingIDNumber.optout_sms = incomingContact.SMSOptout;
+                        //contactWithExistingIDNumber.do_not_contact = incomingContact.DoNotContact;
+
+                        prospecting.SubmitChanges();
 
                         if (dataPacket.ContactCompanyId.HasValue)
                         {
@@ -2086,22 +2120,7 @@ namespace ProspectingProject
             // Just birthday digits available
             if (idNumber.Length == 6 && int.TryParse(idNumber, out nr))
             {
-                // Take the whole surname. If the surname is fewer than 7 characters then pad the rest
-                if (string.IsNullOrWhiteSpace(surname) || surname.Length < 7)
-                {
-                    surname = surname.PadRight(7, 'X');
-                }
-
-                if ((surname.Length + idNumber.Length) > 13)
-                {
-                    surname = surname.Substring(0, 7);
-                }
-
-                string result = string.Concat(idNumber, surname);
-                if (result.Length > 13)
-                {
-                    result = new string(result.Take(13).ToArray());
-                }
+                string result = GeneratePseudoIdentifier();
                 return result;
             }
 
@@ -4153,6 +4172,30 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
             bool result = d != -1 && idNumber[12].ToString() == d.ToString();
 
             return new IDValidationResult { Result = result };
+        }
+
+        public static string GeneratePseudoIdentifier()
+        {
+            string newIdentifier = "#";
+            Random random = new Random();
+            while (true)
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    int digit = random.Next(0, 9);
+                    newIdentifier += digit;
+                }
+
+                using (var prospecting = new ProspectingDataContext())
+                {
+                    var contactWithExistingIDNumber = prospecting.prospecting_contact_persons.FirstOrDefault(cp => cp.id_number == newIdentifier);
+                    if (contactWithExistingIDNumber == null)
+                        break;
+                }
+                newIdentifier = "#";
+            }
+
+            return newIdentifier;
         }
 
         //public static MandateSaveResult SaveMandate(NewMandateInputs newMandateData)

@@ -232,6 +232,10 @@ namespace ProspectingProject
                         string updatedCompanyName = UpdateCompanyName(json);
                         context.Response.Write(updatedCompanyName);
                         break;
+                    case "generate_pseudo_identifier":
+                        string identifier = GeneratePseudoIdentifier();
+                        context.Response.Write(identifier);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -264,6 +268,13 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string GeneratePseudoIdentifier()
+        {
+            string result = ProspectingCore.GeneratePseudoIdentifier();
+            GeneratedIdentifier newIDContainer = new GeneratedIdentifier { GeneratedID = result };
+            return Newtonsoft.Json.JsonConvert.SerializeObject(newIDContainer);
         }
 
         //private string SaveMandate(string json)

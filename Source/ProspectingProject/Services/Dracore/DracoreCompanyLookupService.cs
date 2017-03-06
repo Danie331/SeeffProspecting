@@ -153,44 +153,60 @@ namespace ProspectingProject
                         }
 
                         string firstname = directorPerson.FirstNames;
-                        if (string.IsNullOrWhiteSpace(firstname))
+                        string surname = directorPerson.Surname;
+                        string idNumber = directorPerson.IdentityNumber;
+
+                        bool recordHasAtLeastOneField = (!string.IsNullOrEmpty(firstname) && firstname != "-") ||
+                                                                                (!string.IsNullOrEmpty(surname) && surname != "-") ||
+                                                                                (!string.IsNullOrEmpty(idNumber) && idNumber != "-");
+                        if (!recordHasAtLeastOneField) continue;
+
+                        if (string.IsNullOrWhiteSpace(firstname) || firstname == "-")
                         {
                             firstname = "(unknown firstname)";
                         }
-                        string surname = directorPerson.Surname;
-                        if (string.IsNullOrWhiteSpace(surname))
+                        if (string.IsNullOrWhiteSpace(surname) || surname == "-")
                         {
                             surname = "(unknown surname)";
                         }
-                        if (!string.IsNullOrEmpty(directorPerson.IdentityNumber) && directorPerson.IdentityNumber.Length == 13)
-                        {
-                            string gender;
-                            switch (directorPerson.Gender)
-                            {
-                                case GenderEnum.Male: gender = "M"; break;
-                                case GenderEnum.Female: gender = "F"; break;
-                                default: gender = ProspectingCore.DetermineOwnerGender(directorPerson.IdentityNumber); break;
-                            }
 
-                            var titleKvp = /*!string.IsNullOrEmpty(directorPerson.) ? ProspectingLookupData.ContactPersonTitle.FirstOrDefault(cpt => cpt.Value.ToLower() == directorPerson.Salutation.ToLower()) :*/ default(KeyValuePair<int, string>);
-                            ContactDataPacket contactDataPacket = new ContactDataPacket { ContactCompanyId = _company.contact_company_id, ProspectingPropertyId = _prospectingPropertyId };
-                            ProspectingContactPerson newContact = new ProspectingContactPerson
-                            {
-                                IdNumber = directorPerson.IdentityNumber,
-                                Title = !Equals(titleKvp, default(KeyValuePair<int, string>)) ? (int?)titleKvp.Key : null,
-                                Gender = gender,
-                                Firstname = firstname,
-                                Surname = surname,
-                                ContactCompanyId = _company.contact_company_id,
-                                Directorship = "Yes",
-                                PersonCompanyRelationshipType = relationshipToCompany
-                                // TODO: Rem to add phone no's + email addresses if they are available???
-                            };
-                            contactDataPacket.ContactPerson = newContact;
-                            var prospectingContactPerson = ProspectingCore.SaveContactPerson(contactDataPacket);
-                            prospectingContactPersons.Add(prospectingContactPerson);
-                            atLeastOneDirectorSaved = true;
+                        bool validId = ProspectingCore.HasValidSAIdentityNumber(idNumber).Result;
+
+                        string gender;
+                        switch (directorPerson.Gender)
+                        {
+                            case GenderEnum.Male: gender = "M"; break;
+                            case GenderEnum.Female: gender = "F"; break;
+                            default: gender = validId ? ProspectingCore.DetermineOwnerGender(directorPerson.IdentityNumber) : "M"; break;
                         }
+                        if (string.IsNullOrEmpty(gender))
+                        {
+                            gender = "M";
+                        }
+
+                        if (!validId)
+                        {
+                            idNumber = ProspectingCore.GeneratePseudoIdentifier();
+                        }
+
+                        var titleKvp = default(KeyValuePair<int, string>);
+                        ContactDataPacket contactDataPacket = new ContactDataPacket { ContactCompanyId = _company.contact_company_id, ProspectingPropertyId = _prospectingPropertyId };
+                        ProspectingContactPerson newContact = new ProspectingContactPerson
+                        {
+                            IdNumber = idNumber,
+                            Title = !Equals(titleKvp, default(KeyValuePair<int, string>)) ? (int?)titleKvp.Key : null,
+                            Gender = gender,
+                            Firstname = firstname,
+                            Surname = surname,
+                            ContactCompanyId = _company.contact_company_id,
+                            Directorship = "Yes",
+                            PersonCompanyRelationshipType = relationshipToCompany
+                            // TODO: Rem to add phone no's + email addresses if they are available???
+                        };
+                        contactDataPacket.ContactPerson = newContact;
+                        var prospectingContactPerson = ProspectingCore.SaveContactPerson(contactDataPacket);
+                        prospectingContactPersons.Add(prospectingContactPerson);
+                        atLeastOneDirectorSaved = true;
                     }
                 }
                 else

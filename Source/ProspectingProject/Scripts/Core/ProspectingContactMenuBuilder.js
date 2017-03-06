@@ -224,26 +224,31 @@ function buildGeneralInfoHtml(contact, context) {
         }
     });
 
-    var generateNewIdBtn = $('<input type="image" src="Assets/generate_id.png" title="Generate a new, unique identifier" style="display:none;vertical-align:middle;margin-right:1px;margin-left:2px;" />');
+    var generateNewIdBtn = $('<input type="image" src="Assets/generate_id.png" title="Generate a new, unique identifier" style="display:none;vertical-align:middle;margin-right:1px;margin-left:4px;" />');
     html.append(generateNewIdBtn);
-    //if (!contact) {
-    //    generateNewIdBtn.css('display', 'inline-block');
-    //}
+    if (!contact || !contact.HasValidID) {
+        generateNewIdBtn.css('display', 'inline-block');
+    }
     generateNewIdBtn.click(function (e) {
         e.preventDefault();
-        var newId = contact.ContactPersonId + 'S';
-        newId = newId + Array(13 + 1 - newId.length).join('0');
-        idNumberInput.val(newId);
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify({ Instruction: 'generate_pseudo_identifier' }),
+            dataType: "json"
+        }).done(function (dataContainer) {
+            idNumberInput.val(dataContainer.GeneratedID);
+        });
     });
     idNumberInput.on("input", function (e) {
         var str = $(this).val();
         if (!str.length) {
             if (!contact) return;
             validateIdBtn.css('display', 'none');
-            generateNewIdBtn.css('display', 'inline-block');
+            //generateNewIdBtn.css('display', 'inline-block');
         } else {
             // don't add the validation button back.
-            generateNewIdBtn.css('display', 'none');
+            //generateNewIdBtn.css('display', 'none');
             validateIdBtn.css('display', 'inline-block');
         }
     });
@@ -762,9 +767,11 @@ function validateCorrectnessOfPersonInfo() {
 // Valid if the contact has at least firstname, surname, and relationship type
 function savePersonInfo(continueWithAction) {
     var idNumber = null;
-    if (!currentPersonContact) {
-        idNumber = $('#idOrCkTextBox').val();
+    idNumber = $('#idOrCkTextBox').val();
+    if (currentPersonContact && currentPersonContact.IdNumber == idNumber) {
+        idNumber = null; // don't test the same id of the same contact
     }
+    if (idNumber == '') idNumber = null;
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",

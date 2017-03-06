@@ -216,29 +216,59 @@ namespace ProspectingProject
                         string firstname = trusteeDetail.Element("FirstName")?.Value;
                         string surname = trusteeDetail.Element("Surname")?.Value; ;
                         string idNumber = trusteeDetail.Element("InferredIDNumber")?.Value;
-
-                        if (!string.IsNullOrEmpty(firstname) && firstname != "-" &&
-                            !string.IsNullOrEmpty(surname) && surname != "-" &&
-                            !string.IsNullOrEmpty(idNumber) && idNumber != "-")
+                        string gender = trusteeDetail.Element("Gender")?.Value;
+                        if(!string.IsNullOrEmpty(gender))
                         {
-                            string gender = ProspectingCore.DetermineOwnerGender(idNumber);
-                            if (!string.IsNullOrEmpty(gender))
+                            if (gender == "Female") gender = "F";
+                            else
+                            if (gender == "Male") gender = "M";
+                            else gender = null;
+                        }
+
+                        bool recordHasAtLeastOneField = (!string.IsNullOrEmpty(firstname) && firstname != "-") ||
+                                                        (!string.IsNullOrEmpty(surname) && surname != "-") ||
+                                                        (!string.IsNullOrEmpty(idNumber) && idNumber != "-");
+
+                        if (recordHasAtLeastOneField)
+                        {
+                            bool validId = ProspectingCore.HasValidSAIdentityNumber(idNumber).Result;
+                            if (string.IsNullOrEmpty(gender))
                             {
-                                ContactDataPacket contactDataPacket = new ContactDataPacket { ContactCompanyId = _targetTrust.ContactCompanyID, ProspectingPropertyId = _targetTrust.ProspectingPropertyID };
-                                ProspectingContactPerson newContact = new ProspectingContactPerson
+                                gender = validId ? ProspectingCore.DetermineOwnerGender(idNumber) : "M";
+                                if (string.IsNullOrEmpty(gender))
                                 {
-                                    IdNumber = idNumber,
-                                    Title = null,
-                                    Gender = gender,
-                                    Firstname = firstname,
-                                    Surname = surname,
-                                    ContactCompanyId = _targetTrust.ContactCompanyID,
-                                    PersonCompanyRelationshipType = relationshipToTrust
-                                };
-                                contactDataPacket.ContactPerson = newContact;
-                                var prospectingContactPerson = ProspectingCore.SaveContactPerson(contactDataPacket);
-                                prospectingContactPersons.Add(prospectingContactPerson);
+                                    gender = "M";
+                                }
                             }
+
+                            if (string.IsNullOrWhiteSpace(firstname) || firstname == "-")
+                            {
+                                firstname = "(unknown firstname)";
+                            }
+                            if (string.IsNullOrWhiteSpace(surname) || surname == "-")
+                            {
+                                surname = "(unknown surname)";
+                            }
+
+                            if (!validId)
+                            {
+                                idNumber = ProspectingCore.GeneratePseudoIdentifier();
+                            }
+
+                            ContactDataPacket contactDataPacket = new ContactDataPacket { ContactCompanyId = _targetTrust.ContactCompanyID, ProspectingPropertyId = _targetTrust.ProspectingPropertyID };
+                            ProspectingContactPerson newContact = new ProspectingContactPerson
+                            {
+                                IdNumber = idNumber,
+                                Title = null,
+                                Gender = gender,
+                                Firstname = firstname,
+                                Surname = surname,
+                                ContactCompanyId = _targetTrust.ContactCompanyID,
+                                PersonCompanyRelationshipType = relationshipToTrust
+                            };
+                            contactDataPacket.ContactPerson = newContact;
+                            var prospectingContactPerson = ProspectingCore.SaveContactPerson(contactDataPacket);
+                            prospectingContactPersons.Add(prospectingContactPerson);
                         }
                     }
                 }

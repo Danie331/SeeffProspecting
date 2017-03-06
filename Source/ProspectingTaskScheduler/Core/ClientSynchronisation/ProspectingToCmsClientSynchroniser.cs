@@ -26,6 +26,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
 
         public static void Synchronise()
         {
+            return;
             if (_synching)
                 return;
 
