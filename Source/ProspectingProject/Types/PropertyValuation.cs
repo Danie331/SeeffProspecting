@@ -15,5 +15,9 @@ namespace ProspectingProject
         public bool CreateActivity { get; set; }
         public Guid CreatedByGuid { get; set; }
         public string CreatedByUsername { get; set; }
+        public bool CreateFollowup { get; set; }
+        public DateTime FollowupDate { get; set; }
+        public int RelatedTo { get; set; }
+        public string Comment { get; set; }
     }
 }

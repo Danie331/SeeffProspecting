@@ -818,6 +818,8 @@ function showDialogAddActivity(inputPacket, defaultSelection, callback) {
         // Populate activities
         $('#activityInput').append($("<option />").val(-1).text(''));
         $.each(inputPacket.ActivityTypes, function (idx, el) {
+            if (el.Value == 'Valuation Done' || el.Value == 'Valuation Follow-up')
+                return; // TODO: excluding this value here for backwards compatibility. This activity type must still be available for other operations like filtering, users should not be able to create new activities against this type. -- Remove from DB after a year or so.
             $('#activityInput').append($("<option />").val(el.Key).text(el.Value));
         });
 

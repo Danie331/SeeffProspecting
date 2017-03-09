@@ -88,6 +88,14 @@ function togglePropertyInformationMenu(hide) {
                 $('#valueEstimateInput').val('').attr('readonly', false);
                 $("#dateValuedInput").datepicker('setDate', '');
             }
+
+            var followupComment = buildCommentForValuationFollowup($("#dateValuedInput").val());
+            $("#newValuationFollowupCommentInput").empty().append(followupComment);
+        });
+
+        $("#dateValuedInput").change(function () {
+            var followupComment = buildCommentForValuationFollowup($(this).val());
+            $("#newValuationFollowupCommentInput").empty().append(followupComment);
         });
 
         // Valuations history
@@ -148,6 +156,7 @@ function deleteValuation(valuationRecordId) {
 
 function saveValuation() {
     var value = $("#valueEstimateInput").val();
+    value = value.replace(/\s+/g, "");
     var date = $("#dateValuedInput").val();
     var isCurrentValue = $("#isCurrentValueInput").prop('checked');
     var createActitivity = $("#createValuationActivityInput").prop('checked');
@@ -155,7 +164,18 @@ function saveValuation() {
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: 'create_valuation', ProspectingPropertyId:currentProperty.ProspectingPropertyId, Value: value, ValuationDate: date, IsCurrentValue: isCurrentValue, CreateActivity: createActitivity }),
+        data: JSON.stringify({
+            Instruction: 'create_valuation',
+            ProspectingPropertyId: currentProperty.ProspectingPropertyId,
+            Value: value,
+            ValuationDate: date,
+            IsCurrentValue: isCurrentValue,
+            CreateActivity: createActitivity,
+            CreateFollowup: $("#createValuationFollowupInput").is(":checked"),
+            FollowupDate: $("#newValuationFollowupDateInput").val(),
+            RelatedTo: $("#newValuationRelatedToInput").val(),
+            Comment: $("#newValuationFollowupCommentInput").val()
+        }),
         dataType: "json"
     }).done(function (data) {
         if (!handleResponseIfServerError(data)) {
@@ -168,7 +188,8 @@ function saveValuation() {
 
 function validateNewValuationInputs() {
     var value = $("#valueEstimateInput").val();
-    if (value && $.isNumeric(value)) {
+    value = value.replace(/\s+/g, "");
+    if (value && /^\d+$/.test(value)) {
         var date = $("#dateValuedInput").val();
         if (date) {
             return true;
@@ -223,18 +244,94 @@ function buildContentExpanderForPropertyInfo() {
     return new ContentExpanderWidget('#contentarea', [basicDataTab, newValuationTab, valuationsHistoryTab/*, mandateInformationTab*/], "propertyInfoExpander");
 }
 
+function buildCommentForValuationFollowup(dateString) {
+    if (!dateString) {
+        return "";
+    }
+    var address = currentPropertyForPropertyInformation.StreetOrUnitNo + ' ' + currentPropertyForPropertyInformation.PropertyAddress;
+    if (currentPropertyForPropertyInformation.SS_FH == 'FH') {
+        address = address;
+    } else {
+        address = "Unit " + currentPropertyForPropertyInformation.Unit + ' ' + currentPropertyForPropertyInformation.SSName + ', ' + address;
+    }
+    
+    var commentText = 'Please follow up on a validation done on ' + dateString + ' for ' + address;
+    return commentText;
+}
+
 function buildNewValuationTab() {
+
+    var comment = buildCommentForValuationFollowup(null);
+    //rem restrictions on follow up date + validation on follow up itself + test on Units in SS + test chrome
+
+    var createFollowupForNewValInput = $("<input type='checkbox' id='createValuationFollowupInput' checked />");
+    createFollowupForNewValInput.change(function () {
+        var checked = $(this).is(':checked');
+        $("#createFollowupForNewValuationFieldset").css('display', checked ? 'block' : 'none');
+    });
+
+    var relatedToSelect = $("<select id='newValuationRelatedToInput' style='width:185px;margin-top:3px' />");
+    relatedToSelect.append($("<option />").val(-1).text(''));
+    $.each(currentPropertyForPropertyInformation.Contacts, function (idx, el) {
+        relatedToSelect.append($("<option />").val(el.ContactPersonId).text(el.Firstname + ' ' + el.Surname));
+    });
+
+    var newValuationFollowupDateInput = $("<input type='text' id='newValuationFollowupDateInput' readonly='true' style='width:185px;margin-top:3px' />");
+    newValuationFollowupDateInput.datepicker({
+        dateFormat: 'DD, d MM yy', minDate: 0, changeMonth: true,
+        changeYear: true        
+    }).datepicker('setDate', "+7");
+
+    var followupContainer = $("<div id='valuationFollowupContainer' />")
+                             .append("<label class='fieldAlignmentExtendedWidth' style='width:280px'>Create a follow-up for the activity? </label>")
+                             .append(createFollowupForNewValInput)
+                             .append('<p />')
+                             .append($("<fieldset id='createFollowupForNewValuationFieldset' style='border:1px solid gray'></fieldset>")
+                                    .append("<legend style='padding: 0.2em 0.5em; border:1px solid gray; color:gray;font-size:90%;'>Follow up Details</legend>")
+                                    .append("<label class='fieldAlignmentShortWidth' style='width:165px'>Follow-up Type: </label><span style='color:red'>Valuation Complete - Follow Up</span>")
+                                    .append("<br />")
+                                    .append("<label class='fieldAlignmentShortWidth' style='width:165px;margin-top:3px'>Allocated To: </label><span style='color:red;margin-top:3px'>Me</span>")
+                                    .append("<br />")
+                                    .append("<label class='fieldAlignmentShortWidth' style='width:165px;margin-top:3px'>Related To: </label>")
+                                    .append(relatedToSelect)
+                                    .append("<br />")
+                                    .append("<label class='fieldAlignmentShortWidth' style='width:165px'>Follow-up Date: </label>")
+                                    .append(newValuationFollowupDateInput)
+                                    .append("<p />")
+                                    .append("<label style='width:165px'>Comment (edit as desired): </label>")
+                                    .append("<br />")
+                                    .append($("<textarea id='newValuationFollowupCommentInput' style='width:98%;border:1px solid gray' rows='8' />").append(comment))
+                                    );
+
+    var createValuationActivityInput = $("<input type='checkbox' id='createValuationActivityInput' checked />"); // toggle display, uncheck & disable - undo
+    createValuationActivityInput.change(function () {
+        var checked = $(this).is(":checked");
+        if (checked) {
+            createFollowupForNewValInput.prop('disabled', false);
+            createFollowupForNewValInput.attr('checked', true);
+            $("#createFollowupForNewValuationFieldset").css('display', 'block');
+        } else {
+            createFollowupForNewValInput.prop('disabled', true);
+            createFollowupForNewValInput.attr('checked', false);
+            $("#createFollowupForNewValuationFieldset").css('display', 'none');
+        }
+    });
+
     var container = $("<div />")
                 .empty()
-                .append("<label class='fieldAlignment' style='width:185px'>Value estimate (R) </label><input type='number' id='valueEstimateInput' size='6' />")
+                .append("<label class='fieldAlignmentExtendedWidth' style='width:280px'>Value estimate (R) </label><input type='number' id='valueEstimateInput' style='width:185px;' />")
                 .append("<br />")
-                .append("<label class='fieldAlignment' style='width:185px'>Date valued </label><input type='text' id='dateValuedInput' readonly='true' />")
+                .append("<label class='fieldAlignmentExtendedWidth' style='width:280px'>Date valued </label><input type='text' id='dateValuedInput' readonly='true' style='width:185px;margin-top:3px' />")
                 .append("<br />")
-                .append("<label class='fieldAlignment' style='width:185px'>Use current Lightstone value </label><input type='checkbox' id='isCurrentValueInput' />")
+                .append("<label class='fieldAlignmentExtendedWidth' style='width:280px'>Use current Lightstone value </label><input type='checkbox' id='isCurrentValueInput' />")
                 .append("<br />")
-                .append("<label class='fieldAlignment' style='width:185px'>Create a 'Valuation Done' activity? </label><input type='checkbox' id='createValuationActivityInput' checked />")
+                .append("<label class='fieldAlignmentExtendedWidth' style='width:280px'>Create a 'Valuation Done' activity? </label>")
+                .append(createValuationActivityInput)
+                .append("<br />")
+                // hidden by default, hinged on checkbox above
+                .append(followupContainer)
                 .append("<p />")
-                .append("<input type='button' id='saveNewValuationBtn' value='Save' />");
+                .append("<input type='button' id='saveNewValuationBtn' value='Create' style='cursor:pointer' />");
 
     return container;
 }

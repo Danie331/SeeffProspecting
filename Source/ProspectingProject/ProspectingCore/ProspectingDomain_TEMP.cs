@@ -3135,6 +3135,21 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                     prospecting.activity_logs.InsertOnSubmit(activityRecord);
                     prospecting.SubmitChanges();
                     activityRecordId = activityRecord.activity_log_id;
+
+                    if (valuation.CreateFollowup)
+                    {
+                        ProspectingActivity followupActivity = new ProspectingActivity();
+                        int followUpTypeId = ProspectingLookupData.ActivityFollowupTypes.First(aft => aft.Value == "Valuation Complete - Follow Up").Key;
+                        followupActivity.IsForInsert = true;
+                        followupActivity.ActivityFollowupTypeId = followUpTypeId;
+                        followupActivity.Comment = valuation.Comment;
+                        followupActivity.ContactPersonId = valuation.RelatedTo > 0 ? valuation.RelatedTo : (int?)null;
+                        followupActivity.FollowUpDate = valuation.FollowupDate;
+                        followupActivity.LightstonePropertyId = propertyRecord.lightstone_property_id;
+                        followupActivity.ParentActivityId = activityRecordId;
+                        followupActivity.ActivityTypeId = activityType;
+                        UpdateInsertActivity(followupActivity);
+                    }
                 }
 
                 property_valuation newValuation = new property_valuation

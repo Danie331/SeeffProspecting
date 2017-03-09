@@ -270,8 +270,8 @@ function performFollowupFiltering(sourceFollowups, jContainerElement) {
             value = value.replace(/\n/g, '<br />');
 
             if (label !== '') label = label + ": ";
-            if (label != '' && value.length > 24) {
-                value = value.substring(0,24) + '...';
+            if (label != '' && value.length > 30) {
+                value = value.substring(0,30) + '...';
             }
 
             container.append(label).append(value);
