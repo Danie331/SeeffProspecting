@@ -75,6 +75,7 @@ function togglePropertyInformationMenu(hide) {
         $('#saveNewValuationBtn').click(function () {
             if (validateNewValuationInputs()) {
                 saveValuation();
+                $(this).val('Saved').prop('disabled', true);
             } else {
                 alert("Some of your inputs are not valid.");
             }
