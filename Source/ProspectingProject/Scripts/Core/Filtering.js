@@ -260,6 +260,15 @@ function buildPropertyDetailsFilterTab() {
     var performFilteringBtn = $("<input type='button' id='performFilteringBtn2' value='Filter' style='cursor:pointer;display:inline-block;float:left' />");
     var resetSuburbFilterBtn = $("<input type='button' id='resetSuburbFilterBtn2' value='Refresh & Reload Suburb' style='cursor:pointer;display:inline-block;float:right' />");
 
+    var regDateSelector = populateRegYearInput($("<select id='regDateSelector' style='width:60px' />"));
+    var salePriceSelector = populateSalePriceInput($("<select id='salePriceSelector' style='width:120px' />"));
+    var latestRegDateAndSalePriceFilter = $("<div />")
+                                .append($("<label class='fieldAlignment'>Year of last registration: </label>"))
+                                .append(regDateSelector)
+                                .append("<p />")
+                                .append($("<label class='fieldAlignment'>Last sale price: </label>"))
+                                .append(salePriceSelector);
+
     container
         .append(containerFieldset)
         .append("<p />")
@@ -274,7 +283,9 @@ function buildPropertyDetailsFilterTab() {
         .append(commFilter)
         .append("<br />")
         .append(investmentFilter)
-                .append("<hr />")
+        .append("<hr />")
+        .append(latestRegDateAndSalePriceFilter)
+        .append("<hr />")
         .append("<p />")
         .append(performFilteringBtn).append(resetSuburbFilterBtn);
 
@@ -282,6 +293,29 @@ function buildPropertyDetailsFilterTab() {
     resetSuburbFilterBtn.click(function () { handleResetSuburbFiltering(true); });
 
     return container;
+}
+
+function populateRegYearInput(control) {
+    control.append($("<option />"));
+    var currentYear = new Date().getFullYear();
+    for (var i = currentYear; i >= (currentYear - 50) ; i--) {
+        control.append($("<option />").val(i).text(i));
+    }
+    return control;
+}
+
+function populateSalePriceInput(control) {
+    control.append($("<option />"));
+    control.append($("<option />").val(100).text('< R100k'));
+    control.append($("<option />").val(500).text('R100k to R500k'));
+    control.append($("<option />").val(1000000).text('R500k to R1m'));
+    control.append($("<option />").val(1500000).text('R1m to R1.5m'));
+    control.append($("<option />").val(2500000).text('R1.5m to R2.5m'));
+    control.append($("<option />").val(5000000).text('R2.5m to R5m'));
+    control.append($("<option />").val(10000000).text('R5m to R10m'));
+    control.append($("<option />").val(100000000).text('R10m + '));
+
+    return control;
 }
 
 function handleFilterPropertiesByPropertyDetails() {
@@ -609,6 +643,47 @@ function propertyIsInvestment(property) {
     return property.IsInvestment == true;
 }
 
+function propertyMatchesRegDate(property, regYear) {
+    var regDate = property.LightstoneRegDate;
+    if (!regDate) return false;
+    var dateString = formatDate(regDate);
+    var yearPortion = dateString.substring(0, 4);
+
+    return yearPortion == regYear;
+}
+
+function propertyMatchesSalePrice(property, priceBracket) {
+    var lastPurchPrice = property.LastPurchPrice;
+    if (!lastPurchPrice) return false;
+
+    switch (priceBracket) {
+        case "100":
+            return lastPurchPrice <= 100000;
+            break;
+        case "500":
+            return (lastPurchPrice > 100000) && (lastPurchPrice <= 500000);
+            break;
+        case "1000000":
+            return (lastPurchPrice > 500000) && (lastPurchPrice <= 1000000);
+            break;
+        case "1500000":
+            return (lastPurchPrice > 1000000) && (lastPurchPrice <= 1500000);
+            break;
+        case "2500000":
+            return (lastPurchPrice > 1500000) && (lastPurchPrice <= 2500000);
+            break;
+        case "5000000":
+            return (lastPurchPrice > 2500000) && (lastPurchPrice <= 5000000);
+            break;
+        case "10000000":
+            return (lastPurchPrice > 5000000) && (lastPurchPrice <= 10000000);
+            break;
+        case "100000000":
+            return lastPurchPrice > 10000000;
+            break;
+    }
+}
+
 function loadSuburbAndFilterByPropertyDetails() {
     var filterPropertiesHaving = $('#propertiesFilterHave').is(':checked');
     var exclusive = $("#exclusiveFilterOption2").is(':checked');
@@ -630,13 +705,17 @@ function loadSuburbAndFilterByPropertyDetails() {
     var commFilter = $("#commFilterInput").is(':checked');
     var investmentFilter = $("#investmentFilterInput").is(':checked');
 
+    var regDateSelector = $("#regDateSelector").val();
+    var salePriceSelector = $("#salePriceSelector").val();
+
     clearSuburbBySuburbId(currentSuburb.SuburbId);
     if (currentSuburb.RequiresStatsUpdate) {
         currentSuburb.RequiresStatsUpdate = false;
         currentSuburb.IsInitialised = false;
     }
 
-    var anyOptionsSelected = newRegistrationsFilter || shortTermRentalFilter || longTermRentalFilter || agriFilter || commFilter || investmentFilter;
+    var anyOptionsSelected = newRegistrationsFilter || shortTermRentalFilter || longTermRentalFilter || agriFilter || commFilter || investmentFilter
+                             || (regDateSelector) || (salePriceSelector);
 
     loadSuburb(currentSuburb.SuburbId, false, function () {
         currentProperty = null;
@@ -752,6 +831,40 @@ function loadSuburbAndFilterByPropertyDetails() {
                     }
                 } else {
                     if (!propertyIsInvestment(marker.ProspectingProperty)) {
+                        candidateMarkerForInclusiveFilter = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (regDateSelector) {
+                if (filterPropertiesHaving) {
+                    if (propertyMatchesRegDate(marker.ProspectingProperty, regDateSelector)) {
+                        candidateMarkerForInclusiveFilter = true;
+                    }
+                    else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!propertyMatchesRegDate(marker.ProspectingProperty, regDateSelector)) {
+                        candidateMarkerForInclusiveFilter = true;
+                    } else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                }
+            }
+
+            if (salePriceSelector) {
+                if (filterPropertiesHaving) {
+                    if (propertyMatchesSalePrice(marker.ProspectingProperty, salePriceSelector)) {
+                        candidateMarkerForInclusiveFilter = true;
+                    }
+                    else {
+                        candidateMarkerForExclusiveFilter = false;
+                    }
+                } else {
+                    if (!propertyMatchesSalePrice(marker.ProspectingProperty, salePriceSelector)) {
                         candidateMarkerForInclusiveFilter = true;
                     } else {
                         candidateMarkerForExclusiveFilter = false;

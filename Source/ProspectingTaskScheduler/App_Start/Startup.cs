@@ -10,7 +10,7 @@ using ProspectingTaskScheduler.Core.Communication.Emailing;
 using ProspectingTaskScheduler.Core.Communication.SMSing;
 using ProspectingTaskScheduler.Core.Housekeeping;
 
-[assembly: OwinStartup("", typeof(ProspectingTaskScheduler.App_Start.Startup))]
+[assembly: OwinStartup(typeof(ProspectingTaskScheduler.App_Start.Startup))]
 
 namespace ProspectingTaskScheduler.App_Start
 {
