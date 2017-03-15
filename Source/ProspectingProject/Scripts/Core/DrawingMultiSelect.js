@@ -49,10 +49,20 @@ function addMarkerToSelection(marker, mustTriggerUpdate, addOnlyThisUnit) {
                 selectedMarkers.push(marker);
             }
         } else {
+            var resultsFromFilter = false;
             var ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
                 if (!pp.SS_UNIQUE_IDENTIFIER) return false;
+                if (pp.Whence == 'from_filter') {
+                    resultsFromFilter = true;
+                }
                 return pp.SS_UNIQUE_IDENTIFIER == property.SS_UNIQUE_IDENTIFIER;
             });
+
+            if (resultsFromFilter) {
+                ssUnits = $.grep(ssUnits, function (u) {
+                    return u.Whence == 'from_filter';
+                });
+            }
 
             var requiresOwnerUpdates = false;
             $.each(ssUnits, function (idx, unit) {

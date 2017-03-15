@@ -81,6 +81,10 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                     spatialConnection.Open();
                     foreach (var record in takeonRows)
                     {
+                        if (spatialCmd.Connection.State != ConnectionState.Open)
+                            spatialCmd.Connection.Open();
+                        if (seeffDeeds.Database.Connection.State != ConnectionState.Open)
+                            seeffDeeds.Database.Connection.Open();
                         try
                         {
                             DataSet lightstoneResult = null;

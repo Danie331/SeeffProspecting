@@ -259,6 +259,7 @@ function buildPropertyDetailsFilterTab() {
 
     var performFilteringBtn = $("<input type='button' id='performFilteringBtn2' value='Filter' style='cursor:pointer;display:inline-block;float:left' />");
     var resetSuburbFilterBtn = $("<input type='button' id='resetSuburbFilterBtn2' value='Refresh & Reload Suburb' style='cursor:pointer;display:inline-block;float:right' />");
+    var sendCommsToResultsBtn = $("<input type='button' id='sendCommsToResultsBtn' value='Send Communication' style='cursor:pointer;display:none;' />");
 
     var regDateSelector = populateRegYearInput($("<select id='regDateSelector' style='width:60px' />"));
     var salePriceSelector = populateSalePriceInput($("<select id='salePriceSelector' style='width:120px' />"));
@@ -288,6 +289,15 @@ function buildPropertyDetailsFilterTab() {
         .append("<hr />")
         .append("<p />")
         .append(performFilteringBtn).append(resetSuburbFilterBtn);
+
+    if (prospectingContext.UserHasCommAccess) {
+        container.append("<br /><br />");
+        container.append(sendCommsToResultsBtn);
+        sendCommsToResultsBtn.click(function () {
+            showMenu("communication");
+            loadSuburbAndFilterByPropertyDetails();
+        });
+    }
 
     performFilteringBtn.click(handleFilterPropertiesByPropertyDetails);
     resetSuburbFilterBtn.click(function () { handleResetSuburbFiltering(true); });
@@ -414,6 +424,7 @@ function toggleFilterMode(value) {
         if ($("#pivotTable").length) {
             $("#pivotTable").empty();
         }
+        $("#sendCommsToResultsBtn").hide();
     }
 }
 
@@ -716,6 +727,10 @@ function loadSuburbAndFilterByPropertyDetails() {
 
     var anyOptionsSelected = newRegistrationsFilter || shortTermRentalFilter || longTermRentalFilter || agriFilter || commFilter || investmentFilter
                              || (regDateSelector) || (salePriceSelector);
+
+    if (anyOptionsSelected) {
+        $("#sendCommsToResultsBtn").show();
+    }
 
     loadSuburb(currentSuburb.SuburbId, false, function () {
         currentProperty = null;
