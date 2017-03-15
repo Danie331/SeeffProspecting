@@ -17,13 +17,19 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
 
     public partial class LightstoneTakeOn
     {
+        private static bool _processing = false;
         public static void PerformBaseDataTakeOn()
         {
             StringBuilder reportBuilder = new StringBuilder();
             try
             {
+                if (_processing)
+                    return;
+
                 // Step 1: check if seeff_deeds DB exists
                 if (!SeeffDeedsExists(reportBuilder)) return;
+
+                _processing = true;
 
                 SendEmailReport("Starting Lightstone take-on, Step1 confirms existence of Seeff_Deeds. Starting Step2 at: " + DateTime.Now, reportBuilder);
 

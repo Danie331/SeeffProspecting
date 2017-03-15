@@ -31,7 +31,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
 	                                                 [erf_no] int null,
 	                                                 [portion_no] int null;", connection);
 
-                    command.CommandTimeout = 60 * 5;
+                    command.CommandTimeout = 60 * 10;
                     command.Connection.Open();
                     try
                     {

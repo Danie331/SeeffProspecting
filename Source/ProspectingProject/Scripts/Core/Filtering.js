@@ -236,7 +236,7 @@ function buildPropertyDetailsFilterTab() {
     var fhFilter = $("<label class='fieldAlignmentExtraShortWidth'>Free-hold</label><input type='checkbox' id='fhFilterInput' checked />");
     var ssFilter = $("<label class='fieldAlignmentShortWidth'>Sectional Title</label><input type='checkbox' id='ssFilterInput' checked />");
 
-    var newRegistrationsFilter = $("<label class='fieldAlignment'>New Registrations</label><input type='checkbox' id='newRegistrationsFilterInput'  />");
+    var newRegistrationsFilter = $("<label class='fieldAlignment'>Stale Registrations</label><input type='checkbox' id='newRegistrationsFilterInput'  />");
 
     var shortTermRentalFilter = $("<label class='fieldAlignment'>Short-term Rental</label><input type='checkbox' id='shortTermRentalFilterInput'  />");
     var longTermRentalFilter = $("<label class='fieldAlignment'>Long-term Rental</label><input type='checkbox' id='longTermRentalFilterInput'  />");
@@ -259,7 +259,7 @@ function buildPropertyDetailsFilterTab() {
 
     var performFilteringBtn = $("<input type='button' id='performFilteringBtn2' value='Filter' style='cursor:pointer;display:inline-block;float:left' />");
     var resetSuburbFilterBtn = $("<input type='button' id='resetSuburbFilterBtn2' value='Refresh & Reload Suburb' style='cursor:pointer;display:inline-block;float:right' />");
-    var sendCommsToResultsBtn = $("<input type='button' id='sendCommsToResultsBtn' value='Send Communication' style='cursor:pointer;display:none;' />");
+    var sendCommsToResultsBtn = $("<input type='button' id='sendCommsToResultsBtn' value='Prepare Communication' style='cursor:pointer;display:none;' />");
 
     var regDateSelector = populateRegYearInput($("<select id='regDateSelector' style='width:60px' />"));
     var salePriceSelector = populateSalePriceInput($("<select id='salePriceSelector' style='width:120px' />"));
