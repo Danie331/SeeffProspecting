@@ -29,7 +29,7 @@ function toggleMultiSelectMode(value) {
     }
 }
 
-function addMarkerToSelection(marker, mustTriggerUpdate, addOnlyThisUnit) {
+function addMarkerToSelection(marker, mustTriggerUpdate, addOnlyThisUnit, fromFilter) {
     // Must include SS hey.
     // check exitsing
     // reset all markers too when resetting array
@@ -49,16 +49,12 @@ function addMarkerToSelection(marker, mustTriggerUpdate, addOnlyThisUnit) {
                 selectedMarkers.push(marker);
             }
         } else {
-            var resultsFromFilter = false;
             var ssUnits = $.grep(currentSuburb.ProspectingProperties, function (pp) {
                 if (!pp.SS_UNIQUE_IDENTIFIER) return false;
-                if (pp.Whence == 'from_filter') {
-                    resultsFromFilter = true;
-                }
                 return pp.SS_UNIQUE_IDENTIFIER == property.SS_UNIQUE_IDENTIFIER;
             });
 
-            if (resultsFromFilter) {
+            if (fromFilter) {
                 ssUnits = $.grep(ssUnits, function (u) {
                     return u.Whence == 'from_filter';
                 });
@@ -83,10 +79,12 @@ function addMarkerToSelection(marker, mustTriggerUpdate, addOnlyThisUnit) {
     }
     else {
         if (marker.ProspectingProperty.Prospected && marker.ProspectingProperty.LatestRegDateForUpdate == null) {
-            flagMarkerSelected(marker, true);
-            marker.setIcon(getIconForMarker(marker));
-            if (selectedMarkers.indexOf(marker) == -1) {
-                selectedMarkers.push(marker);
+            if (fromFilter == false || (fromFilter == true && marker.ProspectingProperty.Whence == 'from_filter')) {
+                flagMarkerSelected(marker, true);
+                marker.setIcon(getIconForMarker(marker));
+                if (selectedMarkers.indexOf(marker) == -1) {
+                    selectedMarkers.push(marker);
+                }
             }
         }
     }
@@ -150,9 +148,15 @@ function removeMarkersFromSelection(marker) {
 
 function selectPropertiesInsidePolygon(polygon) {
     // exit drawing mode, clear selection and empty arrays
+    var fromFilter = false;
+    $.each(currentSuburb.ProspectingProperties, function (idx, pp) {
+        if (pp.Whence == 'from_filter') {
+            fromFilter = true;
+        }
+    });
     $.each(currentSuburb.ProspectingProperties, function (idx, pp) {
         if (google.maps.geometry.poly.containsLocation(pp.Marker.position, polygon)) {
-            addMarkerToSelection(pp.Marker, false, false);
+            addMarkerToSelection(pp.Marker, false, false, fromFilter);
         }
     });
 

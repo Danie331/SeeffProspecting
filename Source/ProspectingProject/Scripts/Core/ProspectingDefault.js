@@ -555,7 +555,8 @@ function markerClick(e) {
             removeMarkersFromSelection(marker);
         } else {
             var selectOnlyThisUnit = (e && e.TargetOnlySelectedProperty) ? true : false;
-            addMarkerToSelection(marker, true, selectOnlyThisUnit);
+            var fromFilter = marker.ProspectingProperty.Whence == 'from_filter' ? true : false;
+            addMarkerToSelection(marker, true, selectOnlyThisUnit, fromFilter);
         }
         return;
     }
