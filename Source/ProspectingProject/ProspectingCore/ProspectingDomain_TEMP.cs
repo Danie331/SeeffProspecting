@@ -1451,7 +1451,7 @@ namespace ProspectingProject
                     int.TryParse(searchInputValues.PropertyID, out propertyID);
                     result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", searchInputValues.DeedTown, searchInputValues.ErfNo, searchInputValues.Portion
                         , searchInputValues.SSName, searchInputValues.Unit, searchInputValues.Suburb, searchInputValues.StreetName, searchInputValues.StreetOrUnitNo, ""
-                        , "", "", "", "", searchInputValues.OwnerName, searchInputValues.OwnerIdNumber, searchInputValues.EstateName, "", propertyID, 1000, "", "", 0, 0);
+                        , "", "", "", "", searchInputValues.OwnerName, searchInputValues.OwnerIdNumber, searchInputValues.EstateName, "", propertyID, 500, "", "", 0, 0);
                     if (result.Tables.Count > 1 && result.Tables[1].Rows.Count > 0)
                     {
                         List<DataRow> dataRowCollection = new List<DataRow>();

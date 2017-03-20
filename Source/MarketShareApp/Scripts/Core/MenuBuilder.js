@@ -260,10 +260,11 @@ function buildFilterItemsAndSummaryInfo() {
         var div = $("<div />");
         //var _2011 = buildInputCheckbox("2011", "2011_filter", "left", 2, 2, true, handleFilterItemClick);
         //div.append(buildInputCheckbox("2012", "2012_filter", "left", 2, 2, true, handleFilterItemClick));
-        div.append(buildInputCheckbox("2013", "2013_filter", "left", 2, 2, true, handleFilterItemClick));
+        //div.append(buildInputCheckbox("2013", "2013_filter", "left", 2, 2, true, handleFilterItemClick));
         div.append(buildInputCheckbox("2014", "2014_filter", "left", 2, 2, true, handleFilterItemClick));
         div.append(buildInputCheckbox("2015", "2015_filter", "left", 2, 2, true, handleFilterItemClick));
         div.append(buildInputCheckbox("2016", "2016_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("2017", "2017_filter", "left", 2, 2, true, handleFilterItemClick));
 
         return div;
     }
@@ -303,7 +304,7 @@ function buildFilterItemsAndSummaryInfo() {
 
     filterSets.push(["FH_filter", "SS_filter"]);
     filterSets.push(["R_filter", "C_filter", "A_filter", "D_filter", "O_filter", "P_filter"]);
-    filterSets.push(["2013_filter", "2014_filter", "2015_filter", "2016_filter"]);
+    filterSets.push(["2014_filter", "2015_filter", "2016_filter", "2017_filter"]);
     // The filter set below is handled differently to the rest. See filtering.js
     filterSets.push(["forsale_filter", "forrent_filter"]);
     filterSets.push(["withagencyassigned_filter", "withoutagencyassigned_filter"]);
