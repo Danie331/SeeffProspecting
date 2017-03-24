@@ -40,4 +40,6 @@ CKEDITOR.editorConfig = function( config ) {
 	config.extraPlugins = 'custom';
 
 	config.enterMode = CKEDITOR.ENTER_BR;
+
+	config.extraAllowedContent = '*(*);*{*}';
 };
