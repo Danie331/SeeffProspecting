@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e5335c72dbf245978dbea190e8e5b037" Name="Diagram1">
+        <EntityTypeShape EntityType="clientModel.address" Width="1.5" PointX="5.25" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.address_type" Width="1.5" PointX="3" PointY="32.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client" Width="1.5" PointX="3" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_activity" Width="1.5" PointX="8.25" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_agent" Width="1.5" PointX="5.25" PointY="20.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_agent_role_type" Width="1.5" PointX="3" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_audit" Width="1.5" PointX="5.25" PointY="31.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_branch" Width="1.5" PointX="5.25" PointY="34.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_contact_source" Width="1.5" PointX="8.25" PointY="20.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_contact_status" Width="1.5" PointX="8.25" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_ethnic_group" Width="1.5" PointX="0.75" PointY="21" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_gender" Width="1.5" PointX="0.75" PointY="28.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_license" Width="1.5" PointX="5.25" PointY="43.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_relationship" Width="1.5" PointX="11.25" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_relationship_type" Width="1.5" PointX="9" PointY="31.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_system" Width="1.5" PointX="3" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_system_relationship" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_title" Width="1.5" PointX="0.75" PointY="31" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_type" Width="1.5" PointX="11.25" PointY="20.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_type_description" Width="1.5" PointX="9" PointY="17.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.client_user" Width="1.5" PointX="5.25" PointY="53.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.contact_details" Width="1.5" PointX="11.25" PointY="28.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.contact_details_location_type" Width="1.5" PointX="9" PointY="34.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.contact_details_type" Width="1.5" PointX="9" PointY="37" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.contact_source_type" Width="1.5" PointX="6" PointY="28.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.contact_status_type" Width="1.5" PointX="6" PointY="37.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.country_code" Width="1.5" PointX="0.75" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.error_log" Width="1.5" PointX="5.25" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.language" Width="1.5" PointX="0.75" PointY="33.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.marital_status_type" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.religion" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="clientModel.search_client" Width="1.5" PointX="5.25" PointY="14.5" IsExpanded="true" />
+        <AssociationConnector Association="clientModel.FK_address_address_type" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_address_client" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client__ethnic_g__5C387804" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client__ethnic_g__62E57593" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client__fk_citiz__5D2C9C3D" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client__fk_citiz__63D999CC" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client__fk_count__5E20C076" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client__fk_count__64CDBE05" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client__gender__5F14E4AF" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client__gender__65C1E23E" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client__preferre__600908E8" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client__preferre__66B60677" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client__title__60FD2D21" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client__title__67AA2AB0" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client_ac__fk_cl__245D67DE" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client_co__fk_cl__09A971A2" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client_co__fk_cl__208CD6FA" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_client_agent_client" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_client_audit_client" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_client_branch_client" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_client_license_client" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_client_relationship_client1" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_client_relationship_client2" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_client_type_client" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_client_user_client" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_contact_details_client" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_search_client_client" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client_ag__fk_cl__3E2826D9" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client_co__fk_co__1CBC4616" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__client_co__fk_co__08B54D69" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_client_relationship_client_relationship_type" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__error_log__sourc__0757E033" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_search_client_client_system" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_client_type_client_type_description" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK__contact_d__fk_co__5AEE82B9" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_contact_details_contact_details_location_type" ManuallyRouted="false" />
+        <AssociationConnector Association="clientModel.FK_contact_details_contact_details_type" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

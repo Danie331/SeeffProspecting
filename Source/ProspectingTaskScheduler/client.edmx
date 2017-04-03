@@ -1,0 +1,2393 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="clientModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="address">
+          <Key>
+            <PropertyRef Name="pk_address_id" />
+          </Key>
+          <Property Name="pk_address_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="fk_address_type_id" Type="int" Nullable="false" />
+          <Property Name="address" Type="nvarchar" MaxLength="255" />
+          <Property Name="fk_area_id" Type="int" Nullable="false" />
+          <Property Name="created_by" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+          <Property Name="is_active_status" Type="int" Nullable="false" />
+          <Property Name="postal_code" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="address_type">
+          <Key>
+            <PropertyRef Name="pk_address_type_id" />
+          </Key>
+          <Property Name="pk_address_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="address_type" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client">
+          <Key>
+            <PropertyRef Name="pk_client_id" />
+          </Key>
+          <Property Name="pk_client_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="first_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="last_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="middle_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="preferred_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="identity_number" Type="varchar" MaxLength="50" />
+          <Property Name="passport_number" Type="varchar" MaxLength="50" />
+          <Property Name="title" Type="int" />
+          <Property Name="gender" Type="int" />
+          <Property Name="ethnic_group" Type="int" />
+          <Property Name="occupation" Type="varchar" MaxLength="50" />
+          <Property Name="fk_marital_status_type_id" Type="int" />
+          <Property Name="date_of_birth" Type="datetime" />
+          <Property Name="deleted" Type="bit" />
+          <Property Name="identified" Type="bit" />
+          <Property Name="identified_date" Type="datetime" />
+          <Property Name="blocked" Type="bit" />
+          <Property Name="blocked_date" Type="datetime" />
+          <Property Name="fk_language_id" Type="int" />
+          <Property Name="fk_religion_id" Type="int" />
+          <Property Name="fk_citizenship" Type="int" />
+          <Property Name="fk_country_of_residence" Type="int" />
+          <Property Name="preferred_language" Type="int" />
+          <Property Name="created_by" Type="int" />
+          <Property Name="created_date" Type="datetime" />
+          <Property Name="updated_date" Type="datetime" />
+          <Property Name="deceased_status" Type="bit" />
+          <Property Name="popi_opt_in" Type="bit" Nullable="false" />
+          <Property Name="phone_call_opt_in" Type="bit" Nullable="false" />
+          <Property Name="email_opt_in" Type="bit" Nullable="false" />
+          <Property Name="sms_opt_in" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_activity">
+          <Key>
+            <PropertyRef Name="pk_client_activity_id" />
+          </Key>
+          <Property Name="pk_client_activity_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_activity_type_id" Type="int" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="created_by" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+          <Property Name="allocated_to" Type="int" />
+          <Property Name="activity_value" Type="nvarchar(max)" />
+          <Property Name="is_active_status" Type="bit" />
+        </EntityType>
+        <EntityType Name="client_agent">
+          <Key>
+            <PropertyRef Name="pk_client_agent_id" />
+          </Key>
+          <Property Name="pk_client_agent_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="fk_agent_id" Type="int" Nullable="false" />
+          <Property Name="is_active_status" Type="bit" />
+          <Property Name="created_by" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+          <Property Name="fk_client_role_type" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_agent_role_type">
+          <Key>
+            <PropertyRef Name="client_agent_role_type_id" />
+          </Key>
+          <Property Name="client_agent_role_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="role_description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_audit">
+          <Key>
+            <PropertyRef Name="pk_client_audit_id" />
+          </Key>
+          <Property Name="pk_client_audit_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="created_by" Type="int" Nullable="false" />
+          <Property Name="updated_field" Type="varchar" MaxLength="50" />
+          <Property Name="updated_value" Type="varchar" MaxLength="50" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_branch">
+          <Key>
+            <PropertyRef Name="pk_client_branch_id" />
+          </Key>
+          <Property Name="pk_client_branch_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="fk_branch_id" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_contact_source">
+          <Key>
+            <PropertyRef Name="pk_client_contact_source" />
+          </Key>
+          <Property Name="pk_client_contact_source" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="fk_contact_source_type" Type="int" Nullable="false" />
+          <Property Name="created_by" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_contact_status">
+          <Key>
+            <PropertyRef Name="pk_client_contact_status_id" />
+          </Key>
+          <Property Name="pk_client_contact_status_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_contact_status_type_id" Type="int" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="contact_status_value" Type="bit" Nullable="false" />
+          <Property Name="created_by" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_ethnic_group">
+          <Key>
+            <PropertyRef Name="client_ethinic_group_id" />
+          </Key>
+          <Property Name="client_ethinic_group_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ethnic_group_desc" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_gender">
+          <Key>
+            <PropertyRef Name="client_gender_id" />
+          </Key>
+          <Property Name="client_gender_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="gender_desc" Type="varchar" MaxLength="6" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_license">
+          <Key>
+            <PropertyRef Name="pk_client_license_id" />
+          </Key>
+          <Property Name="pk_client_license_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="fk_license_id" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_relationship">
+          <Key>
+            <PropertyRef Name="pk_client_relationship_id" />
+          </Key>
+          <Property Name="pk_client_relationship_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_from_id" Type="int" Nullable="false" />
+          <Property Name="fk_client_to_id" Type="int" Nullable="false" />
+          <Property Name="fk_client_relationship_type_id" Type="int" Nullable="false" />
+          <Property Name="created_by" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+          <Property Name="is_active_status" Type="bit" />
+        </EntityType>
+        <EntityType Name="client_relationship_type">
+          <Key>
+            <PropertyRef Name="pk_client_relationship_type_id" />
+          </Key>
+          <Property Name="pk_client_relationship_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type_description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_system">
+          <Key>
+            <PropertyRef Name="pk_client_system_id" />
+          </Key>
+          <Property Name="pk_client_system_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="system_name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_system_relationship">
+          <Key>
+            <PropertyRef Name="pk_client_system_relationship_id" />
+          </Key>
+          <Property Name="pk_client_system_relationship_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="fk_client_system_id" Type="int" Nullable="false" />
+          <Property Name="fk_system_client_id" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_title">
+          <Key>
+            <PropertyRef Name="client_title_id" />
+          </Key>
+          <Property Name="client_title_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title_desc" Type="varchar" MaxLength="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_type">
+          <Key>
+            <PropertyRef Name="pk_client_type_id" />
+          </Key>
+          <Property Name="pk_client_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="fk_client_type_description_id" Type="int" Nullable="false" />
+          <Property Name="created_by" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+          <Property Name="is_active_status" Type="bit" />
+        </EntityType>
+        <EntityType Name="client_type_description">
+          <Key>
+            <PropertyRef Name="pk_client_type_description_id" />
+          </Key>
+          <Property Name="pk_client_type_description_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type_description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="client_user">
+          <Key>
+            <PropertyRef Name="pk_client_user_id" />
+          </Key>
+          <Property Name="pk_client_user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="fk_user_id" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="contact_details">
+          <Key>
+            <PropertyRef Name="pk_contact_details_id" />
+          </Key>
+          <Property Name="pk_contact_details_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="fk_contact_details_type_id" Type="int" Nullable="false" />
+          <Property Name="fk_contact_details_location_type_id" Type="int" Nullable="false" />
+          <Property Name="contact_details_value" Type="varchar" MaxLength="100" />
+          <Property Name="is_primary_contact" Type="bit" />
+          <Property Name="created_by" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+          <Property Name="is_active_status" Type="bit" />
+          <Property Name="fk_country_code" Type="int" />
+          <Property Name="deleted" Type="bit" Nullable="false" />
+          <Property Name="deleted_by" Type="uniqueidentifier" />
+          <Property Name="deleted_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="contact_details_location_type">
+          <Key>
+            <PropertyRef Name="pk_contact_details_location_type_id" />
+          </Key>
+          <Property Name="pk_contact_details_location_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type_description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="contact_details_type">
+          <Key>
+            <PropertyRef Name="pk_contact_details_type_id" />
+          </Key>
+          <Property Name="pk_contact_details_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type_description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="contact_source_type">
+          <Key>
+            <PropertyRef Name="pk_contact_source_type_id" />
+          </Key>
+          <Property Name="pk_contact_source_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type_description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="contact_status_type">
+          <Key>
+            <PropertyRef Name="pk_contact_status_type_id" />
+          </Key>
+          <Property Name="pk_contact_status_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type_description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="country_code">
+          <Key>
+            <PropertyRef Name="pk_country_id" />
+          </Key>
+          <Property Name="pk_country_id" Type="int" Nullable="false" />
+          <Property Name="country_name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="country_code_iso" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="country_code_un" Type="nvarchar" MaxLength="255" />
+          <Property Name="country_dial_code" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="error_log">
+          <Key>
+            <PropertyRef Name="error_log_id" />
+          </Key>
+          <Property Name="error_log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="target_application" Type="int" Nullable="false" />
+          <Property Name="friendly_error_msg" Type="varchar(max)" Nullable="false" />
+          <Property Name="exception_string" Type="varchar(max)" Nullable="false" />
+          <Property Name="user" Type="uniqueidentifier" />
+          <Property Name="date_time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="language">
+          <Key>
+            <PropertyRef Name="pk_language_id" />
+          </Key>
+          <Property Name="pk_language_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="language_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="marital_status_type">
+          <Key>
+            <PropertyRef Name="pk_merital_status_type_id" />
+          </Key>
+          <Property Name="pk_merital_status_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type_description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="religion">
+          <Key>
+            <PropertyRef Name="pk_religion_id" />
+          </Key>
+          <Property Name="pk_religion_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="religion_name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="search_client">
+          <Key>
+            <PropertyRef Name="pk_search_client_id" />
+          </Key>
+          <Property Name="pk_search_client_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="fk_client_system_id" Type="int" Nullable="false" />
+          <Property Name="fk_system_client_id" Type="int" Nullable="false" />
+          <Property Name="first_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="last_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="middle_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="preferred_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="identity_number" Type="varchar" MaxLength="50" />
+          <Property Name="passport_number" Type="varchar" MaxLength="50" />
+          <Property Name="date_of_birth" Type="varchar" MaxLength="50" />
+          <Property Name="phone" Type="varchar" MaxLength="50" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="is_primary_contact_no" Type="bit" />
+          <Property Name="is_primary_email" Type="bit" />
+        </EntityType>
+        <Association Name="FK__client__ethnic_g__5C387804">
+          <End Role="client_ethnic_group" Type="Self.client_ethnic_group" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_ethnic_group">
+              <PropertyRef Name="client_ethinic_group_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="ethnic_group" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__ethnic_g__62E57593">
+          <End Role="client_ethnic_group" Type="Self.client_ethnic_group" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_ethnic_group">
+              <PropertyRef Name="client_ethinic_group_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="ethnic_group" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__fk_citiz__5D2C9C3D">
+          <End Role="country_code" Type="Self.country_code" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country_code">
+              <PropertyRef Name="pk_country_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="fk_citizenship" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__fk_citiz__63D999CC">
+          <End Role="country_code" Type="Self.country_code" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country_code">
+              <PropertyRef Name="pk_country_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="fk_citizenship" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__fk_count__5E20C076">
+          <End Role="country_code" Type="Self.country_code" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country_code">
+              <PropertyRef Name="pk_country_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="fk_country_of_residence" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__fk_count__64CDBE05">
+          <End Role="country_code" Type="Self.country_code" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country_code">
+              <PropertyRef Name="pk_country_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="fk_country_of_residence" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__gender__5F14E4AF">
+          <End Role="client_gender" Type="Self.client_gender" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_gender">
+              <PropertyRef Name="client_gender_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="gender" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__gender__65C1E23E">
+          <End Role="client_gender" Type="Self.client_gender" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_gender">
+              <PropertyRef Name="client_gender_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="gender" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__preferre__600908E8">
+          <End Role="language" Type="Self.language" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="language">
+              <PropertyRef Name="pk_language_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="preferred_language" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__preferre__66B60677">
+          <End Role="language" Type="Self.language" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="language">
+              <PropertyRef Name="pk_language_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="preferred_language" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__title__60FD2D21">
+          <End Role="client_title" Type="Self.client_title" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_title">
+              <PropertyRef Name="client_title_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="title" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__title__67AA2AB0">
+          <End Role="client_title" Type="Self.client_title" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_title">
+              <PropertyRef Name="client_title_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="title" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_ac__fk_cl__245D67DE">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_activity" Type="Self.client_activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_activity">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_ag__fk_cl__3E2826D9">
+          <End Role="client_agent_role_type" Type="Self.client_agent_role_type" Multiplicity="1" />
+          <End Role="client_agent" Type="Self.client_agent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_agent_role_type">
+              <PropertyRef Name="client_agent_role_type_id" />
+            </Principal>
+            <Dependent Role="client_agent">
+              <PropertyRef Name="fk_client_role_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_co__fk_cl__09A971A2">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_contact_status" Type="Self.client_contact_status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_contact_status">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_co__fk_cl__208CD6FA">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_contact_source" Type="Self.client_contact_source" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_contact_source">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_co__fk_co__08B54D69">
+          <End Role="contact_status_type" Type="Self.contact_status_type" Multiplicity="1" />
+          <End Role="client_contact_status" Type="Self.client_contact_status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact_status_type">
+              <PropertyRef Name="pk_contact_status_type_id" />
+            </Principal>
+            <Dependent Role="client_contact_status">
+              <PropertyRef Name="fk_contact_status_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_co__fk_co__1CBC4616">
+          <End Role="contact_source_type" Type="Self.contact_source_type" Multiplicity="1" />
+          <End Role="client_contact_source" Type="Self.client_contact_source" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact_source_type">
+              <PropertyRef Name="pk_contact_source_type_id" />
+            </Principal>
+            <Dependent Role="client_contact_source">
+              <PropertyRef Name="fk_contact_source_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__contact_d__fk_co__5AEE82B9">
+          <End Role="country_code" Type="Self.country_code" Multiplicity="0..1" />
+          <End Role="contact_details" Type="Self.contact_details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country_code">
+              <PropertyRef Name="pk_country_id" />
+            </Principal>
+            <Dependent Role="contact_details">
+              <PropertyRef Name="fk_country_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__error_log__sourc__0757E033">
+          <End Role="client_system" Type="Self.client_system" Multiplicity="1" />
+          <End Role="error_log" Type="Self.error_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_system">
+              <PropertyRef Name="pk_client_system_id" />
+            </Principal>
+            <Dependent Role="error_log">
+              <PropertyRef Name="target_application" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_address_address_type">
+          <End Role="address_type" Type="Self.address_type" Multiplicity="1" />
+          <End Role="address" Type="Self.address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="address_type">
+              <PropertyRef Name="pk_address_type_id" />
+            </Principal>
+            <Dependent Role="address">
+              <PropertyRef Name="fk_address_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_address_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="address" Type="Self.address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="address">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_agent_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_agent" Type="Self.client_agent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_agent">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_audit_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_audit" Type="Self.client_audit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_audit">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_branch_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_branch" Type="Self.client_branch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_branch">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_license_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_license" Type="Self.client_license" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_license">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_relationship_client_relationship_type">
+          <End Role="client_relationship_type" Type="Self.client_relationship_type" Multiplicity="1" />
+          <End Role="client_relationship" Type="Self.client_relationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_relationship_type">
+              <PropertyRef Name="pk_client_relationship_type_id" />
+            </Principal>
+            <Dependent Role="client_relationship">
+              <PropertyRef Name="fk_client_relationship_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_relationship_client1">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_relationship" Type="Self.client_relationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_relationship">
+              <PropertyRef Name="fk_client_from_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_relationship_client2">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_relationship" Type="Self.client_relationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_relationship">
+              <PropertyRef Name="fk_client_to_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_type_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_type" Type="Self.client_type" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_type">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_type_client_type_description">
+          <End Role="client_type_description" Type="Self.client_type_description" Multiplicity="1" />
+          <End Role="client_type" Type="Self.client_type" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_type_description">
+              <PropertyRef Name="pk_client_type_description_id" />
+            </Principal>
+            <Dependent Role="client_type">
+              <PropertyRef Name="fk_client_type_description_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_user_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_user" Type="Self.client_user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_user">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_contact_details_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="contact_details" Type="Self.contact_details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="contact_details">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_contact_details_contact_details_location_type">
+          <End Role="contact_details_location_type" Type="Self.contact_details_location_type" Multiplicity="1" />
+          <End Role="contact_details" Type="Self.contact_details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact_details_location_type">
+              <PropertyRef Name="pk_contact_details_location_type_id" />
+            </Principal>
+            <Dependent Role="contact_details">
+              <PropertyRef Name="fk_contact_details_location_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_contact_details_contact_details_type">
+          <End Role="contact_details_type" Type="Self.contact_details_type" Multiplicity="1" />
+          <End Role="contact_details" Type="Self.contact_details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact_details_type">
+              <PropertyRef Name="pk_contact_details_type_id" />
+            </Principal>
+            <Dependent Role="contact_details">
+              <PropertyRef Name="fk_contact_details_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_search_client_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="search_client" Type="Self.search_client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="search_client">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_search_client_client_system">
+          <End Role="client_system" Type="Self.client_system" Multiplicity="1" />
+          <End Role="search_client" Type="Self.search_client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_system">
+              <PropertyRef Name="pk_client_system_id" />
+            </Principal>
+            <Dependent Role="search_client">
+              <PropertyRef Name="fk_client_system_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="clientModelStoreContainer">
+          <EntitySet Name="address" EntityType="Self.address" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="address_type" EntityType="Self.address_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client" EntityType="Self.client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_activity" EntityType="Self.client_activity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_agent" EntityType="Self.client_agent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_agent_role_type" EntityType="Self.client_agent_role_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_audit" EntityType="Self.client_audit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_branch" EntityType="Self.client_branch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_contact_source" EntityType="Self.client_contact_source" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_contact_status" EntityType="Self.client_contact_status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_ethnic_group" EntityType="Self.client_ethnic_group" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_gender" EntityType="Self.client_gender" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_license" EntityType="Self.client_license" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_relationship" EntityType="Self.client_relationship" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_relationship_type" EntityType="Self.client_relationship_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_system" EntityType="Self.client_system" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_system_relationship" EntityType="Self.client_system_relationship" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_title" EntityType="Self.client_title" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_type" EntityType="Self.client_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_type_description" EntityType="Self.client_type_description" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_user" EntityType="Self.client_user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="contact_details" EntityType="Self.contact_details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="contact_details_location_type" EntityType="Self.contact_details_location_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="contact_details_type" EntityType="Self.contact_details_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="contact_source_type" EntityType="Self.contact_source_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="contact_status_type" EntityType="Self.contact_status_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="country_code" EntityType="Self.country_code" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="error_log" EntityType="Self.error_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="language" EntityType="Self.language" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="marital_status_type" EntityType="Self.marital_status_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="religion" EntityType="Self.religion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="search_client" EntityType="Self.search_client" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__client__ethnic_g__5C387804" Association="Self.FK__client__ethnic_g__5C387804">
+            <End Role="client_ethnic_group" EntitySet="client_ethnic_group" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__ethnic_g__62E57593" Association="Self.FK__client__ethnic_g__62E57593">
+            <End Role="client_ethnic_group" EntitySet="client_ethnic_group" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__fk_citiz__5D2C9C3D" Association="Self.FK__client__fk_citiz__5D2C9C3D">
+            <End Role="country_code" EntitySet="country_code" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__fk_citiz__63D999CC" Association="Self.FK__client__fk_citiz__63D999CC">
+            <End Role="country_code" EntitySet="country_code" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__fk_count__5E20C076" Association="Self.FK__client__fk_count__5E20C076">
+            <End Role="country_code" EntitySet="country_code" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__fk_count__64CDBE05" Association="Self.FK__client__fk_count__64CDBE05">
+            <End Role="country_code" EntitySet="country_code" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__gender__5F14E4AF" Association="Self.FK__client__gender__5F14E4AF">
+            <End Role="client_gender" EntitySet="client_gender" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__gender__65C1E23E" Association="Self.FK__client__gender__65C1E23E">
+            <End Role="client_gender" EntitySet="client_gender" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__preferre__600908E8" Association="Self.FK__client__preferre__600908E8">
+            <End Role="language" EntitySet="language" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__preferre__66B60677" Association="Self.FK__client__preferre__66B60677">
+            <End Role="language" EntitySet="language" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__title__60FD2D21" Association="Self.FK__client__title__60FD2D21">
+            <End Role="client_title" EntitySet="client_title" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__title__67AA2AB0" Association="Self.FK__client__title__67AA2AB0">
+            <End Role="client_title" EntitySet="client_title" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_ac__fk_cl__245D67DE" Association="Self.FK__client_ac__fk_cl__245D67DE">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_activity" EntitySet="client_activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_ag__fk_cl__3E2826D9" Association="Self.FK__client_ag__fk_cl__3E2826D9">
+            <End Role="client_agent_role_type" EntitySet="client_agent_role_type" />
+            <End Role="client_agent" EntitySet="client_agent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_co__fk_cl__09A971A2" Association="Self.FK__client_co__fk_cl__09A971A2">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_contact_status" EntitySet="client_contact_status" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_co__fk_cl__208CD6FA" Association="Self.FK__client_co__fk_cl__208CD6FA">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_contact_source" EntitySet="client_contact_source" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_co__fk_co__08B54D69" Association="Self.FK__client_co__fk_co__08B54D69">
+            <End Role="contact_status_type" EntitySet="contact_status_type" />
+            <End Role="client_contact_status" EntitySet="client_contact_status" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_co__fk_co__1CBC4616" Association="Self.FK__client_co__fk_co__1CBC4616">
+            <End Role="contact_source_type" EntitySet="contact_source_type" />
+            <End Role="client_contact_source" EntitySet="client_contact_source" />
+          </AssociationSet>
+          <AssociationSet Name="FK__contact_d__fk_co__5AEE82B9" Association="Self.FK__contact_d__fk_co__5AEE82B9">
+            <End Role="country_code" EntitySet="country_code" />
+            <End Role="contact_details" EntitySet="contact_details" />
+          </AssociationSet>
+          <AssociationSet Name="FK__error_log__sourc__0757E033" Association="Self.FK__error_log__sourc__0757E033">
+            <End Role="client_system" EntitySet="client_system" />
+            <End Role="error_log" EntitySet="error_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK_address_address_type" Association="Self.FK_address_address_type">
+            <End Role="address_type" EntitySet="address_type" />
+            <End Role="address" EntitySet="address" />
+          </AssociationSet>
+          <AssociationSet Name="FK_address_client" Association="Self.FK_address_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="address" EntitySet="address" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_agent_client" Association="Self.FK_client_agent_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_agent" EntitySet="client_agent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_audit_client" Association="Self.FK_client_audit_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_audit" EntitySet="client_audit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_branch_client" Association="Self.FK_client_branch_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_branch" EntitySet="client_branch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_license_client" Association="Self.FK_client_license_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_license" EntitySet="client_license" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_relationship_client_relationship_type" Association="Self.FK_client_relationship_client_relationship_type">
+            <End Role="client_relationship_type" EntitySet="client_relationship_type" />
+            <End Role="client_relationship" EntitySet="client_relationship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_relationship_client1" Association="Self.FK_client_relationship_client1">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_relationship" EntitySet="client_relationship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_relationship_client2" Association="Self.FK_client_relationship_client2">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_relationship" EntitySet="client_relationship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_type_client" Association="Self.FK_client_type_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_type" EntitySet="client_type" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_type_client_type_description" Association="Self.FK_client_type_client_type_description">
+            <End Role="client_type_description" EntitySet="client_type_description" />
+            <End Role="client_type" EntitySet="client_type" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_user_client" Association="Self.FK_client_user_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_user" EntitySet="client_user" />
+          </AssociationSet>
+          <AssociationSet Name="FK_contact_details_client" Association="Self.FK_contact_details_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="contact_details" EntitySet="contact_details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_contact_details_contact_details_location_type" Association="Self.FK_contact_details_contact_details_location_type">
+            <End Role="contact_details_location_type" EntitySet="contact_details_location_type" />
+            <End Role="contact_details" EntitySet="contact_details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_contact_details_contact_details_type" Association="Self.FK_contact_details_contact_details_type">
+            <End Role="contact_details_type" EntitySet="contact_details_type" />
+            <End Role="contact_details" EntitySet="contact_details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_search_client_client" Association="Self.FK_search_client_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="search_client" EntitySet="search_client" />
+          </AssociationSet>
+          <AssociationSet Name="FK_search_client_client_system" Association="Self.FK_search_client_client_system">
+            <End Role="client_system" EntitySet="client_system" />
+            <End Role="search_client" EntitySet="search_client" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="clientModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="address">
+          <Key>
+            <PropertyRef Name="pk_address_id" />
+          </Key>
+          <Property Name="pk_address_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_address_type_id" Type="Int32" Nullable="false" />
+          <Property Name="address1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fk_area_id" Type="Int32" Nullable="false" />
+          <Property Name="created_by" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="is_active_status" Type="Int32" Nullable="false" />
+          <Property Name="postal_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="address_type" Relationship="Self.FK_address_address_type" FromRole="address" ToRole="address_type" />
+          <NavigationProperty Name="client" Relationship="Self.FK_address_client" FromRole="address" ToRole="client" />
+        </EntityType>
+        <EntityType Name="address_type">
+          <Key>
+            <PropertyRef Name="pk_address_type_id" />
+          </Key>
+          <Property Name="pk_address_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="address_type1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="address" Relationship="Self.FK_address_address_type" FromRole="address_type" ToRole="address" />
+        </EntityType>
+        <EntityType Name="client">
+          <Key>
+            <PropertyRef Name="pk_client_id" />
+          </Key>
+          <Property Name="pk_client_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="first_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="last_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="middle_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="preferred_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="identity_number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="passport_number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="title" Type="Int32" />
+          <Property Name="gender" Type="Int32" />
+          <Property Name="ethnic_group" Type="Int32" />
+          <Property Name="occupation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fk_marital_status_type_id" Type="Int32" />
+          <Property Name="date_of_birth" Type="DateTime" Precision="3" />
+          <Property Name="deleted" Type="Boolean" />
+          <Property Name="identified" Type="Boolean" />
+          <Property Name="identified_date" Type="DateTime" Precision="3" />
+          <Property Name="blocked" Type="Boolean" />
+          <Property Name="blocked_date" Type="DateTime" Precision="3" />
+          <Property Name="fk_language_id" Type="Int32" />
+          <Property Name="fk_religion_id" Type="Int32" />
+          <Property Name="fk_citizenship" Type="Int32" />
+          <Property Name="fk_country_of_residence" Type="Int32" />
+          <Property Name="preferred_language" Type="Int32" />
+          <Property Name="created_by" Type="Int32" />
+          <Property Name="created_date" Type="DateTime" Precision="3" />
+          <Property Name="updated_date" Type="DateTime" Precision="3" />
+          <Property Name="deceased_status" Type="Boolean" />
+          <Property Name="popi_opt_in" Type="Boolean" Nullable="false" />
+          <Property Name="phone_call_opt_in" Type="Boolean" Nullable="false" />
+          <Property Name="email_opt_in" Type="Boolean" Nullable="false" />
+          <Property Name="sms_opt_in" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="address" Relationship="Self.FK_address_client" FromRole="client" ToRole="address" />
+          <NavigationProperty Name="client_ethnic_group" Relationship="Self.FK__client__ethnic_g__5C387804" FromRole="client" ToRole="client_ethnic_group" />
+          <NavigationProperty Name="client_ethnic_group1" Relationship="Self.FK__client__ethnic_g__62E57593" FromRole="client" ToRole="client_ethnic_group" />
+          <NavigationProperty Name="country_code" Relationship="Self.FK__client__fk_citiz__5D2C9C3D" FromRole="client" ToRole="country_code" />
+          <NavigationProperty Name="country_code1" Relationship="Self.FK__client__fk_citiz__63D999CC" FromRole="client" ToRole="country_code" />
+          <NavigationProperty Name="country_code2" Relationship="Self.FK__client__fk_count__5E20C076" FromRole="client" ToRole="country_code" />
+          <NavigationProperty Name="country_code3" Relationship="Self.FK__client__fk_count__64CDBE05" FromRole="client" ToRole="country_code" />
+          <NavigationProperty Name="client_gender" Relationship="Self.FK__client__gender__5F14E4AF" FromRole="client" ToRole="client_gender" />
+          <NavigationProperty Name="client_gender1" Relationship="Self.FK__client__gender__65C1E23E" FromRole="client" ToRole="client_gender" />
+          <NavigationProperty Name="language" Relationship="Self.FK__client__preferre__600908E8" FromRole="client" ToRole="language" />
+          <NavigationProperty Name="language1" Relationship="Self.FK__client__preferre__66B60677" FromRole="client" ToRole="language" />
+          <NavigationProperty Name="client_title" Relationship="Self.FK__client__title__60FD2D21" FromRole="client" ToRole="client_title" />
+          <NavigationProperty Name="client_title1" Relationship="Self.FK__client__title__67AA2AB0" FromRole="client" ToRole="client_title" />
+          <NavigationProperty Name="client_activity" Relationship="Self.FK__client_ac__fk_cl__245D67DE" FromRole="client" ToRole="client_activity" />
+          <NavigationProperty Name="client_contact_status" Relationship="Self.FK__client_co__fk_cl__09A971A2" FromRole="client" ToRole="client_contact_status" />
+          <NavigationProperty Name="client_contact_source" Relationship="Self.FK__client_co__fk_cl__208CD6FA" FromRole="client" ToRole="client_contact_source" />
+          <NavigationProperty Name="client_agent" Relationship="Self.FK_client_agent_client" FromRole="client" ToRole="client_agent" />
+          <NavigationProperty Name="client_audit" Relationship="Self.FK_client_audit_client" FromRole="client" ToRole="client_audit" />
+          <NavigationProperty Name="client_branch" Relationship="Self.FK_client_branch_client" FromRole="client" ToRole="client_branch" />
+          <NavigationProperty Name="client_license" Relationship="Self.FK_client_license_client" FromRole="client" ToRole="client_license" />
+          <NavigationProperty Name="client_relationship" Relationship="Self.FK_client_relationship_client1" FromRole="client" ToRole="client_relationship" />
+          <NavigationProperty Name="client_relationship1" Relationship="Self.FK_client_relationship_client2" FromRole="client" ToRole="client_relationship" />
+          <NavigationProperty Name="client_type" Relationship="Self.FK_client_type_client" FromRole="client" ToRole="client_type" />
+          <NavigationProperty Name="client_user" Relationship="Self.FK_client_user_client" FromRole="client" ToRole="client_user" />
+          <NavigationProperty Name="contact_details" Relationship="Self.FK_contact_details_client" FromRole="client" ToRole="contact_details" />
+          <NavigationProperty Name="search_client" Relationship="Self.FK_search_client_client" FromRole="client" ToRole="search_client" />
+        </EntityType>
+        <EntityType Name="client_activity">
+          <Key>
+            <PropertyRef Name="pk_client_activity_id" />
+          </Key>
+          <Property Name="pk_client_activity_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_activity_type_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="created_by" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="allocated_to" Type="Int32" />
+          <Property Name="activity_value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="is_active_status" Type="Boolean" />
+          <NavigationProperty Name="client" Relationship="Self.FK__client_ac__fk_cl__245D67DE" FromRole="client_activity" ToRole="client" />
+        </EntityType>
+        <EntityType Name="client_agent">
+          <Key>
+            <PropertyRef Name="pk_client_agent_id" />
+          </Key>
+          <Property Name="pk_client_agent_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_agent_id" Type="Int32" Nullable="false" />
+          <Property Name="is_active_status" Type="Boolean" />
+          <Property Name="created_by" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fk_client_role_type" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="client" Relationship="Self.FK_client_agent_client" FromRole="client_agent" ToRole="client" />
+          <NavigationProperty Name="client_agent_role_type" Relationship="Self.FK__client_ag__fk_cl__3E2826D9" FromRole="client_agent" ToRole="client_agent_role_type" />
+        </EntityType>
+        <EntityType Name="client_agent_role_type">
+          <Key>
+            <PropertyRef Name="client_agent_role_type_id" />
+          </Key>
+          <Property Name="client_agent_role_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="role_description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="client_agent" Relationship="Self.FK__client_ag__fk_cl__3E2826D9" FromRole="client_agent_role_type" ToRole="client_agent" />
+        </EntityType>
+        <EntityType Name="client_audit">
+          <Key>
+            <PropertyRef Name="pk_client_audit_id" />
+          </Key>
+          <Property Name="pk_client_audit_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="created_by" Type="Int32" Nullable="false" />
+          <Property Name="updated_field" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="updated_value" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="client" Relationship="Self.FK_client_audit_client" FromRole="client_audit" ToRole="client" />
+        </EntityType>
+        <EntityType Name="client_branch">
+          <Key>
+            <PropertyRef Name="pk_client_branch_id" />
+          </Key>
+          <Property Name="pk_client_branch_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_branch_id" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="client" Relationship="Self.FK_client_branch_client" FromRole="client_branch" ToRole="client" />
+        </EntityType>
+        <EntityType Name="client_contact_source">
+          <Key>
+            <PropertyRef Name="pk_client_contact_source" />
+          </Key>
+          <Property Name="pk_client_contact_source" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_contact_source_type" Type="Int32" Nullable="false" />
+          <Property Name="created_by" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="client" Relationship="Self.FK__client_co__fk_cl__208CD6FA" FromRole="client_contact_source" ToRole="client" />
+          <NavigationProperty Name="contact_source_type" Relationship="Self.FK__client_co__fk_co__1CBC4616" FromRole="client_contact_source" ToRole="contact_source_type" />
+        </EntityType>
+        <EntityType Name="client_contact_status">
+          <Key>
+            <PropertyRef Name="pk_client_contact_status_id" />
+          </Key>
+          <Property Name="pk_client_contact_status_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_contact_status_type_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="contact_status_value" Type="Boolean" Nullable="false" />
+          <Property Name="created_by" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="client" Relationship="Self.FK__client_co__fk_cl__09A971A2" FromRole="client_contact_status" ToRole="client" />
+          <NavigationProperty Name="contact_status_type" Relationship="Self.FK__client_co__fk_co__08B54D69" FromRole="client_contact_status" ToRole="contact_status_type" />
+        </EntityType>
+        <EntityType Name="client_ethnic_group">
+          <Key>
+            <PropertyRef Name="client_ethinic_group_id" />
+          </Key>
+          <Property Name="client_ethinic_group_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ethnic_group_desc" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="client" Relationship="Self.FK__client__ethnic_g__5C387804" FromRole="client_ethnic_group" ToRole="client" />
+          <NavigationProperty Name="client1" Relationship="Self.FK__client__ethnic_g__62E57593" FromRole="client_ethnic_group" ToRole="client" />
+        </EntityType>
+        <EntityType Name="client_gender">
+          <Key>
+            <PropertyRef Name="client_gender_id" />
+          </Key>
+          <Property Name="client_gender_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="gender_desc" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="client" Relationship="Self.FK__client__gender__5F14E4AF" FromRole="client_gender" ToRole="client" />
+          <NavigationProperty Name="client1" Relationship="Self.FK__client__gender__65C1E23E" FromRole="client_gender" ToRole="client" />
+        </EntityType>
+        <EntityType Name="client_license">
+          <Key>
+            <PropertyRef Name="pk_client_license_id" />
+          </Key>
+          <Property Name="pk_client_license_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_license_id" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="client" Relationship="Self.FK_client_license_client" FromRole="client_license" ToRole="client" />
+        </EntityType>
+        <EntityType Name="client_relationship">
+          <Key>
+            <PropertyRef Name="pk_client_relationship_id" />
+          </Key>
+          <Property Name="pk_client_relationship_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_from_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_client_to_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_client_relationship_type_id" Type="Int32" Nullable="false" />
+          <Property Name="created_by" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="is_active_status" Type="Boolean" />
+          <NavigationProperty Name="client" Relationship="Self.FK_client_relationship_client1" FromRole="client_relationship" ToRole="client" />
+          <NavigationProperty Name="client1" Relationship="Self.FK_client_relationship_client2" FromRole="client_relationship" ToRole="client" />
+          <NavigationProperty Name="client_relationship_type" Relationship="Self.FK_client_relationship_client_relationship_type" FromRole="client_relationship" ToRole="client_relationship_type" />
+        </EntityType>
+        <EntityType Name="client_relationship_type">
+          <Key>
+            <PropertyRef Name="pk_client_relationship_type_id" />
+          </Key>
+          <Property Name="pk_client_relationship_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="client_relationship" Relationship="Self.FK_client_relationship_client_relationship_type" FromRole="client_relationship_type" ToRole="client_relationship" />
+        </EntityType>
+        <EntityType Name="client_system">
+          <Key>
+            <PropertyRef Name="pk_client_system_id" />
+          </Key>
+          <Property Name="pk_client_system_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="system_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="error_log" Relationship="Self.FK__error_log__sourc__0757E033" FromRole="client_system" ToRole="error_log" />
+          <NavigationProperty Name="search_client" Relationship="Self.FK_search_client_client_system" FromRole="client_system" ToRole="search_client" />
+        </EntityType>
+        <EntityType Name="client_system_relationship">
+          <Key>
+            <PropertyRef Name="pk_client_system_relationship_id" />
+          </Key>
+          <Property Name="pk_client_system_relationship_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_client_system_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_system_client_id" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="client_title">
+          <Key>
+            <PropertyRef Name="client_title_id" />
+          </Key>
+          <Property Name="client_title_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title_desc" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="client" Relationship="Self.FK__client__title__60FD2D21" FromRole="client_title" ToRole="client" />
+          <NavigationProperty Name="client1" Relationship="Self.FK__client__title__67AA2AB0" FromRole="client_title" ToRole="client" />
+        </EntityType>
+        <EntityType Name="client_type">
+          <Key>
+            <PropertyRef Name="pk_client_type_id" />
+          </Key>
+          <Property Name="pk_client_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_client_type_description_id" Type="Int32" Nullable="false" />
+          <Property Name="created_by" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="is_active_status" Type="Boolean" />
+          <NavigationProperty Name="client" Relationship="Self.FK_client_type_client" FromRole="client_type" ToRole="client" />
+          <NavigationProperty Name="client_type_description" Relationship="Self.FK_client_type_client_type_description" FromRole="client_type" ToRole="client_type_description" />
+        </EntityType>
+        <EntityType Name="client_type_description">
+          <Key>
+            <PropertyRef Name="pk_client_type_description_id" />
+          </Key>
+          <Property Name="pk_client_type_description_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="client_type" Relationship="Self.FK_client_type_client_type_description" FromRole="client_type_description" ToRole="client_type" />
+        </EntityType>
+        <EntityType Name="client_user">
+          <Key>
+            <PropertyRef Name="pk_client_user_id" />
+          </Key>
+          <Property Name="pk_client_user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_user_id" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="client" Relationship="Self.FK_client_user_client" FromRole="client_user" ToRole="client" />
+        </EntityType>
+        <EntityType Name="contact_details">
+          <Key>
+            <PropertyRef Name="pk_contact_details_id" />
+          </Key>
+          <Property Name="pk_contact_details_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_contact_details_type_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_contact_details_location_type_id" Type="Int32" Nullable="false" />
+          <Property Name="contact_details_value" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="is_primary_contact" Type="Boolean" />
+          <Property Name="created_by" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="is_active_status" Type="Boolean" />
+          <Property Name="fk_country_code" Type="Int32" />
+          <Property Name="deleted" Type="Boolean" Nullable="false" />
+          <Property Name="deleted_by" Type="Guid" />
+          <Property Name="deleted_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="client" Relationship="Self.FK_contact_details_client" FromRole="contact_details" ToRole="client" />
+          <NavigationProperty Name="country_code" Relationship="Self.FK__contact_d__fk_co__5AEE82B9" FromRole="contact_details" ToRole="country_code" />
+          <NavigationProperty Name="contact_details_location_type" Relationship="Self.FK_contact_details_contact_details_location_type" FromRole="contact_details" ToRole="contact_details_location_type" />
+          <NavigationProperty Name="contact_details_type" Relationship="Self.FK_contact_details_contact_details_type" FromRole="contact_details" ToRole="contact_details_type" />
+        </EntityType>
+        <EntityType Name="contact_details_location_type">
+          <Key>
+            <PropertyRef Name="pk_contact_details_location_type_id" />
+          </Key>
+          <Property Name="pk_contact_details_location_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="contact_details" Relationship="Self.FK_contact_details_contact_details_location_type" FromRole="contact_details_location_type" ToRole="contact_details" />
+        </EntityType>
+        <EntityType Name="contact_details_type">
+          <Key>
+            <PropertyRef Name="pk_contact_details_type_id" />
+          </Key>
+          <Property Name="pk_contact_details_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="contact_details" Relationship="Self.FK_contact_details_contact_details_type" FromRole="contact_details_type" ToRole="contact_details" />
+        </EntityType>
+        <EntityType Name="contact_source_type">
+          <Key>
+            <PropertyRef Name="pk_contact_source_type_id" />
+          </Key>
+          <Property Name="pk_contact_source_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="client_contact_source" Relationship="Self.FK__client_co__fk_co__1CBC4616" FromRole="contact_source_type" ToRole="client_contact_source" />
+        </EntityType>
+        <EntityType Name="contact_status_type">
+          <Key>
+            <PropertyRef Name="pk_contact_status_type_id" />
+          </Key>
+          <Property Name="pk_contact_status_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="client_contact_status" Relationship="Self.FK__client_co__fk_co__08B54D69" FromRole="contact_status_type" ToRole="client_contact_status" />
+        </EntityType>
+        <EntityType Name="country_code">
+          <Key>
+            <PropertyRef Name="pk_country_id" />
+          </Key>
+          <Property Name="pk_country_id" Type="Int32" Nullable="false" />
+          <Property Name="country_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="country_code_iso" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="country_code_un" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="country_dial_code" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="client" Relationship="Self.FK__client__fk_citiz__5D2C9C3D" FromRole="country_code" ToRole="client" />
+          <NavigationProperty Name="client1" Relationship="Self.FK__client__fk_citiz__63D999CC" FromRole="country_code" ToRole="client" />
+          <NavigationProperty Name="client2" Relationship="Self.FK__client__fk_count__5E20C076" FromRole="country_code" ToRole="client" />
+          <NavigationProperty Name="client3" Relationship="Self.FK__client__fk_count__64CDBE05" FromRole="country_code" ToRole="client" />
+          <NavigationProperty Name="contact_details" Relationship="Self.FK__contact_d__fk_co__5AEE82B9" FromRole="country_code" ToRole="contact_details" />
+        </EntityType>
+        <EntityType Name="error_log">
+          <Key>
+            <PropertyRef Name="error_log_id" />
+          </Key>
+          <Property Name="error_log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="target_application" Type="Int32" Nullable="false" />
+          <Property Name="friendly_error_msg" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="exception_string" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="user" Type="Guid" />
+          <Property Name="date_time" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="client_system" Relationship="Self.FK__error_log__sourc__0757E033" FromRole="error_log" ToRole="client_system" />
+        </EntityType>
+        <EntityType Name="language">
+          <Key>
+            <PropertyRef Name="pk_language_id" />
+          </Key>
+          <Property Name="pk_language_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="language_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="client" Relationship="Self.FK__client__preferre__600908E8" FromRole="language" ToRole="client" />
+          <NavigationProperty Name="client1" Relationship="Self.FK__client__preferre__66B60677" FromRole="language" ToRole="client" />
+        </EntityType>
+        <EntityType Name="marital_status_type">
+          <Key>
+            <PropertyRef Name="pk_merital_status_type_id" />
+          </Key>
+          <Property Name="pk_merital_status_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="religion">
+          <Key>
+            <PropertyRef Name="pk_religion_id" />
+          </Key>
+          <Property Name="pk_religion_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="religion_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="search_client">
+          <Key>
+            <PropertyRef Name="pk_search_client_id" />
+          </Key>
+          <Property Name="pk_search_client_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_client_system_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_system_client_id" Type="Int32" Nullable="false" />
+          <Property Name="first_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="last_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="middle_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="preferred_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="identity_number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="passport_number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="date_of_birth" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="is_primary_contact_no" Type="Boolean" />
+          <Property Name="is_primary_email" Type="Boolean" />
+          <NavigationProperty Name="client" Relationship="Self.FK_search_client_client" FromRole="search_client" ToRole="client" />
+          <NavigationProperty Name="client_system" Relationship="Self.FK_search_client_client_system" FromRole="search_client" ToRole="client_system" />
+        </EntityType>
+        <Association Name="FK_address_address_type">
+          <End Role="address_type" Type="Self.address_type" Multiplicity="1" />
+          <End Role="address" Type="Self.address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="address_type">
+              <PropertyRef Name="pk_address_type_id" />
+            </Principal>
+            <Dependent Role="address">
+              <PropertyRef Name="fk_address_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_address_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="address" Type="Self.address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="address">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__ethnic_g__5C387804">
+          <End Role="client_ethnic_group" Type="Self.client_ethnic_group" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_ethnic_group">
+              <PropertyRef Name="client_ethinic_group_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="ethnic_group" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__ethnic_g__62E57593">
+          <End Role="client_ethnic_group" Type="Self.client_ethnic_group" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_ethnic_group">
+              <PropertyRef Name="client_ethinic_group_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="ethnic_group" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__fk_citiz__5D2C9C3D">
+          <End Role="country_code" Type="Self.country_code" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country_code">
+              <PropertyRef Name="pk_country_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="fk_citizenship" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__fk_citiz__63D999CC">
+          <End Role="country_code" Type="Self.country_code" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country_code">
+              <PropertyRef Name="pk_country_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="fk_citizenship" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__fk_count__5E20C076">
+          <End Role="country_code" Type="Self.country_code" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country_code">
+              <PropertyRef Name="pk_country_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="fk_country_of_residence" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__fk_count__64CDBE05">
+          <End Role="country_code" Type="Self.country_code" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country_code">
+              <PropertyRef Name="pk_country_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="fk_country_of_residence" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__gender__5F14E4AF">
+          <End Role="client_gender" Type="Self.client_gender" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_gender">
+              <PropertyRef Name="client_gender_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="gender" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__gender__65C1E23E">
+          <End Role="client_gender" Type="Self.client_gender" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_gender">
+              <PropertyRef Name="client_gender_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="gender" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__preferre__600908E8">
+          <End Role="language" Type="Self.language" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="language">
+              <PropertyRef Name="pk_language_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="preferred_language" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__preferre__66B60677">
+          <End Role="language" Type="Self.language" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="language">
+              <PropertyRef Name="pk_language_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="preferred_language" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__title__60FD2D21">
+          <End Role="client_title" Type="Self.client_title" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_title">
+              <PropertyRef Name="client_title_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="title" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client__title__67AA2AB0">
+          <End Role="client_title" Type="Self.client_title" Multiplicity="0..1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_title">
+              <PropertyRef Name="client_title_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="title" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_ac__fk_cl__245D67DE">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_activity" Type="Self.client_activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_activity">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_co__fk_cl__09A971A2">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_contact_status" Type="Self.client_contact_status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_contact_status">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_co__fk_cl__208CD6FA">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_contact_source" Type="Self.client_contact_source" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_contact_source">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_agent_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_agent" Type="Self.client_agent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_agent">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_audit_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_audit" Type="Self.client_audit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_audit">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_branch_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_branch" Type="Self.client_branch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_branch">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_license_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_license" Type="Self.client_license" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_license">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_relationship_client1">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_relationship" Type="Self.client_relationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_relationship">
+              <PropertyRef Name="fk_client_from_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_relationship_client2">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_relationship" Type="Self.client_relationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_relationship">
+              <PropertyRef Name="fk_client_to_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_type_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_type" Type="Self.client_type" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_type">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_user_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client_user" Type="Self.client_user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="client_user">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_contact_details_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="contact_details" Type="Self.contact_details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="contact_details">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_search_client_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="search_client" Type="Self.search_client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="pk_client_id" />
+            </Principal>
+            <Dependent Role="search_client">
+              <PropertyRef Name="fk_client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_ag__fk_cl__3E2826D9">
+          <End Role="client_agent_role_type" Type="Self.client_agent_role_type" Multiplicity="1" />
+          <End Role="client_agent" Type="Self.client_agent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_agent_role_type">
+              <PropertyRef Name="client_agent_role_type_id" />
+            </Principal>
+            <Dependent Role="client_agent">
+              <PropertyRef Name="fk_client_role_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_co__fk_co__1CBC4616">
+          <End Role="contact_source_type" Type="Self.contact_source_type" Multiplicity="1" />
+          <End Role="client_contact_source" Type="Self.client_contact_source" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact_source_type">
+              <PropertyRef Name="pk_contact_source_type_id" />
+            </Principal>
+            <Dependent Role="client_contact_source">
+              <PropertyRef Name="fk_contact_source_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_co__fk_co__08B54D69">
+          <End Role="contact_status_type" Type="Self.contact_status_type" Multiplicity="1" />
+          <End Role="client_contact_status" Type="Self.client_contact_status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact_status_type">
+              <PropertyRef Name="pk_contact_status_type_id" />
+            </Principal>
+            <Dependent Role="client_contact_status">
+              <PropertyRef Name="fk_contact_status_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_relationship_client_relationship_type">
+          <End Role="client_relationship_type" Type="Self.client_relationship_type" Multiplicity="1" />
+          <End Role="client_relationship" Type="Self.client_relationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_relationship_type">
+              <PropertyRef Name="pk_client_relationship_type_id" />
+            </Principal>
+            <Dependent Role="client_relationship">
+              <PropertyRef Name="fk_client_relationship_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__error_log__sourc__0757E033">
+          <End Role="client_system" Type="Self.client_system" Multiplicity="1" />
+          <End Role="error_log" Type="Self.error_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_system">
+              <PropertyRef Name="pk_client_system_id" />
+            </Principal>
+            <Dependent Role="error_log">
+              <PropertyRef Name="target_application" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_search_client_client_system">
+          <End Role="client_system" Type="Self.client_system" Multiplicity="1" />
+          <End Role="search_client" Type="Self.search_client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_system">
+              <PropertyRef Name="pk_client_system_id" />
+            </Principal>
+            <Dependent Role="search_client">
+              <PropertyRef Name="fk_client_system_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_type_client_type_description">
+          <End Role="client_type_description" Type="Self.client_type_description" Multiplicity="1" />
+          <End Role="client_type" Type="Self.client_type" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client_type_description">
+              <PropertyRef Name="pk_client_type_description_id" />
+            </Principal>
+            <Dependent Role="client_type">
+              <PropertyRef Name="fk_client_type_description_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__contact_d__fk_co__5AEE82B9">
+          <End Role="country_code" Type="Self.country_code" Multiplicity="0..1" />
+          <End Role="contact_details" Type="Self.contact_details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country_code">
+              <PropertyRef Name="pk_country_id" />
+            </Principal>
+            <Dependent Role="contact_details">
+              <PropertyRef Name="fk_country_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_contact_details_contact_details_location_type">
+          <End Role="contact_details_location_type" Type="Self.contact_details_location_type" Multiplicity="1" />
+          <End Role="contact_details" Type="Self.contact_details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact_details_location_type">
+              <PropertyRef Name="pk_contact_details_location_type_id" />
+            </Principal>
+            <Dependent Role="contact_details">
+              <PropertyRef Name="fk_contact_details_location_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_contact_details_contact_details_type">
+          <End Role="contact_details_type" Type="Self.contact_details_type" Multiplicity="1" />
+          <End Role="contact_details" Type="Self.contact_details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact_details_type">
+              <PropertyRef Name="pk_contact_details_type_id" />
+            </Principal>
+            <Dependent Role="contact_details">
+              <PropertyRef Name="fk_contact_details_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="clientEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="address" EntityType="Self.address" />
+          <EntitySet Name="address_type" EntityType="Self.address_type" />
+          <EntitySet Name="client" EntityType="Self.client" />
+          <EntitySet Name="client_activity" EntityType="Self.client_activity" />
+          <EntitySet Name="client_agent" EntityType="Self.client_agent" />
+          <EntitySet Name="client_agent_role_type" EntityType="Self.client_agent_role_type" />
+          <EntitySet Name="client_audit" EntityType="Self.client_audit" />
+          <EntitySet Name="client_branch" EntityType="Self.client_branch" />
+          <EntitySet Name="client_contact_source" EntityType="Self.client_contact_source" />
+          <EntitySet Name="client_contact_status" EntityType="Self.client_contact_status" />
+          <EntitySet Name="client_ethnic_group" EntityType="Self.client_ethnic_group" />
+          <EntitySet Name="client_gender" EntityType="Self.client_gender" />
+          <EntitySet Name="client_license" EntityType="Self.client_license" />
+          <EntitySet Name="client_relationship" EntityType="Self.client_relationship" />
+          <EntitySet Name="client_relationship_type" EntityType="Self.client_relationship_type" />
+          <EntitySet Name="client_system" EntityType="Self.client_system" />
+          <EntitySet Name="client_system_relationship" EntityType="Self.client_system_relationship" />
+          <EntitySet Name="client_title" EntityType="Self.client_title" />
+          <EntitySet Name="client_type" EntityType="Self.client_type" />
+          <EntitySet Name="client_type_description" EntityType="Self.client_type_description" />
+          <EntitySet Name="client_user" EntityType="Self.client_user" />
+          <EntitySet Name="contact_details" EntityType="Self.contact_details" />
+          <EntitySet Name="contact_details_location_type" EntityType="Self.contact_details_location_type" />
+          <EntitySet Name="contact_details_type" EntityType="Self.contact_details_type" />
+          <EntitySet Name="contact_source_type" EntityType="Self.contact_source_type" />
+          <EntitySet Name="contact_status_type" EntityType="Self.contact_status_type" />
+          <EntitySet Name="country_code" EntityType="Self.country_code" />
+          <EntitySet Name="error_log" EntityType="Self.error_log" />
+          <EntitySet Name="language" EntityType="Self.language" />
+          <EntitySet Name="marital_status_type" EntityType="Self.marital_status_type" />
+          <EntitySet Name="religion" EntityType="Self.religion" />
+          <EntitySet Name="search_client" EntityType="Self.search_client" />
+          <AssociationSet Name="FK_address_address_type" Association="Self.FK_address_address_type">
+            <End Role="address_type" EntitySet="address_type" />
+            <End Role="address" EntitySet="address" />
+          </AssociationSet>
+          <AssociationSet Name="FK_address_client" Association="Self.FK_address_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="address" EntitySet="address" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__ethnic_g__5C387804" Association="Self.FK__client__ethnic_g__5C387804">
+            <End Role="client_ethnic_group" EntitySet="client_ethnic_group" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__ethnic_g__62E57593" Association="Self.FK__client__ethnic_g__62E57593">
+            <End Role="client_ethnic_group" EntitySet="client_ethnic_group" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__fk_citiz__5D2C9C3D" Association="Self.FK__client__fk_citiz__5D2C9C3D">
+            <End Role="country_code" EntitySet="country_code" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__fk_citiz__63D999CC" Association="Self.FK__client__fk_citiz__63D999CC">
+            <End Role="country_code" EntitySet="country_code" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__fk_count__5E20C076" Association="Self.FK__client__fk_count__5E20C076">
+            <End Role="country_code" EntitySet="country_code" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__fk_count__64CDBE05" Association="Self.FK__client__fk_count__64CDBE05">
+            <End Role="country_code" EntitySet="country_code" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__gender__5F14E4AF" Association="Self.FK__client__gender__5F14E4AF">
+            <End Role="client_gender" EntitySet="client_gender" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__gender__65C1E23E" Association="Self.FK__client__gender__65C1E23E">
+            <End Role="client_gender" EntitySet="client_gender" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__preferre__600908E8" Association="Self.FK__client__preferre__600908E8">
+            <End Role="language" EntitySet="language" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__preferre__66B60677" Association="Self.FK__client__preferre__66B60677">
+            <End Role="language" EntitySet="language" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__title__60FD2D21" Association="Self.FK__client__title__60FD2D21">
+            <End Role="client_title" EntitySet="client_title" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client__title__67AA2AB0" Association="Self.FK__client__title__67AA2AB0">
+            <End Role="client_title" EntitySet="client_title" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_ac__fk_cl__245D67DE" Association="Self.FK__client_ac__fk_cl__245D67DE">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_activity" EntitySet="client_activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_co__fk_cl__09A971A2" Association="Self.FK__client_co__fk_cl__09A971A2">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_contact_status" EntitySet="client_contact_status" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_co__fk_cl__208CD6FA" Association="Self.FK__client_co__fk_cl__208CD6FA">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_contact_source" EntitySet="client_contact_source" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_agent_client" Association="Self.FK_client_agent_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_agent" EntitySet="client_agent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_audit_client" Association="Self.FK_client_audit_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_audit" EntitySet="client_audit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_branch_client" Association="Self.FK_client_branch_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_branch" EntitySet="client_branch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_license_client" Association="Self.FK_client_license_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_license" EntitySet="client_license" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_relationship_client1" Association="Self.FK_client_relationship_client1">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_relationship" EntitySet="client_relationship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_relationship_client2" Association="Self.FK_client_relationship_client2">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_relationship" EntitySet="client_relationship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_type_client" Association="Self.FK_client_type_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_type" EntitySet="client_type" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_user_client" Association="Self.FK_client_user_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="client_user" EntitySet="client_user" />
+          </AssociationSet>
+          <AssociationSet Name="FK_contact_details_client" Association="Self.FK_contact_details_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="contact_details" EntitySet="contact_details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_search_client_client" Association="Self.FK_search_client_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="search_client" EntitySet="search_client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_ag__fk_cl__3E2826D9" Association="Self.FK__client_ag__fk_cl__3E2826D9">
+            <End Role="client_agent_role_type" EntitySet="client_agent_role_type" />
+            <End Role="client_agent" EntitySet="client_agent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_co__fk_co__1CBC4616" Association="Self.FK__client_co__fk_co__1CBC4616">
+            <End Role="contact_source_type" EntitySet="contact_source_type" />
+            <End Role="client_contact_source" EntitySet="client_contact_source" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_co__fk_co__08B54D69" Association="Self.FK__client_co__fk_co__08B54D69">
+            <End Role="contact_status_type" EntitySet="contact_status_type" />
+            <End Role="client_contact_status" EntitySet="client_contact_status" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_relationship_client_relationship_type" Association="Self.FK_client_relationship_client_relationship_type">
+            <End Role="client_relationship_type" EntitySet="client_relationship_type" />
+            <End Role="client_relationship" EntitySet="client_relationship" />
+          </AssociationSet>
+          <AssociationSet Name="FK__error_log__sourc__0757E033" Association="Self.FK__error_log__sourc__0757E033">
+            <End Role="client_system" EntitySet="client_system" />
+            <End Role="error_log" EntitySet="error_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK_search_client_client_system" Association="Self.FK_search_client_client_system">
+            <End Role="client_system" EntitySet="client_system" />
+            <End Role="search_client" EntitySet="search_client" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_type_client_type_description" Association="Self.FK_client_type_client_type_description">
+            <End Role="client_type_description" EntitySet="client_type_description" />
+            <End Role="client_type" EntitySet="client_type" />
+          </AssociationSet>
+          <AssociationSet Name="FK__contact_d__fk_co__5AEE82B9" Association="Self.FK__contact_d__fk_co__5AEE82B9">
+            <End Role="country_code" EntitySet="country_code" />
+            <End Role="contact_details" EntitySet="contact_details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_contact_details_contact_details_location_type" Association="Self.FK_contact_details_contact_details_location_type">
+            <End Role="contact_details_location_type" EntitySet="contact_details_location_type" />
+            <End Role="contact_details" EntitySet="contact_details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_contact_details_contact_details_type" Association="Self.FK_contact_details_contact_details_type">
+            <End Role="contact_details_type" EntitySet="contact_details_type" />
+            <End Role="contact_details" EntitySet="contact_details" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="clientModelStoreContainer" CdmEntityContainer="clientEntities">
+          <EntitySetMapping Name="address">
+            <EntityTypeMapping TypeName="clientModel.address">
+              <MappingFragment StoreEntitySet="address">
+                <ScalarProperty Name="pk_address_id" ColumnName="pk_address_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="fk_address_type_id" ColumnName="fk_address_type_id" />
+                <ScalarProperty Name="address1" ColumnName="address" />
+                <ScalarProperty Name="fk_area_id" ColumnName="fk_area_id" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="is_active_status" ColumnName="is_active_status" />
+                <ScalarProperty Name="postal_code" ColumnName="postal_code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="address_type">
+            <EntityTypeMapping TypeName="clientModel.address_type">
+              <MappingFragment StoreEntitySet="address_type">
+                <ScalarProperty Name="pk_address_type_id" ColumnName="pk_address_type_id" />
+                <ScalarProperty Name="address_type1" ColumnName="address_type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client">
+            <EntityTypeMapping TypeName="clientModel.client">
+              <MappingFragment StoreEntitySet="client">
+                <ScalarProperty Name="pk_client_id" ColumnName="pk_client_id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="middle_name" ColumnName="middle_name" />
+                <ScalarProperty Name="preferred_name" ColumnName="preferred_name" />
+                <ScalarProperty Name="identity_number" ColumnName="identity_number" />
+                <ScalarProperty Name="passport_number" ColumnName="passport_number" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="ethnic_group" ColumnName="ethnic_group" />
+                <ScalarProperty Name="occupation" ColumnName="occupation" />
+                <ScalarProperty Name="fk_marital_status_type_id" ColumnName="fk_marital_status_type_id" />
+                <ScalarProperty Name="date_of_birth" ColumnName="date_of_birth" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+                <ScalarProperty Name="identified" ColumnName="identified" />
+                <ScalarProperty Name="identified_date" ColumnName="identified_date" />
+                <ScalarProperty Name="blocked" ColumnName="blocked" />
+                <ScalarProperty Name="blocked_date" ColumnName="blocked_date" />
+                <ScalarProperty Name="fk_language_id" ColumnName="fk_language_id" />
+                <ScalarProperty Name="fk_religion_id" ColumnName="fk_religion_id" />
+                <ScalarProperty Name="fk_citizenship" ColumnName="fk_citizenship" />
+                <ScalarProperty Name="fk_country_of_residence" ColumnName="fk_country_of_residence" />
+                <ScalarProperty Name="preferred_language" ColumnName="preferred_language" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="updated_date" ColumnName="updated_date" />
+                <ScalarProperty Name="deceased_status" ColumnName="deceased_status" />
+                <ScalarProperty Name="popi_opt_in" ColumnName="popi_opt_in" />
+                <ScalarProperty Name="phone_call_opt_in" ColumnName="phone_call_opt_in" />
+                <ScalarProperty Name="email_opt_in" ColumnName="email_opt_in" />
+                <ScalarProperty Name="sms_opt_in" ColumnName="sms_opt_in" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_activity">
+            <EntityTypeMapping TypeName="clientModel.client_activity">
+              <MappingFragment StoreEntitySet="client_activity">
+                <ScalarProperty Name="pk_client_activity_id" ColumnName="pk_client_activity_id" />
+                <ScalarProperty Name="fk_activity_type_id" ColumnName="fk_activity_type_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="allocated_to" ColumnName="allocated_to" />
+                <ScalarProperty Name="activity_value" ColumnName="activity_value" />
+                <ScalarProperty Name="is_active_status" ColumnName="is_active_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_agent">
+            <EntityTypeMapping TypeName="clientModel.client_agent">
+              <MappingFragment StoreEntitySet="client_agent">
+                <ScalarProperty Name="pk_client_agent_id" ColumnName="pk_client_agent_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="fk_agent_id" ColumnName="fk_agent_id" />
+                <ScalarProperty Name="is_active_status" ColumnName="is_active_status" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="fk_client_role_type" ColumnName="fk_client_role_type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_agent_role_type">
+            <EntityTypeMapping TypeName="clientModel.client_agent_role_type">
+              <MappingFragment StoreEntitySet="client_agent_role_type">
+                <ScalarProperty Name="client_agent_role_type_id" ColumnName="client_agent_role_type_id" />
+                <ScalarProperty Name="role_description" ColumnName="role_description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_audit">
+            <EntityTypeMapping TypeName="clientModel.client_audit">
+              <MappingFragment StoreEntitySet="client_audit">
+                <ScalarProperty Name="pk_client_audit_id" ColumnName="pk_client_audit_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="updated_field" ColumnName="updated_field" />
+                <ScalarProperty Name="updated_value" ColumnName="updated_value" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_branch">
+            <EntityTypeMapping TypeName="clientModel.client_branch">
+              <MappingFragment StoreEntitySet="client_branch">
+                <ScalarProperty Name="pk_client_branch_id" ColumnName="pk_client_branch_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="fk_branch_id" ColumnName="fk_branch_id" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_contact_source">
+            <EntityTypeMapping TypeName="clientModel.client_contact_source">
+              <MappingFragment StoreEntitySet="client_contact_source">
+                <ScalarProperty Name="pk_client_contact_source" ColumnName="pk_client_contact_source" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="fk_contact_source_type" ColumnName="fk_contact_source_type" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_contact_status">
+            <EntityTypeMapping TypeName="clientModel.client_contact_status">
+              <MappingFragment StoreEntitySet="client_contact_status">
+                <ScalarProperty Name="pk_client_contact_status_id" ColumnName="pk_client_contact_status_id" />
+                <ScalarProperty Name="fk_contact_status_type_id" ColumnName="fk_contact_status_type_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="contact_status_value" ColumnName="contact_status_value" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_ethnic_group">
+            <EntityTypeMapping TypeName="clientModel.client_ethnic_group">
+              <MappingFragment StoreEntitySet="client_ethnic_group">
+                <ScalarProperty Name="client_ethinic_group_id" ColumnName="client_ethinic_group_id" />
+                <ScalarProperty Name="ethnic_group_desc" ColumnName="ethnic_group_desc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_gender">
+            <EntityTypeMapping TypeName="clientModel.client_gender">
+              <MappingFragment StoreEntitySet="client_gender">
+                <ScalarProperty Name="client_gender_id" ColumnName="client_gender_id" />
+                <ScalarProperty Name="gender_desc" ColumnName="gender_desc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_license">
+            <EntityTypeMapping TypeName="clientModel.client_license">
+              <MappingFragment StoreEntitySet="client_license">
+                <ScalarProperty Name="pk_client_license_id" ColumnName="pk_client_license_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="fk_license_id" ColumnName="fk_license_id" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_relationship">
+            <EntityTypeMapping TypeName="clientModel.client_relationship">
+              <MappingFragment StoreEntitySet="client_relationship">
+                <ScalarProperty Name="pk_client_relationship_id" ColumnName="pk_client_relationship_id" />
+                <ScalarProperty Name="fk_client_from_id" ColumnName="fk_client_from_id" />
+                <ScalarProperty Name="fk_client_to_id" ColumnName="fk_client_to_id" />
+                <ScalarProperty Name="fk_client_relationship_type_id" ColumnName="fk_client_relationship_type_id" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="is_active_status" ColumnName="is_active_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_relationship_type">
+            <EntityTypeMapping TypeName="clientModel.client_relationship_type">
+              <MappingFragment StoreEntitySet="client_relationship_type">
+                <ScalarProperty Name="pk_client_relationship_type_id" ColumnName="pk_client_relationship_type_id" />
+                <ScalarProperty Name="type_description" ColumnName="type_description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_system">
+            <EntityTypeMapping TypeName="clientModel.client_system">
+              <MappingFragment StoreEntitySet="client_system">
+                <ScalarProperty Name="pk_client_system_id" ColumnName="pk_client_system_id" />
+                <ScalarProperty Name="system_name" ColumnName="system_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_system_relationship">
+            <EntityTypeMapping TypeName="clientModel.client_system_relationship">
+              <MappingFragment StoreEntitySet="client_system_relationship">
+                <ScalarProperty Name="pk_client_system_relationship_id" ColumnName="pk_client_system_relationship_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="fk_client_system_id" ColumnName="fk_client_system_id" />
+                <ScalarProperty Name="fk_system_client_id" ColumnName="fk_system_client_id" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_title">
+            <EntityTypeMapping TypeName="clientModel.client_title">
+              <MappingFragment StoreEntitySet="client_title">
+                <ScalarProperty Name="client_title_id" ColumnName="client_title_id" />
+                <ScalarProperty Name="title_desc" ColumnName="title_desc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_type">
+            <EntityTypeMapping TypeName="clientModel.client_type">
+              <MappingFragment StoreEntitySet="client_type">
+                <ScalarProperty Name="pk_client_type_id" ColumnName="pk_client_type_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="fk_client_type_description_id" ColumnName="fk_client_type_description_id" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="is_active_status" ColumnName="is_active_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_type_description">
+            <EntityTypeMapping TypeName="clientModel.client_type_description">
+              <MappingFragment StoreEntitySet="client_type_description">
+                <ScalarProperty Name="pk_client_type_description_id" ColumnName="pk_client_type_description_id" />
+                <ScalarProperty Name="type_description" ColumnName="type_description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_user">
+            <EntityTypeMapping TypeName="clientModel.client_user">
+              <MappingFragment StoreEntitySet="client_user">
+                <ScalarProperty Name="pk_client_user_id" ColumnName="pk_client_user_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="fk_user_id" ColumnName="fk_user_id" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="contact_details">
+            <EntityTypeMapping TypeName="clientModel.contact_details">
+              <MappingFragment StoreEntitySet="contact_details">
+                <ScalarProperty Name="pk_contact_details_id" ColumnName="pk_contact_details_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="fk_contact_details_type_id" ColumnName="fk_contact_details_type_id" />
+                <ScalarProperty Name="fk_contact_details_location_type_id" ColumnName="fk_contact_details_location_type_id" />
+                <ScalarProperty Name="contact_details_value" ColumnName="contact_details_value" />
+                <ScalarProperty Name="is_primary_contact" ColumnName="is_primary_contact" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="is_active_status" ColumnName="is_active_status" />
+                <ScalarProperty Name="fk_country_code" ColumnName="fk_country_code" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+                <ScalarProperty Name="deleted_by" ColumnName="deleted_by" />
+                <ScalarProperty Name="deleted_date" ColumnName="deleted_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="contact_details_location_type">
+            <EntityTypeMapping TypeName="clientModel.contact_details_location_type">
+              <MappingFragment StoreEntitySet="contact_details_location_type">
+                <ScalarProperty Name="pk_contact_details_location_type_id" ColumnName="pk_contact_details_location_type_id" />
+                <ScalarProperty Name="type_description" ColumnName="type_description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="contact_details_type">
+            <EntityTypeMapping TypeName="clientModel.contact_details_type">
+              <MappingFragment StoreEntitySet="contact_details_type">
+                <ScalarProperty Name="pk_contact_details_type_id" ColumnName="pk_contact_details_type_id" />
+                <ScalarProperty Name="type_description" ColumnName="type_description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="contact_source_type">
+            <EntityTypeMapping TypeName="clientModel.contact_source_type">
+              <MappingFragment StoreEntitySet="contact_source_type">
+                <ScalarProperty Name="pk_contact_source_type_id" ColumnName="pk_contact_source_type_id" />
+                <ScalarProperty Name="type_description" ColumnName="type_description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="contact_status_type">
+            <EntityTypeMapping TypeName="clientModel.contact_status_type">
+              <MappingFragment StoreEntitySet="contact_status_type">
+                <ScalarProperty Name="pk_contact_status_type_id" ColumnName="pk_contact_status_type_id" />
+                <ScalarProperty Name="type_description" ColumnName="type_description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="country_code">
+            <EntityTypeMapping TypeName="clientModel.country_code">
+              <MappingFragment StoreEntitySet="country_code">
+                <ScalarProperty Name="pk_country_id" ColumnName="pk_country_id" />
+                <ScalarProperty Name="country_name" ColumnName="country_name" />
+                <ScalarProperty Name="country_code_iso" ColumnName="country_code_iso" />
+                <ScalarProperty Name="country_code_un" ColumnName="country_code_un" />
+                <ScalarProperty Name="country_dial_code" ColumnName="country_dial_code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="error_log">
+            <EntityTypeMapping TypeName="clientModel.error_log">
+              <MappingFragment StoreEntitySet="error_log">
+                <ScalarProperty Name="error_log_id" ColumnName="error_log_id" />
+                <ScalarProperty Name="target_application" ColumnName="target_application" />
+                <ScalarProperty Name="friendly_error_msg" ColumnName="friendly_error_msg" />
+                <ScalarProperty Name="exception_string" ColumnName="exception_string" />
+                <ScalarProperty Name="user" ColumnName="user" />
+                <ScalarProperty Name="date_time" ColumnName="date_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="language">
+            <EntityTypeMapping TypeName="clientModel.language">
+              <MappingFragment StoreEntitySet="language">
+                <ScalarProperty Name="pk_language_id" ColumnName="pk_language_id" />
+                <ScalarProperty Name="language_name" ColumnName="language_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="marital_status_type">
+            <EntityTypeMapping TypeName="clientModel.marital_status_type">
+              <MappingFragment StoreEntitySet="marital_status_type">
+                <ScalarProperty Name="pk_merital_status_type_id" ColumnName="pk_merital_status_type_id" />
+                <ScalarProperty Name="type_description" ColumnName="type_description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="religion">
+            <EntityTypeMapping TypeName="clientModel.religion">
+              <MappingFragment StoreEntitySet="religion">
+                <ScalarProperty Name="pk_religion_id" ColumnName="pk_religion_id" />
+                <ScalarProperty Name="religion_name" ColumnName="religion_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="search_client">
+            <EntityTypeMapping TypeName="clientModel.search_client">
+              <MappingFragment StoreEntitySet="search_client">
+                <ScalarProperty Name="pk_search_client_id" ColumnName="pk_search_client_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="fk_client_system_id" ColumnName="fk_client_system_id" />
+                <ScalarProperty Name="fk_system_client_id" ColumnName="fk_system_client_id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="middle_name" ColumnName="middle_name" />
+                <ScalarProperty Name="preferred_name" ColumnName="preferred_name" />
+                <ScalarProperty Name="identity_number" ColumnName="identity_number" />
+                <ScalarProperty Name="passport_number" ColumnName="passport_number" />
+                <ScalarProperty Name="date_of_birth" ColumnName="date_of_birth" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="is_primary_contact_no" ColumnName="is_primary_contact_no" />
+                <ScalarProperty Name="is_primary_email" ColumnName="is_primary_email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

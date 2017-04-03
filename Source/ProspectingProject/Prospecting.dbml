@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="seeff_prospecting" Class="ProspectingDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=louise-pc;Initial Catalog=seeff_prospecting;User ID=prospecting_user" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="seeff_prospectingConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=localhost;Initial Catalog=seeff_prospecting;User ID=prospecting_user" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="seeff_prospectingConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.service_enquiry_log" Member="service_enquiry_logs">
     <Type Name="service_enquiry_log">
       <Column Name="service_enquiry_log_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -434,7 +434,18 @@
       <Association Name="prospecting_contact_person_activity_log" Member="activity_logs" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="activity_log" />
       <Association Name="prospecting_contact_person_sms_communications_log" Member="sms_communications_logs" ThisKey="contact_person_id" OtherKey="target_contact_person_id" Type="sms_communications_log" />
       <Association Name="prospecting_contact_person_email_communications_log" Member="email_communications_logs" ThisKey="contact_person_id" OtherKey="target_contact_person_id" Type="email_communications_log" />
+      <Association Name="prospecting_contact_person_client_sync_log" Member="client_sync_logs" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="client_sync_log" />
       <Association Name="prospecting_person_title_prospecting_contact_person" Member="prospecting_person_title" ThisKey="person_title" OtherKey="prospecting_person_title_id" Type="prospecting_person_title" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.client_sync_log" Member="client_sync_logs">
+    <Type Name="client_sync_log">
+      <Column Name="client_sync_log_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="contact_person_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="user_guid" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="date_time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="synchronised" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="prospecting_contact_person_client_sync_log" Member="prospecting_contact_person" ThisKey="contact_person_id" OtherKey="contact_person_id" Type="prospecting_contact_person" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.prospected_propety_contact_count" Method="prospected_propety_contact_count" IsComposable="true">

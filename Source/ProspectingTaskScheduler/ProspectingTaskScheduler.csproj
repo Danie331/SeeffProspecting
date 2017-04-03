@@ -127,6 +127,26 @@
     <Content Include="bin\System.Net.Http.Formatting.dll" />
     <Content Include="bin\System.Web.Http.dll" />
     <Content Include="bin\System.Web.Http.WebHost.dll" />
+    <Content Include="boss.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>boss.edmx</DependentUpon>
+      <LastGenOutput>boss.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="boss.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>boss.edmx</DependentUpon>
+      <LastGenOutput>boss.cs</LastGenOutput>
+    </Content>
+    <Content Include="client.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>client.edmx</DependentUpon>
+      <LastGenOutput>client.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="client.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>client.edmx</DependentUpon>
+      <LastGenOutput>client1.cs</LastGenOutput>
+    </Content>
     <Content Include="SeeffDeeds.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>SeeffDeeds.edmx</DependentUpon>
@@ -144,6 +164,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="address.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="address_type.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationPreload.cs" />
     <Compile Include="App_Start\HangfireBootstrapper.cs" />
     <Compile Include="App_Start\Startup.cs" />
@@ -165,9 +191,112 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>base_data.tt</DependentUpon>
     </Compile>
+    <Compile Include="boss.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>boss.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="boss.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>boss.tt</DependentUpon>
+    </Compile>
+    <Compile Include="boss.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>boss.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="client.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>client.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>client.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="client1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_activity.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_agent.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_agent_role_type.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_audit.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_branch.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_contact_source.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_contact_status.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_ethnic_group.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_gender.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_license.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_relationship.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_relationship_type.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_system.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_system_relationship.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_title.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_type.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_type_description.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client_user.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="contact_details.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="contact_details_location_type.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="contact_details_type.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="contact_source_type.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="contact_status_type.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\SMSController.cs" />
     <Compile Include="Core\ClientSynchronisation\ProspectingToCmsClientSynchroniser.cs" />
+    <Compile Include="Core\ClientSynchronisation\UserContext.cs" />
     <Compile Include="Core\Communication\Emailing\EmailHandler.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Core\Communication\Emailing\EmailResult.cs" />
@@ -212,14 +341,38 @@
     <Compile Include="Core\LightstoneTakeOn\TransactionResult.cs" />
     <Compile Include="Core\Spatial\SuburbMaintenance.cs" />
     <Compile Include="Core\Utils.cs" />
+    <Compile Include="country_code.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="error_log.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="language.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="license.cs">
+      <DependentUpon>boss.tt</DependentUpon>
+    </Compile>
+    <Compile Include="license_branches.cs">
+      <DependentUpon>boss.tt</DependentUpon>
+    </Compile>
+    <Compile Include="marital_status_type.cs">
+      <DependentUpon>client.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Prospecting.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Prospecting.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="religion.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="search_client.cs">
+      <DependentUpon>client.tt</DependentUpon>
     </Compile>
     <Compile Include="SeeffDeeds.Context.cs">
       <AutoGen>True</AutoGen>
@@ -257,6 +410,9 @@
     <Compile Include="spatial_area.cs">
       <DependentUpon>Spatial.tt</DependentUpon>
     </Compile>
+    <Compile Include="user_registration.cs">
+      <DependentUpon>boss.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -273,6 +429,20 @@
     </EntityDeploy>
     <Content Include="base_data.edmx.diagram">
       <DependentUpon>base_data.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="client.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>client.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="client.edmx.diagram">
+      <DependentUpon>client.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="boss.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>boss.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="boss.edmx.diagram">
+      <DependentUpon>boss.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\1.pubxml" />
     <EntityDeploy Include="Spatial.edmx">

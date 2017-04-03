@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using ProspectingTaskScheduler.Core.ClientSynchronisation;
 using ProspectingTaskScheduler.Core.Communication;
 using ProspectingTaskScheduler.Core.Communication.Emailing.Mandrill;
 using System;
@@ -27,8 +28,9 @@ namespace ProspectingTaskScheduler.Controllers
                     foreach (var contactPerson in contactPersons)
                     {
                         contactPerson.optout_emails = true;
+                        prospectingContext.SubmitChanges();
+                        ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
                     }
-                    prospectingContext.SubmitChanges();
                 }
             }
         }

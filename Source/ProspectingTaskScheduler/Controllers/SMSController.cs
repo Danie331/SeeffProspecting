@@ -1,4 +1,5 @@
-﻿using ProspectingTaskScheduler.Core.Communication;
+﻿using ProspectingTaskScheduler.Core.ClientSynchronisation;
+using ProspectingTaskScheduler.Core.Communication;
 using ProspectingTaskScheduler.Core.Communication.SMSing;
 using ProspectingTaskScheduler.Core.Housekeeping;
 using System;
@@ -81,6 +82,7 @@ namespace ProspectingTaskScheduler.Controllers
                                 };
                                 prospecting.prospecting_contact_details.InsertOnSubmit(newEmailAddress);
                                 prospecting.SubmitChanges();
+                                ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(newEmailAddress.contact_person_id, newEmailAddress.prospecting_contact_person.created_by);
                             } 
                         }
 
@@ -93,6 +95,7 @@ namespace ProspectingTaskScheduler.Controllers
                             {
                                 targetContactPersonRecord.optout_sms = true;
                                 prospecting.SubmitChanges();
+                                ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(targetContactPersonRecord.contact_person_id, targetContactPersonRecord.created_by);
                                 string cellMatch = null;
                                 foreach (var cd in targetContactPersonRecord.prospecting_contact_details)
                                 {
@@ -113,6 +116,7 @@ namespace ProspectingTaskScheduler.Controllers
                                     {
                                         item.prospecting_contact_person.optout_sms = true;
                                         prospecting.SubmitChanges();
+                                        ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(item.contact_person_id, item.prospecting_contact_person.created_by);
                                     }
                                 }
                             }

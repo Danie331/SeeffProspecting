@@ -1129,6 +1129,8 @@ namespace ProspectingProject
                             incomingContact.IsPOPIrestricted,
                             prospecting);
                     }
+
+                    AddClientSynchronisationRequest(contactRecord.contact_person_id);
                 }
                 else
                 {
@@ -1180,6 +1182,7 @@ namespace ProspectingProject
                         //contactWithExistingIDNumber.do_not_contact = incomingContact.DoNotContact;
 
                         prospecting.SubmitChanges();
+                        AddClientSynchronisationRequest(contactWithExistingIDNumber.contact_person_id);
 
                         if (dataPacket.ContactCompanyId.HasValue)
                         {
@@ -1267,7 +1270,7 @@ namespace ProspectingProject
                         };
                         prospecting.prospecting_contact_persons.InsertOnSubmit(newContact);
                         prospecting.SubmitChanges();
-
+                        AddClientSynchronisationRequest(newContact.contact_person_id);
                         incomingContact.ContactPersonId = newContact.contact_person_id;
 
                         if (dataPacket.ContactCompanyId.HasValue)
@@ -1321,6 +1324,29 @@ namespace ProspectingProject
             return rel;
         }
 
+
+        private static void AddClientSynchronisationRequest(int contactPersonID)
+        {
+            try
+            {
+                var loggedInUser = RequestHandler.GetUserSessionObject();
+                using (var prospecting = new ProspectingDataContext())
+                {
+                    var clientSyncRecord = new client_sync_log
+                    {
+                        contact_person_id = contactPersonID,
+                        user_guid = loggedInUser.UserGuid,
+                        date_time = DateTime.Now
+                    };
+                    prospecting.client_sync_logs.InsertOnSubmit(clientSyncRecord);
+                    prospecting.SubmitChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log
+            }
+        }
 
         // TODO: investigate deleting records from contact details table and keep tabs on record counts coming in as new records are added/removed..
 
@@ -2595,6 +2621,7 @@ namespace ProspectingProject
                     }
                     contactDetail.is_primary_contact = true;
                     prospecting.SubmitChanges();
+                    AddClientSynchronisationRequest(contactDetail.contact_person_id);
                 }
             }
         }
@@ -3963,6 +3990,7 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                 targetContactPerson.do_not_contact = contactToUpdate.DoNotContact;
 
                 prospecting.SubmitChanges();
+                AddClientSynchronisationRequest(targetContactPerson.contact_person_id);
 
                 var activityType = ProspectingLookupData.ActivityTypes.First(act => act.Value == "General").Key;
                 string comment;
