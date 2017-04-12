@@ -1136,106 +1136,112 @@ namespace ProspectingProject
                 {
                     string idNumberOfNewContact = dataPacket.ContactPerson.IdNumber;
                     // Search for a contact with this id number
-                    var contactWithExistingIDNumber = (from c in prospecting.prospecting_contact_persons
+                    var contactsWithExistingIDNumbers = (from c in prospecting.prospecting_contact_persons
                                                        where c.id_number == idNumberOfNewContact
-                                                       select c).FirstOrDefault();
-                    if (contactWithExistingIDNumber != null)
+                                                       select c).ToList();
+                    if (contactsWithExistingIDNumbers.Any())
                     {
-                        if (contactWithExistingIDNumber.firstname == "(unknown firstname)" &&
-                            !string.IsNullOrWhiteSpace(dataPacket.ContactPerson.Firstname) &&
-                            dataPacket.ContactPerson.Firstname != "(unknown firstname)")
+                        foreach (var contact in contactsWithExistingIDNumbers)
                         {
-                            contactWithExistingIDNumber.firstname = dataPacket.ContactPerson.Firstname;
-                            prospecting.SubmitChanges();
-                        }
-
-                        if (contactWithExistingIDNumber.surname == "(unknown surname)" &&
-                            !string.IsNullOrWhiteSpace(dataPacket.ContactPerson.Surname) &&
-                            dataPacket.ContactPerson.Surname != "(unknown surname)")
-                        {
-                            contactWithExistingIDNumber.surname = dataPacket.ContactPerson.Surname;
-                            prospecting.SubmitChanges();
-                        }
-
-                        // Update contact person (should we overwrite here??)
-                        //contactWithExistingIDNumber.person_title = incomingContact.Title.HasValue ? (int?)incomingContact.Title.Value : null;
-                        //contactWithExistingIDNumber.firstname = incomingContact.Firstname;
-                        //contactWithExistingIDNumber.surname = incomingContact.Surname;
-                        //contactWithExistingIDNumber.id_number = incomingContact.IdNumber;
-                        //contactWithExistingIDNumber.person_gender = incomingContact.Gender;
-                        //contactWithExistingIDNumber.updated_date = DateTime.Now;
-                        //contactWithExistingIDNumber.comments_notes = incomingContact.Comments;
-                        //contactWithExistingIDNumber.is_popi_restricted = incomingContact.IsPOPIrestricted;
-                        //contactWithExistingIDNumber.deceased_status = incomingContact.DeceasedStatus;
-                        //contactWithExistingIDNumber.age_group = incomingContact.AgeGroup;
-                        //contactWithExistingIDNumber.location = incomingContact.Location;
-                        //contactWithExistingIDNumber.marital_status = incomingContact.MaritalStatus;
-                        //contactWithExistingIDNumber.home_ownership = incomingContact.HomeOwnership;
-                        //contactWithExistingIDNumber.directorship = incomingContact.Directorship;
-                        //contactWithExistingIDNumber.physical_address = incomingContact.PhysicalAddress;
-                        //contactWithExistingIDNumber.employer = incomingContact.Employer;
-                        //contactWithExistingIDNumber.occupation = incomingContact.Occupation;
-                        //contactWithExistingIDNumber.bureau_adverse_indicator = incomingContact.BureauAdverseIndicator;
-                        //contactWithExistingIDNumber.citizenship = incomingContact.Citizenship;
-                        //contactWithExistingIDNumber.optout_emails = incomingContact.EmailOptout;
-                        //contactWithExistingIDNumber.optout_sms = incomingContact.SMSOptout;
-                        //contactWithExistingIDNumber.do_not_contact = incomingContact.DoNotContact;
-
-                        prospecting.SubmitChanges();
-                        AddClientSynchronisationRequest(contactWithExistingIDNumber.contact_person_id);
-
-                        if (dataPacket.ContactCompanyId.HasValue)
-                        {
-                            // This contact has a relationship with a company as opposed to a property
-                            var personCompanyRelation = (from r in prospecting.prospecting_person_company_relationships
-                                                         join q in prospecting.prospecting_company_property_relationships on r.contact_company_id equals q.contact_company_id
-                                                         where r.contact_person_id == contactWithExistingIDNumber.contact_person_id && q.prospecting_property_id == dataPacket.ProspectingPropertyId
-                                                         select r).FirstOrDefault();
-                            if (personCompanyRelation != null)
+                            if (contact.firstname == "(unknown firstname)" &&
+                     !string.IsNullOrWhiteSpace(dataPacket.ContactPerson.Firstname) &&
+                     dataPacket.ContactPerson.Firstname != "(unknown firstname)")
                             {
-                                personCompanyRelation.relationship_to_company = incomingContact.PersonCompanyRelationshipType.Value;
-                                personCompanyRelation.contact_company_id = dataPacket.ContactCompanyId.Value;
-                                personCompanyRelation.updated_date = DateTime.Now;
+                                contact.firstname = dataPacket.ContactPerson.Firstname;
                                 prospecting.SubmitChanges();
+                            }
+
+                            if (contact.surname == "(unknown surname)" &&
+                                !string.IsNullOrWhiteSpace(dataPacket.ContactPerson.Surname) &&
+                                dataPacket.ContactPerson.Surname != "(unknown surname)")
+                            {
+                                contact.surname = dataPacket.ContactPerson.Surname;
+                                prospecting.SubmitChanges();
+                            }
+
+                            prospecting.SubmitChanges();
+                            AddClientSynchronisationRequest(contact.contact_person_id);
+
+                            if (dataPacket.ContactCompanyId.HasValue)
+                            {
+                                // This contact has a relationship with a company as opposed to a property
+                                var personCompanyRelation = (from r in prospecting.prospecting_person_company_relationships
+                                                             join q in prospecting.prospecting_company_property_relationships on r.contact_company_id equals q.contact_company_id
+                                                             where r.contact_person_id == contact.contact_person_id && q.prospecting_property_id == dataPacket.ProspectingPropertyId
+                                                             select r).FirstOrDefault();
+                                if (personCompanyRelation != null)
+                                {
+                                    personCompanyRelation.relationship_to_company = incomingContact.PersonCompanyRelationshipType.Value;
+                                    personCompanyRelation.contact_company_id = dataPacket.ContactCompanyId.Value;
+                                    personCompanyRelation.updated_date = DateTime.Now;
+                                    prospecting.SubmitChanges();
+                                }
+                                else
+                                {
+                                    personCompanyRelation = new prospecting_person_company_relationship
+                                    {
+                                        contact_person_id = contact.contact_person_id,
+                                        contact_company_id = dataPacket.ContactCompanyId,
+                                        relationship_to_company = incomingContact.PersonCompanyRelationshipType,
+                                        created_date = DateTime.Now
+                                    };
+                                    prospecting.prospecting_person_company_relationships.InsertOnSubmit(personCompanyRelation);
+                                    prospecting.SubmitChanges();
+                                }
                             }
                             else
                             {
-                                personCompanyRelation = new prospecting_person_company_relationship
-                                {
-                                    contact_person_id = contactWithExistingIDNumber.contact_person_id,
-                                    contact_company_id = dataPacket.ContactCompanyId,
-                                    relationship_to_company = incomingContact.PersonCompanyRelationshipType,
-                                    created_date = DateTime.Now
-                                };
-                                prospecting.prospecting_person_company_relationships.InsertOnSubmit(personCompanyRelation);
-                                prospecting.SubmitChanges();
-                            }
-                        }
-                        else
-                        {
-                            // A contact with this id number already exists, we must ensure that they are linked to the property
-                            var existingRelationshipToProperty = from ppr in prospecting.prospecting_person_property_relationships
-                                                                 where ppr.contact_person_id == contactWithExistingIDNumber.contact_person_id
-                                                                 && ppr.prospecting_property_id == dataPacket.ProspectingPropertyId
-                                                                 select ppr;
+                                // A contact with this id number already exists, we must ensure that they are linked to the property
+                                var existingRelationshipToProperty = from ppr in prospecting.prospecting_person_property_relationships
+                                                                     where ppr.contact_person_id == contact.contact_person_id
+                                                                     && ppr.prospecting_property_id == dataPacket.ProspectingPropertyId
+                                                                     select ppr;
 
-                            // TODO: This code will need to change to accomodate multiple records for the same person who changed their relationship to the property over time.
-                            if (existingRelationshipToProperty.Count() == 0)
+                                // TODO: This code will need to change to accomodate multiple records for the same person who changed their relationship to the property over time.
+                                if (existingRelationshipToProperty.Count() == 0)
+                                {
+                                    incomingContact.PropertiesOwned = LoadPropertiesOwnedByThisContact(idNumberOfNewContact, prospecting);
+
+                                    // New person-property relationship
+                                    var personPropertyRelation = new prospecting_person_property_relationship
+                                    {
+                                        contact_person_id = contact.contact_person_id,
+                                        prospecting_property_id = dataPacket.ProspectingPropertyId.Value,
+                                        relationship_to_property = GetPersonRelationshipToProperty(dataPacket.ProspectingPropertyId, incomingContact.PersonPropertyRelationships),
+                                        created_date = DateTime.Now
+                                    };
+                                    prospecting.prospecting_person_property_relationships.InsertOnSubmit(personPropertyRelation);
+                                    prospecting.SubmitChanges();
+                                }
+                            }
+
+                            // If not null, then we must assume there is valid data in the list. An empty list indicates
+                            // that we should delete records. Same logic applies to email addresses.
+                            var existingContactItems = from phoneOrEmail in prospecting.prospecting_contact_details
+                                                       where phoneOrEmail.contact_person_id == contact.contact_person_id
+                                                       && !phoneOrEmail.deleted
+                                                       select phoneOrEmail;
+                            // Update contact info
+                            if (incomingContact.PhoneNumbers != null)
                             {
-                                incomingContact.PropertiesOwned = LoadPropertiesOwnedByThisContact(idNumberOfNewContact, prospecting);
-
-                                // New person-property relationship
-                                var personPropertyRelation = new prospecting_person_property_relationship
-                                {
-                                    contact_person_id = contactWithExistingIDNumber.contact_person_id,
-                                    prospecting_property_id = dataPacket.ProspectingPropertyId.Value,
-                                    relationship_to_property = GetPersonRelationshipToProperty(dataPacket.ProspectingPropertyId, incomingContact.PersonPropertyRelationships),
-                                    created_date = DateTime.Now
-                                };
-                                prospecting.prospecting_person_property_relationships.InsertOnSubmit(personPropertyRelation);
-                                prospecting.SubmitChanges();
+                                UpdateContactDetails(contact.contact_person_id,
+                                    ProspectingLookupData.ContactPhoneTypes,
+                                    incomingContact.PhoneNumbers,
+                                    existingContactItems,
+                                    incomingContact.IsPOPIrestricted,
+                                    prospecting);
                             }
-                        }
+                            if (incomingContact.EmailAddresses != null)
+                            {
+                                UpdateContactDetails(contact.contact_person_id,
+                                    ProspectingLookupData.ContactEmailTypes,
+                                    incomingContact.EmailAddresses,
+                                    existingContactItems,
+                                    incomingContact.IsPOPIrestricted,
+                                    prospecting);
+                            }
+
+                        }                 
                     }
                     else
                     {
