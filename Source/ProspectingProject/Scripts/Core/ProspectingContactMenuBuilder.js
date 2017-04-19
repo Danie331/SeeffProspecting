@@ -1118,11 +1118,11 @@ function buildContactDashboard(contacts, context) {
             var regNo = cc.CKNumber && cc.CKNumber.indexOf("UNKNOWN_CK_") == -1 ? cc.CKNumber : '';
             var regNoLink = $("<a href='#' onclick='javascript:void(0);return false;' style='text-decoration:underline;' >" + regNo + "</a>");
             var companyNameLink = $("<a href='#' onclick='javascript:void(0);return false;' style='text-decoration:underline;' >" + cc.CompanyName + "</a>");
-            if (cc.CompanyType != 'TR') {
+            //if (cc.CompanyType != 'TR') {
                 container.append(companyNameLink);
-            } else {
-                container.append(cc.CompanyName);
-            }
+            //} else {
+            //    container.append(cc.CompanyName);
+           // }
 
             companyNameLink.click(function (e) { handleCompanyNameClick(e, cc); });
 
@@ -1137,7 +1137,8 @@ function buildContactDashboard(contacts, context) {
             }
 
             if (cc.CompanyType == 'TR') {
-                container.append(" (").append(regNo).append(")");
+                container.append(" (").append(regNoLink).append(")");
+                regNoLink.click(function (e) { handleCompanyRegNoClick(e, cc); });
                 if (prospectingContext.TrustLookupsEnabled) {
                     container.append(trustEntityEnquiryBtn);
                     trustEntityEnquiryBtn.click(function () {
@@ -1236,11 +1237,11 @@ function buildContactDashboard(contacts, context) {
 }
 
 function handleCompanyNameClick(e, company) {
-    var editCompanyNameMsg = 'You may edit the company name in the textbox below. Please note that changing this value will propagate to all properties owned by this company.';
-    var editNameLabel = $("<span style='display:inline-block;vertical-align:middle;'>Company Name: </span>");
+    var editCompanyNameMsg = 'You may edit the name of this legal entity in the textbox below. Please note that changing this value will propagate to all properties owned by this entity.';
+    var editNameLabel = $("<span style='display:inline-block;vertical-align:middle;'>Name: </span>");
     var editNameInput = $("<input type='text' size=70 style='display:inline-block;vertical-align:middle;margin-left:10px' />").val(company.CompanyName);
     var contentElement = $("<div />").append(editNameLabel).append(editNameInput);
-    var editCompanyNameDialog = $("<div id='editCompanyNameDialog' title='Edit Company Name' style='font-family:Verdana;font-size:12px;overflow:hidden' />").empty();
+    var editCompanyNameDialog = $("<div id='editCompanyNameDialog' title='Edit Name of Legal Entity' style='font-family:Verdana;font-size:12px;overflow:hidden' />").empty();
     editCompanyNameDialog.append(editCompanyNameMsg)
                           .append("<p />")
                           .append(contentElement);
@@ -1288,7 +1289,7 @@ function handleCompanyNameClick(e, company) {
 }
 
 function handleCompanyRegNoClick(e, company) {
-    var editCompanyRegNoMsg = 'You may edit the company registration no. in the text-box below. Please note that changing this value will propagate to all properties owned by this company.';
+    var editCompanyRegNoMsg = 'You may edit the registration no. in the text-box below. Please note that changing this value will propagate to all properties owned by this legal entity.';
     var editRegNoLabel = $("<span style='display:inline-block;vertical-align:middle;'>Registration no.: </span>");
     var editRegNoInput = $("<input type='text' size=30 style='display:inline-block;vertical-align:middle;margin-left:10px' />").val(company.CKNumber);
     var contentElement = $("<div />").append(editRegNoLabel).append(editRegNoInput);
