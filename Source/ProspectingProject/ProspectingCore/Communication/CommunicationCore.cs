@@ -41,7 +41,7 @@ namespace ProspectingProject
 
                 // not enough credit..
                 return new CommunicationBatchStatus { SuccessfullySubmitted = false, ErrorMessage = "Insufficient credit available", WalletBalance = userBalance };
-                
+
             }
             catch (Exception ex)
             {
@@ -68,7 +68,7 @@ namespace ProspectingProject
         private static decimal DebitUserBalanceForBatch(decimal amount)
         {
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
-            {               
+            {
                 var prospectingUser = RequestHandler.GetUserSessionObject();
                 decimal balance = prospectingAuthService.DebitUserBalance(amount, prospectingUser.UserGuid);
 
@@ -154,7 +154,7 @@ namespace ProspectingProject
                         var contactDetail = contactRecord.prospecting_contact_details.First(cd => cd.contact_detail == contact.TargetContactCellphoneNumber);
                         contact.TargetContactCellphoneNumber = contactDetail.prospecting_area_dialing_code.dialing_code_id + contact.TargetContactCellphoneNumber.Remove(0, 1);
                     }
-                    return batch.Recipients.Distinct(new ContactPersonSmsComparer()).ToList(); // make sure the front-end populates these with all required values
+                    contacts = batch.Recipients.Distinct(new ContactPersonSmsComparer()).ToList(); // make sure the front-end populates these with all required values
                 }
 
                 if (batch.TargetAllMySuburbs)
@@ -194,7 +194,7 @@ namespace ProspectingProject
                                                 Surname = cp.surname,
                                                 IdNumber = cp.id_number,
                                                 TargetLightstonePropertyIdForComms = pp.lightstone_property_id,
-                                                TargetContactCellphoneNumber = cd.prospecting_area_dialing_code.dialing_code_id + cd.contact_detail.Remove(0,1)
+                                                TargetContactCellphoneNumber = cd.prospecting_area_dialing_code.dialing_code_id + cd.contact_detail.Remove(0, 1)
                                             };
 
                 var propertyCompanyContacts = from pp in prospecting.prospecting_properties
@@ -260,7 +260,7 @@ namespace ProspectingProject
                 var status = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "PENDING_SUBMIT_TO_API").Key;
                 if (!batch.TemplateActivityTypeId.HasValue)
                 {
-                    batch.TemplateActivityTypeId = ProspectingLookupData.ActivityTypes.First(act => act.Value == "General").Key;
+                    batch.TemplateActivityTypeId = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "General (comm)").Key;
                 }
                 foreach (var recipient in emailRecipients)
                 {
@@ -269,7 +269,7 @@ namespace ProspectingProject
                     {
                         batch_id = batchId,
                         batch_friendly_name = batch.NameOfBatch,
-                        batch_activity_type_id = batch.TemplateActivityTypeId.Value, 
+                        batch_activity_type_id = batch.TemplateActivityTypeId.Value,
                         activity_log_id = null, // Only set when successfully sent.
                         followup_activity_id = null,
                         created_by_user_guid = prospectingUser.UserGuid,
@@ -307,7 +307,7 @@ namespace ProspectingProject
                 var status = ProspectingLookupData.CommunicationStatusTypes.First(t => t.Value == "PENDING_SUBMIT_TO_API").Key;
                 if (!batch.TemplateActivityTypeId.HasValue)
                 {
-                    batch.TemplateActivityTypeId = ProspectingLookupData.ActivityTypes.First(act => act.Value == "General").Key;
+                    batch.TemplateActivityTypeId = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "General (comm)").Key;
                 }
                 foreach (var recipient in recipients)
                 {
@@ -332,7 +332,7 @@ namespace ProspectingProject
                 prospecting.SubmitChanges();
             }
         }
-       
+
         private static string CreateEmailSubject(string subjectText)
         {
             return subjectText;
@@ -368,7 +368,7 @@ namespace ProspectingProject
 
         private static List<ProspectingContactPerson> FilterContactsForTemplateType(List<ProspectingContactPerson> contacts, int? templateActivityTypeId)
         {
-            if (templateActivityTypeId == null || templateActivityTypeId == ProspectingLookupData.ActivityTypes.First(act => act.Value == "General").Key)
+            if (templateActivityTypeId == null || templateActivityTypeId == ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "General (comm)").Key)
             {
                 return contacts;
             }
@@ -392,6 +392,10 @@ namespace ProspectingProject
                 return FilterContactsByAnniversaryDate(contacts, 7);
             }
 
+            // Newsletter type mapping persists?
+            // Check that all other activity types working normally?
+            // mention changes to comms before intro of Campaigns -> text changes to instructions, anniversary changes, mapping to system types, new activities types.
+
             return contacts;
         }
 
@@ -401,16 +405,13 @@ namespace ProspectingProject
             foreach (var contact in contacts)
             {
                 string idNumber = contact.IdNumber;
-                if (idNumber.Length == 13 && idNumber.Take(6).All(s => char.IsNumber(s)))
+                var idValidation = ProspectingCore.HasValidSAIdentityNumber(idNumber);
+                if (idValidation.Result) // success
                 {
-                    // Try convert the first 6 digits to a date
-                    DateTime result;
-                    if (DateTime.TryParseExact(idNumber.Substring(0, 6), "yyMMdd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out result)) 
+                    var dateOfBirth = idValidation.DateOfBirth.Value;
+                    if (dateOfBirth.Month == DateTime.Today.Month && dateOfBirth.Day == DateTime.Today.Day)
                     {
-                        if (result.Month == DateTime.Today.Month && result.Day == DateTime.Today.Day)
-                        {
-                            filteredContacts.Add(contact);
-                        }
+                        filteredContacts.Add(contact);
                     }
                 }
             }
@@ -454,7 +455,7 @@ namespace ProspectingProject
             {
                 if (batch.Recipients.Count > 0)
                 {
-                    return batch.Recipients.Distinct(new ContactPersonEmailComparer()).ToList(); // make sure the front-end populates these with all required values
+                    contacts = batch.Recipients.Distinct(new ContactPersonEmailComparer()).ToList(); // make sure the front-end populates these with all required values
                 }
 
                 if (batch.TargetAllMySuburbs)

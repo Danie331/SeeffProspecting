@@ -9,5 +9,7 @@ namespace ProspectingProject
     {
         public bool Result { get; set; }
         public string ErrorMessage { get; set; }
+
+        public DateTime? DateOfBirth { get; set; }
     }
 }

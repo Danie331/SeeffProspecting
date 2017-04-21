@@ -119,7 +119,7 @@ function selectAllSuburbsRadioBtn() {
     $('#commAllSuburbsRadioBtn').prop('checked', true);
     commCustomSelectionEnabled = false;
     removeMarkersFromSelection();
-    $("#commGetInfoLabel").css('display', 'block').text("The communication will be sent to all contacts across all your available suburbs, who have a default contact value");
+    $("#commGetInfoLabel").css('display', 'block').text("The communication will be sent to relevant contacts across all your available suburbs, who have a default contact value");
     $("#commBottomDiv").css('display', 'block');
 }
 
@@ -136,7 +136,7 @@ function selectCurrentSuburbRadioBtn() {
     $('#commCurrentSuburbRadioBtn').prop('checked', true);
     commCustomSelectionEnabled = false;
     removeMarkersFromSelection();
-    $("#commGetInfoLabel").css('display', 'block').text("The communication will be sent to all contacts in your current suburb, who have a default contact value");
+    $("#commGetInfoLabel").css('display', 'block').text("The communication will be sent to relevant contacts in your current suburb, who have a default contact value");
     $("#commBottomDiv").css('display', 'block');
 }
 
@@ -280,7 +280,7 @@ function buildStandardTemplatesItemContent() {
     var container = $("<div />");
     var iconDiv = $("<div style='display:inline-block;float:left'/>");
     iconDiv.append("<img src='Assets/standard_templates.png' />");
-    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Standard Templates");
+    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("System Templates");
 
     return container.append(iconDiv).append(textDiv);
 }
@@ -556,7 +556,7 @@ function showSaveAsTemplateDialog() {
     var dialogContent = '';
     if (communicationsMode == "EMAIL") {
         dialogContent = "<div>This message will be saved as a template message for future re-use.<br /> \
-                                 The subject text will be used as the template name.<br /><br /> Please note that any existing template with the same name will be overwritten.</div>";
+                                 The subject text will be used as the template name.<br /><br /> Please note that any existing template with the same name will be overwritten.<br /> For system templates, the mapping to the original system type will be retained.</div>";
     }
     var smsTemplateName = $("<input type='text' id='smsTemplateName' style='width:200px' value='' />");
     if (communicationsMode == "SMS") {
@@ -566,7 +566,7 @@ function showSaveAsTemplateDialog() {
                         .append("Please enter a name for this template: ")
                         .append(smsTemplateName)
                         .append("<p />")
-                        .append("Note: Any existing template with the same name will be overwritten.");
+                        .append("Note: Any existing template with the same name will be overwritten.<br /> For system templates, the mapping to the original system type will be retained.");
     }
     dialogHandle.append(dialogContent);
 
@@ -694,7 +694,7 @@ function handleStandardTemplatesItemClick() {
     buildTemplateItemOptionsDiv();
     $('#allSuburbsOptionContainer').hide();
     loadTemplates('get_system_template_list', null, function (results) {
-        $('#templateSelector').append("<option value='-1'>--- Standard Templates ---</option>");
+        $('#templateSelector').append("<option value='-1'>--- System Templates ---</option>");
         $.each(results, function (idx, result) {
             $('#templateSelector').append("<option value='" + idx + "'>" + result.TemplateName + "</option>");
         });
@@ -747,7 +747,7 @@ function showDialogSpecialTemplateSelected() {
     //}
 
     var specialActivityTemplateDiv = $("<div title='Special Template' style='font-family:Verdana;font-size:12px;' />");
-    specialActivityTemplateDiv.empty().append("<span>Please note that this type of template applies specifically to the 'All Suburbs' option.</span>");
+    specialActivityTemplateDiv.empty().append("<span>Please note that this type of template applies specifically to the 'All Suburbs' option by default.</span>");
 
     specialActivityTemplateDiv.dialog(
   {
@@ -824,6 +824,7 @@ function handleSMSMessageClick() {
     updateCommunicationsContacts();
 
     commCustomSelectionEnabled = true;
+    selectedTemplateActivityTypeId = null;
 }
 
 function handleEmailMessageClick() {
@@ -838,6 +839,7 @@ function handleEmailMessageClick() {
     updateCommunicationsContacts();
 
     commCustomSelectionEnabled = true;
+    selectedTemplateActivityTypeId = null;
 }
 
 function handleEnableComms() {
@@ -1914,15 +1916,15 @@ function handleCommSendBtnClick() {
     if (currentOrAllSuburbsSelected()) {
         if ($('#commCurrentSuburbRadioBtn').is(':checked')) {
             readyStatus = '\nReady to send communication to the relevant contact persons in ' + currentSuburb.SuburbName + '.' +
-                          '\nPlease note that only contacts with a default email address or cellphone number will be targeted.';
+                          '\nPlease note that only contacts with a default email address or cellphone number will be targeted, and further filtering might occur if the message is mapped to a system template.';
         }
         if ($('#commAllSuburbsRadioBtn').is(':checked')) {
             readyStatus = '\nReady to send communication to the relevant contact persons in all your available suburbs.' +
-                          '\nPlease note that only contacts with a default email address or cellphone number will be targeted.';
+                          '\nPlease note that only contacts with a default email address or cellphone number will be targeted, and further filtering might occur if the message is mapped to a system template.';
         }
     } else {
         var commSelectedRows = $('#commContactsTable tr.rowSelected');
-        readyStatus = '\nReady to send communication to ' + commSelectedRows.length + ' contact rows.';
+        readyStatus = '\nReady to send communication to a maximum of ' + commSelectedRows.length + ' contact rows. Further filtering might occur if the message is mapped to a system template.';
     }
 
     var batchNameDiv = $("<div style='display:inline-block' />").append("<span>Specify a name for this batch (optional):</span>")

@@ -58,7 +58,7 @@ function loadTemplates(templateType, templateName, callbackFn) {
 
 function saveUserTemplate(templateName) {
 
-    var payload = { Instruction: 'add_update_template', CommunicationType: communicationsMode };
+    var payload = { Instruction: 'add_update_template', CommunicationType: communicationsMode, ActivityTypeId: selectedTemplateActivityTypeId };
     if (communicationsMode == "EMAIL") {
         var emailSubject = $('#emailSubject').val().trim();
         var emailBody = $('#emailMessageBody').val().trim();

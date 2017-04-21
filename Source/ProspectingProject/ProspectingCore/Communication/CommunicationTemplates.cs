@@ -22,7 +22,7 @@ namespace ProspectingProject
                 {
                     TemplateContent = HttpContext.Current.Server.HtmlEncode(content),
                     TemplateName = "Seeff Newsletter - " + DateTime.Today.ToString("MMMM yyyy"),
-                    TemplateActivityTypeId = ProspectingLookupData.ActivityTypes.First(act => act.Value == "General").Key
+                    TemplateActivityTypeId = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "Newsletter").Key
                 };
                 return result;
             } 
@@ -57,7 +57,7 @@ namespace ProspectingProject
                             {
                                 TemplateName = userRecord.template_name,
                                 TemplateContent = userRecord.template_content,
-                                TemplateActivityTypeId = ProspectingLookupData.ActivityTypes.First(act => act.Value == "General").Key
+                                TemplateActivityTypeId = userRecord.activity_type_id.HasValue ? userRecord.activity_type_id.Value : ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "General (comm)").Key
                             };
                         }
                         break;
@@ -83,12 +83,15 @@ namespace ProspectingProject
                 user_communication_template record = prospectingDB.user_communication_templates.FirstOrDefault(uct => uct.created_by == user.UserGuid &&
                                                                                                                       uct.template_name == input.TemplateName &&
                                                                                                                       uct.communication_type == input.CommunicationType);
+
+                int commGeneralTypeId = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "General (comm)").Key;
                 input.TemplateContent = ConvertFromB64(input.TemplateContent);
                 if (record != null)
                 {
                     record.updated_date = DateTime.Now;
                     record.template_content = input.TemplateContent;
                     record.deleted = false;
+                    record.activity_type_id = input.ActivityTypeId.HasValue ? input.ActivityTypeId.Value : record.activity_type_id;
                 }
                 else
                 {
@@ -98,7 +101,8 @@ namespace ProspectingProject
                         created_date = DateTime.Now,
                         template_content = input.TemplateContent,
                         template_name = input.TemplateName,
-                        communication_type = input.CommunicationType
+                        communication_type = input.CommunicationType,
+                        activity_type_id = input.ActivityTypeId.HasValue ? input.ActivityTypeId.Value : commGeneralTypeId
                     };
                     prospectingDB.user_communication_templates.InsertOnSubmit(record);
                 }

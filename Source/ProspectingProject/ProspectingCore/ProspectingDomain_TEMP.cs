@@ -4182,12 +4182,12 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
         public static IDValidationResult HasValidSAIdentityNumber(string idNumber)
         {
             int d = -1;
+            DateTime dobResult = default(DateTime);
             try
             {
                 if (string.IsNullOrWhiteSpace(idNumber) || idNumber.Length != 13)
                     return new IDValidationResult { Result = false };
                 string dob = idNumber.Substring(0, 6);
-                DateTime dobResult;
                 if (!DateTime.TryParseExact(dob, "yyMMdd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dobResult))
                     return new IDValidationResult { Result = false };
                 if (!new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }.Any(ch => ch == idNumber[6]))
@@ -4220,7 +4220,11 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
             catch {/*ignore*/}
             bool result = d != -1 && idNumber[12].ToString() == d.ToString();
 
-            return new IDValidationResult { Result = result };
+            return new IDValidationResult
+            {
+                Result = result,
+                DateOfBirth = dobResult != default(DateTime) ? dobResult : (DateTime?)null
+            };
         }
 
         public static string GeneratePseudoIdentifier()
