@@ -770,6 +770,7 @@
     <Content Include="Assets\poly_menu_remove.png" />
     <Content Include="Assets\primary_contact.png" />
     <Content Include="Assets\property_referrals_history.png" />
+    <Content Include="Assets\reload_from_lightstone.png" />
     <Content Include="Assets\remove_filter.png" />
     <Content Include="Assets\seeff_logo.png" />
     <Content Include="Assets\set_signature_boss.png" />

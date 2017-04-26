@@ -1200,18 +1200,26 @@ namespace ProspectingProject
                                 // TODO: This code will need to change to accomodate multiple records for the same person who changed their relationship to the property over time.
                                 if (existingRelationshipToProperty.Count() == 0)
                                 {
-                                    incomingContact.PropertiesOwned = LoadPropertiesOwnedByThisContact(idNumberOfNewContact, prospecting);
-
-                                    // New person-property relationship
-                                    var personPropertyRelation = new prospecting_person_property_relationship
+                                    // Do an additional check to determine whether a contact with this ID number doesn't already exist
+                                    existingRelationshipToProperty = from ppr in prospecting.prospecting_person_property_relationships
+                                                                     where ppr.prospecting_property_id == dataPacket.ProspectingPropertyId && ppr.prospecting_contact_person.id_number == contact.id_number
+                                                                     select ppr;
+                                    if (existingRelationshipToProperty.Count() == 0)
                                     {
-                                        contact_person_id = contact.contact_person_id,
-                                        prospecting_property_id = dataPacket.ProspectingPropertyId.Value,
-                                        relationship_to_property = GetPersonRelationshipToProperty(dataPacket.ProspectingPropertyId, incomingContact.PersonPropertyRelationships),
-                                        created_date = DateTime.Now
-                                    };
-                                    prospecting.prospecting_person_property_relationships.InsertOnSubmit(personPropertyRelation);
-                                    prospecting.SubmitChanges();
+
+                                        incomingContact.PropertiesOwned = LoadPropertiesOwnedByThisContact(idNumberOfNewContact, prospecting);
+
+                                        // New person-property relationship
+                                        var personPropertyRelation = new prospecting_person_property_relationship
+                                        {
+                                            contact_person_id = contact.contact_person_id,
+                                            prospecting_property_id = dataPacket.ProspectingPropertyId.Value,
+                                            relationship_to_property = GetPersonRelationshipToProperty(dataPacket.ProspectingPropertyId, incomingContact.PersonPropertyRelationships),
+                                            created_date = DateTime.Now
+                                        };
+                                        prospecting.prospecting_person_property_relationships.InsertOnSubmit(personPropertyRelation);
+                                        prospecting.SubmitChanges();
+                                    }
                                 }
                             }
 
@@ -3016,7 +3024,7 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                 sb.AppendLine("Previous sale price on record: " + FormatSalePrice(propertyRecord.last_purch_price));
             }
             sb.AppendLine();
-            sb.AppendLine("Details of the previous owner(s):");
+            sb.AppendLine("Details of owner(s) before update:");
             if (allPropertyContacts.Count > 0)
             {
                 foreach (var contact in allPropertyContacts)
@@ -3094,16 +3102,26 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                     return false;
                 }
             }
+
+            if (searchResult.PropertyMatches == null || searchResult.PropertyMatches.Count != 1)
+            {
+                return false;
+            }
+
+            if (searchResult.PropertyMatches[0].LightstonePropId != property.LightstonePropertyId)
+            {
+                return false;
+            }
             using (var prospecting = new ProspectingDataContext())
             {
                 // Find and delete existing relationships between this property and contacts and companies (if any)
                 propertyRecord = prospecting.prospecting_properties.First(pp => pp.lightstone_property_id == property.LightstonePropertyId);
 
                 // Verify that the record has not already been updated in another session
-                if (propertyRecord.latest_reg_date == null)
-                {
-                    return false;
-                }
+                //if (propertyRecord.latest_reg_date == null )
+                //{
+                //    return false;
+                //}
 
                 CreateActivityForPropertyChangeOfOwnership(prospecting, propertyRecord);
 

@@ -81,6 +81,7 @@
 .context-menu-item.icon-remove_poly { background-image: url(../../Assets/remove_poly.png); }
 .context-menu-item.icon-lightstone {background-image: url(../../Assets/lightstone.png);}
 .context-menu-item.icon-add_activity {background-image: url(../../Assets/add_activity.png);}
+.context-menu-item.icon-reload_from_lightstone {background-image: url(../../Assets/reload_from_lightstone.png);}
 .context-menu-item.icon-google {background-image: url(../../Assets/google.png);}
 .context-menu-item.icon-capture {background-image: url(../../Assets/capture_address.png);}
 .context-menu-item.icon-new_sms_message {background-image: url(../../Assets/comm_sms.png);}

@@ -40,7 +40,7 @@ function initEventHandlers() {
                 callback: function (key, options) {
                     switch (key) {
                         case "Search Lightstone here":
-                            $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading Lightstone results...</p>' });
+                            $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Searching Lightstone at this location...</p>' });
                             buildLightstoneMatchesContent();
                             break;
                     }
@@ -53,7 +53,10 @@ function initEventHandlers() {
     $.contextMenu({
         selector: '.context-menu-rightclick-property',
         build: function ($trigger, e) {
-            var items = { "Add Activity": { name: "Add Activity", icon: "add_activity" } };
+            var items = {
+                "Add Activity": { name: "Add Activity", icon: "add_activity" },
+                "Reload Owners": { name: "Reload Owners", icon: "reload_from_lightstone" }
+            };
             if (prospectingContext.UserHasCommAccess) {
                 if (rightClickedProperty.Prospected) {
                     items["New SMS Message"] = { name: "New SMS Message", icon: "new_sms_message" };
@@ -72,12 +75,46 @@ function initEventHandlers() {
                         case "New Email Message":
                             newMessageToProperty('EMAIL', rightClickedProperty.Marker);
                             break;
+                        case "Reload Owners":
+                            handleReloadFromLightstone(function (marker) {
+                                updateOwnershipOfProperty(marker, function (marker) {
+                                    var prop = marker.ProspectingProperty;
+                                    if (prop.SS_FH == 'SS' || prop.SS_FH == 'FS') {
+                                        prop.Contacts = null;
+                                        loadExistingSSUnit(prop, null);
+                                    } else {
+                                        // HERE!
+                                    }
+                                });
+                            });
+                            break;
                     }
                 },
                 items: items
             };
         }
     });
+}
+
+function handleReloadFromLightstone(proceedCallback) {
+    if (rightClickedProperty != null) {
+        var targetMarker = rightClickedProperty.Marker;
+        var div = $('<div id="reloadFromLightstoneDialog" title="Reload From Lightstone"  style="font-family:Verdana;font-size:12px;" />').empty();
+        div.append("<p /><p />");
+        div.append("This operation will reload and update the property from Lightstone. If the current owners on record in Prospecting are the same as the Lightstone owners, all their details and contact information will be retained provided that the owners have valid RSA ID numbers.<p /> Beware using this function if the contacts associated with this property have invalid ID numbers or have been manually associated such as with tenants, as this operation will disassociate all non-owners from the property.");
+        div.dialog(
+                   {
+                       modal: true,
+                       closeOnEscape: false,
+                       width: '550',
+                       buttons: {
+                           "Continue": function () { $(this).dialog("close"); proceedCallback(targetMarker); },
+                           "Cancel": function () { $(this).dialog("close"); }
+                       },
+                       position: ['center', 'center']
+                   });
+    }
+    rightClickedProperty = null;
 }
 
 function handlePropertyRightClick() {
