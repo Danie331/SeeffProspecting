@@ -83,7 +83,8 @@ function initEventHandlers() {
                                         prop.Contacts = null;
                                         loadExistingSSUnit(prop, null);
                                     } else {
-                                        // HERE!
+                                        prop.Contacts = null;
+                                        loadExistingProspectReloadFromLightstone(prop);
                                     }
                                 });
                             });
@@ -731,6 +732,54 @@ function loadExistingProspectAddActivity(property, defaultSelection, callbackFun
                     }
                     showDialogAddActivity(activityBundle, defaultSelection);
                 }
+            } else {
+                alert('Could not complete request.');
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.status);
+            alert(jqXHR.responseText);
+        },
+        dataType: "json"
+    });
+}
+
+function loadExistingProspectReloadFromLightstone(property) {
+    //closeInfoWindow();
+    $('#propertyInfoDiv').css('display', 'none');
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: "get_existing_prospecting_property", LightstonePropertyId: property.LightstonePropertyId }),
+        success: function (data, textStatus, jqXHR) {
+            $.unblockUI();
+            if (textStatus == "success" && data) {
+                if (!handleResponseIfServerError(data)) {
+                    return;
+                }
+
+                if (data.ErrorMsg && data.ErrorMsg.length > 0) {
+                    alert(data.ErrorMsg);
+                }
+
+                updateExistingPropertyFromProperty(property, data);
+                currentMarker = property.Marker;
+                currentProperty = property;
+                updateOwnerDetailsEditor();
+                //updatePropertyInfoMenu();  // NB CHECK THIS
+
+                if (currentProperty.SS_FH != 'SS' && currentProperty.SS_FH != 'FS') {
+                    openInfoWindow(property.Marker, function () {
+                        // openInfoWindow calls closeInfoWindow which resets a whole bunch of globals, so re-init them here
+                        currentProperty = property;
+                        currentMarker = property.Marker;
+                        updateOwnerDetailsEditor();
+
+                        showMenu("contactdetails");
+                    });
+                }
+
             } else {
                 alert('Could not complete request.');
             }

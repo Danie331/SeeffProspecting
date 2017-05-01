@@ -256,7 +256,7 @@ function buildCommentForValuationFollowup(dateString) {
         address = "Unit " + currentPropertyForPropertyInformation.Unit + ' ' + currentPropertyForPropertyInformation.SSName + ', ' + address;
     }
     
-    var commentText = 'Please follow up on a validation done on ' + dateString + ' for ' + address;
+    var commentText = 'Please follow up on a valuation done on ' + dateString + ' for ' + address;
     return commentText;
 }
 
