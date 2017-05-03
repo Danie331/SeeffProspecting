@@ -48,5 +48,8 @@ namespace ProspectingTaskScheduler
         public Nullable<int> agent_target { get; set; }
         public string academy_institution { get; set; }
         public Nullable<int> division { get; set; }
+        public Nullable<decimal> monthly_breakeven { get; set; }
+        public Nullable<decimal> monthly_target { get; set; }
+        public Nullable<int> show_day_target { get; set; }
     }
 }

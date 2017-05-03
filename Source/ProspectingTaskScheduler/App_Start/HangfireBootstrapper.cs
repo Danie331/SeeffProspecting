@@ -11,6 +11,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using ProspectingTaskScheduler.Core.ClientSynchronisation;
+using ProspectingTaskScheduler.Core.Notifications;
 
 namespace ProspectingTaskScheduler.App_Start
 {
@@ -87,6 +88,8 @@ namespace ProspectingTaskScheduler.App_Start
             RecurringJob.AddOrUpdate("Synchronising spatial areas with seeff.com", () => SuburbMaintenance.SynchroniseSuburbNames(), Cron.Daily(6), TimeZoneInfo.Local);
 
             RecurringJob.AddOrUpdate("Synchronising Prospecting contact information to CMS", () => ProspectingToCmsClientSynchroniser.Synchronise(), Cron.Minutely);
+
+            RecurringJob.AddOrUpdate("Send Prospecting notifications", () => NotificationsGenerator.SendProspectingFollowupsNotification(), Cron.Daily(8));
         }
     }
 }

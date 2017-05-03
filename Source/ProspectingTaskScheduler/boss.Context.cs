@@ -28,5 +28,7 @@ namespace ProspectingTaskScheduler
         public virtual DbSet<user_registration> user_registration { get; set; }
         public virtual DbSet<license> license { get; set; }
         public virtual DbSet<license_branches> license_branches { get; set; }
+        public virtual DbSet<user_preference> user_preference { get; set; }
+        public virtual DbSet<user_preference_type> user_preference_type { get; set; }
     }
 }

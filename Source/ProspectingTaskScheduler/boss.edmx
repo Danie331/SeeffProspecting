@@ -5,24 +5,9 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="bossModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'boss.dbo.license' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="license">
           <Key>
             <PropertyRef Name="license_id" />
-            <PropertyRef Name="license_name" />
-            <PropertyRef Name="region" />
-            <PropertyRef Name="sub_region" />
-            <PropertyRef Name="registration_id" />
-            <PropertyRef Name="manager" />
-            <PropertyRef Name="residential" />
-            <PropertyRef Name="rental" />
-            <PropertyRef Name="commercial" />
-            <PropertyRef Name="agricultural" />
-            <PropertyRef Name="developments" />
-            <PropertyRef Name="distressed" />
-            <PropertyRef Name="icas" />
-            <PropertyRef Name="debt_remedy" />
           </Key>
           <Property Name="license_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="license_name" Type="varchar" MaxLength="150" Nullable="false" />
@@ -58,6 +43,9 @@ warning 6002: The table/view 'boss.dbo.license' does not have a primary key defi
           <Property Name="agent_target" Type="int" />
           <Property Name="academy_institution" Type="varchar" MaxLength="150" />
           <Property Name="division" Type="int" />
+          <Property Name="monthly_breakeven" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="monthly_target" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="show_day_target" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'boss.dbo.license_branches' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -69,6 +57,22 @@ warning 6002: The table/view 'boss.dbo.license_branches' does not have a primary
           <Property Name="license_id" Type="int" Nullable="false" />
           <Property Name="branch_id" Type="int" Nullable="false" />
           <Property Name="business_unit_id" Type="int" />
+        </EntityType>
+        <EntityType Name="user_preference">
+          <Key>
+            <PropertyRef Name="pk_user_preference_id" />
+          </Key>
+          <Property Name="pk_user_preference_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_user_preference_type_id" Type="int" Nullable="false" />
+          <Property Name="fk_user_registration_id" Type="bigint" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user_preference_type">
+          <Key>
+            <PropertyRef Name="pk_user_preference_type_id" />
+          </Key>
+          <Property Name="pk_user_preference_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="preference_type_description" Type="varchar" MaxLength="150" Nullable="false" />
         </EntityType>
         <EntityType Name="user_registration">
           <Key>
@@ -138,50 +142,42 @@ warning 6002: The table/view 'boss.dbo.license_branches' does not have a primary
           <Property Name="deleted_date" Type="datetime" />
           <Property Name="deleted_by" Type="int" />
           <Property Name="license_control" Type="varchar(max)" />
-          <Property Name="prospecting_communication" Type="bit" />
+          <Property Name="prospecting_communication" Type="bit" Nullable="false" />
+          <Property Name="target_at_seven_perc" Type="decimal" Precision="18" Scale="2" />
           <Property Name="mapping" Type="bit" Nullable="false" />
+          <Property Name="prospecting_comm_override" Type="bit" Nullable="false" />
           <Property Name="trust_lookup" Type="bit" Nullable="false" />
+          <Property Name="fk_ethnic_group_id" Type="int" />
         </EntityType>
+        <Association Name="FK__user_pref__fk_us__043C7558">
+          <End Role="user_preference_type" Type="Self.user_preference_type" Multiplicity="1" />
+          <End Role="user_preference" Type="Self.user_preference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user_preference_type">
+              <PropertyRef Name="pk_user_preference_type_id" />
+            </Principal>
+            <Dependent Role="user_preference">
+              <PropertyRef Name="fk_user_preference_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user_pref__fk_us__05309991">
+          <End Role="user_registration" Type="Self.user_registration" Multiplicity="1" />
+          <End Role="user_preference" Type="Self.user_preference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user_registration">
+              <PropertyRef Name="registration_id" />
+            </Principal>
+            <Dependent Role="user_preference">
+              <PropertyRef Name="fk_user_registration_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="bossModelStoreContainer">
+          <EntitySet Name="license" EntityType="Self.license" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user_preference" EntityType="Self.user_preference" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user_preference_type" EntityType="Self.user_preference_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_registration" EntityType="Self.user_registration" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="license" EntityType="Self.license" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [license].[license_id] AS [license_id], 
-    [license].[license_name] AS [license_name], 
-    [license].[region] AS [region], 
-    [license].[sub_region] AS [sub_region], 
-    [license].[sub_license_name] AS [sub_license_name], 
-    [license].[registration_id] AS [registration_id], 
-    [license].[manager] AS [manager], 
-    [license].[residential] AS [residential], 
-    [license].[rental] AS [rental], 
-    [license].[commercial] AS [commercial], 
-    [license].[agricultural] AS [agricultural], 
-    [license].[developments] AS [developments], 
-    [license].[distressed] AS [distressed], 
-    [license].[top_twenty_region] AS [top_twenty_region], 
-    [license].[Status] AS [Status], 
-    [license].[datasheet_link] AS [datasheet_link], 
-    [license].[percentage_quota] AS [percentage_quota], 
-    [license].[sales_referral_residential_id] AS [sales_referral_residential_id], 
-    [license].[rentals_referrals_residential_id] AS [rentals_referrals_residential_id], 
-    [license].[sales_referral_commercial_id] AS [sales_referral_commercial_id], 
-    [license].[rentals_referrals_commercial_id] AS [rentals_referrals_commercial_id], 
-    [license].[sales_referral_agricultural_id] AS [sales_referral_agricultural_id], 
-    [license].[rentals_referrals_agricultural_id] AS [rentals_referrals_agricultural_id], 
-    [license].[sales_referral_developments_id] AS [sales_referral_developments_id], 
-    [license].[rentals_referrals_developments_id] AS [rentals_referrals_developments_id], 
-    [license].[icas] AS [icas], 
-    [license].[debt_remedy] AS [debt_remedy], 
-    [license].[cluster] AS [cluster], 
-    [license].[google_region_key] AS [google_region_key], 
-    [license].[google_licsense_key] AS [google_licsense_key], 
-    [license].[google_statutory_submissions] AS [google_statutory_submissions], 
-    [license].[agent_target] AS [agent_target], 
-    [license].[academy_institution] AS [academy_institution], 
-    [license].[division] AS [division]
-    FROM [dbo].[license] AS [license]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="license_branches" EntityType="Self.license_branches" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [license_branches].[license_id] AS [license_id], 
@@ -189,6 +185,14 @@ warning 6002: The table/view 'boss.dbo.license_branches' does not have a primary
     [license_branches].[business_unit_id] AS [business_unit_id]
     FROM [dbo].[license_branches] AS [license_branches]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK__user_pref__fk_us__043C7558" Association="Self.FK__user_pref__fk_us__043C7558">
+            <End Role="user_preference_type" EntitySet="user_preference_type" />
+            <End Role="user_preference" EntitySet="user_preference" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user_pref__fk_us__05309991" Association="Self.FK__user_pref__fk_us__05309991">
+            <End Role="user_registration" EntitySet="user_registration" />
+            <End Role="user_preference" EntitySet="user_preference" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -262,14 +266,28 @@ warning 6002: The table/view 'boss.dbo.license_branches' does not have a primary
           <Property Name="deleted_date" Type="DateTime" Precision="3" />
           <Property Name="deleted_by" Type="Int32" />
           <Property Name="license_control" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="prospecting_communication" Type="Boolean" />
+          <Property Name="prospecting_communication" Type="Boolean" Nullable="false" />
           <Property Name="mapping" Type="Boolean" Nullable="false" />
           <Property Name="trust_lookup" Type="Boolean" Nullable="false" />
+          <Property Name="target_at_seven_perc" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="prospecting_comm_override" Type="Boolean" Nullable="false" />
+          <Property Name="fk_ethnic_group_id" Type="Int32" />
+          <NavigationProperty Name="user_preference" Relationship="bossModel.FK__user_pref__fk_us__05309991" FromRole="user_registration" ToRole="user_preference" />
         </EntityType>
         <EntityContainer Name="bossEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="user_registration" EntityType="Self.user_registration" />
           <EntitySet Name="license" EntityType="bossModel.license" />
           <EntitySet Name="license_branches" EntityType="bossModel.license_branches" />
+          <EntitySet Name="user_preference" EntityType="bossModel.user_preference" />
+          <EntitySet Name="user_preference_type" EntityType="bossModel.user_preference_type" />
+          <AssociationSet Name="FK__user_pref__fk_us__043C7558" Association="bossModel.FK__user_pref__fk_us__043C7558">
+            <End Role="user_preference_type" EntitySet="user_preference_type" />
+            <End Role="user_preference" EntitySet="user_preference" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user_pref__fk_us__05309991" Association="bossModel.FK__user_pref__fk_us__05309991">
+            <End Role="user_registration" EntitySet="user_registration" />
+            <End Role="user_preference" EntitySet="user_preference" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="license">
           <Key>
@@ -322,6 +340,9 @@ warning 6002: The table/view 'boss.dbo.license_branches' does not have a primary
           <Property Name="agent_target" Type="Int32" />
           <Property Name="academy_institution" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="division" Type="Int32" />
+          <Property Name="monthly_breakeven" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="monthly_target" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="show_day_target" Type="Int32" />
         </EntityType>
         <EntityType Name="license_branches">
           <Key>
@@ -332,6 +353,49 @@ warning 6002: The table/view 'boss.dbo.license_branches' does not have a primary
           <Property Name="branch_id" Type="Int32" Nullable="false" />
           <Property Name="business_unit_id" Type="Int32" />
         </EntityType>
+        <EntityType Name="user_preference">
+          <Key>
+            <PropertyRef Name="pk_user_preference_id" />
+          </Key>
+          <Property Name="pk_user_preference_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_user_preference_type_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_user_registration_id" Type="Int64" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="user_preference_type" Relationship="bossModel.FK__user_pref__fk_us__043C7558" FromRole="user_preference" ToRole="user_preference_type" />
+          <NavigationProperty Name="user_registration" Relationship="bossModel.FK__user_pref__fk_us__05309991" FromRole="user_preference" ToRole="user_registration" />
+        </EntityType>
+        <EntityType Name="user_preference_type">
+          <Key>
+            <PropertyRef Name="pk_user_preference_type_id" />
+          </Key>
+          <Property Name="pk_user_preference_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="preference_type_description" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="user_preference" Relationship="bossModel.FK__user_pref__fk_us__043C7558" FromRole="user_preference_type" ToRole="user_preference" />
+        </EntityType>
+        <Association Name="FK__user_pref__fk_us__043C7558">
+          <End Type="bossModel.user_preference_type" Role="user_preference_type" Multiplicity="1" />
+          <End Type="bossModel.user_preference" Role="user_preference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user_preference_type">
+              <PropertyRef Name="pk_user_preference_type_id" />
+            </Principal>
+            <Dependent Role="user_preference">
+              <PropertyRef Name="fk_user_preference_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user_pref__fk_us__05309991">
+          <End Type="bossModel.user_registration" Role="user_registration" Multiplicity="1" />
+          <End Type="bossModel.user_preference" Role="user_preference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user_registration">
+              <PropertyRef Name="registration_id" />
+            </Principal>
+            <Dependent Role="user_preference">
+              <PropertyRef Name="fk_user_registration_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -341,6 +405,9 @@ warning 6002: The table/view 'boss.dbo.license_branches' does not have a primary
           <EntitySetMapping Name="user_registration">
             <EntityTypeMapping TypeName="bossModel.user_registration">
               <MappingFragment StoreEntitySet="user_registration">
+                <ScalarProperty Name="fk_ethnic_group_id" ColumnName="fk_ethnic_group_id" />
+                <ScalarProperty Name="prospecting_comm_override" ColumnName="prospecting_comm_override" />
+                <ScalarProperty Name="target_at_seven_perc" ColumnName="target_at_seven_perc" />
                 <ScalarProperty Name="registration_id" ColumnName="registration_id" />
                 <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="user_name" ColumnName="user_name" />
@@ -414,6 +481,9 @@ warning 6002: The table/view 'boss.dbo.license_branches' does not have a primary
           <EntitySetMapping Name="license">
             <EntityTypeMapping TypeName="bossModel.license">
               <MappingFragment StoreEntitySet="license">
+                <ScalarProperty Name="show_day_target" ColumnName="show_day_target" />
+                <ScalarProperty Name="monthly_target" ColumnName="monthly_target" />
+                <ScalarProperty Name="monthly_breakeven" ColumnName="monthly_breakeven" />
                 <ScalarProperty Name="division" ColumnName="division" />
                 <ScalarProperty Name="academy_institution" ColumnName="academy_institution" />
                 <ScalarProperty Name="agent_target" ColumnName="agent_target" />
@@ -457,6 +527,24 @@ warning 6002: The table/view 'boss.dbo.license_branches' does not have a primary
                 <ScalarProperty Name="business_unit_id" ColumnName="business_unit_id" />
                 <ScalarProperty Name="branch_id" ColumnName="branch_id" />
                 <ScalarProperty Name="license_id" ColumnName="license_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_preference">
+            <EntityTypeMapping TypeName="bossModel.user_preference">
+              <MappingFragment StoreEntitySet="user_preference">
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="fk_user_registration_id" ColumnName="fk_user_registration_id" />
+                <ScalarProperty Name="fk_user_preference_type_id" ColumnName="fk_user_preference_type_id" />
+                <ScalarProperty Name="pk_user_preference_id" ColumnName="pk_user_preference_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_preference_type">
+            <EntityTypeMapping TypeName="bossModel.user_preference_type">
+              <MappingFragment StoreEntitySet="user_preference_type">
+                <ScalarProperty Name="preference_type_description" ColumnName="preference_type_description" />
+                <ScalarProperty Name="pk_user_preference_type_id" ColumnName="pk_user_preference_type_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

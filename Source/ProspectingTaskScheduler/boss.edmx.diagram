@@ -8,6 +8,10 @@
         <EntityTypeShape EntityType="bossModel.user_registration" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="bossModel.license" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="bossModel.license_branches" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="bossModel.user_preference" Width="1.5" PointX="3" PointY="10" />
+        <EntityTypeShape EntityType="bossModel.user_preference_type" Width="1.5" PointX="0.75" PointY="16.25" />
+        <AssociationConnector Association="bossModel.FK__user_pref__fk_us__043C7558" />
+        <AssociationConnector Association="bossModel.FK__user_pref__fk_us__05309991" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

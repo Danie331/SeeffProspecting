@@ -14,6 +14,12 @@ namespace ProspectingTaskScheduler
     
     public partial class user_registration
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public user_registration()
+        {
+            this.user_preference = new HashSet<user_preference>();
+        }
+    
         public long registration_id { get; set; }
         public string title { get; set; }
         public string user_name { get; set; }
@@ -78,8 +84,14 @@ namespace ProspectingTaskScheduler
         public Nullable<System.DateTime> deleted_date { get; set; }
         public Nullable<int> deleted_by { get; set; }
         public string license_control { get; set; }
-        public Nullable<bool> prospecting_communication { get; set; }
+        public bool prospecting_communication { get; set; }
         public bool mapping { get; set; }
         public bool trust_lookup { get; set; }
+        public Nullable<decimal> target_at_seven_perc { get; set; }
+        public bool prospecting_comm_override { get; set; }
+        public Nullable<int> fk_ethnic_group_id { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<user_preference> user_preference { get; set; }
     }
 }

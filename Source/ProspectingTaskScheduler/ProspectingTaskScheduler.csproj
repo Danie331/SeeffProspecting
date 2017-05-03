@@ -339,6 +339,9 @@
     <Compile Include="Core\LightstoneTakeOn\Step9.cs" />
     <Compile Include="Core\LightstoneTakeOn\TransactionRequest.cs" />
     <Compile Include="Core\LightstoneTakeOn\TransactionResult.cs" />
+    <Compile Include="Core\Notifications\NotificationsGenerator.cs" />
+    <Compile Include="Core\Notifications\ProspectingFollowup.cs" />
+    <Compile Include="Core\Notifications\ProspectingFollowupsForUser.cs" />
     <Compile Include="Core\Spatial\SuburbMaintenance.cs" />
     <Compile Include="Core\Utils.cs" />
     <Compile Include="country_code.cs">
@@ -409,6 +412,12 @@
     </Compile>
     <Compile Include="spatial_area.cs">
       <DependentUpon>Spatial.tt</DependentUpon>
+    </Compile>
+    <Compile Include="user_preference.cs">
+      <DependentUpon>boss.tt</DependentUpon>
+    </Compile>
+    <Compile Include="user_preference_type.cs">
+      <DependentUpon>boss.tt</DependentUpon>
     </Compile>
     <Compile Include="user_registration.cs">
       <DependentUpon>boss.tt</DependentUpon>
