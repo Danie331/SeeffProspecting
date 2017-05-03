@@ -47,7 +47,7 @@ namespace ProspectingTaskScheduler.Core.Housekeeping
                     smtpClient.Send(message);
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 // Add logging code later.
             }

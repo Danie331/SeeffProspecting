@@ -44,13 +44,13 @@ namespace ProspectingTaskScheduler.Core.Notifications
             sb.Append("<p style='font-size:14px;'>Please take note of your prospecting follow ups listed below.</p>");
 
             //Follow ups today
-            CreateContentSection(sb, followupsForUser.TodaysFollowups, "Today's Follow Ups - " + DateTime.Now.ToShortDateString(), "#06791f");
+            CreateContentSection(sb, followupsForUser.TodaysFollowups, "Today's Follow Ups - " + DateTime.Now.ToShortDateString(), "#06791f", false);
 
             //Future follow ups
-            CreateContentSection(sb, followupsForUser.FutureDatedFollowups, "Future dated Prospecting Follow ups", "#da8d00");
+            CreateContentSection(sb, followupsForUser.FutureDatedFollowups, "Future dated Prospecting Follow ups", "#da8d00", true);
 
             //un-actioned/open follow ups
-            CreateContentSection(sb, followupsForUser.UnactionedFollowups, "Un-actioned (open) Follow Ups", "#dc2305");
+            CreateContentSection(sb, followupsForUser.UnactionedFollowups, "Un-actioned (open) Follow Ups", "#dc2305", true);
        
             sb.Append("<p style='font-size:14px;'>Please contact support@seeff.com should you have any questions in this regard.</p>");
             sb.Append("<p style='font-size:14px;'><b>Kind Regards <br/>Seeff Head Office</b></p>");
@@ -71,7 +71,7 @@ namespace ProspectingTaskScheduler.Core.Notifications
             return sb.ToString();
         }
 
-        private static void CreateContentSection(StringBuilder sb, List<ProspectingFollowup> targetList, string heading, string colour)
+        private static void CreateContentSection(StringBuilder sb, List<ProspectingFollowup> targetList, string heading, string colour, bool showFollowupDate)
         {
             sb.Append("<div style='margin-bottom:20px;'>");
             sb.Append("<h5 style='font-size:14px; background-color:" + colour + "; padding:10px 0px 10px 10px; color:#ffffff; margin:0; border-radius:5px 5px 0px 0px; width:590px;'>" + heading + "</h5>");
@@ -86,9 +86,23 @@ namespace ProspectingTaskScheduler.Core.Notifications
                 sb.Append("     <td>");
                 sb.Append("         <table style='width:100%;'>");
                 sb.Append("             <tr>");
-                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Type:</td>");
+                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Activity:</td>");
                 sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'>" + item.ActivityTypeName + "</td>");
                 sb.Append("             </tr>");
+                if (item.FollowupActivityTypeName != "n/a")
+                {
+                    sb.Append("             <tr>");
+                    sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Follow-up Type:</td>");
+                    sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'>" + item.FollowupActivityTypeName + "</td>");
+                    sb.Append("             </tr>");
+                }
+                if (showFollowupDate)
+                {
+                    sb.Append("             <tr>");
+                    sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Follow-up Date:</td>");
+                    sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'>" + item.FollowupDate.ToShortDateString() + "</td>");
+                    sb.Append("             </tr>");
+                }
                 sb.Append("             <tr>");
                 sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Created By:</td>");
                 sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'>" + item.CreatedByUsername + "</td>");
@@ -136,9 +150,9 @@ namespace ProspectingTaskScheduler.Core.Notifications
 
                 var todaysFollowups = prospecting.activity_logs.Where(act => act.allocated_to == userGuid &&
                                                                                 act.followup_date != null &&
-                                                                                act.followup_date.Value.Date == DateTime.Today &&
-                                                                                !parentIds.Contains(act.activity_log_id))
-                                                                .OrderByDescending(d => d.followup_date);
+                                                                                act.followup_date.Value.Date == DateTime.Today).ToList();
+                todaysFollowups = todaysFollowups.Where(act => !parentIds.Contains(act.activity_log_id)).ToList();
+                todaysFollowups = todaysFollowups.OrderByDescending(act => act.followup_date).ToList();
                 foreach (var item in todaysFollowups)
                 {
                     ProspectingFollowup followup = LoadFollowup(item);
@@ -147,10 +161,9 @@ namespace ProspectingTaskScheduler.Core.Notifications
 
                 var futureFollowups = prospecting.activity_logs.Where(act => act.allocated_to == userGuid &&
                                                                                 act.followup_date != null &&
-                                                                                act.followup_date.Value.Date > DateTime.Today &&
-                                                                                !parentIds.Contains(act.activity_log_id))
-                                                                .OrderByDescending(d => d.followup_date);
-
+                                                                                act.followup_date.Value.Date > DateTime.Today).ToList();
+                futureFollowups = futureFollowups.Where(act => !parentIds.Contains(act.activity_log_id)).ToList();
+                futureFollowups = futureFollowups.OrderByDescending(act => act.followup_date).ToList();
                 foreach (var item in futureFollowups)
                 {
                     ProspectingFollowup followup = LoadFollowup(item);
@@ -159,10 +172,9 @@ namespace ProspectingTaskScheduler.Core.Notifications
 
                 var unactionedFollowups = prospecting.activity_logs.Where(act => act.allocated_to == userGuid &&
                                                                                 act.followup_date != null &&
-                                                                                act.followup_date.Value.Date < DateTime.Today &&
-                                                                                !parentIds.Contains(act.activity_log_id))
-                                                                .OrderByDescending(d => d.followup_date);
-
+                                                                                act.followup_date.Value.Date < DateTime.Today).ToList();
+                unactionedFollowups = unactionedFollowups.Where(act => !parentIds.Contains(act.activity_log_id)).ToList();
+                unactionedFollowups = unactionedFollowups.OrderByDescending(act => act.followup_date).ToList();
                 foreach (var item in unactionedFollowups)
                 {
                     ProspectingFollowup followup = LoadFollowup(item);
@@ -176,6 +188,7 @@ namespace ProspectingTaskScheduler.Core.Notifications
         private static ProspectingFollowup LoadFollowup(activity_log item)
         {
             ProspectingFollowup followup = new ProspectingFollowup();
+            followup.FollowupDate = item.followup_date.Value;
             followup.PropertyAddress = GetFormattedAddress(item.lightstone_property_id);
             followup.CreatedByUsername = GetBossUsername(item.created_by);
             followup.Comment = item.comment;
@@ -218,10 +231,13 @@ namespace ProspectingTaskScheduler.Core.Notifications
                 var target = prospecting.prospecting_contact_persons.First(cp => cp.contact_person_id == contact_person_id);
                 var primaryContactDetail = target.prospecting_contact_details.FirstOrDefault(cd => new[] { 1, 2, 3 }.Contains(cd.contact_detail_type) && cd.is_primary_contact && !cd.deleted);
 
-                string formattedContactDetail = String.Format("{0:(###) ### ####}", primaryContactDetail.contact_detail);
-                return primaryContactDetail != null ?
-                    new KeyValuePair<string, string>(primaryContactDetail.contact_detail, string.Concat(formattedContactDetail, " (", primaryContactDetail.prospecting_contact_detail_type.type_desc, ")"))
-                    : new KeyValuePair<string, string>("n/a", "n/a");
+                if (primaryContactDetail != null)
+                {
+                    string formattedContactDetail = string.Concat(primaryContactDetail.contact_detail.Substring(0, 3), " ", primaryContactDetail.contact_detail.Substring(3, 3), " ", primaryContactDetail.contact_detail.Substring(6, 4));
+                    return new KeyValuePair<string, string>(primaryContactDetail.contact_detail, string.Concat(formattedContactDetail, " (", primaryContactDetail.prospecting_contact_detail_type.type_desc, ")"));
+                }
+                               
+                 return new KeyValuePair<string, string>("n/a", "n/a");
             }
         }
 
