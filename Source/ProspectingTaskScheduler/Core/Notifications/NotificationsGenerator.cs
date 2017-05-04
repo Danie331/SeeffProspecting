@@ -17,8 +17,11 @@ namespace ProspectingTaskScheduler.Core.Notifications
                 foreach (var user in RetrieveRecipientsForProspectingFollowups())
                 {
                     ProspectingFollowupsForUser followupsForUser = RetrieveFollowupsForUser(user.user_guid);
-                    string emailContent = CreateMessageBody(followupsForUser);
-                    StatusNotifier.SendEmail(user.user_email_address, "Prospecting", "reports@seeff.com", "danie.vdm@seeff.com", "Prospecting Follow Ups", emailContent);                                        
+                    if (followupsForUser.HasResults)
+                    {
+                        string emailContent = CreateMessageBody(followupsForUser);
+                        StatusNotifier.SendEmail(user.user_email_address, "Prospecting", "reports@seeff.com", "danie.vdm@seeff.com", "Prospecting Follow Ups", emailContent);
+                    }
                 }
             }
             catch (Exception ex)
@@ -44,10 +47,10 @@ namespace ProspectingTaskScheduler.Core.Notifications
             sb.Append("<p style='font-size:14px;'>Please take note of your prospecting follow ups listed below.</p>");
 
             //Follow ups today
-            CreateContentSection(sb, followupsForUser.TodaysFollowups, "Today's Follow Ups - " + DateTime.Now.ToShortDateString(), "#06791f", false);
+            CreateContentSection(sb, followupsForUser.TodaysFollowups, "Today's Follow Ups - " + DateTime.Today.ToString("yyyy/MM/dd"), "#06791f", false);
 
             //Future follow ups
-            CreateContentSection(sb, followupsForUser.FutureDatedFollowups, "Future dated Prospecting Follow ups", "#da8d00", true);
+            CreateContentSection(sb, followupsForUser.FutureDatedFollowups, "Future dated Follow ups", "#da8d00", true);
 
             //un-actioned/open follow ups
             CreateContentSection(sb, followupsForUser.UnactionedFollowups, "Un-actioned (open) Follow Ups", "#dc2305", true);
@@ -100,7 +103,7 @@ namespace ProspectingTaskScheduler.Core.Notifications
                 {
                     sb.Append("             <tr>");
                     sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Follow-up Date:</td>");
-                    sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'>" + item.FollowupDate.ToShortDateString() + "</td>");
+                    sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'>" + item.FollowupDate.ToString("yyyy/MM/dd") + "</td>");
                     sb.Append("             </tr>");
                 }
                 sb.Append("             <tr>");

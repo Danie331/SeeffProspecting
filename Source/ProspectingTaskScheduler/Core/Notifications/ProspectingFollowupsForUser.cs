@@ -17,5 +17,10 @@ namespace ProspectingTaskScheduler.Core.Notifications
             FutureDatedFollowups = new List<ProspectingFollowup>();
             UnactionedFollowups = new List<ProspectingFollowup>();
         }
+
+        public bool HasResults
+        {
+            get { return TodaysFollowups.Any() || FutureDatedFollowups.Any() || UnactionedFollowups.Any(); }
+        }
     }
 }
