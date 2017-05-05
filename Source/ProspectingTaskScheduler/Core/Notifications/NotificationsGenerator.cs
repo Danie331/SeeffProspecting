@@ -20,7 +20,7 @@ namespace ProspectingTaskScheduler.Core.Notifications
                     if (followupsForUser.HasResults)
                     {
                         string emailContent = CreateMessageBody(followupsForUser);
-                        StatusNotifier.SendEmail(user.user_email_address, "Prospecting", "reports@seeff.com", "danie.vdm@seeff.com", "Prospecting Follow Ups", emailContent);
+                        StatusNotifier.SendEmail(user.user_email_address, "Prospecting", "reports@seeff.com", null, "Prospecting Follow Ups", emailContent);
                     }
                 }
             }
