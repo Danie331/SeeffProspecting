@@ -89,41 +89,41 @@ namespace ProspectingTaskScheduler.Core.Notifications
                 sb.Append("     <td>");
                 sb.Append("         <table style='width:100%;'>");
                 sb.Append("             <tr>");
-                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Activity:</td>");
+                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;width:150px;'>Activity:</td>");
                 sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'>" + item.ActivityTypeName + "</td>");
                 sb.Append("             </tr>");
                 if (item.FollowupActivityTypeName != "n/a")
                 {
                     sb.Append("             <tr>");
-                    sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Follow-up Type:</td>");
+                    sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;width:150px;'>Follow-up Type:</td>");
                     sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'>" + item.FollowupActivityTypeName + "</td>");
                     sb.Append("             </tr>");
                 }
                 if (showFollowupDate)
                 {
                     sb.Append("             <tr>");
-                    sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Follow-up Date:</td>");
+                    sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;width:150px;'>Follow-up Date:</td>");
                     sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'>" + item.FollowupDate.ToString("yyyy/MM/dd") + "</td>");
                     sb.Append("             </tr>");
                 }
                 sb.Append("             <tr>");
-                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Created By:</td>");
+                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;width:150px;'>Created By:</td>");
                 sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'>" + item.CreatedByUsername + "</td>");
                 sb.Append("             </tr>");
                 sb.Append("             <tr>");
-                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Related To:</td>");
+                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;width:150px;'>Related To:</td>");
                 sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'>" + item.RelatedToContactPerson + "</td>");
                 sb.Append("             </tr>");
                 sb.Append("             <tr>");
-                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Primary Phone:</td>");
+                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;width:150px;'>Primary Phone:</td>");
                 sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'><a href='tel:" + item.PrimaryContactNo + "'>" + item.PrimaryContactNoFormatted + "</a></td>");
                 sb.Append("             </tr>");
                 sb.Append("             <tr>");
-                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Primary Email:</td>");
+                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;width:150px;'>Primary Email:</td>");
                 sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'><a href='mailto:" + item.PrimaryEmailAddress + "'>" + item.PrimaryEmailAddressFormatted + "</a></td>");
                 sb.Append("             </tr>");
                 sb.Append("             <tr>");
-                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;'>Comment:</td>");
+                sb.Append("                 <td style='padding:5px; font-weight:bold; background-color:#fff;width:150px;'>Comment:</td>");
                 sb.Append("                 <td style='padding:5px 10px; background-color:#fff;'>" + item.Comment + "</td>");
                 sb.Append("             </tr>");
                 sb.Append("         </table>");
@@ -166,7 +166,7 @@ namespace ProspectingTaskScheduler.Core.Notifications
                                                                                 act.followup_date != null &&
                                                                                 act.followup_date.Value.Date > DateTime.Today).ToList();
                 futureFollowups = futureFollowups.Where(act => !parentIds.Contains(act.activity_log_id)).ToList();
-                futureFollowups = futureFollowups.OrderByDescending(act => act.followup_date).ToList();
+                futureFollowups = futureFollowups.OrderBy(act => act.followup_date).ToList();
                 foreach (var item in futureFollowups)
                 {
                     ProspectingFollowup followup = LoadFollowup(item);
@@ -236,7 +236,8 @@ namespace ProspectingTaskScheduler.Core.Notifications
 
                 if (primaryContactDetail != null)
                 {
-                    string formattedContactDetail = string.Concat(primaryContactDetail.contact_detail.Substring(0, 3), " ", primaryContactDetail.contact_detail.Substring(3, 3), " ", primaryContactDetail.contact_detail.Substring(6, 4));
+                    string formattedContactDetail = primaryContactDetail.contact_detail.Length == 10 ? string.Concat(primaryContactDetail.contact_detail.Substring(0, 3), " ", primaryContactDetail.contact_detail.Substring(3, 3), " ", primaryContactDetail.contact_detail.Substring(6, 4))
+                                                                                                     : primaryContactDetail.contact_detail;
                     return new KeyValuePair<string, string>(primaryContactDetail.contact_detail, string.Concat(formattedContactDetail, " (", primaryContactDetail.prospecting_contact_detail_type.type_desc, ")"));
                 }
                                
