@@ -4,12 +4,14 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Web;
+using Hangfire;
 using ProspectingTaskScheduler.Core.Housekeeping;
 
 namespace ProspectingTaskScheduler.Core.Notifications
 {
     public class NotificationsGenerator
     {
+        [AutomaticRetry(Attempts = 0)]
         public static void SendProspectingFollowupsNotification()
         {
             try

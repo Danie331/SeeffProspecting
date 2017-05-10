@@ -34,5 +34,7 @@ namespace ProspectingProject
 
         public List<KeyValuePair<int, string>> ActivityFollowupTypes { get; internal set; }
         public List<KeyValuePair<int, string>> ActivityTypes { get; internal set; }
+
+        public bool IsTrainingMode { get; set; }
     }
 }

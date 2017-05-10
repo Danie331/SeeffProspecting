@@ -32,6 +32,11 @@ namespace ProspectingProject
 
         public decimal DeductEnquiryCost()
         {
+            if (RequestHandler.IsTrainingMode())
+            {
+                return 0.0M;
+            }
+
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 return prospectingAuthService.DebitUserBalance(_enquiryCost, _userGuid);
@@ -53,7 +58,14 @@ namespace ProspectingProject
             XDocument resultsDoc = null;
             try
             {
-                resultsDoc = _tpsService.GetResponseXML(_inputData.LightstoneIDOrCKNo);
+                if (RequestHandler.IsTrainingMode())
+                {
+                    resultsDoc = GenerateTestResponseData();
+                }
+                else
+                {
+                    resultsDoc = _tpsService.GetResponseXML(_inputData.LightstoneIDOrCKNo);
+                }
             }
             catch (Exception ex)
             {
@@ -127,6 +139,11 @@ namespace ProspectingProject
 
         public decimal ReverseEnquiryCost()
         {
+            if (RequestHandler.IsTrainingMode())
+            {
+                return 0.0M;
+            }
+
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 return prospectingAuthService.CreditUserBalance(_enquiryCost, _userGuid);
@@ -183,6 +200,11 @@ namespace ProspectingProject
                 prospectingDB.service_enquiry_logs.InsertOnSubmit(logEntry);
                 prospectingDB.SubmitChanges();
             }
+        }
+
+        private XDocument GenerateTestResponseData()
+        {
+            return new TracepsTestService().GetResponseXML(null);
         }
     }
 }

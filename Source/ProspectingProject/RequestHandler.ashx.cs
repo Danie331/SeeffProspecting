@@ -626,9 +626,20 @@ namespace ProspectingProject
             var sessionKey = Guid.Parse((string)HttpContext.Current.Session["session_key"]);
 
             UserDataResponsePacket user = ProspectingCore.LoadUser(guid, sessionKey, impersonate);
+            user.IsTrainingMode = IsTrainingMode();
             HttpContext.Current.Session["user"] = user;
             HttpContext.Current.Session["deleted_item_count"] = 0;
             return ProspectingCore.SerializeToJsonWithDefaults(user);
+        }
+
+        public static bool IsTrainingMode()
+        {
+            if (HttpContext.Current.Session["training_mode"] != null)
+            {
+                return (bool)HttpContext.Current.Session["training_mode"];
+            }
+
+            return false;
         }
 
         public static UserDataResponsePacket GetUserSessionObject()
