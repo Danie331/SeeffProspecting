@@ -1788,6 +1788,9 @@ namespace ProspectingProject
                 GeoLocation loc = TryConvertToGeoLocation(row["Y"], row["X"]);
                 if (loc == null)
                     return;
+
+                Func<object, string> formatSSName = nameField => nameField.ToString().Replace("&", " AND ");
+
                 // This is a new property that must be added
                 LightstonePropertyMatch match = new LightstonePropertyMatch
                 {
@@ -1799,7 +1802,7 @@ namespace ProspectingProject
                     LightstonePropId = lightstonePropId,
                     RegDate = row["REG_DATE"] != null ? row["REG_DATE"].ToString() : string.Empty,
                     LatLng = loc,
-                    SSName = row["SECTIONAL_TITLE"] != null ? row["SECTIONAL_TITLE"].ToString() : string.Empty,
+                    SSName = row["SECTIONAL_TITLE"] != null ? formatSSName(row["SECTIONAL_TITLE"]) : string.Empty,
                     SS_FH = row["property_type"] != null ? row["property_type"].ToString() : string.Empty,
                     PurchPrice = row["PURCHASE_PRICE"] != null ? row["PURCHASE_PRICE"].ToString() : string.Empty,
                     Unit = row["UNIT"] != null ? row["UNIT"].ToString() : string.Empty,
