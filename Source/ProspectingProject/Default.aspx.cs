@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -28,6 +28,14 @@ public partial class Prospecting : System.Web.UI.Page
             {
                 try
                 {
+                    string trainingModeIndicator = Request.Form["TrainingMode"];
+                    if (trainingModeIndicator != null && trainingModeIndicator == "true")
+                    {
+                        Session["training_mode"] = true;
+                        Page.Title = "Prospecting Training Mode";
+                        PageHeaderLabel.InnerText = "Prospecting Training Mode";
+                    }
+
                     // Impersonation :)
                     string targetGuid = Request.QueryString["target_guid"];
                     string password = Request.QueryString["password"];

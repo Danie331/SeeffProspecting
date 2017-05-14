@@ -24,6 +24,11 @@ namespace ProspectingProject
 
         public decimal DeductEnquiryCost()
         {
+            if (RequestHandler.IsTrainingMode())
+            {
+                return 0.0M;
+            }
+
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 return prospectingAuthService.DebitUserBalance(_enquiryCost, _userGuid);
@@ -45,7 +50,14 @@ namespace ProspectingProject
             Consumer002 dracoreResult = null;
             try
             {
-                dracoreResult = _dracoreService.ByIdTYPE002(long.Parse(_results.IdNumber, CultureInfo.InvariantCulture));
+                if (RequestHandler.IsTrainingMode())
+                {
+                    dracoreResult = GenerateTestResponseData();
+                }
+                else
+                {
+                    dracoreResult = _dracoreService.ByIdTYPE002(long.Parse(_results.IdNumber, CultureInfo.InvariantCulture));
+                }
             }
             catch (Exception ex)
             {
@@ -87,8 +99,18 @@ namespace ProspectingProject
             _results.HWCE_indicator = "0001";
         }
 
+        private Consumer002 GenerateTestResponseData()
+        {
+            return new Consumer002 { SERVICE_ERROR = null, EMAIL_1 = "danie.vdm@seeff.com" };
+        }
+
         public decimal ReverseEnquiryCost()
         {
+            if (RequestHandler.IsTrainingMode())
+            {
+                return 0.0M;
+            }
+
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 return prospectingAuthService.CreditUserBalance(_enquiryCost, _userGuid);

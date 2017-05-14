@@ -90,7 +90,7 @@
     <form id="form1" runat="server">
         <div id='mainpanel' class="ui-widget-content" style="min-width: 45%; display: none;">
             <div id="panelheader">
-                <label style="font-family: Verdana; font-size: 25px; padding: 10px; margin-top: 10px; display: inline-block; color: #000070">Seeff Prospecting</label>
+                <label id="PageHeaderLabel" style="font-family: Verdana; font-size: 25px; padding: 10px; margin-top: 10px; display: inline-block; color: #000070" runat="server">Seeff Prospecting</label>
                 <img src="Assets/seeff_logo.png" style="float: left;" />
                 <img id="closepanelbutton" src="Assets/double-arrow-left.png" style="float: right; padding-right: 5px; padding-left:5px; cursor: pointer;" title="Collapse" />
                 <button id="logoffBtn" type="button" style="display: inline-block; float: right; margin-top:2px; background-color:white;cursor:pointer;border-radius:15px" title="Back to BOSS">

@@ -3835,6 +3835,11 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                 return referralDetails;
             }
 
+            if (RequestHandler.IsTrainingMode())
+            {
+                return referralDetails;
+            }
+
             using (var client = new HttpClient())
             {
                 try

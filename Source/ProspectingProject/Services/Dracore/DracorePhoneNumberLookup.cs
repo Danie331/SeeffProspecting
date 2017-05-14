@@ -24,6 +24,11 @@ namespace ProspectingProject
 
         public decimal DeductEnquiryCost()
         {
+            if (RequestHandler.IsTrainingMode())
+            {
+                return 0.0M;
+            }
+
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 return prospectingAuthService.DebitUserBalance(_enquiryCost, _userGuid);
@@ -45,7 +50,14 @@ namespace ProspectingProject
             Consumer001 dracoreResult = null;
             try
             {
-                dracoreResult = _dracoreService.ByIdTYPE001(long.Parse(_results.IdNumber, CultureInfo.InvariantCulture));
+                if (RequestHandler.IsTrainingMode())
+                {
+                    dracoreResult = GenerateTestReponseData();
+                }
+                else
+                {
+                    dracoreResult = _dracoreService.ByIdTYPE001(long.Parse(_results.IdNumber, CultureInfo.InvariantCulture));
+                }
             }
             catch (Exception ex)
             {
@@ -128,6 +140,11 @@ namespace ProspectingProject
 
         public decimal ReverseEnquiryCost()
         {
+            if (RequestHandler.IsTrainingMode())
+            {
+                return 0.0M;
+            }
+
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 return prospectingAuthService.CreditUserBalance(_enquiryCost, _userGuid);
@@ -192,6 +209,28 @@ namespace ProspectingProject
             _results = results;
             _results.IdNumber = _inputData.LightstoneIDOrCKNo;
             _results.LookupType = ProspectingLookupData.DracorePhoneEnquiryRequest;
+        }
+
+        private Consumer001 GenerateTestReponseData()
+        {
+            return new Consumer001
+            {
+                SERVICE_ERROR = null,
+                TITLE = "Mr",
+                FIRST_NAME = "Danie",
+                SURNAME = "van der Merwe",
+                DECEASED_STATUS = "Alive",
+                CITIZENSHIP = "South Africa",
+                AGE_GROUP = "thirties",
+                MARITAL_STATUS1 = "Unmarried",
+                LOCATION = "South Africa",
+                HOMEOWNERSHIP = "none",
+                DIRECTORSHIP1 = "none",
+                PHYSICALADDR1 = "n/a",
+                CELL_1 = "0724707471",
+                HOME_1 = "0218528166",
+                WORK_1 = "0211231231"
+            };
         }
     }
 }

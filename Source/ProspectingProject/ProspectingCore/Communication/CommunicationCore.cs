@@ -67,6 +67,11 @@ namespace ProspectingProject
 
         private static decimal DebitUserBalanceForBatch(decimal amount)
         {
+            if (RequestHandler.IsTrainingMode())
+            {
+                return amount;
+            }
+
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 var prospectingUser = RequestHandler.GetUserSessionObject();
@@ -78,6 +83,11 @@ namespace ProspectingProject
 
         private static void CreditUserBalanceForBatch(decimal amount)
         {
+            if (RequestHandler.IsTrainingMode())
+            {
+                return;
+            }
+
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 var prospectingUser = RequestHandler.GetUserSessionObject();

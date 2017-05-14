@@ -66,6 +66,11 @@ namespace ProspectingProject
 
         public decimal DeductEnquiryCost()
         {
+            if (RequestHandler.IsTrainingMode())
+            {
+                return 0.0M;
+            }
+
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 return prospectingAuthService.DebitUserBalance(_enquiryCost, _userGuid);
@@ -78,57 +83,77 @@ namespace ProspectingProject
             if (!string.IsNullOrEmpty(_results.ErrorMsg))
                 return;
             //throw new NotImplementedException();
-            var token = GetToken();
-            var companySearch = _client.SearchCompanies(token, "", "", _company.CK_number);//.BusinessEnquiry(_tokenGuid, _company.CK_number, "", "");
-            if (companySearch != null)
+            if (RequestHandler.IsTrainingMode())
             {
-                if (companySearch.ResultType == SearchResultType.MatchFound)
-                {
-                    _results.EnquirySuccessful = true;
-                    _results.ErrorMsg = null;
-                    var searchedCompany = companySearch.Results.First();
-                    var contacts = CreateCompanyContactPersons(searchedCompany);
-                    _results.Contacts = contacts;
-                    // Test this in an SS with multiple units owned by same company
-                }
-                else
-                {
-                    string failureReason = string.Empty;
-                    switch (companySearch.ResultType)
-                    {
-                        case SearchResultType.Error:
-                            failureReason = companySearch.ErrorMessage;
-                            break;
-                        case SearchResultType.MultipleMatchesFound:
-                            failureReason = "Multiple matching companies found for this reg. no.";
-                            break;
-                        case SearchResultType.NoMatchesFound:
-                            failureReason = "No matching result found.";
-                            break;
-                    }
-                    _results.ErrorMsg = "Enquiry unsuccessful - Reason: " + failureReason;
-                    if (companySearch.ResultType == SearchResultType.MultipleMatchesFound)
-                    {
-                        using (var prospectingDb = new ProspectingDataContext())
-                        {
-                            var errorRec = new exception_log
-                            {
-                                friendly_error_msg = "Dracore companies enquiry returned more than one result for reg. no. " + _company.CK_number,
-                                exception_string = "",
-                                user = RequestHandler.GetUserSessionObject().UserGuid,
-                                date_time = DateTime.Now
-                            };
-                            prospectingDb.exception_logs.InsertOnSubmit(errorRec);
-                            prospectingDb.SubmitChanges();
-                        }
-                    }
-                }
+                _results.EnquirySuccessful = true;
+                _results.ErrorMsg = null;
+                _results.Contacts = GenerateTestResponseData();
             }
             else
             {
-                _results.ErrorMsg = "Service provider could not find a company with matching criteria.";
+                var token = GetToken();
+                var companySearch = _client.SearchCompanies(token, "", "", _company.CK_number);//.BusinessEnquiry(_tokenGuid, _company.CK_number, "", "");
+                if (companySearch != null)
+                {
+                    if (companySearch.ResultType == SearchResultType.MatchFound)
+                    {
+                        _results.EnquirySuccessful = true;
+                        _results.ErrorMsg = null;
+                        var searchedCompany = companySearch.Results.First();
+                        var contacts = CreateCompanyContactPersons(searchedCompany);
+                        _results.Contacts = contacts;
+                        // Test this in an SS with multiple units owned by same company
+                    }
+                    else
+                    {
+                        string failureReason = string.Empty;
+                        switch (companySearch.ResultType)
+                        {
+                            case SearchResultType.Error:
+                                failureReason = companySearch.ErrorMessage;
+                                break;
+                            case SearchResultType.MultipleMatchesFound:
+                                failureReason = "Multiple matching companies found for this reg. no.";
+                                break;
+                            case SearchResultType.NoMatchesFound:
+                                failureReason = "No matching result found.";
+                                break;
+                        }
+                        _results.ErrorMsg = "Enquiry unsuccessful - Reason: " + failureReason;
+                        if (companySearch.ResultType == SearchResultType.MultipleMatchesFound)
+                        {
+                            using (var prospectingDb = new ProspectingDataContext())
+                            {
+                                var errorRec = new exception_log
+                                {
+                                    friendly_error_msg = "Dracore companies enquiry returned more than one result for reg. no. " + _company.CK_number,
+                                    exception_string = "",
+                                    user = RequestHandler.GetUserSessionObject().UserGuid,
+                                    date_time = DateTime.Now
+                                };
+                                prospectingDb.exception_logs.InsertOnSubmit(errorRec);
+                                prospectingDb.SubmitChanges();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    _results.ErrorMsg = "Service provider could not find a company with matching criteria.";
+                }
             }
         }
+
+        private List<ProspectingContactPerson> GenerateTestResponseData()
+        {
+            return CreateCompanyContactPersons(new Company
+            {
+                Directors = new[] { new Director { Deceased = false, FirstNames = "John", Surname = "Smith", IdentityNumber = "5501018689021", Gender = GenderEnum.Male  },
+                    new Director { Deceased = false, FirstNames = "Craig", Surname = "Marais", IdentityNumber = "8902025651236", Gender = GenderEnum.Male  },
+                    new Director { Deceased = false, FirstNames = "Jane", Surname = "Doe", IdentityNumber = "6503035658923", Gender =  GenderEnum.Female } }
+            });
+        }
+
         /// <summary>
         /// //
         /// </summary>
@@ -240,11 +265,16 @@ namespace ProspectingProject
         }
 
         // warn about enquiry cost.
-      
+
         // AND TEST WHERE CHANGING OWNERSHIP  to new company and immediately doing a lookup.
 
         public decimal ReverseEnquiryCost()
         {
+            if (RequestHandler.IsTrainingMode())
+            {
+                return 0.0M;
+            }
+
             using (var prospectingAuthService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
                 return prospectingAuthService.CreditUserBalance(_enquiryCost, _userGuid);

@@ -39,6 +39,7 @@ function initialize() {
                 prospectingContext.UserActivityTypes = data.ActivityTypes;
                 prospectingContext.UserFollowupTypes = data.ActivityFollowupTypes;
                 prospectingContext.BusinessUnitUsers = data.BusinessUnitUsers;
+                prospectingContext.IsTrainingMode = data.IsTrainingMode;
 
                 userIsProspectingManager = data.IsProspectingManager;
                 availableCredit = data.AvailableCredit;
@@ -47,6 +48,9 @@ function initialize() {
                 initializeMap(function () {
                     createProspectingMenu(data);
                     initEventHandlers();
+                    if (prospectingContext.IsTrainingMode) {
+                        showDialogTrainingMode();
+                    }
                 });
             }
         },
@@ -115,4 +119,33 @@ function loadSuburbsInfo(data) {
             suburbsInfo[i].RequiresStatsUpdate = true;
         }
     }
+}
+
+function showDialogTrainingMode() {
+    var contents = $("<div title='Prospecting Training Mode' style='font-family:Verdana;font-size:12px;' />");
+    contents.append("<p />");
+    contents.append("Welcome to the training version of Seeff Prospecting!");
+    contents.append("<p />");
+    contents.append("You are now in a training environment that emulates most of the features available in the live Prospecting system. Using this mode will not affect the live system and has no monetary impact.");
+    contents.append("<p />");
+    contents.append("While in training mode:");
+    contents.append("<br />");
+    contents.append(" - live (production) data will not be affected by changes made here");
+    contents.append("<br />");
+    contents.append(" - transactions will not be billed (your live balance will not be affected)");
+    contents.append("<br />");
+    contents.append(" - lookups to service providers will return static test data only");
+    contents.append("<br />");
+    contents.append(" - communications (email and SMS) will not be sent to any recipients");
+
+    contents.dialog(
+                  {
+                      modal: true,
+                      closeOnEscape: false,
+                      width: '550',
+                      buttons: {
+                          "OK": function () { $(this).dialog("close"); }
+                      },
+                      position: ['center', 'center']
+                  });
 }
