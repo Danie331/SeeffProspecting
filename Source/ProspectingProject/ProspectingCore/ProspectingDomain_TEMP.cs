@@ -852,6 +852,12 @@ namespace ProspectingProject
                 {
                     throw new UserSessionExpiredException(); // This is not a true "expired session" but we can treat it as such.
                 }
+
+                if (RequestHandler.IsTrainingMode())
+                {
+                    userAuthPacket.SuburbsList = "[1092,1],[5317,1],[246,1],[240,1],[7249,1],[1122,1],[3486,1],[1146,1],[1128,1],[1127,1],[1091,1],[1139,1],[4560,1],[1078,1],[1587,1],[1588,1],[1050,1],[2420,1],[635,1],[656,1],[662,1],[3795,1],[1014,1],[644,1],[590,1],[3843,1]";
+                }
+
                 var businessUnitUsers = new List<UserDataResponsePacket>(
                         from bu in userAuthPacket.BusinessUnitUsers
                         select new UserDataResponsePacket
