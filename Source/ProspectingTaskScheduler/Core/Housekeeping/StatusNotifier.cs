@@ -15,28 +15,29 @@ namespace ProspectingTaskScheduler.Core.Housekeeping
         {
             string body = "ProspectingTaskScheduler service running at " + DateTime.Now + " (local time on server)";
             SendEmail("danie.vdm@seeff.com", "ProspectingTaskScheduler", "reports@seeff.com", null, "Notification from ProspectingTaskScheduler service", body);
-        }        
+        }
 
         public static void SendEmail(string toAddress, string displayName, string fromAddress, string ccAddress, string subject, string body)
         {
-            MailAddress from = new MailAddress(fromAddress, fromAddress, System.Text.Encoding.UTF8);
-            MailAddress to = new MailAddress(toAddress, displayName);
-            MailMessage message = new MailMessage(from, to);
-            if (!string.IsNullOrEmpty(ccAddress))
-            {
-                message.CC.Add(ccAddress);
-            }
-
-            message.SubjectEncoding = System.Text.Encoding.UTF8;
-            message.Subject = subject;
-
-            message.IsBodyHtml = true;
-            message.BodyEncoding = System.Text.Encoding.UTF8;
-            message.Body = body;
-
-            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(customCertValidation);
             try
             {
+                MailAddress from = new MailAddress(fromAddress, fromAddress, System.Text.Encoding.UTF8);
+                MailAddress to = new MailAddress(toAddress, displayName);
+                MailMessage message = new MailMessage(from, to);
+                if (!string.IsNullOrEmpty(ccAddress))
+                {
+                    message.CC.Add(ccAddress);
+                }
+
+                message.SubjectEncoding = System.Text.Encoding.UTF8;
+                message.Subject = subject;
+
+                message.IsBodyHtml = true;
+                message.BodyEncoding = System.Text.Encoding.UTF8;
+                message.Body = body;
+
+                ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(customCertValidation);
+
                 using (var smtpClient = new SmtpClient())
                 {
                     smtpClient.EnableSsl = true;
