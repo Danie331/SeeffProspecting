@@ -46,13 +46,15 @@ namespace ProspectingTaskScheduler.Core.Notifications
             sb.Append("<tr>");
             sb.Append("<td>");
             sb.Append("<h3 style='font-size:16px;'>Good Day " + followupsForUser.Username + "</h3>");
-            sb.Append("<p style='font-size:14px;'>Please take note of your prospecting follow ups listed below.</p>");
+            string unsubscribeTarget = "http://154.70.214.213/ProspectingTaskScheduler/UnsubscribeProspectingUser.html?reg_id=" + followupsForUser.UserRegistrationID;
+            string unsuscribeLink = "<a href='" + unsubscribeTarget + "' target='_blank'>here</a>";
+            sb.Append("<p style='font-size:14px;'>Please take note of your Prospecting follow ups listed below. If you would like to unsubscribe from this daily reminder, please click " + unsuscribeLink + "</p>");
 
             //Follow ups today
             CreateContentSection(sb, followupsForUser.TodaysFollowups, "Today's Follow Ups - " + DateTime.Today.ToString("yyyy/MM/dd"), "#06791f", false);
 
             //Future follow ups
-            CreateContentSection(sb, followupsForUser.FutureDatedFollowups, "Future dated Follow ups", "#da8d00", true);
+            CreateContentSection(sb, followupsForUser.FutureDatedFollowups, "Upcoming Follow Ups (next 3 days)", "#da8d00", true);
 
             //un-actioned/open follow ups
             CreateContentSection(sb, followupsForUser.UnactionedFollowups, "Un-actioned (open) Follow Ups", "#dc2305", true);
@@ -150,7 +152,9 @@ namespace ProspectingTaskScheduler.Core.Notifications
             using (var prospecting = new ProspectingDataContext())
             {
                 Guid userGuid = Guid.Parse(user_guid);
-                results.Username = GetBossUsername(userGuid);
+                var user = GetBossUser(userGuid);
+                results.Username = user != null ? string.Concat(user.user_name, " ", user.user_surname) : "n/a";
+                results.UserRegistrationID = user != null ? user.registration_id : -1;
                 List<long?> parentIds = prospecting.activity_logs.Where(a => a.parent_activity_id != null).Select(a => a.parent_activity_id).ToList();
 
                 var todaysFollowups = prospecting.activity_logs.Where(act => act.allocated_to == userGuid &&
@@ -164,9 +168,11 @@ namespace ProspectingTaskScheduler.Core.Notifications
                     results.TodaysFollowups.Add(followup);
                 }
 
+                DateTime next3days = DateTime.Today.AddDays(3.0).Date;
                 var futureFollowups = prospecting.activity_logs.Where(act => act.allocated_to == userGuid &&
                                                                                 act.followup_date != null &&
-                                                                                act.followup_date.Value.Date > DateTime.Today).ToList();
+                                                                                act.followup_date.Value.Date > DateTime.Today &&
+                                                                                act.followup_date.Value.Date <= next3days).ToList();
                 futureFollowups = futureFollowups.Where(act => !parentIds.Contains(act.activity_log_id)).ToList();
                 futureFollowups = futureFollowups.OrderBy(act => act.followup_date).ToList();
                 foreach (var item in futureFollowups)
@@ -193,9 +199,10 @@ namespace ProspectingTaskScheduler.Core.Notifications
         private static ProspectingFollowup LoadFollowup(activity_log item)
         {
             ProspectingFollowup followup = new ProspectingFollowup();
+            var user = GetBossUser(item.created_by);
             followup.FollowupDate = item.followup_date.Value;
             followup.PropertyAddress = GetFormattedAddress(item.lightstone_property_id);
-            followup.CreatedByUsername = GetBossUsername(item.created_by);
+            followup.CreatedByUsername = user != null ? string.Concat(user.user_name, " ", user.user_surname) : "n/a";
             followup.Comment = item.comment;
             followup.RelatedToContactPerson = GetContactPersonName(item.contact_person_id);
             var primaryContactNoKvp = GetContactsPrimaryPhoneNo(item.contact_person_id);
@@ -259,12 +266,12 @@ namespace ProspectingTaskScheduler.Core.Notifications
             }
         }
 
-        private static string GetBossUsername(Guid created_by)
+        private static user_registration GetBossUser(Guid created_by)
         {
             using (var boss = new bossEntities())
             {
                 var target = boss.user_registration.FirstOrDefault(ur => ur.user_guid == created_by.ToString().ToLower());
-                return target != null ? string.Concat(target.user_name, " ", target.user_surname) : "n/a";
+                return target;
             }
         }
 

@@ -22,5 +22,7 @@ namespace ProspectingTaskScheduler.Core.Notifications
         {
             get { return TodaysFollowups.Any() || FutureDatedFollowups.Any() || UnactionedFollowups.Any(); }
         }
+
+        public long UserRegistrationID { get; set; }
     }
 }

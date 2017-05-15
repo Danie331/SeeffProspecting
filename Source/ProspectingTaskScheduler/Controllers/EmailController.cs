@@ -17,7 +17,7 @@ namespace ProspectingTaskScheduler.Controllers
         public void Optout(int contactPersonId, string contactDetail)
         {
             using (var prospectingContext = new ProspectingDataContext())
-            {     
+            {
                 var contactPersons = from cd in prospectingContext.prospecting_contact_details
                                      where cd.contact_detail == contactDetail
                                      select cd.prospecting_contact_person;
@@ -38,13 +38,15 @@ namespace ProspectingTaskScheduler.Controllers
         [HttpPost]
         public void UpdateEmailDeliveryStatus()
         {
-            Func<MandrillEventMessageResult, string> getFailureReason = mr => 
+            Func<MandrillEventMessageResult, string> getFailureReason = mr =>
                 {
-                   string result = mr.State;
-                    if (!string.IsNullOrEmpty(mr.BounceDesc)) {
+                    string result = mr.State;
+                    if (!string.IsNullOrEmpty(mr.BounceDesc))
+                    {
                         result = result + " (" + mr.BounceDesc + ")";
                     }
-                    if (!string.IsNullOrEmpty(mr.Diag)) {
+                    if (!string.IsNullOrEmpty(mr.Diag))
+                    {
                         result = result + ": " + mr.Diag;
                     }
 
@@ -121,7 +123,22 @@ namespace ProspectingTaskScheduler.Controllers
                     p.exception_logs.InsertOnSubmit(e);
                     p.SubmitChanges();
                 }
-            }            
+            }
         }
+
+        [HttpGet]
+        public void UnsubscribeProspectingUser(int reg_id)
+        {
+            using (var boss = new bossEntities())
+            {
+                var targetUser = boss.user_preference.FirstOrDefault(up => up.fk_user_registration_id == reg_id && up.fk_user_preference_type_id == 1);
+                if (targetUser != null)
+                {
+                    boss.user_preference.Remove(targetUser);
+                    boss.SaveChanges();
+                }
+            }
+        }
+
     }
 }
