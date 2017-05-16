@@ -3937,6 +3937,13 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                             sb.AppendLine("A new referral has been created for this property (Smart Pass ID: " + referralResponse.pSmart_pass_id + ")");
                             sb.AppendLine("<a target='_blank' style='text-decoration: underline;' href='http://boss.seeff.com/smart_pass_update.aspx?id=" + referralResponse.pSmart_pass_id + "'>Click here to view referral</a>");
 
+                            if (!string.IsNullOrWhiteSpace(inputDetails.Comment))
+                            {
+                                sb.AppendLine();
+                                sb.AppendLine("Comment:");
+                                sb.AppendLine(inputDetails.Comment);
+                            }
+
                             var activityType = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "New Referral").Key;
                             var activityRecord = new activity_log
                             {
