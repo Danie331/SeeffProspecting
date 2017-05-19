@@ -17,12 +17,22 @@ public partial class Prospecting : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+            bool trainingMode = Request.QueryString["mode"] != null;
             bool debugFlag = Request.QueryString["debug"] != null;
-            if (HttpContext.Current.IsDebuggingEnabled || debugFlag)
+            if (HttpContext.Current.IsDebuggingEnabled || debugFlag || trainingMode)
             {
-                Session["user_guid"] = Request.QueryString["user_guid"];
-                Session["session_key"] = Guid.NewGuid().ToString();
-                Session["target_guid"] = Request.QueryString["user_guid"];
+                if (trainingMode && Request.QueryString["mode"].ToString() == "training")
+                {
+                    Session["user_guid"] = "62a85a9d-be7a-4fad-b704-a55edb1d338f";
+                    Session["session_key"] = Guid.NewGuid().ToString();
+                    Session["target_guid"] = "62a85a9d-be7a-4fad-b704-a55edb1d338f";
+                }
+                else
+                {
+                    Session["user_guid"] = Request.QueryString["user_guid"];
+                    Session["session_key"] = Guid.NewGuid().ToString();
+                    Session["target_guid"] = Request.QueryString["user_guid"];
+                }
             }
             else
             {
