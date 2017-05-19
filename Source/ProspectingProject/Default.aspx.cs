@@ -26,6 +26,10 @@ public partial class Prospecting : System.Web.UI.Page
                     Session["user_guid"] = "62a85a9d-be7a-4fad-b704-a55edb1d338f";
                     Session["session_key"] = Guid.NewGuid().ToString();
                     Session["target_guid"] = "62a85a9d-be7a-4fad-b704-a55edb1d338f";
+
+                    Session["training_mode"] = true;
+                    Page.Title = "Prospecting Training Mode";
+                    PageHeaderLabel.InnerText = "Prospecting Training Mode";
                 }
                 else
                 {
