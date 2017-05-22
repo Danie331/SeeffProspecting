@@ -12,6 +12,7 @@ using System.Web;
 using System.Web.Hosting;
 using ProspectingTaskScheduler.Core.ClientSynchronisation;
 using ProspectingTaskScheduler.Core.Notifications;
+using ProspectingTaskScheduler.Core.ProspectingTrainingDB;
 
 namespace ProspectingTaskScheduler.App_Start
 {
@@ -90,6 +91,8 @@ namespace ProspectingTaskScheduler.App_Start
             RecurringJob.AddOrUpdate("Synchronising Prospecting contact information to CMS", () => ProspectingToCmsClientSynchroniser.Synchronise(), Cron.Minutely);
 
             RecurringJob.AddOrUpdate("Send Prospecting notifications", () => NotificationsGenerator.SendProspectingFollowupsNotification(), Cron.Daily(8), TimeZoneInfo.Local);
+
+            RecurringJob.AddOrUpdate("Purge Prospecting training database", () => TrainingDatabase.PurgeAndResetProspectingStaging(), Cron.Daily(), TimeZoneInfo.Local);
         }
     }
 }

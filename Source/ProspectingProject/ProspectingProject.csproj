@@ -784,7 +784,6 @@
     <Content Include="Assets\view_btn.png" />
     <Content Include="Database scripts\boss.sql" />
     <Content Include="Database scripts\change_of_ownership.sql" />
-    <Content Include="Database scripts\create_prospecting_staging.sql" />
     <Content Include="Database scripts\prospecting_property_contact_details_stats.sql" />
     <Content Include="Database scripts\seeff_prospecting.sql" />
     <Content Include="Database scripts\seeff_prospecting_data_takeon.sql" />

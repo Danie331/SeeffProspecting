@@ -16,34 +16,20 @@ public partial class Prospecting : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
-        {
-            bool trainingMode = Request.QueryString["mode"] != null;
+        {            
             bool debugFlag = Request.QueryString["debug"] != null;
-            if (HttpContext.Current.IsDebuggingEnabled || debugFlag || trainingMode)
+            if (HttpContext.Current.IsDebuggingEnabled || debugFlag)
             {
-                if (trainingMode && Request.QueryString["mode"].ToString() == "training")
-                {
-                    Session["user_guid"] = "62a85a9d-be7a-4fad-b704-a55edb1d338f";
-                    Session["session_key"] = Guid.NewGuid().ToString();
-                    Session["target_guid"] = "62a85a9d-be7a-4fad-b704-a55edb1d338f";
-
-                    Session["training_mode"] = true;
-                    Page.Title = "Prospecting Training Mode";
-                    PageHeaderLabel.InnerText = "Prospecting Training Mode";
-                }
-                else
-                {
-                    Session["user_guid"] = Request.QueryString["user_guid"];
-                    Session["session_key"] = Guid.NewGuid().ToString();
-                    Session["target_guid"] = Request.QueryString["user_guid"];
-                }
+                Session["user_guid"] = Request.QueryString["user_guid"];
+                Session["session_key"] = Guid.NewGuid().ToString();
+                Session["target_guid"] = Request.QueryString["user_guid"];
             }
             else
             {
                 try
                 {
-                    string trainingModeIndicator = Request.Form["TrainingMode"];
-                    if (trainingModeIndicator != null && trainingModeIndicator == "true")
+                    bool trainingMode = Request.QueryString["mode"] != null;
+                    if (trainingMode && Request.QueryString["mode"].ToString() == "training")
                     {
                         Session["training_mode"] = true;
                         Page.Title = "Prospecting Training Mode";
