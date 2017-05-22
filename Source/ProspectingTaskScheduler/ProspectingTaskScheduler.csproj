@@ -147,6 +147,16 @@
       <DependentUpon>client.edmx</DependentUpon>
       <LastGenOutput>client1.cs</LastGenOutput>
     </Content>
+    <Content Include="ProspectingStaging.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ProspectingStaging.edmx</DependentUpon>
+      <LastGenOutput>ProspectingStaging.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ProspectingStaging.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ProspectingStaging.edmx</DependentUpon>
+      <LastGenOutput>ProspectingStaging.cs</LastGenOutput>
+    </Content>
     <Content Include="SeeffDeeds.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>SeeffDeeds.edmx</DependentUpon>
@@ -343,6 +353,7 @@
     <Compile Include="Core\Notifications\NotificationsGenerator.cs" />
     <Compile Include="Core\Notifications\ProspectingFollowup.cs" />
     <Compile Include="Core\Notifications\ProspectingFollowupsForUser.cs" />
+    <Compile Include="Core\ProspectingTrainingDB\TrainingDatabase.cs" />
     <Compile Include="Core\Spatial\SuburbMaintenance.cs" />
     <Compile Include="Core\Utils.cs" />
     <Compile Include="country_code.cs">
@@ -371,6 +382,21 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Prospecting.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="ProspectingStaging.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProspectingStaging.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProspectingStaging.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProspectingStaging.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProspectingStaging.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProspectingStaging.edmx</DependentUpon>
     </Compile>
     <Compile Include="religion.cs">
       <DependentUpon>client.tt</DependentUpon>
@@ -480,6 +506,13 @@
       <DependentUpon>SeeffDeeds.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\Default_seeff_work.pubxml" />
+    <EntityDeploy Include="ProspectingStaging.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ProspectingStaging.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="ProspectingStaging.edmx.diagram">
+      <DependentUpon>ProspectingStaging.edmx</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -489,7 +522,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Core\ProspectingTrainingDB\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
