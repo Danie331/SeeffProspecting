@@ -147,7 +147,7 @@ function buildActivitiesAndFollowupsFilterTab() {
             return;
         }
 
-        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Generating Data Model. Please wait...</p>' });
+        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Please wait...</p>' });
         $.ajax({
             type: "POST",
             url: "RequestHandler.ashx",
@@ -179,25 +179,11 @@ function handleFilterByActivityFollowupTypes(activityTypesOnly, rows, filteredPr
     if (!rows.length) {
         outputGrid.append("No results found.");
     } else {
-        if (activityTypesOnly) {
-            // activity types
-            outputGrid.pivotUI(
-                            rows,
-                            {
-                                rows: ["Created By"],
-                                cols: ["Activity Type"]
-                            },
-                            true);
-        }
-        else {
-            outputGrid.pivotUI(
-                            rows,
-                            {
-                                rows: ["Allocated To"],
-                                cols: ["Followup Type"]
-                            },
-                            true);
-        }
+        var uniqueProperties = [];
+        $.each(filteredProperties, function (i, v) {
+            if ($.inArray(v, uniqueProperties) == -1) uniqueProperties.push(v);
+        });
+        outputGrid.append(uniqueProperties.length + " matching properties found.");
     }
 
     clearSuburbBySuburbId(currentSuburb.SuburbId);

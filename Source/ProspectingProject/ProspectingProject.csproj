@@ -1071,13 +1071,6 @@
     <Content Include="Scripts\3rdParty\ckeditor\styles.js" />
     <Content Include="Scripts\3rdParty\CrossDomainRequestPlugin.js" />
     <Content Include="Scripts\3rdParty\jqueryBlockUI.js" />
-    <Content Include="Scripts\3rdParty\PivotTable.js\c3_renderers.min.js" />
-    <Content Include="Scripts\3rdParty\PivotTable.js\d3_renderers.min.js" />
-    <Content Include="Scripts\3rdParty\PivotTable.js\export_renderers.min.js" />
-    <Content Include="Scripts\3rdParty\PivotTable.js\gchart_renderers.min.js" />
-    <Content Include="Scripts\3rdParty\PivotTable.js\pivot.js" />
-    <Content Include="Scripts\3rdParty\PivotTable.js\pivot.min.css" />
-    <Content Include="Scripts\3rdParty\PivotTable.js\tips_data.min.js" />
     <Content Include="Scripts\3rdParty\SlickGrid\controls\slick.columnpicker.css" />
     <Content Include="Scripts\3rdParty\SlickGrid\controls\slick.columnpicker.js" />
     <Content Include="Scripts\3rdParty\SlickGrid\controls\slick.pager.css" />

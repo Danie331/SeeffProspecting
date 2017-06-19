@@ -28,7 +28,6 @@
      <link href="Scripts/StyleSheets/tooltip.css" rel="stylesheet" />
      <link href="Scripts/StyleSheets/OpenTip.css" rel="stylesheet" />
     <link href="Scripts/3rdParty/SlickGrid/slick.grid.css" rel="stylesheet" />
-    <link href="Scripts/3rdParty/PivotTable.js/pivot.min.css" rel="stylesheet" />
      <%-- END_SECTION:3RD_PARTY_STYLESHEETS --%>
      <%-- BEGIN_SECTION:CORE_STYLESHEETS --%>
      <link href="Scripts/StyleSheets/Default.css" rel="stylesheet" />
@@ -57,7 +56,6 @@
     <script src="Scripts/3rdParty/SlickGrid/plugins/slick.rowselectionmodel.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/slick.editors.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/plugins/slick.autotooltips.js"></script>
-    <script src="Scripts/3rdParty/PivotTable.js/pivot.js"></script>
     <%-- END_SECTION:3RD_PARTY_SCRIPTS --%>
     <%-- BEGIN_SECTION:CORE_SCRIPTS --%>
     <script src="Scripts/Core/Utils.js"></script>
