@@ -10,7 +10,7 @@ CKEDITOR.plugins.add('custom', {
             init: function () {
                 this.startGroup("Insert a symbol");
                 var self = this;
-                var content = [{name: "Person title", value: '*title*' }, {name: 'Person name', value: '*name*' }, {name: 'Person surname', value: '*surname*' }, {name: 'Property address' , value: '*address*' }];
+                var content = [{ name: "Person title", value: '*title*' }, { name: 'Person name', value: '*name*' }, { name: 'Person surname', value: '*surname*' }, { name: 'Property address', value: '*address*' }, { name: 'Years since registration', value: '*years*' }];
                 $.each(content, function(index, item) {
                     // value, html, text
                     var html = '<span>' + item.name + '</span>';

@@ -130,6 +130,23 @@ namespace ProspectingProject
             return recipients;
         }
 
+        private static int GetNoYearsSinceLastRegistered(int lightstonePropertyId)
+        {
+            using (var prospectingContext = new ProspectingDataContext())
+            {
+                var property = prospectingContext.prospecting_properties.First(pp => pp.lightstone_property_id == lightstonePropertyId);
+                if (!string.IsNullOrEmpty(property.lightstone_reg_date) && property.lightstone_reg_date.Length == 8)
+                {
+                    DateTime regDate;
+                    if (DateTime.TryParseExact(property.lightstone_reg_date, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out regDate))
+                    {
+                        return DateTime.Now.Year - regDate.Year;
+                    }
+                }
+            }
+            return 0;
+        }
+
         private static string CreateSmsMessage(string rawMessageBody, ProspectingContactPerson contact)
         {
             var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
@@ -142,11 +159,13 @@ namespace ProspectingProject
             string name = titlecaser.ToTitleCase(contact.Firstname.ToLower());
             string surname = titlecaser.ToTitleCase(contact.Surname.ToLower());
             string address = ProspectingCore.GetFormattedAddress(contact.TargetLightstonePropertyIdForComms.Value);
+            int regYears = GetNoYearsSinceLastRegistered(contact.TargetLightstonePropertyIdForComms.Value);
 
             rawMessageBody = rawMessageBody.Replace("*title*", personTitle)
                              .Replace("*name*", name)
                              .Replace("*surname*", surname)
-                             .Replace("*address*", address);
+                             .Replace("*address*", address)
+                             .Replace ("*years*", regYears.ToString());
 
             return rawMessageBody + " STOP to opt out";
         }
@@ -364,11 +383,13 @@ namespace ProspectingProject
                 throw new Exception("It appears that the Lightstone Property ID of one or more communication records is not set. Restart Prospecting and try again. If the problem persists please notify support. Record ID: " + contact.ContactPersonId);
             }
             string address = ProspectingCore.GetFormattedAddress(contact.TargetLightstonePropertyIdForComms.Value);
+            int regYears = GetNoYearsSinceLastRegistered(contact.TargetLightstonePropertyIdForComms.Value);
 
             rawBody = rawBody.Replace("*title*", personTitle)
                              .Replace("*name*", name)
                              .Replace("*surname*", surname)
-                             .Replace("*address*", address);
+                             .Replace("*address*", address)
+                             .Replace("*years*", regYears.ToString());
 
             var link = "http://154.70.214.213/ProspectingTaskScheduler/UnsubscribeEmail.html?email=" + contact.TargetContactEmailAddress + "&contactid=" + contact.ContactPersonId;
             string optoutLink = "<p /><a href='" + link + "' target='_blank'>Unsubscribe</a>";
@@ -386,6 +407,7 @@ namespace ProspectingProject
             int birthdayActivityType = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "Birthday").Key;
             int fiveYearAnniversaryActvityType = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "5 Year Anniversary").Key;
             int sevenYearAnniversaryType = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "7 Year Anniversary").Key;
+            int annualAnniversary = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "Annual Anniversary").Key;
 
             if (templateActivityTypeId == birthdayActivityType)
             {
@@ -400,6 +422,11 @@ namespace ProspectingProject
             if (templateActivityTypeId == sevenYearAnniversaryType)
             {
                 return FilterContactsByAnniversaryDate(contacts, 7);
+            }
+
+            if (templateActivityTypeId == annualAnniversary)
+            {
+                return FilterContactsByAnnualAnniversaryToday(contacts);
             }
 
             // Newsletter type mapping persists?
@@ -451,6 +478,39 @@ namespace ProspectingProject
                                     filteredContacts.Add(contact);
                                 }
                             }                        
+                        }
+                    }
+                }
+                return filteredContacts;
+            }
+        }
+
+        private static List<ProspectingContactPerson> FilterContactsByAnnualAnniversaryToday(List<ProspectingContactPerson> contacts)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                List<ProspectingContactPerson> filteredContacts = new List<ProspectingContactPerson>();
+                foreach (var contact in contacts)
+                {
+                    if (contact.TargetLightstonePropertyIdForComms != null)
+                    {
+                        int lightstonePropertyId = contact.TargetLightstonePropertyIdForComms.Value;
+                        var propertingProperty = prospecting.prospecting_properties.First(pp => pp.lightstone_property_id == lightstonePropertyId);
+                        if (!string.IsNullOrEmpty(propertingProperty.lightstone_reg_date) && propertingProperty.lightstone_reg_date.Length == 8)
+                        {
+                            DateTime regDate;
+                            if (DateTime.TryParseExact(propertingProperty.lightstone_reg_date, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out regDate))
+                            {
+                                var todaysDate = DateTime.Today;
+                                int regYear = regDate.Year;
+                                if (regYear < todaysDate.Year)
+                                {
+                                    if (regDate.Month == todaysDate.Month && regDate.Day == todaysDate.Day)
+                                    {
+                                        filteredContacts.Add(contact);
+                                    }
+                                }                                
+                            }
                         }
                     }
                 }

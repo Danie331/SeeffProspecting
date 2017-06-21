@@ -404,7 +404,8 @@ function buildSMSContentContainer() {
                             .append($("<option value='*title*'>Person title</option>"))
                             .append($("<option value='*name*'>Person name</option>"))
                             .append($("<option value='*surname*'>Person surname</option>"))
-                            .append($("<option value='*address*'>Property address</option>"));
+                            .append($("<option value='*address*'>Property address</option>"))
+                            .append($("<option value='*years*'>Years since registration</option>"));
    
     var msgDiv = $("<textarea id='smsMessageContainer' style='border: 1px solid gray;width:100%;height:80px;color:lightgray;' />");
     var introText = "Use the 'Symbols' drop-down to insert placeholder information.";
@@ -1565,6 +1566,28 @@ function validateMessage() {
         return true;
     }
 
+    function validateRegDateIsValid(msgBody) {
+        var containsRecordsWithInvalidRegDate = false;
+        if (msgBody.indexOf('*years*') > -1) {
+            var commSelectedRows = $('#commContactsTable tr.rowSelected');
+            $.each(commSelectedRows, function (idx, row) {
+                var contactId = $(row).attr("id").replace('comm_row_', '');
+                var contact = getContactFromId(contactId);
+                var property = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+                    return pp.LightstonePropertyId == contact.TargetLightstonePropertyIdForComms;
+                })[0];
+                if (!property.LightstoneRegDate) {
+                    containsRecordsWithInvalidRegDate = true;
+                }
+            });
+            if (containsRecordsWithInvalidRegDate) {
+                alert("One or more of your selected rows do not have a valid date of last registration. In order to use the *years* placeholder your selection must all have valid registration dates.");
+                return false;
+            }
+        }
+        return true;
+    }
+
     function validateNoRowsSelected() {
         var commSelectedRows = $('#commContactsTable tr.rowSelected');
         if (!commSelectedRows.length) {
@@ -1634,6 +1657,10 @@ function validateMessage() {
             return false;
         }
 
+        if (!validateRegDateIsValid(emailBody)) {
+            return false;
+        }
+
         return true;
     }
     if (communicationsMode == "SMS") {
@@ -1665,6 +1692,10 @@ function validateMessage() {
         }
 
         if (!validateAddressIsValid(smsBody)) {
+            return false;
+        }
+
+        if (!validateRegDateIsValid(smsBody)) {
             return false;
         }
 
@@ -2113,11 +2144,12 @@ function createPreviewMessage(signatureData, dialog) {
 
     var firstRecord = null;
     if (currentOrAllSuburbsSelected()) {
-        firstRecord = { ContactPersonId: 1, Title: 1, Firstname: 'John', Surname: 'Doe', PropertyAddress: '22 Smith Street, Constantia', EmailAddresses: [{IsPrimary: true, ItemContent:'john.doe@somedomain.com'}] };
+        firstRecord = { ContactPersonId: 1, Title: 1, Firstname: 'John', Surname: 'Doe', PropertyAddress: '22 Smith Street, Constantia', YearsRegistered: 4, EmailAddresses: [{IsPrimary: true, ItemContent:'john.doe@somedomain.com'}] };
     } else {
         var commSelectedRows = $('#commContactsTable tr.rowSelected');
         var contactId = $(commSelectedRows[0]).attr("id").replace('comm_row_', '');
         firstRecord = getContactFromId(contactId);
+        firstRecord.YearsRegistered = getYearsSinceLastRegistered(firstRecord);
     }
 
     if (communicationsMode == "EMAIL") {
@@ -2164,7 +2196,19 @@ function generateMessageForRecord(templateMsg, record) {
 
     var propertyAddress = formatPropertyAddressTitleCase(record.PropertyAddress);
     templateMsg = replaceAll(templateMsg, '*address*', propertyAddress);
+
+    templateMsg = replaceAll(templateMsg, '*years*', record.YearsRegistered);
+
     return templateMsg;
+}
+
+function getYearsSinceLastRegistered(record) {
+    var property = $.grep(currentSuburb.ProspectingProperties, function (pp) {
+        return pp.LightstonePropertyId == record.TargetLightstonePropertyIdForComms;
+    })[0];
+    var regDate = property.LightstoneRegDate;
+    var yearsPortion = regDate.length == 8 ? regDate.substring(0,4) : null;
+    return new Date().getFullYear() - yearsPortion;
 }
 
 function handleShowMessagePreview(callback) {
