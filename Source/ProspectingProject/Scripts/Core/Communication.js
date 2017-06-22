@@ -13,7 +13,7 @@ var userEmailSignature = '';
 
 var smsOptOut = " STOP to opt out";
 
-var specialActivityTemplates = ['Birthday', '5 Year Anniversary', '7 Year Anniversary'];
+var specialActivityTemplates = ['Birthday', '5 Year Anniversary', '7 Year Anniversary', 'Annual Anniversary'];
 
 var selectedTemplateActivityTypeId = null;
 
@@ -184,42 +184,6 @@ function buildCommunicationMenuItems() {
 
     var emailMessage = buildCommMenuItem("comm_menu_email", buildEmailMenuItemContent(), handleEmailMessageClick);
     menu.append(emailMessage);
-
-
-    //if (currentSuburb) {
-    //    var currentSubMenuItem = buildCommMenuItem("separator", currentSuburb.SuburbName, null);
-    //    menu.append(currentSubMenuItem);
-
-    //    var todaysBdaysSmsForSuburb = buildCommMenuItem("comm_menu_current_suburb_todays_birthdays_sms", buildTodaysBdaysSMS(), null);
-    //    menu.append(todaysBdaysSmsForSuburb);
-
-    //    var todaysBdaysEmailForSuburb = buildCommMenuItem("comm_menu_current_suburb_todays_birthdays_email", buildTodaysBdaysEmail(), null);
-    //    menu.append(todaysBdaysEmailForSuburb);
-
-    //    var todaysAnniversarySMSForSuburb = buildCommMenuItem("comm_menu_current_suburb_todays_anniversary_sms", buildTodaysAnniversarySMS(), null);
-    //    menu.append(todaysAnniversarySMSForSuburb);
-
-    //    var todaysAnniversaryEmailForSuburb = buildCommMenuItem("comm_menu_current_suburb_todays_anniversary_email", buildTodaysAnniversaryEmail(), null);
-    //    menu.append(todaysAnniversaryEmailForSuburb);
-
-    //    var separator = buildCommMenuItem("separator", "-----------------------------------------", null);
-    //    menu.append(separator);
-    //}
-
-    //var allSuburbsMenuItem = buildCommMenuItem("separator", "All Suburbs", null);
-    //menu.append(allSuburbsMenuItem);
-
-    //var todaysBdaysSms = buildCommMenuItem("comm_menu_todays_birthdays_sms", buildTodaysBdaysSMS(), null);
-    //menu.append(todaysBdaysSms);
-
-    //var todaysBdaysEmail = buildCommMenuItem("comm_menu_todays_birthdays_email", buildTodaysBdaysEmail(), null);
-    //menu.append(todaysBdaysEmail);
-
-    //var todaysAnniversarySMS = buildCommMenuItem("comm_menu_todays_anniversary_sms", buildTodaysAnniversarySMS(), null);
-    //menu.append(todaysAnniversarySMS);
-
-    //var todaysAnniversaryEmail = buildCommMenuItem("comm_menu_todays_anniversary_email", buildTodaysAnniversaryEmail(), null);
-    //menu.append(todaysAnniversaryEmail);
     
     if (communicationsMode == "SMS") {
         var separator = buildCommMenuItem("separator", "-----------------------------------------", null);
@@ -350,50 +314,6 @@ function buildEmailMenuItemContent() {
     var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Email Message");
 
     return container.append(iconDiv).append(textDiv);
-}
-
-function buildTodaysBdaysSMS() {
-    var container = $("<div />");
-    var iconDiv = $("<div style='display:inline-block;float:left'/>");
-    iconDiv.append("<img src='Assets/comm_bday.png' />");
-    var iconDiv2 = $("<div style='display:inline-block;float:left;padding-left:5px'/>");
-    iconDiv2.append("<img src='Assets/comm_sms.png' />");
-    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Today's Birthdays (SMS)");
-
-    return container.append(iconDiv).append(iconDiv2).append(textDiv);
-}
-
-function buildTodaysBdaysEmail() {
-    var container = $("<div />");
-    var iconDiv = $("<div style='display:inline-block;float:left'/>");
-    iconDiv.append("<img src='Assets/comm_bday.png' />");
-    var iconDiv2 = $("<div style='display:inline-block;float:left;padding-left:5px'/>");
-    iconDiv2.append("<img src='Assets/comm_email.png' />");
-    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Today's Birthdays (Email)");
-
-    return container.append(iconDiv).append(iconDiv2).append(textDiv);
-}
-
-function buildTodaysAnniversarySMS() {
-    var container = $("<div />");
-    var iconDiv = $("<div style='display:inline-block;float:left'/>");
-    iconDiv.append("<img src='Assets/comm_anniversary.png' />");
-    var iconDiv2 = $("<div style='display:inline-block;float:left;padding-left:5px'/>");
-    iconDiv2.append("<img src='Assets/comm_sms.png' />");
-    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Today's Anniversaries (SMS)");
-
-    return container.append(iconDiv).append(iconDiv2).append(textDiv);
-}
-
-function buildTodaysAnniversaryEmail() {
-    var container = $("<div />");
-    var iconDiv = $("<div style='display:inline-block;float:left'/>");
-    iconDiv.append("<img src='Assets/comm_anniversary.png' />");
-    var iconDiv2 = $("<div style='display:inline-block;float:left;padding-left:5px'/>");
-    iconDiv2.append("<img src='Assets/comm_email.png' />");
-    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Today's Anniversaries (Email)");
-
-    return container.append(iconDiv).append(iconDiv2).append(textDiv);
 }
 
 function buildSMSContentContainer() {
