@@ -57,13 +57,13 @@ namespace MarketShareApp
             var matches = regexSplitter.Matches(suburbsWithPermissions);
             if (matches.Count > 0)
             {
-                var suburbSets = from m in matches.Cast<Match>()
+                var suburbSets = (from m in matches.Cast<Match>()
                                  let suburbSet = m.Groups[0].Value.Split(new[] { ',' })
                                  select new
                                  {
                                      AreaId = int.Parse(suburbSet[0].Replace("[", "")),
                                      CanEdit = suburbSet[1].Replace("]", "") == "1"
-                                 };
+                                 }).GroupBy(s => s.AreaId).Select(g => g.First());
 
 
                     using (var lsBase = DataManager.DataContextRetriever.GetLSBaseDataContext())
