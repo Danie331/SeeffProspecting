@@ -39,8 +39,8 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                     }
                     catch
                     {
-                        reportBuilder.AppendLine("<br /> Error occurred in Step2 at: Augment the Seeff_Deeds_monthly table with columns necessary to process the rows");
-                        throw;
+                        reportBuilder.AppendLine("<br />NON-FATAL: Cannot augment the Seeff_Deeds_monthly table with columns necessary to process the rows");
+                        //throw;
                     }
 
                     // Populate the unique_id column
@@ -64,8 +64,8 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                     }
                     catch
                     {
-                        reportBuilder.AppendLine("<br /> Error occurred in Step2 at: Ensure that each take-on row has a valid unique_id");
-                        throw;
+                        reportBuilder.AppendLine("<br />NON-FATAL: Error occurred in Step2 at: Ensure that each take-on row has a valid unique_id");
+                        //throw;
                     }
 
                     // Flag records for insert
