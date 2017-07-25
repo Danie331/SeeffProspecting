@@ -30,12 +30,12 @@ namespace Seeff.Spatial.WebApp.BusinessLayer.Validators
 
             // #2: License must be fully contained by a territory
             var territories = _license.GetContainingPolys(GlobalAreaCache.Instance.SeeffTerritories);
-            if (territories.Count == 0)
-            {
-                result.IsValid = false;
-                result.ValidationMessage = "This license is not fully contained by a territory.";
-                return result;
-            }
+            //if (territories.Count == 0)
+            //{
+            //    result.IsValid = false;
+            //    result.ValidationMessage = "This license is not fully contained by a territory.";
+            //    return result;
+            //}
             if (territories.Count == 1)
             {
                 result.TerritoryID = territories[0].TerritoryID;

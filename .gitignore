@@ -42,3 +42,7 @@
 /Source/MarketShareApp/Properties/PublishProfiles
 /Source/MarketShareApp/MarketShareApp.csproj.user
 /SeeffSpatial/SeeffSpatial/Seeff.Spatial.Service/Properties/PublishProfiles
+/SeeffSpatial/SeeffSpatial/Seeff.Spatial.Service/obj/Release
+/SeeffSpatial/SeeffSpatial/Seeff.Spatial.WebApp/obj/Release
+/SeeffSpatial/SeeffSpatial/Seeff.Spatial.WebApp/Properties/PublishProfiles
+/Source/SeeffProspectingAuthorisationService/SeeffProspectingAuthService/SeeffProspectingAuthService/Properties/PublishProfiles
