@@ -12,12 +12,17 @@ namespace ProspectingTaskScheduler.Core.Notifications
     public class NotificationsGenerator
     {
         [AutomaticRetry(Attempts = 0)]
-        public static void SendProspectingFollowupsNotification()
-        {
+        public static void SendProspectingFollowupsNotification(IJobCancellationToken cancellationToken)
+        {            
             try
             {
                 foreach (var user in RetrieveRecipientsForProspectingFollowups())
                 {
+                    if (cancellationToken != null)
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                    }
+
                     ProspectingFollowupsForUser followupsForUser = RetrieveFollowupsForUser(user.user_guid);
                     if (followupsForUser.HasResults)
                     {
@@ -29,6 +34,7 @@ namespace ProspectingTaskScheduler.Core.Notifications
             catch (Exception ex)
             {
                 Utils.LogException(ex);
+                throw;
             }
         }
 

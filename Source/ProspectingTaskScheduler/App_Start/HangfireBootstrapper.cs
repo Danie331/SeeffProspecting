@@ -90,7 +90,7 @@ namespace ProspectingTaskScheduler.App_Start
 
             RecurringJob.AddOrUpdate("Synchronising Prospecting contact information to CMS", () => ProspectingToCmsClientSynchroniser.Synchronise(), Cron.Minutely);
 
-            RecurringJob.AddOrUpdate("Send Prospecting notifications", () => NotificationsGenerator.SendProspectingFollowupsNotification(), Cron.Daily(8), TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate("Send Prospecting notifications", () => NotificationsGenerator.SendProspectingFollowupsNotification(JobCancellationToken.Null), Cron.Daily(8), TimeZoneInfo.Local);
 
             RecurringJob.AddOrUpdate("Purge Prospecting training database", () => TrainingDatabase.PurgeAndResetProspectingStaging(), Cron.Daily(), TimeZoneInfo.Local);
         }
