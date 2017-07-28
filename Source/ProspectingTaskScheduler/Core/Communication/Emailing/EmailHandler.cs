@@ -6,6 +6,8 @@ using System.Web;
 using ProspectingTaskScheduler.Core.Communication;
 using ProspectingTaskScheduler.Core.Communication.Emailing.Mandrill;
 using System.Net.Http;
+using ProspectingTaskScheduler.Core.Communication.Emailing.SendGrid;
+using System.Net.Http.Headers;
 
 namespace ProspectingTaskScheduler.Core.Communication.Emailing
 {
@@ -101,7 +103,7 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                 using (var prospecting = new ProspectingDataContext())
                 {
                     int pendingStatus = CommunicationHelpers.GetCommunicationStatusId("PENDING_SUBMIT_TO_API");
-                    var batch = prospecting.email_communications_logs.Where(em => em.status == pendingStatus).Take(10).ToList();
+                    var batch = prospecting.email_communications_logs.Where(em => em.status == pendingStatus).Take(5).ToList();
                     int awaitingStatus = CommunicationHelpers.GetCommunicationStatusId("AWAITING_RESPONSE_FROM_API");
                     foreach (var item in batch)
                     {
@@ -157,7 +159,7 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                 var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
                 string contactFullname = titlecaser.ToTitleCase(pendingItem.prospecting_contact_person.firstname.ToLower()) + " " + titlecaser.ToTitleCase(pendingItem.prospecting_contact_person.surname.ToLower());
 
-                MandrillMessageBuilder builder = new MandrillMessageBuilder(pendingItem.email_body_or_link_id,
+               MessageBuilder builder = new MessageBuilder(pendingItem.email_body_or_link_id,
                     pendingItem.email_subject_or_link_id,
                     pendingItem.created_by_user_email_address,
                     pendingItem.created_by_user_name,
@@ -168,23 +170,27 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                     pendingItem.attachment1_content,
                     pendingItem.user_business_unit_id);
 
-                var req = builder.BuildMandrillSendRequest();
+                var req = builder.BuildMessage();
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(req);
                 HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri("https://mandrillapp.com/");
+                client.BaseAddress = new Uri("https://api.sendgrid.com/v3/");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "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");
                 var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = null;
                 try
                 {
-                    response = client.PostAsync("/api/1.0/messages/send.json", httpContent).Result;
-
-                    var mandrillResponseArray = response.Content.ReadAsAsync<MandrillSuccessfulResponse[]>().Result;
-                    MandrillSuccessfulResponse successResponse = mandrillResponseArray[0];
-                    result.ApiTrackingKey = successResponse._id;
-                    if (successResponse.status != "sent" && !string.IsNullOrEmpty(successResponse.reject_reason))
+                    response = client.PostAsync("mail/send", httpContent).Result;
+                    var responseData = response.Content.ReadAsAsync<Response>().Result;
+                    result.ApiTrackingKey = req.personalizations.First().custom_args.TransactionIdentifier;
+                    if (responseData != null && responseData.errors != null && responseData.errors.Count > 0)
                     {
                         result.Success = false;
-                        result.ErrorMessage = successResponse.status + ": " + successResponse.reject_reason;
+                        string errorMsg = "";
+                        foreach (var error in responseData.errors)
+                        {
+                            errorMsg += "|" + error.field + ":" + error.message;
+                        }
+                        result.ErrorMessage = errorMsg;
                     }
                 }
                 catch (Exception e)
@@ -192,13 +198,20 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                     result.Success = false;
                     result.ErrorMessage = "Error occurred during POST req to emailing API for message id: " + pendingItem.email_communications_log_id + " -- detailed exception: " + e.ToString();
                 }
-                // NB: we do not as yet check any statuses from the API response, only whether an exception occured during the POST.
+                
                 if (response != null)
                 {
                     if (!response.IsSuccessStatusCode)
                     {
                         result.Success = false;
-                        result.ErrorMessage = "The POST req while sending an email to the API failed - " + response.ReasonPhrase;
+                        if (!string.IsNullOrEmpty(result.ErrorMessage))
+                        {
+                            result.ErrorMessage += "The POST req while sending an email to the API failed - " + response.ReasonPhrase;
+                        }
+                        else
+                        {
+                            result.ErrorMessage = "The POST req while sending an email to the API failed - " + response.ReasonPhrase;
+                        }
                     }
                 }
             }

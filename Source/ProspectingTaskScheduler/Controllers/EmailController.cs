@@ -2,6 +2,7 @@
 using ProspectingTaskScheduler.Core.ClientSynchronisation;
 using ProspectingTaskScheduler.Core.Communication;
 using ProspectingTaskScheduler.Core.Communication.Emailing.Mandrill;
+using ProspectingTaskScheduler.Core.Communication.Emailing.SendGrid;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,74 +37,50 @@ namespace ProspectingTaskScheduler.Controllers
         }
 
         [HttpPost]
-        public void UpdateEmailDeliveryStatus()
+        public HttpResponseMessage UpdateEmailDeliveryStatus()
         {
-            Func<MandrillEventMessageResult, string> getFailureReason = mr =>
-                {
-                    string result = mr.State;
-                    if (!string.IsNullOrEmpty(mr.BounceDesc))
-                    {
-                        result = result + " (" + mr.BounceDesc + ")";
-                    }
-                    if (!string.IsNullOrEmpty(mr.Diag))
-                    {
-                        result = result + ": " + mr.Diag;
-                    }
+            int emailSuccessStatus = 6;
+            int emailFailedStatus = 7;
 
-                    return result;
-                };
-
-            int emailSuccessStatus = CommunicationHelpers.GetCommunicationStatusId("EMAIL_SENT");
-            int emailFailedStatus = CommunicationHelpers.GetCommunicationStatusId("EMAIL_UNSENT");
+            string[] successfulEvents = new[] { "delivered", "open", "click", "spamreport", "unsubscribe" };
+            string[] unsuccessfulEvents = new[] { "processed", "dropped", "deferred", "bounce" };
             try
             {
                 string raw = Request.Content.ReadAsStringAsync().Result;
                 string decoded = System.Web.HttpUtility.UrlDecode(raw);
-
-                decoded = decoded.Replace("mandrill_events=", "");
-                MandrillEvent[] events = JsonConvert.DeserializeObject<MandrillEvent[]>(decoded);
-                MandrillEvent target = events.OrderByDescending(ev => ev.TimeStamp).First();
-
-                if (target.MessageResult != null)
+                using (var prospecting = new ProspectingDataContext())
                 {
-                    using (var prospecting = new ProspectingDataContext())
+                    var eventsArray = Newtonsoft.Json.JsonConvert.DeserializeObject<EventCallbackWebhook[]>(decoded);
+                    if (eventsArray != null && eventsArray.Count() > 0)
                     {
-                        var targetRecord = prospecting.email_communications_logs.FirstOrDefault(em => em.api_tracking_id == target.ApiTrackingId);
-                        if (targetRecord != null)
+                        var eventGroups = eventsArray.GroupBy(gr => gr.sg_event_id);
+                        foreach (var item in eventGroups)
                         {
-                            string failureReason = string.Empty;
-                            switch (target.Event)
+                            var uniqueEvent = item.First();
+                            var targetRecord = prospecting.email_communications_logs.FirstOrDefault(em => em.api_tracking_id == uniqueEvent.TransactionIdentifier);
+                            if (targetRecord != null)
                             {
-                                case "send":
-                                case "deferral": // check DB for any 'sent's in the error_msg field before commit.
-                                    if (target.MessageResult.State != "sent")
-                                    {
-                                        failureReason = getFailureReason(target.MessageResult);
-                                        targetRecord.status = emailFailedStatus;
-                                        targetRecord.error_msg = failureReason;
-                                        targetRecord.updated_datetime = DateTime.Now;
-                                        prospecting.SubmitChanges();
-                                    }
-                                    else
+                                // only update a 'success' event with another 'success' event
+                                if (targetRecord.last_api_event_dump != null && successfulEvents.Any(e => e == targetRecord.last_api_event_dump))
+                                {
+                                    if (uniqueEvent.Event != null && successfulEvents.Any(e => e == uniqueEvent.Event))
                                     {
                                         targetRecord.status = emailSuccessStatus;
-                                        targetRecord.error_msg = null;
                                         targetRecord.updated_datetime = DateTime.Now;
+                                        targetRecord.last_api_event_dump = uniqueEvent.Event;
+                                        targetRecord.error_msg = null;
                                         prospecting.SubmitChanges();
                                     }
-                                    break;
-                                case "hard_bounce":
-                                case "soft_bounce":
-                                //case "spam":
-                                //case "unsub":
-                                case "reject":
-                                    failureReason = getFailureReason(target.MessageResult);
-                                    targetRecord.status = emailFailedStatus;
-                                    targetRecord.error_msg = failureReason;
+                                }
+                                else
+                                {
+                                    bool successStatus = uniqueEvent.Event != null && successfulEvents.Any(e => e == uniqueEvent.Event);
+                                    targetRecord.status = successStatus ? emailSuccessStatus : emailFailedStatus;
                                     targetRecord.updated_datetime = DateTime.Now;
+                                    targetRecord.last_api_event_dump = uniqueEvent.Event;
+                                    targetRecord.error_msg = !successStatus ? uniqueEvent.Event : null;
                                     prospecting.SubmitChanges();
-                                    break;
-                                default: break;
+                                }
                             }
                         }
                     }
@@ -124,6 +101,8 @@ namespace ProspectingTaskScheduler.Controllers
                     p.SubmitChanges();
                 }
             }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         [HttpGet]
