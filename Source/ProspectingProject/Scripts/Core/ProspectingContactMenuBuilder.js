@@ -638,6 +638,9 @@ function handleSaveContactPerson(saveDetailsFunction, context) {
 
                 currentPersonContact.EmailOptout = emailOptout;
                 currentPersonContact.SMSOptout = smsOptout;
+                if (emailOptout) {
+                    currentPersonContact.EmailContactabilityStatus = 1;
+                }
 
                 if (propertyRelationship) {
                     // Search for an existing relationship with property, if found modify its value
@@ -665,10 +668,10 @@ function handleSaveContactPerson(saveDetailsFunction, context) {
             else {
                 // Must be a new contact
                 if (propertyRelationship) {
-                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, propertyRelationship, null, null, popiOptionSelected, gender, null, null, emailOptout, smsOptout, false);
+                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, propertyRelationship, null, null, popiOptionSelected, gender, null, null, null, null, null, null, null, null, null, null, null, null, null, emailOptout, smsOptout, false);
                 }
                 else if (companyRelationship) {
-                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, null, null, null, popiOptionSelected, gender, companyRelationship, contactCompanyId, emailOptout, smsOptout, false);
+                    currentPersonContact = newPersonContact(firstname, surname, title, idNo, null, null, null, popiOptionSelected, gender, companyRelationship, contactCompanyId, null, null, null, null, null, null, null, null, null, null, null, emailOptout, smsOptout, false);
                 }
             }
             saveContact(currentPersonContact, currentProperty, function (data) {

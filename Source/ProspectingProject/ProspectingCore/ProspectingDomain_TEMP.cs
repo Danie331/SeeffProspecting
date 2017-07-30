@@ -559,7 +559,8 @@ namespace ProspectingProject
                     Location = pcp.location,
                     EmailOptout = pcp.optout_emails,
                     SMSOptout = pcp.optout_sms,
-                    DoNotContact = pcp.do_not_contact
+                    DoNotContact = pcp.do_not_contact,
+                    EmailContactabilityStatus = pcp.email_contactability_status
                 };
 
                 contactPerson.PhoneNumbers = ProspectingLookupData.PropertyContactPhoneNumberRetriever(prospecting, contactPerson).ToList();
@@ -1019,6 +1020,13 @@ namespace ProspectingProject
                     contactRecord.optout_emails = incomingContact.EmailOptout;
                     contactRecord.optout_sms = incomingContact.SMSOptout;
                     contactRecord.do_not_contact = incomingContact.DoNotContact;
+                    if (incomingContact.EmailOptout)
+                    {
+                        contactRecord.email_contactability_status = 1;
+                    }
+                    else {
+                        contactRecord.email_contactability_status = incomingContact.EmailContactabilityStatus;
+                    }
 
                     prospecting.SubmitChanges();
 
@@ -1282,6 +1290,7 @@ namespace ProspectingProject
                             optout_emails = incomingContact.EmailOptout,
                             optout_sms = incomingContact.SMSOptout,
                             do_not_contact = incomingContact.DoNotContact,
+                            email_contactability_status = incomingContact.EmailOptout ? 1 : 4
                         };
                         prospecting.prospecting_contact_persons.InsertOnSubmit(newContact);
                         prospecting.SubmitChanges();
@@ -1616,6 +1625,7 @@ namespace ProspectingProject
                         EmailOptout = existingContactWithDetail.optout_emails,
                         SMSOptout = existingContactWithDetail.optout_sms,
                         DoNotContact = existingContactWithDetail.do_not_contact,
+                        EmailContactabilityStatus = existingContactWithDetail.email_contactability_status,
 
                         PhoneNumbers = (from det in prospecting.prospecting_contact_details
                                         where det.contact_person_id == existingContactWithDetail.contact_person_id
@@ -2098,6 +2108,7 @@ namespace ProspectingProject
                                            EmailOptout = cc.optout_emails,
                                            SMSOptout = cc.optout_sms,
                                            DoNotContact = cc.do_not_contact,
+                                           EmailContactabilityStatus = cc.email_contactability_status,
 
                                            // In due course may need to add the Dracore fields here
 
@@ -2762,7 +2773,7 @@ namespace ProspectingProject
                          pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays,
                          pp.has_cell, pp.has_primary_cell, pp.has_email, pp.has_primary_email, pp.has_landline, pp.has_primary_landline, pcp.contact_person_id, 
                          ppr.relationship_to_property, NULL AS 'relationship_to_company', NULL AS 'contact_company_id', pcp.firstname, pcp.surname, pcp.id_number, pcp.person_title, pcp.person_gender, pcp.comments_notes, 
-                         pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.do_not_contact, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
+                         pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.do_not_contact, pcp.email_contactability_status, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
                          pcp.physical_address, pcp.home_ownership, pcp.marital_status, pcp.location, pcd.contact_detail_type, pcd.prospecting_contact_detail_id, pcd.contact_detail, pcd.is_primary_contact, pcd.intl_dialing_code_id, 
                          padc.dialing_code_id, pcd.eleventh_digit, pcd.deleted
 FROM            prospecting_property AS pp LEFT OUTER JOIN
@@ -2777,7 +2788,7 @@ SELECT        pp.prospecting_property_id, pp.lightstone_property_id, pp.latitude
                          pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays,
                          pp.has_cell, pp.has_primary_cell, pp.has_email, pp.has_primary_email, pp.has_landline, pp.has_primary_landline, pcp.contact_person_id, NULL 
                          AS 'relationship_to_property', ppcr.relationship_to_company, ppcr.contact_company_id, pcp.firstname, pcp.surname, pcp.id_number, pcp.person_title, pcp.person_gender, pcp.comments_notes, 
-                         pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.do_not_contact, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
+                         pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.do_not_contact, pcp.email_contactability_status, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
                          pcp.physical_address, pcp.home_ownership, pcp.marital_status, pcp.location, pcd.contact_detail_type, pcd.prospecting_contact_detail_id, pcd.contact_detail, pcd.is_primary_contact, pcd.intl_dialing_code_id, 
                          padc.dialing_code_id, pcd.eleventh_digit, pcd.deleted
 FROM            prospecting_property AS pp LEFT OUTER JOIN
@@ -2888,6 +2899,7 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                             EmailOptout = contactRecord.optout_emails.HasValue ? contactRecord.optout_emails.Value : false,
                             SMSOptout = contactRecord.optout_sms.HasValue ? contactRecord.optout_sms.Value : false,
                             DoNotContact = contactRecord.do_not_contact.HasValue ? contactRecord.do_not_contact.Value : false,
+                            EmailContactabilityStatus = contactRecord.email_contactability_status.HasValue ? contactRecord.email_contactability_status.Value : 1,
 
                             // Dracore fields
                             AgeGroup = contactRecord.age_group,
@@ -4447,6 +4459,57 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
 
         //    return results;
         //}
+
+        public static void CreateOptInRequestForEmailComms(ProspectingContactPerson contact)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                var targetContactRecord = prospecting.prospecting_contact_persons.FirstOrDefault(cp => cp.contact_person_id == contact.ContactPersonId);
+                if (targetContactRecord != null && targetContactRecord.email_contactability_status == 4)
+                {
+                    GenerateOptInEmailContent(targetContactRecord.contact_person_id);
+                }
+            }
+        }
+
+        private static string GenerateOptInEmailContent(int contactId)
+        {
+            StringBuilder mailContent = new StringBuilder();
+            //Home banner randomizor
+            List<string> randomHeaderImage = new List<string>();
+
+            randomHeaderImage.Add("MyMailHeader4.jpg");
+            randomHeaderImage.Add("MyMailHeader3.jpg");
+            randomHeaderImage.Add("MyMailHeader2.jpg");
+            randomHeaderImage.Add("MyMailHeader1.jpg");
+
+            Random rnd = new Random();
+            int r = rnd.Next(randomHeaderImage.Count);
+
+            mailContent.Append("<html>" + Environment.NewLine);
+            mailContent.Append("<body style='font-family:arial; color:#001849; width:600px; margin-left:auto; margin-right:auto;'>" + Environment.NewLine);
+            mailContent.Append("<div id='body'>" + Environment.NewLine);
+            mailContent.Append("<img src='https://www.seeff.com/Images/MyMail/Headers/" + (string)randomHeaderImage[r] + "' width='600' border='n'></a>" + Environment.NewLine);
+
+            string optInCallback = "http://154.70.214.213/ProspectingTaskScheduler/api/Email/OptIn?" + contactId;
+            string optOutCallback = "http://154.70.214.213/ProspectingTaskScheduler/api/Email/Optout?contactPersonId=" + contactId;
+
+            mailContent.Append("<h1  style='margin-bottom:5px; margin-top:20px; font-weight:normal; margin-left:5px; font-size:30px; '>Dear Client </h1>" + Environment.NewLine);
+            mailContent.Append("<h2  style='margin-bottom:30px;  width:600px; font-weight:normal; margin-left:5px; font-size:16px;' width='680'>As a member of the \"Seeff Family\", we would like to send you property news, updates and other related articles that we believe will be of interest to you. <br/><br/>Kindly indicate that you are happy to <a href='https://www.seeff.com' style='color:#F81530; font-weight:bold; text-decoration:none; '>receive future communication</a> from us by clicking the following link: " + Environment.NewLine);
+            mailContent.Append("<br/><br/><a href='" + optInCallback + "' onclick='return false;'><img src='https://www.seeff.com/Images/Buttons/SignUpButton.PNG'></a>" + Environment.NewLine);
+            mailContent.Append("        <div id='footer' width='600' style='width:600px; margin-top:50px; font-size:12px;'>" + Environment.NewLine);
+            mailContent.Append("            <p width='600' style='width:600px; margin-top:10px; font-size:12px;'>" + Environment.NewLine);
+            mailContent.Append("            <div style='height:1px; width:600px; background-color:#F81530; margin-bottom:10px;'></div>" + Environment.NewLine);
+            mailContent.Append("            Seeff Properties &copy; " + DateTime.Now.Year.ToString() + Environment.NewLine);
+            mailContent.Append("            <b>|</b>  " + Environment.NewLine);
+            mailContent.Append("            <a href='" + optOutCallback + "' style='color:#F81530; text-decoration:none; ' onclick='return false;'> Click here</a> to opt out of any future communication" + Environment.NewLine);
+            mailContent.Append("            <p><img src='validation link' style='display:none; width:1px; height:1px;' border='n'></p>" + Environment.NewLine);
+            mailContent.Append("        </div>" + Environment.NewLine);
+            mailContent.Append("    </body>" + Environment.NewLine);
+            mailContent.Append("</html>" + Environment.NewLine);
+
+            return mailContent.ToString();
+        }
     }
 }
 

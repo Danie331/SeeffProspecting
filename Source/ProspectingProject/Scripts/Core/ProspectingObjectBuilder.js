@@ -64,7 +64,8 @@ function newPersonContact(firstname,
         Citizenship: citizenship,
         EmailOptout: emailOptout,
         SMSOptout: smsOptout,
-        DoNotContact: doNotContact
+        DoNotContact: doNotContact,
+        EmailContactabilityStatus: emailOptout == true ? 1 : 4
     };
 }
 

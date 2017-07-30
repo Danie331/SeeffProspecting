@@ -29,6 +29,7 @@ namespace ProspectingTaskScheduler.Controllers
                     foreach (var contactPerson in contactPersons)
                     {
                         contactPerson.optout_emails = true;
+                        contactPerson.email_contactability_status = 1;
                         prospectingContext.SubmitChanges();
                         ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
                     }

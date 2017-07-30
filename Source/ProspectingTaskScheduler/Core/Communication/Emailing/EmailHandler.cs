@@ -98,41 +98,41 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
             }
 
 
-            public static void SendEmails()
+        public static void SendEmails()
+        {
+            using (var prospecting = new ProspectingDataContext())
             {
-                using (var prospecting = new ProspectingDataContext())
+                int pendingStatus = CommunicationHelpers.GetCommunicationStatusId("PENDING_SUBMIT_TO_API");
+                var batch = prospecting.email_communications_logs.Where(em => em.status == pendingStatus).Take(5).ToList();
+                int awaitingStatus = CommunicationHelpers.GetCommunicationStatusId("AWAITING_RESPONSE_FROM_API");
+                foreach (var item in batch)
                 {
-                    int pendingStatus = CommunicationHelpers.GetCommunicationStatusId("PENDING_SUBMIT_TO_API");
-                    var batch = prospecting.email_communications_logs.Where(em => em.status == pendingStatus).Take(5).ToList();
-                    int awaitingStatus = CommunicationHelpers.GetCommunicationStatusId("AWAITING_RESPONSE_FROM_API");
-                    foreach (var item in batch)
+                    item.status = awaitingStatus;
+                    try
                     {
-                        item.status = awaitingStatus;
-                        try
-                        {
-                            prospecting.SubmitChanges();
-                        }
-                        catch(Exception e)
-                        {
-                            LogUpdateRecordError(e, "Unexpected error updating the status of email comm record to AWAITING_RESPONSE_FROM_API", item);
-                        }
+                        prospecting.SubmitChanges();
                     }
-                    foreach (var item in batch)
-                    { 
-                        EmailResult result = SendEmail(item);
-                        UpdateRecord(item, result);
-                        try
-                        {
-                            prospecting.SubmitChanges();
-                        }
-                        catch (Exception e)
-                        {
-                            // If an error occurred trying to update the record in the DB, log it
-                            LogUpdateRecordError(e, "Unexpected error when saving updates to email comm. record after send.", item);
-                        }
+                    catch(Exception e)
+                    {
+                        LogUpdateRecordError(e, "Unexpected error updating the status of email comm record to AWAITING_RESPONSE_FROM_API", item);
+                    }
+                }
+                foreach (var item in batch)
+                {
+                    EmailResult result = SendEmail(item);
+                    UpdateRecord(item, result);
+                    try
+                    {
+                        prospecting.SubmitChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        // If an error occurred trying to update the record in the DB, log it
+                        LogUpdateRecordError(e, "Unexpected error when saving updates to email comm. record after send.", item);
                     }
                 }
             }
+        }
 
             private static void LogUpdateRecordError(Exception e, string context, email_communications_log record)
             {

@@ -9,6 +9,8 @@ namespace ProspectingProject
     public class ProspectingContactPerson : IProspectingContactEntity
     {
         private string _idNumber;
+        private int _emailContactabilityStatus;
+        private bool _emailOptout;
         public ProspectingContactPerson()
         {
             PersonPropertyRelationships = new List<KeyValuePair<int, int>>();
@@ -51,9 +53,35 @@ namespace ProspectingProject
         public string BureauAdverseIndicator { get; set; }
         public string Citizenship { get; set; }
 
-        public bool EmailOptout { get; set; }
         public bool SMSOptout { get; set; }
         public bool DoNotContact { get; set; }
+
+        public bool EmailOptout
+        {
+            get { return _emailOptout; }
+            set
+            {
+                _emailOptout = value;
+                if (value)
+                {
+                    _emailContactabilityStatus = 1;
+                }
+            }
+        }
+        public int EmailContactabilityStatus
+        {
+            get
+            {
+                if (_emailOptout) return 1;              
+                return _emailContactabilityStatus;
+            }
+            set
+            {
+                _emailContactabilityStatus = value;
+                if (value == 1) _emailOptout = true;
+                if (value == 2) _emailOptout = false;
+            }
+        }
 
         public int? TargetLightstonePropertyIdForComms { get; set; }
 

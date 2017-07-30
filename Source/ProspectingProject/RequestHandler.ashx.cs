@@ -236,6 +236,9 @@ namespace ProspectingProject
                         string identifier = GeneratePseudoIdentifier();
                         context.Response.Write(identifier);
                         break;
+                    case "send_email_opt_in_request":
+                        SendOptInRequest(json);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -268,6 +271,16 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private void SendOptInRequest(string json)
+        {
+            // send email(s) if status = 4
+            // create actvity
+            // change status
+            // ensure fornt-end loads updated status
+            var contact = ProspectingCore.Deserialise<ProspectingContactPerson>(json);
+            ProspectingCore.CreateOptInRequestForEmailComms(contact);
         }
 
         private string GeneratePseudoIdentifier()

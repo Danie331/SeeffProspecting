@@ -77,6 +77,7 @@ namespace ProspectingProject
                                                                                                                                                             EmailOptout = pcp.optout_emails,
                                                                                                                                                             SMSOptout = pcp.optout_sms,
                                                                                                                                                             DoNotContact = pcp.do_not_contact,
+                                                                                                                                                            EmailContactabilityStatus = pcp.email_contactability_status,
 
                                                                                                                                                             // Dracore fields
                                                                                                                                                             AgeGroup = pcp.age_group,
@@ -112,6 +113,7 @@ namespace ProspectingProject
                                                 EmailOptout = pcp.optout_emails,
                                                 SMSOptout = pcp.optout_sms,
                                                 DoNotContact = pcp.do_not_contact,
+                                                EmailContactabilityStatus = pcp.email_contactability_status,
 
                                                 // Dracore fields
                                                 AgeGroup = pcp.age_group,

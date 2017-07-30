@@ -29,14 +29,43 @@ function ContactDetailsEditorWidget(containerElementId, arrayOfPhoneNumberObject
         var phoneNumbersDiv = $("<form id='phoneNumbersDiv' class='phoneContactSection' />");
         var emailAddressesDiv = $("<form id='emailAddressesDiv' class='emailContactSection' />");
 
+        var optInStatusSection = $('<div />');
+        var emailSectionAvailable = true;
+        var addEmailButtons = true;
+      
+        if (currentPersonContact) {
+            if (currentPersonContact.EmailContactabilityStatus != 2) {
+                if (currentPersonContact.EmailContactabilityStatus == 1) {
+                    optInStatusSection.append('<label style="color:red;display:inline-block">This contact has opted out from receiving emails</label>');
+                    emailSectionAvailable = false;
+                }
+                if (currentPersonContact.EmailContactabilityStatus == 3) {
+                    optInStatusSection.append('<label style="color:red;display:inline-block">An email has been sent to this contact requesting permission to communicate</label>');
+                    addEmailButtons = false;
+                }
+                if (_emailAddresses && _emailAddresses.length) {
+                    if (currentPersonContact.EmailContactabilityStatus == 4) {
+                        var sendOptInRequestLabel = $('<label style="color:red;display:block">This contact must provide consent for communication via email. Use the button below to send them an email requesting permission to communicate</label>');
+                        var optInRequestBtn = $("<input type='button' id='sendOptInRequestBtn' value='Send Opt-in Request' style='display:block;cursor:pointer;' />");
+                        var optInRequestContainer = $('<div />').append(sendOptInRequestLabel).append(optInRequestBtn);
+                        optInStatusSection.append(optInRequestContainer);
+                        optInRequestBtn.click(sendOptInRequest);
+                    }
+                }
+            }
+        }
+
         buildPhoneNumbers(phoneNumbersDiv);
-        buildEmailAddresses(emailAddressesDiv);
+        buildEmailAddresses(emailAddressesDiv, addEmailButtons);
 
         html.append("<label>Contact Phone Numbers</label>");
         html.append(phoneNumbersDiv);
         html.append("<hr><p />");
         html.append("<label>Contact Email Addresses</label>");
-        html.append(emailAddressesDiv);
+        html.append(optInStatusSection);
+        if (emailSectionAvailable) {
+            html.append(emailAddressesDiv);
+        }
         html.append("<hr />");
         html.append(buildSaveBtn());
 
@@ -109,8 +138,10 @@ function ContactDetailsEditorWidget(containerElementId, arrayOfPhoneNumberObject
         }
     }
 
-    function buildEmailAddresses(emailAddressesDiv) {
-        addContactEmailCaptureOptions(emailAddressesDiv);
+    function buildEmailAddresses(emailAddressesDiv, addEmailButtons) {
+        if (addEmailButtons) {
+            addContactEmailCaptureOptions(emailAddressesDiv);
+        }
         if (_emailAddresses) {
             $.each(_emailAddresses, function (index, item) {
                 var elements = buildEmailContactRow(item, _emailTypes);
@@ -569,4 +600,35 @@ function ContactDetailsEditorWidget(containerElementId, arrayOfPhoneNumberObject
     }
 
     return this;
+}
+
+function sendOptInRequest() {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Please wait...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: 'send_email_opt_in_request', ContactPersonId: currentPersonContact.ContactPersonId }),
+        dataType: "json"
+    }).done(function (data) {
+        $.unblockUI();
+        if (!handleResponseIfServerError(data)) {
+            return;
+        }
+
+        var div = $("<div id='optInRequestSentDialog' title='Opt-in Request Sent' style='font-family:Verdana;font-size:12px;' />").empty();
+        div.append("An email has been sent to the email address(es) listed under this contact requesting permission to send them further correspondence.\
+                    They must explicitly provide opt-in consent to further correspondence by clicking the 'Sign Up' link provided within the email before \
+                    further email communication via this system is allowed.");
+
+        div.dialog(
+                {
+                    modal: true,
+                    closeOnEscape: true,
+                    width: '550',
+                    buttons: {
+                        "OK": function () { $(this).dialog("close"); },
+                    },
+                    position: ['center', 'center']
+                });
+    });
 }

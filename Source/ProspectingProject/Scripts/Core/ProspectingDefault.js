@@ -1303,6 +1303,10 @@ function addOrUpdateContactToCurrentProperty(newContact) {
         contact.EmailAddresses = newContact.EmailAddresses;
         contact.Comments = newContact.Comments;
         contact.IsPOPIrestricted = newContact.IsPOPIrestricted;
+        contact.EmailOptout = newContact.EmailOptout;
+        contact.SMSOptout = newContact.SMSOptout;
+        contact.DoNotContact = newContact.DoNotContact;
+        contact.EmailContactabilityStatus = newContact.EmailContactabilityStatus;
 
         if (contact.IsPOPIrestricted) {
             contact.PhoneNumbers = [];

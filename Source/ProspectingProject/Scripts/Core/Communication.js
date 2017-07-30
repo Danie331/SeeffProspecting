@@ -881,13 +881,23 @@ function buildContactsBody(contacts, selectCells) {
             actionStatus = 'Error';
         }
         if (c.IsPOPIrestricted) {
-            actionStatus = 'Opt-out';
+            actionStatus = 'Opt out';
         }
         if (c.SMSOptout && communicationsMode == "SMS") {
-            actionStatus = 'Opt-out';
+            actionStatus = 'Opt out';
         }
         if (c.EmailOptout && communicationsMode == "EMAIL") {
-            actionStatus = 'Opt-out';
+            actionStatus = 'Opt out';
+        }
+        // c.EmailContactabilityStatus == 1 || c.EmailContactabilityStatus == 3 || c.EmailContactabilityStatus == 4
+        if (c.EmailContactabilityStatus == 1 && communicationsMode == "EMAIL") {
+            actionStatus = 'Opt out';
+        }
+        if (c.EmailContactabilityStatus == 3 && communicationsMode == "EMAIL") {
+            actionStatus = 'None - opt-in request pending';
+        }
+        if (c.EmailContactabilityStatus == 4 && communicationsMode == "EMAIL") {
+            actionStatus = 'None - send opt-in request';
         }
         if (communicationsMode == "SMS") {
             // Find a cell nr marked as the default
@@ -1028,6 +1038,9 @@ function buildContactsBody(contacts, selectCells) {
         if (c.EmailOptout && communicationsMode == "EMAIL") {
             rowIsSelected = '';
         }
+        if ((c.EmailContactabilityStatus == 1 || c.EmailContactabilityStatus == 3 || c.EmailContactabilityStatus == 4) && communicationsMode == "EMAIL") {
+            rowIsSelected = '';
+        }
         if (c.IsPOPIrestricted) {
             rowIsSelected = '';
         }
@@ -1042,6 +1055,9 @@ function buildContactsBody(contacts, selectCells) {
         if (c.EmailOptout && communicationsMode == "EMAIL") {
             checkboxDisabled = 'disabled';
         }
+        if ((c.EmailContactabilityStatus == 1 || c.EmailContactabilityStatus == 3 || c.EmailContactabilityStatus == 4) && communicationsMode == "EMAIL") {
+            checkboxDisabled = 'disabled';
+        }
 
         var personTitle = $.grep(prospectingContext.ContactPersonTitle, function (i) {
             return i.Key == c.Title;
@@ -1051,7 +1067,7 @@ function buildContactsBody(contacts, selectCells) {
         var name = $("<td class='commTableRow' id='comm_fullname_" + rowId + "' title='" + personTitle + ' ' + escapePersonName(c.Firstname) + ' ' + escapePersonName(c.Surname) + "' ></td>").append(personTitle + ' ' + escapePersonName(c.Firstname) + ' ' + escapePersonName(c.Surname));
         var address = $("<td class='commTableRow120' id='comm_address_" + rowId + "' title='" + c.PropertyAddress + "' ></td>").append(c.PropertyAddress); // change for SS (unit no) + ordering
         var contact = $("<td class='commTableRow' id='comm_contactdetail_" + rowId + "' title='" + contactDetailTitle + "' ></td>").append(contactDetailContent); // change
-        var action = $("<td class='commTableRow' id='comm_action_" + rowId + "' ></td>").append(actionStatus);
+        var action = $("<td class='commTableRow' id='comm_action_" + rowId + "' title='" + actionStatus + "' ></td>").append(actionStatus);
         //var editBtn = $("<a href='' id='comm_edit_contact_" + rowId + "' style='text-decoration:underline!important;'>Edit</a>");
 
         var editLink = $('<input type="image" src="Assets/edit_link.png" title="Edit contact details" style="display:inline-block;vertical-align:middle; border: 1px outset white;margin-right:3px;" />');
@@ -1864,14 +1880,15 @@ function handleCommSendBtnClick() {
     }
 
     var readyStatus = '';
+    var optInStatusLabel = '<span style="color:red">*Please note that as per our anti-spam policy, only contacts who have explicitly provided opt-in consent are eligible for communication</span>';
     if (currentOrAllSuburbsSelected()) {
         if ($('#commCurrentSuburbRadioBtn').is(':checked')) {
             readyStatus = '\nReady to send communication to the relevant contact persons in ' + currentSuburb.SuburbName + '.' +
-                          '\nPlease note that only contacts with a default email address or cellphone number will be targeted, and further filtering might occur if the message is mapped to a system template.';
+                          '\nOnly contacts with a default email address or cellphone number will be targeted, and further filtering might occur if the message is mapped to a system template.';
         }
         if ($('#commAllSuburbsRadioBtn').is(':checked')) {
             readyStatus = '\nReady to send communication to the relevant contact persons in all your available suburbs.' +
-                          '\nPlease note that only contacts with a default email address or cellphone number will be targeted, and further filtering might occur if the message is mapped to a system template.';
+                          '\nOnly contacts with a default email address or cellphone number will be targeted, and further filtering might occur if the message is mapped to a system template.';
         }
     } else {
         var commSelectedRows = $('#commContactsTable tr.rowSelected');
@@ -1883,7 +1900,11 @@ function handleCommSendBtnClick() {
     
         var dialog = $("#commSendMessageDialog");
         dialog.empty();
-        dialog.append(readyStatus).append('<p />').append(batchNameDiv).append("<p />");
+        if (communicationsMode == 'EMAIL') {
+            dialog.append(readyStatus).append('<p />').append(optInStatusLabel).append('<p />').append(batchNameDiv).append("<p />");
+        } else {
+            dialog.append(readyStatus).append('<p />').append(batchNameDiv).append("<p />");
+        }
         
             var previewMsgLabel = $("<p>Sample message:</p>");
             dialog.append(previewMsgLabel);            
