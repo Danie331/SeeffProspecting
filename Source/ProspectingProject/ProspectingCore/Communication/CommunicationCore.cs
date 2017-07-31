@@ -259,7 +259,7 @@ namespace ProspectingProject
             foreach (var contact in contacts)
             {
                 string targetEmailAddress = contact.TargetContactEmailAddress;
-                string emailBody = CreateEmailBody(batch.EmailBodyHTMLRaw, contact); // TAKE NOTE: contactRecord != contact
+                string emailBody = CreateEmailBody(batch, contact); // TAKE NOTE: contactRecord != contact
                 string emailSubject = CreateEmailSubject(batch.EmailSubjectRaw);
 
                 var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
@@ -367,7 +367,7 @@ namespace ProspectingProject
             return subjectText;
         }
 
-        private static string CreateEmailBody(string rawBody, ProspectingContactPerson contact)
+        private static string CreateEmailBody(EmailBatch batch, ProspectingContactPerson contact)
         {
             var titlecaser = new System.Globalization.CultureInfo("en-US", false).TextInfo;
 
@@ -385,16 +385,20 @@ namespace ProspectingProject
             string address = ProspectingCore.GetFormattedAddress(contact.TargetLightstonePropertyIdForComms.Value);
             int regYears = GetNoYearsSinceLastRegistered(contact.TargetLightstonePropertyIdForComms.Value);
 
-            rawBody = rawBody.Replace("*title*", personTitle)
+            string rawBody = batch.EmailBodyHTMLRaw.Replace("*title*", personTitle)
                              .Replace("*name*", name)
                              .Replace("*surname*", surname)
                              .Replace("*address*", address)
                              .Replace("*years*", regYears.ToString());
 
-            var link = "http://154.70.214.213/ProspectingTaskScheduler/UnsubscribeEmail.html?email=" + contact.TargetContactEmailAddress + "&contactid=" + contact.ContactPersonId;
-            string optoutLink = "<p /><a href='" + link + "' target='_blank'>Unsubscribe</a>";
+            if (batch.IncludeUnsubscribeLink)
+            {
+                var link = "http://154.70.214.213/ProspectingTaskScheduler/UnsubscribeEmail.html?email=" + contact.TargetContactEmailAddress + "&contactid=" + contact.ContactPersonId;
+                string optoutLink = "<p /><a href='" + link + "' target='_blank'>Unsubscribe</a>";
+                return rawBody + optoutLink;
+            }
 
-            return rawBody + optoutLink;
+            return rawBody;
         }
 
         private static List<ProspectingContactPerson> FilterContactsForTemplateType(List<ProspectingContactPerson> contacts, int? templateActivityTypeId)

@@ -37,6 +37,46 @@ namespace ProspectingTaskScheduler.Controllers
             }
         }
 
+        [HttpGet]
+        public HttpResponseMessage Optout(int contactPersonId)
+        {
+            using (var prospectingContext = new ProspectingDataContext())
+            {
+                var contactPerson = prospectingContext.prospecting_contact_persons.FirstOrDefault(cp => cp.contact_person_id == contactPersonId);
+                if (contactPerson != null)
+                {
+                    contactPerson.optout_emails = true;
+                    contactPerson.email_contactability_status = 1;
+                    prospectingContext.SubmitChanges();
+                    ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
+                }
+            }
+
+            var response = Request.CreateResponse(HttpStatusCode.Found);
+            response.Headers.Location = new Uri("https://www.seeff.com/Account/OptOut");
+            return response;
+        }
+
+        [HttpGet]
+        public HttpResponseMessage Optin(int contactPersonId)
+        {
+            using (var prospectingContext = new ProspectingDataContext())
+            {
+                var contactPerson = prospectingContext.prospecting_contact_persons.FirstOrDefault(cp => cp.contact_person_id == contactPersonId);
+                if (contactPerson != null)
+                {
+                    contactPerson.optout_emails = false;
+                    contactPerson.email_contactability_status = 2;
+                    prospectingContext.SubmitChanges();
+                    ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
+                }
+            }
+
+            var response = Request.CreateResponse(HttpStatusCode.Found);
+            response.Headers.Location = new Uri("https://www.seeff.com/Account/OptIn");
+            return response;
+        }
+
         [HttpPost]
         public HttpResponseMessage UpdateEmailDeliveryStatus()
         {

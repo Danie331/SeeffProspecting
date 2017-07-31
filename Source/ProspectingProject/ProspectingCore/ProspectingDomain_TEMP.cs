@@ -4460,15 +4460,49 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
         //    return results;
         //}
 
-        public static void CreateOptInRequestForEmailComms(ProspectingContactPerson contact)
+        public static CommunicationBatchStatus CreateOptInRequestForEmailComms(ProspectingContactPerson contact)
         {
             using (var prospecting = new ProspectingDataContext())
             {
                 var targetContactRecord = prospecting.prospecting_contact_persons.FirstOrDefault(cp => cp.contact_person_id == contact.ContactPersonId);
                 if (targetContactRecord != null && targetContactRecord.email_contactability_status == 4)
                 {
-                    GenerateOptInEmailContent(targetContactRecord.contact_person_id);
+                    string optInEmailContent = GenerateOptInEmailContent(targetContactRecord.contact_person_id);
+                    optInEmailContent = Convert.ToBase64String(Encoding.ASCII.GetBytes(optInEmailContent));
+                    List<ProspectingContactPerson> recipient = new List<ProspectingContactPerson>();
+                    var recipientEmailAddresses = ProspectingLookupData.PropertyContactEmailRetriever(prospecting, contact);
+                    foreach (var emailAddress in recipientEmailAddresses)
+                    {
+                        recipient.Add(new ProspectingContactPerson
+                        {
+                            ContactPersonId = contact.ContactPersonId,
+                            TargetLightstonePropertyIdForComms = contact.TargetLightstonePropertyIdForComms,
+                            TargetContactEmailAddress = emailAddress.ItemContent,
+                            Firstname = targetContactRecord.firstname,
+                            Surname = targetContactRecord.surname
+                        });
+                    }
+                    EmailBatch optInRequest = new EmailBatch
+                    {
+                        Recipients = recipient,
+                        IncludeUnsubscribeLink = false, // test that this is true normally?
+                        NameOfBatch = "",
+                        Attachments = new List<EmailAttachment>(),
+                        EmailBodyHTMLRaw = optInEmailContent,
+                        EmailSubjectRaw = Convert.ToBase64String(Encoding.ASCII.GetBytes("Join the Seeff Family")),
+                        TemplateActivityTypeId = ProspectingLookupData.SystemActivityTypes.First(act => act.Value == "Opt-in Request").Key
+                    };
+
+                    var status = SubmitEmailBatch(optInRequest);
+                    if (status.SuccessfullySubmitted)
+                    {
+                        targetContactRecord.email_contactability_status = 3;
+                        prospecting.SubmitChanges();
+                    }
+
+                    return status;
                 }
+                return new CommunicationBatchStatus { SuccessfullySubmitted = false, ErrorMessage = "Contact with the following ContactPersonId cannot be targeted at this time: " + contact.ContactPersonId };
             }
         }
 
@@ -4491,18 +4525,18 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
             mailContent.Append("<div id='body'>" + Environment.NewLine);
             mailContent.Append("<img src='https://www.seeff.com/Images/MyMail/Headers/" + (string)randomHeaderImage[r] + "' width='600' border='n'></a>" + Environment.NewLine);
 
-            string optInCallback = "http://154.70.214.213/ProspectingTaskScheduler/api/Email/OptIn?" + contactId;
+            string optInCallback = "http://154.70.214.213/ProspectingTaskScheduler/api/Email/Optin?" + contactId;
             string optOutCallback = "http://154.70.214.213/ProspectingTaskScheduler/api/Email/Optout?contactPersonId=" + contactId;
 
             mailContent.Append("<h1  style='margin-bottom:5px; margin-top:20px; font-weight:normal; margin-left:5px; font-size:30px; '>Dear Client </h1>" + Environment.NewLine);
-            mailContent.Append("<h2  style='margin-bottom:30px;  width:600px; font-weight:normal; margin-left:5px; font-size:16px;' width='680'>As a member of the \"Seeff Family\", we would like to send you property news, updates and other related articles that we believe will be of interest to you. <br/><br/>Kindly indicate that you are happy to <a href='https://www.seeff.com' style='color:#F81530; font-weight:bold; text-decoration:none; '>receive future communication</a> from us by clicking the following link: " + Environment.NewLine);
-            mailContent.Append("<br/><br/><a href='" + optInCallback + "' onclick='return false;'><img src='https://www.seeff.com/Images/Buttons/SignUpButton.PNG'></a>" + Environment.NewLine);
+            mailContent.Append("<h2  style='margin-bottom:30px;  width:600px; font-weight:normal; margin-left:5px; font-size:16px;' width='680'>As a member of the \"Seeff Family\", we would like to send you property news, updates and other related articles that we believe will be of interest to you. <br/><br/>Kindly indicate that you are happy to <a href='" + optInCallback + "' style='color:#F81530; font-weight:bold; text-decoration:none; '>receive future communication</a> from us by clicking the following link: " + Environment.NewLine);
+            mailContent.Append("<br/><br/><a href='" + optInCallback + "'><img src='https://www.seeff.com/Images/Buttons/SignUpButton.PNG'></a>" + Environment.NewLine);
             mailContent.Append("        <div id='footer' width='600' style='width:600px; margin-top:50px; font-size:12px;'>" + Environment.NewLine);
             mailContent.Append("            <p width='600' style='width:600px; margin-top:10px; font-size:12px;'>" + Environment.NewLine);
             mailContent.Append("            <div style='height:1px; width:600px; background-color:#F81530; margin-bottom:10px;'></div>" + Environment.NewLine);
             mailContent.Append("            Seeff Properties &copy; " + DateTime.Now.Year.ToString() + Environment.NewLine);
             mailContent.Append("            <b>|</b>  " + Environment.NewLine);
-            mailContent.Append("            <a href='" + optOutCallback + "' style='color:#F81530; text-decoration:none; ' onclick='return false;'> Click here</a> to opt out of any future communication" + Environment.NewLine);
+            mailContent.Append("            <a href='" + optOutCallback + "' style='color:#F81530; text-decoration:none; '> Click here</a> to opt out of any future communication" + Environment.NewLine);
             mailContent.Append("            <p><img src='validation link' style='display:none; width:1px; height:1px;' border='n'></p>" + Environment.NewLine);
             mailContent.Append("        </div>" + Environment.NewLine);
             mailContent.Append("    </body>" + Environment.NewLine);

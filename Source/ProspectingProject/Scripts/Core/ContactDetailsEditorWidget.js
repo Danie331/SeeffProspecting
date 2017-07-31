@@ -607,7 +607,7 @@ function sendOptInRequest() {
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: 'send_email_opt_in_request', ContactPersonId: currentPersonContact.ContactPersonId }),
+        data: JSON.stringify({ Instruction: 'send_email_opt_in_request', ContactPersonId: currentPersonContact.ContactPersonId, TargetLightstonePropertyIdForComms: currentProperty.LightstonePropertyId }),
         dataType: "json"
     }).done(function (data) {
         $.unblockUI();
@@ -615,20 +615,28 @@ function sendOptInRequest() {
             return;
         }
 
-        var div = $("<div id='optInRequestSentDialog' title='Opt-in Request Sent' style='font-family:Verdana;font-size:12px;' />").empty();
-        div.append("An email has been sent to the email address(es) listed under this contact requesting permission to send them further correspondence.\
-                    They must explicitly provide opt-in consent to further correspondence by clicking the 'Sign Up' link provided within the email before \
-                    further email communication via this system is allowed.");
+        var div = null;
+        if (data.SuccessfullySubmitted) {
+            div = $("<div id='optInRequestSentDialog' title='Opt-in Request Sent' style='font-family:Verdana;font-size:12px;' />").empty();
+            div.append("An email has been sent to the email address(es) listed for this contact requesting opt-in permission to send them further correspondence.");
+
+            var contact = $.grep(currentProperty.Contacts, function (c) {
+                return c.ContactPersonId == currentPersonContact.ContactPersonId;
+            })[0];
+            currentPersonContact = contact;
+            currentPersonContact.EmailContactabilityStatus = 3;
+            buildPersonContactMenu(currentProperty.Contacts, true, null);
+        }
 
         div.dialog(
-                {
-                    modal: true,
-                    closeOnEscape: true,
-                    width: '550',
-                    buttons: {
-                        "OK": function () { $(this).dialog("close"); },
-                    },
-                    position: ['center', 'center']
-                });
+                    {
+                        modal: true,
+                        closeOnEscape: true,
+                        width: '550',
+                        buttons: {
+                            "OK": function () { $(this).dialog("close"); },
+                        },
+                        position: ['center', 'center']
+                    });
     });
 }

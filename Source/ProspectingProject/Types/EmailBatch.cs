@@ -17,5 +17,6 @@ namespace ProspectingProject
         public int? TemplateActivityTypeId { get; set; }
         public List<int> UserSuburbIds { get; set; }
         public List<EmailAttachment> Attachments { get; set; }
+        public bool IncludeUnsubscribeLink { get; set; } = true;
     }
 }

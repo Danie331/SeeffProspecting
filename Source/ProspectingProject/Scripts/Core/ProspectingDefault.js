@@ -2677,7 +2677,6 @@ function handleResponseIfServerError(responseObject) {
     if (responseObject.ErrorMessage) {
         $.unblockUI();
         var errorMessage = 'An error occurred processing your request: ' + responseObject.ErrorMessage;
-        errorMessage += '\nIt is recommended that you close down Prospecting and please notify support.';
         alert(errorMessage);
         return false;
     }
