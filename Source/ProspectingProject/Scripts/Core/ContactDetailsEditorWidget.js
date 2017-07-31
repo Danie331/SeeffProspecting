@@ -618,7 +618,7 @@ function sendOptInRequest() {
         var div = null;
         if (data.SuccessfullySubmitted) {
             div = $("<div id='optInRequestSentDialog' title='Opt-in Request Sent' style='font-family:Verdana;font-size:12px;' />").empty();
-            div.append("An email has been sent to the email address(es) listed for this contact requesting opt-in permission to send them further correspondence.");
+            div.append("An email has been sent to the email address(es) listed for this contact requesting opt-in permission for further communication.");
 
             var contact = $.grep(currentProperty.Contacts, function (c) {
                 return c.ContactPersonId == currentPersonContact.ContactPersonId;

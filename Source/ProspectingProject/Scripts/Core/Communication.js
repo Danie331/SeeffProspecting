@@ -1880,7 +1880,7 @@ function handleCommSendBtnClick() {
     }
 
     var readyStatus = '';
-    var optInStatusLabel = '<span style="color:red">*Please note that as per our anti-spam policy, only contacts who have explicitly provided opt-in consent are eligible for communication</span>';
+    var optInStatusLabel = '<span style="color:red">Please note that as per our opt-in policy, only contacts who have explicitly provided consent are eligible for communication</span>';
     if (currentOrAllSuburbsSelected()) {
         if ($('#commCurrentSuburbRadioBtn').is(':checked')) {
             readyStatus = '\nReady to send communication to the relevant contact persons in ' + currentSuburb.SuburbName + '.' +

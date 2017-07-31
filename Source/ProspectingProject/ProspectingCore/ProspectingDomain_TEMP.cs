@@ -4525,7 +4525,7 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
             mailContent.Append("<div id='body'>" + Environment.NewLine);
             mailContent.Append("<img src='https://www.seeff.com/Images/MyMail/Headers/" + (string)randomHeaderImage[r] + "' width='600' border='n'></a>" + Environment.NewLine);
 
-            string optInCallback = "http://154.70.214.213/ProspectingTaskScheduler/api/Email/Optin?" + contactId;
+            string optInCallback = "http://154.70.214.213/ProspectingTaskScheduler/api/Email/Optin?contactPersonId=" + contactId;
             string optOutCallback = "http://154.70.214.213/ProspectingTaskScheduler/api/Email/Optout?contactPersonId=" + contactId;
 
             mailContent.Append("<h1  style='margin-bottom:5px; margin-top:20px; font-weight:normal; margin-left:5px; font-size:30px; '>Dear Client </h1>" + Environment.NewLine);
