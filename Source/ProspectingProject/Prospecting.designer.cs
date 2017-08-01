@@ -2711,7 +2711,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_datetime", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_datetime", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> updated_datetime
 		{
 			get
@@ -2799,7 +2799,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="Int NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public int status
 		{
 			get
@@ -2823,7 +2823,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email_body_or_link_id", DbType="NVarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email_body_or_link_id", DbType="NVarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string email_body_or_link_id
 		{
 			get
@@ -2843,7 +2843,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email_subject_or_link_id", DbType="NVarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email_subject_or_link_id", DbType="NVarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string email_subject_or_link_id
 		{
 			get
@@ -2863,7 +2863,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_error_msg", DbType="NVarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_error_msg", DbType="NVarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string error_msg
 		{
 			get
@@ -2983,7 +2983,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_last_api_event_dump", DbType="NVarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_last_api_event_dump", DbType="NVarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string last_api_event_dump
 		{
 			get
@@ -9971,7 +9971,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_datetime", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_datetime", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> updated_datetime
 		{
 			get
@@ -10059,7 +10059,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="Int NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public int status
 		{
 			get
@@ -10103,7 +10103,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_api_delivery_status", DbType="VarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_api_delivery_status", DbType="VarChar(50)", UpdateCheck=UpdateCheck.Never)]
 		public string api_delivery_status
 		{
 			get
@@ -10123,7 +10123,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_msg_body_or_link_id", DbType="NVarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_msg_body_or_link_id", DbType="NVarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string msg_body_or_link_id
 		{
 			get
@@ -10143,7 +10143,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_reply", DbType="NVarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_reply", DbType="NVarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string reply
 		{
 			get
@@ -10163,7 +10163,7 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_error_msg", DbType="NVarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_error_msg", DbType="NVarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string error_msg
 		{
 			get
