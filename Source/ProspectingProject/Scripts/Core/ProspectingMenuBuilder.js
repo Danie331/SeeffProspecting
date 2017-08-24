@@ -92,6 +92,14 @@ function createProspectingMenu(userData) {
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
+    menuItem = createMenuItem("Lists", "lists", buildListsMenu(), function () {
+        toggleMultiSelectMode(false);
+        toggleFilterMode(false);
+        contactListsManager.toggleListsMainMenu();
+    }, null);
+    appendMenuItemContent(menuItem.MenuItemContent);
+    menuItems.push(menuItem);
+
     //menuItem = createMenuItem("Document Vault", "documentvault", buildDocumentVault(), function () { toggleMultiSelectMode(false); }, null);
     //appendMenuItemContent(menuItem.MenuItemContent);
     //menuItems.push(menuItem);
@@ -1333,4 +1341,10 @@ function buildSuburbsSelectionHtml() {
             s += "&nbsp;";
         }
         return s;
+    }
+
+    function buildListsMenu() {
+        var div = $("<div class='contentdiv' id='listsDiv' style='display:none' />");
+        div.empty();
+        return div;
     }

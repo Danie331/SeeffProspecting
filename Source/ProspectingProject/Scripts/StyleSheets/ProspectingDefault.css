@@ -449,3 +449,11 @@ input.agentNamesAutoCompleteSearchBox:focus
 .center-cell {
     text-align:center;
 }
+
+.cell-reorder {
+       cursor: move;
+      background: url("../3rdParty/SlickGrid/images/drag-handle.png") no-repeat center center;
+}
+.slick-selected-column {
+    text-align: center;
+}

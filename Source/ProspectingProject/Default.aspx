@@ -50,10 +50,12 @@
     <script src="Scripts/3rdParty/waitForImage.js"></script>
     <script src="Scripts/3rdParty/jqueryBlockUI.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/lib/jquery.event.drag-2.2.js"></script>
+    <script src="Scripts/3rdParty/SlickGrid/lib/jquery.event.drop-2.2.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/slick.core.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/slick.grid.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/slick.dataview.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/plugins/slick.rowselectionmodel.js"></script>
+    <script src="Scripts/3rdParty/SlickGrid/plugins/slick.rowmovemanager.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/slick.editors.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/plugins/slick.autotooltips.js"></script>
     <%-- END_SECTION:3RD_PARTY_SCRIPTS --%>
