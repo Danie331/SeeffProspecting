@@ -47,6 +47,7 @@ namespace SeeffProspectingAuthService
                                       CommunicationEnabled = user.prospecting_communication,
                                       BusinessUnitID = businessUnitID,
                                       TrustLookupsEnabled = user.trust_lookup,
+                                      BranchID = user.branch_id 
                                   }).FirstOrDefault();
 
                 return userRecord;

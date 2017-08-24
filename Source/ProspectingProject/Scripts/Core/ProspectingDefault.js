@@ -60,7 +60,7 @@ function initEventHandlers() {
             if (prospectingContext.UserHasCommAccess) {
                 if (rightClickedProperty.Prospected) {
                     items["New SMS Message"] = { name: "New SMS Message", icon: "new_sms_message" };
-                    items["New Email Message"] = { name: "New Email Message", icon: "new_email_message" };
+                    //items["New Email Message"] = { name: "New Email Message", icon: "new_email_message" };
                 }
             }
             return {

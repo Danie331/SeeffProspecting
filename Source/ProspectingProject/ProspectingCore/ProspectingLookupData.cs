@@ -30,6 +30,8 @@ namespace ProspectingProject
         public static List<KeyValuePair<int, string>> SystemActivityTypes { get; set; }
         public static List<KeyValuePair<int, string>> ActivityFollowupTypes { get; set; }
         public static List<KeyValuePair<int, string>> CommunicationStatusTypes { get; set; }
+        public static List<KeyValuePair<int, string>> ContactListUserTypes { get; set; }
+        public static List<KeyValuePair<int, string>> ContactListSystemTypes { get; set; }
 
         public static IEnumerable<int> PhoneTypeIds { get; private set; }
         public static IEnumerable<int> EmailTypeIds { get; private set; }
@@ -54,6 +56,7 @@ namespace ProspectingProject
             LoadSystemActivityTypes();
             LoadActivityFollowupTypes();
             LoadCommunicationStatusTypes();
+            LoadContactListTypes();
 
             PhoneTypeIds = ProspectingLookupData.ContactPhoneTypes.Select(k => k.Key);
             EmailTypeIds = ProspectingLookupData.ContactEmailTypes.Select(k => k.Key);
@@ -161,6 +164,15 @@ namespace ProspectingProject
                                                                              IntDialingCode = det.intl_dialing_code_id,
                                                                              EleventhDigit = det.eleventh_digit
                                                                          }));
+        }
+
+        private static void LoadContactListTypes()
+        {
+            using (var clientDB = new clientEntities())
+            {
+                ContactListUserTypes = (from n in (from item in clientDB.list_type where !item.is_system_type select item).ToList() select new KeyValuePair<int, string>(n.pk_list_type_id, n.type_description)).ToList();
+                ContactListSystemTypes = (from n in (from item in clientDB.list_type where item.is_system_type select item).ToList() select new KeyValuePair<int, string>(n.pk_list_type_id, n.type_description)).ToList();
+            }
         }
 
         private static void LoadSystemActivityTypes()

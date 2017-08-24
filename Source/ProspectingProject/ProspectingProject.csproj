@@ -747,6 +747,7 @@
     <Content Include="Assets\hedonic_data.png" />
     <Content Include="Assets\item_template.png" />
     <Content Include="Assets\lightstone.png" />
+    <Content Include="Assets\lists.png" />
     <Content Include="Assets\log_off.png" />
     <Content Include="Assets\make_primary_contact.png" />
     <Content Include="Assets\mandate_info.png" />
@@ -782,6 +783,16 @@
     <Content Include="Assets\validate_id.png" />
     <Content Include="Assets\valuations_history.png" />
     <Content Include="Assets\view_btn.png" />
+    <Content Include="client.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>client.edmx</DependentUpon>
+      <LastGenOutput>client.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="client.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>client.edmx</DependentUpon>
+      <LastGenOutput>client.cs</LastGenOutput>
+    </Content>
     <Content Include="Database scripts\boss.sql" />
     <Content Include="Database scripts\change_of_ownership.sql" />
     <Content Include="Database scripts\prospecting_property_contact_details_stats.sql" />
@@ -1159,6 +1170,7 @@
     <Content Include="Scripts\Core\ComboSelect.js" />
     <Content Include="Scripts\Core\CommReports.js" />
     <Content Include="Scripts\Core\CommunicationTemplates.js" />
+    <Content Include="Scripts\Core\ContactListsManager.js" />
     <Content Include="Scripts\Core\DocumentVault.js" />
     <Content Include="Scripts\Core\DrawingMultiSelect.js" />
     <Content Include="Scripts\Core\Communication.js" />
@@ -1193,6 +1205,13 @@
     </EntityDeploy>
     <Content Include="ls_base.edmx.diagram">
       <DependentUpon>ls_base.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="client.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>client.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="client.edmx.diagram">
+      <DependentUpon>client.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\1.pubxml" />
     <None Include="Properties\PublishProfiles\2.pubxml" />
@@ -1307,6 +1326,24 @@
     <Compile Include="agency.cs">
       <DependentUpon>ls_base.tt</DependentUpon>
     </Compile>
+    <Compile Include="client.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>client.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="client.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>client.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="client_list.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1316,6 +1353,12 @@
     </Compile>
     <Compile Include="Exceptions\DuplicatePropertyRecordException.cs" />
     <Compile Include="Exceptions\UserSessionExpiredException.cs" />
+    <Compile Include="list.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="list_type.cs">
+      <DependentUpon>client.tt</DependentUpon>
+    </Compile>
     <Compile Include="LogOut.aspx.cs">
       <DependentUpon>LogOut.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1410,7 +1453,10 @@
     <Compile Include="Types\ActivitiesFollowupsFilterResponse.cs" />
     <Compile Include="Types\ActivitiesFollowupsPivotRow.cs" />
     <Compile Include="Types\ActivityBundle.cs" />
+    <Compile Include="Types\ContactList.cs" />
+    <Compile Include="Types\ContactListSelection.cs" />
     <Compile Include="Types\GeneratedIdentifier.cs" />
+    <Compile Include="Types\ListSelected.cs" />
     <Compile Include="Types\MandateLookupDataPacket.cs" />
     <Compile Include="Types\CommReportFilters.cs" />
     <Compile Include="Types\CommReportResults.cs" />
@@ -1442,6 +1488,7 @@
     <Compile Include="Types\MandateStatus.cs" />
     <Compile Include="Types\MandateType.cs" />
     <Compile Include="Types\MarketShareAgency.cs" />
+    <Compile Include="Types\MultiContactListSelection.cs" />
     <Compile Include="Types\NewMandateInputs.cs" />
     <Compile Include="Types\PropertyMandateAgency.cs" />
     <Compile Include="Types\PropertyProspectedStatus.cs" />

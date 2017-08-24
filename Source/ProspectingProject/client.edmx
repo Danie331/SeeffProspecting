@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="clientModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="client_list">
+          <Key>
+            <PropertyRef Name="pk_client_list_id" />
+          </Key>
+          <Property Name="pk_client_list_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_client_id" Type="int" Nullable="false" />
+          <Property Name="fk_list_id" Type="int" Nullable="false" />
+          <Property Name="fk_created_by_user_id" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+          <Property Name="updated_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="list">
+          <Key>
+            <PropertyRef Name="pk_list_id" />
+          </Key>
+          <Property Name="pk_list_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="list_name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="fk_list_type_id" Type="int" Nullable="false" />
+          <Property Name="fk_branch_id" Type="int" Nullable="false" />
+          <Property Name="fk_created_by_user_id" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+          <Property Name="updated_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="list_type">
+          <Key>
+            <PropertyRef Name="pk_list_type_id" />
+          </Key>
+          <Property Name="pk_list_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type_description" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="is_system_type" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__client_li__fk_li__4B19CDBD">
+          <End Role="list" Type="Self.list" Multiplicity="1" />
+          <End Role="client_list" Type="Self.client_list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="list">
+              <PropertyRef Name="pk_list_id" />
+            </Principal>
+            <Dependent Role="client_list">
+              <PropertyRef Name="fk_list_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__list__fk_list_ty__47493CD9">
+          <End Role="list_type" Type="Self.list_type" Multiplicity="1" />
+          <End Role="list" Type="Self.list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="list_type">
+              <PropertyRef Name="pk_list_type_id" />
+            </Principal>
+            <Dependent Role="list">
+              <PropertyRef Name="fk_list_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="clientModelStoreContainer">
+          <EntitySet Name="client_list" EntityType="Self.client_list" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="list" EntityType="Self.list" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="list_type" EntityType="Self.list_type" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__client_li__fk_li__4B19CDBD" Association="Self.FK__client_li__fk_li__4B19CDBD">
+            <End Role="list" EntitySet="list" />
+            <End Role="client_list" EntitySet="client_list" />
+          </AssociationSet>
+          <AssociationSet Name="FK__list__fk_list_ty__47493CD9" Association="Self.FK__list__fk_list_ty__47493CD9">
+            <End Role="list_type" EntitySet="list_type" />
+            <End Role="list" EntitySet="list" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="clientModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="clientEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="list" EntityType="clientModel.list" />
+          <EntitySet Name="list_type" EntityType="clientModel.list_type" />
+          <AssociationSet Name="FK__list__fk_list_ty__47493CD9" Association="clientModel.FK__list__fk_list_ty__47493CD9">
+            <End Role="list_type" EntitySet="list_type" />
+            <End Role="list" EntitySet="list" />
+          </AssociationSet>
+          <EntitySet Name="client_list" EntityType="clientModel.client_list" />
+          <AssociationSet Name="FK__client_li__fk_li__4B19CDBD" Association="clientModel.FK__client_li__fk_li__4B19CDBD">
+            <End Role="list" EntitySet="list" />
+            <End Role="client_list" EntitySet="client_list" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="list">
+          <Key>
+            <PropertyRef Name="pk_list_id" />
+          </Key>
+          <Property Name="pk_list_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="list_name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="fk_list_type_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_branch_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_created_by_user_id" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="updated_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="list_type" Relationship="clientModel.FK__list__fk_list_ty__47493CD9" FromRole="list" ToRole="list_type" />
+          <NavigationProperty Name="client_list" Relationship="clientModel.FK__client_li__fk_li__4B19CDBD" FromRole="list" ToRole="client_list" />
+        </EntityType>
+        <EntityType Name="list_type">
+          <Key>
+            <PropertyRef Name="pk_list_type_id" />
+          </Key>
+          <Property Name="pk_list_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_description" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="is_system_type" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="list" Relationship="clientModel.FK__list__fk_list_ty__47493CD9" FromRole="list_type" ToRole="list" />
+        </EntityType>
+        <Association Name="FK__list__fk_list_ty__47493CD9">
+          <End Type="clientModel.list_type" Role="list_type" Multiplicity="1" />
+          <End Type="clientModel.list" Role="list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="list_type">
+              <PropertyRef Name="pk_list_type_id" />
+            </Principal>
+            <Dependent Role="list">
+              <PropertyRef Name="fk_list_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="client_list">
+          <Key>
+            <PropertyRef Name="pk_client_list_id" />
+          </Key>
+          <Property Name="pk_client_list_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_client_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_list_id" Type="Int32" Nullable="false" />
+          <Property Name="fk_created_by_user_id" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="updated_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="list" Relationship="clientModel.FK__client_li__fk_li__4B19CDBD" FromRole="client_list" ToRole="list" />
+        </EntityType>
+        <Association Name="FK__client_li__fk_li__4B19CDBD">
+          <End Type="clientModel.list" Role="list" Multiplicity="1" />
+          <End Type="clientModel.client_list" Role="client_list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="list">
+              <PropertyRef Name="pk_list_id" />
+            </Principal>
+            <Dependent Role="client_list">
+              <PropertyRef Name="fk_list_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="clientModelStoreContainer" CdmEntityContainer="clientEntities">
+          <EntitySetMapping Name="list">
+            <EntityTypeMapping TypeName="clientModel.list">
+              <MappingFragment StoreEntitySet="list">
+                <ScalarProperty Name="updated_date" ColumnName="updated_date" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="fk_created_by_user_id" ColumnName="fk_created_by_user_id" />
+                <ScalarProperty Name="fk_branch_id" ColumnName="fk_branch_id" />
+                <ScalarProperty Name="fk_list_type_id" ColumnName="fk_list_type_id" />
+                <ScalarProperty Name="list_name" ColumnName="list_name" />
+                <ScalarProperty Name="pk_list_id" ColumnName="pk_list_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="list_type">
+            <EntityTypeMapping TypeName="clientModel.list_type">
+              <MappingFragment StoreEntitySet="list_type">
+                <ScalarProperty Name="is_system_type" ColumnName="is_system_type" />
+                <ScalarProperty Name="type_description" ColumnName="type_description" />
+                <ScalarProperty Name="pk_list_type_id" ColumnName="pk_list_type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_list">
+            <EntityTypeMapping TypeName="clientModel.client_list">
+              <MappingFragment StoreEntitySet="client_list">
+                <ScalarProperty Name="updated_date" ColumnName="updated_date" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="fk_created_by_user_id" ColumnName="fk_created_by_user_id" />
+                <ScalarProperty Name="fk_list_id" ColumnName="fk_list_id" />
+                <ScalarProperty Name="fk_client_id" ColumnName="fk_client_id" />
+                <ScalarProperty Name="pk_client_list_id" ColumnName="pk_client_list_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -81,7 +81,7 @@ namespace ProspectingTaskScheduler.App_Start
             RecurringJob.AddOrUpdate("IIS app pool up and running", () => StatusNotifier.SendHealthStatusEmail(), Cron.Daily(7));
 
             // Spatial tasks
-            RecurringJob.AddOrUpdate("Reindexing Suburbs", () => SuburbMaintenance.ReindexSuburbsRequiringMaintenance(), Cron.Minutely);
+            RecurringJob.AddOrUpdate("Reindexing Suburbs", () => SuburbMaintenance.ReindexSuburbsRequiringMaintenance(), Cron.MinuteInterval(20));
 
 
             RecurringJob.AddOrUpdate("Lightstone base_data take-on", () => LightstoneTakeOn.PerformBaseDataTakeOn(), Cron.Daily(23, 15), TimeZoneInfo.Local);

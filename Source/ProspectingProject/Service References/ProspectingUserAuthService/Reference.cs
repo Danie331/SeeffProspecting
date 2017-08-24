@@ -29,6 +29,9 @@ namespace ProspectingProject.ProspectingUserAuthService {
         private decimal AvailableCreditField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int BranchIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> BusinessUnitIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -93,6 +96,19 @@ namespace ProspectingProject.ProspectingUserAuthService {
                 if ((this.AvailableCreditField.Equals(value) != true)) {
                     this.AvailableCreditField = value;
                     this.RaisePropertyChanged("AvailableCredit");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int BranchID {
+            get {
+                return this.BranchIDField;
+            }
+            set {
+                if ((this.BranchIDField.Equals(value) != true)) {
+                    this.BranchIDField = value;
+                    this.RaisePropertyChanged("BranchID");
                 }
             }
         }

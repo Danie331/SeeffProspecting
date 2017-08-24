@@ -78,7 +78,7 @@ function addMarkerToSelection(marker, mustTriggerUpdate, addOnlyThisUnit, fromFi
         }
     }
     else {
-        if (marker.ProspectingProperty.Prospected && marker.ProspectingProperty.LatestRegDateForUpdate == null) {
+        if (/*marker.ProspectingProperty.Prospected && */marker.ProspectingProperty.LatestRegDateForUpdate == null) {
             if (fromFilter == false || (fromFilter == true && marker.ProspectingProperty.Whence == 'from_filter')) {
                 flagMarkerSelected(marker, true);
                 marker.setIcon(getIconForMarker(marker));

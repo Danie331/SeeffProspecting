@@ -36,5 +36,6 @@ namespace ProspectingProject
         public List<KeyValuePair<int, string>> ActivityTypes { get; internal set; }
 
         public bool IsTrainingMode { get; set; }
+        public int BranchID { get; internal set; }
     }
 }

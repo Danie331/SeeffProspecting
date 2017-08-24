@@ -444,3 +444,8 @@ input.agentNamesAutoCompleteSearchBox:focus
     overflow-x: hidden; /* add padding to account for vertical scrollbar */
 }
 .ui-helper-hidden-accessible { display:none !important; }
+
+/* Slickgrid (Lists) */
+.center-cell {
+    text-align:center;
+}

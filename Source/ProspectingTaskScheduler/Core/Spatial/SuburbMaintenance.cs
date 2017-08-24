@@ -11,7 +11,7 @@ namespace ProspectingTaskScheduler.Core.Spatial
     {
         public static void ReindexSuburbsRequiringMaintenance()
         {
-            if (DateTime.Now.Hour >= 2 && DateTime.Now.Hour < 6)
+            if (DateTime.Now.Hour >= 1 && DateTime.Now.Hour < 6)
             {
                 try
                 {

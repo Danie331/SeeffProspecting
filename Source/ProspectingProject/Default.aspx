@@ -35,7 +35,7 @@
      <link href="Scripts/StyleSheets/ProspectingDefault.css" rel="stylesheet" />
      <link href="Scripts/StyleSheets/ContentExpanderWidgetStyles.css" rel="stylesheet" />
      <link href="Scripts/StyleSheets/ContactDetailsEditorWidgetStyles.css" rel="stylesheet" />
-    <link href="Scripts/StyleSheets/ComboSelect.css" rel="stylesheet" />
+    <link href="Scripts/StyleSheets/ComboSelect.css" rel="stylesheet" />    
      <%-- END_SECTION:CORE_STYLESHEETS --%>     
     <%-- END_SECTION:STYLESHEETS --%>
 
@@ -74,6 +74,7 @@
     <script src="Scripts/Core/DrawingMultiSelect.js"></script>
     <script src="Scripts/Core/AppStart.js"></script>
     <script src="Scripts/Core/ComboSelect.js"></script>
+    <script src="Scripts/Core/ContactListsManager.js"></script>
      <%-- END_SECTION:CORE_SCRIPTS --%>
     <%-- END_SECTION:JAVASCRIPT --%>
 

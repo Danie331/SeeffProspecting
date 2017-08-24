@@ -40,16 +40,16 @@ function ContactDetailsEditorWidget(containerElementId, arrayOfPhoneNumberObject
                     emailSectionAvailable = false;
                 }
                 if (currentPersonContact.EmailContactabilityStatus == 3) {
-                    optInStatusSection.append('<label style="color:red;display:inline-block">An email has been sent to this contact requesting permission to communicate</label>');
-                    addEmailButtons = false;
+                    //optInStatusSection.append('<label style="color:red;display:inline-block">An email has been sent to this contact requesting permission to communicate</label>');
+                    //addEmailButtons = false;
                 }
                 if (_emailAddresses && _emailAddresses.length) {
                     if (currentPersonContact.EmailContactabilityStatus == 4) {
-                        var sendOptInRequestLabel = $('<label style="color:red;display:block">This contact must provide consent for communication via email. Use the button below to send them an email requesting permission to communicate</label>');
-                        var optInRequestBtn = $("<input type='button' id='sendOptInRequestBtn' value='Send Opt-in Request' style='display:block;cursor:pointer;' />");
-                        var optInRequestContainer = $('<div />').append(sendOptInRequestLabel).append(optInRequestBtn);
-                        optInStatusSection.append(optInRequestContainer);
-                        optInRequestBtn.click(sendOptInRequest);
+                        //var sendOptInRequestLabel = $('<label style="color:red;display:block">This contact must provide consent for communication via email. Use the button below to send them an email requesting permission to communicate</label>');
+                        //var optInRequestBtn = $("<input type='button' id='sendOptInRequestBtn' value='Send Opt-in Request' style='display:block;cursor:pointer;' />");
+                        //var optInRequestContainer = $('<div />').append(sendOptInRequestLabel).append(optInRequestBtn);
+                        //optInStatusSection.append(optInRequestContainer);
+                        //optInRequestBtn.click(sendOptInRequest);
                     }
                 }
             }

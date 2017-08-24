@@ -888,7 +888,8 @@ namespace ProspectingProject
                     BusinessUnitID = userAuthPacket.BusinessUnitID,
                     TrustLookupsEnabled = userAuthPacket.TrustLookupsEnabled,
                     ActivityTypes = ProspectingLookupData.ActivityTypes,
-                    ActivityFollowupTypes = ProspectingLookupData.ActivityFollowupTypes
+                    ActivityFollowupTypes = ProspectingLookupData.ActivityFollowupTypes,
+                    BranchID = userAuthPacket.BranchID
                 };
 
                 return userPacket;
@@ -2985,6 +2986,99 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
             return results;
         }
 
+        public static List<ProspectingContactPerson> LoadContacts(int[] inputProperties)
+        {
+            List<ProspectingContactPerson> results = new List<ProspectingContactPerson>();
+            using (var prospecting = new ProspectingDataContext())
+            {
+                string params_ = (from n in inputProperties select n.ToString()).Aggregate((s1, s2) => s1 + "," + s2);
+                var queryResults = prospecting.ExecuteQuery<FlattenedPropertyRecord>(@"SELECT        pp.prospecting_property_id, pp.lightstone_property_id, pp.latitude, pp.longitude, pp.property_address, pp.street_or_unit_no, pp.seeff_area_id, pp.lightstone_id_or_ck_no, pp.lightstone_reg_date, pp.erf_no, 
+                         pp.comments, pp.ss_name, pp.ss_number, pp.ss_id, pp.unit, pp.ss_door_number, pp.last_purch_price, pp.prospected, pp.farm_name, pp.portion_no, pp.lightstone_suburb, pp.ss_fh, pp.ss_unique_identifier, 
+                         pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays,
+                         pp.has_cell, pp.has_primary_cell, pp.has_email, pp.has_primary_email, pp.has_landline, pp.has_primary_landline, pcp.contact_person_id, 
+                         ppr.relationship_to_property, NULL AS 'relationship_to_company', NULL AS 'contact_company_id', pcp.firstname, pcp.surname, pcp.id_number, pcp.person_title, pcp.person_gender, pcp.comments_notes, 
+                         pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.do_not_contact, pcp.email_contactability_status, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
+                         pcp.physical_address, pcp.home_ownership, pcp.marital_status, pcp.location
+FROM            prospecting_property AS pp LEFT OUTER JOIN
+                         prospecting_person_property_relationship AS ppr ON pp.prospecting_property_id = ppr.prospecting_property_id LEFT OUTER JOIN
+                         prospecting_contact_person AS pcp ON pcp.contact_person_id = ppr.contact_person_id
+WHERE        (pp.prospecting_property_id IN (" + params_ + @"))
+UNION ALL
+SELECT        pp.prospecting_property_id, pp.lightstone_property_id, pp.latitude, pp.longitude, pp.property_address, pp.street_or_unit_no, pp.seeff_area_id, pp.lightstone_id_or_ck_no, pp.lightstone_reg_date, pp.erf_no, 
+                         pp.comments, pp.ss_name, pp.ss_number, pp.ss_id, pp.unit, pp.ss_door_number, pp.last_purch_price, pp.prospected, pp.farm_name, pp.portion_no, pp.lightstone_suburb, pp.ss_fh, pp.ss_unique_identifier, 
+                         pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays,
+                         pp.has_cell, pp.has_primary_cell, pp.has_email, pp.has_primary_email, pp.has_landline, pp.has_primary_landline, pcp.contact_person_id, NULL 
+                         AS 'relationship_to_property', ppcr.relationship_to_company, ppcr.contact_company_id, pcp.firstname, pcp.surname, pcp.id_number, pcp.person_title, pcp.person_gender, pcp.comments_notes, 
+                         pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.do_not_contact, pcp.email_contactability_status, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
+                         pcp.physical_address, pcp.home_ownership, pcp.marital_status, pcp.location
+FROM            prospecting_property AS pp LEFT OUTER JOIN
+                         prospecting_company_property_relationship AS cpr ON pp.prospecting_property_id = cpr.prospecting_property_id LEFT OUTER JOIN
+                         prospecting_person_company_relationship AS ppcr ON ppcr.contact_company_id = cpr.contact_company_id LEFT OUTER JOIN
+                         prospecting_contact_person AS pcp ON pcp.contact_person_id = ppcr.contact_person_id
+WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] { });
+
+                var propertyGroupings = queryResults.GroupBy(fpr => fpr.lightstone_property_id);
+                foreach (var sameLightstoneIDGroup in propertyGroupings)
+                {
+                    var lightstoneProperty = sameLightstoneIDGroup.First();  
+                    // contacts grouping
+                    var contactsGroupings = sameLightstoneIDGroup.GroupBy(pp => pp.contact_person_id);
+                    List<ProspectingContactPerson> propertyContacts = new List<ProspectingContactPerson>();
+                    foreach (var sameContactPersonIdGroup in contactsGroupings)
+                    {
+                        if (sameContactPersonIdGroup.Key == null)
+                            continue;
+                        // Dealing with a single contact now
+                        var contactRecord = sameContactPersonIdGroup.First();
+                        List<KeyValuePair<int, int>> personPropertyrelationships = new List<KeyValuePair<int, int>>();
+                        if (contactRecord.relationship_to_property.HasValue)
+                        {
+                            personPropertyrelationships.Add(new KeyValuePair<int, int>(contactRecord.prospecting_property_id, contactRecord.relationship_to_property.Value));
+                        }
+                        var newContactPerson = new ProspectingContactPerson
+                        {
+                            ContactPersonId = contactRecord.contact_person_id,
+                            PersonPropertyRelationships = personPropertyrelationships,
+                            PersonCompanyRelationshipType = contactRecord.relationship_to_company,
+                            ContactCompanyId = contactRecord.contact_company_id,
+                            Firstname = contactRecord.firstname,
+                            Surname = contactRecord.surname,
+                            IdNumber = contactRecord.id_number,
+                            Title = contactRecord.person_title,
+                            Gender = contactRecord.person_gender,
+                            Comments = contactRecord.comments_notes,
+                            IsPOPIrestricted = contactRecord.is_popi_restricted.HasValue ? contactRecord.is_popi_restricted.Value : false,
+                            PropertiesOwned = null,
+                            EmailOptout = contactRecord.optout_emails.HasValue ? contactRecord.optout_emails.Value : false,
+                            SMSOptout = contactRecord.optout_sms.HasValue ? contactRecord.optout_sms.Value : false,
+                            DoNotContact = contactRecord.do_not_contact.HasValue ? contactRecord.do_not_contact.Value : false,
+                            EmailContactabilityStatus = contactRecord.email_contactability_status.HasValue ? contactRecord.email_contactability_status.Value : 1,
+
+                            TargetLightstonePropertyIdForComms = lightstoneProperty.lightstone_property_id,
+
+                            // Dracore fields
+                            AgeGroup = contactRecord.age_group,
+                            BureauAdverseIndicator = contactRecord.bureau_adverse_indicator,
+                            Citizenship = contactRecord.citizenship,
+                            DeceasedStatus = contactRecord.deceased_status,
+                            Directorship = contactRecord.directorship,
+                            Occupation = contactRecord.occupation,
+                            Employer = contactRecord.employer,
+                            PhysicalAddress = contactRecord.physical_address,
+                            HomeOwnership = contactRecord.home_ownership,
+                            MaritalStatus = contactRecord.marital_status,
+                            Location = contactRecord.location
+                        };
+           
+                        propertyContacts.Add(newContactPerson);
+                    }
+                    results.AddRange(propertyContacts);
+                }
+
+                return results;
+            }            
+        }
+
         public static List<ProspectingProperty> GetPropertiesTask(List<int> items)
         {
             using (var prospectingDB = new ProspectingDataContext())
@@ -4543,6 +4637,129 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
             mailContent.Append("</html>" + Environment.NewLine);
 
             return mailContent.ToString();
+        }
+
+        public static List<ContactList> RetrieveListsForBranch()
+        {
+            Func<int, KeyValuePair<int, string>> getListType = typeId =>
+            {
+                var target = ProspectingLookupData.ContactListUserTypes.FirstOrDefault(kvp => kvp.Key == typeId);
+                if (target.Equals(default(KeyValuePair<int, string>)))
+                {
+                    target = ProspectingLookupData.ContactListSystemTypes.First(kvp => kvp.Key == typeId);
+                }
+
+                return target;
+            };
+
+            Func<KeyValuePair<int, string>, string> getListTypeDesc = type => { return type.Value == "User defined" ? "User" : "System"; };
+
+            using (var clientDB = new clientEntities())
+                using (var prospecting =  new ProspectingDataContext())
+            {
+                var currentUser = RequestHandler.GetUserSessionObject();
+                var targetRecords = clientDB.list.Where(li => li.fk_branch_id == currentUser.BranchID).ToList();
+                List<ContactList> results = new List<ContactList>();
+                foreach (var item in targetRecords.OrderByDescending(lt => lt.fk_list_type_id))
+                {
+                    var listType = getListType(item.fk_list_type_id);
+                    var memberRecords = prospecting.contact_person_lists.Where(l => l.fk_list_id == item.pk_list_id).ToList();
+                    List<ProspectingContactPerson> members = new List<ProspectingContactPerson>();
+                    foreach (var memberRecord in memberRecords)
+                    {
+                        members.Add(new ProspectingContactPerson
+                        {
+                            ContactPersonId = memberRecord.contact_person_id
+                        });
+                    }
+                    results.Add(new ContactList
+                    {
+                        id = item.pk_list_id,
+                        ListId = item.pk_list_id,
+                        ListName = item.list_name,
+                        ListType = listType,
+                        ListTypeDescription = getListTypeDesc(listType),
+                        Members = members,
+                        MemberCount = members.Count
+                    });
+                }
+                return results;
+            }
+        }
+
+        public static object SaveListAllocationForContact(ContactListSelection listSelection)
+        {
+            var loggedInUser = RequestHandler.GetUserSessionObject();
+            using (var clientDB = new clientEntities())
+            using (var prospecting = new ProspectingDataContext())
+            {
+                var currentUser = RequestHandler.GetUserSessionObject();
+                var listsForUserBranch = clientDB.list.Where(li => li.fk_branch_id == currentUser.BranchID).Select(li => li.pk_list_id).ToList();
+
+                var targetsToRemove = prospecting.contact_person_lists.Where(cpl => cpl.contact_person_id == listSelection.ContactPersonId && listsForUserBranch.Contains(cpl.fk_list_id));
+                prospecting.contact_person_lists.DeleteAllOnSubmit(targetsToRemove);
+                prospecting.SubmitChanges();
+
+                var targetContactPerson = prospecting.prospecting_contact_persons.First(cp => cp.contact_person_id == listSelection.ContactPersonId);
+                foreach (var item in listSelection.ListAllocation)
+                {
+                    if (item.Selected)
+                    {
+                        var newListRecord = new contact_person_list
+                        {
+                            contact_person_id = listSelection.ContactPersonId,
+                            fk_list_id = item.ListId,
+                            prospecting_property_id = listSelection.TargetPropertyId,
+                            created_by = loggedInUser.UserGuid,
+                            created_date = DateTime.Now
+                        };
+                        prospecting.contact_person_lists.InsertOnSubmit(newListRecord);
+                        prospecting.SubmitChanges();
+                    }
+                }
+            }
+            return true;
+        }
+
+        public static object SaveSelectionToSelectedLists(MultiContactListSelection multiSelection)
+        {
+            using (var prospecting = new ProspectingDataContext())
+            {
+                var loggedInUser = RequestHandler.GetUserSessionObject();
+                List<ProspectingContactPerson> targets = new List<ProspectingContactPerson>();
+                if (multiSelection.TargetContactsList != null && multiSelection.TargetContactsList.Count > 0)
+                {
+                    targets = multiSelection.TargetContactsList;
+                }
+                else if (multiSelection.VisibleProperties != null && multiSelection.VisibleProperties.Count > 0)
+                {
+                    targets = LoadContacts(multiSelection.VisibleProperties.ToArray());
+                }
+
+                foreach (var list in multiSelection.SelectedLists)
+                {
+                    foreach (var contact in targets)
+                    {
+                        bool existingListAssociation = prospecting.contact_person_lists.Any(l => l.fk_list_id == list.ListId && l.contact_person_id == contact.ContactPersonId);
+                        if (!existingListAssociation)
+                        {
+                            int prospectingPropertyId = prospecting.prospecting_properties.First(pp => pp.lightstone_property_id == contact.TargetLightstonePropertyIdForComms).prospecting_property_id;
+                            var newListRecord = new contact_person_list
+                            {
+                                contact_person_id = contact.ContactPersonId.Value,
+                                fk_list_id = list.ListId,
+                                prospecting_property_id = prospectingPropertyId,
+                                created_by = loggedInUser.UserGuid,
+                                created_date = DateTime.Now
+                            };
+                            prospecting.contact_person_lists.InsertOnSubmit(newListRecord);
+                        }
+                    }
+                    prospecting.SubmitChanges();
+                }
+
+                return true;
+            }
         }
     }
 }

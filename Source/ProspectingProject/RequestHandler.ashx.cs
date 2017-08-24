@@ -240,6 +240,18 @@ namespace ProspectingProject
                         string requestStatus = SendOptInRequest(json);
                         context.Response.Write(requestStatus);
                         break;
+                    case "retrieve_lists_for_branch":
+                        string listsForBranch = RetrieveListsForBranch();
+                        context.Response.Write(listsForBranch);
+                        break;
+                    case "save_lists_for_contact":
+                        string listSaveResult = SaveListAllocationForContact(json);
+                        context.Response.Write(listSaveResult);
+                        break;
+                    case "save_lists_for_selection":
+                        string multiListSaveResult = SaveSelectionToSelectedLists(json);
+                        context.Response.Write(multiListSaveResult);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -272,6 +284,26 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string SaveSelectionToSelectedLists(string json)
+        {
+            var listSelection = ProspectingCore.Deserialise<MultiContactListSelection>(json);
+            var result = ProspectingCore.SaveSelectionToSelectedLists(listSelection);
+            return ProspectingCore.SerializeToJsonWithDefaults(result);
+        }
+
+        private string SaveListAllocationForContact(string json)
+        {
+            var listSelection = ProspectingCore.Deserialise<ContactListSelection>(json);
+            var result = ProspectingCore.SaveListAllocationForContact(listSelection);
+            return ProspectingCore.SerializeToJsonWithDefaults(result);
+        }
+
+        private string RetrieveListsForBranch()
+        {
+            var listsForBranch = ProspectingCore.RetrieveListsForBranch();
+            return ProspectingCore.SerializeToJsonWithDefaults(listsForBranch);
         }
 
         private string SendOptInRequest(string json)

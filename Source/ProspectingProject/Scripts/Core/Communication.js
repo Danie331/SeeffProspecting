@@ -33,10 +33,15 @@ function buildCommunicationMenu() {
     var contactablesContentContainer = buildContactablesTable();
     var getInfoLabel = $("<label id='commGetInfoLabel' style='display:none'></label>");
 
-    var bottomContainer = $("<div id='commBottomDiv' style='display:none' />");
+    var smsPreviewDiv = $("<div id='smsPreviewDiv' style='display:none' />");
     var sendButton = $("<div id='commSendMessage' style='display:inline-block;float:right'><input type='button' id='commSendMessageBtn' value='Preview'  /></div>");
     sendButton.click(handleCommSendBtnClick);
-    bottomContainer.append(sendButton);
+    smsPreviewDiv.append(sendButton);
+
+    var listManagerContainer = $("<div id='listManagerContainer' />");
+    var toggleListManagerBtn = $("<button type='text' id='toggleListManagerFromComms' style='cursor:pointer;vertical-align:middle;;margin-top:10px'><img src='Assets/lists.png' style='vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>List Manager</label></button>");
+    toggleListManagerBtn.click(toggleListManager);
+    listManagerContainer.append(toggleListManagerBtn);
 
     var templatesDiv = $("<div id='templateOptionsDiv' style='display:none;width:100%' />");
     var templatesBtn = $("<input type='button' id='templatesBtn' value='Templates' />");
@@ -53,7 +58,7 @@ function buildCommunicationMenu() {
     var templateItemOptionsDiv = buildTemplateItemOptionsDiv();
     templatesDiv.append(templatesBtn).append(templatesMenu).append(templateItemOptionsDiv);
 
-    contentDiv.append(communicationBtn).append(menu).append(remainingCreditLabel).append("<p />").append(templatesDiv).append("<p />").append(messageContentContainer).append("<p />").append(contactablesContentContainer).append(getInfoLabel).append("<br />").append(bottomContainer).append("<p style='padding-bottom:10px' />");
+    contentDiv.append(communicationBtn).append(menu).append(remainingCreditLabel).append("<p />").append(templatesDiv).append("<p />").append(messageContentContainer).append("<p />").append(contactablesContentContainer).append(getInfoLabel).append("<br />").append(smsPreviewDiv).append(listManagerContainer).append("<p style='padding-bottom:10px' />");
 
     var multiSelectSticker = $("#multiSelectMode");
     var mapControl = map.controls[google.maps.ControlPosition.TOP_RIGHT];
@@ -120,7 +125,7 @@ function selectAllSuburbsRadioBtn() {
     commCustomSelectionEnabled = false;
     removeMarkersFromSelection();
     $("#commGetInfoLabel").css('display', 'block').text("The communication will be sent to relevant contacts across all your available suburbs, who have a default contact value");
-    $("#commBottomDiv").css('display', 'block');
+    $("#smsPreviewDiv").css('display', 'block');
 }
 
 function deselectAllSuburbsRadioBtn() {
@@ -128,7 +133,7 @@ function deselectAllSuburbsRadioBtn() {
     $('#commAllSuburbsRadioBtn').prop('checked', false);
     commCustomSelectionEnabled = true;
     $("#commGetInfoLabel").text("");
-    $("#commBottomDiv").css('display', 'none');
+    $("#smsPreviewDiv").css('display', 'none');
 }
 
 function selectCurrentSuburbRadioBtn() {
@@ -137,7 +142,7 @@ function selectCurrentSuburbRadioBtn() {
     commCustomSelectionEnabled = false;
     removeMarkersFromSelection();
     $("#commGetInfoLabel").css('display', 'block').text("The communication will be sent to relevant contacts in your current suburb, who have a default contact value");
-    $("#commBottomDiv").css('display', 'block');
+    $("#smsPreviewDiv").css('display', 'block');
 }
 
 function deselectCurrentSuburbRadioBtn() {
@@ -145,7 +150,7 @@ function deselectCurrentSuburbRadioBtn() {
     $('#commCurrentSuburbRadioBtn').prop('checked', false);
     commCustomSelectionEnabled = true;
     $("#commGetInfoLabel").text("");
-    $("#commBottomDiv").css('display', 'none');
+    $("#smsPreviewDiv").css('display', 'none');
 }
 
 function buildTemplateItems() {
@@ -182,8 +187,10 @@ function buildCommunicationMenuItems() {
     var smsMessage = buildCommMenuItem("comm_menu_sms", buildSMSMenuItemContent(), handleSMSMessageClick);
     menu.append(smsMessage);
 
-    var emailMessage = buildCommMenuItem("comm_menu_email", buildEmailMenuItemContent(), handleEmailMessageClick);
-    menu.append(emailMessage);
+    //var emailMessage = buildCommMenuItem("comm_menu_email", buildEmailMenuItemContent(), handleEmailMessageClick);
+    //menu.append(emailMessage);
+    var addToListUtility = buildCommMenuItem("comm_menu_lists", buildAddToListMenuItemContent(), handleAddToListClick);
+    menu.append(addToListUtility);
     
     if (communicationsMode == "SMS") {
         var separator = buildCommMenuItem("separator", "-----------------------------------------", null);
@@ -316,6 +323,15 @@ function buildEmailMenuItemContent() {
     return container.append(iconDiv).append(textDiv);
 }
 
+function buildAddToListMenuItemContent() {
+    var container = $("<div />");
+    var iconDiv = $("<div style='display:inline-block;float:left'/>");
+    iconDiv.append("<img src='Assets/lists.png' />");
+    var textDiv = $("<div style='display:inline-block;padding-left:22px' />").append("Add Contacts To List");
+
+    return container.append(iconDiv).append(textDiv);
+}
+
 function buildSMSContentContainer() {
     var contentContainer = $("<div />");
 
@@ -364,6 +380,33 @@ function buildSMSContentContainer() {
     });
 
     return contentContainer;
+}
+
+function buildAddToListContent() {
+    var container = $("<div />");
+    var header = $("<span>Use this feature to add contacts to your lists. You may use the shape selection tool to select contacts manually or add all contacts from the visible properties in the current suburb.</span>");
+    container.append(header);
+
+    var currentSuburbOption = $("<label id='addCurrentSuburbToListCheckbox'><input type='checkbox' style='vertical-align:middle' />Use contacts from all visible properties in this suburb</label>");
+    if (!currentSuburb) {
+        currentSuburbOption.css('display', 'none');
+    }
+    container.append('<p />').append(currentSuburbOption);
+    currentSuburbOption.unbind('change').bind('change', function () {
+        var listManagerContainer = $("#listManagerContainer");
+        if ($(this).find('input').is(':checked')) {
+            listManagerContainer.css('display', 'block');
+            $("#contactablesContentContainer").css('display', 'none');
+        } else {
+            var commSelectedRows = $('#commContactsTable tr.rowSelected');
+            if (!commSelectedRows.length) {
+                listManagerContainer.css('display', 'none');
+            }
+            $("#contactablesContentContainer").css('display', 'block');
+        }
+    });
+
+    return container;
 }
 
 function buildEmailContentContainer() {
@@ -763,6 +806,22 @@ function handleEmailMessageClick() {
     selectedTemplateActivityTypeId = null;
 }
 
+function handleAddToListClick() {
+    uploadedFiles.length = 0;
+    communicationsMode = "LISTS";
+    $("#templateOptionsDiv").css('display', 'none');
+    var container = $("#messageContentContainer");
+    container.empty();
+    var templateContainer = $("#templateItemOptionsDiv");
+    templateContainer.empty();
+    container.append(buildAddToListContent());
+
+    updateCommunicationsContacts();
+
+    commCustomSelectionEnabled = true;
+    selectedTemplateActivityTypeId = null;
+}
+
 function handleEnableComms() {
     // you are about to enter comms..restart if made changes/edits. + when re-prospecting warn existing contact will be removed (create acticvity with primary contact details).
     // And of course the suburb selection screen.
@@ -782,6 +841,11 @@ function handleEnableComms() {
         commWarningMessageShown = true;
     }
 
+    if (communicationsMode == "LISTS") {
+        $("#messageContentContainer").empty();
+        communicationsMode = null;
+    } 
+
     toggleMultiSelectMode(true);
     toggleFilterMode(false); // Change here
 }
@@ -789,8 +853,10 @@ function handleEnableComms() {
 function updateCommunicationsContacts() {
     var commGetInfoLabel = $("#commGetInfoLabel");
     commGetInfoLabel.css('display', 'none');
-    var commBottomDiv = $("#commBottomDiv");
-    commBottomDiv.css('display', 'none');
+    var smsPreviewDiv = $("#smsPreviewDiv");
+    smsPreviewDiv.css('display', 'none');
+    var listManagerContainer = $("#listManagerContainer");
+    listManagerContainer.css('display', 'none');
     var commCostOfBatch = $('#commCostOfBatch');
     commCostOfBatch.css('display', 'none');
 
@@ -799,12 +865,15 @@ function updateCommunicationsContacts() {
         getContactsFromSelectedMarkers(function (contacts) {
             if (contacts.length) {
                 contactsContainer.css('display', 'block');
+                $("#addCurrentSuburbToListCheckbox").find('input').prop('checked', false);
                 buildContactsBody(contacts, true);
 
                 if (communicationsMode == "SMS") {
                     updateCostOfBatchSMS();
+                    smsPreviewDiv.css('display', 'block');
+                } else if (communicationsMode == "LISTS") {
+                    listManagerContainer.css('display', 'block');
                 }
-                commBottomDiv.css('display', 'block');
             } else {
                 contactsContainer.css('display', 'none');
                 if (communicationsMode == "SMS") {
@@ -813,13 +882,16 @@ function updateCommunicationsContacts() {
                 if (communicationsMode == "EMAIL") {
                     commGetInfoLabel.text("Select properties with contacts who have an email address.");
                 }
+                if (communicationsMode == "LISTS") {
+                    commGetInfoLabel.text("Select properties with contacts.");
+                }
                 commGetInfoLabel.css('display', 'block');
             }
         }); //display a message saying "please select contacts with an email" or  "mobile number". NB also CHECK for AND USE only cell numbers
     }
     else {
         if (currentOrAllSuburbsSelected()) {
-            commBottomDiv.css('display', 'block');
+            smsPreviewDiv.css('display', 'block');
         }
         var commContactsTable = $("#commContactsTable");
         commContactsTable.find("tr").remove();
@@ -871,33 +943,37 @@ function buildContactsBody(contacts, selectCells) {
 
         var contactDetailContent, contactDetailTitle = '', actionStatus = 'Ready';
         var rowIsSelected = 'checked';
-        if (c.EmailSubmitted) {
-            actionStatus = 'Submitted';
-        }
-        if (c.SmsSubmitted) {
-            actionStatus = 'Submitted';
-        }
-        if (c.SendError) {
-            actionStatus = 'Error';
-        }
-        if (c.IsPOPIrestricted) {
-            actionStatus = 'Opt out';
-        }
-        if (c.SMSOptout && communicationsMode == "SMS") {
-            actionStatus = 'Opt out';
-        }
-        if (c.EmailOptout && communicationsMode == "EMAIL") {
-            actionStatus = 'Opt out';
-        }
-        // c.EmailContactabilityStatus == 1 || c.EmailContactabilityStatus == 3 || c.EmailContactabilityStatus == 4
-        if (c.EmailContactabilityStatus == 1 && communicationsMode == "EMAIL") {
-            actionStatus = 'Opt out';
-        }
-        if (c.EmailContactabilityStatus == 3 && communicationsMode == "EMAIL") {
-            actionStatus = 'None - opt-in request pending';
-        }
-        if (c.EmailContactabilityStatus == 4 && communicationsMode == "EMAIL") {
-            actionStatus = 'None - send opt-in request';
+        if (communicationsMode != "LISTS") {
+            if (c.EmailSubmitted) {
+                actionStatus = 'Submitted';
+            }
+            if (c.SmsSubmitted) {
+                actionStatus = 'Submitted';
+            }
+            if (c.SendError) {
+                actionStatus = 'Error';
+            }
+            if (c.IsPOPIrestricted) {
+                actionStatus = 'Opt out';
+            }
+            if (c.SMSOptout && communicationsMode == "SMS") {
+                actionStatus = 'Opt out';
+            }
+            if (c.EmailOptout && communicationsMode == "EMAIL") {
+                actionStatus = 'Opt out';
+            }
+            // c.EmailContactabilityStatus == 1 || c.EmailContactabilityStatus == 3 || c.EmailContactabilityStatus == 4
+            if (c.EmailContactabilityStatus == 1 && communicationsMode == "EMAIL") {
+                actionStatus = 'Opt out';
+            }
+            if (c.EmailContactabilityStatus == 3 && communicationsMode == "EMAIL") {
+                actionStatus = 'None - opt-in request pending';
+            }
+            if (c.EmailContactabilityStatus == 4 && communicationsMode == "EMAIL") {
+                actionStatus = 'None - send opt-in request';
+            }
+        } else {
+            actionStatus = 'Add to list';
         }
         if (communicationsMode == "SMS") {
             // Find a cell nr marked as the default
@@ -968,9 +1044,9 @@ function buildContactsBody(contacts, selectCells) {
                 actionStatus = 'No default';
                 tr.css('background-color', '#FFEB99');
             }
-        } else {
+        } else if (communicationsMode == "LISTS") {
             var defaultEmail;
-            var allEmails = c.EmailAddresses;
+            var allEmails = c.EmailAddresses ? c.EmailAddresses : [];
             if (allEmails.length == 1) {
                 defaultEmail = allEmails[0];
             } else {
@@ -982,18 +1058,18 @@ function buildContactsBody(contacts, selectCells) {
                 contactDetailContent = defaultEmail.ItemContent;
                 contactDetailTitle = contactDetailContent;
 
-                rowIsSelected = uniqueItems.indexOf(defaultEmail.ItemContent) > -1 ? '' : 'checked';
-                uniqueItems.push(defaultEmail.ItemContent);
+                //rowIsSelected = uniqueItems.indexOf(defaultEmail.ItemContent) > -1 ? '' : 'checked';
+                //uniqueItems.push(defaultEmail.ItemContent);
 
-                if (c.EmailSubmitted) {
-                    rowIsSelected = '';
-                    tr.css('background-color', 'lightgreen');
-                }
-                if (c.SendError) {
-                    tr.css('background-color', '#CC0000');
-                }
+                //if (c.EmailSubmitted) {
+                //    rowIsSelected = '';
+                //    tr.css('background-color', 'lightgreen');
+                //}
+                //if (c.SendError) {
+                //    tr.css('background-color', '#CC0000');
+                //}
             } else {
-                tr.addClass('noDefault');
+                //tr.addClass('noDefault');
                 var emailSelectCombo = $("<select id='comm_default_email_select_" + rowId + "' style='width:95%' />");
                 emailSelectCombo.append("<option value='-1'></option>");
                 $.each(allEmails, function (idx2, email) {
@@ -1017,19 +1093,19 @@ function buildContactsBody(contacts, selectCells) {
                             })[0];
                             primaryEmail.IsPrimary = true;
                             actionStatusTd.html("Ready");
-                            tr.removeClass('noDefault');
-                            tr.css('background-color', 'white');
+                            //tr.removeClass('noDefault');
+                            //tr.css('background-color', 'white');
                         });
                     } else {
                         emailSelectCombo.attr('title', '');
                         actionStatusTd.html("No default");
-                        tr.css('background-color', '#FFEB99');
+                        //tr.css('background-color', '#FFEB99');
                     }
                 });
 
-                contactDetailContent = emailSelectCombo;
-                actionStatus = 'No default';
-                tr.css('background-color', '#FFEB99');
+                contactDetailContent = allEmails.length ? emailSelectCombo : "No email address";
+                //actionStatus = '';
+                //tr.css('background-color', '#FFEB99');
             }
         }
         if (c.SMSOptout && communicationsMode == "SMS") {
@@ -1041,11 +1117,13 @@ function buildContactsBody(contacts, selectCells) {
         if ((c.EmailContactabilityStatus == 1 || c.EmailContactabilityStatus == 3 || c.EmailContactabilityStatus == 4) && communicationsMode == "EMAIL") {
             rowIsSelected = '';
         }
-        if (c.IsPOPIrestricted) {
-            rowIsSelected = '';
-        }
-        if (!selectCells) {
-            rowIsSelected = '';
+        if (communicationsMode != "LISTS") {
+            if (c.IsPOPIrestricted) {
+                rowIsSelected = '';
+            }
+            if (!selectCells) {
+                rowIsSelected = '';
+            }
         }
 
         var checkboxDisabled = '';
@@ -1857,6 +1935,20 @@ function getContactsFromSelectedMarkers(actionWhenDone) {
             });
         }
 
+        if (communicationsMode == "LISTS") {
+            $.each(selectedProperties, function (idx, pp) {
+                if (pp.Contacts) {
+                    $.each(pp.Contacts, function (idx2, contact) {
+                        contact.TargetCommPropertyId = pp.ProspectingPropertyId;
+                        contact.PropertyAddress = getFormattedAddress(pp);
+                        contact.TargetLightstonePropertyId = pp.LightstonePropertyId;
+                        contact.TargetLightstonePropertyIdForComms = pp.LightstonePropertyId;
+                        selectedContacts.push(contact);
+                    });
+                }
+            });
+        }
+
         // What about duplicate contacts
         return selectedContacts;
     }
@@ -2202,4 +2294,16 @@ function newMessageToProperty(messageType, marker) {
     }
 
     new google.maps.event.trigger(marker, 'click', { TargetOnlySelectedProperty: true });
+}
+
+function toggleListManager(e) {
+    e.preventDefault();
+    var currentSuburbOption = $('#addCurrentSuburbToListCheckbox').find("input").is(':checked');
+    var commSelectedRows = $('#commContactsTable tr.rowSelected');
+    if (!commSelectedRows.length && !currentSuburbOption) {
+        alert("You haven't selected any contacts!");
+        return;
+    }
+
+    contactListsManager.showListManagerForSelection(currentSuburbOption);
 }
