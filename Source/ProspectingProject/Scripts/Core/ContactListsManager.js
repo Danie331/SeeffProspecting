@@ -288,15 +288,6 @@ contactListsManager.showListManagerForSelection = function (useVisibleProperties
 }
 
 contactListsManager.toggleListsMainMenu = function() {
-    // accordion
-    // replace mock lists with real ones
-    // NB.: rem if field contains a comma, need to enclose in quotes!!
-    // test chrome
-    // Export options: [if field is empty ommit the entire record, leave as empty field], [various popi options], [select primary contact detail if present, select the first item (if many)]
-    // test UI with no lists
-    // rem export permissions!
-    // Example: filter high value properties in constantia and add to list, 3 ways to add to list, date-stamp lists as they can get out of date fast.
-
     var container = $("#listsDiv");
     if (container.children('.contentExpander').length) {
         return;
@@ -304,31 +295,18 @@ contactListsManager.toggleListsMainMenu = function() {
 
     $('#listExportTab').empty();
     var listExportTab = buildContentExpanderItem('listExportTab', 'Assets/lists.png', "Export Lists", buildlistExportTab());
-    var listsExpander = new ContentExpanderWidget('#contentarea', [listExportTab], "listExportExpander");
+    var listsExpander = new ContentExpanderWidget('#contentarea', [listExportTab], "listExpander");
     container.append(listsExpander.construct());
     listsExpander.open('listExportTab');
     container.css('display', 'block');
 
     function buildlistExportTab() {
-        var div = $("<div />").empty().css('display', 'block');
-        div.unbind('change').bind('change', '.fieldSelectableCheckbox', function (e) {
-            var target = $(e.target);
-            if (target.hasClass('fieldSelectableCheckbox')) {
-                var targetItem = $.grep(data, function (item) {
-                    var id = target.attr('id').replace('fieldid', '');
-                    return item.id == id;
-                })[0];
-                targetItem.selected = target.is(':checked');
-            }
-        });
 
+        var grid; // slickgrid containing columns
+
+        var div = $("<div />").empty().css('display', 'block');      
         var selectListDesc = $("<span class='fieldAlignment' style='display:inline-block'>Select a list to export:</span>");
         var selectListMenu = $("<select style='display:inline-block;width:70%;max-width:60%;' />").append($("<option value='-1' />"));
-        contactListsManager.retrieveListsForBranch(function (data) {
-            $.each(data, function (idx, list) {
-                selectListMenu.append($("<option value='" + list.ListId + "'>" + list.ListName + "</option>"));
-            });
-        });
         div.append(selectListDesc).append(selectListMenu).append("<p />");
         var outputFormatDesc = $("<span class='fieldAlignment' style='display:inline-block'>Select an output format:</span>");
         var selectFormatMenu = $("<select style='display:inline-block' />").append($("<option value='1'>.xls</option>")).append($("<option value='2'>.csv</option>"));
@@ -348,18 +326,18 @@ contactListsManager.toggleListsMainMenu = function() {
         var optionsFieldset = $("<fieldset style='border:1px solid gray;width:90%'></fieldset>");
         optionsFieldset.append("<legend style='padding: 0.2em 0.5em; border:1px solid gray; color:gray;font-size:90%;'>Export Options</legend>");
         optionsFieldset.append('<span>When a field is empty or null:</span><br />');
-        var emptyFieldRadioGroup = $('<input style="vertical-align:middle" type="radio" name="emptyFieldGroup" value="true" checked="checked" /> <span style="vertical-align:middle;margin-right:20px">Leave as empty</span> \
-                                      <input style="vertical-align:middle" type="radio" name="emptyFieldGroup" value="false" /> <span style="vertical-align:middle">Exclude the record</span> <br />');
+        var emptyFieldRadioGroup = $('<input id="leaveFieldIfEmptyRadio" style="vertical-align:middle" type="radio" name="emptyFieldGroup" value="true" checked="checked" /> <span style="vertical-align:middle;margin-right:20px">Leave as empty</span> \
+                                      <input id="omitFieldIfEmptyRadio" style="vertical-align:middle" type="radio" name="emptyFieldGroup" value="false" /> <span style="vertical-align:middle">Exclude the record</span> <br />');
         optionsFieldset.append(emptyFieldRadioGroup).append("<p />");
         optionsFieldset.append('<span>Contact details:</span><br />');
-        var contactDetailSelector = $('<input style="vertical-align:middle" type="radio" name="contactDetailsGroup" value="true" checked="checked" /> <span style="vertical-align:middle;margin-right:20px">Use primary detail (if present)</span> \
+        var contactDetailSelector = $('<input id="usePrimaryDetailIfPresent" style="vertical-align:middle" type="radio" name="contactDetailsGroup" value="true" checked="checked" /> <span style="vertical-align:middle;margin-right:20px">Use primary detail (if present)</span> \
                                       <input style="vertical-align:middle" type="radio" name="contactDetailsGroup" value="false" /> <span style="vertical-align:middle">Use any</span> <br />');
         optionsFieldset.append(contactDetailSelector).append("<p />");
         optionsFieldset.append('<span>Exclude contacts with the following statuses:</span><br />');
-        var optOutGroup = $("<input style='vertical-align:middle' type='checkbox' checked /> POPI opt out \
-                            <input style='vertical-align:middle;margin-left:20px' type='checkbox' checked /> Email opt out  \
-                             <input style='vertical-align:middle;margin-left:20px' type='checkbox' /> SMS opt out  \
-                            <input style='vertical-align:middle;margin-left:20px' type='checkbox' /> Do not contact <br />");
+        var optOutGroup = $("<input id='excludeRecordIfPopiChecked' style='vertical-align:middle' type='checkbox' checked /> POPI opt out \
+                            <input id='excludeRecordIfEmailOptOut' style='vertical-align:middle;margin-left:20px' type='checkbox' checked /> Email opt out  \
+                             <input id='excludeRecordIfSmsOptOut' style='vertical-align:middle;margin-left:20px' type='checkbox' /> SMS opt out  \
+                            <input id='excludeRecordIfDoNotContactChecked' style='vertical-align:middle;margin-left:20px' type='checkbox' /> Do not contact <br />");
         optionsFieldset.append(optOutGroup);
         div.append("<p />").append(optionsFieldset).append("<p />");
         var exportBtn = $("<input type='button' style='display:inline-block;' value='Export..' />");
@@ -368,7 +346,27 @@ contactListsManager.toggleListsMainMenu = function() {
             var listSelected = selectListMenu.val() > -1;
             var atLeastOneColumnSelected = $('.fieldSelectableCheckbox').is(':checked');
             if (listSelected && atLeastOneColumnSelected) {
-
+                var gridSelection = grid.getData();
+                var columns = [];
+                $.each(gridSelection, function (idx, column) {
+                    if (column.selected) {
+                        columns.push(column.fieldname);
+                    }
+                });
+                var exportObject =
+                    {
+                        Instruction: 'export_list',
+                        ListId: selectListMenu.val(),
+                        OutputFormat: selectFormatMenu.find("option:selected").text(),
+                        Columns: columns,
+                        OmitRecordIfEmptyField: $("#omitFieldIfEmptyRadio").is(":checked"),
+                        UsePrimaryContactDetailIfPresent: $("#usePrimaryDetailIfPresent").is(":checked"),
+                        ExcludeRecordIfPopiChecked: $("#excludeRecordIfPopiChecked").is(":checked"),
+                        ExcludeRecordIfEmailOptOut: $("#excludeRecordIfEmailOptOut").is(":checked"),
+                        ExcludeRecordIfSmsOptOut: $("#excludeRecordIfSmsOptOut").is(":checked"),
+                        ExcludeRecordIfDoNotContactChecked: $("#excludeRecordIfDoNotContactChecked").is(":checked")
+                    };
+                contactListsManager.exportList(exportObject, contactListsManager.exportListCallback);
             } else {
                 alert("Please select a list to export and ensure that at least one field/column is selected.");
             }
@@ -381,96 +379,130 @@ contactListsManager.toggleListsMainMenu = function() {
             return selected[0].outerHTML;
         }
 
-        var grid;
-        var data = [];
-        var columns = [
-          {
-              id: "#",
-              name: "",
-              width: 40,
-              behavior: "selectAndMove",
-              selectable: false,
-              resizable: false,
-              cssClass: "cell-reorder dnd"
-          },
-          {
-              id: "fieldname",
-              name: "Column Name",
-              field: "fieldname",
-              width: 300,
-              cssClass: "cell-title"
-          },
-          {
-              id: "selected",
-              name: "Selected",
-              width: 60,
-              field: "selected",
-              cssClass: "slick-selected-column",
-              formatter: fieldSelectableFormatter
-          }
-        ];
+        contactListsManager.retrieveListsForBranch(function (data) {
+            $.each(data, function (idx, list) {
+                selectListMenu.append($("<option value='" + list.ListId + "'>" + list.ListName + "</option>"));
+            });
+            
+            var data = [];
+            var columns = [
+              {
+                  id: "#",
+                  name: "",
+                  width: 40,
+                  behavior: "selectAndMove",
+                  selectable: false,
+                  resizable: false,
+                  cssClass: "cell-reorder dnd"
+              },
+              {
+                  id: "fieldname",
+                  name: "Column Name",
+                  field: "fieldname",
+                  width: 300,
+                  cssClass: "cell-title"
+              },
+              {
+                  id: "selected",
+                  name: "Selected",
+                  width: 60,
+                  field: "selected",
+                  cssClass: "slick-selected-column",
+                  formatter: fieldSelectableFormatter
+              }
+            ];
 
-        var options = { forceFitColumns: true };
-        data = [
-    { fieldname: "[Title]", id: 1, selected: true },
-    { fieldname: "[First Name]", id: 2, selected: true },
-    { fieldname: "[Surname]", id: 3, selected: true },
-    { fieldname: "[Private Email Address]", id: 4, selected: true },
-    { fieldname: "[Work Email Address]", id: 5, selected: true },
-    { fieldname: "[Home Landline]", id: 6, selected: true },
-    { fieldname: "[Work Landline]", id: 7, selected: true },
-    { fieldname: "[Cellphone]", id: 8, selected: true },
-    { fieldname: "[ID number]", id: 9, selected: true },
-    { fieldname: "[Property Address]", id: 10, selected: true }
-        ];
-        grid = new Slick.Grid(gridContainer.find("#columnExportGrid"), data, columns, options);
-        grid.setSelectionModel(new Slick.RowSelectionModel());
-        var moveRowsPlugin = new Slick.RowMoveManager();
-        moveRowsPlugin.onBeforeMoveRows.subscribe(function (e, data) {
-            for (var i = 0; i < data.rows.length; i++) {
-                // no point in moving before or after itself
-                if (data.rows[i] == data.insertBefore || data.rows[i] == data.insertBefore - 1) {
-                    e.stopPropagation();
-                    return false;
+            var options = { forceFitColumns: true };
+            data = [
+        { fieldname: "[Title]", id: 1, selected: true },
+        { fieldname: "[First Name]", id: 2, selected: true },
+        { fieldname: "[Surname]", id: 3, selected: true },
+        { fieldname: "[Private Email Address]", id: 4, selected: true },
+        { fieldname: "[Work Email Address]", id: 5, selected: true },
+        { fieldname: "[Home Landline]", id: 6, selected: true },
+        { fieldname: "[Work Landline]", id: 7, selected: true },
+        { fieldname: "[Cellphone]", id: 8, selected: true },
+        { fieldname: "[ID number]", id: 9, selected: true },
+        { fieldname: "[Property Address]", id: 10, selected: true }
+            ];
+            grid = new Slick.Grid("#columnExportGrid", data, columns, options);
+            grid.setSelectionModel(new Slick.RowSelectionModel());
+            var moveRowsPlugin = new Slick.RowMoveManager();
+            moveRowsPlugin.onBeforeMoveRows.subscribe(function (e, data) {
+                for (var i = 0; i < data.rows.length; i++) {
+                    // no point in moving before or after itself
+                    if (data.rows[i] == data.insertBefore || data.rows[i] == data.insertBefore - 1) {
+                        e.stopPropagation();
+                        return false;
+                    }
                 }
-            }
-            return true;
-        });
-        moveRowsPlugin.onMoveRows.subscribe(function (e, args) {
-            var extractedRows = [], left, right;
-            var rows = args.rows;
-            var insertBefore = args.insertBefore;
-            left = data.slice(0, insertBefore);
-            right = data.slice(insertBefore, data.length);
-            rows.sort(function (a, b) { return a - b; });
-            for (var i = 0; i < rows.length; i++) {
-                extractedRows.push(data[rows[i]]);
-            }
-            rows.reverse();
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                if (row < insertBefore) {
-                    left.splice(row, 1);
-                } else {
-                    right.splice(row - insertBefore, 1);
+                return true;
+            });
+            moveRowsPlugin.onMoveRows.subscribe(function (e, args) {
+                var extractedRows = [], left, right;
+                var rows = args.rows;
+                var insertBefore = args.insertBefore;
+                left = data.slice(0, insertBefore);
+                right = data.slice(insertBefore, data.length);
+                rows.sort(function (a, b) { return a - b; });
+                for (var i = 0; i < rows.length; i++) {
+                    extractedRows.push(data[rows[i]]);
                 }
-            }
-            data = left.concat(extractedRows.concat(right));
-            var selectedRows = [];
-            for (var i = 0; i < rows.length; i++)
-                selectedRows.push(left.length + i);
-            grid.resetActiveCell();
-            grid.setData(data);
-            grid.setSelectedRows(selectedRows);
-            grid.render();
-        });
-        grid.registerPlugin(moveRowsPlugin);
-        grid.onDragInit.subscribe(function (e, dd) {
-            // prevent the grid from cancelling drag'n'drop by default
-            e.stopImmediatePropagation();
-        });
+                rows.reverse();
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    if (row < insertBefore) {
+                        left.splice(row, 1);
+                    } else {
+                        right.splice(row - insertBefore, 1);
+                    }
+                }
+                data = left.concat(extractedRows.concat(right));
+                var selectedRows = [];
+                for (var i = 0; i < rows.length; i++)
+                    selectedRows.push(left.length + i);
+                grid.resetActiveCell();
+                grid.setData(data);
+                grid.setSelectedRows(selectedRows);
+                grid.render();
+            });
+            grid.registerPlugin(moveRowsPlugin);
+            grid.onDragInit.subscribe(function (e, dd) {
+                // prevent the grid from cancelling drag'n'drop by default
+                e.stopImmediatePropagation();
+            });
 
-        $.drop({ mode: "mouse" });
+            $.drop({ mode: "mouse" });
+
+            div.unbind('change').bind('change', '.fieldSelectableCheckbox', function (e) {
+                var target = $(e.target);
+                if (target.hasClass('fieldSelectableCheckbox')) {
+                    var targetItem = $.grep(data, function (item) {
+                        var id = target.attr('id').replace('fieldid', '');
+                        return item.id == id;
+                    })[0];
+                    targetItem.selected = target.is(':checked');
+                }
+            });
+        });
+        
         return div;
     }
+}
+
+contactListsManager.exportList = function (exportObject, callback) {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Generating Export. Please wait...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify(exportObject),
+        dataType: "json"
+    }).done(function (data) {
+        $.unblockUI();
+        callback(data);
+    });
+}
+
+contactListsManager.exportListCallback = function (data) {
+    debugger;
 }

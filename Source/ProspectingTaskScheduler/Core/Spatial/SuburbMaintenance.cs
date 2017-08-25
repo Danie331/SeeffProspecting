@@ -11,8 +11,8 @@ namespace ProspectingTaskScheduler.Core.Spatial
     {
         public static void ReindexSuburbsRequiringMaintenance()
         {
-            if (DateTime.Now.Hour >= 1 && DateTime.Now.Hour < 6)
-            {
+            //if (DateTime.Now.Hour >= 1 && DateTime.Now.Hour < 6)
+            //{
                 try
                 {
                     using (var spatial = new seeff_spatialEntities())
@@ -34,7 +34,7 @@ namespace ProspectingTaskScheduler.Core.Spatial
                 {
                     Utils.LogException(e);
                 }
-            }
+            //}
         }
 
         public static void SynchroniseSuburbNames()

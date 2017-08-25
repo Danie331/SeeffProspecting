@@ -4761,6 +4761,52 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                 return true;
             }
         }
+
+        public static object ExportList(ListExportSelection export)
+        {
+
+//            NB.: rem if field contains a comma, need to enclose in quotes!!
+//           below Prepare Communication button add another button "Manage Lists"
+//add another accordion for creating new lists and / or mapping to system types.
+//check for export permissions!
+//Test for scale with a large suburb like bryanston
+//test sms
+//rem when exporting system lists special rules apply!add note of this somewhere
+//commit, web.config, database deploy, auth service deploy.
+
+            using (var prospecting = new ProspectingDataContext())
+            {
+                //Dictionary<string, string> columnMappings = new Dictionary<string, string> {
+                //  { "[Title]", "person_title" }, { "[First Name]", "firstname" }, { "[Surname]", "surname" }, { "[Private Email Address]", "contact_detail" }, { "[Work Email Address]", "contact_detail" }
+                //, { "[Home Landline]", "contact_detail" } , { "[Work Landline]", "contact_detail" } , { "[Cellphone]", "contact_detail" } , { "[ID number]", "id_number" } , { "[Property Address]", "" } };
+
+                string baseQuery = @"select distinct
+                                    cp.contact_person_id,
+                                    pt.person_title,
+                                    cp.firstname,
+                                    cp.surname,
+                                    cp.id_number
+                                    from contact_person_list cpl
+                                    join prospecting_contact_person cp on cp.contact_person_id = cpl.contact_person_id
+                                    left join prospecting_person_title pt on cp.person_title = pt.prospecting_person_title_id
+                                    where cpl.fk_list_id = " + export.ListId;
+
+                bool loadEmails = export.Columns.Contains("[Private Email Address]") || export.Columns.Contains("[Work Email Address]");
+                IQueryable<ProspectingContactDetail> contactEmails = null;
+
+                var results = prospecting.ExecuteQuery<ContactListExportRecord>(baseQuery, new Object[] { });
+                foreach (var item in results)
+                {
+                    var contactRecord = new ProspectingContactPerson { ContactPersonId = item.contact_person_id };
+                    if (loadEmails)
+                    {
+                        contactEmails = ProspectingLookupData.PropertyContactEmailRetriever(prospecting, contactRecord);
+                    }
+                }
+
+                return true;
+            }
+        }
     }
 }
 

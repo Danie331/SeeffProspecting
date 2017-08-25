@@ -252,6 +252,10 @@ namespace ProspectingProject
                         string multiListSaveResult = SaveSelectionToSelectedLists(json);
                         context.Response.Write(multiListSaveResult);
                         break;
+                    case "export_list":
+                        string exportListResult = ExportList(json);
+                        context.Response.Write(exportListResult);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -284,6 +288,13 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string ExportList(string json)
+        {
+            var export = ProspectingCore.Deserialise<ListExportSelection>(json);
+            var result = ProspectingCore.ExportList(export);
+            return ProspectingCore.SerializeToJsonWithDefaults(result);
         }
 
         private string SaveSelectionToSelectedLists(string json)

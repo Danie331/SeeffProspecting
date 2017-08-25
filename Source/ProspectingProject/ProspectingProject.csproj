@@ -1454,8 +1454,10 @@
     <Compile Include="Types\ActivitiesFollowupsPivotRow.cs" />
     <Compile Include="Types\ActivityBundle.cs" />
     <Compile Include="Types\ContactList.cs" />
+    <Compile Include="Types\ContactListExportRecord.cs" />
     <Compile Include="Types\ContactListSelection.cs" />
     <Compile Include="Types\GeneratedIdentifier.cs" />
+    <Compile Include="Types\ListExportSelection.cs" />
     <Compile Include="Types\ListSelected.cs" />
     <Compile Include="Types\MandateLookupDataPacket.cs" />
     <Compile Include="Types\CommReportFilters.cs" />
