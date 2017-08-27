@@ -318,7 +318,7 @@ contactListsManager.toggleListsMainMenu = function() {
         var gridContainer = $('<div style="width:90%"> \
                                 <div class="grid-header" style="width:100%"> \
                                 </div> \
-                                <div id="columnExportGrid" style="width:100%;height:300px;"></div> \
+                                <div id="columnExportGrid" style="width:100%;height:260px;"></div> \
                               </div>');
         div.append(gridContainer);
 
@@ -330,16 +330,20 @@ contactListsManager.toggleListsMainMenu = function() {
                                       <input id="omitFieldIfEmptyRadio" style="vertical-align:middle" type="radio" name="emptyFieldGroup" value="false" /> <span style="vertical-align:middle">Exclude the record</span> <br />');
         optionsFieldset.append(emptyFieldRadioGroup).append("<p />");
         optionsFieldset.append('<span>Contact details:</span><br />');
-        var contactDetailSelector = $('<input id="usePrimaryDetailIfPresent" style="vertical-align:middle" type="radio" name="contactDetailsGroup" value="true" checked="checked" /> <span style="vertical-align:middle;margin-right:20px">Use primary detail (if present)</span> \
-                                      <input style="vertical-align:middle" type="radio" name="contactDetailsGroup" value="false" /> <span style="vertical-align:middle">Use any</span> <br />');
+        var contactDetailSelector = $('<input style="vertical-align:middle" type="radio" name="contactDetailsGroup" value="true" checked="checked" /> <span style="vertical-align:middle">Use any contact details but prefer primary contact detail if present</span> <br /> \
+                                       <input id="usePrimaryDetailOnly" style="vertical-align:middle" type="radio" name="contactDetailsGroup" value="false"  /> <span style="vertical-align:middle;margin-right:20px">Use <b>only</b> primary contact details</span><br />');
         optionsFieldset.append(contactDetailSelector).append("<p />");
         optionsFieldset.append('<span>Exclude contacts with the following statuses:</span><br />');
         var optOutGroup = $("<input id='excludeRecordIfPopiChecked' style='vertical-align:middle' type='checkbox' checked /> POPI opt out \
                             <input id='excludeRecordIfEmailOptOut' style='vertical-align:middle;margin-left:20px' type='checkbox' checked /> Email opt out  \
                              <input id='excludeRecordIfSmsOptOut' style='vertical-align:middle;margin-left:20px' type='checkbox' /> SMS opt out  \
                             <input id='excludeRecordIfDoNotContactChecked' style='vertical-align:middle;margin-left:20px' type='checkbox' /> Do not contact <br />");
-        optionsFieldset.append(optOutGroup);
-        div.append("<p />").append(optionsFieldset).append("<p />");
+        optionsFieldset.append(optOutGroup).append("<p />");
+        optionsFieldset.append('<span>Duplicates:</span><br />');
+        var duplicatesGroup = $("<input id='excludeDuplicateContacts' style='vertical-align:middle' type='checkbox' checked /> Exclude duplicate contacts \
+                                <input id='excludeDuplicateEmailAddresses' style='vertical-align:middle;margin-left:20px' type='checkbox' checked /> Exclude records with a duplicate email address <br />");
+        optionsFieldset.append(duplicatesGroup).append("<p />");
+        div.append("<br />").append(optionsFieldset).append("<p />");
         var exportBtn = $("<input type='button' style='display:inline-block;' value='Export..' />");
         div.append(exportBtn);
         exportBtn.click(function () {
@@ -360,11 +364,13 @@ contactListsManager.toggleListsMainMenu = function() {
                         OutputFormat: selectFormatMenu.find("option:selected").text(),
                         Columns: columns,
                         OmitRecordIfEmptyField: $("#omitFieldIfEmptyRadio").is(":checked"),
-                        UsePrimaryContactDetailIfPresent: $("#usePrimaryDetailIfPresent").is(":checked"),
+                        UsePrimaryContactDetailOnly: $("#usePrimaryDetailOnly").is(":checked"),
                         ExcludeRecordIfPopiChecked: $("#excludeRecordIfPopiChecked").is(":checked"),
                         ExcludeRecordIfEmailOptOut: $("#excludeRecordIfEmailOptOut").is(":checked"),
                         ExcludeRecordIfSmsOptOut: $("#excludeRecordIfSmsOptOut").is(":checked"),
-                        ExcludeRecordIfDoNotContactChecked: $("#excludeRecordIfDoNotContactChecked").is(":checked")
+                        ExcludeRecordIfDoNotContactChecked: $("#excludeRecordIfDoNotContactChecked").is(":checked"),
+                        ExcludeDuplicateContacts: $("#excludeDuplicateContacts").is(":checked"),
+                        ExcludeDuplicateEmailAddress: $("#excludeDuplicateEmailAddresses").is(":checked")
                     };
                 contactListsManager.exportList(exportObject, contactListsManager.exportListCallback);
             } else {
@@ -417,13 +423,12 @@ contactListsManager.toggleListsMainMenu = function() {
         { fieldname: "[Title]", id: 1, selected: true },
         { fieldname: "[First Name]", id: 2, selected: true },
         { fieldname: "[Surname]", id: 3, selected: true },
-        { fieldname: "[Private Email Address]", id: 4, selected: true },
-        { fieldname: "[Work Email Address]", id: 5, selected: true },
-        { fieldname: "[Home Landline]", id: 6, selected: true },
-        { fieldname: "[Work Landline]", id: 7, selected: true },
-        { fieldname: "[Cellphone]", id: 8, selected: true },
-        { fieldname: "[ID number]", id: 9, selected: true },
-        { fieldname: "[Property Address]", id: 10, selected: true }
+        { fieldname: "[Email Address]", id: 4, selected: true },
+        { fieldname: "[Home Landline]", id: 5, selected: true },
+        { fieldname: "[Work Landline]", id: 6, selected: true },
+        { fieldname: "[Cellphone]", id: 7, selected: true },
+        { fieldname: "[ID number]", id: 8, selected: true },
+        { fieldname: "[Property Address]", id: 9, selected: true }
             ];
             grid = new Slick.Grid("#columnExportGrid", data, columns, options);
             grid.setSelectionModel(new Slick.RowSelectionModel());
@@ -473,6 +478,7 @@ contactListsManager.toggleListsMainMenu = function() {
             });
 
             $.drop({ mode: "mouse" });
+            $("#columnExportGrid .slick-viewport").css('overflow-x', 'hidden');
 
             div.unbind('change').bind('change', '.fieldSelectableCheckbox', function (e) {
                 var target = $(e.target);

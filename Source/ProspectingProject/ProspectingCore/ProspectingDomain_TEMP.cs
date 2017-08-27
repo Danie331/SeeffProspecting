@@ -4780,28 +4780,40 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                 //  { "[Title]", "person_title" }, { "[First Name]", "firstname" }, { "[Surname]", "surname" }, { "[Private Email Address]", "contact_detail" }, { "[Work Email Address]", "contact_detail" }
                 //, { "[Home Landline]", "contact_detail" } , { "[Work Landline]", "contact_detail" } , { "[Cellphone]", "contact_detail" } , { "[ID number]", "id_number" } , { "[Property Address]", "" } };
 
-                string baseQuery = @"select distinct
+                string baseQuery = @"select 
                                     cp.contact_person_id,
                                     pt.person_title,
                                     cp.firstname,
                                     cp.surname,
-                                    cp.id_number
+                                    cp.id_number,
+                                    cp.is_popi_restricted,
+                                    cp.optout_emails,
+                                    cp.optout_sms,
+                                    cp.do_not_contact,
+                                    pp.street_or_unit_no,
+                                    pp.unit,
+                                    pp.property_address,
+                                    pp.ss_name,
+                                    pp.ss_door_number,
+                                    cd.contact_detail_type,
+                                    cd.contact_detail,
+                                    cd.eleventh_digit,
+                                    adc.code_desc,
+                                    cd.is_primary_contact
                                     from contact_person_list cpl
                                     join prospecting_contact_person cp on cp.contact_person_id = cpl.contact_person_id
+                                    left join prospecting_property pp on pp.prospecting_property_id = cpl.prospecting_property_id
                                     left join prospecting_person_title pt on cp.person_title = pt.prospecting_person_title_id
-                                    where cpl.fk_list_id = " + export.ListId;
-
-                bool loadEmails = export.Columns.Contains("[Private Email Address]") || export.Columns.Contains("[Work Email Address]");
-                IQueryable<ProspectingContactDetail> contactEmails = null;
+                                    left join prospecting_contact_detail cd on cd.contact_person_id = cp.contact_person_id
+                                    left join prospecting_area_dialing_code adc on adc.prospecting_area_dialing_code_id = cd.intl_dialing_code_id
+                                    where cpl.fk_list_id = " + export.ListId + " and (cd.deleted is null or cd.deleted = 0)";
 
                 var results = prospecting.ExecuteQuery<ContactListExportRecord>(baseQuery, new Object[] { });
-                foreach (var item in results)
+                var contacts = results.GroupBy(c => c.contact_person_id);
+                // now determine which columns to take from the results...
+                foreach (var contact in contacts)
                 {
-                    var contactRecord = new ProspectingContactPerson { ContactPersonId = item.contact_person_id };
-                    if (loadEmails)
-                    {
-                        contactEmails = ProspectingLookupData.PropertyContactEmailRetriever(prospecting, contactRecord);
-                    }
+
                 }
 
                 return true;
