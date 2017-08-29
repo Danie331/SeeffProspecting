@@ -245,7 +245,8 @@ function buildPropertyDetailsFilterTab() {
 
     var performFilteringBtn = $("<input type='button' id='performFilteringBtn2' value='Filter' style='cursor:pointer;display:inline-block;float:left' />");
     var resetSuburbFilterBtn = $("<input type='button' id='resetSuburbFilterBtn2' value='Refresh & Reload Suburb' style='cursor:pointer;display:inline-block;float:right' />");
-    var sendCommsToResultsBtn = $("<input type='button' id='sendCommsToResultsBtn' value='Prepare Communication' style='cursor:pointer;display:none;' />");
+    var sendCommsToResultsBtn = $("<input type='button' id='sendCommsToResultsBtn' value='Prepare SMS' style='cursor:pointer;display:none;' />");
+    var addToListToggleBtn = $("<input type='button' id='addToListToggleBtn' value='Add To List' style='cursor:pointer;display:none;margin-left:10px' />");
 
     var regDateSelector = populateRegYearInput($("<select id='regDateSelector' style='width:60px' />"));
     var salePriceSelector = populateSalePriceInput($("<select id='salePriceSelector' style='width:120px' />"));
@@ -279,8 +280,15 @@ function buildPropertyDetailsFilterTab() {
     if (prospectingContext.UserHasCommAccess) {
         container.append("<br /><br />");
         container.append(sendCommsToResultsBtn);
+        container.append(addToListToggleBtn);
         sendCommsToResultsBtn.click(function () {
             showMenu("communication");
+            handleSMSMessageClick();
+            loadSuburbAndFilterByPropertyDetails();
+        });
+        addToListToggleBtn.click(function () {
+            showMenu("communication");
+            handleAddToListClick();
             loadSuburbAndFilterByPropertyDetails();
         });
     }
@@ -411,6 +419,7 @@ function toggleFilterMode(value) {
             $("#pivotTable").empty();
         }
         $("#sendCommsToResultsBtn").hide();
+        $("#addToListToggleBtn").hide();
     }
 }
 
@@ -716,6 +725,7 @@ function loadSuburbAndFilterByPropertyDetails() {
 
     if (anyOptionsSelected) {
         $("#sendCommsToResultsBtn").show();
+        $("#addToListToggleBtn").show();
     }
 
     loadSuburb(currentSuburb.SuburbId, false, function () {

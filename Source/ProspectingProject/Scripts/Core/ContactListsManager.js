@@ -293,9 +293,12 @@ contactListsManager.toggleListsMainMenu = function() {
         return;
     }
 
+    $('#createNewListTab').empty();
+    var createNewListTab = buildContentExpanderItem('createNewListTab', 'Assets/new_list.png', "Create New List", buildCreateNewListTab());
     $('#listExportTab').empty();
-    var listExportTab = buildContentExpanderItem('listExportTab', 'Assets/lists.png', "Export Lists", buildlistExportTab());
-    var listsExpander = new ContentExpanderWidget('#contentarea', [listExportTab], "listExpander");
+    var listExportTab = buildContentExpanderItem('listExportTab', 'Assets/export_list.png', "Export List", buildlistExportTab());
+
+    var listsExpander = new ContentExpanderWidget('#contentarea', [createNewListTab, listExportTab], "listExpander");
     container.append(listsExpander.construct());
     listsExpander.open('listExportTab');
     container.css('display', 'block');
@@ -309,7 +312,7 @@ contactListsManager.toggleListsMainMenu = function() {
         var selectListMenu = $("<select style='display:inline-block;width:70%;max-width:60%;' />").append($("<option value='-1' />"));
         div.append(selectListDesc).append(selectListMenu).append("<p />");
         var outputFormatDesc = $("<span class='fieldAlignment' style='display:inline-block'>Select an output format:</span>");
-        var selectFormatMenu = $("<select style='display:inline-block' />").append($("<option value='1'>.xls</option>")).append($("<option value='2'>.csv</option>"));
+        var selectFormatMenu = $("<select style='display:inline-block' />").append($("<option value='1'>.xlsx</option>")).append($("<option value='2'>.csv</option>"));
         div.append(outputFormatDesc).append(selectFormatMenu).append("<p />").append("<p />");
 
         var fieldSelectionAndOrderingDesc = $("<span style='display:inline-block;width:90%'>Select the fields (columns) to be included in the export. The columns are ordered from top to bottom, to re-order the columns drag the handle in the left-most column to the appropriate position:</span>");
@@ -340,7 +343,7 @@ contactListsManager.toggleListsMainMenu = function() {
                             <input id='excludeRecordIfDoNotContactChecked' style='vertical-align:middle;margin-left:20px' type='checkbox' /> Do not contact <br />");
         optionsFieldset.append(optOutGroup).append("<p />");
         optionsFieldset.append('<span>Duplicates:</span><br />');
-        var duplicatesGroup = $("<input id='excludeDuplicateContacts' style='vertical-align:middle' type='checkbox' checked /> Exclude duplicate contacts \
+        var duplicatesGroup = $("<input id='excludeDuplicateContacts' style='vertical-align:middle' type='checkbox' disabled='disabled' checked /> Exclude duplicate contacts \
                                 <input id='excludeDuplicateEmailAddresses' style='vertical-align:middle;margin-left:20px' type='checkbox' checked /> Exclude records with a duplicate email address <br />");
         optionsFieldset.append(duplicatesGroup).append("<p />");
         div.append("<br />").append(optionsFieldset).append("<p />");
@@ -369,7 +372,7 @@ contactListsManager.toggleListsMainMenu = function() {
                         ExcludeRecordIfEmailOptOut: $("#excludeRecordIfEmailOptOut").is(":checked"),
                         ExcludeRecordIfSmsOptOut: $("#excludeRecordIfSmsOptOut").is(":checked"),
                         ExcludeRecordIfDoNotContactChecked: $("#excludeRecordIfDoNotContactChecked").is(":checked"),
-                        ExcludeDuplicateContacts: $("#excludeDuplicateContacts").is(":checked"),
+                        ExcludeDuplicateContacts: true,
                         ExcludeDuplicateEmailAddress: $("#excludeDuplicateEmailAddresses").is(":checked")
                     };
                 contactListsManager.exportList(exportObject, contactListsManager.exportListCallback);
@@ -494,6 +497,44 @@ contactListsManager.toggleListsMainMenu = function() {
         
         return div;
     }
+
+    function buildCreateNewListTab() {        
+        var container = $("<div />").empty().css('display', 'block');   
+        var newListDesc = $("<span class='fieldAlignment' style='display:inline-block'>List Name:</span>");
+        var newListNameInput = $("<input type='text' style='display:inline-block;width:70%;max-width:60%;' />");
+        container.append(newListDesc).append(newListNameInput).append("<p />");
+
+        var selectListTypeDesc = $("<span class='fieldAlignment' style='display:inline-block'>List Type:</span>");
+        var selectListTypeMenu = $("<select style='display:inline-block;width:40%;max-width:40%;' />");
+        container.append(selectListTypeDesc).append(selectListTypeMenu).append("<p />");
+
+        var createBtn = $("<input type='button' style='display:inline-block;' value='Create..' />");
+        container.append(createBtn);
+
+        createBtn.click(function () {
+            var listName = newListNameInput.val();
+            if (listName == '') {
+                alert("You must provide a name for the list");
+                return;
+            }
+
+        });
+
+        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading...</p>' });
+        $.ajax({
+            type: "POST",
+            url: "RequestHandler.ashx",
+            data: JSON.stringify({ Instruction: 'retrieve_list_types' }),
+            dataType: "json"
+        }).done(function (data) {
+            $.unblockUI();
+            $.each(data, function (idx, listType) {
+                selectListTypeMenu.append($("<option value='" + listType.ListTypeId + "'>" + listType.ListTypeDescription + "</option>"));
+            });
+        });
+
+        return container;
+    }
 }
 
 contactListsManager.exportList = function (exportObject, callback) {
@@ -509,6 +550,14 @@ contactListsManager.exportList = function (exportObject, callback) {
     });
 }
 
-contactListsManager.exportListCallback = function (data) {
-    debugger;
+contactListsManager.exportListCallback = function (fileData) {
+    if (fileData.Success == true) {
+        var downloadURL = fileData.Filepath;
+        var form = $('<form method="get" action="' + downloadURL + '"><input type="hidden" value="" /></form>');
+        $('body').append(form);
+        $(form).submit();
+        form.remove();
+    } else {
+        alert("An error occurred during the export. Please contact support if the error persists.");
+    }
 }

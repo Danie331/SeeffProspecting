@@ -26,5 +26,6 @@ namespace ProspectingProject
         public int? eleventh_digit { get; set; }
         public string code_desc { get; set; }
         public bool? is_primary_contact { get; set; }
+        public string ss_fh { get; set; }
     }
 }

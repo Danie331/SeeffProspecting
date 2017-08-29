@@ -19,6 +19,8 @@ using System.Net.Http.Formatting;
 using System.Data.Linq;
 using System.Threading.Tasks;
 using ProspectingProject.Services.SeeffSpatial;
+using OfficeOpenXml;
+using System.Reflection;
 // first git push!
 namespace ProspectingProject
 {
@@ -3113,6 +3115,23 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
             }
         }
 
+        public static string GetFormattedAddress(ProspectingProperty property)
+        {
+            Func<string, string> encloseInQuotes = pr => "\"" + pr + "\"";
+
+            if (property.SS_FH == "SS" || property.SS_FH == "FS")
+            {
+                if (!string.IsNullOrEmpty(property.SSDoorNo))
+                {
+                    return encloseInQuotes( "Unit " + property.Unit + " (Door no.: " + property.SSDoorNo + ") " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.SSName.ToLower()).Replace("Ss ", "SS "));
+                }
+
+                return encloseInQuotes("Unit " + property.Unit + " " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.SSName.ToLower()).Replace("Ss ", "SS "));
+            }
+
+            return encloseInQuotes(property.StreetOrUnitNo + " " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.PropertyAddress.ToLower()));
+        }
+
         private static void CreateActivityForPropertyChangeOfOwnership(ProspectingDataContext prospecting, prospecting_property propertyRecord)
         {
             List<ProspectingContactPerson> allPropertyContacts = new List<ProspectingContactPerson>();
@@ -4762,25 +4781,28 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
             }
         }
 
-        public static object ExportList(ListExportSelection export)
+        public static ExportSaveResult ExportList(ListExportSelection export)
         {
-
-//            NB.: rem if field contains a comma, need to enclose in quotes!!
-//           below Prepare Communication button add another button "Manage Lists"
-//add another accordion for creating new lists and / or mapping to system types.
-//check for export permissions!
-//Test for scale with a large suburb like bryanston
-//test sms
-//rem when exporting system lists special rules apply!add note of this somewhere
-//commit, web.config, database deploy, auth service deploy.
-
-            using (var prospecting = new ProspectingDataContext())
+            Func<IGrouping<int, ContactListExportRecord>, string, string> formatPhoneNumber = (record, phone) =>
             {
-                //Dictionary<string, string> columnMappings = new Dictionary<string, string> {
-                //  { "[Title]", "person_title" }, { "[First Name]", "firstname" }, { "[Surname]", "surname" }, { "[Private Email Address]", "contact_detail" }, { "[Work Email Address]", "contact_detail" }
-                //, { "[Home Landline]", "contact_detail" } , { "[Work Landline]", "contact_detail" } , { "[Cellphone]", "contact_detail" } , { "[ID number]", "id_number" } , { "[Property Address]", "" } };
+                if (phone == "") return "";
+                string result = phone;
+                var target = record.First(fp => fp.contact_detail == phone);
+                if (target.code_desc != "South Africa +27") result = target.code_desc + " " + result;
+                if (target.eleventh_digit != null) result = result + target.eleventh_digit;
 
-                string baseQuery = @"select 
+                return result;
+            };
+
+            Func<string, string> encloseInQuotesIfNeeded = pr => pr.Contains(",") ?  "\"" + pr + "\"" : pr;
+          
+
+            try
+            {
+                using (var client = new clientEntities())
+                using (var prospecting = new ProspectingDataContext())
+                {
+                    string baseQuery = @"select 
                                     cp.contact_person_id,
                                     pt.person_title,
                                     cp.firstname,
@@ -4792,6 +4814,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                                     cp.do_not_contact,
                                     pp.street_or_unit_no,
                                     pp.unit,
+                                    pp.ss_fh,
                                     pp.property_address,
                                     pp.ss_name,
                                     pp.ss_door_number,
@@ -4808,15 +4831,326 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                                     left join prospecting_area_dialing_code adc on adc.prospecting_area_dialing_code_id = cd.intl_dialing_code_id
                                     where cpl.fk_list_id = " + export.ListId + " and (cd.deleted is null or cd.deleted = 0)";
 
-                var results = prospecting.ExecuteQuery<ContactListExportRecord>(baseQuery, new Object[] { });
-                var contacts = results.GroupBy(c => c.contact_person_id);
-                // now determine which columns to take from the results...
-                foreach (var contact in contacts)
-                {
+                    var results = prospecting.ExecuteQuery<ContactListExportRecord>(baseQuery, new Object[] { });
+                    var contacts = results.GroupBy(c => c.contact_person_id);
+                    List<ListOutputRecord> outputRecords = new List<ListOutputRecord>();
+                    foreach (var contactGrouping in contacts)
+                    {
+                        ContactListExportRecord contactRecord = contactGrouping.First();
+                        ListOutputRecord record = new ListOutputRecord();
+                        record.Title = contactRecord.person_title;
+                        record.Firstname = contactRecord.firstname;
+                        record.Surname = contactRecord.surname;
+                        record.IdNumber = contactRecord.id_number;
+                        record.PopiOptOut = contactRecord.is_popi_restricted;
+                        record.EmailOptOut = contactRecord.optout_emails;
+                        record.SmsOptOut = contactRecord.optout_sms;
+                        record.DoNotContact = contactRecord.do_not_contact;
 
+                        if (export.Columns.Contains("[Property Address]"))
+                        {
+                            ProspectingProperty property = new ProspectingProperty { SS_FH = contactRecord.ss_fh, Unit = contactRecord.unit, StreetOrUnitNo = contactRecord.street_or_unit_no, SSDoorNo = contactRecord.ss_door_number, SSName = contactRecord.ss_name, PropertyAddress = contactRecord.property_address };
+                            record.PropertyAddress = GetFormattedAddress(property);
+                        }
+
+                        string emailAddress = "";
+                        string cellPhone = "";
+                        string homeLandline = "";
+                        string workLandline = "";
+                        if (export.UsePrimaryContactDetailOnly)
+                        {
+                            var targetEmail = contactGrouping.FirstOrDefault(cd => cd.is_primary_contact == true && cd.contact_detail_type.HasValue && new[] { 4, 5 }.Contains(cd.contact_detail_type.Value));
+                            if (targetEmail != null)
+                            {
+                                emailAddress = targetEmail.contact_detail;
+                            }
+                            var targetCellphone = contactGrouping.FirstOrDefault(cd => cd.is_primary_contact == true && cd.contact_detail_type.HasValue && cd.contact_detail_type == 3);
+                            if (targetCellphone != null)
+                            {
+                                cellPhone = targetCellphone.contact_detail;
+                            }
+                            var targetHomeLandline = contactGrouping.FirstOrDefault(cd => cd.is_primary_contact == true && cd.contact_detail_type.HasValue && cd.contact_detail_type == 1);
+                            if (targetHomeLandline != null)
+                            {
+                                homeLandline = targetHomeLandline.contact_detail;
+                            }
+                            var targetWorkLandline = contactGrouping.FirstOrDefault(cd => cd.is_primary_contact == true && cd.contact_detail_type.HasValue && cd.contact_detail_type == 2);
+                            if (targetWorkLandline != null)
+                            {
+                                workLandline = targetWorkLandline.contact_detail;
+                            }
+                        }
+                        else
+                        {
+                            var targetEmail = contactGrouping.FirstOrDefault(cd => cd.is_primary_contact == true && cd.contact_detail_type.HasValue && new[] { 4, 5 }.Contains(cd.contact_detail_type.Value));
+                            if (targetEmail == null)
+                            {
+                                targetEmail = contactGrouping.FirstOrDefault(cd => cd.contact_detail_type.HasValue && new[] { 4, 5 }.Contains(cd.contact_detail_type.Value));
+                                emailAddress = targetEmail != null ? targetEmail.contact_detail : "";
+                            }
+                            else
+                            {
+                                emailAddress = targetEmail.contact_detail;
+                            }
+                            var targetCellphone = contactGrouping.FirstOrDefault(cd => cd.is_primary_contact == true && cd.contact_detail_type.HasValue && cd.contact_detail_type == 3);
+                            if (targetCellphone == null)
+                            {
+                                targetCellphone = contactGrouping.FirstOrDefault(cd => cd.contact_detail_type.HasValue && cd.contact_detail_type == 3);
+                                cellPhone = targetCellphone != null ? targetCellphone.contact_detail : "";
+                            }
+                            else
+                            {
+                                cellPhone = targetCellphone.contact_detail;
+                            }
+                            var targetHomeLandline = contactGrouping.FirstOrDefault(cd => cd.is_primary_contact == true && cd.contact_detail_type.HasValue && cd.contact_detail_type == 1);
+                            if (targetHomeLandline == null)
+                            {
+                                targetHomeLandline = contactGrouping.FirstOrDefault(cd => cd.contact_detail_type.HasValue && cd.contact_detail_type == 1);
+                                homeLandline = targetHomeLandline != null ? targetHomeLandline.contact_detail : "";
+                            }
+                            else
+                            {
+                                homeLandline = targetHomeLandline.contact_detail;
+                            }
+                            var targetWorkLandline = contactGrouping.FirstOrDefault(cd => cd.is_primary_contact == true && cd.contact_detail_type.HasValue && cd.contact_detail_type == 2);
+                            if (targetWorkLandline == null)
+                            {
+                                targetWorkLandline = contactGrouping.FirstOrDefault(cd => cd.contact_detail_type.HasValue && cd.contact_detail_type == 2);
+                                workLandline = targetWorkLandline != null ? targetWorkLandline.contact_detail : "";
+                            }
+                            else
+                            {
+                                workLandline = targetWorkLandline.contact_detail;
+                            }
+                        }
+
+                        record.EmailAddress = emailAddress;
+                        record.Cellphone = formatPhoneNumber(contactGrouping, cellPhone);
+                        record.HomeLandline = formatPhoneNumber(contactGrouping, homeLandline);
+                        record.WorkLandline = formatPhoneNumber(contactGrouping, workLandline);
+
+                        outputRecords.Add(record);
+                    }
+
+                    // address other options here
+                    List<ListOutputRecord> netOutputRecords = new List<ListOutputRecord>();
+                    foreach (var record in outputRecords)
+                    {
+                        ListOutputRecord netOutputRecord = new ListOutputRecord();
+                        netOutputRecord.Title = record.Title != null ? record.Title : "";
+                        netOutputRecord.Firstname = encloseInQuotesIfNeeded(record.Firstname);
+                        netOutputRecord.Surname = encloseInQuotesIfNeeded(record.Surname);
+                        netOutputRecord.IdNumber = record.IdNumber;
+                        netOutputRecord.PropertyAddress = record.PropertyAddress;
+                        netOutputRecord.EmailAddress = record.EmailAddress;
+                        netOutputRecord.Cellphone = record.Cellphone;
+                        netOutputRecord.HomeLandline = record.HomeLandline;
+                        netOutputRecord.WorkLandline = record.WorkLandline;
+                        netOutputRecord.PopiOptOut = record.PopiOptOut;
+                        netOutputRecord.EmailOptOut = record.EmailOptOut;
+                        netOutputRecord.SmsOptOut = record.SmsOptOut;
+                        netOutputRecord.DoNotContact = record.DoNotContact;
+
+                        if (export.OmitRecordIfEmptyField)
+                        {
+                            if (string.IsNullOrEmpty(netOutputRecord.Title) && export.Columns.Contains("[Title]"))
+                                continue;
+                            if (string.IsNullOrEmpty(netOutputRecord.Firstname) && export.Columns.Contains("[First Name]"))
+                                continue;
+                            if (string.IsNullOrEmpty(netOutputRecord.Surname) && export.Columns.Contains("[Surname]"))
+                                continue;
+                            if (string.IsNullOrEmpty(netOutputRecord.IdNumber) && export.Columns.Contains("[ID number]"))
+                                continue;
+                            if (string.IsNullOrEmpty(netOutputRecord.PropertyAddress) && export.Columns.Contains("[Property Address]"))
+                                continue;
+                            if (string.IsNullOrEmpty(netOutputRecord.EmailAddress) && export.Columns.Contains("[Email Address]"))
+                                continue;
+                            if (string.IsNullOrEmpty(netOutputRecord.Cellphone) && export.Columns.Contains("[Cellphone]"))
+                                continue;
+                            if (string.IsNullOrEmpty(netOutputRecord.HomeLandline) && export.Columns.Contains("[Home Landline]"))
+                                continue;
+                            if (string.IsNullOrEmpty(netOutputRecord.WorkLandline) && export.Columns.Contains("[Work Landline]"))
+                                continue;
+                        }
+
+                        if (export.ExcludeRecordIfPopiChecked)
+                        {
+                            if (netOutputRecord.PopiOptOut) continue;
+                        }
+                        if (export.ExcludeRecordIfEmailOptOut)
+                        {
+                            if (netOutputRecord.EmailOptOut) continue;
+                        }
+                        if (export.ExcludeRecordIfSmsOptOut)
+                        {
+                            if (netOutputRecord.SmsOptOut) continue;
+                        }
+                        if (export.ExcludeRecordIfDoNotContactChecked)
+                        {
+                            if (netOutputRecord.DoNotContact) continue;
+                        }
+
+                        netOutputRecords.Add(netOutputRecord);
+                    }
+
+                    if (export.ExcludeDuplicateEmailAddress)
+                    {
+                        var uniqueByEmail = netOutputRecords.GroupBy(r => r.EmailAddress).ToList();
+                        netOutputRecords.Clear();
+                        var emptyEmailGroup = uniqueByEmail.FirstOrDefault(gr => gr.First().EmailAddress == "");
+                        if (emptyEmailGroup != null && emptyEmailGroup.Count() > 0)
+                        {
+                            foreach (var item in emptyEmailGroup)
+                            {
+                                netOutputRecords.Add(item);
+                            }
+                        }
+                        foreach (var item in uniqueByEmail.Where(gr => gr.First().EmailAddress != ""))
+                        {
+                            netOutputRecords.Add(item.First());
+                        }
+                    }
+
+                    // column selection here
+                    if (export.OutputFormat == ".xlsx")
+                    {
+                        using (ExcelPackage package = new ExcelPackage())
+                        {
+                            string listName = client.list.First(li => li.pk_list_id == export.ListId).list_name;
+                            ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(listName + " - " + DateTime.Now.ToShortDateString());
+                            worksheet.Cells["A1"].LoadFromDataTable(new DataTable(), true);
+
+                            worksheet.Row(1).Style.Font.Bold = true;
+                            worksheet.Row(1).Height = 20;
+                            worksheet.Row(2).Height = 18;
+
+                            List<PropertyInfo> recordProps = new List<PropertyInfo>();
+                            for (int i = 1; i <= export.Columns.Count; i++)
+                            {
+                                worksheet.Cells[1, i].Value = export.Columns[i - 1];
+
+                                var recordProp = typeof(ListOutputRecord).GetProperties().First(prop =>
+                                {
+                                    ColumnMappingAttribute MyAttribute = (ColumnMappingAttribute)Attribute.GetCustomAttribute(prop, typeof(ColumnMappingAttribute));
+                                    return MyAttribute != null ? MyAttribute.ColumnName == export.Columns[i - 1] : false;
+                                });
+                                recordProps.Add(recordProp);
+                            }
+
+                            int rowNumber = 2;
+                            foreach (var record in netOutputRecords)
+                            {
+                                int columnCounter = 1;
+                                foreach (var col in export.Columns)
+                                {
+                                    var x = recordProps[columnCounter - 1].GetValue(record);
+                                    worksheet.Cells[rowNumber, columnCounter++].Value = x.ToString();
+                                }
+                                rowNumber++;
+                            }
+
+                            for (int i = 1; i <= export.Columns.Count; i++)
+                            {
+                                worksheet.Column(i).AutoFit();
+                            }
+
+                            string fileName = listName + " - " + DateTime.Now.ToString("yyyy-MM-dd") + ".xlsx";
+                            return SaveFile(fileName, package);
+                        }
+                    }
+
+                    if (export.OutputFormat == ".csv")
+                    {
+                        string listName = client.list.First(li => li.pk_list_id == export.ListId).list_name;
+                        string fileName = listName + " - " + DateTime.Now.ToString("yyyy-MM-dd") + ".csv";
+
+                        StringBuilder sb = new StringBuilder();
+                        List<PropertyInfo> recordProps = new List<PropertyInfo>();
+                        for (int i = 1; i <= export.Columns.Count; i++)
+                        {
+                            var recordProp = typeof(ListOutputRecord).GetProperties().First(prop =>
+                            {
+                                ColumnMappingAttribute MyAttribute = (ColumnMappingAttribute)Attribute.GetCustomAttribute(prop, typeof(ColumnMappingAttribute));
+                                return MyAttribute != null ? MyAttribute.ColumnName == export.Columns[i - 1] : false;
+                            });
+                            recordProps.Add(recordProp);
+                        }
+
+                        string header = export.Columns.Aggregate((s1, s2) => s1 + "," + s2);
+                        sb.AppendLine(header);
+
+                        foreach (var record in netOutputRecords)
+                        {
+                            List<string> recordFields = new List<string>();
+                            int columnCounter = 1;
+                            foreach (var col in export.Columns)
+                            {
+                                var x = recordProps[columnCounter - 1].GetValue(record);
+                                recordFields.Add(x.ToString());
+                                columnCounter++;
+                            }
+
+                            string recordRow = recordFields.Aggregate((s1, s2) => s1 + "," + s2);
+                            sb.AppendLine(recordRow);
+                        }
+
+                        return SaveFile(fileName, sb);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                return new ExportSaveResult { Success = false };
+            }
 
-                return true;
+            return new ExportSaveResult { Success = false };
+        }
+
+        public static ExportSaveResult SaveFile(string fileName, ExcelPackage package)
+        {
+            var currentUser = RequestHandler.GetUserSessionObject();
+            int branchId = currentUser.BranchID;
+            string exportPath = "/ExportOutput/" + branchId + "/" + fileName;
+
+            var path = HttpContext.Current.Server.MapPath("~" + exportPath);
+            FileInfo fs = new FileInfo(path);
+            fs.Directory.Create();
+            package.SaveAs(fs);
+
+            string appFolderPath = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
+            appFolderPath = Path.Combine(appFolderPath, exportPath);
+            return new ExportSaveResult { Success = true, Filepath = appFolderPath };
+        }
+
+        public static ExportSaveResult SaveFile(string fileName, StringBuilder sb)
+        {
+            var currentUser = RequestHandler.GetUserSessionObject();
+            int branchId = currentUser.BranchID;
+            string exportPath = "/ExportOutput/" + branchId + "/" + fileName;
+
+            var path = HttpContext.Current.Server.MapPath("~" + exportPath);
+            FileInfo fs = new FileInfo(path);
+            fs.Directory.Create();
+            System.IO.File.WriteAllText(path, sb.ToString());
+
+            string appFolderPath = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
+            appFolderPath = Path.Combine(appFolderPath, exportPath);
+            return new ExportSaveResult { Success = true, Filepath = appFolderPath };
+        }
+
+        public static List<ContactListType> RetrieveListTypes()
+        {
+            List<ContactListType> types = new List<ContactListType>();
+            using (var client = new clientEntities())
+            {
+                types = (from lt in client.list_type
+                         select new ContactListType
+                         {
+                             ListTypeId = lt.pk_list_type_id,
+                             ListTypeDescription = lt.type_description
+                         }).ToList();
+
+                return types;
             }
         }
     }

@@ -56,6 +56,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Google.Apis">
       <HintPath>..\packages\Google.Apis.1.9.0\lib\net40\Google.Apis.dll</HintPath>
     </Reference>
@@ -740,6 +744,7 @@
     <Content Include="Assets\edit.png" />
     <Content Include="Assets\edit_link.png" />
     <Content Include="Assets\email_icon.png" />
+    <Content Include="Assets\export_list.png" />
     <Content Include="Assets\fh_edit.png" />
     <Content Include="Assets\frm_edit.png" />
     <Content Include="Assets\generate_id.png" />
@@ -763,6 +768,7 @@
     <Content Include="Assets\marker_icons\prospecting\unprospected_bulk_select.png" />
     <Content Include="Assets\my_templates.png" />
     <Content Include="Assets\newsletter_template.png" />
+    <Content Include="Assets\new_list.png" />
     <Content Include="Assets\new_valuation.png" />
     <Content Include="Assets\notes.png" />
     <Content Include="Assets\person.png" />
@@ -1456,8 +1462,11 @@
     <Compile Include="Types\ContactList.cs" />
     <Compile Include="Types\ContactListExportRecord.cs" />
     <Compile Include="Types\ContactListSelection.cs" />
+    <Compile Include="Types\ContactListType.cs" />
+    <Compile Include="Types\ExportSaveResult.cs" />
     <Compile Include="Types\GeneratedIdentifier.cs" />
     <Compile Include="Types\ListExportSelection.cs" />
+    <Compile Include="Types\ListOutputRecord.cs" />
     <Compile Include="Types\ListSelected.cs" />
     <Compile Include="Types\MandateLookupDataPacket.cs" />
     <Compile Include="Types\CommReportFilters.cs" />

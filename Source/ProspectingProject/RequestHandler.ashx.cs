@@ -256,6 +256,10 @@ namespace ProspectingProject
                         string exportListResult = ExportList(json);
                         context.Response.Write(exportListResult);
                         break;
+                    case "retrieve_list_types":
+                        string listTypes = RetrieveListTypes();
+                        context.Response.Write(listTypes);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -288,6 +292,12 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string RetrieveListTypes()
+        {
+            var types = ProspectingCore.RetrieveListTypes();
+            return ProspectingCore.SerializeToJsonWithDefaults(types);
         }
 
         private string ExportList(string json)
