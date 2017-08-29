@@ -891,7 +891,9 @@ namespace ProspectingProject
                     TrustLookupsEnabled = userAuthPacket.TrustLookupsEnabled,
                     ActivityTypes = ProspectingLookupData.ActivityTypes,
                     ActivityFollowupTypes = ProspectingLookupData.ActivityFollowupTypes,
-                    BranchID = userAuthPacket.BranchID
+                    BranchID = userAuthPacket.BranchID,
+                    RegistrationId = userAuthPacket.RegistrationId,
+                    ExportPermission = userAuthPacket.ExportPermission
                 };
 
                 return userPacket;
@@ -4815,6 +4817,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                                     pp.street_or_unit_no,
                                     pp.unit,
                                     pp.ss_fh,
+                                    pp.prospecting_property_id,
                                     pp.property_address,
                                     pp.ss_name,
                                     pp.ss_door_number,
@@ -4831,6 +4834,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                                     left join prospecting_area_dialing_code adc on adc.prospecting_area_dialing_code_id = cd.intl_dialing_code_id
                                     where cpl.fk_list_id = " + export.ListId + " and (cd.deleted is null or cd.deleted = 0)";
 
+                    string listType = client.list.First(li => li.pk_list_id == export.ListId).list_type.type_description;
                     var results = prospecting.ExecuteQuery<ContactListExportRecord>(baseQuery, new Object[] { });
                     var contacts = results.GroupBy(c => c.contact_person_id);
                     List<ListOutputRecord> outputRecords = new List<ListOutputRecord>();
@@ -4846,6 +4850,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                         record.EmailOptOut = contactRecord.optout_emails;
                         record.SmsOptOut = contactRecord.optout_sms;
                         record.DoNotContact = contactRecord.do_not_contact;
+                        record.ProspectingPropertyId = contactRecord.prospecting_property_id;
 
                         if (export.Columns.Contains("[Property Address]"))
                         {
@@ -4950,6 +4955,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                         netOutputRecord.EmailOptOut = record.EmailOptOut;
                         netOutputRecord.SmsOptOut = record.SmsOptOut;
                         netOutputRecord.DoNotContact = record.DoNotContact;
+                        netOutputRecord.ProspectingPropertyId = record.ProspectingPropertyId;
 
                         if (export.OmitRecordIfEmptyField)
                         {
@@ -5011,6 +5017,53 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                         }
                     }
 
+                    if (listType == "Today's Birthdays" || listType == "Today's Anniversaries")
+                    {
+                        switch (listType)
+                        {
+                            case "Today's Birthdays":
+                                List<ListOutputRecord> bdayList = new List<ListOutputRecord>();
+                                foreach (var item in netOutputRecords)
+                                {
+                                    var idValidation = ProspectingCore.HasValidSAIdentityNumber(item.IdNumber);
+                                    if (idValidation.Result) // success
+                                    {
+                                        var dateOfBirth = idValidation.DateOfBirth.Value;
+                                        if (dateOfBirth.Month == DateTime.Today.Month && dateOfBirth.Day == DateTime.Today.Day)
+                                        {
+                                            bdayList.Add(item);
+                                        }
+                                    }
+                                }
+                                netOutputRecords = bdayList;
+                                break;
+                            case "Today's Anniversaries":
+                                List<ListOutputRecord> propertyAnniversaryList = new List<ListOutputRecord>();
+                                foreach (var item in netOutputRecords)
+                                {
+                                    var prospectingProperty = prospecting.prospecting_properties.First(pp => pp.prospecting_property_id == item.ProspectingPropertyId);
+                                    if (!string.IsNullOrEmpty(prospectingProperty.lightstone_reg_date) && prospectingProperty.lightstone_reg_date.Length == 8)
+                                    {
+                                        DateTime regDate;
+                                        if (DateTime.TryParseExact(prospectingProperty.lightstone_reg_date, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out regDate))
+                                        {
+                                            var todaysDate = DateTime.Today;
+                                            int regYear = regDate.Year;
+                                            if (regYear < todaysDate.Year)
+                                            {
+                                                if (regDate.Month == todaysDate.Month && regDate.Day == todaysDate.Day)
+                                                {
+                                                    propertyAnniversaryList.Add(item);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                netOutputRecords = propertyAnniversaryList;
+                                break;
+                        }
+                    }
+
                     // column selection here
                     if (export.OutputFormat == ".xlsx")
                     {
@@ -5027,7 +5080,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                             List<PropertyInfo> recordProps = new List<PropertyInfo>();
                             for (int i = 1; i <= export.Columns.Count; i++)
                             {
-                                worksheet.Cells[1, i].Value = export.Columns[i - 1];
+                                worksheet.Cells[1, i].Value = export.Columns[i - 1].Replace("[", "").Replace("]", "");
 
                                 var recordProp = typeof(ListOutputRecord).GetProperties().First(prop =>
                                 {
@@ -5076,7 +5129,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                             recordProps.Add(recordProp);
                         }
 
-                        string header = export.Columns.Aggregate((s1, s2) => s1 + "," + s2);
+                        string header = export.Columns.Aggregate((s1, s2) => s1.Replace("[", "").Replace("]", "") + "," + s2.Replace("[", "").Replace("]", ""));
                         sb.AppendLine(header);
 
                         foreach (var record in netOutputRecords)
@@ -5151,6 +5204,26 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                          }).ToList();
 
                 return types;
+            }
+        }
+
+        public static bool CreateNewListForBranch(ContactList input)
+        {
+            var currentUser = RequestHandler.GetUserSessionObject();
+            using (var client = new clientEntities())
+            {
+                list newList = new list
+                {
+                    list_name = input.ListName,
+                    fk_list_type_id = input.ListType.Key,
+                    fk_branch_id = currentUser.BranchID,
+                    fk_created_by_user_id = currentUser.RegistrationId,
+                    created_date = DateTime.Now,
+                    updated_date = DateTime.Now
+                };
+                client.list.Add(newList);
+                client.SaveChanges();
+                return true;
             }
         }
     }

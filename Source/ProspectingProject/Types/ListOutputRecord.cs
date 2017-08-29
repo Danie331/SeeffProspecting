@@ -29,6 +29,7 @@ namespace ProspectingProject
         public bool EmailOptOut { get; set; }
         public bool SmsOptOut { get; set; }
         public bool DoNotContact { get; set; }
+        public int ProspectingPropertyId { get; internal set; }
     }
 
     class ColumnMappingAttribute: Attribute

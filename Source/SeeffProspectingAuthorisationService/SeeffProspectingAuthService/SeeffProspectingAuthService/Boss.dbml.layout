@@ -20,5 +20,31 @@
         <elementListCompartment Id="dc7e1973-a9cf-4481-9858-374e55ef3f43" absoluteBounds="5.265, 1.96, 1.9700000000000002, 13.133585611979166" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="7620ab1e-43e9-4950-ade1-59082540d79a" absoluteBounds="1.25, 3.875, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/BossDataContext/permission" />
+      <nestedChildShapes>
+        <elementListCompartment Id="aa5f7862-2fdf-4a8c-bfa2-3e6a717f9aa0" absoluteBounds="1.2649999999999997, 4.335, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.25 : 5.04890055338542); (3.25 : 5.04890055338542)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BossDataContext/user_registration/user_registration_permission" />
+      <nodes>
+        <classShapeMoniker Id="caca2945-9c86-454d-a2cc-d3e9cadf6b5f" />
+        <classShapeMoniker Id="7620ab1e-43e9-4950-ade1-59082540d79a" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="f726203c-b647-431e-ac4d-de667d3d6840" absoluteBounds="1.25, 7.25, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/BossDataContext/permission_section" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fe7a8c09-e4db-475b-a721-579fe25b9a91" absoluteBounds="1.2649999999999997, 7.71, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.25 : 7.25); (2.25 : 6.22280110677083)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BossDataContext/permission_section/permission_section_permission" />
+      <nodes>
+        <classShapeMoniker Id="f726203c-b647-431e-ac4d-de667d3d6840" />
+        <classShapeMoniker Id="7620ab1e-43e9-4950-ade1-59082540d79a" />
+      </nodes>
+    </associationConnector>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

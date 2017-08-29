@@ -296,12 +296,14 @@ function buildGeneralInfoHtml(contact, context) {
         }
 
         // Lists
-        var associatedListsBtn = $("<button type='text' id='associatedListsBtn' style='cursor:pointer;vertical-align:middle;margin-left:5px;'><img src='Assets/lists.png' style='vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>List Manager</label></button>");
-        html.append(associatedListsBtn);
-        associatedListsBtn.click(function (e) {
-            e.preventDefault();
-            contactListsManager.showListManagerForContactPerson();
-        });
+        if (prospectingContext.LoggedInUser == "95568323-61cd-456b-9934-34bd17754a57" || prospectingContext.LoggedInUser == "62a85a9d-be7a-4fad-b704-a55edb1d338f") {
+            var associatedListsBtn = $("<button type='text' id='associatedListsBtn' style='cursor:pointer;vertical-align:middle;margin-left:5px;'><img src='Assets/lists.png' style='vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>List Manager</label></button>");
+            html.append(associatedListsBtn);
+            associatedListsBtn.click(function (e) {
+                e.preventDefault();
+                contactListsManager.showListManagerForContactPerson();
+            });
+        }
 
         // Referrals
         var newReferralBtn = $("<button type='button' id='newReferralBtn' style='cursor:pointer;display:inline-block;vertical-align:middle;float:right'><img src='Assets/create_referral.png' style='display:inline-block;vertical-align:middle;margin-right:5px' /><label style='vertical-align:middle'>Create Referral</label></button>");

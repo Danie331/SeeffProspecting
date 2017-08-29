@@ -92,13 +92,15 @@ function createProspectingMenu(userData) {
     appendMenuItemContent(menuItem.MenuItemContent);
     menuItems.push(menuItem);
 
-    menuItem = createMenuItem("Lists", "lists", buildListsMenu(), function () {
-        toggleMultiSelectMode(false);
-        toggleFilterMode(false);
-        contactListsManager.toggleListsMainMenu();
-    }, null);
-    appendMenuItemContent(menuItem.MenuItemContent);
-    menuItems.push(menuItem);
+    if (prospectingContext.LoggedInUser == "95568323-61cd-456b-9934-34bd17754a57" || prospectingContext.LoggedInUser == "62a85a9d-be7a-4fad-b704-a55edb1d338f") {
+        menuItem = createMenuItem("Lists", "lists", buildListsMenu(), function () {
+            toggleMultiSelectMode(false);
+            toggleFilterMode(false);
+            contactListsManager.toggleListsMainMenu();
+        }, null);
+        appendMenuItemContent(menuItem.MenuItemContent);
+        menuItems.push(menuItem);
+    }
 
     //menuItem = createMenuItem("Document Vault", "documentvault", buildDocumentVault(), function () { toggleMultiSelectMode(false); }, null);
     //appendMenuItemContent(menuItem.MenuItemContent);

@@ -280,7 +280,9 @@ function buildPropertyDetailsFilterTab() {
     if (prospectingContext.UserHasCommAccess) {
         container.append("<br /><br />");
         container.append(sendCommsToResultsBtn);
-        container.append(addToListToggleBtn);
+        if (prospectingContext.LoggedInUser == "95568323-61cd-456b-9934-34bd17754a57" || prospectingContext.LoggedInUser == "62a85a9d-be7a-4fad-b704-a55edb1d338f") {
+            container.append(addToListToggleBtn);
+        }
         sendCommsToResultsBtn.click(function () {
             showMenu("communication");
             handleSMSMessageClick();

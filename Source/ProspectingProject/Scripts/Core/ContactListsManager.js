@@ -290,6 +290,12 @@ contactListsManager.showListManagerForSelection = function (useVisibleProperties
 contactListsManager.toggleListsMainMenu = function() {
     var container = $("#listsDiv");
     if (container.children('.contentExpander').length) {
+        contactListsManager.retrieveListsForBranch(function (data) {
+            var target = $("#selectListToExport").empty().append($("<option value='-1' />"));
+            $.each(data, function (idx, list) {
+                target.append($("<option value='" + list.ListId + "'>" + list.ListName + "</option>"));
+            });
+        });
         return;
     }
 
@@ -309,7 +315,7 @@ contactListsManager.toggleListsMainMenu = function() {
 
         var div = $("<div />").empty().css('display', 'block');      
         var selectListDesc = $("<span class='fieldAlignment' style='display:inline-block'>Select a list to export:</span>");
-        var selectListMenu = $("<select style='display:inline-block;width:70%;max-width:60%;' />").append($("<option value='-1' />"));
+        var selectListMenu = $("<select id='selectListToExport' style='display:inline-block;width:70%;max-width:60%;' />").append($("<option value='-1' />"));
         div.append(selectListDesc).append(selectListMenu).append("<p />");
         var outputFormatDesc = $("<span class='fieldAlignment' style='display:inline-block'>Select an output format:</span>");
         var selectFormatMenu = $("<select style='display:inline-block' />").append($("<option value='1'>.xlsx</option>")).append($("<option value='2'>.csv</option>"));
@@ -350,6 +356,12 @@ contactListsManager.toggleListsMainMenu = function() {
         var exportBtn = $("<input type='button' style='display:inline-block;' value='Export..' />");
         div.append(exportBtn);
         exportBtn.click(function () {
+
+            if (!prospectingContext.UserHasExportPermission) {
+                alert("You do not have access (permission) to use this feature.");
+                return;
+            }
+
             var listSelected = selectListMenu.val() > -1;
             var atLeastOneColumnSelected = $('.fieldSelectableCheckbox').is(':checked');
             if (listSelected && atLeastOneColumnSelected) {
@@ -512,12 +524,27 @@ contactListsManager.toggleListsMainMenu = function() {
         container.append(createBtn);
 
         createBtn.click(function () {
+            var listType = selectListTypeMenu.val();
             var listName = newListNameInput.val();
             if (listName == '') {
                 alert("You must provide a name for the list");
                 return;
             }
-
+            $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Adding List...</p>' });
+            $.ajax({
+                type: "POST",
+                url: "RequestHandler.ashx",
+                data: JSON.stringify({ Instruction: 'create_list', ListName: listName, ListType: {Key: listType, Value: ''} }),
+                dataType: "json"
+            }).done(function (data) {
+                $.unblockUI();
+                if (data == true) {
+                    showSavedSplashDialog("List Created Successfully");
+                    newListNameInput.val("");
+                } else {
+                    alert("Error occurred saving list. Please contact support.");
+                }
+            });
         });
 
         $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading...</p>' });

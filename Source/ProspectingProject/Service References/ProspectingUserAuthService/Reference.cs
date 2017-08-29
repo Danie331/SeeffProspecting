@@ -44,6 +44,9 @@ namespace ProspectingProject.ProspectingUserAuthService {
         private string EmailAddressField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool ExportPermissionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string GuidField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -51,6 +54,9 @@ namespace ProspectingProject.ProspectingUserAuthService {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket[] ManagerDetailsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int RegistrationIdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SuburbsListField;
@@ -166,6 +172,19 @@ namespace ProspectingProject.ProspectingUserAuthService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool ExportPermission {
+            get {
+                return this.ExportPermissionField;
+            }
+            set {
+                if ((this.ExportPermissionField.Equals(value) != true)) {
+                    this.ExportPermissionField = value;
+                    this.RaisePropertyChanged("ExportPermission");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string Guid {
             get {
                 return this.GuidField;
@@ -200,6 +219,19 @@ namespace ProspectingProject.ProspectingUserAuthService {
                 if ((object.ReferenceEquals(this.ManagerDetailsField, value) != true)) {
                     this.ManagerDetailsField = value;
                     this.RaisePropertyChanged("ManagerDetails");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int RegistrationId {
+            get {
+                return this.RegistrationIdField;
+            }
+            set {
+                if ((this.RegistrationIdField.Equals(value) != true)) {
+                    this.RegistrationIdField = value;
+                    this.RaisePropertyChanged("RegistrationId");
                 }
             }
         }

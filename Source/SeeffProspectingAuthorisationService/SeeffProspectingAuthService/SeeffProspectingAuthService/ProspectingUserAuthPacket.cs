@@ -49,5 +49,11 @@ namespace SeeffProspectingAuthService
         public bool TrustLookupsEnabled { get; set; }
         [DataMember]
         public int BranchID { get; internal set; }
+
+        [DataMember]
+        public int RegistrationId { get; set; }
+
+        [DataMember]
+        public bool ExportPermission { get; set; }
     }
 }

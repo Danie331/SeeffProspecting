@@ -27,6 +27,7 @@ namespace SeeffProspectingAuthService
                     }
                 }
 
+                bool exportPermission = GetExportPermissionStatus(userGuid);
                 var userManager = GetProspectingManagerDetails(userGuid);
                 int? businessUnitID = GetBusinessUnitID(userGuid);
                 var businessUnitUsers = GetBusinessUnitUsers(userGuid);
@@ -47,10 +48,28 @@ namespace SeeffProspectingAuthService
                                       CommunicationEnabled = user.prospecting_communication,
                                       BusinessUnitID = businessUnitID,
                                       TrustLookupsEnabled = user.trust_lookup,
-                                      BranchID = user.branch_id 
+                                      BranchID = user.branch_id,
+                                      RegistrationId = Convert.ToInt32(user.registration_id),
+                                      ExportPermission = exportPermission
                                   }).FirstOrDefault();
 
                 return userRecord;
+            }
+        }
+
+        private bool GetExportPermissionStatus(Guid userGuid)
+        {
+            using (var boss = new BossDataContext())
+            {
+                var thisUser = boss.user_registrations.First(u => u.user_guid == userGuid.ToString());
+                var permissionSection = boss.permission_sections.FirstOrDefault(ps => ps.permission_section_name == "Client Contact Details Report");
+                if (permissionSection != null)
+                {
+                    int permissionSectionId = permissionSection.permission_section_id;
+                    return boss.permissions.Any(p => p.fk_permission_section_id == permissionSectionId && p.fk_registration_id == thisUser.registration_id);
+                }
+
+                return false;
             }
         }
 

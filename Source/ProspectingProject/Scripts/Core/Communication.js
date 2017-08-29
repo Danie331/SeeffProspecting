@@ -189,8 +189,10 @@ function buildCommunicationMenuItems() {
 
     //var emailMessage = buildCommMenuItem("comm_menu_email", buildEmailMenuItemContent(), handleEmailMessageClick);
     //menu.append(emailMessage);
-    var addToListUtility = buildCommMenuItem("comm_menu_lists", buildAddToListMenuItemContent(), handleAddToListClick);
-    menu.append(addToListUtility);
+    if (prospectingContext.LoggedInUser == "95568323-61cd-456b-9934-34bd17754a57" || prospectingContext.LoggedInUser == "62a85a9d-be7a-4fad-b704-a55edb1d338f") {
+        var addToListUtility = buildCommMenuItem("comm_menu_lists", buildAddToListMenuItemContent(), handleAddToListClick);
+        menu.append(addToListUtility);
+    }
     
     if (communicationsMode == "SMS") {
         var separator = buildCommMenuItem("separator", "-----------------------------------------", null);

@@ -37,5 +37,7 @@ namespace ProspectingProject
 
         public bool IsTrainingMode { get; set; }
         public int BranchID { get; internal set; }
+        public int RegistrationId { get; set; }
+        public bool ExportPermission { get; set; }
     }
 }

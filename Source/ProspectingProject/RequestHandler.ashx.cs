@@ -260,6 +260,10 @@ namespace ProspectingProject
                         string listTypes = RetrieveListTypes();
                         context.Response.Write(listTypes);
                         break;
+                    case "create_list":
+                        string createListResult = CreateNewListForBranch(json);
+                        context.Response.Write(createListResult);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -292,6 +296,13 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string CreateNewListForBranch(string json)
+        {
+            var input = ProspectingCore.Deserialise<ContactList>(json);
+            var createListResult = ProspectingCore.CreateNewListForBranch(input);
+            return ProspectingCore.SerializeToJsonWithDefaults(createListResult);
         }
 
         private string RetrieveListTypes()

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="boss" Class="BossDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=louise-pc;Initial Catalog=boss;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="bossConnectionString2" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=localhost;Initial Catalog=boss;Integrated Security=True;MultipleActiveResultSets=True;Application Name=EntityFramework" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="bossConnectionString3" Provider="System.Data.SqlClient" />
   <Table Name="dbo.license_branches" Member="license_branches">
     <Type Name="license_branch">
       <Column Name="license_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -94,6 +94,28 @@
       <Column Name="prospecting_communication" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="mapping" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="trust_lookup" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="user_registration_permission" Member="permissions" ThisKey="registration_id" OtherKey="fk_registration_id" Type="permission" />
+    </Type>
+  </Table>
+  <Table Name="dbo.permission" Member="permissions">
+    <Type Name="permission">
+      <Column Name="permission_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="fk_registration_id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="fk_permission_section_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="fk_permission_type_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="permission_create_date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="permission_create_user" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="permission_update_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="permission_update_user" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="user_registration_permission" Member="user_registration" ThisKey="fk_registration_id" OtherKey="registration_id" Type="user_registration" IsForeignKey="true" />
+      <Association Name="permission_section_permission" Member="permission_section" ThisKey="fk_permission_section_id" OtherKey="permission_section_id" Type="permission_section" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.permission_section" Member="permission_sections">
+    <Type Name="permission_section">
+      <Column Name="permission_section_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="permission_section_name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="permission_section_permission" Member="permissions" ThisKey="permission_section_id" OtherKey="fk_permission_section_id" Type="permission" />
     </Type>
   </Table>
   <Function Name="dbo.user_auth" Method="user_auth">

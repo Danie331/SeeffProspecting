@@ -40,6 +40,7 @@ function initialize() {
                 prospectingContext.UserFollowupTypes = data.ActivityFollowupTypes;
                 prospectingContext.BusinessUnitUsers = data.BusinessUnitUsers;
                 prospectingContext.IsTrainingMode = data.IsTrainingMode;
+                prospectingContext.UserHasExportPermission = data.ExportPermission;
 
                 userIsProspectingManager = data.IsProspectingManager;
                 availableCredit = data.AvailableCredit;
