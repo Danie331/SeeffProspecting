@@ -3059,6 +3059,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                             EmailContactabilityStatus = contactRecord.email_contactability_status.HasValue ? contactRecord.email_contactability_status.Value : 1,
 
                             TargetLightstonePropertyIdForComms = lightstoneProperty.lightstone_property_id,
+                            TargetProspectingPropertyId = lightstoneProperty.prospecting_property_id,
 
                             // Dracore fields
                             AgeGroup = contactRecord.age_group,
@@ -4684,15 +4685,8 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                 foreach (var item in targetRecords.OrderByDescending(lt => lt.fk_list_type_id))
                 {
                     var listType = getListType(item.fk_list_type_id);
-                    var memberRecords = prospecting.contact_person_lists.Where(l => l.fk_list_id == item.pk_list_id).ToList();
-                    List<ProspectingContactPerson> members = new List<ProspectingContactPerson>();
-                    foreach (var memberRecord in memberRecords)
-                    {
-                        members.Add(new ProspectingContactPerson
-                        {
-                            ContactPersonId = memberRecord.contact_person_id
-                        });
-                    }
+                    var contactIDs = prospecting.contact_person_lists.Where(l => l.fk_list_id == item.pk_list_id).Select(c => c.contact_person_id);
+                    List<ProspectingContactPerson> members = (from v in contactIDs select new ProspectingContactPerson { ContactPersonId = v }).ToList();
                     results.Add(new ContactList
                     {
                         id = item.pk_list_id,
@@ -4757,24 +4751,25 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                     targets = LoadContacts(multiSelection.VisibleProperties.ToArray());
                 }
 
+                var targetIDs = targets.Select(g => g.ContactPersonId.ToString());
                 foreach (var list in multiSelection.SelectedLists)
                 {
-                    foreach (var contact in targets)
+                    var targetsForInsert = new List<ProspectingContactPerson>();
+                    var queryResults = prospecting.ExecuteQuery<FlattenedPropertyRecord>(@"SELECT contact_person_id FROM contact_person_list WHERE fk_list_id = " + list.ListId +
+                                                                    " AND contact_person_id in (" + targetIDs.Aggregate((n1, n2) => n1 + "," + n2) + ")", new object[] { });
+                    List<int> x = new List<int>(queryResults.Select(c => c.contact_person_id.Value));
+                    targetsForInsert = targets.Where(cp => !x.Contains(cp.ContactPersonId.Value)).ToList();
+                    foreach (var contact in targetsForInsert)
                     {
-                        bool existingListAssociation = prospecting.contact_person_lists.Any(l => l.fk_list_id == list.ListId && l.contact_person_id == contact.ContactPersonId);
-                        if (!existingListAssociation)
+                        var newListRecord = new contact_person_list
                         {
-                            int prospectingPropertyId = prospecting.prospecting_properties.First(pp => pp.lightstone_property_id == contact.TargetLightstonePropertyIdForComms).prospecting_property_id;
-                            var newListRecord = new contact_person_list
-                            {
-                                contact_person_id = contact.ContactPersonId.Value,
-                                fk_list_id = list.ListId,
-                                prospecting_property_id = prospectingPropertyId,
-                                created_by = loggedInUser.UserGuid,
-                                created_date = DateTime.Now
-                            };
-                            prospecting.contact_person_lists.InsertOnSubmit(newListRecord);
-                        }
+                            contact_person_id = contact.ContactPersonId.Value,
+                            fk_list_id = list.ListId,
+                            prospecting_property_id = contact.TargetProspectingPropertyId.Value,
+                            created_by = loggedInUser.UserGuid,
+                            created_date = DateTime.Now
+                        };
+                        prospecting.contact_person_lists.InsertOnSubmit(newListRecord);
                     }
                     prospecting.SubmitChanges();
                 }
@@ -5151,9 +5146,9 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new ExportSaveResult { Success = false };
+                return new ExportSaveResult { Success = false, Error = ex.ToString() };
             }
 
             return new ExportSaveResult { Success = false };

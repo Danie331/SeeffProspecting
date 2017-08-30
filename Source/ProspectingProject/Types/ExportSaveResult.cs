@@ -9,5 +9,6 @@ namespace ProspectingProject
     {
         public string Filepath { get;  set; }
         public bool Success { get; set; }
+        public String Error { get; set; }
     }
 }

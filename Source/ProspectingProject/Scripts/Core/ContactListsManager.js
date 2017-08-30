@@ -203,7 +203,7 @@ contactListsManager.saveListsForSelection = function (useVisibleProperties, call
         TargetContactsList: recipients
     };
 
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Saving...</p>' });
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Saving...please note that this process can take a while</p>' });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
@@ -539,7 +539,22 @@ contactListsManager.toggleListsMainMenu = function() {
             }).done(function (data) {
                 $.unblockUI();
                 if (data == true) {
-                    showSavedSplashDialog("List Created Successfully");
+                    $("<div title='List Created Successfully' style='font-family:Verdana;font-size:12px;' />")
+                        .append("Your list is ready to be populated and available to all users within your branch. To populate the list you may use any of the methods listed below:")
+                        .append("<p />")
+                        .append("1. To add/remove individual contacts to lists, navigate to the contact record and click 'List Manager'")
+                        .append("<br />")
+                        .append("2. To add contacts in bulk, select a suburb, navigate to the Communication menu and click 'Add Contacts To List'")
+                        .append("<br />")
+                        .append("3. To filter properties first and then add contacts, perform the filtering and then click 'Add To List'")
+                        .dialog({
+                        modal: true,
+                        closeOnEscape: true,
+                        width: '730',
+                        height: '250',
+                        buttons: { "Ok": function () { $(this).dialog("close");} },
+                        position: ['center', 'center']
+                    });
                     newListNameInput.val("");
                 } else {
                     alert("Error occurred saving list. Please contact support.");
@@ -585,6 +600,6 @@ contactListsManager.exportListCallback = function (fileData) {
         $(form).submit();
         form.remove();
     } else {
-        alert("An error occurred during the export. Please contact support if the error persists.");
+        alert("An error occurred during the export. Please contact support if the error persists: " + fileData.Error);
     }
 }

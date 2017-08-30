@@ -120,5 +120,6 @@ namespace ProspectingProject
         public string TargetContactCellphoneNumber { get; set; }
 
         public bool HasValidID { get; private set; }
+       public int? TargetProspectingPropertyId { get; set; }
     }
 }

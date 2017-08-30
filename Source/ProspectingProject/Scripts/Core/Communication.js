@@ -1912,6 +1912,7 @@ function getContactsFromSelectedMarkers(actionWhenDone) {
                             contact.PropertyAddress = getFormattedAddress(pp);
                             contact.TargetLightstonePropertyId = pp.LightstonePropertyId;
                             contact.TargetLightstonePropertyIdForComms = pp.LightstonePropertyId;
+                            contact.TargetProspectingPropertyId = pp.ProspectingPropertyId;
 
                             selectedContacts.push(contact);
                         }
@@ -1929,6 +1930,7 @@ function getContactsFromSelectedMarkers(actionWhenDone) {
                             contact.PropertyAddress = getFormattedAddress(pp);
                             contact.TargetLightstonePropertyId = pp.LightstonePropertyId;
                             contact.TargetLightstonePropertyIdForComms = pp.LightstonePropertyId;
+                            contact.TargetProspectingPropertyId = pp.ProspectingPropertyId;
 
                             selectedContacts.push(contact);
                         }
@@ -1945,6 +1947,7 @@ function getContactsFromSelectedMarkers(actionWhenDone) {
                         contact.PropertyAddress = getFormattedAddress(pp);
                         contact.TargetLightstonePropertyId = pp.LightstonePropertyId;
                         contact.TargetLightstonePropertyIdForComms = pp.LightstonePropertyId;
+                        contact.TargetProspectingPropertyId = pp.ProspectingPropertyId;
                         selectedContacts.push(contact);
                     });
                 }
