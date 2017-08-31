@@ -452,7 +452,7 @@ input.agentNamesAutoCompleteSearchBox:focus
 
 .cell-reorder {
        cursor: move;
-      background: url("../3rdParty/SlickGrid/images/drag-handle.png") no-repeat center center;
+      background: url("/Scripts/3rdParty/SlickGrid/images/drag-handle.png") no-repeat center center;
 }
 .slick-selected-column {
     text-align: center;

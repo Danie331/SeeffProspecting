@@ -7,7 +7,7 @@ contactListsManager.retrieveListsForBranch = function (callback) {
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: 'retrieve_lists_for_branch'}),
+        data: JSON.stringify({ Instruction: 'retrieve_lists_for_branch', ContactPersonId: currentPersonContact ? currentPersonContact.ContactPersonId : null }),
         dataType: "json"
     }).done(function (data) {
         callback(data);
@@ -131,11 +131,7 @@ contactListsManager.showLists = function (container, listsData) {
         var id = 'listid_' + dataContext.ListId;
         var checked = '';
         if (currentPersonContact) {
-            var contactsInList = dataContext.Members;
-            var isMember = $.grep(contactsInList, function (c) {
-                return c == currentPersonContact.ContactPersonId;
-            })[0];
-            if (isMember) {
+            if (dataContext.CurrentContactIsMember) {
                 checked = 'checked';
             }
         }

@@ -241,7 +241,7 @@ namespace ProspectingProject
                         context.Response.Write(requestStatus);
                         break;
                     case "retrieve_lists_for_branch":
-                        string listsForBranch = RetrieveListsForBranch();
+                        string listsForBranch = RetrieveListsForBranch(json);
                         context.Response.Write(listsForBranch);
                         break;
                     case "save_lists_for_contact":
@@ -332,9 +332,10 @@ namespace ProspectingProject
             return ProspectingCore.SerializeToJsonWithDefaults(result);
         }
 
-        private string RetrieveListsForBranch()
+        private string RetrieveListsForBranch(string json)
         {
-            var listsForBranch = ProspectingCore.RetrieveListsForBranch();
+            ProspectingContactPerson cp = ProspectingCore.Deserialise<ProspectingContactPerson>(json);
+            var listsForBranch = ProspectingCore.RetrieveListsForBranch(cp);
             return ProspectingCore.SerializeToJsonWithDefaults(listsForBranch);
         }
 

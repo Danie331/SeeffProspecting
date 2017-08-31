@@ -4661,7 +4661,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
             return mailContent.ToString();
         }
 
-        public static List<ContactList> RetrieveListsForBranch()
+        public static List<ContactList> RetrieveListsForBranch(ProspectingContactPerson currentContact)
         {
             Func<int, KeyValuePair<int, string>> getListType = typeId =>
             {
@@ -4685,10 +4685,12 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                 var currentUser = RequestHandler.GetUserSessionObject();
                 var targetRecords = clientDB.list.Where(li => li.fk_branch_id == currentUser.BranchID).ToList();
                 List<ContactList> results = new List<ContactList>();
+                int? currentContactID = currentContact.ContactPersonId;
                 foreach (var item in targetRecords.OrderByDescending(lt => lt.fk_list_type_id))
                 {
                     var listType = getListType(item.fk_list_type_id);
                     var contactIDs = prospecting.contact_person_lists.Where(l => l.fk_list_id == item.pk_list_id).Select(c => c.contact_person_id).ToList();
+                    bool currentContactIsMember = currentContactID.HasValue ? contactIDs.Contains(currentContactID.Value) : false;
                     results.Add(new ContactList
                     {
                         id = item.pk_list_id,
@@ -4696,8 +4698,8 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                         ListName = item.list_name,
                         ListType = listType,
                         ListTypeDescription = getListTypeDesc(listType),
-                        Members = contactIDs,
-                        MemberCount = contactIDs.Count
+                        MemberCount = contactIDs.Count,
+                        CurrentContactIsMember = currentContactIsMember
                     });
                 }
                 return results;
