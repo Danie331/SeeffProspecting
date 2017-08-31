@@ -126,7 +126,7 @@ namespace ProspectingReleaseBuilder
                 }
                 if (string.IsNullOrWhiteSpace(result))
                 {
-                    throw new Exception("Error minifying a script.");
+                    throw new Exception("Error minifying a script: " + script);
                 }
                 if (fileType == ".js")
                 {
@@ -161,7 +161,7 @@ namespace ProspectingReleaseBuilder
             }
         }
         static void CleanTargetFolder(string targetFolder) { }
-        static void Abandon(Exception ex) { }
+        static void Abandon(Exception ex) { Console.ReadLine(); }
         static void PerformChecksumComplete() { }
     }
 

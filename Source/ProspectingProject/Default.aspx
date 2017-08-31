@@ -21,6 +21,7 @@
     <script src="Scripts/3rdParty/ckeditor/ckeditor.js"></script>
     <script src="Scripts/3rdParty/ckeditor/adapters/jquery.js"></script>
     <script src="Scripts/Core/Extensions.js"></script>
+    <script src="Scripts/3rdParty/tooltip.js"></script>
 
     <%-- BEGIN_SECTION:STYLESHEETS --%> 
      <%-- BEGIN_SECTION:3RD_PARTY_STYLESHEETS --%>
@@ -45,7 +46,6 @@
     <script src="Scripts/3rdParty/OverlappingMarkerSpiderfier.js"></script>
     <script src="Scripts/3rdParty/jquery.contextMenu.js"></script>
     <script src="Scripts/3rdParty/jquery.ui.position.js"></script>
-    <script src="Scripts/3rdParty/tooltip.js"></script>
     <script src="Scripts/3rdParty/OpenTip.js"></script>
     <script src="Scripts/3rdParty/waitForImage.js"></script>
     <script src="Scripts/3rdParty/jqueryBlockUI.js"></script>
