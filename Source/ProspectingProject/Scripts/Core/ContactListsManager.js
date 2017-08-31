@@ -10,7 +10,6 @@ contactListsManager.retrieveListsForBranch = function (callback) {
         data: JSON.stringify({ Instruction: 'retrieve_lists_for_branch'}),
         dataType: "json"
     }).done(function (data) {
-        $.unblockUI();
         callback(data);
     });
 }
@@ -70,7 +69,8 @@ contactListsManager.showListManagerForContactPerson = function () {
             container.dialog("option", "buttons", { "Close": function () { $(this).dialog("close"); } });
             return;
         }
-        contactListsManager.showLists(listsContainer, data);        
+        contactListsManager.showLists(listsContainer, data);
+        $.unblockUI();
     });
 }
 
@@ -91,8 +91,8 @@ contactListsManager.showLists = function (container, listsData) {
     };
 
     columns = [
-                 { id: "col_ListName", name: "List", field: "ListName", width: 370, sortable: false },
-                 { id: "col_ListTypeDescription", name: "List Type", field: "ListTypeDescription", sortable: false, cssClass: 'center-cell' },
+                 { id: "col_ListName", name: "List", field: "ListName", width: 300, sortable: false },
+                 { id: "col_ListTypeDescription", name: "Export Filter", width: 150, field: "ListTypeDescription", sortable: false },
                   { id: "col_MemberCount", name: "List Size", field: "MemberCount", sortable: false, cssClass: 'center-cell' },
                  { id: "col_IsMember", name: "Member Of", formatter: addListMemberFormatter, sortable: false, cssClass: 'center-cell' }
     ];
@@ -133,7 +133,7 @@ contactListsManager.showLists = function (container, listsData) {
         if (currentPersonContact) {
             var contactsInList = dataContext.Members;
             var isMember = $.grep(contactsInList, function (c) {
-                return c.ContactPersonId == currentPersonContact.ContactPersonId;
+                return c == currentPersonContact.ContactPersonId;
             })[0];
             if (isMember) {
                 checked = 'checked';
@@ -203,7 +203,7 @@ contactListsManager.saveListsForSelection = function (useVisibleProperties, call
         TargetContactsList: recipients
     };
 
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Saving...please note that this process can take a while</p>' });
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Saving...Please wait.</p>' });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
@@ -284,6 +284,7 @@ contactListsManager.showListManagerForSelection = function (useVisibleProperties
             return;
         }
         contactListsManager.showLists(listsContainer, data);
+        $.unblockUI();
     });
 }
 
@@ -295,10 +296,12 @@ contactListsManager.toggleListsMainMenu = function() {
             $.each(data, function (idx, list) {
                 target.append($("<option value='" + list.ListId + "'>" + list.ListName + "</option>"));
             });
+            $.unblockUI();
         });
         return;
     }
 
+    var createListTabInit = false, createExportTabInit = false;
     $('#createNewListTab').empty();
     var createNewListTab = buildContentExpanderItem('createNewListTab', 'Assets/new_list.png', "Create New List", buildCreateNewListTab());
     $('#listExportTab').empty();
@@ -505,6 +508,10 @@ contactListsManager.toggleListsMainMenu = function() {
                     targetItem.selected = target.is(':checked');
                 }
             });
+            createExportTabInit = true;
+            if (createListTabInit && createExportTabInit) {
+                $.unblockUI();
+            }
         });
         
         return div;
@@ -516,7 +523,7 @@ contactListsManager.toggleListsMainMenu = function() {
         var newListNameInput = $("<input type='text' style='display:inline-block;width:70%;max-width:60%;' />");
         container.append(newListDesc).append(newListNameInput).append("<p />");
 
-        var selectListTypeDesc = $("<span class='fieldAlignment' style='display:inline-block'>List Type:</span>");
+        var selectListTypeDesc = $("<span class='fieldAlignment' style='display:inline-block'>Export Filter:</span>");
         var selectListTypeMenu = $("<select style='display:inline-block;width:40%;max-width:40%;' />");
         container.append(selectListTypeDesc).append(selectListTypeMenu).append("<p />");
 
@@ -569,10 +576,13 @@ contactListsManager.toggleListsMainMenu = function() {
             data: JSON.stringify({ Instruction: 'retrieve_list_types' }),
             dataType: "json"
         }).done(function (data) {
-            $.unblockUI();
             $.each(data, function (idx, listType) {
                 selectListTypeMenu.append($("<option value='" + listType.ListTypeId + "'>" + listType.ListTypeDescription + "</option>"));
             });
+            createListTabInit = true;
+            if (createListTabInit && createExportTabInit) {
+                $.unblockUI();
+            }
         });
 
         return container;

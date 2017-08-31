@@ -11,8 +11,8 @@ namespace ProspectingProject
         public int? ListId { get; set; }
         public string ListName { get; set; }
         public KeyValuePair<int, string> ListType { get; set; }
-        public string ListTypeDescription { get; internal set; }
-        public int MemberCount { get; internal set; }
-        public List<ProspectingContactPerson> Members { get; set; }
+        public string ListTypeDescription { get;  set; }
+        public int MemberCount { get;  set; }
+        public List<int> Members { get; set; }
     }
 }

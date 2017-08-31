@@ -4674,7 +4674,10 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                 return target;
             };
 
-            Func<KeyValuePair<int, string>, string> getListTypeDesc = type => { return type.Value == "User defined" ? "User" : "System"; };
+            Func<KeyValuePair<int, string>, string> getListTypeDesc = type => 
+            {
+                return type.Value == "No filtering" ? "None" : type.Value;
+            };
 
             using (var clientDB = new clientEntities())
                 using (var prospecting =  new ProspectingDataContext())
@@ -4685,8 +4688,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                 foreach (var item in targetRecords.OrderByDescending(lt => lt.fk_list_type_id))
                 {
                     var listType = getListType(item.fk_list_type_id);
-                    var contactIDs = prospecting.contact_person_lists.Where(l => l.fk_list_id == item.pk_list_id).Select(c => c.contact_person_id);
-                    List<ProspectingContactPerson> members = (from v in contactIDs select new ProspectingContactPerson { ContactPersonId = v }).ToList();
+                    var contactIDs = prospecting.contact_person_lists.Where(l => l.fk_list_id == item.pk_list_id).Select(c => c.contact_person_id).ToList();
                     results.Add(new ContactList
                     {
                         id = item.pk_list_id,
@@ -4694,8 +4696,8 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                         ListName = item.list_name,
                         ListType = listType,
                         ListTypeDescription = getListTypeDesc(listType),
-                        Members = members,
-                        MemberCount = members.Count
+                        Members = contactIDs,
+                        MemberCount = contactIDs.Count
                     });
                 }
                 return results;
