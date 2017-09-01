@@ -172,7 +172,8 @@ namespace SeeffProspectingAuthService
                          {
                              UserName = ur.user_preferred_name,
                              UserSurname = ur.user_surname,
-                             Guid = ur.user_guid
+                             Guid = ur.user_guid,
+                             RegistrationId = Convert.ToInt32(ur.registration_id)
                          }).Distinct().ToList();
 
                 return users;

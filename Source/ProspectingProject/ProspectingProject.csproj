@@ -755,6 +755,7 @@
     <Content Include="Assets\lists.png" />
     <Content Include="Assets\log_off.png" />
     <Content Include="Assets\make_primary_contact.png" />
+    <Content Include="Assets\manage_lists.png" />
     <Content Include="Assets\mandate_info.png" />
     <Content Include="Assets\marker_icons\prospecting\prospected.png" />
     <Content Include="Assets\marker_icons\prospecting\prospected_attention_required.png" />

@@ -862,7 +862,8 @@ namespace ProspectingProject
                         {
                             UserGuid = Guid.Parse(bu.Guid),
                             UserName = bu.UserName,
-                            UserSurname = bu.UserSurname
+                            UserSurname = bu.UserSurname,
+                            RegistrationId = bu.RegistrationId
                         });
 
                 var followupBundle = LoadFollowups(userGuid, businessUnitUsers, new List<long>());
@@ -4663,6 +4664,8 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
 
         public static List<ContactList> RetrieveListsForBranch(ProspectingContactPerson currentContact)
         {
+            var currentUser = RequestHandler.GetUserSessionObject();
+
             Func<int, KeyValuePair<int, string>> getListType = typeId =>
             {
                 var target = ProspectingLookupData.ContactListUserTypes.FirstOrDefault(kvp => kvp.Key == typeId);
@@ -4679,11 +4682,16 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                 return type.Value == "No filtering" ? "None" : type.Value;
             };
 
+            Func<int, string> getCreatedByUser =  regId => 
+            {
+                var target = currentUser.BusinessUnitUsers.FirstOrDefault(bu => bu.RegistrationId == regId);
+                return target != null ? target.Fullname : "n/a";
+            };
+
             using (var clientDB = new clientEntities())
                 using (var prospecting =  new ProspectingDataContext())
-            {
-                var currentUser = RequestHandler.GetUserSessionObject();
-                var targetRecords = clientDB.list.Where(li => li.fk_branch_id == currentUser.BranchID).ToList();
+            {               
+                var targetRecords = clientDB.list.Where(li => li.fk_branch_id == currentUser.BranchID && !li.deleted).ToList();
                 List<ContactList> results = new List<ContactList>();
                 int? currentContactID = currentContact.ContactPersonId;
                 foreach (var item in targetRecords.OrderByDescending(lt => lt.fk_list_type_id))
@@ -4691,6 +4699,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                     var listType = getListType(item.fk_list_type_id);
                     var contactIDs = prospecting.contact_person_lists.Where(l => l.fk_list_id == item.pk_list_id).Select(c => c.contact_person_id).ToList();
                     bool currentContactIsMember = currentContactID.HasValue ? contactIDs.Contains(currentContactID.Value) : false;
+                    string createdByUser = getCreatedByUser(item.fk_created_by_user_id);
                     results.Add(new ContactList
                     {
                         id = item.pk_list_id,
@@ -4699,7 +4708,9 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                         ListType = listType,
                         ListTypeDescription = getListTypeDesc(listType),
                         MemberCount = contactIDs.Count,
-                        CurrentContactIsMember = currentContactIsMember
+                        CurrentContactIsMember = currentContactIsMember,
+                        CreatedByUser = createdByUser,
+                        UpdatedDate = item.updated_date.HasValue ? item.updated_date.Value.ToString("yyyy-MM-dd") : item.created_date.ToString("yyyy-MM-dd")
                     });
                 }
                 return results;
@@ -4730,11 +4741,15 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                             fk_list_id = item.ListId,
                             prospecting_property_id = listSelection.TargetPropertyId,
                             created_by = loggedInUser.UserGuid,
-                            created_date = DateTime.Now
+                            created_date = DateTime.Now                             
                         };
                         prospecting.contact_person_lists.InsertOnSubmit(newListRecord);
                         prospecting.SubmitChanges();
                     }
+
+                    var targetList = clientDB.list.First(l => l.pk_list_id == item.ListId);
+                    targetList.updated_date = DateTime.Now;
+                    clientDB.SaveChanges();
                 }
             }
             return true;
@@ -4742,6 +4757,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
 
         public static object SaveSelectionToSelectedLists(MultiContactListSelection multiSelection)
         {
+            using (var clientDB = new clientEntities())
             using (var prospecting = new ProspectingDataContext())
             {
                 var loggedInUser = RequestHandler.GetUserSessionObject();
@@ -4776,6 +4792,10 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                         prospecting.contact_person_lists.InsertOnSubmit(newListRecord);
                     }
                     prospecting.SubmitChanges();
+
+                    var targetList = clientDB.list.First(l => l.pk_list_id == list.ListId);
+                    targetList.updated_date = DateTime.Now;
+                    clientDB.SaveChanges();
                 }
 
                 return true;
@@ -5218,7 +5238,8 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                     fk_branch_id = currentUser.BranchID,
                     fk_created_by_user_id = currentUser.RegistrationId,
                     created_date = DateTime.Now,
-                    updated_date = DateTime.Now
+                    updated_date = DateTime.Now,
+                    deleted = false
                 };
                 client.list.Add(newList);
                 client.SaveChanges();

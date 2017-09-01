@@ -27,6 +27,7 @@ namespace ProspectingProject
         public int fk_created_by_user_id { get; set; }
         public System.DateTime created_date { get; set; }
         public Nullable<System.DateTime> updated_date { get; set; }
+        public bool deleted { get; set; }
     
         public virtual list_type list_type { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
