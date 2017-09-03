@@ -5246,6 +5246,18 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                 return true;
             }
         }
+
+        public static bool DeleteList(ContactList input)
+        {
+            using (var client = new clientEntities())
+            {
+                var targetList = client.list.First(li => li.pk_list_id == input.ListId);
+                targetList.deleted = true;
+                targetList.updated_date = DateTime.Now;
+                client.SaveChanges();
+                return true;
+            }
+        }
     }
 }
 

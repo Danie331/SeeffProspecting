@@ -23,13 +23,13 @@ contactListsManager.showListManagerForContactPerson = function () {
     container.append("<p />");
     var selectAllCheckbox = $("<label style='display:inline-block;float:right;'><input type='checkbox' id='selectAllListsForContact' style='vertical-align:middle' />Select All</label>");
     container.append(selectAllCheckbox);
-    var listsContainer = $("<div id='listsContainer' style='height:300px;display:inline-block;width:100%;overflow-y:scroll;' />");
+    var listsContainer = $("<div id='listsContainer' style='height:300px;display:inline-block;width:100%;' />");
     container.append(listsContainer);
     container.dialog({
         modal: true,
         closeOnEscape: false,
         width: '600',
-        height: '500',
+        //height: '450',
         open: function (event, ui) { $(".ui-dialog-titlebar-close", $(this).parent()).hide(); },
         buttons: {
             "Save And Close": function () {
@@ -50,7 +50,7 @@ contactListsManager.showListManagerForContactPerson = function () {
                 container.remove();
             }
         },
-        position: ['center', 'center']
+        position: ['center', 150]
     });
     selectAllCheckbox.unbind('change').bind('change', function (e) {
         var target = $(this).find('input');
@@ -70,6 +70,7 @@ contactListsManager.showListManagerForContactPerson = function () {
             $(".memberOfListCheckbox").remove();
             container.append("<p /><span>No lists have been added for your branch.</span>");
             container.dialog("option", "buttons", { "Close": function () { $(this).dialog("close"); } });
+            $.unblockUI();
             return;
         }
         contactListsManager.showListsForSelection(listsContainer, data);
@@ -91,6 +92,7 @@ contactListsManager.showListsForSelection = function (container, listsData) {
         enableCellNavigation: false,
         enableColumnReorder: false,
         multiColumnSort: false
+        //autoHeight: true
     };
 
     columns = [
@@ -102,6 +104,20 @@ contactListsManager.showListsForSelection = function (container, listsData) {
     grid = new Slick.Grid(container, dataView, columns, options);
     grid.setSelectionModel(new Slick.RowSelectionModel());
     grid.registerPlugin(new Slick.AutoTooltips());
+
+    grid.onClick.subscribe(function (e, args) {
+        if (!currentPersonContact) return;
+        var checkbox = $(e.target);
+        if (checkbox.hasClass('memberOfListCheckbox')) {
+            var isChecked = checkbox.is(':checked');
+            var listId = checkbox.attr('id').replace('listid_', '');
+            $.each(listsData, function (idx, list) {
+                if (list.ListId == listId) {
+                    list.CurrentContactIsMember = isChecked;
+                }
+            });
+        }
+    });
 
     function comparer(a, b) {
         var x = a[sortcol].toLowerCase(), y = b[sortcol].toLowerCase();
@@ -129,6 +145,7 @@ contactListsManager.showListsForSelection = function (container, listsData) {
     dataView.endUpdate();
     dataView.syncGridSelection(grid, true);
     container.find(".slick-viewport").css('overflow-x', 'hidden');
+    //container.find(".slick-viewport").css('overflow-y', 'scroll');
 
     function addListMemberFormatter(row, cell, value, columnDef, dataContext) {
         var id = 'listid_' + dataContext.ListId;
@@ -229,13 +246,13 @@ contactListsManager.showListManagerForSelection = function (useVisibleProperties
     container.append("<p />");
     var selectAllCheckbox = $("<label style='display:inline-block;float:right;'><input type='checkbox' id='selectAllListsForSelection' style='vertical-align:middle' />Select All</label>");
     container.append(selectAllCheckbox);
-    var listsContainer = $("<div id='listsContainer' style='height:300px;display:inline-block;width:100%;overflow-y:scroll;' />");
+    var listsContainer = $("<div id='listsContainer' style='height:300px;display:inline-block;width:100%;' />");
     container.append(listsContainer);
     container.dialog({
         modal: true,
         closeOnEscape: false,
         width: '600',
-        height: '500',
+        //height: '400',
         open: function (event, ui) { $(".ui-dialog-titlebar-close", $(this).parent()).hide(); },
         buttons: {
             "Save And Close": function () {
@@ -260,7 +277,7 @@ contactListsManager.showListManagerForSelection = function (useVisibleProperties
                 container.remove();
             }
         },
-        position: ['center', 'center']
+        position: ['center', 150]
     });
     selectAllCheckbox.unbind('change').bind('change', function (e) {
         var target = $(this).find('input');
@@ -278,8 +295,9 @@ contactListsManager.showListManagerForSelection = function (useVisibleProperties
             selectAllCheckbox.remove();
             listsContainer.remove();
             $(".memberOfListCheckbox").remove();
-            container.append("<p /><span>No lists have been added for your branch. Use the SmartAdmin interface to add lists.</span>");
+            container.append("<p /><span>No lists have been added for your branch.</span>");
             container.dialog("option", "buttons", { "Close": function () { $(this).dialog("close"); } });
+            $.unblockUI();
             return;
         }
         contactListsManager.showListsForSelection(listsContainer, data);
@@ -300,7 +318,6 @@ contactListsManager.toggleListsMainMenu = function() {
         return;
     }
 
-    var createListTabInit = false, createExportTabInit = false;
     $('#createNewListTab').empty();
     var createNewListTab = buildContentExpanderItem('createNewListTab', 'Assets/new_list.png', "Create New List", buildCreateNewListTab());
     $("#manageListsTab").empty();
@@ -313,17 +330,43 @@ contactListsManager.toggleListsMainMenu = function() {
         contactListsManager.listManagementGrid.resizeCanvas();
 
         var cols = contactListsManager.listManagementGrid.getColumns();
-        cols[0].width = 250;
+        cols[0].width = 200;
         cols[2].width = 80;
         contactListsManager.listManagementGrid.setColumns(cols);
     });
     container.append(listsExpander.construct());
     //listsExpander.open('listExportTab');
     container.css('display', 'block');
+    //..listsForBranch, listTypes
+    contactListsManager.retrieveListsForBranch(function (listsForBranch) {
+        contactListsManager.retrieveListTypes(function (listTypes) {
+
+            $.each(listTypes, function (idx, listType) {
+                $('#selectListTypeMenu').append($("<option value='" + listType.ListTypeId + "'>" + listType.ListTypeDescription + "</option>"));
+            });
+
+            if (!listsForBranch.length) {
+                $("#manageListsMid").show();
+                $("#manageListsBottom").hide();
+            } else {
+                $("#manageListsMid").hide();
+                $("#manageListsBottom").show();
+            }
+            contactListsManager.showListManagementView($('#listManagementContainer'), listsForBranch);
+
+            $.each(listsForBranch, function (idx, list) {
+                $('#selectListToExport').append($("<option value='" + list.ListId + "'>" + list.ListName + "</option>"));
+            });
+
+            contactListsManager.showColumnSelectionGrid();
+            $.unblockUI();
+        });
+    });
 
     function buildlistExportTab() {
 
-        var div = $("<div />").empty().css('display', 'block');      
+        var div = $("<div id='exportContainer' />").empty().css('display', 'block');
+        div.append($("<span style='font-style: italic;'>Use this section to download the contacts of a list. If your list has an export filter, the contacts will be filtered accordingly. Note that extra access rights are required to use this feature.</span>")).append("<p />");
         var selectListDesc = $("<span class='fieldAlignment' style='display:inline-block'>Select a list to export:</span>");
         var selectListMenu = $("<select id='selectListToExport' style='display:inline-block;width:70%;max-width:60%;' />").append($("<option value='-1' />"));
         div.append(selectListDesc).append(selectListMenu).append("<p />");
@@ -401,153 +444,30 @@ contactListsManager.toggleListsMainMenu = function() {
             } else {
                 alert("Please select a list to export and ensure that at least one field/column is selected.");
             }
-        });
-
-        function fieldSelectableFormatter(row, cell, value, columnDef, dataContext) {
-            var id = 'fieldid' + dataContext.id;
-            var checked = dataContext.selected ? 'checked' : '';
-            var selected = $("<input id='" + id + "' type='checkbox' class='fieldSelectableCheckbox' " + checked + " />");
-            return selected[0].outerHTML;
-        }
-
-        contactListsManager.retrieveListsForBranch(function (data) {
-            $.each(data, function (idx, list) {
-                selectListMenu.append($("<option value='" + list.ListId + "'>" + list.ListName + "</option>"));
-            });
-            
-            var data = [];
-            var columns = [
-              {
-                  id: "#",
-                  name: "",
-                  width: 40,
-                  behavior: "selectAndMove",
-                  selectable: false,
-                  resizable: false,
-                  cssClass: "cell-reorder dnd"
-              },
-              {
-                  id: "fieldname",
-                  name: "Column Name",
-                  field: "fieldname",
-                  width: 300,
-                  cssClass: "cell-title"
-              },
-              {
-                  id: "selected",
-                  name: "Selected",
-                  width: 60,
-                  field: "selected",
-                  cssClass: "slick-selected-column",
-                  headerCssClass: "slick-selected-column",
-                  formatter: fieldSelectableFormatter
-              }
-            ];
-
-            var options = { forceFitColumns: true };
-            data = [
-        { fieldname: "[Title]", id: 1, selected: true },
-        { fieldname: "[First Name]", id: 2, selected: true },
-        { fieldname: "[Surname]", id: 3, selected: true },
-        { fieldname: "[Email Address]", id: 4, selected: true },
-        { fieldname: "[Home Landline]", id: 5, selected: true },
-        { fieldname: "[Work Landline]", id: 6, selected: true },
-        { fieldname: "[Cellphone]", id: 7, selected: true },
-        { fieldname: "[ID number]", id: 8, selected: true },
-        { fieldname: "[Property Address]", id: 9, selected: true }
-            ];
-            contactListsManager.columnSelectionGrid = new Slick.Grid("#columnExportGrid", data, columns, options);
-            contactListsManager.columnSelectionGrid.setSelectionModel(new Slick.RowSelectionModel());
-            var moveRowsPlugin = new Slick.RowMoveManager();
-            moveRowsPlugin.onBeforeMoveRows.subscribe(function (e, data) {
-                for (var i = 0; i < data.rows.length; i++) {
-                    // no point in moving before or after itself
-                    if (data.rows[i] == data.insertBefore || data.rows[i] == data.insertBefore - 1) {
-                        e.stopPropagation();
-                        return false;
-                    }
-                }
-                return true;
-            });
-            moveRowsPlugin.onMoveRows.subscribe(function (e, args) {
-                var extractedRows = [], left, right;
-                var rows = args.rows;
-                var insertBefore = args.insertBefore;
-                left = data.slice(0, insertBefore);
-                right = data.slice(insertBefore, data.length);
-                rows.sort(function (a, b) { return a - b; });
-                for (var i = 0; i < rows.length; i++) {
-                    extractedRows.push(data[rows[i]]);
-                }
-                rows.reverse();
-                for (var i = 0; i < rows.length; i++) {
-                    var row = rows[i];
-                    if (row < insertBefore) {
-                        left.splice(row, 1);
-                    } else {
-                        right.splice(row - insertBefore, 1);
-                    }
-                }
-                data = left.concat(extractedRows.concat(right));
-                var selectedRows = [];
-                for (var i = 0; i < rows.length; i++)
-                    selectedRows.push(left.length + i);
-                contactListsManager.columnSelectionGrid.resetActiveCell();
-                contactListsManager.columnSelectionGrid.setData(data);
-                contactListsManager.columnSelectionGrid.setSelectedRows(selectedRows);
-                contactListsManager.columnSelectionGrid.render();
-            });
-            contactListsManager.columnSelectionGrid.registerPlugin(moveRowsPlugin);
-            contactListsManager.columnSelectionGrid.onDragInit.subscribe(function (e, dd) {
-                // prevent the grid from cancelling drag'n'drop by default
-                e.stopImmediatePropagation();
-            });
-
-            $.drop({ mode: "mouse" });
-            $("#columnExportGrid .slick-viewport").css('overflow-x', 'hidden');
-
-            div.unbind('change').bind('change', '.fieldSelectableCheckbox', function (e) {
-                var target = $(e.target);
-                if (target.hasClass('fieldSelectableCheckbox')) {
-                    var targetItem = $.grep(data, function (item) {
-                        var id = target.attr('id').replace('fieldid', '');
-                        return item.id == id;
-                    })[0];
-                    targetItem.selected = target.is(':checked');
-                }
-            });
-            createExportTabInit = true;
-            if (createListTabInit && createExportTabInit) {
-                $.unblockUI();
-            }
-        });
-        
+        });        
         return div;
     }
 
     function buildManageListsTab() {
         var container = $("<div />").empty().css('display', 'block');
-        var sectionDescription = $("<span style='font-style: italic;'>Use this section to view and delete lists available within your branch.</span>");
-        container.append(sectionDescription).append("<p />");
-        var refreshListsBtn = $("<input type='button' style='float:right' value='Refresh..' />");
-        container.append(refreshListsBtn).append("<p />");
-        var listContainer = $("<div id='listManagementContainer' style='height:300px;display:inline-block;width:100%;overflow-y:scroll;' />").empty();
-        container.append(listContainer);
 
-        contactListsManager.retrieveListsForBranch(function (data) {
-            if (!data.length) {
-                listContainer.append("No lists to show.");
-            } else {
-                contactListsManager.showListManagementView(listContainer, data);
-            }
-            $.unblockUI();
-        });
+        var topSection = $("<div id='manageListsTop' />").append($("<span style='font-style: italic;'>Use this section to view and delete lists available within your branch.</span>"));
+        var refreshListsBtn = $("<input id='refreshListsBtn' type='button' value='Refresh..' />");
+        var midSection = $("<div id='manageListsMid' />").append($("<span style='font-style: italic;'>No lists to show.</span>").append("<p />"));
+        var bottomSection = $("<div id='manageListsBottom' />");
+        var listContainer = $("<div id='listManagementContainer' style='height:100%;display:inline-block;width:100%;margin-right:10px' />").empty();
+        bottomSection.append(listContainer);
+
+        container.append(topSection).append("<p />").append(midSection).append("<p />").append(refreshListsBtn).append("<p />").append(bottomSection);
 
         refreshListsBtn.click(function () {
             contactListsManager.retrieveListsForBranch(function (data) {
                 if (!data.length) {
-                    listContainer.append("No lists to show.");
+                    midSection.show();
+                    bottomSection.hide();
                 } else {
+                    midSection.hide();
+                    bottomSection.show();
                     contactListsManager.showListManagementView(listContainer, data);
                 }
                 $.unblockUI();
@@ -565,7 +485,7 @@ contactListsManager.toggleListsMainMenu = function() {
         container.append(sectionDescription).append("<p />").append(newListDesc).append(newListNameInput).append("<p />");
 
         var selectListTypeDesc = $("<span class='fieldAlignment' style='display:inline-block'>Export Filter:</span>");
-        var selectListTypeMenu = $("<select style='display:inline-block;width:40%;max-width:40%;' />");
+        var selectListTypeMenu = $("<select id='selectListTypeMenu' style='display:inline-block;width:40%;max-width:40%;' />");
         container.append(selectListTypeDesc).append(selectListTypeMenu).append("<p />");
 
         var createBtn = $("<input type='button' style='display:inline-block;' value='Create..' />");
@@ -610,28 +530,134 @@ contactListsManager.toggleListsMainMenu = function() {
             });
         });
 
-        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading...</p>' });
-        $.ajax({
-            type: "POST",
-            url: "RequestHandler.ashx",
-            data: JSON.stringify({ Instruction: 'retrieve_list_types' }),
-            dataType: "json"
-        }).done(function (data) {
-            $.each(data, function (idx, listType) {
-                selectListTypeMenu.append($("<option value='" + listType.ListTypeId + "'>" + listType.ListTypeDescription + "</option>"));
-            });
-            createListTabInit = true;
-            if (createListTabInit && createExportTabInit) {
-                $.unblockUI();
-            }
-        });
-
         return container;
     }
 }
 
+contactListsManager.showColumnSelectionGrid = function () {
+    function fieldSelectableFormatter(row, cell, value, columnDef, dataContext) {
+        var id = 'fieldid' + dataContext.id;
+        var checked = dataContext.selected ? 'checked' : '';
+        var selected = $("<input id='" + id + "' type='checkbox' class='fieldSelectableCheckbox' " + checked + " />");
+        return selected[0].outerHTML;
+    }
+
+    var data = [];
+    var columns = [
+      {
+          id: "#",
+          name: "",
+          width: 40,
+          behavior: "selectAndMove",
+          selectable: false,
+          resizable: false,
+          cssClass: "cell-reorder dnd"
+      },
+      {
+          id: "fieldname",
+          name: "Column Name",
+          field: "fieldname",
+          width: 300,
+          cssClass: "cell-title"
+      },
+      {
+          id: "selected",
+          name: "Selected",
+          width: 60,
+          field: "selected",
+          cssClass: "slick-selected-column",
+          headerCssClass: "slick-selected-column",
+          formatter: fieldSelectableFormatter
+      }
+    ];
+
+    var options = { forceFitColumns: true };
+    data = [
+{ fieldname: "[Title]", id: 1, selected: true },
+{ fieldname: "[First Name]", id: 2, selected: true },
+{ fieldname: "[Surname]", id: 3, selected: true },
+{ fieldname: "[Email Address]", id: 4, selected: true },
+{ fieldname: "[Home Landline]", id: 5, selected: true },
+{ fieldname: "[Work Landline]", id: 6, selected: true },
+{ fieldname: "[Cellphone]", id: 7, selected: true },
+{ fieldname: "[ID number]", id: 8, selected: true },
+{ fieldname: "[Property Address]", id: 9, selected: true }
+    ];
+    contactListsManager.columnSelectionGrid = new Slick.Grid("#columnExportGrid", data, columns, options);
+    contactListsManager.columnSelectionGrid.setSelectionModel(new Slick.RowSelectionModel());
+    var moveRowsPlugin = new Slick.RowMoveManager();
+    moveRowsPlugin.onBeforeMoveRows.subscribe(function (e, data) {
+        for (var i = 0; i < data.rows.length; i++) {
+            // no point in moving before or after itself
+            if (data.rows[i] == data.insertBefore || data.rows[i] == data.insertBefore - 1) {
+                e.stopPropagation();
+                return false;
+            }
+        }
+        return true;
+    });
+    moveRowsPlugin.onMoveRows.subscribe(function (e, args) {
+        var extractedRows = [], left, right;
+        var rows = args.rows;
+        var insertBefore = args.insertBefore;
+        left = data.slice(0, insertBefore);
+        right = data.slice(insertBefore, data.length);
+        rows.sort(function (a, b) { return a - b; });
+        for (var i = 0; i < rows.length; i++) {
+            extractedRows.push(data[rows[i]]);
+        }
+        rows.reverse();
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            if (row < insertBefore) {
+                left.splice(row, 1);
+            } else {
+                right.splice(row - insertBefore, 1);
+            }
+        }
+        data = left.concat(extractedRows.concat(right));
+        var selectedRows = [];
+        for (var i = 0; i < rows.length; i++)
+            selectedRows.push(left.length + i);
+        contactListsManager.columnSelectionGrid.resetActiveCell();
+        contactListsManager.columnSelectionGrid.setData(data);
+        contactListsManager.columnSelectionGrid.setSelectedRows(selectedRows);
+        contactListsManager.columnSelectionGrid.render();
+    });
+    contactListsManager.columnSelectionGrid.registerPlugin(moveRowsPlugin);
+    contactListsManager.columnSelectionGrid.onDragInit.subscribe(function (e, dd) {
+        // prevent the grid from cancelling drag'n'drop by default
+        e.stopImmediatePropagation();
+    });
+
+    $.drop({ mode: "mouse" });
+    $("#columnExportGrid .slick-viewport").css('overflow-x', 'hidden');
+
+    $("#exportContainer").unbind('change').bind('change', '.fieldSelectableCheckbox', function (e) {
+        var target = $(e.target);
+        if (target.hasClass('fieldSelectableCheckbox')) {
+            var targetItem = $.grep(data, function (item) {
+                var id = target.attr('id').replace('fieldid', '');
+                return item.id == id;
+            })[0];
+            targetItem.selected = target.is(':checked');
+        }
+    });
+}
+
+contactListsManager.retrieveListTypes = function (callback) {
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: 'retrieve_list_types' }),
+        dataType: "json"
+    }).done(function (data) {
+        callback(data);
+    });
+}
+
 contactListsManager.exportList = function (exportObject, callback) {
-    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Generating Export. Please wait...</p>' });
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Generating Export File. Please wait...</p>' });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
@@ -655,7 +681,7 @@ contactListsManager.exportListCallback = function (fileData) {
     }
 }
 
-contactListsManager.showListManagementView = function (container, lists) {
+contactListsManager.showListManagementView = function (container, listsForBranch) {
     var columns;
     var sortcol;
     var sortdir = 1;
@@ -665,11 +691,12 @@ contactListsManager.showListManagementView = function (container, lists) {
         forceFitColumns: true,
         enableCellNavigation: false,
         enableColumnReorder: false,
-        multiColumnSort: false
+        multiColumnSort: false,
+        autoHeight: true
     };
 
     columns = [
-                 { id: "col_ListName", name: "List", field: "ListName", width: 250, sortable: false },
+                 { id: "col_ListName", name: "List", field: "ListName", width: 200, sortable: false },
                  { id: "col_ListTypeDescription", name: "Export Filter", width: 150, field: "ListTypeDescription", sortable: false, cssClass: "slick-selected-column", headerCssClass: "slick-selected-column" },
                  { id: "col_MemberCount", name: "List Size", field: "MemberCount", sortable: false, cssClass: 'center-cell', headerCssClass: "slick-selected-column" },
                  { id: "col_CreatedByUser", name: "Created By", field: "CreatedByUser", sortable: false, cssClass: "slick-selected-column", headerCssClass: "slick-selected-column" },
@@ -685,17 +712,19 @@ contactListsManager.showListManagementView = function (container, lists) {
         var row = contactListsManager.listManagementGrid.getDataItem(args.row);
         var listId = row.ListId;
 
-        var confirmDialog = $("<div title='Delete List Item' style='font-family:Verdana;font-size:12px;overflow: hidden;' />").empty();
+        var confirmDialog = $("<div title='Delete List' style='font-family:Verdana;font-size:12px;overflow: hidden;' />").empty();
         confirmDialog.append("Are you sure you want to delete this list?");
         confirmDialog.dialog({
             modal: true,
             closeOnEscape: false,
             width: '300',
-            height: '250',
+            height: '150',
             open: function (event, ui) { $(".ui-dialog-titlebar-close", $(this).parent()).hide(); },
             buttons: {
                 "Yes": function () {
-                    contactListsManager.deleteList(function () {
+                    contactListsManager.deleteList(listId, function () {
+                        $('#refreshListsBtn').trigger('click');
+                        confirmDialog.dialog("close");
                     });
                 },
                 "No": function () {  confirmDialog.dialog("close"); }
@@ -726,10 +755,14 @@ contactListsManager.showListManagementView = function (container, lists) {
     });
 
     dataView.beginUpdate();
-    dataView.setItems(lists);
+    dataView.setItems(listsForBranch);
     dataView.endUpdate();
     dataView.syncGridSelection(contactListsManager.listManagementGrid, true);
     container.find(".slick-viewport").css('overflow-x', 'hidden');
+
+    if (!listsForBranch.length) {
+        container.append("No lists to show.");
+    }
 
     function deleteItemFormatter(row, cell, value, columnDef, dataContext) {
         var deleteLink = $("<a href='' style='cursor:pointer;text-decoration: underline;' onclick='return false;'>delete</a>");
@@ -737,6 +770,15 @@ contactListsManager.showListManagementView = function (container, lists) {
     }
 }
 
-contactListsManager.deleteList = function () {
+contactListsManager.deleteList = function (listId, callback) {
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Deleting item...</p>' });
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: 'delete_list', ListId: listId }),
+        dataType: "json"
+    }).done(function (data) {
+        $.unblockUI();
+        callback(data);
+    });
 }

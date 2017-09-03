@@ -264,6 +264,10 @@ namespace ProspectingProject
                         string createListResult = CreateNewListForBranch(json);
                         context.Response.Write(createListResult);
                         break;
+                    case "delete_list":
+                        string listDeleteResult = DeleteList(json);
+                        context.Response.Write(listDeleteResult);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -296,6 +300,13 @@ namespace ProspectingProject
                     context.Response.Write(errorJSON);
                 }
             }
+        }
+
+        private string DeleteList(string json)
+        {
+            var input = ProspectingCore.Deserialise<ContactList>(json);
+            var result = ProspectingCore.DeleteList(input);
+            return ProspectingCore.SerializeToJsonWithDefaults(result);
         }
 
         private string CreateNewListForBranch(string json)
