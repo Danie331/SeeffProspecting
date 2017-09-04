@@ -21,8 +21,6 @@ contactListsManager.showListManagerForContactPerson = function () {
     var container = $("<div title='List Manager' style='font-family:Verdana;font-size:12px;overflow: hidden;' />").empty();
     container.append("Lists provide a way to group contacts together. Use this feature to toggle the list(s) this contact is a member of.<p style='margin-top:10px'/>");
     container.append("<p />");
-    var selectAllCheckbox = $("<label style='display:inline-block;float:right;'><input type='checkbox' id='selectAllListsForContact' style='vertical-align:middle' />Select All</label>");
-    container.append(selectAllCheckbox);
     var listsContainer = $("<div id='listsContainer' style='height:300px;display:inline-block;width:100%;' />");
     container.append(listsContainer);
     container.dialog({
@@ -52,20 +50,8 @@ contactListsManager.showListManagerForContactPerson = function () {
         },
         position: ['center', 150]
     });
-    selectAllCheckbox.unbind('change').bind('change', function (e) {
-        var target = $(this).find('input');
-        var checked = target.is(':checked');
-        if (checked) {
-            $('.memberOfListCheckbox').prop('checked', true);
-        }
-        else {
-            $('.memberOfListCheckbox').prop('checked', false);
-        }
-        e.preventDefault();
-    });
     contactListsManager.retrieveListsForBranch(function (data) {
         if (!data.length) {
-            selectAllCheckbox.remove();
             listsContainer.remove();
             $(".memberOfListCheckbox").remove();
             container.append("<p /><span>No lists have been added for your branch.</span>");
@@ -244,8 +230,6 @@ contactListsManager.showListManagerForSelection = function (useVisibleProperties
     var container = $("<div title='List Manager' style='font-family:Verdana;font-size:12px;overflow: hidden;' />").empty();
     container.append("Lists provide a way to group contacts together. " + headerMessage + "<p style='margin-top:10px'/>");
     container.append("<p />");
-    var selectAllCheckbox = $("<label style='display:inline-block;float:right;'><input type='checkbox' id='selectAllListsForSelection' style='vertical-align:middle' />Select All</label>");
-    container.append(selectAllCheckbox);
     var listsContainer = $("<div id='listsContainer' style='height:300px;display:inline-block;width:100%;' />");
     container.append(listsContainer);
     container.dialog({
@@ -279,20 +263,8 @@ contactListsManager.showListManagerForSelection = function (useVisibleProperties
         },
         position: ['center', 150]
     });
-    selectAllCheckbox.unbind('change').bind('change', function (e) {
-        var target = $(this).find('input');
-        var checked = target.is(':checked');
-        if (checked) {
-            $('.memberOfListCheckbox').prop('checked', true);
-        }
-        else {
-            $('.memberOfListCheckbox').prop('checked', false);
-        }
-        e.preventDefault();
-    });
     contactListsManager.retrieveListsForBranch(function (data) {
         if (!data.length) {
-            selectAllCheckbox.remove();
             listsContainer.remove();
             $(".memberOfListCheckbox").remove();
             container.append("<p /><span>No lists have been added for your branch.</span>");

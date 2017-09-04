@@ -189,7 +189,13 @@ function buildCommunicationMenuItems() {
 
     //var emailMessage = buildCommMenuItem("comm_menu_email", buildEmailMenuItemContent(), handleEmailMessageClick);
     //menu.append(emailMessage);
-    if (prospectingContext.LoggedInUser == "95568323-61cd-456b-9934-34bd17754a57" || prospectingContext.LoggedInUser == "62a85a9d-be7a-4fad-b704-a55edb1d338f") {
+    if (prospectingContext.LoggedInUser == "95568323-61cd-456b-9934-34bd17754a57" ||
+        prospectingContext.LoggedInUser == "62a85a9d-be7a-4fad-b704-a55edb1d338f" || 
+        prospectingContext.LoggedInUser == "aa4284d8-eca3-405a-8af8-9966064bae38" ||
+        prospectingContext.LoggedInUser == "72095a56-d66b-4ef5-babb-0de0a3843316" ||
+        prospectingContext.LoggedInUser == "3a23c297-9f6b-4895-894b-22535bec3d35" ||
+        prospectingContext.LoggedInUser == "b9dcb687-9827-41f1-999c-0f59b9da970d" ||
+        prospectingContext.LoggedInUser == "f2be7d6a-93a2-4f3a-9d28-ee4301a53048") {
         var addToListUtility = buildCommMenuItem("comm_menu_lists", buildAddToListMenuItemContent(), handleAddToListClick);
         menu.append(addToListUtility);
     }
