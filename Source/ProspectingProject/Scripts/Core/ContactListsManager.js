@@ -352,7 +352,7 @@ contactListsManager.toggleListsMainMenu = function() {
         var gridContainer = $('<div style="width:90%"> \
                                 <div class="grid-header" style="width:100%"> \
                                 </div> \
-                                <div id="columnExportGrid" style="width:100%;height:260px;"></div> \
+                                <div id="columnExportGrid" style="width:100%;height:340px;"></div> \
                               </div>');
         div.append(gridContainer);
 
@@ -553,7 +553,10 @@ contactListsManager.showColumnSelectionGrid = function () {
 { fieldname: "[Work Landline]", id: 6, selected: true },
 { fieldname: "[Cellphone]", id: 7, selected: true },
 { fieldname: "[ID number]", id: 8, selected: true },
-{ fieldname: "[Property Address]", id: 9, selected: true }
+{ fieldname: "[Relationship Type]", id: 9, selected: true },
+{ fieldname: "[Property Address]", id: 10, selected: true },
+{ fieldname: "[Sectional Title]", id: 11, selected: false },
+{ fieldname: "[Legal Entity]", id: 12, selected: false }
     ];
     contactListsManager.columnSelectionGrid = new Slick.Grid("#columnExportGrid", data, columns, options);
     contactListsManager.columnSelectionGrid.setSelectionModel(new Slick.RowSelectionModel());

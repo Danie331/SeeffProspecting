@@ -3125,12 +3125,24 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
 
             if (property.SS_FH == "SS" || property.SS_FH == "FS")
             {
+                string ssAddress = "";
                 if (!string.IsNullOrEmpty(property.SSDoorNo))
                 {
-                    return encloseInQuotes( "Unit " + property.Unit + " (Door no.: " + property.SSDoorNo + ") " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.SSName.ToLower()).Replace("Ss ", "SS "));
+                    ssAddress = "Unit " + property.Unit + " (Door no.: " + property.SSDoorNo + ") " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.SSName.ToLower()).Replace("Ss ", "SS ");
                 }
 
-                return encloseInQuotes("Unit " + property.Unit + " " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.SSName.ToLower()).Replace("Ss ", "SS "));
+                ssAddress = "Unit " + property.Unit + " " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.SSName.ToLower()).Replace("Ss ", "SS ");
+
+                if (!string.IsNullOrEmpty(property.StreetOrUnitNo) && property.StreetOrUnitNo != "n/a")
+                {
+                    ssAddress = encloseInQuotes(string.Concat(ssAddress, ", ", property.StreetOrUnitNo + " " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.PropertyAddress.ToLower())));
+                }
+                else
+                {
+                    ssAddress = encloseInQuotes(ssAddress);
+                }
+
+                return ssAddress;
             }
 
             return encloseInQuotes(property.StreetOrUnitNo + " " + new CultureInfo("en-US", false).TextInfo.ToTitleCase(property.PropertyAddress.ToLower()));
@@ -4823,6 +4835,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                 using (var client = new clientEntities())
                 using (var prospecting = new ProspectingDataContext())
                 {
+                    // only when not null (person-to-company relation AND company-to-property relation) perform population of the 2 columns
                     string baseQuery = @"select 
                                     cp.contact_person_id,
                                     pt.person_title,
@@ -4838,6 +4851,10 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                                     pp.ss_fh,
                                     pp.prospecting_property_id,
                                     pp.property_address,
+                                    pprt.relationship_desc as relationship_to_property,
+                                    pcrt.relationship_desc as relationship_to_company,
+                                    cc.company_name,
+                                    cc.CK_number,
                                     pp.ss_name,
                                     pp.ss_door_number,
                                     cd.contact_detail_type,
@@ -4848,6 +4865,12 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                                     from contact_person_list cpl
                                     join prospecting_contact_person cp on cp.contact_person_id = cpl.contact_person_id
                                     left join prospecting_property pp on pp.prospecting_property_id = cpl.prospecting_property_id
+                                    left join prospecting_person_property_relationship ppr on (ppr.prospecting_property_id = pp.prospecting_property_id and ppr.contact_person_id = cp.contact_person_id)
+                                    left join prospecting_person_property_relationship_type pprt on pprt.person_property_relationship_type_id = ppr.relationship_to_property
+                                    left join prospecting_company_property_relationship cpr on cpr.prospecting_property_id = pp.prospecting_property_id
+                                    left join prospecting_contact_company cc on cc.contact_company_id = cpr.contact_company_id
+                                    left join prospecting_person_company_relationship pcr on (pcr.contact_company_id = cc.contact_company_id and pcr.contact_person_id = cp.contact_person_id)
+                                    left join prospecting_person_company_relationship_type pcrt on pcrt.person_company_relationship_type_id = pcr.relationship_to_company
                                     left join prospecting_person_title pt on cp.person_title = pt.prospecting_person_title_id
                                     left join prospecting_contact_detail cd on cd.contact_person_id = cp.contact_person_id
                                     left join prospecting_area_dialing_code adc on adc.prospecting_area_dialing_code_id = cd.intl_dialing_code_id
@@ -4870,6 +4893,10 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                         record.SmsOptOut = contactRecord.optout_sms;
                         record.DoNotContact = contactRecord.do_not_contact;
                         record.ProspectingPropertyId = contactRecord.prospecting_property_id;
+                        record.SectionalTitle = contactRecord.ss_name;
+                        record.LegalEntity = contactRecord.company_name;
+                        record.LegalEntityNumber = contactRecord.CK_number;
+                        record.RelationshipType = contactRecord.relationship_to_property ?? contactRecord.relationship_to_company;
 
                         if (export.Columns.Contains("[Property Address]"))
                         {
@@ -4975,6 +5002,9 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                         netOutputRecord.SmsOptOut = record.SmsOptOut;
                         netOutputRecord.DoNotContact = record.DoNotContact;
                         netOutputRecord.ProspectingPropertyId = record.ProspectingPropertyId;
+                        netOutputRecord.SectionalTitle = record.SectionalTitle != null ? record.SectionalTitle : "";
+                        netOutputRecord.LegalEntity = record.LegalEntity != null ? (record.LegalEntity + " (" + record.LegalEntityNumber + ")") : "";
+                        netOutputRecord.RelationshipType = record.RelationshipType != null ? record.RelationshipType : "";
 
                         if (export.OmitRecordIfEmptyField)
                         {
@@ -4995,6 +5025,12 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                             if (string.IsNullOrEmpty(netOutputRecord.HomeLandline) && export.Columns.Contains("[Home Landline]"))
                                 continue;
                             if (string.IsNullOrEmpty(netOutputRecord.WorkLandline) && export.Columns.Contains("[Work Landline]"))
+                                continue;
+                            if (string.IsNullOrEmpty(netOutputRecord.RelationshipType) && export.Columns.Contains("[Relationship Type]"))
+                                continue;
+                            if (string.IsNullOrEmpty(netOutputRecord.SectionalTitle) && export.Columns.Contains("[Sectional Title]"))
+                                continue;
+                            if (string.IsNullOrEmpty(netOutputRecord.LegalEntity) && export.Columns.Contains("[Legal Entity]"))
                                 continue;
                         }
 

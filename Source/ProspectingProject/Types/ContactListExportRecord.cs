@@ -28,5 +28,9 @@ namespace ProspectingProject
         public bool? is_primary_contact { get; set; }
         public string ss_fh { get; set; }
         public int prospecting_property_id { get; set; }
+        public string relationship_to_property { get; set; }
+        public string relationship_to_company { get; set; }
+        public string company_name { get; set; }
+        public string CK_number { get; set; }
     }
 }

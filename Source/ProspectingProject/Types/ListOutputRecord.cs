@@ -25,6 +25,13 @@ namespace ProspectingProject
         public string Cellphone { get; set; }
         [ColumnMapping("[Property Address]")]
         public string PropertyAddress { get; set; }
+        [ColumnMapping("[Relationship Type]")]
+        public string RelationshipType { get; set; }
+        [ColumnMapping("[Sectional Title]")]
+        public string SectionalTitle { get; set; }
+        [ColumnMapping("[Legal Entity]")]
+        public string LegalEntity { get; set; }
+        public string LegalEntityNumber { get; set; }
         public bool PopiOptOut { get; set; }
         public bool EmailOptOut { get; set; }
         public bool SmsOptOut { get; set; }
