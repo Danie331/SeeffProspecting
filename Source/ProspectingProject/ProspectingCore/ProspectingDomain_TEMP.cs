@@ -4874,10 +4874,10 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                                     left join prospecting_person_title pt on cp.person_title = pt.prospecting_person_title_id
                                     left join prospecting_contact_detail cd on cd.contact_person_id = cp.contact_person_id
                                     left join prospecting_area_dialing_code adc on adc.prospecting_area_dialing_code_id = cd.intl_dialing_code_id
-                                    where cpl.fk_list_id = " + export.ListId + " and (cd.deleted is null or cd.deleted = 0)";
+                                    where cpl.fk_list_id = {0} and (cd.deleted is null or cd.deleted = 0)";
 
                     string listType = client.list.First(li => li.pk_list_id == export.ListId).list_type.type_description;
-                    var results = prospecting.ExecuteQuery<ContactListExportRecord>(baseQuery, new Object[] { });
+                    var results = prospecting.ExecuteQuery<ContactListExportRecord>(baseQuery, export.ListId);
                     var contacts = results.GroupBy(c => c.contact_person_id);
                     List<ListOutputRecord> outputRecords = new List<ListOutputRecord>();
                     foreach (var contactGrouping in contacts)
