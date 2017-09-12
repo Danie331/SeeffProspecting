@@ -9945,7 +9945,7 @@ namespace ProspectingTaskScheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_datetime", DbType="DateTime NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_datetime", DbType="DateTime NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public System.DateTime created_datetime
 		{
 			get
@@ -10077,7 +10077,7 @@ namespace ProspectingTaskScheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_api_tracking_id", DbType="VarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_api_tracking_id", DbType="VarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string api_tracking_id
 		{
 			get
