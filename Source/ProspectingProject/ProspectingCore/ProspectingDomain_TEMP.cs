@@ -3270,6 +3270,8 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
 
                 CreateActivityForPropertyChangeOfOwnership(prospecting, propertyRecord);
 
+                var oldOwners = propertyRecord.prospecting_person_property_relationships.Select(cp => cp.prospecting_contact_person).ToList();
+
                 prospecting.prospecting_company_property_relationships.DeleteAllOnSubmit(propertyRecord.prospecting_company_property_relationships);
                 prospecting.prospecting_person_property_relationships.DeleteAllOnSubmit(propertyRecord.prospecting_person_property_relationships);
                 prospecting.SubmitChanges();
@@ -3280,6 +3282,38 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                 propertyRecord.last_purch_price = !string.IsNullOrEmpty(propertyMatch.PurchPrice) ? decimal.Parse(propertyMatch.PurchPrice, CultureInfo.InvariantCulture) : (decimal?)null;
                 propertyRecord.lightstone_reg_date = propertyMatch.RegDate;
                 propertyRecord.latest_reg_date = null;
+
+                // 
+                if (property.DeleteOldContactsFromMyLists == true)
+                {
+                    // Compare old and new owners and if they differ - remove old contacts from any lists they belong to which THIS user has access:
+                    List<prospecting_contact_person> contactsEligibleForRemoval = new List<prospecting_contact_person>();
+                    // If the old contact record doesn't exist in the new contacts list it's eligible for deletion from lists
+                    foreach (var oldOwner in oldOwners)
+                    {
+                        bool contactCanBeRemoved = true;
+                        foreach (var newOwner in propertyMatch.Owners)
+                        {
+                            if (newOwner.ContactEntityType == ContactEntityType.NaturalPerson)
+                            {
+                                var newContact = (ProspectingContactPerson)newOwner;
+                                if (oldOwner.id_number == newContact.IdNumber)
+                                {
+                                    contactCanBeRemoved = false;
+                                }
+                            }
+                        }
+                        if (contactCanBeRemoved)
+                        {
+                            contactsEligibleForRemoval.Add(oldOwner);
+                        }
+                    }
+                    foreach (var item in contactsEligibleForRemoval)
+                    {
+                        SaveListAllocationForContact(new ContactListSelection { ContactPersonId = item.contact_person_id, ListAllocation = new List<ListSelected>() });
+                    }
+                }
+
                 prospecting.SubmitChanges();
             }
 

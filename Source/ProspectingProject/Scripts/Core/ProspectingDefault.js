@@ -526,18 +526,22 @@ function setCurrentMarker(suburb, property, callback) {
 
 function showChangeOfOwnershipDialog(freeholdOrSS, proceedCallback, cancelCallback) {
     var div = $("<div id='ownershipChangeDialog' title='Change Of Ownership' style='font-family:Verdana;font-size:12px;' />").empty();
+    var deleteOldContactsFromLists = $("<label style='display:inline-block;vertical-align:middle;padding-right:10px'><input type='checkbox' id='deleteOldContactsFromLists' style='display:inline-block;vertical-align:middle;' />On update remove old owners from all my lists</label>");
     if (freeholdOrSS == 'FH') {        
-            div.append("The ownership of this property has changed and the current information on record is stale. ")
-            .append("Please update this property with the latest data from Lightstone. The existing contacts will be replaced by the new owners, however an activity will be created for the property containing details of the previous owners and their default contact information, should you wish to revert to that information at a later point in time.");
+        div.append("The ownership of this property has changed and the current information on record is stale. ")
+        .append("Please update this property with the latest data from Lightstone. The existing contacts will be replaced by the new owners, however an activity will be created for the property containing details of the previous owners and their default contact information, should you wish to revert to that information at a later point in time.")
+        .append("<p />")
+        .append(deleteOldContactsFromLists);
 
         div.dialog(
                 {
                     modal: true,
                     closeOnEscape: false,
                     width: '550',
+                    open: function (event, ui) { $(".ui-dialog-titlebar-close", $(this).parent()).hide(); },
                     buttons: {
-                        "Update ownership": function () { $(this).dialog("close"); proceedCallback(); },
-                        "Continue to property": function () { $(this).dialog("close"); cancelCallback(); }
+                        "Update ownership": function () { proceedCallback(); $(this).dialog("close").empty(); },
+                        "Continue to property": function () { $(this).dialog("close").empty(); cancelCallback(); }
                     },
                     position: ['center', 'center']
                 });
@@ -546,14 +550,17 @@ function showChangeOfOwnershipDialog(freeholdOrSS, proceedCallback, cancelCallba
         div.append("The ownership of one or more units in this sectional title has changed.<br />")
         .append("It is recommended that you update the affected units with the latest data from Lightstone. <br />")
         .append("The affected units will appear highlighted in red.");
+        //.append("<p />")
+        //.append(deleteOldContactsFromLists);
 
         div.dialog(
                 {
                     modal: true,
                     closeOnEscape: false,
                     width: 'auto',
+                    open: function (event, ui) { $(".ui-dialog-titlebar-close", $(this).parent()).hide(); },
                     buttons: {
-                        "Ok": function () { $(this).dialog("close"); proceedCallback(); }
+                        "Ok": function () { $(this).dialog("close").empty(); proceedCallback(); }
                     },
                     position: ['center', 'center']
                 });
@@ -562,11 +569,12 @@ function showChangeOfOwnershipDialog(freeholdOrSS, proceedCallback, cancelCallba
 
 function updateOwnershipOfProperty(marker, callbackFn) {
     var property = marker.ProspectingProperty;
+    var deleteOldOwnersFromLists = $("#deleteOldContactsFromLists").length ? $("#deleteOldContactsFromLists").is(":checked") : false;
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Updating Property Ownership...</p>' });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "update_property_ownership", LightstonePropertyId: property.LightstonePropertyId }),
+        data: JSON.stringify({ Instruction: "update_property_ownership", LightstonePropertyId: property.LightstonePropertyId, DeleteOldContactsFromMyLists: deleteOldOwnersFromLists }),
         dataType: "json"
     }).done(function (data) {
         $.unblockUI();

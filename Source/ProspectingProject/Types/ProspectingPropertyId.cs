@@ -12,5 +12,7 @@ namespace ProspectingProject
         public bool LoadActivities { get; set; }
 
         public int? ProspectingPropertyID { get; set; }
+
+       public bool? DeleteOldContactsFromMyLists { get; set; }
     }
 }
