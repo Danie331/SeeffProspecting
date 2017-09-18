@@ -5,12 +5,12 @@ var contactListsManager = contactListsManager || {};
 contactListsManager.listManagementGrid = null;
 contactListsManager.columnSelectionGrid = null; // slickgrid containing columns
 
-contactListsManager.retrieveListsForBranch = function (callback) {
+contactListsManager.retrieveListsForUser = function (callback) {
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading...</p>' });
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: 'retrieve_lists_for_branch', ContactPersonId: currentPersonContact ? currentPersonContact.ContactPersonId : null }),
+        data: JSON.stringify({ Instruction: 'retrieve_lists_for_user', ContactPersonId: currentPersonContact ? currentPersonContact.ContactPersonId : null }),
         dataType: "json"
     }).done(function (data) {
         callback(data);
@@ -50,11 +50,11 @@ contactListsManager.showListManagerForContactPerson = function () {
         },
         position: ['center', 150]
     });
-    contactListsManager.retrieveListsForBranch(function (data) {
+    contactListsManager.retrieveListsForUser(function (data) {
         if (!data.length) {
             listsContainer.remove();
             $(".memberOfListCheckbox").remove();
-            container.append("<p /><span>No lists have been added for your branch.</span>");
+            container.append("<p /><span>There are no lists available to you.</span>");
             container.dialog("option", "buttons", { "Close": function () { $(this).dialog("close"); } });
             $.unblockUI();
             return;
@@ -263,11 +263,11 @@ contactListsManager.showListManagerForSelection = function (useVisibleProperties
         },
         position: ['center', 150]
     });
-    contactListsManager.retrieveListsForBranch(function (data) {
+    contactListsManager.retrieveListsForUser(function (data) {
         if (!data.length) {
             listsContainer.remove();
             $(".memberOfListCheckbox").remove();
-            container.append("<p /><span>No lists have been added for your branch.</span>");
+            container.append("<p /><span>There are no lists available to you.</span>");
             container.dialog("option", "buttons", { "Close": function () { $(this).dialog("close"); } });
             $.unblockUI();
             return;
@@ -280,7 +280,7 @@ contactListsManager.showListManagerForSelection = function (useVisibleProperties
 contactListsManager.toggleListsMainMenu = function() {
     var container = $("#listsDiv");
     if (container.children('.contentExpander').length) {
-        contactListsManager.retrieveListsForBranch(function (data) {
+        contactListsManager.retrieveListsForUser(function (data) {
             var target = $("#selectListToExport").empty().append($("<option value='-1' />"));
             $.each(data, function (idx, list) {
                 target.append($("<option value='" + list.ListId + "'>" + list.ListName + "</option>"));
@@ -310,23 +310,23 @@ contactListsManager.toggleListsMainMenu = function() {
     //listsExpander.open('listExportTab');
     container.css('display', 'block');
     //..listsForBranch, listTypes
-    contactListsManager.retrieveListsForBranch(function (listsForBranch) {
+    contactListsManager.retrieveListsForUser(function (listsForUser) {
         contactListsManager.retrieveListTypes(function (listTypes) {
 
             $.each(listTypes, function (idx, listType) {
                 $('#selectListTypeMenu').append($("<option value='" + listType.ListTypeId + "'>" + listType.ListTypeDescription + "</option>"));
             });
 
-            if (!listsForBranch.length) {
+            if (!listsForUser.length) {
                 $("#manageListsMid").show();
                 $("#manageListsBottom").hide();
             } else {
                 $("#manageListsMid").hide();
                 $("#manageListsBottom").show();
             }
-            contactListsManager.showListManagementView($('#listManagementContainer'), listsForBranch);
+            contactListsManager.showListManagementView($('#listManagementContainer'), listsForUser);
 
-            $.each(listsForBranch, function (idx, list) {
+            $.each(listsForUser, function (idx, list) {
                 $('#selectListToExport').append($("<option value='" + list.ListId + "'>" + list.ListName + "</option>"));
             });
 
@@ -423,7 +423,7 @@ contactListsManager.toggleListsMainMenu = function() {
     function buildManageListsTab() {
         var container = $("<div />").empty().css('display', 'block');
 
-        var topSection = $("<div id='manageListsTop' />").append($("<span style='font-style: italic;'>Use this section to view and delete lists available within your branch.</span>"));
+        var topSection = $("<div id='manageListsTop' />").append($("<span style='font-style: italic;'>Use this section to view and delete lists available to you.</span>"));
         var refreshListsBtn = $("<input id='refreshListsBtn' type='button' value='Refresh..' />");
         var midSection = $("<div id='manageListsMid' />").append($("<span style='font-style: italic;'>No lists to show.</span>").append("<p />"));
         var bottomSection = $("<div id='manageListsBottom' />");
@@ -433,7 +433,7 @@ contactListsManager.toggleListsMainMenu = function() {
         container.append(topSection).append("<p />").append(midSection).append("<p />").append(refreshListsBtn).append("<p />").append(bottomSection);
 
         refreshListsBtn.click(function () {
-            contactListsManager.retrieveListsForBranch(function (data) {
+            contactListsManager.retrieveListsForUser(function (data) {
                 if (!data.length) {
                     midSection.show();
                     bottomSection.hide();
@@ -451,7 +451,7 @@ contactListsManager.toggleListsMainMenu = function() {
 
     function buildCreateNewListTab() {        
         var container = $("<div />").empty().css('display', 'block');
-        var sectionDescription = $("<span style='font-style: italic;'>Use this section to create a new list. The list will be visible to all users within your branch.</span>");
+        var sectionDescription = $("<span style='font-style: italic;'>Use this section to create a new list. The list will be available to you and other users within your license depending on their level of access.</span>");
         var newListDesc = $("<span class='fieldAlignment' style='display:inline-block'>List Name:</span>");
         var newListNameInput = $("<input type='text' style='display:inline-block;width:70%;max-width:60%;' />");
         container.append(sectionDescription).append("<p />").append(newListDesc).append(newListNameInput).append("<p />");
@@ -480,7 +480,7 @@ contactListsManager.toggleListsMainMenu = function() {
                 $.unblockUI();
                 if (data == true) {
                     $("<div title='List Created Successfully' style='font-family:Verdana;font-size:12px;' />")
-                        .append("Your list is ready to be populated and available to all users within your branch. To populate the list you may use any of the methods listed below:")
+                        .append("Your list is ready to be populated using any of the methods listed below:")
                         .append("<p />")
                         .append("1. To add/remove individual contacts to lists, navigate to the contact record and click 'List Manager'")
                         .append("<br />")
@@ -656,7 +656,7 @@ contactListsManager.exportListCallback = function (fileData) {
     }
 }
 
-contactListsManager.showListManagementView = function (container, listsForBranch) {
+contactListsManager.showListManagementView = function (container, listsForUser) {
     var columns;
     var sortcol;
     var sortdir = 1;
@@ -730,12 +730,12 @@ contactListsManager.showListManagementView = function (container, listsForBranch
     });
 
     dataView.beginUpdate();
-    dataView.setItems(listsForBranch);
+    dataView.setItems(listsForUser);
     dataView.endUpdate();
     dataView.syncGridSelection(contactListsManager.listManagementGrid, true);
     container.find(".slick-viewport").css('overflow-x', 'hidden');
 
-    if (!listsForBranch.length) {
+    if (!listsForUser.length) {
         container.append("No lists to show.");
     }
 

@@ -27,10 +27,11 @@ namespace SeeffProspectingAuthService
                     }
                 }
 
-                bool exportPermission = GetExportPermissionStatus(userGuid);
+                bool exportPermission = GetListExportPermissionStatus(userGuid);
                 var userManager = GetProspectingManagerDetails(userGuid);
                 int? businessUnitID = GetBusinessUnitID(userGuid);
                 var businessUnitUsers = GetBusinessUnitUsers(userGuid);
+                string permissionLevelLists = GetPermissionLevelForLists(userGuid);
                 var userRecord = (from user in boss.user_registrations
                                   where user.user_guid == userGuid.ToString()
                                   select new ProspectingUserAuthPacket
@@ -50,14 +51,46 @@ namespace SeeffProspectingAuthService
                                       TrustLookupsEnabled = user.trust_lookup,
                                       BranchID = user.branch_id,
                                       RegistrationId = Convert.ToInt32(user.registration_id),
-                                      ExportPermission = exportPermission
+                                      ExportPermission = exportPermission,
+                                      PermissionLevelLists = permissionLevelLists
                                   }).FirstOrDefault();
 
                 return userRecord;
             }
         }
 
-        private bool GetExportPermissionStatus(Guid userGuid)
+        private string GetPermissionLevelForLists(Guid userGuid)
+        {
+            using (var boss = new BossDataContext())
+            {
+                var thisUser = boss.user_registrations.First(u => u.user_guid == userGuid.ToString());
+                var permissionSection = boss.permission_sections.FirstOrDefault(ps => ps.permission_section_name == "Client Contact Lists");
+                if (permissionSection != null)
+                {
+                    var permissions = boss.permission.Where(p => p.fk_permission_section_id == permissionSection.permission_section_id && p.fk_registration_id == thisUser.registration_id);
+                    var permissionsWithLevel = permissions.Where(p => p.fk_permission_level_id != null);
+                    if (!permissionsWithLevel.Any())
+                    {
+                        return "User"; // default to user-level permissions when no levels specified
+                    }
+                    // find the "highest" permission level for this user and section
+                    var permissionLevel = boss.permission_level.FirstOrDefault(pl => pl.permission_level_description == "National");
+                    if (permissionLevel != null && permissionsWithLevel.Any(pl => pl.fk_permission_level_id == permissionLevel.pk_permission_level_id)) return permissionLevel.permission_level_description;
+
+                    permissionLevel = boss.permission_level.FirstOrDefault(pl => pl.permission_level_description == "License");
+                    if (permissionLevel != null && permissionsWithLevel.Any(pl => pl.fk_permission_level_id == permissionLevel.pk_permission_level_id)) return permissionLevel.permission_level_description;
+
+                    permissionLevel = boss.permission_level.FirstOrDefault(pl => pl.permission_level_description == "Branch");
+                    if (permissionLevel != null && permissionsWithLevel.Any(pl => pl.fk_permission_level_id == permissionLevel.pk_permission_level_id)) return permissionLevel.permission_level_description;
+
+                    permissionLevel = boss.permission_level.FirstOrDefault(pl => pl.permission_level_description == "User");
+                    if (permissionLevel != null && permissionsWithLevel.Any(pl => pl.fk_permission_level_id == permissionLevel.pk_permission_level_id)) return permissionLevel.permission_level_description;
+                }
+            }
+            return "User";
+        }
+
+        private bool GetListExportPermissionStatus(Guid userGuid)
         {
             using (var boss = new BossDataContext())
             {
@@ -66,7 +99,7 @@ namespace SeeffProspectingAuthService
                 if (permissionSection != null)
                 {
                     int permissionSectionId = permissionSection.permission_section_id;
-                    return boss.permissions.Any(p => p.fk_permission_section_id == permissionSectionId && p.fk_registration_id == thisUser.registration_id);
+                    return boss.permission.Any(p => p.fk_permission_section_id == permissionSectionId && p.fk_registration_id == thisUser.registration_id);
                 }
 
                 return false;
@@ -173,7 +206,8 @@ namespace SeeffProspectingAuthService
                              UserName = ur.user_preferred_name,
                              UserSurname = ur.user_surname,
                              Guid = ur.user_guid,
-                             RegistrationId = Convert.ToInt32(ur.registration_id)
+                             RegistrationId = Convert.ToInt32(ur.registration_id),
+                             BranchID = ur.branch_id
                          }).Distinct().ToList();
 
                 return users;

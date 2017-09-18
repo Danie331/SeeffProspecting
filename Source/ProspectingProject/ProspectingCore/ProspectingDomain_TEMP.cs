@@ -894,7 +894,8 @@ namespace ProspectingProject
                     ActivityFollowupTypes = ProspectingLookupData.ActivityFollowupTypes,
                     BranchID = userAuthPacket.BranchID,
                     RegistrationId = userAuthPacket.RegistrationId,
-                    ExportPermission = userAuthPacket.ExportPermission
+                    ExportPermission = userAuthPacket.ExportPermission,
+                    PermissionLevelForLists = userAuthPacket.PermissionLevelLists
                 };
 
                 return userPacket;
@@ -4708,7 +4709,31 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
             return mailContent.ToString();
         }
 
-        public static List<ContactList> RetrieveListsForBranch(ProspectingContactPerson currentContact)
+        public static List<list> GetListsForUserPermissionLevel()
+        {
+            using (var clientDB = new clientEntities())
+            {
+                var currentUser = RequestHandler.GetUserSessionObject();
+                List<list> targetRecords = new List<list>();
+                string permissionLevel = currentUser.PermissionLevelForLists;
+                switch (permissionLevel)
+                {
+                    case "User":
+                        targetRecords = clientDB.list.Where(li => li.fk_created_by_user_id == currentUser.RegistrationId && !li.deleted).ToList();
+                        break;
+                    case "Branch":
+                        targetRecords = clientDB.list.Where(li => (li.fk_branch_id == currentUser.BranchID || li.fk_created_by_user_id == currentUser.RegistrationId) && !li.deleted).ToList();
+                        break;
+                    case "License":
+                        var targetUsers = currentUser.BusinessUnitUsers.Select(bu => bu.RegistrationId).Concat(new[] { currentUser.RegistrationId });
+                        targetRecords = clientDB.list.Where(li => targetUsers.Contains(li.fk_created_by_user_id) && !li.deleted).ToList();
+                        break;
+                }
+                return targetRecords;
+            }
+        }
+
+        public static List<ContactList> RetrieveListsForUser(ProspectingContactPerson currentContact)
         {
             var currentUser = RequestHandler.GetUserSessionObject();
 
@@ -4736,8 +4761,8 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
 
             using (var clientDB = new clientEntities())
                 using (var prospecting =  new ProspectingDataContext())
-            {               
-                var targetRecords = clientDB.list.Where(li => li.fk_branch_id == currentUser.BranchID && !li.deleted).ToList();
+            {
+                var targetRecords = GetListsForUserPermissionLevel();
                 List<ContactList> results = new List<ContactList>();
                 int? currentContactID = currentContact.ContactPersonId;
                 foreach (var item in targetRecords.OrderByDescending(lt => lt.fk_list_type_id))
@@ -4770,9 +4795,9 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
             using (var prospecting = new ProspectingDataContext())
             {
                 var currentUser = RequestHandler.GetUserSessionObject();
-                var listsForUserBranch = clientDB.list.Where(li => li.fk_branch_id == currentUser.BranchID).Select(li => li.pk_list_id).ToList();
+                var listsForUser = GetListsForUserPermissionLevel().Select(l => l.pk_list_id).ToList();
 
-                var targetsToRemove = prospecting.contact_person_lists.Where(cpl => cpl.contact_person_id == listSelection.ContactPersonId && listsForUserBranch.Contains(cpl.fk_list_id));
+                var targetsToRemove = prospecting.contact_person_lists.Where(cpl => cpl.contact_person_id == listSelection.ContactPersonId && listsForUser.Contains(cpl.fk_list_id));
                 prospecting.contact_person_lists.DeleteAllOnSubmit(targetsToRemove);
                 prospecting.SubmitChanges();
 
@@ -5296,7 +5321,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
             }
         }
 
-        public static bool CreateNewListForBranch(ContactList input)
+        public static bool CreateNewListForUser(ContactList input)
         {
             var currentUser = RequestHandler.GetUserSessionObject();
             using (var client = new clientEntities())

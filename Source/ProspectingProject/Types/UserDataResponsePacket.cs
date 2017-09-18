@@ -39,5 +39,6 @@ namespace ProspectingProject
         public int BranchID { get; internal set; }
         public int RegistrationId { get; set; }
         public bool ExportPermission { get; set; }
+        public string PermissionLevelForLists { get; internal set; }
     }
 }

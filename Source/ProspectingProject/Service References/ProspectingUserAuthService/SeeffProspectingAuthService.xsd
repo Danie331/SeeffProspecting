@@ -13,6 +13,7 @@
       <xs:element minOccurs="0" name="Guid" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsProspectingManager" type="xs:boolean" />
       <xs:element minOccurs="0" name="ManagerDetails" nillable="true" type="tns:ArrayOfProspectingUserAuthPacket" />
+      <xs:element minOccurs="0" name="PermissionLevelLists" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RegistrationId" type="xs:int" />
       <xs:element minOccurs="0" name="SuburbsList" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TrustLookupsEnabled" type="xs:boolean" />

@@ -56,6 +56,9 @@ namespace ProspectingProject.ProspectingUserAuthService {
         private ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket[] ManagerDetailsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PermissionLevelListsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int RegistrationIdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -219,6 +222,19 @@ namespace ProspectingProject.ProspectingUserAuthService {
                 if ((object.ReferenceEquals(this.ManagerDetailsField, value) != true)) {
                     this.ManagerDetailsField = value;
                     this.RaisePropertyChanged("ManagerDetails");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string PermissionLevelLists {
+            get {
+                return this.PermissionLevelListsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PermissionLevelListsField, value) != true)) {
+                    this.PermissionLevelListsField = value;
+                    this.RaisePropertyChanged("PermissionLevelLists");
                 }
             }
         }

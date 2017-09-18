@@ -240,9 +240,9 @@ namespace ProspectingProject
                         string requestStatus = SendOptInRequest(json);
                         context.Response.Write(requestStatus);
                         break;
-                    case "retrieve_lists_for_branch":
-                        string listsForBranch = RetrieveListsForBranch(json);
-                        context.Response.Write(listsForBranch);
+                    case "retrieve_lists_for_user":
+                        string listsForUser = RetrieveListsForUser(json);
+                        context.Response.Write(listsForUser);
                         break;
                     case "save_lists_for_contact":
                         string listSaveResult = SaveListAllocationForContact(json);
@@ -261,7 +261,7 @@ namespace ProspectingProject
                         context.Response.Write(listTypes);
                         break;
                     case "create_list":
-                        string createListResult = CreateNewListForBranch(json);
+                        string createListResult = CreateNewListForUser(json);
                         context.Response.Write(createListResult);
                         break;
                     case "delete_list":
@@ -309,10 +309,10 @@ namespace ProspectingProject
             return ProspectingCore.SerializeToJsonWithDefaults(result);
         }
 
-        private string CreateNewListForBranch(string json)
+        private string CreateNewListForUser(string json)
         {
             var input = ProspectingCore.Deserialise<ContactList>(json);
-            var createListResult = ProspectingCore.CreateNewListForBranch(input);
+            var createListResult = ProspectingCore.CreateNewListForUser(input);
             return ProspectingCore.SerializeToJsonWithDefaults(createListResult);
         }
 
@@ -343,11 +343,11 @@ namespace ProspectingProject
             return ProspectingCore.SerializeToJsonWithDefaults(result);
         }
 
-        private string RetrieveListsForBranch(string json)
+        private string RetrieveListsForUser(string json)
         {
             ProspectingContactPerson cp = ProspectingCore.Deserialise<ProspectingContactPerson>(json);
-            var listsForBranch = ProspectingCore.RetrieveListsForBranch(cp);
-            return ProspectingCore.SerializeToJsonWithDefaults(listsForBranch);
+            var listsForUser = ProspectingCore.RetrieveListsForUser(cp);
+            return ProspectingCore.SerializeToJsonWithDefaults(listsForUser);
         }
 
         private string SendOptInRequest(string json)

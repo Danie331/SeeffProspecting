@@ -33,12 +33,15 @@ namespace SeeffProspectingAuthService
     partial void Insertuser_registration(user_registration instance);
     partial void Updateuser_registration(user_registration instance);
     partial void Deleteuser_registration(user_registration instance);
-    partial void Insertpermission(permission instance);
-    partial void Updatepermission(permission instance);
-    partial void Deletepermission(permission instance);
     partial void Insertpermission_section(permission_section instance);
     partial void Updatepermission_section(permission_section instance);
     partial void Deletepermission_section(permission_section instance);
+    partial void Insertpermission(permission instance);
+    partial void Updatepermission(permission instance);
+    partial void Deletepermission(permission instance);
+    partial void Insertpermission_level(permission_level instance);
+    partial void Updatepermission_level(permission_level instance);
+    partial void Deletepermission_level(permission_level instance);
     #endregion
 		
 		public BossDataContext() : 
@@ -95,7 +98,15 @@ namespace SeeffProspectingAuthService
 			}
 		}
 		
-		public System.Data.Linq.Table<permission> permissions
+		public System.Data.Linq.Table<permission_section> permission_sections
+		{
+			get
+			{
+				return this.GetTable<permission_section>();
+			}
+		}
+		
+		public System.Data.Linq.Table<permission> permission
 		{
 			get
 			{
@@ -103,11 +114,11 @@ namespace SeeffProspectingAuthService
 			}
 		}
 		
-		public System.Data.Linq.Table<permission_section> permission_sections
+		public System.Data.Linq.Table<permission_level> permission_level
 		{
 			get
 			{
-				return this.GetTable<permission_section>();
+				return this.GetTable<permission_level>();
 			}
 		}
 		
@@ -589,7 +600,7 @@ namespace SeeffProspectingAuthService
 		
 		private bool _trust_lookup;
 		
-		private EntitySet<permission> _permissions;
+		private EntitySet<permission> _permission;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -733,7 +744,7 @@ namespace SeeffProspectingAuthService
 		
 		public user_registration()
 		{
-			this._permissions = new EntitySet<permission>(new Action<permission>(this.attach_permissions), new Action<permission>(this.detach_permissions));
+			this._permission = new EntitySet<permission>(new Action<permission>(this.attach_permission), new Action<permission>(this.detach_permission));
 			OnCreated();
 		}
 		
@@ -2077,16 +2088,16 @@ namespace SeeffProspectingAuthService
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_registration_permission", Storage="_permissions", ThisKey="registration_id", OtherKey="fk_registration_id")]
-		public EntitySet<permission> permissions
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_registration_permission", Storage="_permission", ThisKey="registration_id", OtherKey="fk_registration_id")]
+		public EntitySet<permission> permission
 		{
 			get
 			{
-				return this._permissions;
+				return this._permission;
 			}
 			set
 			{
-				this._permissions.Assign(value);
+				this._permission.Assign(value);
 			}
 		}
 		
@@ -2110,16 +2121,130 @@ namespace SeeffProspectingAuthService
 			}
 		}
 		
-		private void attach_permissions(permission entity)
+		private void attach_permission(permission entity)
 		{
 			this.SendPropertyChanging();
 			entity.user_registration = this;
 		}
 		
-		private void detach_permissions(permission entity)
+		private void detach_permission(permission entity)
 		{
 			this.SendPropertyChanging();
 			entity.user_registration = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.permission_section")]
+	public partial class permission_section : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _permission_section_id;
+		
+		private string _permission_section_name;
+		
+		private EntitySet<permission> _permission;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onpermission_section_idChanging(int value);
+    partial void Onpermission_section_idChanged();
+    partial void Onpermission_section_nameChanging(string value);
+    partial void Onpermission_section_nameChanged();
+    #endregion
+		
+		public permission_section()
+		{
+			this._permission = new EntitySet<permission>(new Action<permission>(this.attach_permission), new Action<permission>(this.detach_permission));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_permission_section_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int permission_section_id
+		{
+			get
+			{
+				return this._permission_section_id;
+			}
+			set
+			{
+				if ((this._permission_section_id != value))
+				{
+					this.Onpermission_section_idChanging(value);
+					this.SendPropertyChanging();
+					this._permission_section_id = value;
+					this.SendPropertyChanged("permission_section_id");
+					this.Onpermission_section_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_permission_section_name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string permission_section_name
+		{
+			get
+			{
+				return this._permission_section_name;
+			}
+			set
+			{
+				if ((this._permission_section_name != value))
+				{
+					this.Onpermission_section_nameChanging(value);
+					this.SendPropertyChanging();
+					this._permission_section_name = value;
+					this.SendPropertyChanged("permission_section_name");
+					this.Onpermission_section_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="permission_section_permission", Storage="_permission", ThisKey="permission_section_id", OtherKey="fk_permission_section_id")]
+		public EntitySet<permission> permission
+		{
+			get
+			{
+				return this._permission;
+			}
+			set
+			{
+				this._permission.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_permission(permission entity)
+		{
+			this.SendPropertyChanging();
+			entity.permission_section = this;
+		}
+		
+		private void detach_permission(permission entity)
+		{
+			this.SendPropertyChanging();
+			entity.permission_section = null;
 		}
 	}
 	
@@ -2145,9 +2270,11 @@ namespace SeeffProspectingAuthService
 		
 		private string _permission_update_user;
 		
-		private EntityRef<user_registration> _user_registration;
+		private System.Nullable<int> _fk_permission_level_id;
 		
 		private EntityRef<permission_section> _permission_section;
+		
+		private EntityRef<user_registration> _user_registration;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2169,12 +2296,14 @@ namespace SeeffProspectingAuthService
     partial void Onpermission_update_dateChanged();
     partial void Onpermission_update_userChanging(string value);
     partial void Onpermission_update_userChanged();
+    partial void Onfk_permission_level_idChanging(System.Nullable<int> value);
+    partial void Onfk_permission_level_idChanged();
     #endregion
 		
 		public permission()
 		{
-			this._user_registration = default(EntityRef<user_registration>);
 			this._permission_section = default(EntityRef<permission_section>);
+			this._user_registration = default(EntityRef<user_registration>);
 			OnCreated();
 		}
 		
@@ -2346,36 +2475,22 @@ namespace SeeffProspectingAuthService
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_registration_permission", Storage="_user_registration", ThisKey="fk_registration_id", OtherKey="registration_id", IsForeignKey=true)]
-		public user_registration user_registration
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fk_permission_level_id", DbType="Int")]
+		public System.Nullable<int> fk_permission_level_id
 		{
 			get
 			{
-				return this._user_registration.Entity;
+				return this._fk_permission_level_id;
 			}
 			set
 			{
-				user_registration previousValue = this._user_registration.Entity;
-				if (((previousValue != value) 
-							|| (this._user_registration.HasLoadedOrAssignedValue == false)))
+				if ((this._fk_permission_level_id != value))
 				{
+					this.Onfk_permission_level_idChanging(value);
 					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._user_registration.Entity = null;
-						previousValue.permissions.Remove(this);
-					}
-					this._user_registration.Entity = value;
-					if ((value != null))
-					{
-						value.permissions.Add(this);
-						this._fk_registration_id = value.registration_id;
-					}
-					else
-					{
-						this._fk_registration_id = default(long);
-					}
-					this.SendPropertyChanged("user_registration");
+					this._fk_permission_level_id = value;
+					this.SendPropertyChanged("fk_permission_level_id");
+					this.Onfk_permission_level_idChanged();
 				}
 			}
 		}
@@ -2397,12 +2512,12 @@ namespace SeeffProspectingAuthService
 					if ((previousValue != null))
 					{
 						this._permission_section.Entity = null;
-						previousValue.permissions.Remove(this);
+						previousValue.permission.Remove(this);
 					}
 					this._permission_section.Entity = value;
 					if ((value != null))
 					{
-						value.permissions.Add(this);
+						value.permission.Add(this);
 						this._fk_permission_section_id = value.permission_section_id;
 					}
 					else
@@ -2410,6 +2525,40 @@ namespace SeeffProspectingAuthService
 						this._fk_permission_section_id = default(int);
 					}
 					this.SendPropertyChanged("permission_section");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_registration_permission", Storage="_user_registration", ThisKey="fk_registration_id", OtherKey="registration_id", IsForeignKey=true)]
+		public user_registration user_registration
+		{
+			get
+			{
+				return this._user_registration.Entity;
+			}
+			set
+			{
+				user_registration previousValue = this._user_registration.Entity;
+				if (((previousValue != value) 
+							|| (this._user_registration.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._user_registration.Entity = null;
+						previousValue.permission.Remove(this);
+					}
+					this._user_registration.Entity = value;
+					if ((value != null))
+					{
+						value.permission.Add(this);
+						this._fk_registration_id = value.registration_id;
+					}
+					else
+					{
+						this._fk_registration_id = default(long);
+					}
+					this.SendPropertyChanged("user_registration");
 				}
 			}
 		}
@@ -2435,84 +2584,68 @@ namespace SeeffProspectingAuthService
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.permission_section")]
-	public partial class permission_section : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.permission_level")]
+	public partial class permission_level : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _permission_section_id;
+		private int _pk_permission_level_id;
 		
-		private string _permission_section_name;
-		
-		private EntitySet<permission> _permissions;
+		private string _permission_level_description;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void Onpermission_section_idChanging(int value);
-    partial void Onpermission_section_idChanged();
-    partial void Onpermission_section_nameChanging(string value);
-    partial void Onpermission_section_nameChanged();
+    partial void Onpk_permission_level_idChanging(int value);
+    partial void Onpk_permission_level_idChanged();
+    partial void Onpermission_level_descriptionChanging(string value);
+    partial void Onpermission_level_descriptionChanged();
     #endregion
 		
-		public permission_section()
+		public permission_level()
 		{
-			this._permissions = new EntitySet<permission>(new Action<permission>(this.attach_permissions), new Action<permission>(this.detach_permissions));
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_permission_section_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int permission_section_id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pk_permission_level_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int pk_permission_level_id
 		{
 			get
 			{
-				return this._permission_section_id;
+				return this._pk_permission_level_id;
 			}
 			set
 			{
-				if ((this._permission_section_id != value))
+				if ((this._pk_permission_level_id != value))
 				{
-					this.Onpermission_section_idChanging(value);
+					this.Onpk_permission_level_idChanging(value);
 					this.SendPropertyChanging();
-					this._permission_section_id = value;
-					this.SendPropertyChanged("permission_section_id");
-					this.Onpermission_section_idChanged();
+					this._pk_permission_level_id = value;
+					this.SendPropertyChanged("pk_permission_level_id");
+					this.Onpk_permission_level_idChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_permission_section_name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string permission_section_name
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_permission_level_description", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string permission_level_description
 		{
 			get
 			{
-				return this._permission_section_name;
+				return this._permission_level_description;
 			}
 			set
 			{
-				if ((this._permission_section_name != value))
+				if ((this._permission_level_description != value))
 				{
-					this.Onpermission_section_nameChanging(value);
+					this.Onpermission_level_descriptionChanging(value);
 					this.SendPropertyChanging();
-					this._permission_section_name = value;
-					this.SendPropertyChanged("permission_section_name");
-					this.Onpermission_section_nameChanged();
+					this._permission_level_description = value;
+					this.SendPropertyChanged("permission_level_description");
+					this.Onpermission_level_descriptionChanged();
 				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="permission_section_permission", Storage="_permissions", ThisKey="permission_section_id", OtherKey="fk_permission_section_id")]
-		public EntitySet<permission> permissions
-		{
-			get
-			{
-				return this._permissions;
-			}
-			set
-			{
-				this._permissions.Assign(value);
 			}
 		}
 		
@@ -2534,18 +2667,6 @@ namespace SeeffProspectingAuthService
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_permissions(permission entity)
-		{
-			this.SendPropertyChanging();
-			entity.permission_section = this;
-		}
-		
-		private void detach_permissions(permission entity)
-		{
-			this.SendPropertyChanging();
-			entity.permission_section = null;
 		}
 	}
 	
