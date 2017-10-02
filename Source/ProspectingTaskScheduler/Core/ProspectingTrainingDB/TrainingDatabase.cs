@@ -60,9 +60,12 @@ FROM   sys.tables t
 WHERE  t.type = 'U'
 Exec sp_executesql @sql;
 
-/****** Object:  Table [dbo].[activity_followup_type]    Script Date: 2017/05/08 1:07:17 PM ******/
-SET ANSI_NULLS ON;
-SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON
+;
+SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
+;
 CREATE TABLE [dbo].[activity_followup_type](
 	[activity_followup_type_id] [int] IDENTITY(1,1) NOT NULL,
 	[activity_name] [varchar](255) NOT NULL,
@@ -74,10 +77,14 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[activity_log]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[activity_log]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[activity_log](
 	[activity_log_id] [bigint] IDENTITY(1,1) NOT NULL,
@@ -107,10 +114,14 @@ CREATE TABLE [dbo].[activity_log](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[activity_type]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[activity_type]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[activity_type](
 	[activity_type_id] [int] IDENTITY(1,1) NOT NULL,
@@ -124,10 +135,32 @@ CREATE TABLE [dbo].[activity_type](
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[communications_status]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[client_sync_log]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+CREATE TABLE [dbo].[client_sync_log](
+	[client_sync_log_id] [int] IDENTITY(1,1) NOT NULL,
+	[contact_person_id] [int] NOT NULL,
+	[user_guid] [uniqueidentifier] NULL,
+	[date_time] [datetime] NOT NULL,
+	[synchronised] [bit] NOT NULL DEFAULT ((0)),
+PRIMARY KEY CLUSTERED 
+(
+	[client_sync_log_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+;
+/****** Object:  Table [dbo].[communications_status]    Script Date: 2017-10-02 02:32:17 PM ******/
+SET ANSI_NULLS ON
+;
+SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[communications_status](
 	[communications_status_id] [int] IDENTITY(1,1) NOT NULL,
@@ -139,10 +172,53 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[email_communications_log]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[contact_person_list]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+CREATE TABLE [dbo].[contact_person_list](
+	[contact_person_list_id] [int] IDENTITY(1,1) NOT NULL,
+	[contact_person_id] [int] NOT NULL,
+	[fk_list_id] [int] NOT NULL,
+	[prospecting_property_id] [int] NOT NULL,
+	[created_by] [uniqueidentifier] NOT NULL,
+	[created_date] [datetime] NOT NULL,
+	[updated_date] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[contact_person_list_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+;
+/****** Object:  Table [dbo].[contactability_status]    Script Date: 2017-10-02 02:32:17 PM ******/
+SET ANSI_NULLS ON
+;
+SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
+;
+CREATE TABLE [dbo].[contactability_status](
+	[contactability_status_id] [int] IDENTITY(1,1) NOT NULL,
+	[contactability_status_desc] [varchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[contactability_status_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+;
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[email_communications_log]    Script Date: 2017-10-02 02:32:17 PM ******/
+SET ANSI_NULLS ON
+;
+SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[email_communications_log](
 	[email_communications_log_id] [int] IDENTITY(1,1) NOT NULL,
@@ -168,6 +244,7 @@ CREATE TABLE [dbo].[email_communications_log](
 	[attachment1_name] [nvarchar](255) NULL,
 	[user_business_unit_id] [int] NULL,
 	[api_tracking_id] [varchar](max) NULL,
+	[last_api_event_dump] [nvarchar](max) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[email_communications_log_id] ASC
@@ -175,10 +252,14 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[exception_log]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[exception_log]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[exception_log](
 	[exception_log_id] [int] IDENTITY(1,1) NOT NULL,
@@ -193,7 +274,9 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[property_valuation]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[property_valuation]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
@@ -208,7 +291,7 @@ CREATE TABLE [dbo].[property_valuation](
 	[value_estimate] [decimal](18, 2) NOT NULL,
 	[date_valued] [datetime] NOT NULL,
 	[current_value] [bit] NOT NULL,
-	[deleted] [bit] NOT NULL,
+	[deleted] [bit] NOT NULL DEFAULT ((0)),
 	[date_deleted] [datetime] NULL,
 	[deleted_by] [uniqueidentifier] NULL,
 PRIMARY KEY CLUSTERED 
@@ -218,10 +301,12 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_area_dialing_code]    Script Date: 2017/05/08 1:07:17 PM ******/
+/****** Object:  Table [dbo].[prospecting_area_dialing_code]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[prospecting_area_dialing_code](
 	[prospecting_area_dialing_code_id] [int] IDENTITY(1,1) NOT NULL,
@@ -234,7 +319,9 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_company_property_relationship]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[prospecting_company_property_relationship]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
@@ -254,10 +341,12 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_company_property_relationship_type]    Script Date: 2017/05/08 1:07:17 PM ******/
+/****** Object:  Table [dbo].[prospecting_company_property_relationship_type]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[prospecting_company_property_relationship_type](
 	[company_property_relationship_type_id] [int] IDENTITY(1,1) NOT NULL,
@@ -269,10 +358,14 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_contact_company]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[prospecting_contact_company]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[prospecting_contact_company](
 	[contact_company_id] [int] IDENTITY(1,1) NOT NULL,
@@ -289,10 +382,14 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_contact_detail]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[prospecting_contact_detail]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[prospecting_contact_detail](
 	[prospecting_contact_detail_id] [int] IDENTITY(1,1) NOT NULL,
@@ -302,7 +399,7 @@ CREATE TABLE [dbo].[prospecting_contact_detail](
 	[intl_dialing_code_id] [int] NULL,
 	[eleventh_digit] [int] NULL,
 	[is_primary_contact] [bit] NOT NULL,
-	[deleted] [bit] NOT NULL,
+	[deleted] [bit] NOT NULL DEFAULT ((0)),
 	[deleted_by] [uniqueidentifier] NULL,
 	[deleted_date] [datetime] NULL,
 PRIMARY KEY CLUSTERED 
@@ -312,10 +409,14 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_contact_detail_type]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[prospecting_contact_detail_type]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[prospecting_contact_detail_type](
 	[contact_detail_type_id] [int] IDENTITY(1,1) NOT NULL,
@@ -327,10 +428,14 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_contact_person]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[prospecting_contact_person]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[prospecting_contact_person](
 	[contact_person_id] [int] IDENTITY(1,1) NOT NULL,
@@ -343,7 +448,7 @@ CREATE TABLE [dbo].[prospecting_contact_person](
 	[propcntrl_buyer_id] [int] NULL,
 	[referral_network] [bit] NULL,
 	[investor] [bit] NULL,
-	[is_popi_restricted] [bit] NOT NULL,
+	[is_popi_restricted] [bit] NOT NULL DEFAULT ((0)),
 	[created_date] [datetime] NULL,
 	[updated_date] [datetime] NULL,
 	[created_by] [uniqueidentifier] NULL,
@@ -359,9 +464,10 @@ CREATE TABLE [dbo].[prospecting_contact_person](
 	[occupation] [nvarchar](255) NULL,
 	[bureau_adverse_indicator] [nvarchar](255) NULL,
 	[citizenship] [nvarchar](255) NULL,
-	[optout_emails] [bit] NOT NULL,
-	[optout_sms] [bit] NOT NULL,
-	[do_not_contact] [bit] NOT NULL,
+	[optout_emails] [bit] NOT NULL DEFAULT ((0)),
+	[optout_sms] [bit] NOT NULL DEFAULT ((0)),
+	[do_not_contact] [bit] NOT NULL DEFAULT ((0)),
+	[email_contactability_status] [int] NOT NULL DEFAULT ((4)),
 PRIMARY KEY CLUSTERED 
 (
 	[contact_person_id] ASC
@@ -369,7 +475,9 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_person_company_relationship]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[prospecting_person_company_relationship]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
@@ -389,10 +497,12 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_person_company_relationship_type]    Script Date: 2017/05/08 1:07:17 PM ******/
+/****** Object:  Table [dbo].[prospecting_person_company_relationship_type]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[prospecting_person_company_relationship_type](
 	[person_company_relationship_type_id] [int] IDENTITY(1,1) NOT NULL,
@@ -404,7 +514,9 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_person_person_relationship]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[prospecting_person_person_relationship]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
@@ -424,10 +536,12 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_person_person_relationship_type]    Script Date: 2017/05/08 1:07:17 PM ******/
+/****** Object:  Table [dbo].[prospecting_person_person_relationship_type]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[prospecting_person_person_relationship_type](
 	[person_person_relationship_type_id] [int] IDENTITY(1,1) NOT NULL,
@@ -439,7 +553,9 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_person_property_relationship]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[prospecting_person_property_relationship]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
@@ -461,10 +577,12 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_person_property_relationship_type]    Script Date: 2017/05/08 1:07:17 PM ******/
+/****** Object:  Table [dbo].[prospecting_person_property_relationship_type]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[prospecting_person_property_relationship_type](
 	[person_property_relationship_type_id] [int] IDENTITY(1,1) NOT NULL,
@@ -476,10 +594,14 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_person_title]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[prospecting_person_title]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[prospecting_person_title](
 	[prospecting_person_title_id] [int] IDENTITY(1,1) NOT NULL,
@@ -491,10 +613,14 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[prospecting_property]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[prospecting_property]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[prospecting_property](
 	[prospecting_property_id] [int] IDENTITY(1,1) NOT NULL,
@@ -523,7 +649,7 @@ CREATE TABLE [dbo].[prospecting_property](
 	[parking_bays] [int] NULL,
 	[pool] [bit] NULL,
 	[staff_accomodation] [bit] NULL,
-	[created_date] [datetime] NULL,
+	[created_date] [datetime] NULL CONSTRAINT [DF_prospecting_property_created_date]  DEFAULT (getdate()),
 	[updated_date] [datetime] NULL,
 	[created_by] [uniqueidentifier] NULL,
 	[lightstone_id_or_ck_no] [varchar](255) NULL,
@@ -536,35 +662,43 @@ CREATE TABLE [dbo].[prospecting_property](
 	[last_purch_price] [decimal](18, 2) NULL,
 	[ss_id] [varchar](10) NULL,
 	[ss_door_number] [varchar](50) NULL,
-	[prospected] [bit] NULL,
+	[prospected] [bit] NULL CONSTRAINT [DF_prospecting_property_prospected]  DEFAULT ((0)),
 	[farm_name] [nvarchar](255) NULL,
 	[lightstone_suburb] [nvarchar](255) NULL,
 	[ss_unique_identifier] [nvarchar](max) NULL,
 	[locked_by_guid] [uniqueidentifier] NULL,
 	[locked_datetime] [datetime] NULL,
 	[latest_reg_date] [varchar](8) NULL,
-	[is_short_term_rental] [bit] NULL,
-	[is_long_term_rental] [bit] NULL,
-	[is_commercial] [bit] NULL,
-	[is_agricultural] [bit] NULL,
-	[is_investment] [bit] NULL,
-	[has_email] [bit] NULL,
-	[has_cell] [bit] NULL,
-	[has_landline] [bit] NULL,
-	[has_primary_email] [bit] NULL,
-	[has_primary_cell] [bit] NULL,
-	[has_primary_landline] [bit] NULL,
+	[is_short_term_rental] [bit] NULL DEFAULT ((0)),
+	[is_long_term_rental] [bit] NULL DEFAULT ((0)),
+	[is_commercial] [bit] NULL DEFAULT ((0)),
+	[is_agricultural] [bit] NULL DEFAULT ((0)),
+	[is_investment] [bit] NULL DEFAULT ((0)),
+	[has_email] [bit] NULL DEFAULT ((0)),
+	[has_cell] [bit] NULL DEFAULT ((0)),
+	[has_landline] [bit] NULL DEFAULT ((0)),
+	[has_primary_email] [bit] NULL DEFAULT ((0)),
+	[has_primary_cell] [bit] NULL DEFAULT ((0)),
+	[has_primary_landline] [bit] NULL DEFAULT ((0)),
  CONSTRAINT [PK__prospect__8E5D8F4FDB723D77] PRIMARY KEY CLUSTERED 
 (
 	[prospecting_property_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [ls_prop_id_unique] UNIQUE NONCLUSTERED 
+(
+	[lightstone_property_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[service_enquiry_log]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[service_enquiry_log]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[service_enquiry_log](
 	[service_enquiry_log_id] [int] IDENTITY(1,1) NOT NULL,
@@ -572,7 +706,7 @@ CREATE TABLE [dbo].[service_enquiry_log](
 	[user] [uniqueidentifier] NOT NULL,
 	[date_of_enquiry] [datetime] NOT NULL,
 	[successful] [bit] NOT NULL,
-	[id_number] [varchar](13) NOT NULL,
+	[id_number] [varchar](13) NOT NULL DEFAULT ('xxxxxxxxxxxxx'),
 	[HWCE_indicator] [varchar](4) NULL,
 	[service_type_name] [varchar](20) NULL,
 	[enquiry_cost] [decimal](19, 4) NULL,
@@ -585,10 +719,14 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[sms_communications_log]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[sms_communications_log]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[sms_communications_log](
 	[sms_communications_log_id] [int] IDENTITY(1,1) NOT NULL,
@@ -617,10 +755,14 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[system_communication_template]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[system_communication_template]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[system_communication_template](
 	[system_communication_template_id] [int] IDENTITY(1,1) NOT NULL,
@@ -628,7 +770,7 @@ CREATE TABLE [dbo].[system_communication_template](
 	[template_content] [nvarchar](max) NOT NULL,
 	[template_name] [varchar](1000) NOT NULL,
 	[communication_type] [varchar](5) NOT NULL,
-	[active] [bit] NOT NULL,
+	[active] [bit] NOT NULL DEFAULT ((1)),
 PRIMARY KEY CLUSTERED 
 (
 	[system_communication_template_id] ASC
@@ -636,10 +778,14 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 ;
-/****** Object:  Table [dbo].[user_communication_template]    Script Date: 2017/05/08 1:07:17 PM ******/
+SET ANSI_PADDING OFF
+;
+/****** Object:  Table [dbo].[user_communication_template]    Script Date: 2017-10-02 02:32:17 PM ******/
 SET ANSI_NULLS ON
 ;
 SET QUOTED_IDENTIFIER ON
+;
+SET ANSI_PADDING ON
 ;
 CREATE TABLE [dbo].[user_communication_template](
 	[user_communication_template_id] [int] IDENTITY(1,1) NOT NULL,
@@ -649,15 +795,153 @@ CREATE TABLE [dbo].[user_communication_template](
 	[template_content] [nvarchar](max) NOT NULL,
 	[template_name] [varchar](1000) NOT NULL,
 	[communication_type] [varchar](5) NOT NULL,
-	[deleted] [bit] NOT NULL,
+	[deleted] [bit] NOT NULL DEFAULT ((0)),
 	[activity_type_id] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[user_communication_template_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 ;
+
+SET ANSI_PADDING OFF
+;
+ALTER TABLE [dbo].[activity_log]  WITH NOCHECK ADD FOREIGN KEY([activity_followup_type_id])
+REFERENCES [dbo].[activity_followup_type] ([activity_followup_type_id])
+;
+ALTER TABLE [dbo].[activity_log]  WITH NOCHECK ADD  CONSTRAINT [FK_activity_type_id] FOREIGN KEY([activity_type_id])
+REFERENCES [dbo].[activity_type] ([activity_type_id])
+;
+ALTER TABLE [dbo].[activity_log] CHECK CONSTRAINT [FK_activity_type_id]
+;
+ALTER TABLE [dbo].[activity_log]  WITH NOCHECK ADD  CONSTRAINT [FK_contact_person_id] FOREIGN KEY([contact_person_id])
+REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
+;
+ALTER TABLE [dbo].[activity_log] CHECK CONSTRAINT [FK_contact_person_id]
+;
+ALTER TABLE [dbo].[activity_log]  WITH NOCHECK ADD  CONSTRAINT [FK_lightstone_property_id] FOREIGN KEY([lightstone_property_id])
+REFERENCES [dbo].[prospecting_property] ([lightstone_property_id])
+;
+ALTER TABLE [dbo].[activity_log] CHECK CONSTRAINT [FK_lightstone_property_id]
+;
+ALTER TABLE [dbo].[client_sync_log]  WITH NOCHECK ADD FOREIGN KEY([contact_person_id])
+REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
+;
+ALTER TABLE [dbo].[contact_person_list]  WITH CHECK ADD FOREIGN KEY([contact_person_id])
+REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
+;
+ALTER TABLE [dbo].[contact_person_list]  WITH CHECK ADD FOREIGN KEY([prospecting_property_id])
+REFERENCES [dbo].[prospecting_property] ([prospecting_property_id])
+;
+ALTER TABLE [dbo].[email_communications_log]  WITH CHECK ADD FOREIGN KEY([activity_log_id])
+REFERENCES [dbo].[activity_log] ([activity_log_id])
+;
+ALTER TABLE [dbo].[email_communications_log]  WITH CHECK ADD FOREIGN KEY([batch_activity_type_id])
+REFERENCES [dbo].[activity_type] ([activity_type_id])
+;
+ALTER TABLE [dbo].[email_communications_log]  WITH CHECK ADD FOREIGN KEY([followup_activity_id])
+REFERENCES [dbo].[activity_log] ([activity_log_id])
+;
+ALTER TABLE [dbo].[email_communications_log]  WITH CHECK ADD FOREIGN KEY([status])
+REFERENCES [dbo].[communications_status] ([communications_status_id])
+;
+ALTER TABLE [dbo].[email_communications_log]  WITH CHECK ADD FOREIGN KEY([target_contact_person_id])
+REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
+;
+ALTER TABLE [dbo].[email_communications_log]  WITH NOCHECK ADD FOREIGN KEY([target_lightstone_property_id])
+REFERENCES [dbo].[prospecting_property] ([lightstone_property_id])
+;
+ALTER TABLE [dbo].[property_valuation]  WITH CHECK ADD FOREIGN KEY([activity_log_id])
+REFERENCES [dbo].[activity_log] ([activity_log_id])
+;
+ALTER TABLE [dbo].[property_valuation]  WITH NOCHECK ADD FOREIGN KEY([prospecting_property_id])
+REFERENCES [dbo].[prospecting_property] ([prospecting_property_id])
+;
+ALTER TABLE [dbo].[prospecting_company_property_relationship]  WITH NOCHECK ADD FOREIGN KEY([contact_company_id])
+REFERENCES [dbo].[prospecting_contact_company] ([contact_company_id])
+;
+ALTER TABLE [dbo].[prospecting_company_property_relationship]  WITH NOCHECK ADD  CONSTRAINT [FK__prospecti__prosp__398D8EEE] FOREIGN KEY([prospecting_property_id])
+REFERENCES [dbo].[prospecting_property] ([prospecting_property_id])
+;
+ALTER TABLE [dbo].[prospecting_company_property_relationship] CHECK CONSTRAINT [FK__prospecti__prosp__398D8EEE]
+;
+ALTER TABLE [dbo].[prospecting_company_property_relationship]  WITH NOCHECK ADD FOREIGN KEY([relationship_to_property])
+REFERENCES [dbo].[prospecting_company_property_relationship_type] ([company_property_relationship_type_id])
+;
+ALTER TABLE [dbo].[prospecting_contact_detail]  WITH CHECK ADD FOREIGN KEY([contact_detail_type])
+REFERENCES [dbo].[prospecting_contact_detail_type] ([contact_detail_type_id])
+;
+ALTER TABLE [dbo].[prospecting_contact_detail]  WITH CHECK ADD FOREIGN KEY([contact_person_id])
+REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
+;
+ALTER TABLE [dbo].[prospecting_contact_detail]  WITH CHECK ADD FOREIGN KEY([intl_dialing_code_id])
+REFERENCES [dbo].[prospecting_area_dialing_code] ([prospecting_area_dialing_code_id])
+;
+ALTER TABLE [dbo].[prospecting_contact_person]  WITH CHECK ADD FOREIGN KEY([email_contactability_status])
+REFERENCES [dbo].[contactability_status] ([contactability_status_id])
+;
+ALTER TABLE [dbo].[prospecting_contact_person]  WITH CHECK ADD FOREIGN KEY([person_title])
+REFERENCES [dbo].[prospecting_person_title] ([prospecting_person_title_id])
+;
+ALTER TABLE [dbo].[prospecting_person_company_relationship]  WITH CHECK ADD FOREIGN KEY([contact_company_id])
+REFERENCES [dbo].[prospecting_contact_company] ([contact_company_id])
+;
+ALTER TABLE [dbo].[prospecting_person_company_relationship]  WITH CHECK ADD FOREIGN KEY([contact_person_id])
+REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
+;
+ALTER TABLE [dbo].[prospecting_person_company_relationship]  WITH CHECK ADD FOREIGN KEY([relationship_to_company])
+REFERENCES [dbo].[prospecting_person_company_relationship_type] ([person_company_relationship_type_id])
+;
+ALTER TABLE [dbo].[prospecting_person_person_relationship]  WITH CHECK ADD FOREIGN KEY([contact_person_id])
+REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
+;
+ALTER TABLE [dbo].[prospecting_person_person_relationship]  WITH CHECK ADD FOREIGN KEY([relationship_to_person])
+REFERENCES [dbo].[prospecting_person_person_relationship_type] ([person_person_relationship_type_id])
+;
+ALTER TABLE [dbo].[prospecting_person_person_relationship]  WITH CHECK ADD FOREIGN KEY([related_contacted_person_id])
+REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
+;
+ALTER TABLE [dbo].[prospecting_person_property_relationship]  WITH NOCHECK ADD FOREIGN KEY([contact_person_id])
+REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
+;
+ALTER TABLE [dbo].[prospecting_person_property_relationship]  WITH NOCHECK ADD  CONSTRAINT [FK__prospecti__prosp__46E78A0C] FOREIGN KEY([prospecting_property_id])
+REFERENCES [dbo].[prospecting_property] ([prospecting_property_id])
+;
+ALTER TABLE [dbo].[prospecting_person_property_relationship] CHECK CONSTRAINT [FK__prospecti__prosp__46E78A0C]
+;
+ALTER TABLE [dbo].[prospecting_person_property_relationship]  WITH NOCHECK ADD FOREIGN KEY([relationship_to_property])
+REFERENCES [dbo].[prospecting_person_property_relationship_type] ([person_property_relationship_type_id])
+;
+ALTER TABLE [dbo].[service_enquiry_log]  WITH NOCHECK ADD  CONSTRAINT [FK__prospecti__prosp__49C3F6B7] FOREIGN KEY([prospecting_property_id])
+REFERENCES [dbo].[prospecting_property] ([prospecting_property_id])
+;
+ALTER TABLE [dbo].[service_enquiry_log] CHECK CONSTRAINT [FK__prospecti__prosp__49C3F6B7]
+;
+ALTER TABLE [dbo].[sms_communications_log]  WITH CHECK ADD FOREIGN KEY([activity_log_id])
+REFERENCES [dbo].[activity_log] ([activity_log_id])
+;
+ALTER TABLE [dbo].[sms_communications_log]  WITH CHECK ADD FOREIGN KEY([batch_activity_type_id])
+REFERENCES [dbo].[activity_type] ([activity_type_id])
+;
+ALTER TABLE [dbo].[sms_communications_log]  WITH CHECK ADD FOREIGN KEY([followup_activity_id])
+REFERENCES [dbo].[activity_log] ([activity_log_id])
+;
+ALTER TABLE [dbo].[sms_communications_log]  WITH CHECK ADD FOREIGN KEY([status])
+REFERENCES [dbo].[communications_status] ([communications_status_id])
+;
+ALTER TABLE [dbo].[sms_communications_log]  WITH CHECK ADD FOREIGN KEY([target_contact_person_id])
+REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
+;
+ALTER TABLE [dbo].[sms_communications_log]  WITH NOCHECK ADD FOREIGN KEY([target_lightstone_property_id])
+REFERENCES [dbo].[prospecting_property] ([lightstone_property_id])
+;
+ALTER TABLE [dbo].[system_communication_template]  WITH CHECK ADD FOREIGN KEY([activity_type_id])
+REFERENCES [dbo].[activity_type] ([activity_type_id])
+;
+ALTER TABLE [dbo].[user_communication_template]  WITH CHECK ADD FOREIGN KEY([activity_type_id])
+REFERENCES [dbo].[activity_type] ([activity_type_id])
+;
+
 SET IDENTITY_INSERT [dbo].[activity_followup_type] ON 
 
 ;
@@ -735,179 +1019,6 @@ INSERT [dbo].[system_communication_template] ([system_communication_template_id]
 ;
 
 SET IDENTITY_INSERT [dbo].[system_communication_template] OFF
-;
-/****** Object:  Index [ls_prop_id_unique]    Script Date: 2017/05/08 1:07:18 PM ******/
-ALTER TABLE [dbo].[prospecting_property] ADD  CONSTRAINT [ls_prop_id_unique] UNIQUE NONCLUSTERED 
-(
-	[lightstone_property_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-;
-ALTER TABLE [dbo].[property_valuation] ADD  DEFAULT ((0)) FOR [deleted]
-;
-ALTER TABLE [dbo].[prospecting_contact_detail] ADD  DEFAULT ((0)) FOR [deleted]
-;
-ALTER TABLE [dbo].[prospecting_contact_person] ADD  DEFAULT ((0)) FOR [is_popi_restricted]
-;
-ALTER TABLE [dbo].[prospecting_contact_person] ADD  DEFAULT ((0)) FOR [optout_emails]
-;
-ALTER TABLE [dbo].[prospecting_contact_person] ADD  DEFAULT ((0)) FOR [optout_sms]
-;
-ALTER TABLE [dbo].[prospecting_contact_person] ADD  DEFAULT ((0)) FOR [do_not_contact]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  CONSTRAINT [DF_prospecting_property_created_date]  DEFAULT (getdate()) FOR [created_date]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  CONSTRAINT [DF_prospecting_property_prospected]  DEFAULT ((0)) FOR [prospected]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  DEFAULT ((0)) FOR [is_short_term_rental]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  DEFAULT ((0)) FOR [is_long_term_rental]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  DEFAULT ((0)) FOR [is_commercial]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  DEFAULT ((0)) FOR [is_agricultural]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  DEFAULT ((0)) FOR [is_investment]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  DEFAULT ((0)) FOR [has_email]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  DEFAULT ((0)) FOR [has_cell]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  DEFAULT ((0)) FOR [has_landline]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  DEFAULT ((0)) FOR [has_primary_email]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  DEFAULT ((0)) FOR [has_primary_cell]
-;
-ALTER TABLE [dbo].[prospecting_property] ADD  DEFAULT ((0)) FOR [has_primary_landline]
-;
-ALTER TABLE [dbo].[service_enquiry_log] ADD  DEFAULT ('xxxxxxxxxxxxx') FOR [id_number]
-;
-ALTER TABLE [dbo].[system_communication_template] ADD  DEFAULT ((1)) FOR [active]
-;
-ALTER TABLE [dbo].[user_communication_template] ADD  DEFAULT ((0)) FOR [deleted]
-;
-ALTER TABLE [dbo].[activity_log]  WITH NOCHECK ADD FOREIGN KEY([activity_followup_type_id])
-REFERENCES [dbo].[activity_followup_type] ([activity_followup_type_id])
-;
-ALTER TABLE [dbo].[activity_log]  WITH NOCHECK ADD  CONSTRAINT [FK_activity_type_id] FOREIGN KEY([activity_type_id])
-REFERENCES [dbo].[activity_type] ([activity_type_id])
-;
-ALTER TABLE [dbo].[activity_log] CHECK CONSTRAINT [FK_activity_type_id]
-;
-ALTER TABLE [dbo].[activity_log]  WITH NOCHECK ADD  CONSTRAINT [FK_contact_person_id] FOREIGN KEY([contact_person_id])
-REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
-;
-ALTER TABLE [dbo].[activity_log] CHECK CONSTRAINT [FK_contact_person_id]
-;
-ALTER TABLE [dbo].[activity_log]  WITH NOCHECK ADD  CONSTRAINT [FK_lightstone_property_id] FOREIGN KEY([lightstone_property_id])
-REFERENCES [dbo].[prospecting_property] ([lightstone_property_id])
-;
-ALTER TABLE [dbo].[activity_log] CHECK CONSTRAINT [FK_lightstone_property_id]
-;
-ALTER TABLE [dbo].[email_communications_log]  WITH CHECK ADD FOREIGN KEY([activity_log_id])
-REFERENCES [dbo].[activity_log] ([activity_log_id])
-;
-ALTER TABLE [dbo].[email_communications_log]  WITH CHECK ADD FOREIGN KEY([batch_activity_type_id])
-REFERENCES [dbo].[activity_type] ([activity_type_id])
-;
-ALTER TABLE [dbo].[email_communications_log]  WITH CHECK ADD FOREIGN KEY([followup_activity_id])
-REFERENCES [dbo].[activity_log] ([activity_log_id])
-;
-ALTER TABLE [dbo].[email_communications_log]  WITH CHECK ADD FOREIGN KEY([status])
-REFERENCES [dbo].[communications_status] ([communications_status_id])
-;
-ALTER TABLE [dbo].[email_communications_log]  WITH CHECK ADD FOREIGN KEY([target_contact_person_id])
-REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
-;
-ALTER TABLE [dbo].[email_communications_log]  WITH NOCHECK ADD FOREIGN KEY([target_lightstone_property_id])
-REFERENCES [dbo].[prospecting_property] ([lightstone_property_id])
-;
-ALTER TABLE [dbo].[property_valuation]  WITH CHECK ADD FOREIGN KEY([activity_log_id])
-REFERENCES [dbo].[activity_log] ([activity_log_id])
-;
-ALTER TABLE [dbo].[property_valuation]  WITH CHECK ADD FOREIGN KEY([prospecting_property_id])
-REFERENCES [dbo].[prospecting_property] ([prospecting_property_id])
-;
-ALTER TABLE [dbo].[prospecting_company_property_relationship]  WITH NOCHECK ADD FOREIGN KEY([contact_company_id])
-REFERENCES [dbo].[prospecting_contact_company] ([contact_company_id])
-;
-ALTER TABLE [dbo].[prospecting_company_property_relationship]  WITH NOCHECK ADD  CONSTRAINT [FK__prospecti__prosp__398D8EEE] FOREIGN KEY([prospecting_property_id])
-REFERENCES [dbo].[prospecting_property] ([prospecting_property_id])
-;
-ALTER TABLE [dbo].[prospecting_company_property_relationship] CHECK CONSTRAINT [FK__prospecti__prosp__398D8EEE]
-;
-ALTER TABLE [dbo].[prospecting_company_property_relationship]  WITH NOCHECK ADD FOREIGN KEY([relationship_to_property])
-REFERENCES [dbo].[prospecting_company_property_relationship_type] ([company_property_relationship_type_id])
-;
-ALTER TABLE [dbo].[prospecting_contact_detail]  WITH CHECK ADD FOREIGN KEY([contact_detail_type])
-REFERENCES [dbo].[prospecting_contact_detail_type] ([contact_detail_type_id])
-;
-ALTER TABLE [dbo].[prospecting_contact_detail]  WITH CHECK ADD FOREIGN KEY([contact_person_id])
-REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
-;
-ALTER TABLE [dbo].[prospecting_contact_detail]  WITH CHECK ADD FOREIGN KEY([intl_dialing_code_id])
-REFERENCES [dbo].[prospecting_area_dialing_code] ([prospecting_area_dialing_code_id])
-;
-ALTER TABLE [dbo].[prospecting_contact_person]  WITH CHECK ADD FOREIGN KEY([person_title])
-REFERENCES [dbo].[prospecting_person_title] ([prospecting_person_title_id])
-;
-ALTER TABLE [dbo].[prospecting_person_company_relationship]  WITH CHECK ADD FOREIGN KEY([contact_company_id])
-REFERENCES [dbo].[prospecting_contact_company] ([contact_company_id])
-;
-ALTER TABLE [dbo].[prospecting_person_company_relationship]  WITH CHECK ADD FOREIGN KEY([contact_person_id])
-REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
-;
-ALTER TABLE [dbo].[prospecting_person_company_relationship]  WITH CHECK ADD FOREIGN KEY([relationship_to_company])
-REFERENCES [dbo].[prospecting_person_company_relationship_type] ([person_company_relationship_type_id])
-;
-ALTER TABLE [dbo].[prospecting_person_person_relationship]  WITH CHECK ADD FOREIGN KEY([contact_person_id])
-REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
-;
-ALTER TABLE [dbo].[prospecting_person_person_relationship]  WITH CHECK ADD FOREIGN KEY([relationship_to_person])
-REFERENCES [dbo].[prospecting_person_person_relationship_type] ([person_person_relationship_type_id])
-;
-ALTER TABLE [dbo].[prospecting_person_person_relationship]  WITH CHECK ADD FOREIGN KEY([related_contacted_person_id])
-REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
-;
-ALTER TABLE [dbo].[prospecting_person_property_relationship]  WITH NOCHECK ADD FOREIGN KEY([contact_person_id])
-REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
-;
-ALTER TABLE [dbo].[prospecting_person_property_relationship]  WITH NOCHECK ADD  CONSTRAINT [FK__prospecti__prosp__46E78A0C] FOREIGN KEY([prospecting_property_id])
-REFERENCES [dbo].[prospecting_property] ([prospecting_property_id])
-;
-ALTER TABLE [dbo].[prospecting_person_property_relationship] CHECK CONSTRAINT [FK__prospecti__prosp__46E78A0C]
-;
-ALTER TABLE [dbo].[prospecting_person_property_relationship]  WITH NOCHECK ADD FOREIGN KEY([relationship_to_property])
-REFERENCES [dbo].[prospecting_person_property_relationship_type] ([person_property_relationship_type_id])
-;
-ALTER TABLE [dbo].[service_enquiry_log]  WITH NOCHECK ADD  CONSTRAINT [FK__prospecti__prosp__49C3F6B7] FOREIGN KEY([prospecting_property_id])
-REFERENCES [dbo].[prospecting_property] ([prospecting_property_id])
-;
-ALTER TABLE [dbo].[service_enquiry_log] CHECK CONSTRAINT [FK__prospecti__prosp__49C3F6B7]
-;
-ALTER TABLE [dbo].[sms_communications_log]  WITH CHECK ADD FOREIGN KEY([activity_log_id])
-REFERENCES [dbo].[activity_log] ([activity_log_id])
-;
-ALTER TABLE [dbo].[sms_communications_log]  WITH CHECK ADD FOREIGN KEY([batch_activity_type_id])
-REFERENCES [dbo].[activity_type] ([activity_type_id])
-;
-ALTER TABLE [dbo].[sms_communications_log]  WITH CHECK ADD FOREIGN KEY([followup_activity_id])
-REFERENCES [dbo].[activity_log] ([activity_log_id])
-;
-ALTER TABLE [dbo].[sms_communications_log]  WITH CHECK ADD FOREIGN KEY([status])
-REFERENCES [dbo].[communications_status] ([communications_status_id])
-;
-ALTER TABLE [dbo].[sms_communications_log]  WITH CHECK ADD FOREIGN KEY([target_contact_person_id])
-REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
-;
-ALTER TABLE [dbo].[sms_communications_log]  WITH CHECK ADD FOREIGN KEY([target_lightstone_property_id])
-REFERENCES [dbo].[prospecting_property] ([lightstone_property_id])
-;
-ALTER TABLE [dbo].[system_communication_template]  WITH CHECK ADD FOREIGN KEY([activity_type_id])
-REFERENCES [dbo].[activity_type] ([activity_type_id])
-;
-ALTER TABLE [dbo].[user_communication_template]  WITH CHECK ADD FOREIGN KEY([activity_type_id])
-REFERENCES [dbo].[activity_type] ([activity_type_id])
 ;
 ";
             }
