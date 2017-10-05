@@ -1223,6 +1223,7 @@
     <None Include="Properties\PublishProfiles\1.pubxml" />
     <None Include="Properties\PublishProfiles\2.pubxml" />
     <None Include="Properties\PublishProfiles\3.pubxml" />
+    <None Include="Properties\PublishProfiles\4.pubxml" />
     <None Include="Properties\PublishProfiles\Seeff Server.pubxml" />
     <None Include="Properties\PublishProfiles\seeffprospecting - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\seeffprospecting - Web Deploy.pubxml" />

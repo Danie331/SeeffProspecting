@@ -282,6 +282,12 @@ namespace ProspectingProject
                 }
                 else
                 {
+                    Guid guid;
+                    try
+                    {
+                        guid = GetUserSessionObject().UserGuid;
+                    }
+                    catch { guid = Guid.NewGuid(); }
                     // Other excepion - log + display on front-end + contact support 
                     using (var prospectingDb = new ProspectingDataContext())
                     {
@@ -289,7 +295,7 @@ namespace ProspectingProject
                         {
                             friendly_error_msg = ex.Message,
                             exception_string = ex.ToString(),
-                            user = GetUserSessionObject().UserGuid,
+                            user = guid,
                             date_time = DateTime.Now
                         };
                         prospectingDb.exception_logs.InsertOnSubmit(errorRec);
