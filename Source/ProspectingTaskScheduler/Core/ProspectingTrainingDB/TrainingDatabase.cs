@@ -362,6 +362,7 @@ CREATE TABLE [dbo].[prospecting_contact_person](
 	[optout_emails] [bit] NOT NULL,
 	[optout_sms] [bit] NOT NULL,
 	[do_not_contact] [bit] NOT NULL,
+    [email_contactability_status] [int] NOT NULL DEFAULT ((4)),
 PRIMARY KEY CLUSTERED 
 (
 	[contact_person_id] ASC
@@ -656,8 +657,32 @@ PRIMARY KEY CLUSTERED
 	[user_communication_template_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
 ;
+
+CREATE TABLE [dbo].[contact_person_list](
+	[contact_person_list_id] [int] IDENTITY(1,1) NOT NULL,
+	[contact_person_id] [int] NOT NULL,
+	[fk_list_id] [int] NOT NULL,
+	[prospecting_property_id] [int] NOT NULL,
+	[created_by] [uniqueidentifier] NOT NULL,
+	[created_date] [datetime] NOT NULL,
+	[updated_date] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[contact_person_list_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+;
+CREATE TABLE [dbo].[contactability_status](
+	[contactability_status_id] [int] IDENTITY(1,1) NOT NULL,
+	[contactability_status_desc] [varchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[contactability_status_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+;
+
 SET IDENTITY_INSERT [dbo].[activity_followup_type] ON 
 
 ;
@@ -736,6 +761,11 @@ INSERT [dbo].[system_communication_template] ([system_communication_template_id]
 
 SET IDENTITY_INSERT [dbo].[system_communication_template] OFF
 ;
+
+SET IDENTITY_INSERT [dbo].[contactability_status] ON;
+insert [dbo].[contactability_status] (contactability_status_id, contactability_status_desc) select contactability_status_id, contactability_status_desc from seeff_prospecting.dbo.[contactability_status]
+SET IDENTITY_INSERT [dbo].[contactability_status] OFF;
+
 /****** Object:  Index [ls_prop_id_unique]    Script Date: 2017/05/08 1:07:18 PM ******/
 ALTER TABLE [dbo].[prospecting_property] ADD  CONSTRAINT [ls_prop_id_unique] UNIQUE NONCLUSTERED 
 (
@@ -851,6 +881,9 @@ REFERENCES [dbo].[prospecting_area_dialing_code] ([prospecting_area_dialing_code
 ALTER TABLE [dbo].[prospecting_contact_person]  WITH CHECK ADD FOREIGN KEY([person_title])
 REFERENCES [dbo].[prospecting_person_title] ([prospecting_person_title_id])
 ;
+ALTER TABLE [dbo].[prospecting_contact_person]  WITH CHECK ADD FOREIGN KEY([email_contactability_status])
+REFERENCES [dbo].[contactability_status] ([contactability_status_id])
+;
 ALTER TABLE [dbo].[prospecting_person_company_relationship]  WITH CHECK ADD FOREIGN KEY([contact_company_id])
 REFERENCES [dbo].[prospecting_contact_company] ([contact_company_id])
 ;
@@ -908,6 +941,12 @@ REFERENCES [dbo].[activity_type] ([activity_type_id])
 ;
 ALTER TABLE [dbo].[user_communication_template]  WITH CHECK ADD FOREIGN KEY([activity_type_id])
 REFERENCES [dbo].[activity_type] ([activity_type_id])
+;
+ALTER TABLE [dbo].[contact_person_list]  WITH CHECK ADD FOREIGN KEY([contact_person_id])
+REFERENCES [dbo].[prospecting_contact_person] ([contact_person_id])
+;
+ALTER TABLE [dbo].[contact_person_list]  WITH CHECK ADD FOREIGN KEY([prospecting_property_id])
+REFERENCES [dbo].[prospecting_property] ([prospecting_property_id])
 ;
 ";
             }
