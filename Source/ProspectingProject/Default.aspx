@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 
         <%-- Google maps API access (note server key) --%>
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDWHlk3fmGm0oDsqVaoBM3_YocW5xPKtwA&libraries=drawing,geometry,places&sensor=true"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDWHlk3fmGm0oDsqVaoBM3_YocW5xPKtwA&libraries=drawing,geometry,places&sensor=true&v=3.30"></script>
     <script src="https://apis.google.com/js/client.js"></script>
 
       <%-- UNMINIFIED --%> 
