@@ -124,9 +124,9 @@ function getRelevantListingsForPropFilter(listings) {
     //if (menu.find("#2013_filter").is(':checked')) {
     //    selectedYears.push('2013');
     //}
-    if (menu.find("#2014_filter").is(':checked')) {
-        selectedYears.push('2014');
-    }
+    //if (menu.find("#2014_filter").is(':checked')) {
+    //    selectedYears.push('2014');
+    //}
     if (menu.find("#2015_filter").is(':checked')) {
         selectedYears.push('2015');
     }
@@ -135,6 +135,9 @@ function getRelevantListingsForPropFilter(listings) {
     }
     if (menu.find("#2017_filter").is(':checked')) {
         selectedYears.push('2017');
+    }
+    if (menu.find("#2018_filter").is(':checked')) {
+        selectedYears.push('2018');
     }
 
     return $.grep(listings, function (listing, idx) {
