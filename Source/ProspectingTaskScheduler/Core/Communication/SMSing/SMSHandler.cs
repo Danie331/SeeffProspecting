@@ -85,7 +85,7 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
                         {
                             string encodedMsg = HttpUtility.UrlEncode(item.msg_body_or_link_id);
                             string encodedCallbackURL = HttpUtility.UrlEncode("http://154.70.214.213/ProspectingTaskScheduler/api/SMS/UpdateDeliveryStatus?recordID=" + item.sms_communications_log_id + "&status=%d");
-                            string targetURI = string.Format("json?action=message_send&username=seeffnational&password=Zaq12wsXc&to={0}&text={1}&from={2}&report_mask=31&report_url={3}",
+                            string targetURI = string.Format("json?action=message_send&username=seeffnational&password=dPBbboXWMgqz5GqZ2f1C&to={0}&text={1}&from={2}&report_mask=31&report_url={3}",
                                                             item.target_cellphone_no,
                                                             encodedMsg,
                                                             "27724707471",
