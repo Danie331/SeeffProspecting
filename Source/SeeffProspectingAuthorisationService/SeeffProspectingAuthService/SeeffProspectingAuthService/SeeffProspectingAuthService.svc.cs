@@ -188,7 +188,7 @@ namespace SeeffProspectingAuthService
                 var thisUser = boss.user_registrations.First(u => u.user_guid == userGuid.ToString());
                 List<int> branchIds = new List<int>();
                 var licenseBranch = boss.license_branches.First(bu => bu.branch_id == thisUser.branch_id);
-                if (licenseBranch.business_unit_id == null)
+                if (licenseBranch.business_unit_id == null || licenseBranch.business_unit_id == 0)
                 {
                     // Get all Then get all the branch id's for license
                     branchIds = boss.license_branches.Where(lb => lb.license_id == licenseBranch.license_id).Select(b => b.branch_id).ToList();
