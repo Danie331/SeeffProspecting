@@ -2340,8 +2340,16 @@ function performLightstoneSearch() {
             erfNo.length > 0 ||
             estateName.length > 0 ||
             propertyID.length > 0 ||
-            ownerName.length > 0 ||
+            ownerFullname.trim().length > 0 ||
             ownerIdNo.length > 0;
+    }
+
+    function validateOwnerNameAndSurname() {
+        if (!ownerFirstName.length && !ownerSurname.length) return true;
+
+        if (ownerFirstName.length < 3 || ownerSurname.length < 3) return false;
+
+        return true;
     }
 
     var deedTown = $('#deedTownInput').val().trim();
@@ -2353,10 +2361,17 @@ function performLightstoneSearch() {
     var portion = $('#portionNoInputBox').val().trim();
     var estateName = $('#estateNameInput').val().trim();
     var propertyID = $('#propertyIdInput').val().trim();
-    var ownerName = $('#ownerNameInput').val().trim();
+    var ownerFirstName = $('#ownerFirstNameInput').val().trim();
+    var ownerSurname = $('#ownerSurnameInput').val().trim();
     var ownerIdNo = $('#ownerIDnoInput').val().trim();
 
-    try{
+    var ownerFullname = ownerFirstName + " " + ownerSurname;
+
+    try {
+        if (!validateOwnerNameAndSurname()) {
+            alert('When searching by name, please specify both firstname and surname (without initials).');
+            return;
+        }
         if (atLeastOneFieldPopulated()) {
             $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Searching for matching properties...</p>' });
             $.ajax({
@@ -2373,7 +2388,7 @@ function performLightstoneSearch() {
                     Portion: portion,
                     EstateName: estateName,
                     PropertyID: propertyID,
-                    OwnerName: ownerName,
+                    OwnerName: ownerFullname,
                     OwnerIdNumber: ownerIdNo
                 }),
                 dataType: "json",

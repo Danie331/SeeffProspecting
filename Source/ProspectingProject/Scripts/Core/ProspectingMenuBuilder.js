@@ -565,8 +565,10 @@ function buildSearchMenu() {
                       <label class='fieldAlignmentShortWidth' for='propertyIdInput'>Property ID</label>\
                       <input type='text' name='propertyIdInput' id='propertyIdInput' size='30' style='height:12px;font-size:12px' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
                       <hr />\
-                      <label class='fieldAlignmentShortWidth' for='ownerNameInput'>Owner Name</label>\
-                      <input type='text' name='ownerNameInput' id='ownerNameInput' size='30' style='height:12px;font-size:12px' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
+                      <label class='fieldAlignmentShortWidth' for='ownerFirstNameInput'>Owner Firstname</label>\
+                      <input type='text' name='ownerNameInput' id='ownerFirstNameInput' size='30' style='height:12px;font-size:12px' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
+                      <label class='fieldAlignmentShortWidth' for='ownerSurnameInput'>Owner Surname</label>\
+                      <input type='text' name='ownerNameInput' id='ownerSurnameInput' size='30' style='height:12px;font-size:12px' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />\
                       <label class='fieldAlignmentShortWidth' for='ownerIDnoInput'>Owner ID No.</label>\
                       <input type='text' name='ownerIDnoInput' id='ownerIDnoInput' size='30' style='height:12px;font-size:12px' onkeypress='return searchLightstoneOnEnter(event);' /><p style='margin:3px;' />");
 

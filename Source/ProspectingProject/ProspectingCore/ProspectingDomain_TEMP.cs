@@ -1530,6 +1530,19 @@ namespace ProspectingProject
                                 result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", "", "", "", "", "", "", "", "", ""
                                                                         , "", "", "", "", "", "", "", "", propId, 1000, "", "", 0, 0);
                                 dataRowCollection.AddRange(result.Tables[1].Rows.Cast<DataRow>());
+
+                                using (var prospectingDb = new ProspectingDataContext())
+                                {
+                                    var errorRec = new exception_log
+                                    {
+                                        friendly_error_msg = "*** In loop for Lightstone call to FindMatchingProperties() ***",
+                                        exception_string = "resultsPropIds = " + resultsPropIds,
+                                        user = RequestHandler.GetUserSessionObject().UserGuid,
+                                        date_time = DateTime.Now
+                                    };
+                                    prospectingDb.exception_logs.InsertOnSubmit(errorRec);
+                                    prospectingDb.SubmitChanges();
+                                }
                             }
                         }
                         using (var prospecting = new ProspectingDataContext())
