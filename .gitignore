@@ -48,3 +48,5 @@
 /Source/SeeffProspectingAuthorisationService/SeeffProspectingAuthService/SeeffProspectingAuthService/Properties/PublishProfiles
 /Source/ProspectingProject/ExportOutput/277
 *.user
+/SeeffSpatial/SeeffSpatial/.vs/SeeffSpatial/v15
+/Source/ProspectingProject/Properties/PublishProfiles

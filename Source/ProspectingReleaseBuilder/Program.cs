@@ -168,7 +168,7 @@ namespace ProspectingReleaseBuilder
     static class BuildDefaults
     {
         public static string _buildVersion = GetBuildVersion();
-        public static string _publishTarget = @"C:\Users\Louise\Desktop\deploy_temp";
+        public static string _publishTarget = @"C:\GitRepos\Prospecting\Source\ProspectingProject\bin\Release\PublishOutput";
         public static string _publishScripts = @"Scripts\";
         public static string _javascriptSourceFolder = @"Scripts\Core\";
         public static string _stylesheetSourceFolder = @"Scripts\StyleSheets\";
@@ -184,7 +184,7 @@ namespace ProspectingReleaseBuilder
         public static string _coreStylesheetSectionName = "CORE_STYLESHEETS";
 
         public static string _jsMinifierPostData = "js_code={0}&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS&language=ECMASCRIPT6";
-        public static string _jsMinifierAPI = "http://closure-compiler.appspot.com/compile";
+        public static string _jsMinifierAPI = "https://closure-compiler.appspot.com/compile";
 
         public static string _cssMiniferAPI = "http://cssminifier.com/raw";
         public static string _cssMinifierPostData = "input={0}";
