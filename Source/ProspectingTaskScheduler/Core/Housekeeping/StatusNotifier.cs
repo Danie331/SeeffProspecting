@@ -30,7 +30,7 @@ namespace ProspectingTaskScheduler.Core.Housekeeping
                 {
                     var target = boss.user_registration.FirstOrDefault(ur => ur.user_guid == item.user.ToString().ToLower());
                     string recordItem = item.date_time.ToString() + " | " + target.user_name + " " + target.user_surname + " | " + item.call_location_src;
-                    sb.AppendLine(recordItem);
+                    sb.AppendLine(recordItem + "<br />");
                 }
 
                 string subject = "Prospecting Lightstone call history for " + DateTime.Now.AddDays(-1).Date.ToShortDateString();
