@@ -1509,6 +1509,9 @@ namespace ProspectingProject
                     result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", searchInputValues.DeedTown, searchInputValues.ErfNo, searchInputValues.Portion
                         , searchInputValues.SSName, searchInputValues.Unit, searchInputValues.Suburb, searchInputValues.StreetName, searchInputValues.StreetOrUnitNo, ""
                         , "", "", "", "", searchInputValues.OwnerName, searchInputValues.OwnerIdNumber, searchInputValues.EstateName, "", propertyID, 500, "", "", 0, 0);
+
+                    LogLightstoneCall("FindMatchingProperties()", Newtonsoft.Json.JsonConvert.SerializeObject(searchInputValues));
+
                     if (result.Tables.Count > 1 && result.Tables[1].Rows.Count > 0)
                     {
                         List<DataRow> dataRowCollection = new List<DataRow>();
@@ -1531,18 +1534,7 @@ namespace ProspectingProject
                                                                         , "", "", "", "", "", "", "", "", propId, 1000, "", "", 0, 0);
                                 dataRowCollection.AddRange(result.Tables[1].Rows.Cast<DataRow>());
 
-                                using (var prospectingDb = new ProspectingDataContext())
-                                {
-                                    var errorRec = new exception_log
-                                    {
-                                        friendly_error_msg = "*** In loop for Lightstone call to FindMatchingProperties() ***",
-                                        exception_string = "resultsPropIds = " + resultsPropIds,
-                                        user = RequestHandler.GetUserSessionObject().UserGuid,
-                                        date_time = DateTime.Now
-                                    };
-                                    prospectingDb.exception_logs.InsertOnSubmit(errorRec);
-                                    prospectingDb.SubmitChanges();
-                                }
+                                LogLightstoneCall("foreach (int propId in resultsPropIds)", "resultsPropIds=" + resultsPropIds.Count);
                             }
                         }
                         using (var prospecting = new ProspectingDataContext())
@@ -1755,6 +1747,8 @@ namespace ProspectingProject
                 {
                     result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", "", "", "", "", "", ""
                         , "", "", "", "", "", "", "", "", "", "", "", 0, 1000, "", "", lng, lat);
+
+                    LogLightstoneCall("GetMatchingAddresses()", Newtonsoft.Json.JsonConvert.SerializeObject(dataPacket));
                 }
                 catch { return new List<NewProspectingEntity>(); }
                 if (result.Tables[0] != null && result.Tables.Count > 1 && result.Tables[1].Rows.Count > 0)
@@ -2329,6 +2323,8 @@ namespace ProspectingProject
                     string ssName = sectionalTitle.SectionalScheme;
                     DataSet result = service.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f", "", "", "", erf, "", ssName, "", ""
                        , "", "", "", "", "", "", "", "", "", "", "", 0, 1000, "", "", 0.0, 0.0);
+
+                    LogLightstoneCall("CreateSectionalTitle()", Newtonsoft.Json.JsonConvert.SerializeObject(sectionalTitle));
 
                     if (sectionalTitle.PropertyMatches.Count < result.Tables[1].Rows.Count)
                     {
@@ -5364,6 +5360,23 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                 targetList.updated_date = DateTime.Now;
                 client.SaveChanges();
                 return true;
+            }
+        }
+
+        private static void LogLightstoneCall(string srcLocation, string serviceInputs)
+        {
+            var currentUser = RequestHandler.GetUserSessionObject();
+            using (var prospecting = new ProspectingDataContext())
+            {
+                lightstone_call_log newEntry = new lightstone_call_log
+                {
+                    user = currentUser.UserGuid,
+                    date_time = DateTime.Now,
+                    call_location_src = srcLocation,
+                    search_inputs = serviceInputs != null ? serviceInputs.ToString() : null
+                };
+                prospecting.lightstone_call_logs.InsertOnSubmit(newEntry);
+                prospecting.SubmitChanges();
             }
         }
     }

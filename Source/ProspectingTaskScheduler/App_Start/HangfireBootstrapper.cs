@@ -93,6 +93,8 @@ namespace ProspectingTaskScheduler.App_Start
             RecurringJob.AddOrUpdate("Send Prospecting notifications", () => NotificationsGenerator.SendProspectingFollowupsNotification(JobCancellationToken.Null), Cron.Daily(8), TimeZoneInfo.Local);
 
             RecurringJob.AddOrUpdate("Purge Prospecting training database", () => TrainingDatabase.PurgeAndResetProspectingStaging(), Cron.Daily(), TimeZoneInfo.Local);
+
+            RecurringJob.AddOrUpdate("Sending Lightstone call log", () => StatusNotifier.SendYesterdaysLightstoneCallLog(), Cron.Daily(8), TimeZoneInfo.Local);
         }
     }
 }

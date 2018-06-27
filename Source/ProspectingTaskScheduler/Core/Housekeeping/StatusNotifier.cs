@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Web;
 
 namespace ProspectingTaskScheduler.Core.Housekeeping
@@ -15,6 +16,28 @@ namespace ProspectingTaskScheduler.Core.Housekeeping
         {
             string body = "ProspectingTaskScheduler service running at " + DateTime.Now + " (local time on server)";
             SendEmail("danie.vdm@seeff.com", "ProspectingTaskScheduler", "reports@seeff.com", null, "Notification from ProspectingTaskScheduler service", body);
+        }
+
+        public static void SendYesterdaysLightstoneCallLog()
+        {
+            StringBuilder sb = new StringBuilder();
+            using (var boss = new bossEntities())
+                using (var prospecting = new ProspectingDataContext())
+            {
+                DateTime yesterday = DateTime.Now.AddDays(-1).Date;
+                var yesterdaysCalls = prospecting.lightstone_call_logs.Where(s => s.date_time.Date == yesterday);
+                foreach (var item in yesterdaysCalls)
+                {
+                    var target = boss.user_registration.FirstOrDefault(ur => ur.user_guid == item.user.ToString().ToLower());
+                    string recordItem = item.date_time.ToString() + " | " + target.user_name + " " + target.user_surname + " | " + item.call_location_src;
+                    sb.AppendLine(recordItem);
+                }
+
+                string subject = "Prospecting Lightstone call history for " + DateTime.Now.AddDays(-1).Date.ToShortDateString();
+                string contents = sb.ToString();
+
+                SendEmail("danie.vdm@seeff.com", "ProspectingTaskScheduler", "reports2@seeff.com", null, subject, contents);
+            }
         }
 
         public static void SendEmail(string toAddress, string displayName, string fromAddress, string ccAddress, string subject, string body)

@@ -114,6 +114,9 @@ namespace ProspectingTaskScheduler
     partial void Insertsystem_communication_template(system_communication_template instance);
     partial void Updatesystem_communication_template(system_communication_template instance);
     partial void Deletesystem_communication_template(system_communication_template instance);
+    partial void Insertlightstone_call_log(lightstone_call_log instance);
+    partial void Updatelightstone_call_log(lightstone_call_log instance);
+    partial void Deletelightstone_call_log(lightstone_call_log instance);
     #endregion
 		
 		public ProspectingDataContext() : 
@@ -367,6 +370,14 @@ namespace ProspectingTaskScheduler
 			get
 			{
 				return this.GetTable<system_communication_template>();
+			}
+		}
+		
+		public System.Data.Linq.Table<lightstone_call_log> lightstone_call_logs
+		{
+			get
+			{
+				return this.GetTable<lightstone_call_log>();
 			}
 		}
 		
@@ -10620,6 +10631,164 @@ namespace ProspectingTaskScheduler
 						this._activity_type_id = default(int);
 					}
 					this.SendPropertyChanged("activity_type");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.lightstone_call_log")]
+	public partial class lightstone_call_log : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _lightstone_call_log_id;
+		
+		private System.Guid _user;
+		
+		private System.DateTime _date_time;
+		
+		private string _call_location_src;
+		
+		private string _search_inputs;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onlightstone_call_log_idChanging(int value);
+    partial void Onlightstone_call_log_idChanged();
+    partial void OnuserChanging(System.Guid value);
+    partial void OnuserChanged();
+    partial void Ondate_timeChanging(System.DateTime value);
+    partial void Ondate_timeChanged();
+    partial void Oncall_location_srcChanging(string value);
+    partial void Oncall_location_srcChanged();
+    partial void Onsearch_inputsChanging(string value);
+    partial void Onsearch_inputsChanged();
+    #endregion
+		
+		public lightstone_call_log()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lightstone_call_log_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int lightstone_call_log_id
+		{
+			get
+			{
+				return this._lightstone_call_log_id;
+			}
+			set
+			{
+				if ((this._lightstone_call_log_id != value))
+				{
+					this.Onlightstone_call_log_idChanging(value);
+					this.SendPropertyChanging();
+					this._lightstone_call_log_id = value;
+					this.SendPropertyChanged("lightstone_call_log_id");
+					this.Onlightstone_call_log_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[user]", Storage="_user", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid user
+		{
+			get
+			{
+				return this._user;
+			}
+			set
+			{
+				if ((this._user != value))
+				{
+					this.OnuserChanging(value);
+					this.SendPropertyChanging();
+					this._user = value;
+					this.SendPropertyChanged("user");
+					this.OnuserChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date_time", DbType="DateTime NOT NULL")]
+		public System.DateTime date_time
+		{
+			get
+			{
+				return this._date_time;
+			}
+			set
+			{
+				if ((this._date_time != value))
+				{
+					this.Ondate_timeChanging(value);
+					this.SendPropertyChanging();
+					this._date_time = value;
+					this.SendPropertyChanged("date_time");
+					this.Ondate_timeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_call_location_src", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string call_location_src
+		{
+			get
+			{
+				return this._call_location_src;
+			}
+			set
+			{
+				if ((this._call_location_src != value))
+				{
+					this.Oncall_location_srcChanging(value);
+					this.SendPropertyChanging();
+					this._call_location_src = value;
+					this.SendPropertyChanged("call_location_src");
+					this.Oncall_location_srcChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_search_inputs", DbType="VarChar(1000)")]
+		public string search_inputs
+		{
+			get
+			{
+				return this._search_inputs;
+			}
+			set
+			{
+				if ((this._search_inputs != value))
+				{
+					this.Onsearch_inputsChanging(value);
+					this.SendPropertyChanging();
+					this._search_inputs = value;
+					this.SendPropertyChanged("search_inputs");
+					this.Onsearch_inputsChanged();
 				}
 			}
 		}
