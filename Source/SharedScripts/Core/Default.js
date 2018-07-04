@@ -1066,6 +1066,7 @@ function buildContentForInfoWindow(listing) {
                        "<label>Property ID: </label>" + listing.PropertyId + "<br />" +
                        "<label>Last seller: </label>" + formatDisplayString(listing.SellerName) + "<br />" +
                        "<label>Last buyer: </label>" + formatDisplayString(listing.BuyerName) + "<br />" +
+                       "<label>Sale price: </label>" + formatRandValue(listing.PurchPrice) + "<br />" +
                        "<label>Property type: </label>" + getPropertyTypeName(listing) +
                        "</div>";
         }
