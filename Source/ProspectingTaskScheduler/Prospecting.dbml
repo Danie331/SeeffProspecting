@@ -461,6 +461,15 @@
       <Association Name="activity_type_system_communication_template" Member="activity_type" ThisKey="activity_type_id" OtherKey="activity_type_id" Type="activity_type" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.lightstone_call_log" Member="lightstone_call_logs">
+    <Type Name="lightstone_call_log">
+      <Column Name="lightstone_call_log_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="[user]" Member="user" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="date_time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="call_location_src" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="search_inputs" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+    </Type>
+  </Table>
   <Function Name="dbo.update_property_contact_detail_statistics" Method="update_property_contact_detail_statistics">
     <Parameter Name="area_id" Type="System.Int32" DbType="Int" />
     <Return Type="System.Int32" />

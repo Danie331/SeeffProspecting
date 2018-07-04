@@ -476,6 +476,15 @@
       <Association Name="prospecting_property_contact_person_list" Member="prospecting_property" ThisKey="prospecting_property_id" OtherKey="prospecting_property_id" Type="prospecting_property" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.lightstone_call_log" Member="lightstone_call_logs">
+    <Type Name="lightstone_call_log">
+      <Column Name="lightstone_call_log_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="[user]" Member="user" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="date_time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="call_location_src" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="search_inputs" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+    </Type>
+  </Table>
   <Function Name="dbo.prospected_propety_contact_count" Method="prospected_propety_contact_count" IsComposable="true">
     <Parameter Name="prospecting_property_id" Type="System.Int32" DbType="Int" />
     <Return Type="System.Int32" />
