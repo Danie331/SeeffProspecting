@@ -1656,13 +1656,14 @@ function centreMap(suburb, marker, mustSetZoom) {
         }
         map.setCenter(mapMarkerPos);
     } else {
-        var pos = calcMapCenterWithOffset(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng, -350, 0);
-        if (pos) {
-            map.setCenter(pos);
-        }
-        else {
-            map.setCenter(new google.maps.LatLng(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng));
-        }
+        panToWithOffset(new google.maps.LatLng(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng), -350, 0);
+        //var pos = calcMapCenterWithOffset(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng, -350, 0);
+        //if (pos) {
+        //    map.setCenter(pos);
+        //}
+        //else {
+        //    map.setCenter(new google.maps.LatLng(suburb.PolyCoords[0].Lat, suburb.PolyCoords[0].Lng));
+        //}
     }
 }
 
@@ -2061,7 +2062,7 @@ function buildContentForInfoWindow(property, infowindow, showStreetView) {
 
     // SS, chrome,
     if (showStreetView) {
-        var imgUrl = 'https://maps.googleapis.com/maps/api/streetview?size=200x150&location=' + property.LatLng.Lat + ',' + property.LatLng.Lng + '&fov=90&heading=235&pitch=10';
+        var imgUrl = 'https://maps.googleapis.com/maps/api/streetview?key=AIzaSyDWHlk3fmGm0oDsqVaoBM3_YocW5xPKtwA&size=200x150&location=' + property.LatLng.Lat + ',' + property.LatLng.Lng + '&fov=90&heading=235&pitch=10';
         var imgElement = $("<img id='streetview_" + property.LightstonePropertyId + "' style='cursor:pointer' />").attr('src', imgUrl);
         var streetViewDiv = $("<div style='padding-right:5px;float:left;display:inline-block;width:201px' />")
                             .append($("<div><span style='font-size:10px'>(Click the image to go to StreetView)</span></div>"))

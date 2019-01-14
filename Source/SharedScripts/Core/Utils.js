@@ -84,7 +84,7 @@ function calcMapCenterWithOffset(lat, lng, offset_x, offset_y) {
 
     var currentProj = proj.getProjection();
     if (currentProj) {
-        var point = currentProj.fromLatLngToDivPixel(new google.maps.LatLng(lat, lng));
+        var point = currentProj.fromLatLngToContainerPixel(new google.maps.LatLng(lat, lng));
     }
     else {
         return null;
@@ -93,9 +93,22 @@ function calcMapCenterWithOffset(lat, lng, offset_x, offset_y) {
     point.x = point.x + offset_x;
     point.y = point.y + offset_y;
 
-    var newLatLng = proj.getProjection().fromDivPixelToLatLng(point);
+    var newLatLng = proj.getProjection().fromContainerPixelToLatLng(point);
     return newLatLng;
 }
+
+function panToWithOffset(latlng, offsetX, offsetY) {
+    var ov = new google.maps.OverlayView();
+    ov.onAdd = function () {
+        var proj = this.getProjection();
+        var aPoint = proj.fromLatLngToContainerPixel(latlng);
+        aPoint.x = aPoint.x + offsetX;
+        aPoint.y = aPoint.y + offsetY;
+        map.panTo(proj.fromContainerPixelToLatLng(aPoint));
+    };
+    ov.draw = function () { };
+    ov.setMap(map);
+};
 
 function isCKNumber(number) {
     // Currently to validate a CK number all we do is test whether there are any non-numeric digits present
