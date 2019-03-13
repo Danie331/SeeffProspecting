@@ -168,7 +168,7 @@ namespace ProspectingReleaseBuilder
     static class BuildDefaults
     {
         public static string _buildVersion = GetBuildVersion();
-        public static string _publishTarget = @"C:\GitRepos\Prospecting\Source\ProspectingProject\bin\Release\PublishOutput";
+        public static string _publishTarget = @"C:\Users\Louise\Desktop\Repos2019\SeeffProspecting\Source\ProspectingProject\publish";
         public static string _publishScripts = @"Scripts\";
         public static string _javascriptSourceFolder = @"Scripts\Core\";
         public static string _stylesheetSourceFolder = @"Scripts\StyleSheets\";

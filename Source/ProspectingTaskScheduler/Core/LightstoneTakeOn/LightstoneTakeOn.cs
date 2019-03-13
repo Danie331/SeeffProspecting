@@ -1,4 +1,5 @@
-﻿using ProspectingTaskScheduler.Core.Housekeeping;
+﻿using Hangfire;
+using ProspectingTaskScheduler.Core.Housekeeping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,8 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
     public partial class LightstoneTakeOn
     {
         private static bool _processing = false;
-        public static void PerformBaseDataTakeOn()
+        [AutomaticRetry(Attempts = 15)]
+        public static void PerformBaseDataTakeOn(IJobCancellationToken cancellationToken)
         {
             StringBuilder reportBuilder = new StringBuilder();
             try
@@ -39,7 +41,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                 SendEmailReport("<br /> Step2 completed successfully. Starting Step3 at: " + DateTime.Now, reportBuilder);
 
                 // Step 3: This performs the data enrichment of all take-on records prior to insert.
-                ProcessRecordsForInsert(reportBuilder);
+                ProcessRecordsForInsert(reportBuilder, cancellationToken);
 
                 SendEmailReport("<br /> Step3 completed successfully. Starting Step4 at: " + DateTime.Now, reportBuilder);
 
@@ -77,6 +79,11 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                 AutoFateDevelopments(reportBuilder);
 
                 SendEmailReport("<br /> Step 10 completed successfully.<p /><p />------------ Take-on completed succesfully at: " + DateTime.Now + " ------------", reportBuilder);
+            }
+            catch (OperationCanceledException)
+            {
+                // Retry due to error outside of our control
+                return;
             }
             catch (Exception ex)
             {

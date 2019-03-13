@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace ProspectingTaskScheduler.Core
 {
@@ -9,7 +6,7 @@ namespace ProspectingTaskScheduler.Core
     {
         public static void LogException(Exception ex)
         {
-            using (var prospectingDb = new ProspectingDataContext())
+            using (var prospectingDb = new seeff_prospectingEntities())
             {
                 var errorRec = new exception_log
                 {
@@ -18,8 +15,8 @@ namespace ProspectingTaskScheduler.Core
                     user = new Guid(),
                     date_time = DateTime.Now
                 };
-                prospectingDb.exception_logs.InsertOnSubmit(errorRec);
-                prospectingDb.SubmitChanges();
+                prospectingDb.exception_log.Add(errorRec);
+                prospectingDb.SaveChanges();
             }
         }
     }

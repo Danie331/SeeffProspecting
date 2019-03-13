@@ -15,7 +15,7 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
     {
         private static long CreateActivityForRecord(email_communications_log emailItem)
         {
-            using (var prospecting = new ProspectingDataContext())
+            using (var prospecting = new seeff_prospectingEntities())
             {
                 var activityRecord = new activity_log
                 {
@@ -31,14 +31,14 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                     parent_activity_id = null,
                     activity_followup_type_id = null
                 };
-                prospecting.activity_logs.InsertOnSubmit(activityRecord);
+                prospecting.activity_log.Add(activityRecord);
                 try
                 {
-                    prospecting.SubmitChanges();
+                    prospecting.SaveChanges();
                 }
                 catch (Exception e)
                 {
-                    using (var newContext = new ProspectingDataContext())
+                    using (var newContext = new seeff_prospectingEntities())
                     {
                         string msg = "Error inserting activity record for email communication sent. (Email comm record id: " + emailItem.email_communications_log_id + ")";
                         exception_log logentry = new exception_log
@@ -48,8 +48,8 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                             date_time = DateTime.Now,
                             user = emailItem.created_by_user_guid
                         };
-                        newContext.exception_logs.InsertOnSubmit(logentry);
-                        newContext.SubmitChanges();
+                        newContext.exception_log.Add(logentry);
+                        newContext.SaveChanges();
                     }
                 }
                 return activityRecord.activity_log_id;
@@ -100,17 +100,17 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
 
         public static void SendEmails()
         {
-            using (var prospecting = new ProspectingDataContext())
+            using (var prospecting = new seeff_prospectingEntities())
             {
                 int pendingStatus = CommunicationHelpers.GetCommunicationStatusId("PENDING_SUBMIT_TO_API");
-                var batch = prospecting.email_communications_logs.Where(em => em.status == pendingStatus).Take(5).ToList();
+                var batch = prospecting.email_communications_log.Where(em => em.status == pendingStatus).Take(5).ToList();
                 int awaitingStatus = CommunicationHelpers.GetCommunicationStatusId("AWAITING_RESPONSE_FROM_API");
                 foreach (var item in batch)
                 {
                     item.status = awaitingStatus;
                     try
                     {
-                        prospecting.SubmitChanges();
+                        prospecting.SaveChanges();
                     }
                     catch(Exception e)
                     {
@@ -123,7 +123,7 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                     UpdateRecord(item, result);
                     try
                     {
-                        prospecting.SubmitChanges();
+                        prospecting.SaveChanges();
                     }
                     catch (Exception e)
                     {
@@ -136,7 +136,7 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
 
             private static void LogUpdateRecordError(Exception e, string context, email_communications_log record)
             {
-                using (var newContext = new ProspectingDataContext())
+                using (var newContext = new seeff_prospectingEntities())
                 {
                     string msg = context + "(Email communication record id: " + record.email_communications_log_id + ")";
                     exception_log logentry = new exception_log
@@ -146,8 +146,8 @@ namespace ProspectingTaskScheduler.Core.Communication.Emailing
                         date_time = DateTime.Now,
                         user = record.created_by_user_guid
                     };
-                    newContext.exception_logs.InsertOnSubmit(logentry);
-                    newContext.SubmitChanges();
+                    newContext.exception_log.Add(logentry);
+                    newContext.SaveChanges();
                 }
             }
 

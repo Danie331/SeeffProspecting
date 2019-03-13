@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hangfire;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -9,34 +10,33 @@ namespace ProspectingTaskScheduler.Core.Spatial
 {
     public class SuburbMaintenance
     {
+        [AutomaticRetry(Attempts = 0)]
         public static void ReindexSuburbsRequiringMaintenance()
         {
-            //if (DateTime.Now.Hour >= 1 && DateTime.Now.Hour < 6)
-            //{
-                try
+            try
+            {
+                using (var spatial = new seeff_spatialEntities())
                 {
-                    using (var spatial = new seeff_spatialEntities())
+                    string connStr = WebConfigurationManager.ConnectionStrings["seeff_spatial"].ConnectionString;
+                    using (var conn = new SqlConnection(connStr))
+                    using (var command = new SqlCommand("reindex_seeff_suburb", conn)
                     {
-                        string connStr = WebConfigurationManager.ConnectionStrings["seeff_spatial"].ConnectionString;
-                        using (var conn = new SqlConnection(connStr))
-                        using (var command = new SqlCommand("reindex_seeff_suburb", conn)
-                        {
-                            CommandType = System.Data.CommandType.StoredProcedure
-                        })
-                        {
-                            command.CommandTimeout = int.MaxValue;
-                            conn.Open();
-                            command.ExecuteNonQuery();
-                        }
+                        CommandType = System.Data.CommandType.StoredProcedure
+                    })
+                    {
+                        command.CommandTimeout = int.MaxValue;
+                        conn.Open();
+                        command.ExecuteNonQuery();
                     }
                 }
-                catch (Exception e)
-                {
-                    Utils.LogException(e);
-                }
-            //}
+            }
+            catch (Exception e)
+            {
+                Utils.LogException(e);
+            }
         }
 
+        [AutomaticRetry(Attempts=1)]
         public static void SynchroniseSuburbNames()
         {
             try
@@ -58,6 +58,7 @@ namespace ProspectingTaskScheduler.Core.Spatial
             catch (Exception ex)
             {
                 Utils.LogException(ex);
+                // Fire email here.
             }
         }
     }

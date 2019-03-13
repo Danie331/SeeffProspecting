@@ -1,10 +1,6 @@
-﻿using Newtonsoft.Json;
-using ProspectingTaskScheduler.Core.ClientSynchronisation;
-using ProspectingTaskScheduler.Core.Communication;
-using ProspectingTaskScheduler.Core.Communication.Emailing.Mandrill;
+﻿using ProspectingTaskScheduler.Core.ClientSynchronisation;
 using ProspectingTaskScheduler.Core.Communication.Emailing.SendGrid;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,9 +13,9 @@ namespace ProspectingTaskScheduler.Controllers
         [HttpGet]
         public void Optout(int contactPersonId, string contactDetail)
         {
-            using (var prospectingContext = new ProspectingDataContext())
+            using (var prospectingContext = new seeff_prospectingEntities())
             {
-                var contactPersons = from cd in prospectingContext.prospecting_contact_details
+                var contactPersons = from cd in prospectingContext.prospecting_contact_detail
                                      where cd.contact_detail == contactDetail
                                      select cd.prospecting_contact_person;
                 var contactPersonIDs = contactPersons.Select(cp => cp.contact_person_id);
@@ -30,7 +26,7 @@ namespace ProspectingTaskScheduler.Controllers
                     {
                         contactPerson.optout_emails = true;
                         contactPerson.email_contactability_status = 1;
-                        prospectingContext.SubmitChanges();
+                        prospectingContext.SaveChanges();
                         ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
                     }
                 }
@@ -40,14 +36,14 @@ namespace ProspectingTaskScheduler.Controllers
         [HttpGet]
         public HttpResponseMessage Optout(int contactPersonId)
         {
-            using (var prospectingContext = new ProspectingDataContext())
+            using (var prospectingContext = new seeff_prospectingEntities())
             {
-                var contactPerson = prospectingContext.prospecting_contact_persons.FirstOrDefault(cp => cp.contact_person_id == contactPersonId);
+                var contactPerson = prospectingContext.prospecting_contact_person.FirstOrDefault(cp => cp.contact_person_id == contactPersonId);
                 if (contactPerson != null)
                 {
                     contactPerson.optout_emails = true;
                     contactPerson.email_contactability_status = 1;
-                    prospectingContext.SubmitChanges();
+                    prospectingContext.SaveChanges();
                     ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
                 }
             }
@@ -60,14 +56,14 @@ namespace ProspectingTaskScheduler.Controllers
         [HttpGet]
         public HttpResponseMessage Optin(int contactPersonId)
         {
-            using (var prospectingContext = new ProspectingDataContext())
+            using (var prospectingContext = new seeff_prospectingEntities())
             {
-                var contactPerson = prospectingContext.prospecting_contact_persons.FirstOrDefault(cp => cp.contact_person_id == contactPersonId);
+                var contactPerson = prospectingContext.prospecting_contact_person.FirstOrDefault(cp => cp.contact_person_id == contactPersonId);
                 if (contactPerson != null)
                 {
                     contactPerson.optout_emails = false;
                     contactPerson.email_contactability_status = 2;
-                    prospectingContext.SubmitChanges();
+                    prospectingContext.SaveChanges();
                     ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
                 }
             }
@@ -89,7 +85,7 @@ namespace ProspectingTaskScheduler.Controllers
             {
                 string raw = Request.Content.ReadAsStringAsync().Result;
                 string decoded = System.Web.HttpUtility.UrlDecode(raw);
-                using (var prospecting = new ProspectingDataContext())
+                using (var prospecting = new seeff_prospectingEntities())
                 {
                     var eventsArray = Newtonsoft.Json.JsonConvert.DeserializeObject<EventCallbackWebhook[]>(decoded);
                     if (eventsArray != null && eventsArray.Count() > 0)
@@ -98,7 +94,7 @@ namespace ProspectingTaskScheduler.Controllers
                         foreach (var item in eventGroups)
                         {
                             var uniqueEvent = item.First();
-                            var targetRecord = prospecting.email_communications_logs.FirstOrDefault(em => em.api_tracking_id == uniqueEvent.TransactionIdentifier);
+                            var targetRecord = prospecting.email_communications_log.FirstOrDefault(em => em.api_tracking_id == uniqueEvent.TransactionIdentifier);
                             if (targetRecord != null)
                             {
                                 // only update a 'success' event with another 'success' event
@@ -110,7 +106,7 @@ namespace ProspectingTaskScheduler.Controllers
                                         targetRecord.updated_datetime = DateTime.Now;
                                         targetRecord.last_api_event_dump = uniqueEvent.Event;
                                         targetRecord.error_msg = null;
-                                        prospecting.SubmitChanges();
+                                        prospecting.SaveChanges();
                                     }
                                 }
                                 else
@@ -120,7 +116,7 @@ namespace ProspectingTaskScheduler.Controllers
                                     targetRecord.updated_datetime = DateTime.Now;
                                     targetRecord.last_api_event_dump = uniqueEvent.Event;
                                     targetRecord.error_msg = !successStatus ? uniqueEvent.Event : null;
-                                    prospecting.SubmitChanges();
+                                    prospecting.SaveChanges();
                                 }
                             }
                         }
@@ -129,7 +125,7 @@ namespace ProspectingTaskScheduler.Controllers
             }
             catch (Exception ex)
             {
-                using (var p = new ProspectingDataContext())
+                using (var p = new seeff_prospectingEntities())
                 {
                     exception_log e = new exception_log
                     {
@@ -138,8 +134,8 @@ namespace ProspectingTaskScheduler.Controllers
                         friendly_error_msg = "Error occurred in UpdateEmailDeliveryStatus() in Task Scheduler",
                         user = new Guid()
                     };
-                    p.exception_logs.InsertOnSubmit(e);
-                    p.SubmitChanges();
+                    p.exception_log.Add(e);
+                    p.SaveChanges();
                 }
             }
 

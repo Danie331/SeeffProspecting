@@ -13,6 +13,7 @@ using System.Web.Hosting;
 using ProspectingTaskScheduler.Core.ClientSynchronisation;
 using ProspectingTaskScheduler.Core.Notifications;
 using ProspectingTaskScheduler.Core.ProspectingTrainingDB;
+using System.Data.Entity.Core.EntityClient;
 
 namespace ProspectingTaskScheduler.App_Start
 {
@@ -38,8 +39,10 @@ namespace ProspectingTaskScheduler.App_Start
 
                 HostingEnvironment.RegisterObject(this);
 
-                string cs = ConfigurationManager.ConnectionStrings["seeff_prospectingConnectionString"].ConnectionString;
-                GlobalConfiguration.Configuration.UseSqlServerStorage(cs);
+                string cs = ConfigurationManager.ConnectionStrings["seeff_prospectingEntities"].ConnectionString;
+                var efConn = new EntityConnectionStringBuilder(cs);
+                string adoConn = efConn.ProviderConnectionString;
+                GlobalConfiguration.Configuration.UseSqlServerStorage(adoConn);
 
                 _backgroundJobServer = new BackgroundJobServer();
                 EnqueueJobs();
@@ -67,8 +70,8 @@ namespace ProspectingTaskScheduler.App_Start
         public static void EnqueueJobs() 
         {
 
-            RecurringJob.AddOrUpdate("Sending Emails", () => EmailHandler.SendEmails(), Cron.Minutely);
-            RecurringJob.AddOrUpdate("Sending SMS's", () => SMSHandler.SendSMS(), Cron.Minutely);
+            //RecurringJob.AddOrUpdate("Sending Emails", () => EmailHandler.SendEmails(), Cron.Minutely);
+            RecurringJob.AddOrUpdate("Sending SMS's", () => SMSHandler.SendSMS(JobCancellationToken.Null), Cron.Minutely);
 
             // Job: Query statuses of SMS's sent
             //RecurringJob.AddOrUpdate("Updating delivery statuses", () => SMSHandler.UpdateDeliveryStatuses(), Cron.Minutely); // change to daily.
@@ -76,7 +79,7 @@ namespace ProspectingTaskScheduler.App_Start
             // Public URL which they will call with replies
 
             // Housekeeping tasks
-            RecurringJob.AddOrUpdate("Resetting yesterdays locked properties", () => CleanupLockedPropertyRecords.ResetYesterdaysLockedRecords(), Cron.Daily(1));
+            RecurringJob.AddOrUpdate("Resetting yesterdays locked properties", () => CleanupLockedPropertyRecords.ResetYesterdaysLockedRecords(JobCancellationToken.Null), Cron.Daily(1));
 
             RecurringJob.AddOrUpdate("IIS app pool up and running", () => StatusNotifier.SendHealthStatusEmail(), Cron.Daily(7));
 
@@ -84,17 +87,17 @@ namespace ProspectingTaskScheduler.App_Start
             RecurringJob.AddOrUpdate("Reindexing Suburbs", () => SuburbMaintenance.ReindexSuburbsRequiringMaintenance(), Cron.MinuteInterval(59));
 
 
-            RecurringJob.AddOrUpdate("Lightstone base_data take-on", () => LightstoneTakeOn.PerformBaseDataTakeOn(), Cron.Daily(23, 15), TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate("Lightstone base_data take-on", () => LightstoneTakeOn.PerformBaseDataTakeOn(JobCancellationToken.Null), Cron.Daily(23, 15), TimeZoneInfo.Local);
 
             RecurringJob.AddOrUpdate("Synchronising spatial areas with seeff.com", () => SuburbMaintenance.SynchroniseSuburbNames(), Cron.Daily(6), TimeZoneInfo.Local);
 
-            RecurringJob.AddOrUpdate("Synchronising Prospecting contact information to CMS", () => ProspectingToCmsClientSynchroniser.Synchronise(), Cron.Minutely);
+            RecurringJob.AddOrUpdate("Synchronising Prospecting contact information to CMS", () => ProspectingToCmsClientSynchroniser.Synchronise(JobCancellationToken.Null), Cron.MinuteInterval(5));
 
             RecurringJob.AddOrUpdate("Send Prospecting notifications", () => NotificationsGenerator.SendProspectingFollowupsNotification(JobCancellationToken.Null), Cron.Daily(8), TimeZoneInfo.Local);
 
-            RecurringJob.AddOrUpdate("Purge Prospecting training database", () => TrainingDatabase.PurgeAndResetProspectingStaging(), Cron.Daily(), TimeZoneInfo.Local);
+            //RecurringJob.AddOrUpdate("Purge Prospecting training database", () => TrainingDatabase.PurgeAndResetProspectingStaging(), Cron.Daily(), TimeZoneInfo.Local);
 
-            RecurringJob.AddOrUpdate("Sending Lightstone call log", () => StatusNotifier.SendYesterdaysLightstoneCallLog(), Cron.Daily(8), TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate("Sending Lightstone call log", () => StatusNotifier.SendYesterdaysLightstoneCallLog(JobCancellationToken.Null), Cron.Daily(8), TimeZoneInfo.Local);
         }
     }
 }

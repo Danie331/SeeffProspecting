@@ -1,25 +1,27 @@
-﻿using Newtonsoft.Json;
+﻿using Hangfire;
+using Newtonsoft.Json;
 using ProspectingTaskScheduler.Core.Housekeeping;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using System.Xml.Linq;
 
 namespace ProspectingTaskScheduler.Core.Communication.SMSing
 {
     public class SMSHandler
     {
-        public static void SendSMS()
+        [AutomaticRetry(Attempts = 0)]
+        public static async Task SendSMS(IJobCancellationToken cancellationToken)
         {
             try
             {
-                var batch = GetBatch5();
-                Task.WaitAll(SubmitBatch(batch));
+                var batch = await GetBatch5();
+                await SubmitBatchAsync(batch, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -27,9 +29,9 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
             }
         }
 
-        private static List<sms_communications_log> GetBatch5()
+        private static async Task<List<sms_communications_log>> GetBatch5()
         {
-            using (var prospecting = new ProspectingDataContext())
+            using (var prospecting = new seeff_prospectingEntities())
             {
                 List<sms_communications_log> batch = new List<sms_communications_log>();
                 if (DateTime.Now.Hour > 19 || DateTime.Now.Hour < 8)
@@ -39,10 +41,10 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
 
                 int pendingStatus = CommunicationHelpers.GetCommunicationStatusId("PENDING_SUBMIT_TO_API");
 
-                batch = prospecting.sms_communications_logs.Where(sms => sms.status == pendingStatus)
+                batch = await prospecting.sms_communications_log.Where(sms => sms.status == pendingStatus)
                                                             .OrderBy(item => item.created_datetime)
                                                             .Take(5)
-                                                            .ToList();
+                                                            .ToListAsync();
 
                 return batch;
             }
@@ -70,9 +72,9 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
             return statusDesc;
         }
 
-        private static async Task SubmitBatch(List<sms_communications_log> batch)
+        private static async Task SubmitBatchAsync(List<sms_communications_log> batch, IJobCancellationToken cancellationToken)
         {
-            using (var prospecting = new ProspectingDataContext())
+            using (var prospecting = new seeff_prospectingEntities())
             {
                 using (HttpClient client = new HttpClient())
                 {
@@ -83,6 +85,8 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
                     {
                         try
                         {
+                            cancellationToken.ThrowIfCancellationRequested();
+
                             string encodedMsg = HttpUtility.UrlEncode(item.msg_body_or_link_id);
                             string encodedCallbackURL = HttpUtility.UrlEncode("http://154.70.214.213/ProspectingTaskScheduler/api/SMS/UpdateDeliveryStatus?recordID=" + item.sms_communications_log_id + "&status=%d");
                             string targetURI = string.Format("json?action=message_send&username=seeffnational&password=dPBbboXWMgqz5GqZ2f1C&to={0}&text={1}&from={2}&report_mask=31&report_url={3}",
@@ -91,7 +95,7 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
                                                             "27724707471",
                                                             encodedCallbackURL);
 
-                            var targetRecord = prospecting.sms_communications_logs.First(rec => rec.sms_communications_log_id == item.sms_communications_log_id);
+                            var targetRecord = await prospecting.sms_communications_log.FirstAsync(rec => rec.sms_communications_log_id == item.sms_communications_log_id);
 
                             if (targetRecord.status != CommunicationHelpers.GetCommunicationStatusId("PENDING_SUBMIT_TO_API"))
                                 continue;
@@ -109,7 +113,12 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
                             targetRecord.api_tracking_id = messageResult.details;
                             targetRecord.msg_body_or_link_id = null;
 
-                            prospecting.SubmitChanges();
+                            await prospecting.SaveChangesAsync();
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            // Suppress and return as the job will be retried during its next scheduled run.
+                            return;
                         }
                         catch (Exception ex)
                         {
@@ -120,9 +129,9 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
             }
         }
 
-        private static void LogRecordUpdateException(string context, Exception e)
+        private async Task LogRecordUpdateException(string context, Exception e)
         {
-            using (var prospecting = new ProspectingDataContext())
+            using (var prospecting = new seeff_prospectingEntities())
             {
                 exception_log errorRecord = new exception_log
                 {
@@ -131,14 +140,14 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
                     exception_string = e.ToString(),
                     user = Guid.NewGuid()
                 };
-                prospecting.exception_logs.InsertOnSubmit(errorRecord);
-                prospecting.SubmitChanges();
+                prospecting.exception_log.Add(errorRecord);
+                await prospecting.SaveChangesAsync();
             }
         }
 
-        public static long CreateActivityForRecord(sms_communications_log smsItem)
+        public static async Task<long> CreateActivityForRecord(sms_communications_log smsItem)
         {
-            using (var prospecting = new ProspectingDataContext())
+            using (var prospecting = new seeff_prospectingEntities())
             {
                 var activityRecord = new activity_log
                 {
@@ -154,14 +163,14 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
                     parent_activity_id = null,
                     activity_followup_type_id = null
                 };
-                prospecting.activity_logs.InsertOnSubmit(activityRecord);
+                prospecting.activity_log.Add(activityRecord);
                 try
                 {
-                    prospecting.SubmitChanges();
+                    await prospecting.SaveChangesAsync();
                 }
                 catch (Exception e)
                 {
-                    using (var newContext = new ProspectingDataContext())
+                    using (var newContext = new seeff_prospectingEntities())
                     {
                         string msg = "Error inserting activity record for SMS communication sent. (SMS comm record id: " + smsItem.sms_communications_log_id + ")";
                         exception_log logentry = new exception_log
@@ -171,8 +180,8 @@ namespace ProspectingTaskScheduler.Core.Communication.SMSing
                             date_time = DateTime.Now,
                             user = smsItem.created_by_user_guid
                         };
-                        newContext.exception_logs.InsertOnSubmit(logentry);
-                        newContext.SubmitChanges();
+                        newContext.exception_log.Add(logentry);
+                        await newContext.SaveChangesAsync();
                     }
                 }
                 return activityRecord.activity_log_id;

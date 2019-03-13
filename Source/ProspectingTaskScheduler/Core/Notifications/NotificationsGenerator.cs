@@ -13,7 +13,7 @@ namespace ProspectingTaskScheduler.Core.Notifications
     {
         [AutomaticRetry(Attempts = 0)]
         public static void SendProspectingFollowupsNotification(IJobCancellationToken cancellationToken)
-        {            
+        {
             try
             {
                 foreach (var user in RetrieveRecipientsForProspectingFollowups())
@@ -31,10 +31,14 @@ namespace ProspectingTaskScheduler.Core.Notifications
                     }
                 }
             }
+            catch (OperationCanceledException)
+            {
+                // Suppress and return as the job will be retried during its next scheduled run.
+                return;
+            }
             catch (Exception ex)
             {
                 Utils.LogException(ex);
-                throw;
             }
         }
 
@@ -155,15 +159,15 @@ namespace ProspectingTaskScheduler.Core.Notifications
         private static ProspectingFollowupsForUser RetrieveFollowupsForUser(string user_guid)
         {
             ProspectingFollowupsForUser results = new ProspectingFollowupsForUser();
-            using (var prospecting = new ProspectingDataContext())
+            using (var prospecting = new seeff_prospectingEntities())
             {
                 Guid userGuid = Guid.Parse(user_guid);
                 var user = GetBossUser(userGuid);
                 results.Username = user != null ? string.Concat(user.user_name, " ", user.user_surname) : "n/a";
                 results.UserRegistrationID = user != null ? user.registration_id : -1;
-                List<long?> parentIds = prospecting.activity_logs.Where(a => a.parent_activity_id != null).Select(a => a.parent_activity_id).ToList();
+                List<long?> parentIds = prospecting.activity_log.Where(a => a.parent_activity_id != null).Select(a => a.parent_activity_id).ToList();
 
-                var todaysFollowups = prospecting.activity_logs.Where(act => act.allocated_to == userGuid &&
+                var todaysFollowups = prospecting.activity_log.Where(act => act.allocated_to == userGuid &&
                                                                                 act.followup_date != null &&
                                                                                 act.followup_date.Value.Date == DateTime.Today).ToList();
                 todaysFollowups = todaysFollowups.Where(act => !parentIds.Contains(act.activity_log_id)).ToList();
@@ -175,7 +179,7 @@ namespace ProspectingTaskScheduler.Core.Notifications
                 }
 
                 DateTime next3days = DateTime.Today.AddDays(3.0).Date;
-                var futureFollowups = prospecting.activity_logs.Where(act => act.allocated_to == userGuid &&
+                var futureFollowups = prospecting.activity_log.Where(act => act.allocated_to == userGuid &&
                                                                                 act.followup_date != null &&
                                                                                 act.followup_date.Value.Date > DateTime.Today &&
                                                                                 act.followup_date.Value.Date <= next3days).ToList();
@@ -187,7 +191,7 @@ namespace ProspectingTaskScheduler.Core.Notifications
                     results.FutureDatedFollowups.Add(followup);
                 }
 
-                var unactionedFollowups = prospecting.activity_logs.Where(act => act.allocated_to == userGuid &&
+                var unactionedFollowups = prospecting.activity_log.Where(act => act.allocated_to == userGuid &&
                                                                                 act.followup_date != null &&
                                                                                 act.followup_date.Value.Date < DateTime.Today).ToList();
                 unactionedFollowups = unactionedFollowups.Where(act => !parentIds.Contains(act.activity_log_id)).ToList();
@@ -228,10 +232,10 @@ namespace ProspectingTaskScheduler.Core.Notifications
             if (contact_person_id == null)
                 return new KeyValuePair<string, string>("n/a", "n/a");
 
-            using (var prospecting = new ProspectingDataContext())
+            using (var prospecting = new seeff_prospectingEntities())
             {
-                var target = prospecting.prospecting_contact_persons.First(cp => cp.contact_person_id == contact_person_id);
-                var primaryContactDetail = target.prospecting_contact_details.FirstOrDefault(cd => new[] { 4, 5 }.Contains(cd.contact_detail_type) && cd.is_primary_contact && !cd.deleted);
+                var target = prospecting.prospecting_contact_person.First(cp => cp.contact_person_id == contact_person_id);
+                var primaryContactDetail = target.prospecting_contact_detail.FirstOrDefault(cd => new[] { 4, 5 }.Contains(cd.contact_detail_type) && cd.is_primary_contact && !cd.deleted);
 
                 return primaryContactDetail != null ? 
                      new KeyValuePair<string, string>(primaryContactDetail.contact_detail, string.Concat(primaryContactDetail.contact_detail, " (", primaryContactDetail.prospecting_contact_detail_type.type_desc, ")"))
@@ -244,10 +248,10 @@ namespace ProspectingTaskScheduler.Core.Notifications
             if (contact_person_id == null)
                 return new KeyValuePair<string, string>("n/a", "n/a");
 
-            using (var prospecting = new ProspectingDataContext())
+            using (var prospecting = new seeff_prospectingEntities())
             {
-                var target = prospecting.prospecting_contact_persons.First(cp => cp.contact_person_id == contact_person_id);
-                var primaryContactDetail = target.prospecting_contact_details.FirstOrDefault(cd => new[] { 1, 2, 3 }.Contains(cd.contact_detail_type) && cd.is_primary_contact && !cd.deleted);
+                var target = prospecting.prospecting_contact_person.First(cp => cp.contact_person_id == contact_person_id);
+                var primaryContactDetail = target.prospecting_contact_detail.FirstOrDefault(cd => new[] { 1, 2, 3 }.Contains(cd.contact_detail_type) && cd.is_primary_contact && !cd.deleted);
 
                 if (primaryContactDetail != null)
                 {
@@ -265,9 +269,9 @@ namespace ProspectingTaskScheduler.Core.Notifications
             if (contact_person_id == null)
                 return "n/a";
 
-            using (var prospecting = new ProspectingDataContext())
+            using (var prospecting = new seeff_prospectingEntities())
             {
-                var target = prospecting.prospecting_contact_persons.First(cp => cp.contact_person_id == contact_person_id);
+                var target = prospecting.prospecting_contact_person.First(cp => cp.contact_person_id == contact_person_id);
                 return string.Concat(target.firstname, " ", target.surname);
             }
         }
@@ -283,9 +287,9 @@ namespace ProspectingTaskScheduler.Core.Notifications
 
         public static string GetFormattedAddress(int lightstonePropertyId)
         {
-            using (var prospectingContext = new ProspectingDataContext())
+            using (var prospectingContext = new seeff_prospectingEntities())
             {
-                var property = prospectingContext.prospecting_properties.First(pp => pp.lightstone_property_id == lightstonePropertyId);
+                var property = prospectingContext.prospecting_property.First(pp => pp.lightstone_property_id == lightstonePropertyId);
                 if (property.ss_fh == "SS" || property.ss_fh == "FS")
                 {
                     if (!string.IsNullOrEmpty(property.ss_door_number))

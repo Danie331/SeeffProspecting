@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hangfire;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -12,7 +13,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
 {
     public partial class LightstoneTakeOn
     {
-        public static void ProcessRecordsForInsert(StringBuilder reportBuilder)
+        public static void ProcessRecordsForInsert(StringBuilder reportBuilder, IJobCancellationToken cancellationToken)
         {
             try
             {
@@ -81,6 +82,8 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                     spatialConnection.Open();
                     foreach (var record in takeonRows)
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         if (spatialCmd.Connection.State != ConnectionState.Open)
                             spatialCmd.Connection.Open();
                         if (seeffDeeds.Database.Connection.State != ConnectionState.Open)

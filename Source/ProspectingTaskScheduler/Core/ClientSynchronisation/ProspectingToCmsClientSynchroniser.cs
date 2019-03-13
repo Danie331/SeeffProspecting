@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
+using Hangfire;
 using ProspectingTaskScheduler.Core.Housekeeping;
 
 namespace ProspectingTaskScheduler.Core.ClientSynchronisation
@@ -24,11 +26,11 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
             _synching = false;
         }
 
-        public static void AddClientSynchronisationRequest(int contactPersonID, Guid? user)
+        public static async Task AddClientSynchronisationRequest(int contactPersonID, Guid? user)
         {
             try
             {
-                using (var prospecting = new ProspectingDataContext())
+                using (var prospecting = new seeff_prospectingEntities())
                 {
                     var clientSyncRecord = new client_sync_log
                     {
@@ -36,8 +38,8 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
                         user_guid = user,
                         date_time = DateTime.Now
                     };
-                    prospecting.client_sync_logs.InsertOnSubmit(clientSyncRecord);
-                    prospecting.SubmitChanges();
+                    prospecting.client_sync_log.Add(clientSyncRecord);
+                    await prospecting.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
@@ -46,14 +48,15 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
             }
         }
 
-        public static void Synchronise()
+        [AutomaticRetry(Attempts = 0)]
+        public static void Synchronise(IJobCancellationToken cancellationToken)
         {
             if (_synching)
                 return;
 
             _synching = true;
 
-            UpdateInsertClients();
+            UpdateInsertClients(cancellationToken);
 
 
             // 1. Add new records to CMS based on ID number match (insert as client system ID 2) 
@@ -68,24 +71,31 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
             _synching = false;
         }
 
-        private static void UpdateInsertClients()
+        private static void UpdateInsertClients(IJobCancellationToken cancellationToken)
         {
             try
             {
                 var clientPhoneTypes = RetrieveClientPhoneTypes();
                 var clientEmailTypes = RetrieveClientEmailTypes();
-                using (var prospecting = new ProspectingDataContext())
+                using (var prospecting = new seeff_prospectingEntities())
                 {
-                    var clientUpdateBatch = prospecting.client_sync_logs.Where(cl => !cl.synchronised).Take(30).ToList();
+                    var clientUpdateBatch = prospecting.client_sync_log.Where(cl => !cl.synchronised).Take(30).ToList();
                     foreach (var clientToSync in clientUpdateBatch)
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         if (UpdateOrInsertClient(clientToSync, clientPhoneTypes, clientEmailTypes))
                         {
                             clientToSync.synchronised = true;
-                            prospecting.SubmitChanges();
+                            prospecting.SaveChanges();
                         }
                     }
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                // Suppress and return as the job will be retried during its next scheduled run.
+                return;
             }
             catch (Exception ex)
             {
@@ -116,10 +126,10 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
         {
             try
             {
-                using (var prospecting = new ProspectingDataContext())
+                using (var prospecting = new seeff_prospectingEntities())
                 {
                     int prospectingContactRecordId = prospectingContactToSync.contact_person_id;
-                    var prospectingContactRecord = prospecting.prospecting_contact_persons.First(cp => cp.contact_person_id == prospectingContactRecordId);
+                    var prospectingContactRecord = prospecting.prospecting_contact_person.First(cp => cp.contact_person_id == prospectingContactRecordId);
                     UserContext user = GetUserContextFromGuid(prospectingContactToSync.user_guid);
                     int clientClientRecordId = -1;
                     using (var client = new clientEntities())
@@ -145,7 +155,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
                             clientRecord.email_opt_in = !prospectingContactRecord.optout_emails;
                             clientRecord.sms_opt_in = !prospectingContactRecord.optout_sms;
 
-                            var prospectingContactDetails = prospectingContactRecord.prospecting_contact_details;
+                            var prospectingContactDetails = prospectingContactRecord.prospecting_contact_detail;
                             foreach (var prospectingContactDetail in prospectingContactDetails)
                             {
                                 AddContactDetailToClient(prospectingContactToSync, prospectingContactDetail, clientRecord, user);
@@ -175,7 +185,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
                             client.client.Add(newRecord);
                             client.SaveChanges();
 
-                            var prospectingContactDetails = prospectingContactRecord.prospecting_contact_details;
+                            var prospectingContactDetails = prospectingContactRecord.prospecting_contact_detail;
                             foreach (var prospectingContactDetail in prospectingContactDetails)
                             {
                                 AddContactDetailToClient(prospectingContactToSync, prospectingContactDetail, newRecord, user);
@@ -277,9 +287,9 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
                 }
 
                 // client types
-                using (var prospecting = new ProspectingDataContext())
+                using (var prospecting = new seeff_prospectingEntities())
                 {
-                    var contactPropertyRelationships = prospecting.prospecting_person_property_relationships.Where(ppr => ppr.contact_person_id == prospectingContactRecordId);
+                    var contactPropertyRelationships = prospecting.prospecting_person_property_relationship.Where(ppr => ppr.contact_person_id == prospectingContactRecordId);
                     var personPropertyRelationshipTypes = contactPropertyRelationships.Select(pprt => pprt.relationship_to_property).Distinct().ToList();
                     if (personPropertyRelationshipTypes.Any())
                     {
@@ -727,7 +737,7 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
 
         private static void LogException(Exception  ex, string methodName)
         {
-            using (var prospectingDb = new ProspectingDataContext())
+            using (var prospectingDb = new seeff_prospectingEntities())
             {
                 var errorRec = new exception_log
                 {
@@ -736,13 +746,13 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
                     user = new Guid(),
                     date_time = DateTime.Now
                 };
-                prospectingDb.exception_logs.InsertOnSubmit(errorRec);
-                prospectingDb.SubmitChanges();
+                prospectingDb.exception_log.Add(errorRec);
+                prospectingDb.SaveChanges();
             }
         }
         private static void LogSucess(string methodName)
         {
-            using (var prospectingDb = new ProspectingDataContext())
+            using (var prospectingDb = new seeff_prospectingEntities())
             {
                 var errorRec = new exception_log
                 {
@@ -751,8 +761,8 @@ namespace ProspectingTaskScheduler.Core.ClientSynchronisation
                     user = new Guid(),
                     date_time = DateTime.Now
                 };
-                prospectingDb.exception_logs.InsertOnSubmit(errorRec);
-                prospectingDb.SubmitChanges();
+                prospectingDb.exception_log.Add(errorRec);
+                prospectingDb.SaveChanges();
             }
         }
 

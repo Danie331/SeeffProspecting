@@ -1,0 +1,1564 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="seeff_prospectingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="activity_followup_type">
+          <Key>
+            <PropertyRef Name="activity_followup_type_id" />
+          </Key>
+          <Property Name="activity_followup_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="activity_name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="activity_log">
+          <Key>
+            <PropertyRef Name="activity_log_id" />
+          </Key>
+          <Property Name="activity_log_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="lightstone_property_id" Type="int" Nullable="false" />
+          <Property Name="followup_date" Type="datetime" />
+          <Property Name="allocated_to" Type="uniqueidentifier" />
+          <Property Name="activity_type_id" Type="int" Nullable="false" />
+          <Property Name="comment" Type="varchar(max)" />
+          <Property Name="created_by" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="created_date" Type="datetime" Nullable="false" />
+          <Property Name="contact_person_id" Type="int" />
+          <Property Name="deleted_by" Type="uniqueidentifier" />
+          <Property Name="delete_date" Type="datetime" />
+          <Property Name="deleted" Type="bit" />
+          <Property Name="parent_activity_id" Type="bigint" />
+          <Property Name="sms_template_id" Type="int" />
+          <Property Name="sms_sent" Type="bit" />
+          <Property Name="email_template_id" Type="int" />
+          <Property Name="email_sent" Type="bit" />
+          <Property Name="phone_call" Type="bit" />
+          <Property Name="visit" Type="bit" />
+          <Property Name="activity_followup_type_id" Type="int" />
+        </EntityType>
+        <EntityType Name="activity_type">
+          <Key>
+            <PropertyRef Name="activity_type_id" />
+          </Key>
+          <Property Name="activity_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="activity_name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="active" Type="bit" Nullable="false" />
+          <Property Name="is_system_type" Type="bit" />
+        </EntityType>
+        <EntityType Name="client_sync_log">
+          <Key>
+            <PropertyRef Name="client_sync_log_id" />
+          </Key>
+          <Property Name="client_sync_log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="contact_person_id" Type="int" Nullable="false" />
+          <Property Name="user_guid" Type="uniqueidentifier" />
+          <Property Name="date_time" Type="datetime" Nullable="false" />
+          <Property Name="synchronised" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="communications_status">
+          <Key>
+            <PropertyRef Name="communications_status_id" />
+          </Key>
+          <Property Name="communications_status_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="status_desc" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="email_communications_log">
+          <Key>
+            <PropertyRef Name="email_communications_log_id" />
+          </Key>
+          <Property Name="email_communications_log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="batch_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="batch_friendly_name" Type="varchar(max)" />
+          <Property Name="batch_activity_type_id" Type="int" Nullable="false" />
+          <Property Name="activity_log_id" Type="bigint" />
+          <Property Name="followup_activity_id" Type="bigint" />
+          <Property Name="created_by_user_guid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="created_by_user_name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="created_by_user_email_address" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="created_datetime" Type="datetime" Nullable="false" />
+          <Property Name="updated_datetime" Type="datetime" />
+          <Property Name="target_contact_person_id" Type="int" Nullable="false" />
+          <Property Name="target_email_address" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="target_lightstone_property_id" Type="int" Nullable="false" />
+          <Property Name="status" Type="int" Nullable="false" />
+          <Property Name="email_body_or_link_id" Type="nvarchar(max)" />
+          <Property Name="email_subject_or_link_id" Type="nvarchar(max)" />
+          <Property Name="error_msg" Type="nvarchar(max)" />
+          <Property Name="attachment1_content" Type="nvarchar(max)" />
+          <Property Name="attachment1_type" Type="nvarchar" MaxLength="255" />
+          <Property Name="attachment1_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="user_business_unit_id" Type="int" />
+          <Property Name="api_tracking_id" Type="varchar(max)" />
+          <Property Name="last_api_event_dump" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="exception_log">
+          <Key>
+            <PropertyRef Name="exception_log_id" />
+          </Key>
+          <Property Name="exception_log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="friendly_error_msg" Type="varchar(max)" Nullable="false" />
+          <Property Name="exception_string" Type="varchar(max)" Nullable="false" />
+          <Property Name="user" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="date_time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="lightstone_call_log">
+          <Key>
+            <PropertyRef Name="lightstone_call_log_id" />
+          </Key>
+          <Property Name="lightstone_call_log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="date_time" Type="datetime" Nullable="false" />
+          <Property Name="call_location_src" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="search_inputs" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="prospecting_area_dialing_code">
+          <Key>
+            <PropertyRef Name="prospecting_area_dialing_code_id" />
+          </Key>
+          <Property Name="prospecting_area_dialing_code_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dialing_code_id" Type="int" Nullable="false" />
+          <Property Name="code_desc" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="prospecting_contact_detail">
+          <Key>
+            <PropertyRef Name="prospecting_contact_detail_id" />
+          </Key>
+          <Property Name="prospecting_contact_detail_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="contact_detail_type" Type="int" Nullable="false" />
+          <Property Name="contact_person_id" Type="int" Nullable="false" />
+          <Property Name="contact_detail" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="intl_dialing_code_id" Type="int" />
+          <Property Name="eleventh_digit" Type="int" />
+          <Property Name="is_primary_contact" Type="bit" Nullable="false" />
+          <Property Name="deleted" Type="bit" Nullable="false" />
+          <Property Name="deleted_by" Type="uniqueidentifier" />
+          <Property Name="deleted_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="prospecting_contact_detail_type">
+          <Key>
+            <PropertyRef Name="contact_detail_type_id" />
+          </Key>
+          <Property Name="contact_detail_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type_desc" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="prospecting_contact_person">
+          <Key>
+            <PropertyRef Name="contact_person_id" />
+          </Key>
+          <Property Name="contact_person_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="person_title" Type="int" />
+          <Property Name="person_gender" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="id_number" Type="varchar" MaxLength="14" Nullable="false" />
+          <Property Name="firstname" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="surname" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="job_title" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="propcntrl_buyer_id" Type="int" />
+          <Property Name="referral_network" Type="bit" />
+          <Property Name="investor" Type="bit" />
+          <Property Name="is_popi_restricted" Type="bit" Nullable="false" />
+          <Property Name="created_date" Type="datetime" />
+          <Property Name="updated_date" Type="datetime" />
+          <Property Name="created_by" Type="uniqueidentifier" />
+          <Property Name="comments_notes" Type="varchar(max)" />
+          <Property Name="deceased_status" Type="nvarchar" MaxLength="255" />
+          <Property Name="age_group" Type="nvarchar" MaxLength="255" />
+          <Property Name="location" Type="nvarchar" MaxLength="255" />
+          <Property Name="marital_status" Type="nvarchar" MaxLength="255" />
+          <Property Name="home_ownership" Type="nvarchar" MaxLength="255" />
+          <Property Name="directorship" Type="nvarchar" MaxLength="255" />
+          <Property Name="physical_address" Type="nvarchar" MaxLength="255" />
+          <Property Name="employer" Type="nvarchar" MaxLength="255" />
+          <Property Name="occupation" Type="nvarchar" MaxLength="255" />
+          <Property Name="bureau_adverse_indicator" Type="nvarchar" MaxLength="255" />
+          <Property Name="citizenship" Type="nvarchar" MaxLength="255" />
+          <Property Name="optout_emails" Type="bit" Nullable="false" />
+          <Property Name="optout_sms" Type="bit" Nullable="false" />
+          <Property Name="do_not_contact" Type="bit" Nullable="false" />
+          <Property Name="email_contactability_status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="prospecting_person_property_relationship">
+          <Key>
+            <PropertyRef Name="person_property_relationship_id" />
+          </Key>
+          <Property Name="person_property_relationship_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="contact_person_id" Type="int" Nullable="false" />
+          <Property Name="prospecting_property_id" Type="int" Nullable="false" />
+          <Property Name="relationship_to_property" Type="int" Nullable="false" />
+          <Property Name="created_date" Type="datetime" />
+          <Property Name="updated_date" Type="datetime" />
+          <Property Name="created_by" Type="uniqueidentifier" />
+          <Property Name="from_date" Type="datetime" />
+          <Property Name="to_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="prospecting_property">
+          <Key>
+            <PropertyRef Name="prospecting_property_id" />
+          </Key>
+          <Property Name="prospecting_property_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="licence_id" Type="int" />
+          <Property Name="seeff_area_id" Type="int" />
+          <Property Name="development_id" Type="int" />
+          <Property Name="lightstone_property_id" Type="int" Nullable="false" />
+          <Property Name="propstats_id" Type="int" />
+          <Property Name="windeed_id" Type="int" />
+          <Property Name="erf_no" Type="int" />
+          <Property Name="portion_no" Type="int" />
+          <Property Name="property_address" Type="varchar" MaxLength="255" />
+          <Property Name="street_or_unit_no" Type="varchar" MaxLength="255" />
+          <Property Name="photo_url" Type="nvarchar" MaxLength="256" />
+          <Property Name="latitude" Type="decimal" Precision="13" Scale="8" />
+          <Property Name="longitude" Type="decimal" Precision="13" Scale="8" />
+          <Property Name="age" Type="datetime" />
+          <Property Name="erf_size" Type="int" />
+          <Property Name="dwell_size" Type="int" />
+          <Property Name="condition" Type="varchar" MaxLength="255" />
+          <Property Name="beds" Type="int" />
+          <Property Name="baths" Type="int" />
+          <Property Name="receptions" Type="int" />
+          <Property Name="studies" Type="int" />
+          <Property Name="garages" Type="int" />
+          <Property Name="parking_bays" Type="int" />
+          <Property Name="pool" Type="bit" />
+          <Property Name="staff_accomodation" Type="bit" />
+          <Property Name="created_date" Type="datetime" />
+          <Property Name="updated_date" Type="datetime" />
+          <Property Name="created_by" Type="uniqueidentifier" />
+          <Property Name="lightstone_id_or_ck_no" Type="varchar" MaxLength="255" />
+          <Property Name="lightstone_reg_date" Type="varchar" MaxLength="8" />
+          <Property Name="comments" Type="varchar(max)" />
+          <Property Name="ss_name" Type="varchar" MaxLength="255" />
+          <Property Name="ss_number" Type="varchar" MaxLength="50" />
+          <Property Name="unit" Type="varchar" MaxLength="50" />
+          <Property Name="ss_fh" Type="varchar" MaxLength="3" />
+          <Property Name="last_purch_price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ss_id" Type="varchar" MaxLength="10" />
+          <Property Name="ss_door_number" Type="varchar" MaxLength="50" />
+          <Property Name="prospected" Type="bit" />
+          <Property Name="farm_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="lightstone_suburb" Type="nvarchar" MaxLength="255" />
+          <Property Name="ss_unique_identifier" Type="nvarchar(max)" />
+          <Property Name="locked_by_guid" Type="uniqueidentifier" />
+          <Property Name="locked_datetime" Type="datetime" />
+          <Property Name="latest_reg_date" Type="varchar" MaxLength="8" />
+          <Property Name="is_short_term_rental" Type="bit" />
+          <Property Name="is_long_term_rental" Type="bit" />
+          <Property Name="is_commercial" Type="bit" />
+          <Property Name="is_agricultural" Type="bit" />
+          <Property Name="is_investment" Type="bit" />
+          <Property Name="has_email" Type="bit" />
+          <Property Name="has_cell" Type="bit" />
+          <Property Name="has_landline" Type="bit" />
+          <Property Name="has_primary_email" Type="bit" />
+          <Property Name="has_primary_cell" Type="bit" />
+          <Property Name="has_primary_landline" Type="bit" />
+        </EntityType>
+        <EntityType Name="sms_communications_log">
+          <Key>
+            <PropertyRef Name="sms_communications_log_id" />
+          </Key>
+          <Property Name="sms_communications_log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="batch_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="batch_friendly_name" Type="varchar(max)" />
+          <Property Name="batch_activity_type_id" Type="int" Nullable="false" />
+          <Property Name="activity_log_id" Type="bigint" />
+          <Property Name="followup_activity_id" Type="bigint" />
+          <Property Name="created_by_user_guid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="created_datetime" Type="datetime" Nullable="false" />
+          <Property Name="updated_datetime" Type="datetime" />
+          <Property Name="target_contact_person_id" Type="int" Nullable="false" />
+          <Property Name="target_cellphone_no" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="target_lightstone_property_id" Type="int" Nullable="false" />
+          <Property Name="status" Type="int" Nullable="false" />
+          <Property Name="api_tracking_id" Type="varchar(max)" />
+          <Property Name="api_delivery_status" Type="varchar" MaxLength="50" />
+          <Property Name="msg_body_or_link_id" Type="nvarchar(max)" />
+          <Property Name="reply" Type="nvarchar(max)" />
+          <Property Name="error_msg" Type="nvarchar(max)" />
+          <Property Name="user_business_unit_id" Type="int" />
+        </EntityType>
+        <Association Name="FK__activity___activ__1B9317B3">
+          <End Role="activity_followup_type" Type="Self.activity_followup_type" Multiplicity="0..1" />
+          <End Role="activity_log" Type="Self.activity_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_followup_type">
+              <PropertyRef Name="activity_followup_type_id" />
+            </Principal>
+            <Dependent Role="activity_log">
+              <PropertyRef Name="activity_followup_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__client_sy__conta__05F8DC4F">
+          <End Role="prospecting_contact_person" Type="Self.prospecting_contact_person" Multiplicity="1" />
+          <End Role="client_sync_log" Type="Self.client_sync_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_person">
+              <PropertyRef Name="contact_person_id" />
+            </Principal>
+            <Dependent Role="client_sync_log">
+              <PropertyRef Name="contact_person_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__email_com__activ__69C6B1F5">
+          <End Role="activity_log" Type="Self.activity_log" Multiplicity="0..1" />
+          <End Role="email_communications_log" Type="Self.email_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_log">
+              <PropertyRef Name="activity_log_id" />
+            </Principal>
+            <Dependent Role="email_communications_log">
+              <PropertyRef Name="activity_log_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__email_com__batch__6ABAD62E">
+          <End Role="activity_type" Type="Self.activity_type" Multiplicity="1" />
+          <End Role="email_communications_log" Type="Self.email_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_type">
+              <PropertyRef Name="activity_type_id" />
+            </Principal>
+            <Dependent Role="email_communications_log">
+              <PropertyRef Name="batch_activity_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__email_com__follo__6BAEFA67">
+          <End Role="activity_log" Type="Self.activity_log" Multiplicity="0..1" />
+          <End Role="email_communications_log" Type="Self.email_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_log">
+              <PropertyRef Name="activity_log_id" />
+            </Principal>
+            <Dependent Role="email_communications_log">
+              <PropertyRef Name="followup_activity_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__email_com__statu__6CA31EA0">
+          <End Role="communications_status" Type="Self.communications_status" Multiplicity="1" />
+          <End Role="email_communications_log" Type="Self.email_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="communications_status">
+              <PropertyRef Name="communications_status_id" />
+            </Principal>
+            <Dependent Role="email_communications_log">
+              <PropertyRef Name="status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__email_com__targe__6D9742D9">
+          <End Role="prospecting_contact_person" Type="Self.prospecting_contact_person" Multiplicity="1" />
+          <End Role="email_communications_log" Type="Self.email_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_person">
+              <PropertyRef Name="contact_person_id" />
+            </Principal>
+            <Dependent Role="email_communications_log">
+              <PropertyRef Name="target_contact_person_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errors Found During Generation:
+warning 6035: The relationship 'FK__email_com__targe__6E8B6712' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+        <Association Name="FK__email_com__targe__6E8B6712" />-->
+        <Association Name="FK__prospecti__conta__3D5E1FD2">
+          <End Role="prospecting_contact_detail_type" Type="Self.prospecting_contact_detail_type" Multiplicity="1" />
+          <End Role="prospecting_contact_detail" Type="Self.prospecting_contact_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_detail_type">
+              <PropertyRef Name="contact_detail_type_id" />
+            </Principal>
+            <Dependent Role="prospecting_contact_detail">
+              <PropertyRef Name="contact_detail_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__prospecti__conta__3E52440B">
+          <End Role="prospecting_contact_person" Type="Self.prospecting_contact_person" Multiplicity="1" />
+          <End Role="prospecting_contact_detail" Type="Self.prospecting_contact_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_person">
+              <PropertyRef Name="contact_person_id" />
+            </Principal>
+            <Dependent Role="prospecting_contact_detail">
+              <PropertyRef Name="contact_person_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__prospecti__conta__47DBAE45">
+          <End Role="prospecting_contact_person" Type="Self.prospecting_contact_person" Multiplicity="1" />
+          <End Role="prospecting_person_property_relationship" Type="Self.prospecting_person_property_relationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_person">
+              <PropertyRef Name="contact_person_id" />
+            </Principal>
+            <Dependent Role="prospecting_person_property_relationship">
+              <PropertyRef Name="contact_person_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__prospecti__intl___3C69FB99">
+          <End Role="prospecting_area_dialing_code" Type="Self.prospecting_area_dialing_code" Multiplicity="0..1" />
+          <End Role="prospecting_contact_detail" Type="Self.prospecting_contact_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_area_dialing_code">
+              <PropertyRef Name="prospecting_area_dialing_code_id" />
+            </Principal>
+            <Dependent Role="prospecting_contact_detail">
+              <PropertyRef Name="intl_dialing_code_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__prospecti__prosp__46E78A0C">
+          <End Role="prospecting_property" Type="Self.prospecting_property" Multiplicity="1" />
+          <End Role="prospecting_person_property_relationship" Type="Self.prospecting_person_property_relationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_property">
+              <PropertyRef Name="prospecting_property_id" />
+            </Principal>
+            <Dependent Role="prospecting_person_property_relationship">
+              <PropertyRef Name="prospecting_property_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__sms_commu__activ__7167D3BD">
+          <End Role="activity_log" Type="Self.activity_log" Multiplicity="0..1" />
+          <End Role="sms_communications_log" Type="Self.sms_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_log">
+              <PropertyRef Name="activity_log_id" />
+            </Principal>
+            <Dependent Role="sms_communications_log">
+              <PropertyRef Name="activity_log_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__sms_commu__batch__725BF7F6">
+          <End Role="activity_type" Type="Self.activity_type" Multiplicity="1" />
+          <End Role="sms_communications_log" Type="Self.sms_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_type">
+              <PropertyRef Name="activity_type_id" />
+            </Principal>
+            <Dependent Role="sms_communications_log">
+              <PropertyRef Name="batch_activity_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__sms_commu__follo__73501C2F">
+          <End Role="activity_log" Type="Self.activity_log" Multiplicity="0..1" />
+          <End Role="sms_communications_log" Type="Self.sms_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_log">
+              <PropertyRef Name="activity_log_id" />
+            </Principal>
+            <Dependent Role="sms_communications_log">
+              <PropertyRef Name="followup_activity_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__sms_commu__statu__74444068">
+          <End Role="communications_status" Type="Self.communications_status" Multiplicity="1" />
+          <End Role="sms_communications_log" Type="Self.sms_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="communications_status">
+              <PropertyRef Name="communications_status_id" />
+            </Principal>
+            <Dependent Role="sms_communications_log">
+              <PropertyRef Name="status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__sms_commu__targe__753864A1">
+          <End Role="prospecting_contact_person" Type="Self.prospecting_contact_person" Multiplicity="1" />
+          <End Role="sms_communications_log" Type="Self.sms_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_person">
+              <PropertyRef Name="contact_person_id" />
+            </Principal>
+            <Dependent Role="sms_communications_log">
+              <PropertyRef Name="target_contact_person_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errors Found During Generation:
+warning 6035: The relationship 'FK__sms_commu__targe__762C88DA' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+        <Association Name="FK__sms_commu__targe__762C88DA" />-->
+        <Association Name="FK_activity_type_id">
+          <End Role="activity_type" Type="Self.activity_type" Multiplicity="1" />
+          <End Role="activity_log" Type="Self.activity_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_type">
+              <PropertyRef Name="activity_type_id" />
+            </Principal>
+            <Dependent Role="activity_log">
+              <PropertyRef Name="activity_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_contact_person_id">
+          <End Role="prospecting_contact_person" Type="Self.prospecting_contact_person" Multiplicity="0..1" />
+          <End Role="activity_log" Type="Self.activity_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_person">
+              <PropertyRef Name="contact_person_id" />
+            </Principal>
+            <Dependent Role="activity_log">
+              <PropertyRef Name="contact_person_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_lightstone_property_id' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+        <Association Name="FK_lightstone_property_id" />-->
+        <EntityContainer Name="seeff_prospectingModelStoreContainer">
+          <EntitySet Name="activity_followup_type" EntityType="Self.activity_followup_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="activity_log" EntityType="Self.activity_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="activity_type" EntityType="Self.activity_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client_sync_log" EntityType="Self.client_sync_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="communications_status" EntityType="Self.communications_status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="email_communications_log" EntityType="Self.email_communications_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="exception_log" EntityType="Self.exception_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lightstone_call_log" EntityType="Self.lightstone_call_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="prospecting_area_dialing_code" EntityType="Self.prospecting_area_dialing_code" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="prospecting_contact_detail" EntityType="Self.prospecting_contact_detail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="prospecting_contact_detail_type" EntityType="Self.prospecting_contact_detail_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="prospecting_contact_person" EntityType="Self.prospecting_contact_person" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="prospecting_person_property_relationship" EntityType="Self.prospecting_person_property_relationship" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="prospecting_property" EntityType="Self.prospecting_property" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sms_communications_log" EntityType="Self.sms_communications_log" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__activity___activ__1B9317B3" Association="Self.FK__activity___activ__1B9317B3">
+            <End Role="activity_followup_type" EntitySet="activity_followup_type" />
+            <End Role="activity_log" EntitySet="activity_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__client_sy__conta__05F8DC4F" Association="Self.FK__client_sy__conta__05F8DC4F">
+            <End Role="prospecting_contact_person" EntitySet="prospecting_contact_person" />
+            <End Role="client_sync_log" EntitySet="client_sync_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__email_com__activ__69C6B1F5" Association="Self.FK__email_com__activ__69C6B1F5">
+            <End Role="activity_log" EntitySet="activity_log" />
+            <End Role="email_communications_log" EntitySet="email_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__email_com__batch__6ABAD62E" Association="Self.FK__email_com__batch__6ABAD62E">
+            <End Role="activity_type" EntitySet="activity_type" />
+            <End Role="email_communications_log" EntitySet="email_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__email_com__follo__6BAEFA67" Association="Self.FK__email_com__follo__6BAEFA67">
+            <End Role="activity_log" EntitySet="activity_log" />
+            <End Role="email_communications_log" EntitySet="email_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__email_com__statu__6CA31EA0" Association="Self.FK__email_com__statu__6CA31EA0">
+            <End Role="communications_status" EntitySet="communications_status" />
+            <End Role="email_communications_log" EntitySet="email_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__email_com__targe__6D9742D9" Association="Self.FK__email_com__targe__6D9742D9">
+            <End Role="prospecting_contact_person" EntitySet="prospecting_contact_person" />
+            <End Role="email_communications_log" EntitySet="email_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__prospecti__conta__3D5E1FD2" Association="Self.FK__prospecti__conta__3D5E1FD2">
+            <End Role="prospecting_contact_detail_type" EntitySet="prospecting_contact_detail_type" />
+            <End Role="prospecting_contact_detail" EntitySet="prospecting_contact_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK__prospecti__conta__3E52440B" Association="Self.FK__prospecti__conta__3E52440B">
+            <End Role="prospecting_contact_person" EntitySet="prospecting_contact_person" />
+            <End Role="prospecting_contact_detail" EntitySet="prospecting_contact_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK__prospecti__conta__47DBAE45" Association="Self.FK__prospecti__conta__47DBAE45">
+            <End Role="prospecting_contact_person" EntitySet="prospecting_contact_person" />
+            <End Role="prospecting_person_property_relationship" EntitySet="prospecting_person_property_relationship" />
+          </AssociationSet>
+          <AssociationSet Name="FK__prospecti__intl___3C69FB99" Association="Self.FK__prospecti__intl___3C69FB99">
+            <End Role="prospecting_area_dialing_code" EntitySet="prospecting_area_dialing_code" />
+            <End Role="prospecting_contact_detail" EntitySet="prospecting_contact_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK__prospecti__prosp__46E78A0C" Association="Self.FK__prospecti__prosp__46E78A0C">
+            <End Role="prospecting_property" EntitySet="prospecting_property" />
+            <End Role="prospecting_person_property_relationship" EntitySet="prospecting_person_property_relationship" />
+          </AssociationSet>
+          <AssociationSet Name="FK__sms_commu__activ__7167D3BD" Association="Self.FK__sms_commu__activ__7167D3BD">
+            <End Role="activity_log" EntitySet="activity_log" />
+            <End Role="sms_communications_log" EntitySet="sms_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__sms_commu__batch__725BF7F6" Association="Self.FK__sms_commu__batch__725BF7F6">
+            <End Role="activity_type" EntitySet="activity_type" />
+            <End Role="sms_communications_log" EntitySet="sms_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__sms_commu__follo__73501C2F" Association="Self.FK__sms_commu__follo__73501C2F">
+            <End Role="activity_log" EntitySet="activity_log" />
+            <End Role="sms_communications_log" EntitySet="sms_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__sms_commu__statu__74444068" Association="Self.FK__sms_commu__statu__74444068">
+            <End Role="communications_status" EntitySet="communications_status" />
+            <End Role="sms_communications_log" EntitySet="sms_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__sms_commu__targe__753864A1" Association="Self.FK__sms_commu__targe__753864A1">
+            <End Role="prospecting_contact_person" EntitySet="prospecting_contact_person" />
+            <End Role="sms_communications_log" EntitySet="sms_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK_activity_type_id" Association="Self.FK_activity_type_id">
+            <End Role="activity_type" EntitySet="activity_type" />
+            <End Role="activity_log" EntitySet="activity_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK_contact_person_id" Association="Self.FK_contact_person_id">
+            <End Role="prospecting_contact_person" EntitySet="prospecting_contact_person" />
+            <End Role="activity_log" EntitySet="activity_log" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="seeff_prospectingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="seeff_prospectingEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="activity_log" EntityType="seeff_prospectingModel.activity_log" />
+          <EntitySet Name="prospecting_contact_detail" EntityType="seeff_prospectingModel.prospecting_contact_detail" />
+          <EntitySet Name="sms_communications_log" EntityType="seeff_prospectingModel.sms_communications_log" />
+          <AssociationSet Name="FK__sms_commu__activ__7167D3BD" Association="seeff_prospectingModel.FK__sms_commu__activ__7167D3BD">
+            <End Role="activity_log" EntitySet="activity_log" />
+            <End Role="sms_communications_log" EntitySet="sms_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__sms_commu__follo__73501C2F" Association="seeff_prospectingModel.FK__sms_commu__follo__73501C2F">
+            <End Role="activity_log" EntitySet="activity_log" />
+            <End Role="sms_communications_log" EntitySet="sms_communications_log" />
+          </AssociationSet>
+          <EntitySet Name="prospecting_contact_person" EntityType="seeff_prospectingModel.prospecting_contact_person" />
+          <AssociationSet Name="FK_contact_person_id" Association="seeff_prospectingModel.FK_contact_person_id">
+            <End Role="prospecting_contact_person" EntitySet="prospecting_contact_person" />
+            <End Role="activity_log" EntitySet="activity_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__prospecti__conta__3E52440B" Association="seeff_prospectingModel.FK__prospecti__conta__3E52440B">
+            <End Role="prospecting_contact_person" EntitySet="prospecting_contact_person" />
+            <End Role="prospecting_contact_detail" EntitySet="prospecting_contact_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK__sms_commu__targe__753864A1" Association="seeff_prospectingModel.FK__sms_commu__targe__753864A1">
+            <End Role="prospecting_contact_person" EntitySet="prospecting_contact_person" />
+            <End Role="sms_communications_log" EntitySet="sms_communications_log" />
+          </AssociationSet>
+          <EntitySet Name="prospecting_area_dialing_code" EntityType="seeff_prospectingModel.prospecting_area_dialing_code" />
+          <AssociationSet Name="FK__prospecti__intl___3C69FB99" Association="seeff_prospectingModel.FK__prospecti__intl___3C69FB99">
+            <End Role="prospecting_area_dialing_code" EntitySet="prospecting_area_dialing_code" />
+            <End Role="prospecting_contact_detail" EntitySet="prospecting_contact_detail" />
+          </AssociationSet>
+          <EntitySet Name="client_sync_log" EntityType="seeff_prospectingModel.client_sync_log" />
+          <AssociationSet Name="FK__client_sy__conta__05F8DC4F" Association="seeff_prospectingModel.FK__client_sy__conta__05F8DC4F">
+            <End Role="prospecting_contact_person" EntitySet="prospecting_contact_person" />
+            <End Role="client_sync_log" EntitySet="client_sync_log" />
+          </AssociationSet>
+          <EntitySet Name="prospecting_person_property_relationship" EntityType="seeff_prospectingModel.prospecting_person_property_relationship" />
+          <AssociationSet Name="FK__prospecti__conta__47DBAE45" Association="seeff_prospectingModel.FK__prospecti__conta__47DBAE45">
+            <End Role="prospecting_contact_person" EntitySet="prospecting_contact_person" />
+            <End Role="prospecting_person_property_relationship" EntitySet="prospecting_person_property_relationship" />
+          </AssociationSet>
+          <EntitySet Name="exception_log" EntityType="seeff_prospectingModel.exception_log" />
+          <EntitySet Name="email_communications_log" EntityType="seeff_prospectingModel.email_communications_log" />
+          <AssociationSet Name="FK__email_com__activ__69C6B1F5" Association="seeff_prospectingModel.FK__email_com__activ__69C6B1F5">
+            <End Role="activity_log" EntitySet="activity_log" />
+            <End Role="email_communications_log" EntitySet="email_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__email_com__follo__6BAEFA67" Association="seeff_prospectingModel.FK__email_com__follo__6BAEFA67">
+            <End Role="activity_log" EntitySet="activity_log" />
+            <End Role="email_communications_log" EntitySet="email_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__email_com__targe__6D9742D9" Association="seeff_prospectingModel.FK__email_com__targe__6D9742D9">
+            <End Role="prospecting_contact_person" EntitySet="prospecting_contact_person" />
+            <End Role="email_communications_log" EntitySet="email_communications_log" />
+          </AssociationSet>
+          <EntitySet Name="activity_type" EntityType="seeff_prospectingModel.activity_type" />
+          <AssociationSet Name="FK_activity_type_id" Association="seeff_prospectingModel.FK_activity_type_id">
+            <End Role="activity_type" EntitySet="activity_type" />
+            <End Role="activity_log" EntitySet="activity_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__email_com__batch__6ABAD62E" Association="seeff_prospectingModel.FK__email_com__batch__6ABAD62E">
+            <End Role="activity_type" EntitySet="activity_type" />
+            <End Role="email_communications_log" EntitySet="email_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__sms_commu__batch__725BF7F6" Association="seeff_prospectingModel.FK__sms_commu__batch__725BF7F6">
+            <End Role="activity_type" EntitySet="activity_type" />
+            <End Role="sms_communications_log" EntitySet="sms_communications_log" />
+          </AssociationSet>
+          <EntitySet Name="activity_followup_type" EntityType="seeff_prospectingModel.activity_followup_type" />
+          <AssociationSet Name="FK__activity___activ__1B9317B3" Association="seeff_prospectingModel.FK__activity___activ__1B9317B3">
+            <End Role="activity_followup_type" EntitySet="activity_followup_type" />
+            <End Role="activity_log" EntitySet="activity_log" />
+          </AssociationSet>
+          <EntitySet Name="prospecting_property" EntityType="seeff_prospectingModel.prospecting_property" />
+          <AssociationSet Name="FK__prospecti__prosp__46E78A0C" Association="seeff_prospectingModel.FK__prospecti__prosp__46E78A0C">
+            <End Role="prospecting_property" EntitySet="prospecting_property" />
+            <End Role="prospecting_person_property_relationship" EntitySet="prospecting_person_property_relationship" />
+          </AssociationSet>
+          <EntitySet Name="prospecting_contact_detail_type" EntityType="seeff_prospectingModel.prospecting_contact_detail_type" />
+          <AssociationSet Name="FK__prospecti__conta__3D5E1FD2" Association="seeff_prospectingModel.FK__prospecti__conta__3D5E1FD2">
+            <End Role="prospecting_contact_detail_type" EntitySet="prospecting_contact_detail_type" />
+            <End Role="prospecting_contact_detail" EntitySet="prospecting_contact_detail" />
+          </AssociationSet>
+          <EntitySet Name="communications_status" EntityType="seeff_prospectingModel.communications_status" />
+          <AssociationSet Name="FK__email_com__statu__6CA31EA0" Association="seeff_prospectingModel.FK__email_com__statu__6CA31EA0">
+            <End Role="communications_status" EntitySet="communications_status" />
+            <End Role="email_communications_log" EntitySet="email_communications_log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__sms_commu__statu__74444068" Association="seeff_prospectingModel.FK__sms_commu__statu__74444068">
+            <End Role="communications_status" EntitySet="communications_status" />
+            <End Role="sms_communications_log" EntitySet="sms_communications_log" />
+          </AssociationSet>
+          <EntitySet Name="lightstone_call_log" EntityType="seeff_prospectingModel.lightstone_call_log" />
+        </EntityContainer>
+        <EntityType Name="activity_log">
+          <Key>
+            <PropertyRef Name="activity_log_id" />
+          </Key>
+          <Property Name="activity_log_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="lightstone_property_id" Type="Int32" Nullable="false" />
+          <Property Name="followup_date" Type="DateTime" Precision="3" />
+          <Property Name="allocated_to" Type="Guid" />
+          <Property Name="activity_type_id" Type="Int32" Nullable="false" />
+          <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="created_by" Type="Guid" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="contact_person_id" Type="Int32" />
+          <Property Name="deleted_by" Type="Guid" />
+          <Property Name="delete_date" Type="DateTime" Precision="3" />
+          <Property Name="deleted" Type="Boolean" />
+          <Property Name="parent_activity_id" Type="Int64" />
+          <Property Name="sms_template_id" Type="Int32" />
+          <Property Name="sms_sent" Type="Boolean" />
+          <Property Name="email_template_id" Type="Int32" />
+          <Property Name="email_sent" Type="Boolean" />
+          <Property Name="phone_call" Type="Boolean" />
+          <Property Name="visit" Type="Boolean" />
+          <Property Name="activity_followup_type_id" Type="Int32" />
+          <NavigationProperty Name="sms_communications_log" Relationship="seeff_prospectingModel.FK__sms_commu__activ__7167D3BD" FromRole="activity_log" ToRole="sms_communications_log" />
+          <NavigationProperty Name="sms_communications_log1" Relationship="seeff_prospectingModel.FK__sms_commu__follo__73501C2F" FromRole="activity_log" ToRole="sms_communications_log" />
+          <NavigationProperty Name="prospecting_contact_person" Relationship="seeff_prospectingModel.FK_contact_person_id" FromRole="activity_log" ToRole="prospecting_contact_person" />
+          <NavigationProperty Name="email_communications_log" Relationship="seeff_prospectingModel.FK__email_com__activ__69C6B1F5" FromRole="activity_log" ToRole="email_communications_log" />
+          <NavigationProperty Name="email_communications_log1" Relationship="seeff_prospectingModel.FK__email_com__follo__6BAEFA67" FromRole="activity_log" ToRole="email_communications_log" />
+          <NavigationProperty Name="activity_type" Relationship="seeff_prospectingModel.FK_activity_type_id" FromRole="activity_log" ToRole="activity_type" />
+          <NavigationProperty Name="activity_followup_type" Relationship="seeff_prospectingModel.FK__activity___activ__1B9317B3" FromRole="activity_log" ToRole="activity_followup_type" />
+        </EntityType>
+        <EntityType Name="prospecting_contact_detail">
+          <Key>
+            <PropertyRef Name="prospecting_contact_detail_id" />
+          </Key>
+          <Property Name="prospecting_contact_detail_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="contact_detail_type" Type="Int32" Nullable="false" />
+          <Property Name="contact_person_id" Type="Int32" Nullable="false" />
+          <Property Name="contact_detail" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="intl_dialing_code_id" Type="Int32" />
+          <Property Name="eleventh_digit" Type="Int32" />
+          <Property Name="is_primary_contact" Type="Boolean" Nullable="false" />
+          <Property Name="deleted" Type="Boolean" Nullable="false" />
+          <Property Name="deleted_by" Type="Guid" />
+          <Property Name="deleted_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="prospecting_contact_person" Relationship="seeff_prospectingModel.FK__prospecti__conta__3E52440B" FromRole="prospecting_contact_detail" ToRole="prospecting_contact_person" />
+          <NavigationProperty Name="prospecting_area_dialing_code" Relationship="seeff_prospectingModel.FK__prospecti__intl___3C69FB99" FromRole="prospecting_contact_detail" ToRole="prospecting_area_dialing_code" />
+          <NavigationProperty Name="prospecting_contact_detail_type" Relationship="seeff_prospectingModel.FK__prospecti__conta__3D5E1FD2" FromRole="prospecting_contact_detail" ToRole="prospecting_contact_detail_type" />
+        </EntityType>
+        <EntityType Name="sms_communications_log">
+          <Key>
+            <PropertyRef Name="sms_communications_log_id" />
+          </Key>
+          <Property Name="sms_communications_log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="batch_id" Type="Guid" Nullable="false" />
+          <Property Name="batch_friendly_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="batch_activity_type_id" Type="Int32" Nullable="false" />
+          <Property Name="activity_log_id" Type="Int64" />
+          <Property Name="followup_activity_id" Type="Int64" />
+          <Property Name="created_by_user_guid" Type="Guid" Nullable="false" />
+          <Property Name="created_datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="updated_datetime" Type="DateTime" Precision="3" />
+          <Property Name="target_contact_person_id" Type="Int32" Nullable="false" />
+          <Property Name="target_cellphone_no" Type="String" Nullable="false" MaxLength="13" FixedLength="false" Unicode="false" />
+          <Property Name="target_lightstone_property_id" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="Int32" Nullable="false" />
+          <Property Name="api_tracking_id" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="api_delivery_status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="msg_body_or_link_id" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="reply" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="error_msg" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="user_business_unit_id" Type="Int32" />
+          <NavigationProperty Name="activity_log" Relationship="seeff_prospectingModel.FK__sms_commu__activ__7167D3BD" FromRole="sms_communications_log" ToRole="activity_log" />
+          <NavigationProperty Name="activity_log1" Relationship="seeff_prospectingModel.FK__sms_commu__follo__73501C2F" FromRole="sms_communications_log" ToRole="activity_log" />
+          <NavigationProperty Name="prospecting_contact_person" Relationship="seeff_prospectingModel.FK__sms_commu__targe__753864A1" FromRole="sms_communications_log" ToRole="prospecting_contact_person" />
+          <NavigationProperty Name="activity_type" Relationship="seeff_prospectingModel.FK__sms_commu__batch__725BF7F6" FromRole="sms_communications_log" ToRole="activity_type" />
+          <NavigationProperty Name="communications_status" Relationship="seeff_prospectingModel.FK__sms_commu__statu__74444068" FromRole="sms_communications_log" ToRole="communications_status" />
+        </EntityType>
+        <Association Name="FK__sms_commu__activ__7167D3BD">
+          <End Type="seeff_prospectingModel.activity_log" Role="activity_log" Multiplicity="0..1" />
+          <End Type="seeff_prospectingModel.sms_communications_log" Role="sms_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_log">
+              <PropertyRef Name="activity_log_id" />
+            </Principal>
+            <Dependent Role="sms_communications_log">
+              <PropertyRef Name="activity_log_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__sms_commu__follo__73501C2F">
+          <End Type="seeff_prospectingModel.activity_log" Role="activity_log" Multiplicity="0..1" />
+          <End Type="seeff_prospectingModel.sms_communications_log" Role="sms_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_log">
+              <PropertyRef Name="activity_log_id" />
+            </Principal>
+            <Dependent Role="sms_communications_log">
+              <PropertyRef Name="followup_activity_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="prospecting_contact_person">
+          <Key>
+            <PropertyRef Name="contact_person_id" />
+          </Key>
+          <Property Name="contact_person_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="person_title" Type="Int32" />
+          <Property Name="person_gender" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="id_number" Type="String" Nullable="false" MaxLength="14" FixedLength="false" Unicode="false" />
+          <Property Name="firstname" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="surname" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="job_title" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="propcntrl_buyer_id" Type="Int32" />
+          <Property Name="referral_network" Type="Boolean" />
+          <Property Name="investor" Type="Boolean" />
+          <Property Name="is_popi_restricted" Type="Boolean" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Precision="3" />
+          <Property Name="updated_date" Type="DateTime" Precision="3" />
+          <Property Name="created_by" Type="Guid" />
+          <Property Name="comments_notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="deceased_status" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="age_group" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="marital_status" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="home_ownership" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="directorship" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="physical_address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="employer" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="occupation" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="bureau_adverse_indicator" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="citizenship" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="optout_emails" Type="Boolean" Nullable="false" />
+          <Property Name="optout_sms" Type="Boolean" Nullable="false" />
+          <Property Name="do_not_contact" Type="Boolean" Nullable="false" />
+          <Property Name="email_contactability_status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="activity_log" Relationship="seeff_prospectingModel.FK_contact_person_id" FromRole="prospecting_contact_person" ToRole="activity_log" />
+          <NavigationProperty Name="prospecting_contact_detail" Relationship="seeff_prospectingModel.FK__prospecti__conta__3E52440B" FromRole="prospecting_contact_person" ToRole="prospecting_contact_detail" />
+          <NavigationProperty Name="sms_communications_log" Relationship="seeff_prospectingModel.FK__sms_commu__targe__753864A1" FromRole="prospecting_contact_person" ToRole="sms_communications_log" />
+          <NavigationProperty Name="client_sync_log" Relationship="seeff_prospectingModel.FK__client_sy__conta__05F8DC4F" FromRole="prospecting_contact_person" ToRole="client_sync_log" />
+          <NavigationProperty Name="prospecting_person_property_relationship" Relationship="seeff_prospectingModel.FK__prospecti__conta__47DBAE45" FromRole="prospecting_contact_person" ToRole="prospecting_person_property_relationship" />
+          <NavigationProperty Name="email_communications_log" Relationship="seeff_prospectingModel.FK__email_com__targe__6D9742D9" FromRole="prospecting_contact_person" ToRole="email_communications_log" />
+        </EntityType>
+        <Association Name="FK_contact_person_id">
+          <End Type="seeff_prospectingModel.prospecting_contact_person" Role="prospecting_contact_person" Multiplicity="0..1" />
+          <End Type="seeff_prospectingModel.activity_log" Role="activity_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_person">
+              <PropertyRef Name="contact_person_id" />
+            </Principal>
+            <Dependent Role="activity_log">
+              <PropertyRef Name="contact_person_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__prospecti__conta__3E52440B">
+          <End Type="seeff_prospectingModel.prospecting_contact_person" Role="prospecting_contact_person" Multiplicity="1" />
+          <End Type="seeff_prospectingModel.prospecting_contact_detail" Role="prospecting_contact_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_person">
+              <PropertyRef Name="contact_person_id" />
+            </Principal>
+            <Dependent Role="prospecting_contact_detail">
+              <PropertyRef Name="contact_person_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__sms_commu__targe__753864A1">
+          <End Type="seeff_prospectingModel.prospecting_contact_person" Role="prospecting_contact_person" Multiplicity="1" />
+          <End Type="seeff_prospectingModel.sms_communications_log" Role="sms_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_person">
+              <PropertyRef Name="contact_person_id" />
+            </Principal>
+            <Dependent Role="sms_communications_log">
+              <PropertyRef Name="target_contact_person_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="prospecting_area_dialing_code">
+          <Key>
+            <PropertyRef Name="prospecting_area_dialing_code_id" />
+          </Key>
+          <Property Name="prospecting_area_dialing_code_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dialing_code_id" Type="Int32" Nullable="false" />
+          <Property Name="code_desc" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="prospecting_contact_detail" Relationship="seeff_prospectingModel.FK__prospecti__intl___3C69FB99" FromRole="prospecting_area_dialing_code" ToRole="prospecting_contact_detail" />
+        </EntityType>
+        <Association Name="FK__prospecti__intl___3C69FB99">
+          <End Type="seeff_prospectingModel.prospecting_area_dialing_code" Role="prospecting_area_dialing_code" Multiplicity="0..1" />
+          <End Type="seeff_prospectingModel.prospecting_contact_detail" Role="prospecting_contact_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_area_dialing_code">
+              <PropertyRef Name="prospecting_area_dialing_code_id" />
+            </Principal>
+            <Dependent Role="prospecting_contact_detail">
+              <PropertyRef Name="intl_dialing_code_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="client_sync_log">
+          <Key>
+            <PropertyRef Name="client_sync_log_id" />
+          </Key>
+          <Property Name="client_sync_log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="contact_person_id" Type="Int32" Nullable="false" />
+          <Property Name="user_guid" Type="Guid" />
+          <Property Name="date_time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="synchronised" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="prospecting_contact_person" Relationship="seeff_prospectingModel.FK__client_sy__conta__05F8DC4F" FromRole="client_sync_log" ToRole="prospecting_contact_person" />
+        </EntityType>
+        <Association Name="FK__client_sy__conta__05F8DC4F">
+          <End Type="seeff_prospectingModel.prospecting_contact_person" Role="prospecting_contact_person" Multiplicity="1" />
+          <End Type="seeff_prospectingModel.client_sync_log" Role="client_sync_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_person">
+              <PropertyRef Name="contact_person_id" />
+            </Principal>
+            <Dependent Role="client_sync_log">
+              <PropertyRef Name="contact_person_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="prospecting_person_property_relationship">
+          <Key>
+            <PropertyRef Name="person_property_relationship_id" />
+          </Key>
+          <Property Name="person_property_relationship_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="contact_person_id" Type="Int32" Nullable="false" />
+          <Property Name="prospecting_property_id" Type="Int32" Nullable="false" />
+          <Property Name="relationship_to_property" Type="Int32" Nullable="false" />
+          <Property Name="created_date" Type="DateTime" Precision="3" />
+          <Property Name="updated_date" Type="DateTime" Precision="3" />
+          <Property Name="created_by" Type="Guid" />
+          <Property Name="from_date" Type="DateTime" Precision="3" />
+          <Property Name="to_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="prospecting_contact_person" Relationship="seeff_prospectingModel.FK__prospecti__conta__47DBAE45" FromRole="prospecting_person_property_relationship" ToRole="prospecting_contact_person" />
+          <NavigationProperty Name="prospecting_property" Relationship="seeff_prospectingModel.FK__prospecti__prosp__46E78A0C" FromRole="prospecting_person_property_relationship" ToRole="prospecting_property" />
+        </EntityType>
+        <Association Name="FK__prospecti__conta__47DBAE45">
+          <End Type="seeff_prospectingModel.prospecting_contact_person" Role="prospecting_contact_person" Multiplicity="1" />
+          <End Type="seeff_prospectingModel.prospecting_person_property_relationship" Role="prospecting_person_property_relationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_person">
+              <PropertyRef Name="contact_person_id" />
+            </Principal>
+            <Dependent Role="prospecting_person_property_relationship">
+              <PropertyRef Name="contact_person_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="exception_log">
+          <Key>
+            <PropertyRef Name="exception_log_id" />
+          </Key>
+          <Property Name="exception_log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="friendly_error_msg" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="exception_string" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="user" Type="Guid" Nullable="false" />
+          <Property Name="date_time" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="email_communications_log">
+          <Key>
+            <PropertyRef Name="email_communications_log_id" />
+          </Key>
+          <Property Name="email_communications_log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="batch_id" Type="Guid" Nullable="false" />
+          <Property Name="batch_friendly_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="batch_activity_type_id" Type="Int32" Nullable="false" />
+          <Property Name="activity_log_id" Type="Int64" />
+          <Property Name="followup_activity_id" Type="Int64" />
+          <Property Name="created_by_user_guid" Type="Guid" Nullable="false" />
+          <Property Name="created_by_user_name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created_by_user_email_address" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created_datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="updated_datetime" Type="DateTime" Precision="3" />
+          <Property Name="target_contact_person_id" Type="Int32" Nullable="false" />
+          <Property Name="target_email_address" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="target_lightstone_property_id" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="Int32" Nullable="false" />
+          <Property Name="email_body_or_link_id" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="email_subject_or_link_id" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="error_msg" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="attachment1_content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="attachment1_type" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="attachment1_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="user_business_unit_id" Type="Int32" />
+          <Property Name="api_tracking_id" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="last_api_event_dump" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="activity_log" Relationship="seeff_prospectingModel.FK__email_com__activ__69C6B1F5" FromRole="email_communications_log" ToRole="activity_log" />
+          <NavigationProperty Name="activity_log1" Relationship="seeff_prospectingModel.FK__email_com__follo__6BAEFA67" FromRole="email_communications_log" ToRole="activity_log" />
+          <NavigationProperty Name="prospecting_contact_person" Relationship="seeff_prospectingModel.FK__email_com__targe__6D9742D9" FromRole="email_communications_log" ToRole="prospecting_contact_person" />
+          <NavigationProperty Name="activity_type" Relationship="seeff_prospectingModel.FK__email_com__batch__6ABAD62E" FromRole="email_communications_log" ToRole="activity_type" />
+          <NavigationProperty Name="communications_status" Relationship="seeff_prospectingModel.FK__email_com__statu__6CA31EA0" FromRole="email_communications_log" ToRole="communications_status" />
+        </EntityType>
+        <Association Name="FK__email_com__activ__69C6B1F5">
+          <End Type="seeff_prospectingModel.activity_log" Role="activity_log" Multiplicity="0..1" />
+          <End Type="seeff_prospectingModel.email_communications_log" Role="email_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_log">
+              <PropertyRef Name="activity_log_id" />
+            </Principal>
+            <Dependent Role="email_communications_log">
+              <PropertyRef Name="activity_log_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__email_com__follo__6BAEFA67">
+          <End Type="seeff_prospectingModel.activity_log" Role="activity_log" Multiplicity="0..1" />
+          <End Type="seeff_prospectingModel.email_communications_log" Role="email_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_log">
+              <PropertyRef Name="activity_log_id" />
+            </Principal>
+            <Dependent Role="email_communications_log">
+              <PropertyRef Name="followup_activity_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__email_com__targe__6D9742D9">
+          <End Type="seeff_prospectingModel.prospecting_contact_person" Role="prospecting_contact_person" Multiplicity="1" />
+          <End Type="seeff_prospectingModel.email_communications_log" Role="email_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_person">
+              <PropertyRef Name="contact_person_id" />
+            </Principal>
+            <Dependent Role="email_communications_log">
+              <PropertyRef Name="target_contact_person_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="activity_type">
+          <Key>
+            <PropertyRef Name="activity_type_id" />
+          </Key>
+          <Property Name="activity_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="activity_name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="active" Type="Boolean" Nullable="false" />
+          <Property Name="is_system_type" Type="Boolean" />
+          <NavigationProperty Name="activity_log" Relationship="seeff_prospectingModel.FK_activity_type_id" FromRole="activity_type" ToRole="activity_log" />
+          <NavigationProperty Name="email_communications_log" Relationship="seeff_prospectingModel.FK__email_com__batch__6ABAD62E" FromRole="activity_type" ToRole="email_communications_log" />
+          <NavigationProperty Name="sms_communications_log" Relationship="seeff_prospectingModel.FK__sms_commu__batch__725BF7F6" FromRole="activity_type" ToRole="sms_communications_log" />
+        </EntityType>
+        <Association Name="FK_activity_type_id">
+          <End Type="seeff_prospectingModel.activity_type" Role="activity_type" Multiplicity="1" />
+          <End Type="seeff_prospectingModel.activity_log" Role="activity_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_type">
+              <PropertyRef Name="activity_type_id" />
+            </Principal>
+            <Dependent Role="activity_log">
+              <PropertyRef Name="activity_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__email_com__batch__6ABAD62E">
+          <End Type="seeff_prospectingModel.activity_type" Role="activity_type" Multiplicity="1" />
+          <End Type="seeff_prospectingModel.email_communications_log" Role="email_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_type">
+              <PropertyRef Name="activity_type_id" />
+            </Principal>
+            <Dependent Role="email_communications_log">
+              <PropertyRef Name="batch_activity_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__sms_commu__batch__725BF7F6">
+          <End Type="seeff_prospectingModel.activity_type" Role="activity_type" Multiplicity="1" />
+          <End Type="seeff_prospectingModel.sms_communications_log" Role="sms_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_type">
+              <PropertyRef Name="activity_type_id" />
+            </Principal>
+            <Dependent Role="sms_communications_log">
+              <PropertyRef Name="batch_activity_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="activity_followup_type">
+          <Key>
+            <PropertyRef Name="activity_followup_type_id" />
+          </Key>
+          <Property Name="activity_followup_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="activity_name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="activity_log" Relationship="seeff_prospectingModel.FK__activity___activ__1B9317B3" FromRole="activity_followup_type" ToRole="activity_log" />
+        </EntityType>
+        <Association Name="FK__activity___activ__1B9317B3">
+          <End Type="seeff_prospectingModel.activity_followup_type" Role="activity_followup_type" Multiplicity="0..1" />
+          <End Type="seeff_prospectingModel.activity_log" Role="activity_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activity_followup_type">
+              <PropertyRef Name="activity_followup_type_id" />
+            </Principal>
+            <Dependent Role="activity_log">
+              <PropertyRef Name="activity_followup_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="prospecting_property">
+          <Key>
+            <PropertyRef Name="prospecting_property_id" />
+          </Key>
+          <Property Name="prospecting_property_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="licence_id" Type="Int32" />
+          <Property Name="seeff_area_id" Type="Int32" />
+          <Property Name="development_id" Type="Int32" />
+          <Property Name="lightstone_property_id" Type="Int32" Nullable="false" />
+          <Property Name="propstats_id" Type="Int32" />
+          <Property Name="windeed_id" Type="Int32" />
+          <Property Name="erf_no" Type="Int32" />
+          <Property Name="portion_no" Type="Int32" />
+          <Property Name="property_address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="street_or_unit_no" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="photo_url" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="latitude" Type="Decimal" Precision="13" Scale="8" />
+          <Property Name="longitude" Type="Decimal" Precision="13" Scale="8" />
+          <Property Name="age" Type="DateTime" Precision="3" />
+          <Property Name="erf_size" Type="Int32" />
+          <Property Name="dwell_size" Type="Int32" />
+          <Property Name="condition" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="beds" Type="Int32" />
+          <Property Name="baths" Type="Int32" />
+          <Property Name="receptions" Type="Int32" />
+          <Property Name="studies" Type="Int32" />
+          <Property Name="garages" Type="Int32" />
+          <Property Name="parking_bays" Type="Int32" />
+          <Property Name="pool" Type="Boolean" />
+          <Property Name="staff_accomodation" Type="Boolean" />
+          <Property Name="created_date" Type="DateTime" Precision="3" />
+          <Property Name="updated_date" Type="DateTime" Precision="3" />
+          <Property Name="created_by" Type="Guid" />
+          <Property Name="lightstone_id_or_ck_no" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="lightstone_reg_date" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ss_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ss_number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="unit" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ss_fh" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="last_purch_price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ss_id" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ss_door_number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="prospected" Type="Boolean" />
+          <Property Name="farm_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="lightstone_suburb" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ss_unique_identifier" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="locked_by_guid" Type="Guid" />
+          <Property Name="locked_datetime" Type="DateTime" Precision="3" />
+          <Property Name="latest_reg_date" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="is_short_term_rental" Type="Boolean" />
+          <Property Name="is_long_term_rental" Type="Boolean" />
+          <Property Name="is_commercial" Type="Boolean" />
+          <Property Name="is_agricultural" Type="Boolean" />
+          <Property Name="is_investment" Type="Boolean" />
+          <Property Name="has_email" Type="Boolean" />
+          <Property Name="has_cell" Type="Boolean" />
+          <Property Name="has_landline" Type="Boolean" />
+          <Property Name="has_primary_email" Type="Boolean" />
+          <Property Name="has_primary_cell" Type="Boolean" />
+          <Property Name="has_primary_landline" Type="Boolean" />
+          <NavigationProperty Name="prospecting_person_property_relationship" Relationship="seeff_prospectingModel.FK__prospecti__prosp__46E78A0C" FromRole="prospecting_property" ToRole="prospecting_person_property_relationship" />
+        </EntityType>
+        <Association Name="FK__prospecti__prosp__46E78A0C">
+          <End Type="seeff_prospectingModel.prospecting_property" Role="prospecting_property" Multiplicity="1" />
+          <End Type="seeff_prospectingModel.prospecting_person_property_relationship" Role="prospecting_person_property_relationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_property">
+              <PropertyRef Name="prospecting_property_id" />
+            </Principal>
+            <Dependent Role="prospecting_person_property_relationship">
+              <PropertyRef Name="prospecting_property_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="prospecting_contact_detail_type">
+          <Key>
+            <PropertyRef Name="contact_detail_type_id" />
+          </Key>
+          <Property Name="contact_detail_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_desc" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="prospecting_contact_detail" Relationship="seeff_prospectingModel.FK__prospecti__conta__3D5E1FD2" FromRole="prospecting_contact_detail_type" ToRole="prospecting_contact_detail" />
+        </EntityType>
+        <Association Name="FK__prospecti__conta__3D5E1FD2">
+          <End Type="seeff_prospectingModel.prospecting_contact_detail_type" Role="prospecting_contact_detail_type" Multiplicity="1" />
+          <End Type="seeff_prospectingModel.prospecting_contact_detail" Role="prospecting_contact_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="prospecting_contact_detail_type">
+              <PropertyRef Name="contact_detail_type_id" />
+            </Principal>
+            <Dependent Role="prospecting_contact_detail">
+              <PropertyRef Name="contact_detail_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="communications_status">
+          <Key>
+            <PropertyRef Name="communications_status_id" />
+          </Key>
+          <Property Name="communications_status_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="status_desc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="email_communications_log" Relationship="seeff_prospectingModel.FK__email_com__statu__6CA31EA0" FromRole="communications_status" ToRole="email_communications_log" />
+          <NavigationProperty Name="sms_communications_log" Relationship="seeff_prospectingModel.FK__sms_commu__statu__74444068" FromRole="communications_status" ToRole="sms_communications_log" />
+        </EntityType>
+        <Association Name="FK__email_com__statu__6CA31EA0">
+          <End Type="seeff_prospectingModel.communications_status" Role="communications_status" Multiplicity="1" />
+          <End Type="seeff_prospectingModel.email_communications_log" Role="email_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="communications_status">
+              <PropertyRef Name="communications_status_id" />
+            </Principal>
+            <Dependent Role="email_communications_log">
+              <PropertyRef Name="status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__sms_commu__statu__74444068">
+          <End Type="seeff_prospectingModel.communications_status" Role="communications_status" Multiplicity="1" />
+          <End Type="seeff_prospectingModel.sms_communications_log" Role="sms_communications_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="communications_status">
+              <PropertyRef Name="communications_status_id" />
+            </Principal>
+            <Dependent Role="sms_communications_log">
+              <PropertyRef Name="status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="lightstone_call_log">
+          <Key>
+            <PropertyRef Name="lightstone_call_log_id" />
+          </Key>
+          <Property Name="lightstone_call_log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user" Type="Guid" Nullable="false" />
+          <Property Name="date_time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="call_location_src" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="search_inputs" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="seeff_prospectingModelStoreContainer" CdmEntityContainer="seeff_prospectingEntities" >
+          <EntitySetMapping Name="activity_log">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.activity_log">
+              <MappingFragment StoreEntitySet="activity_log">
+                <ScalarProperty Name="activity_followup_type_id" ColumnName="activity_followup_type_id" />
+                <ScalarProperty Name="visit" ColumnName="visit" />
+                <ScalarProperty Name="phone_call" ColumnName="phone_call" />
+                <ScalarProperty Name="email_sent" ColumnName="email_sent" />
+                <ScalarProperty Name="email_template_id" ColumnName="email_template_id" />
+                <ScalarProperty Name="sms_sent" ColumnName="sms_sent" />
+                <ScalarProperty Name="sms_template_id" ColumnName="sms_template_id" />
+                <ScalarProperty Name="parent_activity_id" ColumnName="parent_activity_id" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+                <ScalarProperty Name="delete_date" ColumnName="delete_date" />
+                <ScalarProperty Name="deleted_by" ColumnName="deleted_by" />
+                <ScalarProperty Name="contact_person_id" ColumnName="contact_person_id" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="comment" ColumnName="comment" />
+                <ScalarProperty Name="activity_type_id" ColumnName="activity_type_id" />
+                <ScalarProperty Name="allocated_to" ColumnName="allocated_to" />
+                <ScalarProperty Name="followup_date" ColumnName="followup_date" />
+                <ScalarProperty Name="lightstone_property_id" ColumnName="lightstone_property_id" />
+                <ScalarProperty Name="activity_log_id" ColumnName="activity_log_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="prospecting_contact_detail">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.prospecting_contact_detail">
+              <MappingFragment StoreEntitySet="prospecting_contact_detail">
+                <ScalarProperty Name="deleted_date" ColumnName="deleted_date" />
+                <ScalarProperty Name="deleted_by" ColumnName="deleted_by" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+                <ScalarProperty Name="is_primary_contact" ColumnName="is_primary_contact" />
+                <ScalarProperty Name="eleventh_digit" ColumnName="eleventh_digit" />
+                <ScalarProperty Name="intl_dialing_code_id" ColumnName="intl_dialing_code_id" />
+                <ScalarProperty Name="contact_detail" ColumnName="contact_detail" />
+                <ScalarProperty Name="contact_person_id" ColumnName="contact_person_id" />
+                <ScalarProperty Name="contact_detail_type" ColumnName="contact_detail_type" />
+                <ScalarProperty Name="prospecting_contact_detail_id" ColumnName="prospecting_contact_detail_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sms_communications_log">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.sms_communications_log">
+              <MappingFragment StoreEntitySet="sms_communications_log">
+                <ScalarProperty Name="user_business_unit_id" ColumnName="user_business_unit_id" />
+                <ScalarProperty Name="error_msg" ColumnName="error_msg" />
+                <ScalarProperty Name="reply" ColumnName="reply" />
+                <ScalarProperty Name="msg_body_or_link_id" ColumnName="msg_body_or_link_id" />
+                <ScalarProperty Name="api_delivery_status" ColumnName="api_delivery_status" />
+                <ScalarProperty Name="api_tracking_id" ColumnName="api_tracking_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="target_lightstone_property_id" ColumnName="target_lightstone_property_id" />
+                <ScalarProperty Name="target_cellphone_no" ColumnName="target_cellphone_no" />
+                <ScalarProperty Name="target_contact_person_id" ColumnName="target_contact_person_id" />
+                <ScalarProperty Name="updated_datetime" ColumnName="updated_datetime" />
+                <ScalarProperty Name="created_datetime" ColumnName="created_datetime" />
+                <ScalarProperty Name="created_by_user_guid" ColumnName="created_by_user_guid" />
+                <ScalarProperty Name="followup_activity_id" ColumnName="followup_activity_id" />
+                <ScalarProperty Name="activity_log_id" ColumnName="activity_log_id" />
+                <ScalarProperty Name="batch_activity_type_id" ColumnName="batch_activity_type_id" />
+                <ScalarProperty Name="batch_friendly_name" ColumnName="batch_friendly_name" />
+                <ScalarProperty Name="batch_id" ColumnName="batch_id" />
+                <ScalarProperty Name="sms_communications_log_id" ColumnName="sms_communications_log_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="prospecting_contact_person">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.prospecting_contact_person">
+              <MappingFragment StoreEntitySet="prospecting_contact_person">
+                <ScalarProperty Name="email_contactability_status" ColumnName="email_contactability_status" />
+                <ScalarProperty Name="do_not_contact" ColumnName="do_not_contact" />
+                <ScalarProperty Name="optout_sms" ColumnName="optout_sms" />
+                <ScalarProperty Name="optout_emails" ColumnName="optout_emails" />
+                <ScalarProperty Name="citizenship" ColumnName="citizenship" />
+                <ScalarProperty Name="bureau_adverse_indicator" ColumnName="bureau_adverse_indicator" />
+                <ScalarProperty Name="occupation" ColumnName="occupation" />
+                <ScalarProperty Name="employer" ColumnName="employer" />
+                <ScalarProperty Name="physical_address" ColumnName="physical_address" />
+                <ScalarProperty Name="directorship" ColumnName="directorship" />
+                <ScalarProperty Name="home_ownership" ColumnName="home_ownership" />
+                <ScalarProperty Name="marital_status" ColumnName="marital_status" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="age_group" ColumnName="age_group" />
+                <ScalarProperty Name="deceased_status" ColumnName="deceased_status" />
+                <ScalarProperty Name="comments_notes" ColumnName="comments_notes" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="updated_date" ColumnName="updated_date" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="is_popi_restricted" ColumnName="is_popi_restricted" />
+                <ScalarProperty Name="investor" ColumnName="investor" />
+                <ScalarProperty Name="referral_network" ColumnName="referral_network" />
+                <ScalarProperty Name="propcntrl_buyer_id" ColumnName="propcntrl_buyer_id" />
+                <ScalarProperty Name="job_title" ColumnName="job_title" />
+                <ScalarProperty Name="surname" ColumnName="surname" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="id_number" ColumnName="id_number" />
+                <ScalarProperty Name="person_gender" ColumnName="person_gender" />
+                <ScalarProperty Name="person_title" ColumnName="person_title" />
+                <ScalarProperty Name="contact_person_id" ColumnName="contact_person_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="prospecting_area_dialing_code">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.prospecting_area_dialing_code">
+              <MappingFragment StoreEntitySet="prospecting_area_dialing_code">
+                <ScalarProperty Name="code_desc" ColumnName="code_desc" />
+                <ScalarProperty Name="dialing_code_id" ColumnName="dialing_code_id" />
+                <ScalarProperty Name="prospecting_area_dialing_code_id" ColumnName="prospecting_area_dialing_code_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="client_sync_log">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.client_sync_log">
+              <MappingFragment StoreEntitySet="client_sync_log">
+                <ScalarProperty Name="synchronised" ColumnName="synchronised" />
+                <ScalarProperty Name="date_time" ColumnName="date_time" />
+                <ScalarProperty Name="user_guid" ColumnName="user_guid" />
+                <ScalarProperty Name="contact_person_id" ColumnName="contact_person_id" />
+                <ScalarProperty Name="client_sync_log_id" ColumnName="client_sync_log_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="prospecting_person_property_relationship">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.prospecting_person_property_relationship">
+              <MappingFragment StoreEntitySet="prospecting_person_property_relationship">
+                <ScalarProperty Name="to_date" ColumnName="to_date" />
+                <ScalarProperty Name="from_date" ColumnName="from_date" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="updated_date" ColumnName="updated_date" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="relationship_to_property" ColumnName="relationship_to_property" />
+                <ScalarProperty Name="prospecting_property_id" ColumnName="prospecting_property_id" />
+                <ScalarProperty Name="contact_person_id" ColumnName="contact_person_id" />
+                <ScalarProperty Name="person_property_relationship_id" ColumnName="person_property_relationship_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="exception_log">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.exception_log">
+              <MappingFragment StoreEntitySet="exception_log">
+                <ScalarProperty Name="date_time" ColumnName="date_time" />
+                <ScalarProperty Name="user" ColumnName="user" />
+                <ScalarProperty Name="exception_string" ColumnName="exception_string" />
+                <ScalarProperty Name="friendly_error_msg" ColumnName="friendly_error_msg" />
+                <ScalarProperty Name="exception_log_id" ColumnName="exception_log_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="email_communications_log">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.email_communications_log">
+              <MappingFragment StoreEntitySet="email_communications_log">
+                <ScalarProperty Name="last_api_event_dump" ColumnName="last_api_event_dump" />
+                <ScalarProperty Name="api_tracking_id" ColumnName="api_tracking_id" />
+                <ScalarProperty Name="user_business_unit_id" ColumnName="user_business_unit_id" />
+                <ScalarProperty Name="attachment1_name" ColumnName="attachment1_name" />
+                <ScalarProperty Name="attachment1_type" ColumnName="attachment1_type" />
+                <ScalarProperty Name="attachment1_content" ColumnName="attachment1_content" />
+                <ScalarProperty Name="error_msg" ColumnName="error_msg" />
+                <ScalarProperty Name="email_subject_or_link_id" ColumnName="email_subject_or_link_id" />
+                <ScalarProperty Name="email_body_or_link_id" ColumnName="email_body_or_link_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="target_lightstone_property_id" ColumnName="target_lightstone_property_id" />
+                <ScalarProperty Name="target_email_address" ColumnName="target_email_address" />
+                <ScalarProperty Name="target_contact_person_id" ColumnName="target_contact_person_id" />
+                <ScalarProperty Name="updated_datetime" ColumnName="updated_datetime" />
+                <ScalarProperty Name="created_datetime" ColumnName="created_datetime" />
+                <ScalarProperty Name="created_by_user_email_address" ColumnName="created_by_user_email_address" />
+                <ScalarProperty Name="created_by_user_name" ColumnName="created_by_user_name" />
+                <ScalarProperty Name="created_by_user_guid" ColumnName="created_by_user_guid" />
+                <ScalarProperty Name="followup_activity_id" ColumnName="followup_activity_id" />
+                <ScalarProperty Name="activity_log_id" ColumnName="activity_log_id" />
+                <ScalarProperty Name="batch_activity_type_id" ColumnName="batch_activity_type_id" />
+                <ScalarProperty Name="batch_friendly_name" ColumnName="batch_friendly_name" />
+                <ScalarProperty Name="batch_id" ColumnName="batch_id" />
+                <ScalarProperty Name="email_communications_log_id" ColumnName="email_communications_log_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="activity_type">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.activity_type">
+              <MappingFragment StoreEntitySet="activity_type">
+                <ScalarProperty Name="is_system_type" ColumnName="is_system_type" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="activity_name" ColumnName="activity_name" />
+                <ScalarProperty Name="activity_type_id" ColumnName="activity_type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="activity_followup_type">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.activity_followup_type">
+              <MappingFragment StoreEntitySet="activity_followup_type">
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="activity_name" ColumnName="activity_name" />
+                <ScalarProperty Name="activity_followup_type_id" ColumnName="activity_followup_type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="prospecting_property">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.prospecting_property">
+              <MappingFragment StoreEntitySet="prospecting_property">
+                <ScalarProperty Name="has_primary_landline" ColumnName="has_primary_landline" />
+                <ScalarProperty Name="has_primary_cell" ColumnName="has_primary_cell" />
+                <ScalarProperty Name="has_primary_email" ColumnName="has_primary_email" />
+                <ScalarProperty Name="has_landline" ColumnName="has_landline" />
+                <ScalarProperty Name="has_cell" ColumnName="has_cell" />
+                <ScalarProperty Name="has_email" ColumnName="has_email" />
+                <ScalarProperty Name="is_investment" ColumnName="is_investment" />
+                <ScalarProperty Name="is_agricultural" ColumnName="is_agricultural" />
+                <ScalarProperty Name="is_commercial" ColumnName="is_commercial" />
+                <ScalarProperty Name="is_long_term_rental" ColumnName="is_long_term_rental" />
+                <ScalarProperty Name="is_short_term_rental" ColumnName="is_short_term_rental" />
+                <ScalarProperty Name="latest_reg_date" ColumnName="latest_reg_date" />
+                <ScalarProperty Name="locked_datetime" ColumnName="locked_datetime" />
+                <ScalarProperty Name="locked_by_guid" ColumnName="locked_by_guid" />
+                <ScalarProperty Name="ss_unique_identifier" ColumnName="ss_unique_identifier" />
+                <ScalarProperty Name="lightstone_suburb" ColumnName="lightstone_suburb" />
+                <ScalarProperty Name="farm_name" ColumnName="farm_name" />
+                <ScalarProperty Name="prospected" ColumnName="prospected" />
+                <ScalarProperty Name="ss_door_number" ColumnName="ss_door_number" />
+                <ScalarProperty Name="ss_id" ColumnName="ss_id" />
+                <ScalarProperty Name="last_purch_price" ColumnName="last_purch_price" />
+                <ScalarProperty Name="ss_fh" ColumnName="ss_fh" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="ss_number" ColumnName="ss_number" />
+                <ScalarProperty Name="ss_name" ColumnName="ss_name" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="lightstone_reg_date" ColumnName="lightstone_reg_date" />
+                <ScalarProperty Name="lightstone_id_or_ck_no" ColumnName="lightstone_id_or_ck_no" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="updated_date" ColumnName="updated_date" />
+                <ScalarProperty Name="created_date" ColumnName="created_date" />
+                <ScalarProperty Name="staff_accomodation" ColumnName="staff_accomodation" />
+                <ScalarProperty Name="pool" ColumnName="pool" />
+                <ScalarProperty Name="parking_bays" ColumnName="parking_bays" />
+                <ScalarProperty Name="garages" ColumnName="garages" />
+                <ScalarProperty Name="studies" ColumnName="studies" />
+                <ScalarProperty Name="receptions" ColumnName="receptions" />
+                <ScalarProperty Name="baths" ColumnName="baths" />
+                <ScalarProperty Name="beds" ColumnName="beds" />
+                <ScalarProperty Name="condition" ColumnName="condition" />
+                <ScalarProperty Name="dwell_size" ColumnName="dwell_size" />
+                <ScalarProperty Name="erf_size" ColumnName="erf_size" />
+                <ScalarProperty Name="age" ColumnName="age" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="photo_url" ColumnName="photo_url" />
+                <ScalarProperty Name="street_or_unit_no" ColumnName="street_or_unit_no" />
+                <ScalarProperty Name="property_address" ColumnName="property_address" />
+                <ScalarProperty Name="portion_no" ColumnName="portion_no" />
+                <ScalarProperty Name="erf_no" ColumnName="erf_no" />
+                <ScalarProperty Name="windeed_id" ColumnName="windeed_id" />
+                <ScalarProperty Name="propstats_id" ColumnName="propstats_id" />
+                <ScalarProperty Name="lightstone_property_id" ColumnName="lightstone_property_id" />
+                <ScalarProperty Name="development_id" ColumnName="development_id" />
+                <ScalarProperty Name="seeff_area_id" ColumnName="seeff_area_id" />
+                <ScalarProperty Name="licence_id" ColumnName="licence_id" />
+                <ScalarProperty Name="prospecting_property_id" ColumnName="prospecting_property_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="prospecting_contact_detail_type">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.prospecting_contact_detail_type">
+              <MappingFragment StoreEntitySet="prospecting_contact_detail_type">
+                <ScalarProperty Name="type_desc" ColumnName="type_desc" />
+                <ScalarProperty Name="contact_detail_type_id" ColumnName="contact_detail_type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="communications_status">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.communications_status">
+              <MappingFragment StoreEntitySet="communications_status">
+                <ScalarProperty Name="status_desc" ColumnName="status_desc" />
+                <ScalarProperty Name="communications_status_id" ColumnName="communications_status_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lightstone_call_log">
+            <EntityTypeMapping TypeName="seeff_prospectingModel.lightstone_call_log">
+              <MappingFragment StoreEntitySet="lightstone_call_log">
+                <ScalarProperty Name="search_inputs" ColumnName="search_inputs" />
+                <ScalarProperty Name="call_location_src" ColumnName="call_location_src" />
+                <ScalarProperty Name="date_time" ColumnName="date_time" />
+                <ScalarProperty Name="user" ColumnName="user" />
+                <ScalarProperty Name="lightstone_call_log_id" ColumnName="lightstone_call_log_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

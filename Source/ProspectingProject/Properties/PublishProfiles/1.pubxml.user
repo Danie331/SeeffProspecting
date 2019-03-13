@@ -4,4 +4,2235 @@ This file is used by the publish/package process of your Web project. You can cu
 by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\Louise\Desktop\Repos2019\SeeffProspecting\Source\ProspectingProject\publish</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="Assets/activities-followups-filtering.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/add_activity.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/add_mandate.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/autocompleteloader.gif">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/bin.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/capture_address.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/comm_anniversary.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/comm_bday.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/comm_email.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/comm_message_history.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/comm_report_filters.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/comm_sms.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/contact.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/create_referral.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/double-arrow-left.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/double-arrow-right.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/edit.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/edit_link.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/email_icon.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/export_list.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/fh_edit.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/frm_edit.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/generate_id.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/google.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/hedonic_data.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/item_template.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/lightstone.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/lists.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/loading.gif">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/log_off.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/make_primary_contact.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/manage_lists.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/mandate_info.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2007.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2008.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2009.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2010.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2011.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2012.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2013.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2014.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2015.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2016.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2017.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2018.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2019.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/2020.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/agricultural/agricultural.psd">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2007.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2008.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2009.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2010.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2011.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2012.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2013.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2014.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2015.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2016.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2017.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2018.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2019.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/2020.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/commercial/commercial.psd">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2007.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2008.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2009.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2010.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2011.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2012.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2013.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2014.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2015.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2016.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2017.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2018.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2019.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/development/2020.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2007.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2008.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2009.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2010.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2011.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2012.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2013.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2014.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2015.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2016.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2017.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2018.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2019.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2020.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2021.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2022.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2023.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/2024.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/house.psd">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/ss.PNG">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/house or apartment/ss.PSD">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2007.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2008.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2009.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2010.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2011.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2012.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2013.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2014.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2015.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2016.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2017.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2018.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2019.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/2020.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/competitor/other/Other.psd">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/pending.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/prospecting/prospected.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/prospecting/prospected_attention_required.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/prospecting/prospected_bulk_select.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/prospecting/ss_attention_required.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/prospecting/ss_prospected.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/prospecting/ss_unprospected.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/prospecting/ss_unprospected_bulk_select.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/prospecting/unprospected.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/prospecting/unprospected_attention_required.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/prospecting/unprospected_bulk_select.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2007.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2008.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2009.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2010.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2011.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2012.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2013.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2014.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2015.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2016.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2017.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2018.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2019.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/2020.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/agricultural.psd">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/current_buy.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/agricultural/current_rent.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2007.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2008.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2009.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2010.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2011.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2012.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2013.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2014.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2015.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2016.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2017.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2018.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2019.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/2020.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/commercial.psd">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/current_buy.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/commercial/current_rent.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2007.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2007.psd">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2008.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2009.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2010.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2011.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2012.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2013.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2014.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2015.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2016.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2017.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2018.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2019.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/development/2020.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2007.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2008.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2009.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2010.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2011.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2012.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2013.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2014.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2015.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2016.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2017.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2018.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2019.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2020.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2021.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2022.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2023.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/2024.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/current_buy.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/current_rent.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/house.psd">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/ss.PNG">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/house or apartment/ss.PSD">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2007.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2008.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2009.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2010.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2011.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2012.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2013.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2014.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2015.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2016.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2017.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2018.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2019.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/2020.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/other/Other.psd">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/ss_buy.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/ss_rent.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/seeff/ss_rentandbuy.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/ss.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/unfated house or apartment/house_unfated.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/marker_icons/unfated house or apartment/ss_unfated.PNG">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/my_templates.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/newsletter_template.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/new_list.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/new_valuation.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/notes.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/person.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/phone_icon.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/poly_menu_item.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/poly_menu_remove.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/primary_contact.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/property_referrals_history.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/reload_from_lightstone.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/remove_filter.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/remove_poly.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/save_changes.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/seeff_logo.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/set_signature_boss.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/snap.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/ss_edit.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/standard_templates.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/system_search.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/tick.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/titlecase_icon.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/titlecase_link.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/tps_info.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/unknown.png">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Assets/validate_id.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/valuations_history.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Assets/view_btn.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="bin/de/Microsoft.Data.Edm.resources.dll">
+      <publishTime>12/01/2016 16:36:29</publishTime>
+    </File>
+    <File Include="bin/de/Microsoft.Data.OData.resources.dll">
+      <publishTime>12/01/2016 16:36:31</publishTime>
+    </File>
+    <File Include="bin/de/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>12/01/2016 16:36:34</publishTime>
+    </File>
+    <File Include="bin/de/System.Spatial.resources.dll">
+      <publishTime>12/01/2016 16:36:28</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>07/26/2016 09:01:29</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.SqlServer.dll">
+      <publishTime>07/26/2016 09:01:29</publishTime>
+    </File>
+    <File Include="bin/EPPlus.dll">
+      <publishTime>10/31/2016 09:59:11</publishTime>
+    </File>
+    <File Include="bin/es/Microsoft.Data.Edm.resources.dll">
+      <publishTime>12/01/2016 16:36:29</publishTime>
+    </File>
+    <File Include="bin/es/Microsoft.Data.OData.resources.dll">
+      <publishTime>12/01/2016 16:36:31</publishTime>
+    </File>
+    <File Include="bin/es/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>12/01/2016 16:36:34</publishTime>
+    </File>
+    <File Include="bin/es/System.Spatial.resources.dll">
+      <publishTime>12/01/2016 16:36:28</publishTime>
+    </File>
+    <File Include="bin/fr/Microsoft.Data.Edm.resources.dll">
+      <publishTime>12/01/2016 16:36:29</publishTime>
+    </File>
+    <File Include="bin/fr/Microsoft.Data.OData.resources.dll">
+      <publishTime>12/01/2016 16:36:31</publishTime>
+    </File>
+    <File Include="bin/fr/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>12/01/2016 16:36:34</publishTime>
+    </File>
+    <File Include="bin/fr/System.Spatial.resources.dll">
+      <publishTime>12/01/2016 16:36:28</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.Auth.dll">
+      <publishTime>02/16/2017 13:36:00</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.Auth.pdb">
+      <publishTime>02/16/2017 13:36:00</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.Auth.PlatformServices.dll">
+      <publishTime>02/16/2017 13:36:00</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.Auth.PlatformServices.pdb">
+      <publishTime>02/16/2017 13:36:00</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.Core.dll">
+      <publishTime>02/16/2017 13:36:00</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.Core.pdb">
+      <publishTime>02/16/2017 13:36:00</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.dll">
+      <publishTime>02/16/2017 13:36:01</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.Drive.v2.dll">
+      <publishTime>02/16/2017 13:36:05</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.Drive.v2.pdb">
+      <publishTime>02/16/2017 13:36:05</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.Gmail.v1.dll">
+      <publishTime>02/16/2017 13:36:05</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.Gmail.v1.pdb">
+      <publishTime>02/16/2017 13:36:05</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.pdb">
+      <publishTime>02/16/2017 13:36:01</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.PlatformServices.dll">
+      <publishTime>02/16/2017 13:36:01</publishTime>
+    </File>
+    <File Include="bin/Google.Apis.PlatformServices.pdb">
+      <publishTime>02/16/2017 13:36:01</publishTime>
+    </File>
+    <File Include="bin/it/Microsoft.Data.Edm.resources.dll">
+      <publishTime>12/01/2016 16:36:29</publishTime>
+    </File>
+    <File Include="bin/it/Microsoft.Data.OData.resources.dll">
+      <publishTime>12/01/2016 16:36:31</publishTime>
+    </File>
+    <File Include="bin/it/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>12/01/2016 16:36:34</publishTime>
+    </File>
+    <File Include="bin/it/System.Spatial.resources.dll">
+      <publishTime>12/01/2016 16:36:28</publishTime>
+    </File>
+    <File Include="bin/ja/Microsoft.Data.Edm.resources.dll">
+      <publishTime>12/01/2016 16:36:29</publishTime>
+    </File>
+    <File Include="bin/ja/Microsoft.Data.OData.resources.dll">
+      <publishTime>12/01/2016 16:36:31</publishTime>
+    </File>
+    <File Include="bin/ja/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>12/01/2016 16:36:34</publishTime>
+    </File>
+    <File Include="bin/ja/System.Spatial.resources.dll">
+      <publishTime>12/01/2016 16:36:28</publishTime>
+    </File>
+    <File Include="bin/ko/Microsoft.Data.Edm.resources.dll">
+      <publishTime>12/01/2016 16:36:29</publishTime>
+    </File>
+    <File Include="bin/ko/Microsoft.Data.OData.resources.dll">
+      <publishTime>12/01/2016 16:36:31</publishTime>
+    </File>
+    <File Include="bin/ko/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>12/01/2016 16:36:34</publishTime>
+    </File>
+    <File Include="bin/ko/System.Spatial.resources.dll">
+      <publishTime>12/01/2016 16:36:28</publishTime>
+    </File>
+    <File Include="bin/log4net.dll">
+      <publishTime>02/16/2017 13:36:06</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Data.Edm.dll">
+      <publishTime>12/01/2016 16:36:30</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Data.OData.dll">
+      <publishTime>12/01/2016 16:36:32</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Data.Services.Client.dll">
+      <publishTime>12/01/2016 16:36:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Owin.dll">
+      <publishTime>07/26/2016 09:01:24</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Threading.Tasks.dll">
+      <publishTime>02/16/2017 13:36:06</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Threading.Tasks.Extensions.Desktop.dll">
+      <publishTime>02/16/2017 13:36:06</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Threading.Tasks.Extensions.dll">
+      <publishTime>02/16/2017 13:36:06</publishTime>
+    </File>
+    <File Include="bin/Microsoft.WindowsAzure.Configuration.dll">
+      <publishTime>12/01/2016 16:36:24</publishTime>
+    </File>
+    <File Include="bin/Microsoft.WindowsAzure.Storage.dll">
+      <publishTime>12/01/2016 16:36:29</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>12/01/2016 16:36:29</publishTime>
+    </File>
+    <File Include="bin/Owin.dll">
+      <publishTime>07/26/2016 09:01:25</publishTime>
+    </File>
+    <File Include="bin/ProspectingProject.dll">
+      <publishTime>01/14/2019 16:09:27</publishTime>
+    </File>
+    <File Include="bin/ProspectingProject.pdb">
+      <publishTime>01/14/2019 16:09:27</publishTime>
+    </File>
+    <File Include="bin/ProspectingProject.XmlSerializers.dll">
+      <publishTime>01/14/2019 16:09:32</publishTime>
+    </File>
+    <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
+      <publishTime>12/01/2016 16:36:29</publishTime>
+    </File>
+    <File Include="bin/ru/Microsoft.Data.OData.resources.dll">
+      <publishTime>12/01/2016 16:36:31</publishTime>
+    </File>
+    <File Include="bin/ru/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>12/01/2016 16:36:34</publishTime>
+    </File>
+    <File Include="bin/ru/System.Spatial.resources.dll">
+      <publishTime>12/01/2016 16:36:28</publishTime>
+    </File>
+    <File Include="bin/System.Data.Linq.dll">
+      <publishTime>09/26/2012 03:16:08</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Extensions.dll">
+      <publishTime>12/01/2016 16:36:35</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>08/11/2016 12:34:33</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Primitives.dll">
+      <publishTime>12/01/2016 16:36:34</publishTime>
+    </File>
+    <File Include="bin/System.Spatial.dll">
+      <publishTime>12/01/2016 16:36:28</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/Microsoft.Data.Edm.resources.dll">
+      <publishTime>12/01/2016 16:36:30</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/Microsoft.Data.OData.resources.dll">
+      <publishTime>12/01/2016 16:36:32</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>12/01/2016 16:36:34</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Spatial.resources.dll">
+      <publishTime>12/01/2016 16:36:28</publishTime>
+    </File>
+    <File Include="bin/zh-Hant/Microsoft.Data.Edm.resources.dll">
+      <publishTime>12/01/2016 16:36:30</publishTime>
+    </File>
+    <File Include="bin/zh-Hant/Microsoft.Data.OData.resources.dll">
+      <publishTime>12/01/2016 16:36:32</publishTime>
+    </File>
+    <File Include="bin/zh-Hant/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>12/01/2016 16:36:34</publishTime>
+    </File>
+    <File Include="bin/zh-Hant/System.Spatial.resources.dll">
+      <publishTime>12/01/2016 16:36:28</publishTime>
+    </File>
+    <File Include="bin/Zlib.Portable.dll">
+      <publishTime>12/01/2016 16:36:24</publishTime>
+    </File>
+    <File Include="client.edmx.diagram">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Database scripts/boss.sql">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Database scripts/change_of_ownership.sql">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Database scripts/prospecting_property_contact_details_stats.sql">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Database scripts/seeff_prospecting.sql">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Database scripts/seeff_prospecting_data_takeon.sql">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Database scripts/useful.sql">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Default.aspx">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="LogOut.aspx">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="ls_base.edmx.diagram">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="NotAuthorised.aspx">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Properties/DataSources/System.Data.DataSet.datasource">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Prospecting.dbml">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="RequestHandler.ashx">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/adapters/jquery.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/build-config.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/CHANGES.md">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/ckeditor.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/config.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/contents.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/af.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/ar.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/bg.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/bn.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/bs.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/ca.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/cs.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/cy.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/da.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/de.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/el.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/en-au.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/en-ca.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/en-gb.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/en.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/eo.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/es.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/et.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/eu.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/fa.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/fi.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/fo.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/fr-ca.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/fr.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/gl.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/gu.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/he.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/hi.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/hr.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/hu.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/id.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/is.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/it.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/ja.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/ka.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/km.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/ko.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/ku.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/lt.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/lv.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/mk.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/mn.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/ms.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/nb.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/nl.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/no.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/pl.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/pt-br.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/pt.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/ro.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/ru.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/si.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/sk.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/sl.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/sq.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/sr-latn.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/sr.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/sv.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/th.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/tr.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/tt.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/ug.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/uk.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/vi.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/zh-cn.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/lang/zh.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/LICENSE.md">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/a11yhelp.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/af.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/ar.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/bg.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/ca.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/cs.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/cy.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/da.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/de.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/el.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/en-gb.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/en.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/eo.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/es.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/et.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/fa.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/fi.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/fr-ca.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/fr.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/gl.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/gu.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/he.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/hi.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/hr.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/hu.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/id.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/it.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/ja.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/km.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/ko.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/ku.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/lt.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/lv.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/mk.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/mn.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/nb.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/nl.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/no.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/pl.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/pt-br.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/pt.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/ro.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/ru.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/si.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/sk.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/sl.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/sq.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/sr-latn.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/sr.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/sv.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/th.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/tr.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/tt.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/ug.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/uk.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/vi.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/zh-cn.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/zh.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/a11yhelp/dialogs/lang/_translationstatus.txt">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/about/dialogs/about.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/about/dialogs/hidpi/logo_ckeditor.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/about/dialogs/logo_ckeditor.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/clipboard/dialogs/paste.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/custom/plugin.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/dialog/dialogDefinition.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/icons.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/icons_hidpi.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/image/dialogs/image.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/image/images/noimage.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/imagepaste/docs/install.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/imagepaste/docs/styles.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/imagepaste/plugin.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/link/dialogs/anchor.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/link/dialogs/link.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/link/images/anchor.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/link/images/hidpi/anchor.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/magicline/images/hidpi/icon-rtl.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/magicline/images/hidpi/icon.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/magicline/images/icon-rtl.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/magicline/images/icon.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/pastefromword/filter/default.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/scayt/dialogs/options.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/scayt/dialogs/toolbar.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/scayt/LICENSE.md">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/scayt/README.md">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/af.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/ar.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/bg.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/ca.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/cs.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/cy.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/da.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/de.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/el.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/en-gb.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/en.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/eo.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/es.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/et.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/fa.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/fi.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/fr-ca.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/fr.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/gl.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/he.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/hr.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/hu.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/id.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/it.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/ja.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/km.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/ku.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/lt.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/lv.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/nb.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/nl.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/no.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/pl.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/pt-br.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/pt.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/ru.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/si.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/sk.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/sl.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/sq.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/sv.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/th.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/tr.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/tt.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/ug.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/uk.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/vi.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/zh-cn.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/zh.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/lang/_translationstatus.txt">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/specialchar/dialogs/specialchar.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/table/dialogs/table.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/tabletools/dialogs/tableCell.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/wsc/dialogs/ciframe.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/wsc/dialogs/tmpFrameset.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/wsc/dialogs/wsc.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/wsc/dialogs/wsc.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/wsc/dialogs/wsc_ie.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/wsc/LICENSE.md">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/plugins/wsc/README.md">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/README.md">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/ajax.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/api.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/appendto.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/assets/inlineall/logo.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/assets/outputxhtml/outputxhtml.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/assets/posteddata.php">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/assets/sample.jpg">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/assets/uilanguages/languages.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/datafiltering.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/divreplace.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/index.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/inlineall.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/inlinebycode.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/inlinetextarea.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/jquery.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/plugins/dialog/assets/my_dialog.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/plugins/dialog/dialog.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/plugins/enterkey/enterkey.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/plugins/htmlwriter/assets/outputforflash/outputforflash.fla">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/plugins/htmlwriter/assets/outputforflash/outputforflash.swf">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/plugins/htmlwriter/assets/outputforflash/swfobject.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/plugins/htmlwriter/outputforflash.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/plugins/htmlwriter/outputhtml.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/plugins/magicline/magicline.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/plugins/toolbar/toolbar.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/plugins/wysiwygarea/fullpage.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/readonly.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/replacebyclass.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/replacebycode.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/sample.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/sample.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/sample_posteddata.php">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/tabindex.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/uicolor.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/uilanguages.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/samples/xhtmlstyle.html">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/dialog.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/dialog_ie.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/dialog_ie7.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/dialog_ie8.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/dialog_iequirks.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/editor.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/editor_gecko.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/editor_ie.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/editor_ie7.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/editor_ie8.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/editor_iequirks.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/icons.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/icons_hidpi.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/images/arrow.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/images/close.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/images/hidpi/close.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/images/hidpi/lock-open.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/images/hidpi/lock.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/images/hidpi/refresh.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/images/lock-open.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/images/lock.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/images/refresh.png">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/skins/moono/readme.md">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/ckeditor/styles.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/CrossDomainRequestPlugin.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/jquery.contextMenu.js">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/jquery.ui.position.js">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/jqueryBlockUI.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/MarkerClustererPlus.js">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/OpenTip.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/OverlappingMarkerSpiderfier.js">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/controls/slick.columnpicker.css">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/controls/slick.columnpicker.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/controls/slick.pager.css">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/controls/slick.pager.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-bg_flat_0_aaaaaa_40x100.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-bg_flat_75_ffffff_40x100.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-bg_glass_55_fbf9ee_1x400.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-bg_glass_65_ffffff_1x400.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-bg_glass_75_dadada_1x400.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-bg_glass_75_e6e6e6_1x400.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-bg_glass_95_fef1ec_1x400.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-icons_222222_256x240.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-icons_2e83ff_256x240.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-icons_454545_256x240.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-icons_888888_256x240.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/images/ui-icons_cd0a0a_256x240.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/css/smoothness/jquery-ui-1.8.16.custom.css">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/actions.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/ajax-loader-small.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/arrow_redo.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/arrow_right_peppermint.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/arrow_right_spearmint.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/arrow_undo.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/bullet_blue.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/bullet_star.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/bullet_toggle_minus.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/bullet_toggle_plus.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/calendar.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/collapse.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/comment_yellow.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/down.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/drag-handle.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/editor-helper-bg.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/expand.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/header-bg.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/header-columns-bg.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/header-columns-over-bg.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/help.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/info.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/listview.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/pencil.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/row-over-bg.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/sort-asc.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/sort-asc.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/sort-desc.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/sort-desc.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/stripes.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/tag_red.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/tick.png">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/user_identity.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/images/user_identity_plus.gif">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/lib/firebugx.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/lib/jquery-1.7.min.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/lib/jquery-ui-1.8.16.custom.min.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/lib/jquery.event.drag-2.2.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/lib/jquery.event.drop-2.2.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/lib/jquery.jsonp-2.4.min.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/lib/jquery.simulate.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/lib/jquery.sparkline.min.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/lib/qunit.css">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/lib/qunit.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/MIT-LICENSE.txt">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/plugins/slick.autotooltips.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/plugins/slick.cellcopymanager.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/plugins/slick.cellrangedecorator.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/plugins/slick.cellrangeselector.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/plugins/slick.cellselectionmodel.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/plugins/slick.checkboxselectcolumn.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/plugins/slick.headerbuttons.css">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/plugins/slick.headerbuttons.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/plugins/slick.headermenu.css">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/plugins/slick.headermenu.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/plugins/slick.rowmovemanager.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/plugins/slick.rowselectionmodel.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/README.md">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/slick-default-theme.css">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/slick.core.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/slick.dataview.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/slick.editors.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/slick.formatters.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/slick.grid.css">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/slick.grid.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/slick.groupitemmetadataprovider.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/SlickGrid/slick.remotemodel.js">
+      <publishTime>01/09/2019 15:58:20</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/tooltip.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/3rdParty/waitForImage.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/AppStart.js">
+      <publishTime>01/10/2019 11:51:05</publishTime>
+    </File>
+    <File Include="Scripts/Core/ComboSelect.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/CommReports.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/Communication.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/CommunicationTemplates.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/ContactDetailsEditorWidget.js">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Scripts/Core/ContactListsManager.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/ContentExpanderWidget.js">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Scripts/Core/DocumentVault.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/DrawingMultiSelect.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/Extensions.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/Filtering.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/PropertyInformation.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/ProspectingContactMenuBuilder.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/ProspectingDefault.js">
+      <publishTime>01/10/2019 13:22:34</publishTime>
+    </File>
+    <File Include="Scripts/Core/ProspectingMenuBuilder.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/ProspectingObjectBuilder.js">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/Core/Utils.js">
+      <publishTime>01/10/2019 12:25:08</publishTime>
+    </File>
+    <File Include="Scripts/StyleSheets/ComboSelect.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/StyleSheets/ContactDetailsEditorWidgetStyles.css">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Scripts/StyleSheets/ContentExpanderWidgetStyles.css">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Scripts/StyleSheets/Default.css">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Scripts/StyleSheets/jquery.contextMenu.css">
+      <publishTime>01/09/2019 15:58:22</publishTime>
+    </File>
+    <File Include="Scripts/StyleSheets/OpenTip.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/StyleSheets/Panel.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/StyleSheets/ProspectingDefault.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Scripts/StyleSheets/tooltip.css">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Service References/DracoreETLConsumerService/ProspectingProject.DracoreETLConsumerService.CompanySearch.datasource">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Service References/ProspectingUserAuthService/ProspectingProject.ProspectingUserAuthService.MarketShareUserAuthPacket.datasource">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Service References/ProspectingUserAuthService/ProspectingProject.ProspectingUserAuthService.ProspectingUserAuthPacket.datasource">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Service References/ProspectingUserAuthService/ProspectingProject.ProspectingUserAuthService.SpatialUserAuthPacket.datasource">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Web References/IdValidatorService/Reference.map">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Web References/IdValidatorService/saidType.datasource">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>01/09/2019 15:58:21</publishTime>
+    </File>
+  </ItemGroup>
 </Project>

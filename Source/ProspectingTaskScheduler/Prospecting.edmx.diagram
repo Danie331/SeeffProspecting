@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ae7d1ddae0ae4c4199d2d546d872e51c" Name="Diagram1" >
+        <EntityTypeShape EntityType="seeff_prospectingModel.activity_log" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.prospecting_contact_detail" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.sms_communications_log" Width="1.5" PointX="3" PointY="4.875" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__sms_commu__activ__7167D3BD" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__sms_commu__follo__73501C2F" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.prospecting_contact_person" Width="1.5" PointX="5.25" PointY="1.25" />
+        <AssociationConnector Association="seeff_prospectingModel.FK_contact_person_id" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__prospecti__conta__3E52440B" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__sms_commu__targe__753864A1" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.prospecting_area_dialing_code" Width="1.5" PointX="7.375" PointY="0.875" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__prospecti__intl___3C69FB99" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.client_sync_log" Width="1.5" PointX="7.5" PointY="4" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__client_sy__conta__05F8DC4F" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.prospecting_person_property_relationship" Width="1.5" PointX="7.5" PointY="7.625" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__prospecti__conta__47DBAE45" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.exception_log" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.email_communications_log" Width="1.5" PointX="10.5" PointY="3.875" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__email_com__activ__69C6B1F5" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__email_com__follo__6BAEFA67" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__email_com__targe__6D9742D9" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.activity_type" Width="1.5" PointX="0.75" PointY="12" />
+        <AssociationConnector Association="seeff_prospectingModel.FK_activity_type_id" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__email_com__batch__6ABAD62E" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__sms_commu__batch__725BF7F6" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.activity_followup_type" Width="1.5" PointX="11.375" PointY="0.875" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__activity___activ__1B9317B3" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.prospecting_property" Width="1.5" PointX="3.375" PointY="12.375" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__prospecti__prosp__46E78A0C" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.prospecting_contact_detail_type" Width="1.5" PointX="5.375" PointY="11.875" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__prospecti__conta__3D5E1FD2" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.communications_status" Width="1.5" PointX="7.375" PointY="11.875" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__email_com__statu__6CA31EA0" />
+        <AssociationConnector Association="seeff_prospectingModel.FK__sms_commu__statu__74444068" />
+        <EntityTypeShape EntityType="seeff_prospectingModel.lightstone_call_log" Width="1.5" PointX="9.375" PointY="11.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

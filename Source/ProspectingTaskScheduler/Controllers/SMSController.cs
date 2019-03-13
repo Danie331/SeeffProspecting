@@ -5,11 +5,13 @@ using ProspectingTaskScheduler.Core.Housekeeping;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 
@@ -18,16 +20,16 @@ namespace ProspectingTaskScheduler.Controllers
     public class SMSController : ApiController
     {
         [HttpGet]
-        public void ProcessReply()
+        public async Task ProcessReply()
         {
             try
             {
                 NameValueCollection nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
-                using (var prospecting = new ProspectingDataContext())
+                using (var prospecting = new seeff_prospectingEntities())
                 {
                     // Find the latest matching record for this userid (by latest I mean the last record inserted)
                     string apiTrackingID = nvc["panacea_msg_uuid"];
-                    var targetRecord = prospecting.sms_communications_logs.FirstOrDefault(rec => rec.api_tracking_id == apiTrackingID);
+                    var targetRecord = await prospecting.sms_communications_log.FirstOrDefaultAsync(rec => rec.api_tracking_id == apiTrackingID);
                     if (targetRecord != null)
                     {
                         string replyText = nvc["message"] ?? string.Empty;
@@ -51,13 +53,13 @@ namespace ProspectingTaskScheduler.Controllers
                                 parent_activity_id = targetRecord.activity_log_id,
                                 activity_followup_type_id = 2 // NB soft code this at a later stage                            
                             };
-                            prospecting.activity_logs.InsertOnSubmit(followupActivity);
-                            prospecting.SubmitChanges();
+                            prospecting.activity_log.Add(followupActivity);
+                            await prospecting.SaveChangesAsync();
                             followupActivityId = followupActivity.activity_log_id;
                         }
 
                         targetRecord.followup_activity_id = followupActivityId;
-                        prospecting.SubmitChanges();
+                        await prospecting.SaveChangesAsync();
 
                         // Capture email address against contact if present in reply:
                         Regex regex = new Regex(@"\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b");
@@ -69,8 +71,8 @@ namespace ProspectingTaskScheduler.Controllers
                             string email = target.Value;
 
                             // Find all email addresses associated with this contact person and see if ours already exists
-                            var existingContactDetails = prospecting.prospecting_contact_details.Where(cd => cd.contact_person_id == targetRecord.target_contact_person_id);
-                            bool contactDetailExists = existingContactDetails.FirstOrDefault(ed => ed.contact_detail == email) != null;
+                            var existingContactDetails = prospecting.prospecting_contact_detail.Where(cd => cd.contact_person_id == targetRecord.target_contact_person_id);
+                            bool contactDetailExists = await existingContactDetails.FirstOrDefaultAsync(ed => ed.contact_detail == email) != null;
                             if (!contactDetailExists)
                             {
                                 prospecting_contact_detail newEmailAddress = new prospecting_contact_detail
@@ -80,24 +82,24 @@ namespace ProspectingTaskScheduler.Controllers
                                     contact_detail = email,
                                     is_primary_contact = false                                     
                                 };
-                                prospecting.prospecting_contact_details.InsertOnSubmit(newEmailAddress);
-                                prospecting.SubmitChanges();
-                                ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(newEmailAddress.contact_person_id, newEmailAddress.prospecting_contact_person.created_by);
+                                prospecting.prospecting_contact_detail.Add(newEmailAddress);
+                                await prospecting.SaveChangesAsync();
+                                await ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(newEmailAddress.contact_person_id, newEmailAddress.prospecting_contact_person.created_by);
                             } 
                         }
 
                         if (replyText.ToUpper() == "STOP")
                         {
                             // Opt-out
-                            var targetContactPersonRecord = prospecting.prospecting_contact_persons.FirstOrDefault(c => c.contact_person_id == targetRecord.target_contact_person_id);
+                            var targetContactPersonRecord = await prospecting.prospecting_contact_person.FirstOrDefaultAsync(c => c.contact_person_id == targetRecord.target_contact_person_id);
                             // We need to find the record for the cell phone number that was used
                             if (targetContactPersonRecord != null)
                             {
                                 targetContactPersonRecord.optout_sms = true;
-                                prospecting.SubmitChanges();
-                                ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(targetContactPersonRecord.contact_person_id, targetContactPersonRecord.created_by);
+                                await prospecting.SaveChangesAsync();
+                                await ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(targetContactPersonRecord.contact_person_id, targetContactPersonRecord.created_by);
                                 string cellMatch = null;
-                                foreach (var cd in targetContactPersonRecord.prospecting_contact_details)
+                                foreach (var cd in targetContactPersonRecord.prospecting_contact_detail)
                                 {
                                     if (cd.intl_dialing_code_id == null)
                                         continue;
@@ -111,12 +113,12 @@ namespace ProspectingTaskScheduler.Controllers
                                 }
                                 if (!string.IsNullOrEmpty(cellMatch))
                                 {
-                                    var allMatches = prospecting.prospecting_contact_details.Where(cd => cd.contact_detail == cellMatch);
-                                    foreach (var item in allMatches)
+                                    var allMatches = prospecting.prospecting_contact_detail.Where(cd => cd.contact_detail == cellMatch);
+                                    foreach (var item in await allMatches.ToListAsync())
                                     {
                                         item.prospecting_contact_person.optout_sms = true;
-                                        prospecting.SubmitChanges();
-                                        ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(item.contact_person_id, item.prospecting_contact_person.created_by);
+                                        await prospecting.SaveChangesAsync();
+                                        await ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(item.contact_person_id, item.prospecting_contact_person.created_by);
                                     }
                                 }
                             }
@@ -141,18 +143,18 @@ namespace ProspectingTaskScheduler.Controllers
         }
 
         [HttpGet]
-        public void UpdateDeliveryStatus()
+        public async Task UpdateDeliveryStatus()
         {
             try
             {
                 NameValueCollection nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
                 var param1 = nvc["recordID"];
                 var param2 = nvc["status"];
-                using (var prospecting = new ProspectingDataContext())
+                using (var prospecting = new seeff_prospectingEntities())
                 {
                     int recordID = Convert.ToInt32(param1);
                     int apistatus = Convert.ToInt32(param2);
-                    var targetRecord = prospecting.sms_communications_logs.FirstOrDefault(item => item.sms_communications_log_id == recordID);
+                    var targetRecord = await prospecting.sms_communications_log.FirstOrDefaultAsync(item => item.sms_communications_log_id == recordID);
                     if (targetRecord != null)
                     {
                         switch(apistatus)
@@ -161,7 +163,7 @@ namespace ProspectingTaskScheduler.Controllers
                                 targetRecord.status = CommunicationHelpers.GetCommunicationStatusId("SMS_DELIVERED");
                                 if (targetRecord.activity_log_id == null)
                                 {
-                                    targetRecord.activity_log_id = SMSHandler.CreateActivityForRecord(targetRecord);
+                                    targetRecord.activity_log_id = await SMSHandler.CreateActivityForRecord(targetRecord);
                                 }
                                 targetRecord.api_delivery_status = "Delivered";
                                 break;
@@ -189,7 +191,7 @@ namespace ProspectingTaskScheduler.Controllers
 
                         targetRecord.updated_datetime = DateTime.Now;
 
-                        prospecting.SubmitChanges();
+                        await prospecting.SaveChangesAsync();
                     }
                 }
             }
