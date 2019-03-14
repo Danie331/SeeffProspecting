@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketShareAppReleaseOptimiser", "MarketShareProjectReleaseBuilder\MarketShareAppReleaseOptimiser.csproj", "{4871E3F5-911A-45EC-9471-B123DA3E617D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProspectingProject", "ProspectingProject\ProspectingProject.csproj", "{361553D3-8CD3-4BB0-87EA-B11013C1FB8E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{083AD503-D7B6-4507-A117-193B1E13F185} = {083AD503-D7B6-4507-A117-193B1E13F185}
@@ -317,10 +315,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4871E3F5-911A-45EC-9471-B123DA3E617D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4871E3F5-911A-45EC-9471-B123DA3E617D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4871E3F5-911A-45EC-9471-B123DA3E617D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4871E3F5-911A-45EC-9471-B123DA3E617D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{361553D3-8CD3-4BB0-87EA-B11013C1FB8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{361553D3-8CD3-4BB0-87EA-B11013C1FB8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{361553D3-8CD3-4BB0-87EA-B11013C1FB8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -367,5 +361,8 @@ Global
 		{103F53C2-08F3-4B27-B767-8C8EA26BA95C} = {F2E7C5E6-E64B-4B83-AA41-6B9DD89F0B9B}
 		{074C4602-68DF-4CAC-975D-2C938E6DBF5D} = {F2E7C5E6-E64B-4B83-AA41-6B9DD89F0B9B}
 		{D3678A6C-C3BD-4BAB-8974-49A95B433DFA} = {F2E7C5E6-E64B-4B83-AA41-6B9DD89F0B9B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6900C168-B94F-4966-86FB-EA51D958FE62}
 	EndGlobalSection
 EndGlobal

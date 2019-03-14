@@ -26,6 +26,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -167,6 +168,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\MS_publish.pubxml" />
     <None Include="Service References\AuthService\SeeffProspectingAuthService.disco" />
     <None Include="Service References\AuthService\configuration91.svcinfo" />

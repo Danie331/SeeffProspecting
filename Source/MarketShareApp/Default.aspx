@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 
     <%-- Google maps API access (note server key) --%>
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDWHlk3fmGm0oDsqVaoBM3_YocW5xPKtwA&libraries=drawing,geometry,places&sensor=true&v=3.30"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBzPnnvalo0QCtGgQn17e5nbRS8yyDpcuM&libraries=drawing,geometry,places&sensor=true&v=3.30"></script>
 
     <%-- 3rd party libs --%>
     <script src="Scripts/3rdParty/MarkerClustererPlus.js"></script>
