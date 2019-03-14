@@ -262,10 +262,11 @@ function buildFilterItemsAndSummaryInfo() {
         //div.append(buildInputCheckbox("2012", "2012_filter", "left", 2, 2, true, handleFilterItemClick));
         //div.append(buildInputCheckbox("2013", "2013_filter", "left", 2, 2, true, handleFilterItemClick));
         //div.append(buildInputCheckbox("2014", "2014_filter", "left", 2, 2, true, handleFilterItemClick));
-        div.append(buildInputCheckbox("2015", "2015_filter", "left", 2, 2, true, handleFilterItemClick));
+        //div.append(buildInputCheckbox("2015", "2015_filter", "left", 2, 2, true, handleFilterItemClick));
         div.append(buildInputCheckbox("2016", "2016_filter", "left", 2, 2, true, handleFilterItemClick));
         div.append(buildInputCheckbox("2017", "2017_filter", "left", 2, 2, true, handleFilterItemClick));
         div.append(buildInputCheckbox("2018", "2018_filter", "left", 2, 2, true, handleFilterItemClick));
+        div.append(buildInputCheckbox("2019", "2019_filter", "left", 2, 2, true, handleFilterItemClick));
 
         return div;
     }
@@ -305,7 +306,7 @@ function buildFilterItemsAndSummaryInfo() {
 
     filterSets.push(["FH_filter", "SS_filter"]);
     filterSets.push(["R_filter", "C_filter", "A_filter", "D_filter", "O_filter", "P_filter"]);
-    filterSets.push(["2015_filter", "2016_filter", "2017_filter", "2018_filter"]);
+    filterSets.push(["2016_filter", "2017_filter", "2018_filter", "2019_filter"]);
     // The filter set below is handled differently to the rest. See filtering.js
     filterSets.push(["forsale_filter", "forrent_filter"]);
     filterSets.push(["withagencyassigned_filter", "withoutagencyassigned_filter"]);
@@ -624,11 +625,12 @@ function openResultOnMap(searchResult) {
         })[0];
         // trigger the marker click event.
         openInfoWindow(target.Marker);
-        var pos = calcMapCenterWithOffset(target.LatLong.Lat, target.LatLong.Lng, -350, 0);
-        if (pos) {
-            //map.setZoom(13);
-            map.setCenter(pos);
-        }     
+        try {
+            panToWithOffset(new google.maps.LatLng(target.LatLong.Lat, target.LatLong.Lng), -350, 0);
+        }
+        catch (e) {
+            console.log(e);
+        }
     });
 
     //setTimeout(function () {

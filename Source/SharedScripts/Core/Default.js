@@ -88,7 +88,7 @@ function initializeMap(defaultZoomAndLocation) {
                 content: ""
             });
 
-            calcMapCenterWithOffset(defaultLat, defaultLng, 0, 0);           
+            panToWithOffset(center, 0, 0);
         });
     }
 }
@@ -661,11 +661,11 @@ function setZoomToTarget(suburb) {
     if (suburb && suburb.Listings && suburb.Listings.length) {
         var target = suburb.Listings[0];
         map.setZoom(15);
-        var pos = calcMapCenterWithOffset(target.LatLong.Lat, target.LatLong.Lng, -350, 0);
-        if (pos) {
-            map.setCenter(pos);
+
+        try {
+            panToWithOffset(new google.maps.LatLng(target.LatLong.Lat, target.LatLong.Lng), -350, 0);
         }
-        else {
+        catch (e) {
             map.setCenter(suburb.PolyCoords[0]);
         }
     }

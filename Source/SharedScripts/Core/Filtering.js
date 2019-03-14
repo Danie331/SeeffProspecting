@@ -109,10 +109,11 @@ function applyFilter(markersToFilter, filter, isChecked) {
         //case "2012":
         //case "2013":
         //case "2014":
-        case "2015":
+        //case "2015":
         case "2016":
         case "2017":
         case "2018":
+        case "2019":
             return filterYear(markersToFilter, filter, isChecked);
         case "Seeff":
         case "PGP":
