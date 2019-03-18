@@ -14,7 +14,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
         {
             try
             {
-                string connStr = WebConfigurationManager.ConnectionStrings["seeff_prospectingConnectionString"].ConnectionString;                
+                string connStr = WebConfigurationManager.ConnectionStrings["seeff_prospectingEntities"].ConnectionString;                
                 using (var connection = new SqlConnection(connStr))
                 {
                     using (var command = new SqlCommand(string.Format("SELECT db_id('{0}')", "Seeff_Deeds"), connection))

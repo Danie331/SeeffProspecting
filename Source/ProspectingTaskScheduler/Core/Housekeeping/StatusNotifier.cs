@@ -1,5 +1,6 @@
 ﻿using Hangfire;
 using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -28,7 +29,7 @@ namespace ProspectingTaskScheduler.Core.Housekeeping
                 using (var prospecting = new seeff_prospectingEntities())
                 {
                     DateTime yesterday = DateTime.Now.AddDays(-1).Date;
-                    var yesterdaysCalls = prospecting.lightstone_call_log.Where(s => s.date_time.Date == yesterday);
+                    var yesterdaysCalls = prospecting.lightstone_call_log.Where(s => DbFunctions.TruncateTime(s.date_time) == yesterday);
                     foreach (var item in yesterdaysCalls)
                     {
                         cancellationToken.ThrowIfCancellationRequested();

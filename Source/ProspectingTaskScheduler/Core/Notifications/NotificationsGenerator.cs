@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -166,10 +167,10 @@ namespace ProspectingTaskScheduler.Core.Notifications
                 results.Username = user != null ? string.Concat(user.user_name, " ", user.user_surname) : "n/a";
                 results.UserRegistrationID = user != null ? user.registration_id : -1;
                 List<long?> parentIds = prospecting.activity_log.Where(a => a.parent_activity_id != null).Select(a => a.parent_activity_id).ToList();
-
+                var today = DateTime.Today;
                 var todaysFollowups = prospecting.activity_log.Where(act => act.allocated_to == userGuid &&
                                                                                 act.followup_date != null &&
-                                                                                act.followup_date.Value.Date == DateTime.Today).ToList();
+                                                                                DbFunctions.TruncateTime(act.followup_date) == today).ToList();
                 todaysFollowups = todaysFollowups.Where(act => !parentIds.Contains(act.activity_log_id)).ToList();
                 todaysFollowups = todaysFollowups.OrderByDescending(act => act.followup_date).ToList();
                 foreach (var item in todaysFollowups)
@@ -181,8 +182,8 @@ namespace ProspectingTaskScheduler.Core.Notifications
                 DateTime next3days = DateTime.Today.AddDays(3.0).Date;
                 var futureFollowups = prospecting.activity_log.Where(act => act.allocated_to == userGuid &&
                                                                                 act.followup_date != null &&
-                                                                                act.followup_date.Value.Date > DateTime.Today &&
-                                                                                act.followup_date.Value.Date <= next3days).ToList();
+                                                                                DbFunctions.TruncateTime(act.followup_date) > today &&
+                                                                                DbFunctions.TruncateTime(act.followup_date) <= next3days).ToList();
                 futureFollowups = futureFollowups.Where(act => !parentIds.Contains(act.activity_log_id)).ToList();
                 futureFollowups = futureFollowups.OrderBy(act => act.followup_date).ToList();
                 foreach (var item in futureFollowups)
@@ -193,7 +194,7 @@ namespace ProspectingTaskScheduler.Core.Notifications
 
                 var unactionedFollowups = prospecting.activity_log.Where(act => act.allocated_to == userGuid &&
                                                                                 act.followup_date != null &&
-                                                                                act.followup_date.Value.Date < DateTime.Today).ToList();
+                                                                                DbFunctions.TruncateTime(act.followup_date) < today).ToList();
                 unactionedFollowups = unactionedFollowups.Where(act => !parentIds.Contains(act.activity_log_id)).ToList();
                 unactionedFollowups = unactionedFollowups.OrderByDescending(act => act.followup_date).ToList();
                 foreach (var item in unactionedFollowups)

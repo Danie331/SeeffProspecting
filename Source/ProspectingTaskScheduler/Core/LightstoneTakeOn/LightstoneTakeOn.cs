@@ -31,6 +31,8 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                 // Step 1: check if seeff_deeds DB exists
                 if (!SeeffDeedsExists(reportBuilder)) return;
 
+                Utils.LogException(new Exception("<<< Starting PerformBaseDataTakeOn() >>>", null));
+
                 _processing = true;
 
                 SendEmailReport("Starting Lightstone take-on, Step1 confirms existence of Seeff_Deeds. Starting Step2 at: " + DateTime.Now, reportBuilder);
@@ -79,6 +81,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                 AutoFateDevelopments(reportBuilder);
 
                 SendEmailReport("<br /> Step 10 completed successfully.<p /><p />------------ Take-on completed succesfully at: " + DateTime.Now + " ------------", reportBuilder);
+                Utils.LogException(new Exception("<<< Finished PerformBaseDataTakeOn() >>>", null));
             }
             catch (OperationCanceledException)
             {
@@ -90,6 +93,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                 SendEmailReport("<p /> Fatal error occurred in Lightstone data take-on. Process aborted with error: " + ex.ToString() +
                                 "<br /> -------- Stack Trace --------" +
                                 "<p />" + ex.StackTrace, reportBuilder);
+                Utils.LogException(new Exception("<<< Error in PerformBaseDataTakeOn() >>>", ex));
             }
         }
 
@@ -97,7 +101,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
         {
             reportBuilder.AppendLine(message);
 
-            string emailToAddress = "danie.vdm@seeff.com";
+            string emailToAddress = "danievdm85@gmail.com";
             string emailDisplayName = "ProspectingTaskScheduler";
             string emailFromAddress = "reports@seeff.com";
             string emaiLSubject = "Notification: Lightstone data take-on";
