@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,9 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
         {
             try
             {
-                string connStr = WebConfigurationManager.ConnectionStrings["seeff_prospectingEntities"].ConnectionString;                
+                string connStr = WebConfigurationManager.ConnectionStrings["seeff_prospectingEntities"].ConnectionString;
+                var efConn = new EntityConnectionStringBuilder(connStr);
+                connStr = efConn.ProviderConnectionString;
                 using (var connection = new SqlConnection(connStr))
                 {
                     using (var command = new SqlCommand(string.Format("SELECT db_id('{0}')", "Seeff_Deeds"), connection))
