@@ -595,6 +595,7 @@ namespace ProspectingProject
                 }
             }
 
+            using (var baseData = new ls_baseEntities())
             using (var prospecting = new ProspectingDataContext())
             {
                 int? areaId;
@@ -641,10 +642,12 @@ namespace ProspectingProject
                     created_date = DateTime.Now
                 };
 
+                var recordInserted = false;
                 prospecting.prospecting_properties.InsertOnSubmit(newPropRecord);
                 try
                 {
                     prospecting.SubmitChanges(); // Create the property first before adding contacts
+                    recordInserted = true;
                 }
                 catch (Exception ex)
                 {
@@ -654,6 +657,21 @@ namespace ProspectingProject
                     }
 
                     throw;
+                }
+
+                if (recordInserted)
+                {
+                    var marketShareRecord = baseData.base_data.FirstOrDefault(bd => bd.property_id == newPropRecord.lightstone_property_id);
+                    if (marketShareRecord != null)
+                    {
+                        marketShareRecord.property_address = newPropRecord.property_address.TrimStart(new[] { ' ', ',', ' ' });
+                        marketShareRecord.street_or_unit_no = newPropRecord.street_or_unit_no;
+                        try
+                        {
+                            baseData.SaveChanges();
+                        }
+                        catch { }
+                    }
                 }
 
                 foreach (var owner in standaloneUnit.Owners)
@@ -2296,6 +2314,7 @@ namespace ProspectingProject
                 }
             }
 
+            using (var baseData = new ls_baseEntities())
             using (var prospecting = new ProspectingDataContext())
             {
                 prospecting.CommandTimeout = 4 * 60;
@@ -2370,10 +2389,12 @@ namespace ProspectingProject
                         created_date = DateTime.Now
                     };
 
+                    var recordInserted = false;
                     prospecting.prospecting_properties.InsertOnSubmit(newPropRecord);
                     try
                     {
                         prospecting.SubmitChanges(); // Create the property first before adding contacts
+                        recordInserted = true;
                     }
                     catch (Exception ex)
                     {
@@ -2383,6 +2404,22 @@ namespace ProspectingProject
                         }
 
                         throw;
+                    }
+
+                    if (recordInserted)
+                    {
+                        //do for fh, an for updating.
+                        var marketShareRecord = baseData.base_data.FirstOrDefault(bd => bd.property_id == newPropRecord.lightstone_property_id);
+                        if (marketShareRecord != null)
+                        {
+                            marketShareRecord.property_address = string.Concat(newPropRecord.ss_name, ", ", newPropRecord.property_address.TrimStart(new[] { ' ', ',', ' ' }));
+                            marketShareRecord.street_or_unit_no = newPropRecord.street_or_unit_no;
+                            try
+                            {
+                                baseData.SaveChanges();
+                            }
+                            catch {}
+                        }
                     }
 
                     foreach (var owner in unit.Owners)

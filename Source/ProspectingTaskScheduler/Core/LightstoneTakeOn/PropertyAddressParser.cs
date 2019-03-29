@@ -172,5 +172,30 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                 
             return "n/a";
         }
+
+        public static int?[] GetErfAndPortion(string erfKey)
+        {
+            var result = new int?[2] { null, null };
+            try
+            {
+                if (string.IsNullOrEmpty(erfKey))
+                    return result;
+
+                var parts = erfKey.Split(new[] { '~' });
+                if (parts.Length != 3)
+                    return result;
+
+                int erf = int.Parse(parts[1]);
+                int portion = int.Parse(parts[2].TrimStart(new[] { '0' }));
+                result[0] = erf;
+                result[1] = portion;
+
+                return result;
+            }
+            catch
+            {
+                return result;
+            }
+        }
     }
 }

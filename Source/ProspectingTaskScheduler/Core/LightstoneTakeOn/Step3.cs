@@ -20,13 +20,13 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                 NumberFormatInfo nfi = new NumberFormatInfo();
                 nfi.NumberDecimalSeparator = ".";
 
-                using (Seeff lightstoneService = new Seeff())
+                using (var prospecting = new seeff_prospectingEntities())
                 using (var spatial = new seeff_spatialEntities())
                 using (var seeffDeeds = new Seeff_DeedsEntities())
                 {
                     List<TakeOnRow> takeonRows = new List<TakeOnRow>();
                     var seeffDeedsConnection = seeffDeeds.Database.Connection as SqlConnection;
-                    SqlCommand cmd = new SqlCommand(@"SELECT unique_id, property_id, iregdate, Y, X FROM SEEFF_Deeds_Monthly
+                    SqlCommand cmd = new SqlCommand(@"SELECT unique_id, property_id, iregdate, Y, X, erf_key FROM SEEFF_Deeds_Monthly
                                                   WHERE is_for_insert = 1 AND seeff_area_id IS NULL", seeffDeedsConnection);
 
                     seeffDeedsConnection.Open();
@@ -45,13 +45,15 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                                     string regDate = reader.GetString(2);
                                     string lat = reader.GetDecimal(3).ToString(nfi);
                                     string lng = reader.GetDecimal(4).ToString(nfi);
+                                    string erfKey = reader.GetString(5);
                                     takeonRows.Add(new TakeOnRow
                                     {
                                         unique_id = uniqueID,
                                         property_id = propertyID,
                                         iregdate = regDate,
                                         Y = lat,
-                                        X = lng
+                                        X = lng,
+                                        erf_key = erfKey
                                     });
                                 }
                             }
@@ -90,31 +92,27 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                             seeffDeeds.Database.Connection.Open();
                         try
                         {
-                            DataSet lightstoneResult = null;
-                            try
+                            string streetOrUnitNo = "n/a";
+                            string streetAddress = "n/a";
+                            // try fetch address from prospecting here. update address on take-on, update address on prospecting new/updating prospecting
+                            var prospectingTarget = prospecting.prospecting_property.FirstOrDefault(pp => pp.lightstone_property_id == record.property_id);
+                            if (prospectingTarget != null)
                             {
-                                lightstoneResult = lightstoneService.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f",
-                                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-                                    record.property_id, 1, "", "", default(double), default(double));
+                                streetAddress = prospectingTarget.property_address.TrimStart(new[] { ' ', ',', ' ' });
+                                streetOrUnitNo = prospectingTarget.street_or_unit_no;
+                                if (prospectingTarget.ss_fh == "SS")
+                                {
+                                    streetAddress = string.Concat(prospectingTarget.ss_name, ", ", streetAddress);
+                                }
                             }
-                            catch (Exception ex)
+                            else
                             {
-                                Thread.Sleep(1000 * 60 * 5);
-
-                                lightstoneResult = lightstoneService.ReturnProperties_Seef("a44c998b-bb46-4bfb-942d-44b19a293e3f",
-                                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-                                    record.property_id, 1, "", "", default(double), default(double));
-                            }
-
-                            string streetOrUnitNo;
-                            string streetAddress = PropertyAddressParser.GetAddress(lightstoneResult, out streetOrUnitNo);
-                            if (string.IsNullOrEmpty(streetAddress))
-                            {
-                                streetAddress = "n/a";
+                                streetAddress = "Prospect to display address details";
                             }
 
-                            int erfNo = TryGetItem<int>(lightstoneResult.Tables["Properties"], "ERF");
-                            int portionNo = TryGetItem<int>(lightstoneResult.Tables["Properties"], "PORTION");
+                            var erfPortion = PropertyAddressParser.GetErfAndPortion(record.erf_key);
+                            int? erfNo = erfPortion[0];
+                            int? portionNo = erfPortion[1];
 
                             spatialCmd.CommandText = @"SELECT dbo.get_area_id(" + record.Y + "," + record.X + "," + -1 + ")";
                             int seeff_area_id;
@@ -204,8 +202,8 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                                                          WHERE unique_id = '{9}'",
                                                                  EscapeSqlStringLiteral(streetAddress),
                                                                  EscapeSqlStringLiteral(streetOrUnitNo),
-                                                                 erfNo,
-                                                                 portionNo,
+                                                                 erfNo.HasValue ? erfNo.Value.ToString() : "NULL",
+                                                                 portionNo.HasValue ? portionNo.Value.ToString() : "NULL",
                                                                  seeff_area_id,
                                                                  seeff_lic_id,
                                                                  territory_id,
@@ -233,12 +231,13 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
         }
 
         private class TakeOnRow
-        {
+        {            
             public string unique_id { get; set; }
             public int property_id { get; set; }
             public string iregdate { get; set; }
             public string Y { get; set; }
             public string X { get; set; }
+            public string erf_key { get; set; }
         }
 
         private static T TryGetItem<T>(DataTable dt, string propertyName)

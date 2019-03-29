@@ -27,5 +27,6 @@ namespace ProspectingProject
     
         public virtual DbSet<agency> agency { get; set; }
         public virtual DbSet<seeff_agents> seeff_agents { get; set; }
+        public virtual DbSet<base_data> base_data { get; set; }
     }
 }

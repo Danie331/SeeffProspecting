@@ -1336,6 +1336,9 @@
     <Compile Include="agency.cs">
       <DependentUpon>ls_base.tt</DependentUpon>
     </Compile>
+    <Compile Include="base_data.cs">
+      <DependentUpon>ls_base.tt</DependentUpon>
+    </Compile>
     <Compile Include="client.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

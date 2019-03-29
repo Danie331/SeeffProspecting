@@ -12,6 +12,58 @@
           <Property Name="agency_name" Type="varchar(max)" />
           <Property Name="agency_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
+        <EntityType Name="base_data">
+          <Key>
+            <PropertyRef Name="base_data_id" />
+          </Key>
+          <Property Name="ls_area_id" Type="int" />
+          <Property Name="seeff_lic_area" Type="varchar" MaxLength="100" />
+          <Property Name="property_id" Type="int" />
+          <Property Name="iregdate" Type="varchar" MaxLength="8" />
+          <Property Name="ipurchdate" Type="numeric" Precision="11" Scale="0" />
+          <Property Name="title_deed_no" Type="varchar" MaxLength="20" />
+          <Property Name="non_gar_props_on_title" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="purch_price" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="erf_key" Type="varchar" MaxLength="60" />
+          <Property Name="ea_code" Type="varchar" MaxLength="10" />
+          <Property Name="suburb" Type="varchar" MaxLength="40" />
+          <Property Name="munic_name" Type="varchar" MaxLength="40" />
+          <Property Name="province" Type="varchar" MaxLength="40" />
+          <Property Name="property_type" Type="varchar" MaxLength="3" />
+          <Property Name="ss_fh" Type="varchar" MaxLength="4" />
+          <Property Name="property_currently_in_pvt_hands" Type="varchar" MaxLength="10" />
+          <Property Name="private_registration" Type="varchar" MaxLength="10" />
+          <Property Name="bonded_transfer" Type="varchar" MaxLength="20" />
+          <Property Name="suburb_id" Type="int" />
+          <Property Name="erf_size" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="buyer_name" Type="varchar" MaxLength="70" />
+          <Property Name="seller_name" Type="varchar" MaxLength="70" />
+          <Property Name="property_address" Type="varchar" MaxLength="255" />
+          <Property Name="ls_resflg" Type="bit" />
+          <Property Name="estate_name" Type="varchar" MaxLength="100" />
+          <Property Name="buyer_name_2" Type="varchar" MaxLength="100" />
+          <Property Name="multibuyer" Type="varchar" MaxLength="10" />
+          <Property Name="seeff_suburb" Type="varchar" MaxLength="100" />
+          <Property Name="seeff_suburb_id" Type="int" />
+          <Property Name="seeff_suburb_type" Type="varchar" MaxLength="10" />
+          <Property Name="seeff_lic_id" Type="int" />
+          <Property Name="x" Type="decimal" Precision="13" Scale="8" />
+          <Property Name="y" Type="decimal" Precision="13" Scale="8" />
+          <Property Name="seeff_area_id" Type="int" />
+          <Property Name="unique_id" Type="nvarchar" MaxLength="50" />
+          <Property Name="seeff_deal" Type="bit" />
+          <Property Name="fated" Type="bit" />
+          <Property Name="market_share_type" Type="varchar" MaxLength="1" />
+          <Property Name="base_data_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="agency_id" Type="int" />
+          <Property Name="street_or_unit_no" Type="varchar" MaxLength="255" />
+          <Property Name="erf_no" Type="int" />
+          <Property Name="portion_no" Type="int" />
+          <Property Name="parent_property_id" Type="int" />
+          <Property Name="sale_includes_others_flag" Type="bit" />
+          <Property Name="fk_territory_id" Type="int" />
+          <Property Name="fated_date" Type="datetime" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'ls_base.dbo.seeff_agents' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="seeff_agents">
@@ -24,6 +76,7 @@ warning 6002: The table/view 'ls_base.dbo.seeff_agents' does not have a primary 
         </EntityType>
         <EntityContainer Name="ls_baseModelStoreContainer">
           <EntitySet Name="agency" EntityType="Self.agency" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="base_data" EntityType="Self.base_data" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="seeff_agents" EntityType="Self.seeff_agents" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [seeff_agents].[agentId] AS [agentId], 
@@ -45,6 +98,7 @@ warning 6002: The table/view 'ls_base.dbo.seeff_agents' does not have a primary 
         <EntityContainer Name="ls_baseEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="agency" EntityType="Self.agency" />
           <EntitySet Name="seeff_agents" EntityType="ls_baseModel.seeff_agents" />
+          <EntitySet Name="base_data" EntityType="ls_baseModel.base_data" />
         </EntityContainer>
         <EntityType Name="seeff_agents">
           <Key>
@@ -53,6 +107,58 @@ warning 6002: The table/view 'ls_base.dbo.seeff_agents' does not have a primary 
           </Key>
           <Property Name="agentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="agentName" Type="String" Nullable="false" MaxLength="101" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="base_data">
+          <Key>
+            <PropertyRef Name="base_data_id" />
+          </Key>
+          <Property Name="ls_area_id" Type="Int32" />
+          <Property Name="seeff_lic_area" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="property_id" Type="Int32" />
+          <Property Name="iregdate" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="ipurchdate" Type="Decimal" Precision="11" Scale="0" />
+          <Property Name="title_deed_no" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="non_gar_props_on_title" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="purch_price" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="erf_key" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="ea_code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="suburb" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="munic_name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="province" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="property_type" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="ss_fh" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="property_currently_in_pvt_hands" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="private_registration" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="bonded_transfer" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="suburb_id" Type="Int32" />
+          <Property Name="erf_size" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="buyer_name" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="seller_name" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="property_address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ls_resflg" Type="Boolean" />
+          <Property Name="estate_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="buyer_name_2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="multibuyer" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="seeff_suburb" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="seeff_suburb_id" Type="Int32" />
+          <Property Name="seeff_suburb_type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="seeff_lic_id" Type="Int32" />
+          <Property Name="x" Type="Decimal" Precision="13" Scale="8" />
+          <Property Name="y" Type="Decimal" Precision="13" Scale="8" />
+          <Property Name="seeff_area_id" Type="Int32" />
+          <Property Name="unique_id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="seeff_deal" Type="Boolean" />
+          <Property Name="fated" Type="Boolean" />
+          <Property Name="market_share_type" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="base_data_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="agency_id" Type="Int32" />
+          <Property Name="street_or_unit_no" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="erf_no" Type="Int32" />
+          <Property Name="portion_no" Type="Int32" />
+          <Property Name="parent_property_id" Type="Int32" />
+          <Property Name="sale_includes_others_flag" Type="Boolean" />
+          <Property Name="fk_territory_id" Type="Int32" />
+          <Property Name="fated_date" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -73,6 +179,59 @@ warning 6002: The table/view 'ls_base.dbo.seeff_agents' does not have a primary 
               <MappingFragment StoreEntitySet="seeff_agents">
                 <ScalarProperty Name="agentName" ColumnName="agentName" />
                 <ScalarProperty Name="agentId" ColumnName="agentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="base_data">
+            <EntityTypeMapping TypeName="ls_baseModel.base_data">
+              <MappingFragment StoreEntitySet="base_data">
+                <ScalarProperty Name="fated_date" ColumnName="fated_date" />
+                <ScalarProperty Name="fk_territory_id" ColumnName="fk_territory_id" />
+                <ScalarProperty Name="sale_includes_others_flag" ColumnName="sale_includes_others_flag" />
+                <ScalarProperty Name="parent_property_id" ColumnName="parent_property_id" />
+                <ScalarProperty Name="portion_no" ColumnName="portion_no" />
+                <ScalarProperty Name="erf_no" ColumnName="erf_no" />
+                <ScalarProperty Name="street_or_unit_no" ColumnName="street_or_unit_no" />
+                <ScalarProperty Name="agency_id" ColumnName="agency_id" />
+                <ScalarProperty Name="base_data_id" ColumnName="base_data_id" />
+                <ScalarProperty Name="market_share_type" ColumnName="market_share_type" />
+                <ScalarProperty Name="fated" ColumnName="fated" />
+                <ScalarProperty Name="seeff_deal" ColumnName="seeff_deal" />
+                <ScalarProperty Name="unique_id" ColumnName="unique_id" />
+                <ScalarProperty Name="seeff_area_id" ColumnName="seeff_area_id" />
+                <ScalarProperty Name="y" ColumnName="y" />
+                <ScalarProperty Name="x" ColumnName="x" />
+                <ScalarProperty Name="seeff_lic_id" ColumnName="seeff_lic_id" />
+                <ScalarProperty Name="seeff_suburb_type" ColumnName="seeff_suburb_type" />
+                <ScalarProperty Name="seeff_suburb_id" ColumnName="seeff_suburb_id" />
+                <ScalarProperty Name="seeff_suburb" ColumnName="seeff_suburb" />
+                <ScalarProperty Name="multibuyer" ColumnName="multibuyer" />
+                <ScalarProperty Name="buyer_name_2" ColumnName="buyer_name_2" />
+                <ScalarProperty Name="estate_name" ColumnName="estate_name" />
+                <ScalarProperty Name="ls_resflg" ColumnName="ls_resflg" />
+                <ScalarProperty Name="property_address" ColumnName="property_address" />
+                <ScalarProperty Name="seller_name" ColumnName="seller_name" />
+                <ScalarProperty Name="buyer_name" ColumnName="buyer_name" />
+                <ScalarProperty Name="erf_size" ColumnName="erf_size" />
+                <ScalarProperty Name="suburb_id" ColumnName="suburb_id" />
+                <ScalarProperty Name="bonded_transfer" ColumnName="bonded_transfer" />
+                <ScalarProperty Name="private_registration" ColumnName="private_registration" />
+                <ScalarProperty Name="property_currently_in_pvt_hands" ColumnName="property_currently_in_pvt_hands" />
+                <ScalarProperty Name="ss_fh" ColumnName="ss_fh" />
+                <ScalarProperty Name="property_type" ColumnName="property_type" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="munic_name" ColumnName="munic_name" />
+                <ScalarProperty Name="suburb" ColumnName="suburb" />
+                <ScalarProperty Name="ea_code" ColumnName="ea_code" />
+                <ScalarProperty Name="erf_key" ColumnName="erf_key" />
+                <ScalarProperty Name="purch_price" ColumnName="purch_price" />
+                <ScalarProperty Name="non_gar_props_on_title" ColumnName="non_gar_props_on_title" />
+                <ScalarProperty Name="title_deed_no" ColumnName="title_deed_no" />
+                <ScalarProperty Name="ipurchdate" ColumnName="ipurchdate" />
+                <ScalarProperty Name="iregdate" ColumnName="iregdate" />
+                <ScalarProperty Name="property_id" ColumnName="property_id" />
+                <ScalarProperty Name="seeff_lic_area" ColumnName="seeff_lic_area" />
+                <ScalarProperty Name="ls_area_id" ColumnName="ls_area_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
