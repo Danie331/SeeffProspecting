@@ -26,7 +26,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                 {
                     List<TakeOnRow> takeonRows = new List<TakeOnRow>();
                     var seeffDeedsConnection = seeffDeeds.Database.Connection as SqlConnection;
-                    SqlCommand cmd = new SqlCommand(@"SELECT unique_id, property_id, iregdate, Y, X, erf_key FROM SEEFF_Deeds_Monthly
+                    SqlCommand cmd = new SqlCommand(@"SELECT unique_id, property_id, iregdate, Y, X FROM SEEFF_Deeds_Monthly
                                                   WHERE is_for_insert = 1 AND seeff_area_id IS NULL", seeffDeedsConnection);
 
                     seeffDeedsConnection.Open();
@@ -45,15 +45,13 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                                     string regDate = reader.GetString(2);
                                     string lat = reader.GetDecimal(3).ToString(nfi);
                                     string lng = reader.GetDecimal(4).ToString(nfi);
-                                    string erfKey = reader.GetString(5);
                                     takeonRows.Add(new TakeOnRow
                                     {
                                         unique_id = uniqueID,
                                         property_id = propertyID,
                                         iregdate = regDate,
                                         Y = lat,
-                                        X = lng,
-                                        erf_key = erfKey
+                                        X = lng
                                     });
                                 }
                             }
@@ -109,10 +107,6 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                             {
                                 streetAddress = "Prospect to display address details";
                             }
-
-                            var erfPortion = PropertyAddressParser.GetErfAndPortion(record.erf_key);
-                            int? erfNo = erfPortion[0];
-                            int? portionNo = erfPortion[1];
 
                             spatialCmd.CommandText = @"SELECT dbo.get_area_id(" + record.Y + "," + record.X + "," + -1 + ")";
                             int seeff_area_id;
@@ -192,18 +186,14 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                             string sqlText = string.Format(@"UPDATE SEEFF_Deeds_Monthly
                                                      SET property_address = '{0}',
                                                          street_or_unit_no = '{1}',
-                                                         erf_no = {2},
-                                                         portion_no = {3},
-                                                         seeff_area_id = {4},
-                                                         Seeff_LIC_ID = {5},
-                                                         territory_id = {6},
-                                                         seeff_deal = {7},
-                                                         division = {8}  
-                                                         WHERE unique_id = '{9}'",
+                                                         seeff_area_id = {2},
+                                                         Seeff_LIC_ID = {3},
+                                                         territory_id = {4},
+                                                         seeff_deal = {5},
+                                                         division = {6}  
+                                                         WHERE unique_id = '{7}'",
                                                                  EscapeSqlStringLiteral(streetAddress),
                                                                  EscapeSqlStringLiteral(streetOrUnitNo),
-                                                                 erfNo.HasValue ? erfNo.Value.ToString() : "NULL",
-                                                                 portionNo.HasValue ? portionNo.Value.ToString() : "NULL",
                                                                  seeff_area_id,
                                                                  seeff_lic_id,
                                                                  territory_id,
@@ -237,7 +227,6 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
             public string iregdate { get; set; }
             public string Y { get; set; }
             public string X { get; set; }
-            public string erf_key { get; set; }
         }
 
         private static T TryGetItem<T>(DataTable dt, string propertyName)

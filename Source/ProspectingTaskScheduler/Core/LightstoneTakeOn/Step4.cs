@@ -99,7 +99,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
                                       ,[x]
                                       ,[y]
 	                                  ,[erf_no]
-	                                  ,[portion_no] 
+	                                  ,[portion] 
 	                                 FROM Seeff_Deeds.dbo.SEEFF_Deeds_Monthly
                                      WHERE is_for_insert = 1;";
                     SqlCommand cmd = new SqlCommand(commandText, lsBaseConnection);

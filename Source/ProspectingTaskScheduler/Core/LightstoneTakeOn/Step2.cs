@@ -27,9 +27,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
 	                                                 [seeff_deal] bit null,
                                                      [division] varchar(1) null,
 	                                                 [property_address] varchar(255) null,
-	                                                 [street_or_unit_no] varchar(255) null,
-	                                                 [erf_no] int null,
-	                                                 [portion_no] int null;", connection);
+	                                                 [street_or_unit_no] varchar(255) null;", connection);
 
                     command.CommandTimeout = 60 * 10;
                     command.Connection.Open();
