@@ -86,7 +86,7 @@ namespace ProspectingTaskScheduler.Core.LightstoneTakeOn
             catch (OperationCanceledException)
             {
                 // Retry due to error outside of our control
-                return;
+                throw;
             }
             catch (Exception ex)
             {
