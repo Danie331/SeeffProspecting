@@ -7,6 +7,7 @@
       <Diagram DiagramId="53a11c661ddc4aba90ab9e08f1b3c8a9" Name="Diagram1">
         <EntityTypeShape EntityType="ls_baseModel.agency" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ls_baseModel.seeff_agents" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ls_baseModel.base_data" Width="1.5" PointX="0.75" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

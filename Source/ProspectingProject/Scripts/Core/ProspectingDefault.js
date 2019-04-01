@@ -244,7 +244,7 @@ function generateOutputFromLightstone(data) {
 
             if (selectedEntities.length > 0) {
                 closeInfoWindow();
-                $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Creating new prospects. Please wait...</p>' });
+                $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Creating new prospects. Please note this process may take a few minutes to complete...</p>' });
 
                 createProspectingEntities(selectedEntities, function (data) {
                     var dataObject = $.parseJSON(data);
@@ -330,7 +330,7 @@ function createProspectingEntities(selectedEntities, callbackSuccess, callbackFa
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        timeout: 240000,
+        timeout: 320000,
         data: JSON.stringify(inputData)
     })
         .done(function (data) {

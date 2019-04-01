@@ -91,7 +91,7 @@ namespace ProspectingTaskScheduler.App_Start
 
             //RecurringJob.AddOrUpdate("Synchronising spatial areas with seeff.com", () => SuburbMaintenance.SynchroniseSuburbNames(), Cron.Daily(6), TimeZoneInfo.Local);
 
-            RecurringJob.AddOrUpdate("Synchronising Prospecting contact information to CMS", () => ProspectingToCmsClientSynchroniser.Synchronise(JobCancellationToken.Null), Cron.MinuteInterval(5));
+            //RecurringJob.AddOrUpdate("Synchronising Prospecting contact information to CMS", () => ProspectingToCmsClientSynchroniser.Synchronise(JobCancellationToken.Null), Cron.MinuteInterval(5));
 
             RecurringJob.AddOrUpdate("Send Prospecting notifications", () => NotificationsGenerator.SendProspectingFollowupsNotification(JobCancellationToken.Null), Cron.Daily(8), TimeZoneInfo.Local);
 

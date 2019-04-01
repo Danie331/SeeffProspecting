@@ -27,7 +27,7 @@ namespace ProspectingTaskScheduler.Controllers
                         contactPerson.optout_emails = true;
                         contactPerson.email_contactability_status = 1;
                         prospectingContext.SaveChanges();
-                        ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
+                        //ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
                     }
                 }
             }
@@ -44,7 +44,7 @@ namespace ProspectingTaskScheduler.Controllers
                     contactPerson.optout_emails = true;
                     contactPerson.email_contactability_status = 1;
                     prospectingContext.SaveChanges();
-                    ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
+                    //ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
                 }
             }
 
@@ -64,7 +64,7 @@ namespace ProspectingTaskScheduler.Controllers
                     contactPerson.optout_emails = false;
                     contactPerson.email_contactability_status = 2;
                     prospectingContext.SaveChanges();
-                    ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
+                    //ProspectingToCmsClientSynchroniser.AddClientSynchronisationRequest(contactPerson.contact_person_id, contactPerson.created_by);
                 }
             }
 
