@@ -1175,14 +1175,6 @@
     <Content Include="client.edmx.diagram">
       <DependentUpon>client.edmx</DependentUpon>
     </Content>
-    <None Include="Properties\PublishProfiles\1.pubxml" />
-    <None Include="Properties\PublishProfiles\2.pubxml" />
-    <None Include="Properties\PublishProfiles\3.pubxml" />
-    <None Include="Properties\PublishProfiles\4.pubxml" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
-    <None Include="Properties\PublishProfiles\Seeff Server.pubxml" />
-    <None Include="Properties\PublishProfiles\seeffprospecting - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\seeffprospecting - Web Deploy.pubxml" />
     <Content Include="Scripts\3rdParty\SlickGrid\README.md" />
     <None Include="Service References\DracoreETLConsumerService\configuration91.svcinfo" />
     <None Include="Service References\DracoreETLConsumerService\configuration.svcinfo" />
