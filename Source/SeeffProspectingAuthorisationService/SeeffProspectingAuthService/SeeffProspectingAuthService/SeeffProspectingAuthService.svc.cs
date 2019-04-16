@@ -52,7 +52,8 @@ namespace SeeffProspectingAuthService
                                       BranchID = user.branch_id,
                                       RegistrationId = Convert.ToInt32(user.registration_id),
                                       ExportPermission = exportPermission,
-                                      PermissionLevelLists = permissionLevelLists
+                                      PermissionLevelLists = permissionLevelLists,
+                                      CanCreateListing = true
                                   }).FirstOrDefault();
 
                 return userRecord;

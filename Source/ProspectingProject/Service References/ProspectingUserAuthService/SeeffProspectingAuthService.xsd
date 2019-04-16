@@ -7,6 +7,7 @@
       <xs:element minOccurs="0" name="BranchID" type="xs:int" />
       <xs:element minOccurs="0" name="BusinessUnitID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="BusinessUnitUsers" nillable="true" type="tns:ArrayOfProspectingUserAuthPacket" />
+      <xs:element minOccurs="0" name="CanCreateListing" type="xs:boolean" />
       <xs:element minOccurs="0" name="CommunicationEnabled" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="EmailAddress" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ExportPermission" type="xs:boolean" />

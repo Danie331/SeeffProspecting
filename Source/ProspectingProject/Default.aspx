@@ -77,6 +77,9 @@
     <script src="Scripts/Core/AppStart.js"></script>
     <script src="Scripts/Core/ComboSelect.js"></script>
     <script src="Scripts/Core/ContactListsManager.js"></script>
+    <script src="Scripts/Core/ListingsManager/ContentBuilder.js"></script>
+    <script src="Scripts/Core/ListingsManager/Handler.js"></script>
+    <script src="Scripts/Core/ListingsManager/ListingModel.js"></script>
      <%-- END_SECTION:CORE_SCRIPTS --%>
     <%-- END_SECTION:JAVASCRIPT --%>
 

@@ -215,6 +215,27 @@ text-align:left;
     padding: 0 8px;
 }
 
+.bigRedButton {
+    background-color: #d14836;
+    background-image: -webkit-linear-gradient(top,#dd4b39,#d14836);
+    color: #fff;
+    border: 1px solid transparent;
+    min-width: 97px;
+    margin-right: 0;
+    text-shadow: 0 1px rgba(0,0,0,0.1);
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    height: 27px;
+    line-height: 27px;
+    outline: 0;
+    padding: 0 8px;
+}
+
 #templatesBtn {
     background-color: #33CCFF;
     background-image: -webkit-linear-gradient(top,#33CCFF,#33CCFF);
@@ -456,4 +477,9 @@ input.agentNamesAutoCompleteSearchBox:focus
 }
 .slick-selected-column {
     text-align: center;
+}
+
+.centered-aligned {
+    display: inline-block;
+    vertical-align: middle;
 }

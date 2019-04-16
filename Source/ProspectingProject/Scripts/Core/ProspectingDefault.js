@@ -1818,6 +1818,8 @@ function buildInfoWindowContentForSS(unit) {
                             ssunit.Marker.setIcon(getIconForMarker(ssunit.Marker));
                         });
                     }
+
+                    app.togglePropertyListingMenu(true);
                 });
             }
             else if (e.which == 3) {
@@ -2199,6 +2201,7 @@ function closeInfoWindow() {
         clearActivityReport();
         resetFollowupFilters();
         togglePropertyInformationMenu(true);
+        app.togglePropertyListingMenu(true);
         //updatePropertyNotesDiv();
 
         currentTracePSInfoPacket = null;

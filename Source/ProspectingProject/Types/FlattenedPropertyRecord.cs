@@ -90,5 +90,7 @@ namespace ProspectingProject
 
         public bool? has_landline { get; set; }
         public bool? has_primary_landline { get; set; }
+
+        public int? property_listing_id { get; set; }
     }
 }

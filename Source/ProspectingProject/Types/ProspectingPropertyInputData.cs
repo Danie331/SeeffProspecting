@@ -62,5 +62,7 @@ namespace ProspectingProject
         public bool? IsInvestment { get; set; }
 
         public bool? TitleCaseSS { get; set; }
+
+        public int? PropertyListingId { get; set; }
     }
 }

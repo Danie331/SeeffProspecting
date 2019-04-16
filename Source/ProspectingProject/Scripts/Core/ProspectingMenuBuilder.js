@@ -47,6 +47,11 @@ function createProspectingMenu(userData) {
     fixElementHeightForIE('contentfollowupContainer', 0.8);
     menuItems.push(menuItem);
 
+    if (prospectingContext.UserCanCreateListing) {
+        menuItem = createMenuItem("Property Listing", "propertylisting", app.buildPropertyListingMenu(), app.togglePropertyListingMenu, null);
+        appendMenuItemContent(menuItem.MenuItemContent);
+        menuItems.push(menuItem);
+    }
 
     var fcc = $('#contentfollowupContainer');
     fcc.unbind('scroll').bind('scroll', function (e) {

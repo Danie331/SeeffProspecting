@@ -733,6 +733,7 @@
     <Content Include="Assets\poly_menu_remove.png" />
     <Content Include="Assets\primary_contact.png" />
     <Content Include="Assets\property_referrals_history.png" />
+    <Content Include="Assets\prpdata.png" />
     <Content Include="Assets\reload_from_lightstone.png" />
     <Content Include="Assets\remove_filter.png" />
     <Content Include="Assets\seeff_logo.png" />
@@ -1138,6 +1139,9 @@
     <Content Include="Scripts\Core\Communication.js" />
     <Content Include="Scripts\Core\Extensions.js" />
     <Content Include="Scripts\Core\Filtering.js" />
+    <Content Include="Scripts\Core\ListingsManager\ContentBuilder.js" />
+    <Content Include="Scripts\Core\ListingsManager\Handler.js" />
+    <Content Include="Scripts\Core\ListingsManager\ListingModel.js" />
     <Content Include="Scripts\Core\PropertyInformation.js" />
     <Content Include="Scripts\StyleSheets\ComboSelect.css" />
     <Content Include="Scripts\StyleSheets\OpenTip.css" />
@@ -1176,6 +1180,7 @@
       <DependentUpon>client.edmx</DependentUpon>
     </Content>
     <Content Include="Scripts\3rdParty\SlickGrid\README.md" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Service References\DracoreETLConsumerService\configuration91.svcinfo" />
     <None Include="Service References\DracoreETLConsumerService\configuration.svcinfo" />
     <None Include="Service References\DracoreETLConsumerService\DracoreDataService1.disco" />

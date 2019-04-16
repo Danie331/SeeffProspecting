@@ -55,7 +55,11 @@ namespace SeeffProspectingAuthService
 
         [DataMember]
         public bool ExportPermission { get; set; }
+
         [DataMember]
         public string PermissionLevelLists { get; internal set; }
+
+        [DataMember]
+        public bool CanCreateListing { get; internal set; }
     }
 }

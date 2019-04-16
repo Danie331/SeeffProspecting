@@ -35,6 +35,7 @@ function initialize() {
                 prospectingContext.LoggedInUser = data.UserGuid;
                 prospectingContext.LoggedInUsername = data.Fullname;
                 prospectingContext.UserHasCommAccess = data.HasCommAccess;
+                prospectingContext.UserCanCreateListing = data.CanCreateListing;
                 prospectingContext.TrustLookupsEnabled = data.TrustLookupsEnabled;
                 prospectingContext.UserActivityTypes = data.ActivityTypes;
                 prospectingContext.UserFollowupTypes = data.ActivityFollowupTypes;
