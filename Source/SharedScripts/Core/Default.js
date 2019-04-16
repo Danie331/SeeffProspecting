@@ -1058,17 +1058,18 @@ function buildContentForInfoWindow(listing) {
 
             var SS_or_FH_erfsize_label = listing.SS_FH == "SS" ? "Unit size: " : "Erf size: ";
             return "<div id='" + listing.UniqueId + "' style='line-height:1.35;overflow:hidden;white-space:nowrap;'>" +
-                       "<label>Property Address: </label>" + listing.PropertyAddress + "<br />" +
-                       "<label>Street/Unit no.: </label>" + formatPropertyStreetOrUnitNo(listing.StreetOrUnitNo) + "<br />" +
-                       "<label>Title deed no.: </label>" + listing.TitleDeedNo + "<br />" +
-                       "<label>Erf no.: </label>" + listing.ErfNo + "<br />" +
-                       "<label>" + SS_or_FH_erfsize_label + "</label>" + listing.ErfOrUnitSize + "<br />" +
-                       "<label>Property ID: </label>" + listing.PropertyId + "<br />" +
-                       "<label>Last seller: </label>" + formatDisplayString(listing.SellerName) + "<br />" +
-                       "<label>Last buyer: </label>" + formatDisplayString(listing.BuyerName) + "<br />" +
-                       "<label>Sale price: </label>" + formatRandValue(listing.PurchPrice) + "<br />" +
-                       "<label>Property type: </label>" + getPropertyTypeName(listing) +
-                       "</div>";
+                "<label>Property Address: </label>" + listing.PropertyAddress + "<br />" +
+                "<label>Street/Unit no.: </label>" + formatPropertyStreetOrUnitNo(listing.StreetOrUnitNo) + "<br />" +
+                "<label>Title deed no.: </label>" + listing.TitleDeedNo + "<br />" +
+                "<label>Erf no.: </label>" + listing.ErfNo + "<br />" +
+                "<label>" + SS_or_FH_erfsize_label + "</label>" + listing.ErfOrUnitSize + "<br />" +
+                "<label>Last Purch Date: </label>" + (listing.PurchDate != 0 ? formatDate(listing.PurchDate.toString()) : 'n/a') + "<br />" +
+                "<label>Property ID: </label>" + listing.PropertyId + "<br />" +
+                "<label>Last seller: </label>" + formatDisplayString(listing.SellerName) + "<br />" +
+                "<label>Last buyer: </label>" + formatDisplayString(listing.BuyerName) + "<br />" +
+                "<label>Sale price: </label>" + formatRandValue(listing.PurchPrice) + "<br />" +
+                "<label>Property type: </label>" + getPropertyTypeName(listing) +
+                "</div>";
         }
     }
 }
@@ -1089,8 +1090,15 @@ function buildUnitContentRow(unit) {
     var color = getBGColourForRow(unit);
     var bgcolor = "background-color:" + color;
 
+    var sortedByPurchDate = unit.Listings.sort(function (x, y) {
+        var yDate = y.PurchDate != 0 ? formatDate(y.PurchDate.toString()) : formatDate(new Date(2000, 01).toString());
+        var xDate = x.PurchDate != 0 ? formatDate(x.PurchDate.toString()) : formatDate(new Date(2000, 01).toString());
+        return new Date(yDate) - new Date(xDate);
+    });
+    var lastPurchDate = (sortedByPurchDate.length && sortedByPurchDate[0].PurchDate != 0) ? sortedByPurchDate[0].PurchDate.toString() : 'n/a'
     var unitContent = "Unit " + unit.Listings[0].StreetOrUnitNo + '<br />';
     unitContent += 'Last Reg Date: ' + formatDate(unit.Listings[0].RegDate) + '<br />';
+    unitContent += 'Last Purch Date: ' + (lastPurchDate != 'n/a' ? formatDate(lastPurchDate) : lastPurchDate) + '<br />';
     unitContent += 'Last purchase price: ' + formatRandValue(unit.Listings[0].PurchPrice) + '<br />';
     unitContent += 'Prop ID: ' + unit.Listings[0].PropertyId + '<br />';
     unitContent += 'Owner: ' + unit.Listings[0].BuyerName + '<br />';

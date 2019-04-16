@@ -49,6 +49,18 @@ function showMenuForUser(userCanEdit, unfatedTransactions) {
     menuItem = createMenuItem("Filter / Summary", "filterandsummary", buildFilterItemsAndSummaryInfo(), function () {
         if (expanderWidget != null) {
             expanderWidget.open('generalFilter');
+
+            $("input[name='regOrPurchDate']").unbind('change').bind('change', function () {
+                var value = $(this).val();
+                switch (value) {
+                    case "RegDate":
+                        $("#yearFilterType").text('Currently filtering by Registration Date');
+                        break;
+                    case "LastPurchDate":
+                        $("#yearFilterType").text('Currently filtering by Last Purchase Date');
+                        break;
+                }
+            });
         }
     });
     appendMenuItemContent(menuItem.MenuItemContent);
@@ -258,6 +270,10 @@ function buildFilterItemsAndSummaryInfo() {
     }
     function buildYearFilterHtml() {
         var div = $("<div />");
+        var regOrPurchDateContainer = $("<div />").append("<input type='radio' name='regOrPurchDate' value='RegDate' checked>By Registration Date \
+                                                           <input type='radio' name='regOrPurchDate' value='LastPurchDate'>By Last Purchase Date");
+        div.append(regOrPurchDateContainer);
+        div.append("<p />");
         //var _2011 = buildInputCheckbox("2011", "2011_filter", "left", 2, 2, true, handleFilterItemClick);
         //div.append(buildInputCheckbox("2012", "2012_filter", "left", 2, 2, true, handleFilterItemClick));
         //div.append(buildInputCheckbox("2013", "2013_filter", "left", 2, 2, true, handleFilterItemClick));
@@ -272,6 +288,10 @@ function buildFilterItemsAndSummaryInfo() {
     }
     function buildMonthFilterHtml() {
         var div = $("<div />");
+
+        var currentlyFilteringByLabel = $("<span id='yearFilterType'>Currently filtering by Registration Date</span>");
+        div.append(currentlyFilteringByLabel).append("<p />");
+
         div.append(buildInputCheckbox("Jan", "jan_filter", "left", 2, 2, true, handleFilterItemClick));
         div.append(buildInputCheckbox("Feb", "feb_filter", "left", 2, 2, true, handleFilterItemClick));
         div.append(buildInputCheckbox("Mar", "mar_filter", "left", 2, 2, true, handleFilterItemClick));

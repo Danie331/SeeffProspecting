@@ -65,6 +65,7 @@ public class Domain
                 item.PropertyAddress = listing.property_address;
                 item.StreetOrUnitNo = listing.street_or_unit_no;
                 item.RegDate = listing.iregdate;
+                item.PurchDate = listing.ipurchdate;
                 item.PurchPrice = listing.purch_price;
                 item.MarketShareType = listing.market_share_type;
                 item.Fated = listing.fated;

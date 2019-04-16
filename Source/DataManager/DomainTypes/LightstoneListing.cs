@@ -39,4 +39,5 @@ public class LightstoneListing : IListing
     public string EstateName { get; set; }
     public bool? IsCurrentSeeffListing { get; set; }
     public int? SeeffAreaId { get; set; }
+    public decimal? PurchDate { get; set; }
 }

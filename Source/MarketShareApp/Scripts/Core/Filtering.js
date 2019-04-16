@@ -179,35 +179,6 @@ function filterByPrice(markersToFilter) {
     }
 }
 
-function filterByMonth(markersToFilter, filter, isChecked) {
-    
-    function anyListingsMeetFilterRequirement(listings) {
-        var matchingListings = $.grep(listings, function (listing) {
-            var monthPart = listing.RegDate.substring(4, 6);
-            var yearPart = listing.RegDate.substring(0, 4);
-            return monthLookup[filter] == monthPart && $.inArray(yearPart, yearLookup) > -1;
-        });
-
-        return matchingListings.length > 0;
-    }
-
-    function noListingsMeetFilterRequirement(listings) {
-        var matchingListings = $.grep(listings, function (listing) {
-            var monthPart = listing.RegDate.substring(4, 6);
-            var yearPart = listing.RegDate.substring(0, 4);
-            return monthLookup[filter] != monthPart || $.inArray(yearPart, yearLookup) == -1;
-        });
-
-        return matchingListings.length == listings.length;
-    }
-    
-    var filtered = $.grep(markersToFilter, function (m) {
-        return isChecked ? anyListingsMeetFilterRequirement(m.Listings) : noListingsMeetFilterRequirement(m.Listings);
-    });
-
-    return filtered;
-}
-
 function isCurrentSeeffListing(listing) {
     return listing.IsCurrentSeeffListing == true;
 }
@@ -313,12 +284,24 @@ function filterMarketShareType(markersToFilter, filter, isChecked) {
     return filtered;
 }
 
-function filterYear(markersToFilter, filter, isChecked) {
+function filterYear(markersToFilter, filter, isChecked) {    
 
     function anyListingsMeetFilterRequirement(listings) {
+        var byRegDate = $("input[name='regOrPurchDate']:checked").val() == 'RegDate';
         yearLookup.push(filter);
         var matchingListings = $.grep(listings, function (listing) {       
-            var yearPart = listing.RegDate.substring(0, 4);
+            var yearPart = '';
+            if (byRegDate) {
+                yearPart = listing.RegDate.substring(0, 4);
+            } else {
+                // purch date
+                if (listing.PurchDate != 0) {
+                    yearPart = listing.PurchDate.toString().substring(0, 4);
+                } else {
+                    return false;
+                }
+            }
+            
             return yearPart == filter;
         });
 
@@ -326,8 +309,19 @@ function filterYear(markersToFilter, filter, isChecked) {
     }
 
     function noListingsMeetFilterRequirement(listings) {
+        var byRegDate = $("input[name='regOrPurchDate']:checked").val() == 'RegDate';
         var matchingListings = $.grep(listings, function (listing) {          
-            var yearPart = listing.RegDate.substring(0, 4);
+            var yearPart = '';
+            if (byRegDate) {
+                yearPart = listing.RegDate.substring(0, 4);
+            } else {
+                // purch date
+                if (listing.PurchDate != 0) {
+                    yearPart = listing.PurchDate.toString().substring(0, 4);
+                } else {
+                    return false;
+                }
+            }
             return yearPart != filter;
         });
 
@@ -335,6 +329,55 @@ function filterYear(markersToFilter, filter, isChecked) {
     }
 
     var filtered = $.grep(markersToFilter, function (m) {        
+        return isChecked ? anyListingsMeetFilterRequirement(m.Listings) : noListingsMeetFilterRequirement(m.Listings);
+    });
+
+    return filtered;
+}
+
+function filterByMonth(markersToFilter, filter, isChecked) {
+
+    function anyListingsMeetFilterRequirement(listings) {
+        var byRegDate = $("input[name='regOrPurchDate']:checked").val() == 'RegDate';
+        var matchingListings = $.grep(listings, function (listing) {
+            var monthPart = '';
+            var yearPart = '';
+            if (byRegDate) {
+                monthPart = listing.RegDate.substring(4, 6);
+                yearPart = listing.RegDate.substring(0, 4);
+            } else {
+                // purch date
+                if (listing.PurchDate == 0) return false;
+                monthPart = listing.PurchDate.toString().substring(4, 6);
+                yearPart = listing.PurchDate.toString().substring(0, 4);
+            }
+            return monthLookup[filter] == monthPart && $.inArray(yearPart, yearLookup) > -1;
+        });
+
+        return matchingListings.length > 0;
+    }
+
+    function noListingsMeetFilterRequirement(listings) {
+        var byRegDate = $("input[name='regOrPurchDate']:checked").val() == 'RegDate';
+        var matchingListings = $.grep(listings, function (listing) {
+            var monthPart = '';
+            var yearPart = '';
+            if (byRegDate) {
+                monthPart = listing.RegDate.substring(4, 6);
+                yearPart = listing.RegDate.substring(0, 4);
+            } else {
+                // purch date
+                if (listing.PurchDate == 0) return false;
+                monthPart = listing.PurchDate.toString().substring(4, 6);
+                yearPart = listing.PurchDate.toString().substring(0, 4);
+            }
+            return monthLookup[filter] != monthPart || $.inArray(yearPart, yearLookup) == -1;
+        });
+
+        return matchingListings.length == listings.length;
+    }
+
+    var filtered = $.grep(markersToFilter, function (m) {
         return isChecked ? anyListingsMeetFilterRequirement(m.Listings) : noListingsMeetFilterRequirement(m.Listings);
     });
 
