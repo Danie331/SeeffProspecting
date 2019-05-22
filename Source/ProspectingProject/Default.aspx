@@ -77,7 +77,11 @@
     <script src="Scripts/Core/AppStart.js"></script>
     <script src="Scripts/Core/ComboSelect.js"></script>
     <script src="Scripts/Core/ContactListsManager.js"></script>
-    <script src="Scripts/Core/ListingsManager/ContentBuilder.js"></script>
+    <script src="Scripts/Core/ListingsManager/Content/Common.js"></script>
+    <script src="Scripts/Core/ListingsManager/Content/Commercial.js"></script>
+    <script src="Scripts/Core/ListingsManager/Content/Developments.js"></script>
+    <script src="Scripts/Core/ListingsManager/Content/Holiday.js"></script>
+    <script src="Scripts/Core/ListingsManager/Content/Residential.js"></script>
     <script src="Scripts/Core/ListingsManager/Handler.js"></script>
     <script src="Scripts/Core/ListingsManager/ListingModel.js"></script>
      <%-- END_SECTION:CORE_SCRIPTS --%>

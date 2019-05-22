@@ -81,10 +81,22 @@ text-align:left;
     text-align: left; 
 }
 
+.fieldAlignmentLongWidth {
+    display: inline-block;
+    width: 350px;
+    text-align: left;
+}
+
 .fieldAlignmentShortWidth {
     display: inline-block;
     width: 110px;
     text-align: left; 
+}
+
+.fieldAlignmentExtraShortWidth {
+    display: inline-block;
+    width: 80px;
+    text-align: left;
 }
 
 .fieldAlignRight {
@@ -482,4 +494,8 @@ input.agentNamesAutoCompleteSearchBox:focus
 .centered-aligned {
     display: inline-block;
     vertical-align: middle;
+}
+
+.vertical-spacer {
+    margin: 3px;
 }

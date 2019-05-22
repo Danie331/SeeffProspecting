@@ -47,4 +47,32 @@ app.handleSelectListingCategory = function () {
             app.clearListingSelection();
             break;
     }
+    app.attachEventHandlers();
+}
+
+app.attachEventHandlers = function () {
+    $("#priceInput").unbind('keyup').bind('keyup', function () {
+        var val = $(this).val().replace(/\s/g, '');
+        if (val == '' || isNaN(val)) {
+            $(this).val('');
+            return;
+        }
+        val = parseFloat(val);
+        val = val.toLocaleString().replace(/,/g, " ");
+        $(this).val(val);
+    });
+
+    $("#addDevelopmentPropertyTypeBtn").click(app.addDevelopmentPropertyTypeRow);
+
+    var container = $("#propertyListingContainer");
+    container.on('keyup', '#pricedFromInput', function () {
+        var val = $(this).val().replace(/\s/g, '');
+        if (val == '' || isNaN(val)) {
+            $(this).val('');
+            return;
+        }
+        val = parseFloat(val);
+        val = val.toLocaleString().replace(/,/g, " ");
+        $(this).val(val);
+    })
 }

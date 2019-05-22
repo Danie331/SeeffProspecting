@@ -1,0 +1,114 @@
+﻿
+app.buildDevelopmentsListing = function () {
+    app.clearListingSelection();
+    $("#listingFieldsContainer").show();
+    var content = $("#listingFieldsContent");
+    content.append(app.buildLocationSelect());
+    content.append(app.buildDevelopmentName());
+    content.append(app.buildAddressInformation());
+    content.append(app.buildDescription());
+    content.append(app.buildAgentBranchSelector());
+    content.append(app.buildDevelopmentListingTypes());
+    content.append(app.buildDevelopmentCategories());
+    content.append(app.buildDevelopmentPropertyTypesWidget());
+}
+
+app.buildDevelopmentListingTypes = function () {
+    return "<label for='listingTypeInput' class='fieldAlignmentShortWidth'>Listing Type:</label>\
+        <select id='listingTypeInput' class='centered-aligned'>\
+            <option value=''></option>\
+            <option value='ResidentialEstate'>Residential Estate</option>\
+            <option value='CommercialEstate'>Commercial Estate</option>\
+            <option value='ResidentialNewDevelopment'>Residential New Development</option>\
+            <option value='CommercialNewDevelopment'>Commercial New Development</option>\
+        </select>\
+        <p class='vertical-spacer' />";
+}
+
+app.buildDevelopmentName = function () {
+    return "<label for='developmentNameInput' class='fieldAlignmentShortWidth'>Name:</label>\
+                    <input id='developmentNameInput' class='fieldAlignmentLongWidth' />\
+                    <p class='vertical-spacer' />";
+}
+
+app.buildDevelopmentCategories = function () {
+    return "<label for='categoryInput' class='fieldAlignmentShortWidth'>Category:</label>\
+        <select id='categoryInput' class='centered-aligned'>\
+            <option value=''></option>\
+            <option value='1'>Apartment Block</option>\
+            <option value='2'>Affordable Housing Development</option>\
+            <option value='3'>Coastal Estate</option>\
+            <option value='4'>Equestrian Estate</option>\
+            <option value='5'>Game Farm Estate</option>\
+            <option value='6'>Golf Estate</option>\
+            <option value='7'>Nature Estate</option>\
+            <option value='8'>Residential Estate</option>\
+            <option value='9'>Retirement Estate</option>\
+            <option value='10'>Wine Estate</option>\
+            <option value='11'>Leaseback</option>\
+            <option value='12'>Eco Estate</option>\
+            <option value='13'>Building</option>\
+            <option value='14'>Business Park</option>\
+            <option value='15'>Hotel Investment</option>\
+            <option value='16'>Industrial Development</option>\
+            <option value='17'>Industrial Park</option>\
+            <option value='18'>Medical Centre</option>\
+            <option value='19'>Mixed Use Development</option>\
+            <option value='20'>Office Development</option>\
+            <option value='21'>Office Park</option>\
+            <option value='22'>Retail Development</option>\
+            <option value='23'>Retail Park</option>\
+            <option value='24'>Shopping Centre</option>\
+         </select>\
+        <p class='vertical-spacer' />";
+}
+
+app.buildDevelopmentPropertyTypesWidget = function () {
+    return "<input type='button' id='addDevelopmentPropertyTypeBtn' value='Add Types' class='fieldAlignmentExtraShortWidth' />\
+                   <div id='developmentPropertyTypesContainer' />";
+
+}
+
+app.getDevelopmentPropertyTypeOptions = function () {
+    return "<option value=''></option>\
+            <option value='1'>Apartment</option>\
+            <option value='2'>Contract</option>\
+            <option value='3'>Duplex</option>\
+            <option value='4'>Flat</option>\
+            <option value='5'>House</option>\
+            <option value='6'>Simplex</option>\
+            <option value='7'>Townhouse</option>\
+            <option value='8'>Vacant Land</option>\
+            <option value='9'>Villa</option>\
+            <option value='10'>Units</option>\
+            <option value='11'>Hotel Room</option>\
+            <option value='12'>Equestrian Property</option>\
+            <option value='13'>Leaseback</option>\
+            <option value='14'>Chalet</option>\
+            <option value='15'>Building</option>\
+            <option value='16'>Business</option>\
+            <option value='17'>Factory</option>\
+            <option value='18'>Investment</option>\
+            <option value='19'>Office</option>\
+            <option value='20'>Mini Factory</option>\
+            <option value='21'>Retail</option>\
+            <option value='22'>Showroom</option>\
+            <option value='23'>Warehouse</option>\
+            <option value='24'>Medical Centre</option>\
+            <option value='25'>Shopping Centre</option>";
+}
+
+app.addDevelopmentPropertyTypeRow = function () {
+    var container = $("#developmentPropertyTypesContainer");
+    var rowItem = "<hr><label class='fieldAlignmentShortWidth'>Property Type:</label>\
+                    <select class='development-property-type-item centered-aligned'>" +
+        app.getDevelopmentPropertyTypeOptions() +
+        "</select>\
+                    <p class='vertical-spacer' />\
+                    <label for='pricedFromInput' class='fieldAlignmentShortWidth'>Priced From:</label>\
+                    <input id='pricedFromInput' class='fieldAlignmentExtraShortWidth' />\
+                    <p class='vertical-spacer' />\
+                    <label for='developmentPropertyTypeNumber' class='fieldAlignmentShortWidth'>Number:</label>\
+                    <input id='developmentPropertyTypeNumber' class='fieldAlignmentExtraShortWidth' type='number' />";
+    container.append(rowItem);
+}

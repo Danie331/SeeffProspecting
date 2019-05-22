@@ -1139,7 +1139,11 @@
     <Content Include="Scripts\Core\Communication.js" />
     <Content Include="Scripts\Core\Extensions.js" />
     <Content Include="Scripts\Core\Filtering.js" />
-    <Content Include="Scripts\Core\ListingsManager\ContentBuilder.js" />
+    <Content Include="Scripts\Core\ListingsManager\Content\Commercial.js" />
+    <Content Include="Scripts\Core\ListingsManager\Content\Common.js" />
+    <Content Include="Scripts\Core\ListingsManager\Content\Developments.js" />
+    <Content Include="Scripts\Core\ListingsManager\Content\Holiday.js" />
+    <Content Include="Scripts\Core\ListingsManager\Content\Residential.js" />
     <Content Include="Scripts\Core\ListingsManager\Handler.js" />
     <Content Include="Scripts\Core\ListingsManager\ListingModel.js" />
     <Content Include="Scripts\Core\PropertyInformation.js" />
@@ -1596,6 +1600,7 @@
     <WCFMetadataStorage Include="Service References\ProspectingUserAuthService\" />
     <WCFMetadataStorage Include="Service References\SearchWorksAPI\" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
