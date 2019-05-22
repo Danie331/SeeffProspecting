@@ -36,7 +36,7 @@ app.buildListingDetailsTab = function () {
         var listingCategorySelectorContainer = $("<div id='listingCategorySelectorContainer' />");
         var listingFieldsContainer = $("<div id='listingFieldsContainer' style='display:none'>\
                                             <hr>\
-                                                <div id='listingFieldsContent'>\
+                                                <div id='listingFieldsContent' data-parsley-validate>\
                                                     \
                                                 </div>\
                                             <hr>\
@@ -76,9 +76,9 @@ app.clearListingSelection = function () {
 }
 
 app.buildLocationSelect = function () {
-    return $("<label for='locationSelector' class='fieldAlignmentShortWidth'>P24 Suburb:</label>\
-                                <select id='locationSelector' class='centered-aligned'><option value=''></option><option value='1'>Test</option></select>\
-                                <p class='vertical-spacer' />");
+    return "<label for='locationSelector' class='fieldAlignmentShortWidth'>P24 Suburb:</label>\
+                                <select id='locationSelector' class='centered-aligned' data-parsley-required><option value=''></option><option value='1'>Test</option></select>\
+                                <p class='vertical-spacer' />";
 }
 
 app.buildAddressInformation = function () {
@@ -107,16 +107,16 @@ app.buildAddressInformation = function () {
 
 app.buildDescription = function () {
     return "<label for='descriptionInput' class='fieldAlignmentShortWidth'>Description:</label>\
-                    <textarea id='descriptionInput' rows='8' class='fieldAlignmentLongWidth' style='vertical-align:middle'></textarea>\
+                    <textarea id='descriptionInput' rows='8' class='fieldAlignmentLongWidth' style='vertical-align:middle' data-parsley-required='true'></textarea>\
                     <p class='vertical-spacer' />";
 }
 
 app.buildAgentBranchSelector = function () {
     return "<label for='agentInput' class='fieldAlignmentShortWidth'>Agent:</label>\
-        <select id='agentInput' class='centered-aligned'><option value='1'>me@seeff.com</option></select>\
+        <select id='agentInput' class='centered-aligned' data-parsley-required><option value='1'>me@seeff.com</option></select>\
                     <p class='vertical-spacer' />\
                     <label for='branchInput' class='fieldAlignmentShortWidth'>Branch:</label>\
-        <select id='branchInput' class='centered-aligned'><option value=''></option></select>\
+        <select id='branchInput' class='centered-aligned' data-parsley-required><option value=''></option></select>\
                     <p class='vertical-spacer' />";
 }
 
@@ -135,13 +135,13 @@ app.buildStatusSelector = function () {
 
 app.buildPriceInput = function () {
     return "<label for='priceInput' class='fieldAlignmentShortWidth'>Price (R):</label>\
-                    <input id='priceInput' class='fieldAlignmentExtraShortWidth' />\
+                    <input id='priceInput' class='fieldAlignmentExtraShortWidth' data-parsley-required />\
                     <p class='vertical-spacer' />";
 }
 
 app.buildListingTypeSelect = function () {
     return "<label for='listingTypeInput' class='fieldAlignmentShortWidth'>Listing Type:</label>\
-        <select id='listingTypeInput' class='centered-aligned'>\
+        <select id='listingTypeInput' class='centered-aligned' data-parsley-required>\
             <option value=''></option>\
             <option value='ForSale'>For Sale</option>\
             <option value='ToLet'>To Let</option>\

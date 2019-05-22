@@ -16,7 +16,7 @@ app.buildCommercialListing = function () {
 
 app.buildCommercialPropertyTypes = function () {
     return "<label for='propertyTypeInput' class='fieldAlignmentShortWidth'>Property Type:</label>\
-        <select id='propertyTypeInput' class='centered-aligned'>\
+        <select id='propertyTypeInput' class='centered-aligned' data-parsley-required>\
             <option value=''></option>\
             <option value='1'>Building</option>\
             <option value='2'>Bed &amp; Breakfast</option>\

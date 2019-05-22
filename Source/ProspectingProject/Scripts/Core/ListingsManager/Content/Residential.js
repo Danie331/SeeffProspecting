@@ -15,7 +15,7 @@ app.buildResidentialListing = function () {
 
 app.buildResidentialPropertyTypeSelector = function () {
     return "<label for='propertyTypeInput' class='fieldAlignmentShortWidth'>Property Type:</label>\
-        <select id='propertyTypeInput' class='centered-aligned'>\
+        <select id='propertyTypeInput' class='centered-aligned' data-parsley-required>\
             <option value=''></option>\
             <option value='1'>Apartment</option>\
             <option value='2'>Apartment Block</option>\

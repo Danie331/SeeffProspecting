@@ -15,7 +15,7 @@ app.buildDevelopmentsListing = function () {
 
 app.buildDevelopmentListingTypes = function () {
     return "<label for='listingTypeInput' class='fieldAlignmentShortWidth'>Listing Type:</label>\
-        <select id='listingTypeInput' class='centered-aligned'>\
+        <select id='listingTypeInput' class='centered-aligned' data-parsley-required>\
             <option value=''></option>\
             <option value='ResidentialEstate'>Residential Estate</option>\
             <option value='CommercialEstate'>Commercial Estate</option>\
@@ -27,13 +27,13 @@ app.buildDevelopmentListingTypes = function () {
 
 app.buildDevelopmentName = function () {
     return "<label for='developmentNameInput' class='fieldAlignmentShortWidth'>Name:</label>\
-                    <input id='developmentNameInput' class='fieldAlignmentLongWidth' />\
+                    <input id='developmentNameInput' class='fieldAlignmentLongWidth' data-parsley-required data-parsley-length='[1, 100]' />\
                     <p class='vertical-spacer' />";
 }
 
 app.buildDevelopmentCategories = function () {
     return "<label for='categoryInput' class='fieldAlignmentShortWidth'>Category:</label>\
-        <select id='categoryInput' class='centered-aligned'>\
+        <select id='categoryInput' class='centered-aligned' data-parsley-required>\
             <option value=''></option>\
             <option value='1'>Apartment Block</option>\
             <option value='2'>Affordable Housing Development</option>\

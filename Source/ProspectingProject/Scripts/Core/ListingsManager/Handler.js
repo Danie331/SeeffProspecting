@@ -47,6 +47,7 @@ app.handleSelectListingCategory = function () {
             app.clearListingSelection();
             break;
     }
+    app.parsleyInstance = $("#listingFieldsContent").parsley();
     app.attachEventHandlers();
 }
 
@@ -74,5 +75,9 @@ app.attachEventHandlers = function () {
         val = parseFloat(val);
         val = val.toLocaleString().replace(/,/g, " ");
         $(this).val(val);
-    })
+    });
+
+    $("#createListingBtn").click(function () {
+        app.parsleyInstance.validate();
+    });
 }

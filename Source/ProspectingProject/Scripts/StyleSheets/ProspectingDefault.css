@@ -499,3 +499,9 @@ input.agentNamesAutoCompleteSearchBox:focus
 .vertical-spacer {
     margin: 3px;
 }
+
+/* PARSLEY */
+.parsley-errors-list li.parsley-required, li.parsley-length, li.parsley-type {
+    font-family: Verdana;
+    color: red;
+}

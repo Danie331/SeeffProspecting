@@ -35,4 +35,4 @@
 
 // Switch over to production URLs when ready.
 
-// exception logging mechanism for api errors.
+// exception logging mechanism for api errors >> serialize the model json and log it in case of exception

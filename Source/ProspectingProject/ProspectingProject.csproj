@@ -1045,6 +1045,7 @@
     <Content Include="Scripts\3rdParty\ckeditor\styles.js" />
     <Content Include="Scripts\3rdParty\CrossDomainRequestPlugin.js" />
     <Content Include="Scripts\3rdParty\jqueryBlockUI.js" />
+    <Content Include="Scripts\3rdParty\Parsely\parsley.min.js" />
     <Content Include="Scripts\3rdParty\SlickGrid\controls\slick.columnpicker.css" />
     <Content Include="Scripts\3rdParty\SlickGrid\controls\slick.columnpicker.js" />
     <Content Include="Scripts\3rdParty\SlickGrid\controls\slick.pager.css" />

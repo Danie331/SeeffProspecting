@@ -58,6 +58,7 @@
     <script src="Scripts/3rdParty/SlickGrid/plugins/slick.rowmovemanager.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/slick.editors.js"></script>
     <script src="Scripts/3rdParty/SlickGrid/plugins/slick.autotooltips.js"></script>
+    <script src="Scripts/3rdParty/Parsely/parsley.min.js"></script>
     <%-- END_SECTION:3RD_PARTY_SCRIPTS --%>
     <%-- BEGIN_SECTION:CORE_SCRIPTS --%>
     <script src="Scripts/Core/Utils.js"></script>
