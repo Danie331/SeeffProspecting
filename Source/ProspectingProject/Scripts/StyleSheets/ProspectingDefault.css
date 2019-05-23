@@ -505,3 +505,8 @@ input.agentNamesAutoCompleteSearchBox:focus
     font-family: Verdana;
     color: red;
 }
+/* */
+
+.red-text {
+    color: red;
+}

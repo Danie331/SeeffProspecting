@@ -334,3 +334,44 @@ app.buildCleaningServiceSelection = function () {
         </select>\
         <p class='vertical-spacer' />";
 }
+
+app.buildHolidaySummary = function () {
+    return `${app.buildListingSummaryRow('locationSelector')}\
+            ${app.buildListingSummaryRow('streetNameInput')}\
+            ${app.buildListingSummaryRow('streetNoInput')}\
+            ${currentProperty.SS_FH == "SS" ? (app.buildListingSummaryRow('complexNameInput') + app.buildListingSummaryRow('unitNoInput')) : ''}\
+            ${app.buildListingSummaryRow('descriptionInput')}\
+            ${app.buildListingSummaryRow('agentInput')}\
+            ${app.buildListingSummaryRow('branchInput')}\
+            ${app.buildListingSummaryRow('statusInput')}\
+            ${app.buildListingSummaryRow('listingTypeInput')}\
+            ${app.buildListingSummaryRow('propertyTypeInput')}\
+            ${app.buildListingSummaryRow('establishmentNameInput')}\
+            ${app.buildListingSummaryRow('establishmentNotesInput')}\
+            ${app.buildListingSummaryRow('bedroomsInput')}\
+            ${app.buildListingSummaryRow('sleepsInput')}\
+            ${app.buildListingSummaryRow('kingBedsInput')}\
+            ${app.buildListingSummaryRow('queenBedsInput')}\
+            ${app.buildListingSummaryRow('doubleBedsInput')}\
+            ${app.buildListingSummaryRow('bunkBedsInput')}\
+            ${app.buildListingSummaryRow('singleBedsInput')}\
+            ${app.buildListingSummaryRow('bathroomsInput')}\
+            ${app.buildListingSummaryRow('bathsInput')}\
+            ${app.buildListingSummaryRow('showersInput')}\
+            ${app.buildListingSummaryRow('handShowersInput')}\
+            ${app.buildListingSummaryRow('loungesInput')}\
+            ${app.buildListingSummaryRow('diningRoomsInput')}\
+            ${app.buildListingSummaryRow('gardenInput')}\
+            ${app.buildListingSummaryRow('braaiInput')}\
+            ${app.buildListingSummaryRow('poolInput')}\
+            ${app.buildListingSummaryRow('jacuzziInput')}\
+            ${app.buildListingSummaryRow('undercoverParkingBaysInput')}\
+            ${app.buildListingSummaryRow('openParkingBaysInput')}\
+            ${app.buildListingSummaryRow('peakSeasonInput')}\
+            ${app.buildListingSummaryRow('semiSeasonInput')}\
+            ${app.buildListingSummaryRow('lowSeasonInput')}\
+            ${app.buildListingSummaryRow('outOfSeasonInput')}\
+            ${app.buildListingSummaryRow('floorInput')}\
+            ${app.buildListingSummaryRow('seaViewsInput')}\
+            ${app.buildListingSummaryRow('cleaningServiceInput')}`;
+}

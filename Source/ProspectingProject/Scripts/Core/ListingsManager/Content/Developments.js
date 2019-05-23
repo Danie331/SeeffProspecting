@@ -100,15 +100,56 @@ app.getDevelopmentPropertyTypeOptions = function () {
 
 app.addDevelopmentPropertyTypeRow = function () {
     var container = $("#developmentPropertyTypesContainer");
-    var rowItem = "<hr><label class='fieldAlignmentShortWidth'>Property Type:</label>\
+    var rowItem = "<div class='development-row-item' >\
+                    <label class='fieldAlignmentShortWidth'>Property Type:</label>\
                     <select class='development-property-type-item centered-aligned'>" +
         app.getDevelopmentPropertyTypeOptions() +
         "</select>\
                     <p class='vertical-spacer' />\
-                    <label for='pricedFromInput' class='fieldAlignmentShortWidth'>Priced From:</label>\
-                    <input id='pricedFromInput' class='fieldAlignmentExtraShortWidth' />\
+                    <label for='pricedFromInput' class='fieldAlignmentShortWidth'>Priced From (R):</label>\
+                    <input id='pricedFromInput' class='fieldAlignmentExtraShortWidth development-property-type-item-price' />\
                     <p class='vertical-spacer' />\
                     <label for='developmentPropertyTypeNumber' class='fieldAlignmentShortWidth'>Number:</label>\
-                    <input id='developmentPropertyTypeNumber' class='fieldAlignmentExtraShortWidth' type='number' />";
-    container.append(rowItem);
+                    <input id='developmentPropertyTypeNumber' class='fieldAlignmentExtraShortWidth development-property-type-item-number' type='number' />\
+                   </div>";
+    container.append("<hr>").append(rowItem);
+}
+
+app.getDevelopmentPropertyRows = function () {
+    var items = [];
+    $('.development-row-item').each(function (idx, item) {
+        var propertyType = $(item).find('.development-property-type-item').first().find('option:selected').text();
+        var price = $(item).find('.development-property-type-item-price').first().val();
+        var number = $(item).find('.development-property-type-item-number').first().val();
+
+        items.push({ PropertyType: propertyType, Price: price, Number: number });
+    });
+
+    return items;
+}
+
+app.buildDevelopmentsSummary = function () {
+    var content = `${app.buildListingSummaryRow('locationSelector')}\
+            ${app.buildListingSummaryRow('developmentNameInput')}\
+            ${app.buildListingSummaryRow('streetNameInput')}\
+            ${app.buildListingSummaryRow('streetNoInput')}\
+            ${currentProperty.SS_FH == "SS" ? (app.buildListingSummaryRow('complexNameInput') + app.buildListingSummaryRow('unitNoInput')) : ''}\
+            ${app.buildListingSummaryRow('descriptionInput')}\
+            ${app.buildListingSummaryRow('agentInput')}\
+            ${app.buildListingSummaryRow('branchInput')}\
+            ${app.buildListingSummaryRow('listingTypeInput')}\
+            ${app.buildListingSummaryRow('categoryInput')}`;
+
+    var propertyTypes = app.getDevelopmentPropertyRows();
+    propertyTypes.forEach(function (item) {
+        content += "<hr>";
+        content += "<p class='vertical-spacer' />";
+        content += `<label class='fieldAlignmentShortWidth'>Property Type:</label><span class='centered-aligned red-text'>${item.PropertyType}</span>`;
+        content += "<p class='vertical-spacer' />";
+        content += `<label class='fieldAlignmentShortWidth'>Priced From (R):</label><span class='centered-aligned red-text'>${item.Price}</span>`;
+        content += "<p class='vertical-spacer' />";
+        content += `<label class='fieldAlignmentShortWidth'>Number:</label><span class='centered-aligned red-text'>${item.Number}</span>`;
+    });
+
+    return content;
 }

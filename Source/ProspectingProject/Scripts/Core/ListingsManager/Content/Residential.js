@@ -54,3 +54,17 @@ app.buildResidentialPropertyTypeSelector = function () {
         </select>\
         <p class='vertical-spacer' />";
 }
+
+app.buildResidentialSummary = function () {
+    return `${app.buildListingSummaryRow('locationSelector')}\
+            ${app.buildListingSummaryRow('streetNameInput')}\
+            ${app.buildListingSummaryRow('streetNoInput')}\
+            ${currentProperty.SS_FH == "SS" ? (app.buildListingSummaryRow('complexNameInput') + app.buildListingSummaryRow('unitNoInput')) : ''}\
+            ${app.buildListingSummaryRow('descriptionInput')}\
+            ${app.buildListingSummaryRow('agentInput')}\
+            ${app.buildListingSummaryRow('branchInput')}\
+            ${app.buildListingSummaryRow('statusInput')}\
+            ${app.buildListingSummaryRow('priceInput')}\
+            ${app.buildListingSummaryRow('listingTypeInput')}\
+            ${app.buildListingSummaryRow('propertyTypeInput')}`;
+}

@@ -63,7 +63,7 @@ app.attachEventHandlers = function () {
         $(this).val(val);
     });
 
-    $("#addDevelopmentPropertyTypeBtn").click(app.addDevelopmentPropertyTypeRow);
+    $("#addDevelopmentPropertyTypeBtn").unbind('click').bind('click', app.addDevelopmentPropertyTypeRow);
 
     var container = $("#propertyListingContainer");
     container.on('keyup', '#pricedFromInput', function () {
@@ -77,7 +77,67 @@ app.attachEventHandlers = function () {
         $(this).val(val);
     });
 
-    $("#createListingBtn").click(function () {
-        app.parsleyInstance.validate();
+    $("#createListingBtn").unbind('click').bind('click', function() {
+        if (app.parsleyInstance.validate()) {
+            if (app.validateInputs()) {
+                app.showSummaryDialog();
+            }
+            else {
+                app.showInvalidInputs();
+            }
+        }
+    });
+}
+
+app.validateInputs = function () {
+    if ($("#listingCategorySelector").val() != 'developments') {
+        return true;
+    }
+
+    var rows = app.getDevelopmentPropertyRows();
+    if (!rows.length) {
+        return false;
+    }
+
+    var isValid = true;
+    rows.forEach(function (row) {
+        if (!row.PropertyType || !row.Price || !row.Number) {
+            isValid = false;
+        }
+    });
+
+    return isValid;
+}
+
+app.showInvalidInputs = function () {
+    var dialog = $("<div title='Validation Error' style='font-family: Verdana;font-size: 12px;' />")
+        .append("<span>Please fix the following errors before proceeding:</span>")
+        .append("<p />");
+
+    var rows = app.getDevelopmentPropertyRows();
+    if (!rows.length) {
+        dialog.append("<span>- Please add at least one property type (using the \"Add Types\" button)</span>");
+    }
+
+    var isValid = true;
+    if (rows.length) {
+        rows.forEach(function (row) {
+            if (!row.PropertyType || !row.Price || !row.Number) {
+                isValid = false;
+            }
+        });
+    }
+    if (!isValid) {
+        dialog.append("<span>- One or more inputs under the Types is empty or incomplete</span>");
+    }
+
+    dialog.dialog({
+        modal: true,
+        closeOnEscape: false,
+        width: '600',
+        buttons: {
+            "OK": function () { $(this).dialog("close"); }
+        },
+        position: ['middle', 'middle']
     });
 }

@@ -116,7 +116,7 @@ app.buildAgentBranchSelector = function () {
         <select id='agentInput' class='centered-aligned' data-parsley-required><option value='1'>me@seeff.com</option></select>\
                     <p class='vertical-spacer' />\
                     <label for='branchInput' class='fieldAlignmentShortWidth'>Branch:</label>\
-        <select id='branchInput' class='centered-aligned' data-parsley-required><option value=''></option></select>\
+        <select id='branchInput' class='centered-aligned' data-parsley-required><option value='1'>test</option></select>\
                     <p class='vertical-spacer' />";
 }
 
@@ -147,4 +147,72 @@ app.buildListingTypeSelect = function () {
             <option value='ToLet'>To Let</option>\
         </select>\
         <p class='vertical-spacer' />";
+}
+
+app.buildListingSummaryRow = function (labelIdentifier) {
+    var targetLabel = $("#listingFieldsContent").find(`[for='${labelIdentifier}']`).first();
+    var targetElement = $("#listingFieldsContent").find(`[id='${labelIdentifier}']`).first();
+    var labelText = targetLabel.text();
+    var elementType = targetElement.prop('type');
+    var html = '';
+    switch (elementType) {
+        case 'select-one':
+            html = `<label class='fieldAlignmentShortWidth'>${labelText} </label><span class='centered-aligned red-text'>${targetElement.find('option:selected').text()}</span>`;
+            break;
+        case 'text':
+            html = `<label class='fieldAlignmentShortWidth'>${labelText} </label><span class='centered-aligned red-text'>${targetElement.val()}</span>`;
+            break;
+        case 'textarea':
+            html = `<label class='fieldAlignmentShortWidth'>${labelText} </label><textarea rows='8' class='fieldAlignmentLongWidth' style='vertical-align:middle' readonly>${targetElement.val()}</textarea>`;
+            break;
+    }
+
+    html += "<p class='vertical-spacer' />";
+    return html;
+}
+
+app.buildBasicInfo = function () {
+    return `<label class='fieldAlignmentShortWidth'>Lightstone ID: </label><span class='centered-aligned'>${currentProperty.LightstonePropertyId}</span>\
+            <p class='vertical-spacer' />\
+            <label class='fieldAlignmentShortWidth'>Lat/Long: </label><span class='centered-aligned'>${currentProperty.LatLng.Lat}, ${currentProperty.LatLng.Lng}</span>\
+            <p class='vertical-spacer' />\
+            <label class='fieldAlignmentShortWidth'>ERF: </label><span class='centered-aligned'>${currentProperty.ErfNo}</span>\
+            <p />\
+            <label class='fieldAlignmentShortWidth'>List under: </label><span class='centered-aligned red-text'>${$("#listingCategorySelector").find('option:selected').text()}</span>\
+            <p class='vertical-spacer' />`;
+}
+
+app.showSummaryDialog = function () {
+    var container = $("<div title='Create New Listing - Summary' style='font-family: Verdana;font-size: 12px;' />");
+    container.append("<span>Review your inputs below. After the listing is created, you will be provided a link to edit the listing on the service provider's portal.</span>");
+    container.append("<p />");
+    var summaryContent = app.buildBasicInfo();
+    var selectedCat = $("#listingCategorySelector").val();
+    switch (selectedCat) {
+        case 'residential':
+            summaryContent += app.buildResidentialSummary();
+            break;
+        case 'commercial':
+            summaryContent += app.buildCommercialSummary();
+            break;
+        case 'developments':
+            summaryContent += app.buildDevelopmentsSummary();
+            break;
+        case 'holiday':
+            summaryContent += app.buildHolidaySummary();
+            break;
+    }
+    container.append(summaryContent);
+    container.dialog({
+        modal: true,
+        closeOnEscape: false,
+        width: '600',
+        buttons: {
+            "Create Listing": function () {},
+            "Cancel": function () { $(this).dialog("close"); }
+        },
+        position: ['top', 'top']
+    });
+
+    container.css({ 'max-height': "500px", overflow: "auto" });
 }
