@@ -36,3 +36,5 @@
 // Switch over to production URLs when ready.
 
 // exception logging mechanism for api errors >> serialize the model json and log it in case of exception
+
+// get summary of all possible updates to ID's and polling that will be required

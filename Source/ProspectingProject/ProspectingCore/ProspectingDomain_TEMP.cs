@@ -145,7 +145,7 @@ namespace ProspectingProject
                 HasContactWithLandline = prospectingRecord.has_landline,
                 HasContactWithPrimaryLandline = prospectingRecord.has_primary_landline,
 
-                PropertyListingId = prospectingRecord.property_listing_id
+                PropertyListingId = prospectingRecord.active_listing_id
             };
 
             switch (prospectingRecord.ss_fh)
@@ -357,7 +357,7 @@ namespace ProspectingProject
                 HasContactWithLandline = prospectingRecord.has_landline,
                 HasContactWithPrimaryLandline = prospectingRecord.has_primary_landline,
 
-                PropertyListingId = prospectingRecord.property_listing_id
+                PropertyListingId = prospectingRecord.active_listing_id
             };
 
             return prop;
@@ -857,7 +857,7 @@ namespace ProspectingProject
                 existingRecord.is_commercial = dataPacket.IsCommercial;
                 existingRecord.is_agricultural = dataPacket.IsAgricultural;
                 existingRecord.is_investment = dataPacket.IsInvestment;
-                existingRecord.property_listing_id = dataPacket.PropertyListingId;
+                existingRecord.active_listing_id = dataPacket.PropertyListingId;
 
                 prospecting.SubmitChanges();
             }
@@ -2114,7 +2114,7 @@ namespace ProspectingProject
                                       HasContactWithLandline = pp.has_landline,
                                       HasContactWithPrimaryLandline = pp.has_primary_landline,
 
-                                      PropertyListingId = pp.property_listing_id
+                                      PropertyListingId = pp.active_listing_id
                                   }).ToList();
                 return properties;
             }
@@ -2830,7 +2830,7 @@ namespace ProspectingProject
                 var queryResults = prospecting.ExecuteQuery<FlattenedPropertyRecord>(@"SELECT        pp.prospecting_property_id, pp.lightstone_property_id, pp.latitude, pp.longitude, pp.property_address, pp.street_or_unit_no, pp.seeff_area_id, pp.lightstone_id_or_ck_no, pp.lightstone_reg_date, pp.erf_no, 
                          pp.comments, pp.ss_name, pp.ss_number, pp.ss_id, pp.unit, pp.ss_door_number, pp.last_purch_price, pp.prospected, pp.farm_name, pp.portion_no, pp.lightstone_suburb, pp.ss_fh, pp.ss_unique_identifier, 
                          pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays,
-                         pp.has_cell, pp.has_primary_cell, pp.has_email, pp.has_primary_email, pp.has_landline, pp.has_primary_landline, pp.property_listing_id, pcp.contact_person_id, 
+                         pp.has_cell, pp.has_primary_cell, pp.has_email, pp.has_primary_email, pp.has_landline, pp.has_primary_landline, pp.active_listing_id, pcp.contact_person_id, 
                          ppr.relationship_to_property, NULL AS 'relationship_to_company', NULL AS 'contact_company_id', pcp.firstname, pcp.surname, pcp.id_number, pcp.person_title, pcp.person_gender, pcp.comments_notes, 
                          pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.do_not_contact, pcp.email_contactability_status, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
                          pcp.physical_address, pcp.home_ownership, pcp.marital_status, pcp.location, pcd.contact_detail_type, pcd.prospecting_contact_detail_id, pcd.contact_detail, pcd.is_primary_contact, pcd.intl_dialing_code_id, 
@@ -2845,7 +2845,7 @@ UNION ALL
 SELECT        pp.prospecting_property_id, pp.lightstone_property_id, pp.latitude, pp.longitude, pp.property_address, pp.street_or_unit_no, pp.seeff_area_id, pp.lightstone_id_or_ck_no, pp.lightstone_reg_date, pp.erf_no, 
                          pp.comments, pp.ss_name, pp.ss_number, pp.ss_id, pp.unit, pp.ss_door_number, pp.last_purch_price, pp.prospected, pp.farm_name, pp.portion_no, pp.lightstone_suburb, pp.ss_fh, pp.ss_unique_identifier, 
                          pp.latest_reg_date, pp.baths, pp.condition, pp.beds, pp.dwell_size, pp.erf_size, pp.garages, pp.pool, pp.receptions, pp.staff_accomodation, pp.studies, pp.parking_bays,
-                         pp.has_cell, pp.has_primary_cell, pp.has_email, pp.has_primary_email, pp.has_landline, pp.has_primary_landline, pp.property_listing_id, pcp.contact_person_id, NULL 
+                         pp.has_cell, pp.has_primary_cell, pp.has_email, pp.has_primary_email, pp.has_landline, pp.has_primary_landline, pp.active_listing_id, pcp.contact_person_id, NULL 
                          AS 'relationship_to_property', ppcr.relationship_to_company, ppcr.contact_company_id, pcp.firstname, pcp.surname, pcp.id_number, pcp.person_title, pcp.person_gender, pcp.comments_notes, 
                          pcp.is_popi_restricted, pcp.optout_emails, pcp.optout_sms, pcp.do_not_contact, pcp.email_contactability_status, pcp.age_group, pcp.bureau_adverse_indicator, pcp.citizenship, pcp.deceased_status, pcp.directorship, pcp.occupation, pcp.employer, 
                          pcp.physical_address, pcp.home_ownership, pcp.marital_status, pcp.location, pcd.contact_detail_type, pcd.prospecting_contact_detail_id, pcd.contact_detail, pcd.is_primary_contact, pcd.intl_dialing_code_id, 
@@ -2918,7 +2918,7 @@ WHERE        (pp.lightstone_property_id IN (" + params_ + @"))", new object[] { 
                         HasContactWithLandline = prospectingRecord.has_landline,
                         HasContactWithPrimaryLandline = prospectingRecord.has_primary_landline,
 
-                        PropertyListingId = prospectingRecord.property_listing_id
+                        PropertyListingId = prospectingRecord.active_listing_id
                     };
                     switch (prospectingRecord.ss_fh)
                     {
