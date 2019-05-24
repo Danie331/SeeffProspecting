@@ -11790,9 +11790,13 @@ namespace ProspectingProject
 		
 		private int _propdata_suburb_lookup_id;
 		
-		private int _seeff_area_id;
+		private string _suburb_name;
 		
-		private System.Nullable<int> _propdata_p24_id;
+		private string _extension;
+		
+		private int _seeff_suburb_id;
+		
+		private System.Nullable<int> _p24_suburb_id;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -11800,10 +11804,14 @@ namespace ProspectingProject
     partial void OnCreated();
     partial void Onpropdata_suburb_lookup_idChanging(int value);
     partial void Onpropdata_suburb_lookup_idChanged();
-    partial void Onseeff_area_idChanging(int value);
-    partial void Onseeff_area_idChanged();
-    partial void Onpropdata_p24_idChanging(System.Nullable<int> value);
-    partial void Onpropdata_p24_idChanged();
+    partial void Onsuburb_nameChanging(string value);
+    partial void Onsuburb_nameChanged();
+    partial void OnextensionChanging(string value);
+    partial void OnextensionChanged();
+    partial void Onseeff_suburb_idChanging(int value);
+    partial void Onseeff_suburb_idChanged();
+    partial void Onp24_suburb_idChanging(System.Nullable<int> value);
+    partial void Onp24_suburb_idChanged();
     #endregion
 		
 		public propdata_suburb_lookup()
@@ -11831,42 +11839,82 @@ namespace ProspectingProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_seeff_area_id", DbType="Int NOT NULL")]
-		public int seeff_area_id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_suburb_name", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string suburb_name
 		{
 			get
 			{
-				return this._seeff_area_id;
+				return this._suburb_name;
 			}
 			set
 			{
-				if ((this._seeff_area_id != value))
+				if ((this._suburb_name != value))
 				{
-					this.Onseeff_area_idChanging(value);
+					this.Onsuburb_nameChanging(value);
 					this.SendPropertyChanging();
-					this._seeff_area_id = value;
-					this.SendPropertyChanged("seeff_area_id");
-					this.Onseeff_area_idChanged();
+					this._suburb_name = value;
+					this.SendPropertyChanged("suburb_name");
+					this.Onsuburb_nameChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_propdata_p24_id", DbType="Int")]
-		public System.Nullable<int> propdata_p24_id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_extension", DbType="VarChar(255)")]
+		public string extension
 		{
 			get
 			{
-				return this._propdata_p24_id;
+				return this._extension;
 			}
 			set
 			{
-				if ((this._propdata_p24_id != value))
+				if ((this._extension != value))
 				{
-					this.Onpropdata_p24_idChanging(value);
+					this.OnextensionChanging(value);
 					this.SendPropertyChanging();
-					this._propdata_p24_id = value;
-					this.SendPropertyChanged("propdata_p24_id");
-					this.Onpropdata_p24_idChanged();
+					this._extension = value;
+					this.SendPropertyChanged("extension");
+					this.OnextensionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_seeff_suburb_id", DbType="Int NOT NULL")]
+		public int seeff_suburb_id
+		{
+			get
+			{
+				return this._seeff_suburb_id;
+			}
+			set
+			{
+				if ((this._seeff_suburb_id != value))
+				{
+					this.Onseeff_suburb_idChanging(value);
+					this.SendPropertyChanging();
+					this._seeff_suburb_id = value;
+					this.SendPropertyChanged("seeff_suburb_id");
+					this.Onseeff_suburb_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_p24_suburb_id", DbType="Int")]
+		public System.Nullable<int> p24_suburb_id
+		{
+			get
+			{
+				return this._p24_suburb_id;
+			}
+			set
+			{
+				if ((this._p24_suburb_id != value))
+				{
+					this.Onp24_suburb_idChanging(value);
+					this.SendPropertyChanging();
+					this._p24_suburb_id = value;
+					this.SendPropertyChanged("p24_suburb_id");
+					this.Onp24_suburb_idChanged();
 				}
 			}
 		}

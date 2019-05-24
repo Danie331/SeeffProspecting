@@ -515,8 +515,10 @@
   <Table Name="dbo.propdata_suburb_lookup" Member="propdata_suburb_lookups">
     <Type Name="propdata_suburb_lookup">
       <Column Name="propdata_suburb_lookup_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="seeff_area_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="propdata_p24_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="suburb_name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="extension" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="seeff_suburb_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="p24_suburb_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.prospected_propety_contact_count" Method="prospected_propety_contact_count" IsComposable="true">
