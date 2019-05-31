@@ -92,4 +92,18 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetUserGuidByEmail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUserGuidByEmailResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="GetUserGuidByEmailResult" type="q13:guid" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

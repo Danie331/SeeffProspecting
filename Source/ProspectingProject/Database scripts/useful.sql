@@ -2,6 +2,7 @@
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////*/
 //  Script to re-reprospect a sectional scheme safely. First make sure you are targeting the right SS (ie could be more than 1)
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////*/
+-- NB.: ensure no current active listings on any records
 delete pr from dbo.prospecting_person_property_relationship pr
 join prospecting_property pp on pp.prospecting_property_id = pr.prospecting_property_id
 where ss_name = 'SS AQUILA' and property_address = 'GRANITE ROAD, FOURWAYS, CITY OF JOHANNESBURG' and street_or_unit_no = '28'

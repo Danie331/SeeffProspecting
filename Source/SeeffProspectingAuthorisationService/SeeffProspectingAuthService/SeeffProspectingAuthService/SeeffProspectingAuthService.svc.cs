@@ -53,7 +53,7 @@ namespace SeeffProspectingAuthService
                                       RegistrationId = Convert.ToInt32(user.registration_id),
                                       ExportPermission = exportPermission,
                                       PermissionLevelLists = permissionLevelLists,
-                                      CanCreateListing = true
+                                      CanCreateListing = userGuid.ToString().ToLower() == "a2c48f98-14fb-425e-bbd2-312cfb89980c"
                                   }).FirstOrDefault();
 
                 return userRecord;
@@ -298,6 +298,17 @@ namespace SeeffProspectingAuthService
                       Authenticated = false,
                       AuthMessage = "Unable to find user in the database."
                  };
+            }
+        }
+
+        public Guid GetUserGuidByEmail(string email)
+        {
+            using (var boss = new BossDataContext())
+            {
+                var targetUser = boss.user_registrations.FirstOrDefault(u => u.user_email_address.ToLower() == email.ToLower());
+                Guid result;
+                Guid.TryParse(targetUser?.user_guid, out result);
+                return result;
             }
         }
     }

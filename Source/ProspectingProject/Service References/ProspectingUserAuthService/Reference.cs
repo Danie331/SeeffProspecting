@@ -543,6 +543,12 @@ namespace ProspectingProject.ProspectingUserAuthService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateMSUser", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateMSUserResponse")]
         System.Threading.Tasks.Task<ProspectingProject.ProspectingUserAuthService.MarketShareUserAuthPacket> AuthenticateMSUserAsync(System.Guid userGuid, System.Guid sessionKey);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/GetUserGuidByEmail", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/GetUserGuidByEmailResponse")]
+        System.Guid GetUserGuidByEmail(string email);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISeeffProspectingAuthService/GetUserGuidByEmail", ReplyAction="http://tempuri.org/ISeeffProspectingAuthService/GetUserGuidByEmailResponse")]
+        System.Threading.Tasks.Task<System.Guid> GetUserGuidByEmailAsync(string email);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -618,6 +624,14 @@ namespace ProspectingProject.ProspectingUserAuthService {
         
         public System.Threading.Tasks.Task<ProspectingProject.ProspectingUserAuthService.MarketShareUserAuthPacket> AuthenticateMSUserAsync(System.Guid userGuid, System.Guid sessionKey) {
             return base.Channel.AuthenticateMSUserAsync(userGuid, sessionKey);
+        }
+        
+        public System.Guid GetUserGuidByEmail(string email) {
+            return base.Channel.GetUserGuidByEmail(email);
+        }
+        
+        public System.Threading.Tasks.Task<System.Guid> GetUserGuidByEmailAsync(string email) {
+            return base.Channel.GetUserGuidByEmailAsync(email);
         }
     }
 }

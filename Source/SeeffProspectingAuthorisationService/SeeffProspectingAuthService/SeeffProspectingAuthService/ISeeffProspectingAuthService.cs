@@ -28,5 +28,8 @@ namespace SeeffProspectingAuthService
 
         [OperationContract]
         MarketShareUserAuthPacket AuthenticateMSUser(Guid userGuid, Guid sessionKey);
+
+        [OperationContract]
+        Guid GetUserGuidByEmail(string email);
     }
 }

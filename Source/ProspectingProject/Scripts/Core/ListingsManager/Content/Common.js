@@ -22,19 +22,33 @@ app.buildListingDetailsTab = function () {
     var container = $("<div id='listingDetailsContainer' class='contentdiv' />");
     if (currentProperty.PropertyListingId) {
         // Property has an active listing
-        app.getListingInfo(currentProperty.PropertyListingId, function (listingModel) {
-            // may need to access container by ID here
+        app.getListingInfo(currentProperty.PropertyListingId, function (listingDetails) {
+            container.append(`<span style='display:block;'>Listing for ${app.formatAddress()}:</span>`);
+            container.append(`<p style='display:block;'>Listing status: <span style='color:red'>${listingDetails.Status}</span></p>`);
+            container.append(`<p style='display:block;'>Listing URL: <a href='${listingDetails.Url}' target='_blank' style='color:red'>${listingDetails.Url}</span></p>`);
 
+            if (listingDetails.Status != 'Active') {
+                container.append("<p />");
+                app.buildCreateListingOptions(container);
+            }
+            ///go to SS and back to FH 
         });
     } else {
         // No active listing, option to create and post a ListingModel
-        container.append($(`<span style='display:block;'>No current listing found for ${app.formatAddress()}</span>`));
-        var createListingBtn = $("<input type='button' id='newlistingbtn' class='bigRedButton' value='New Listing' />");
-        container.append("<p />").append(createListingBtn).append("<p />");
-        createListingBtn.click(app.handleNewListingClick);
+        container.append($(`<span style='display:block;'>No active listing found for ${app.formatAddress()}</span>`));
+        app.buildCreateListingOptions(container);
+    }
 
-        var listingCategorySelectorContainer = $("<div id='listingCategorySelectorContainer' />");
-        var listingFieldsContainer = $("<div id='listingFieldsContainer' style='display:none'>\
+    return container;
+}
+
+app.buildCreateListingOptions = function (container) {
+    var createListingBtn = $("<input type='button' id='newlistingbtn' class='bigRedButton' value='New Listing' />");
+    container.append("<p />").append(createListingBtn).append("<p />");
+    createListingBtn.click(app.handleNewListingClick);
+
+    var listingCategorySelectorContainer = $("<div id='listingCategorySelectorContainer' />");
+    var listingFieldsContainer = $("<div id='listingFieldsContainer' style='display:none'>\
                                             <hr>\
                                                 <div id='listingFieldsContent' data-parsley-validate>\
                                                     \
@@ -43,11 +57,8 @@ app.buildListingDetailsTab = function () {
                                             <input type='button' id='createListingBtn' class='bigRedButton' value='Next >>' />\
                                         </div>");
 
-        container.append(listingCategorySelectorContainer);
-        container.append(listingFieldsContainer);
-    }
-
-    return container;
+    container.append(listingCategorySelectorContainer);
+    container.append(listingFieldsContainer);
 }
 
 app.buildListingHistoryTab = function () {
@@ -76,8 +87,8 @@ app.clearListingSelection = function () {
 }
 
 app.buildLocationSelect = function () {
-    return "<label for='locationSelector' class='fieldAlignmentShortWidth'>P24 Suburb:</label>\
-                                <select id='locationSelector' class='centered-aligned' data-parsley-required><option value=''></option><option value='1'>Test</option></select>\
+    return "<label for='locationSelector' class='fieldAlignmentShortWidth'>Suburb:</label>\
+                                <select id='locationSelector' class='centered-aligned' data-parsley-required><option value=''></option></select>\
                                 <p class='vertical-spacer' />";
 }
 
@@ -113,10 +124,10 @@ app.buildDescription = function () {
 
 app.buildAgentBranchSelector = function () {
     return "<label for='agentInput' class='fieldAlignmentShortWidth'>Agent:</label>\
-        <select id='agentInput' class='centered-aligned' data-parsley-required><option value='1'>me@seeff.com</option></select>\
+        <select id='agentInput' class='centered-aligned' data-parsley-required><option value=''></option></select>\
                     <p class='vertical-spacer' />\
                     <label for='branchInput' class='fieldAlignmentShortWidth'>Branch:</label>\
-        <select id='branchInput' class='centered-aligned' data-parsley-required><option value='1'>test</option></select>\
+        <select id='branchInput' class='centered-aligned' data-parsley-required></select>\
                     <p class='vertical-spacer' />";
 }
 
@@ -183,7 +194,7 @@ app.buildBasicInfo = function () {
 }
 
 app.showSummaryDialog = function () {
-    var container = $("<div title='Create New Listing - Summary' style='font-family: Verdana;font-size: 12px;' />");
+    var container = $("<div id='createListingSummaryDialog' title='Create New Listing - Summary' style='font-family: Verdana;font-size: 12px;' />");
     container.append("<span>Review your inputs below. After the listing is created, you will be provided a link to edit the listing on the service provider's portal.</span>");
     container.append("<p />");
     var summaryContent = app.buildBasicInfo();
@@ -208,11 +219,64 @@ app.showSummaryDialog = function () {
         closeOnEscape: false,
         width: '600',
         buttons: {
-            "Create Listing": function () {},
+            "Create Listing": function () {
+                app.submitNewListing(selectedCat);
+                $(this).dialog("close");
+            },
             "Cancel": function () { $(this).dialog("close"); }
         },
         position: ['top', 'top']
     });
 
     container.css({ 'max-height': "500px", overflow: "auto" });
+}
+
+app.populateLookupControls = function (data) {
+    data.Locations.forEach(function (loc) {
+        var suburbDescription = `${loc.LocationArea} (${loc.LocationSuburb}) - ${loc.LocationId}`;
+        $("#locationSelector").append($("<option></option>").attr("value", `${loc.LocationId}`).text(suburbDescription));
+    });
+
+    if (data.Locations.length == 1) {
+        $("#locationSelector").val(data.Locations[0].P24SuburbId);
+    }
+
+    data.Agents.forEach(function (agent) {
+        var agentDescription = `${agent.first_name} ${agent.last_name} (${agent.email})`;
+        $("#agentInput").append($("<option></option>").attr("value", `${agent.id}`).text(agentDescription));
+    });
+}
+
+app.populateAgentBranches = function (data) {
+    $("#branchInput").empty().append($("<option></option>").attr("value", '').text(''));
+    data.Branches.forEach(function (br) {
+        var branchText = `${br.BranchName} - ${br.Id}`;
+        $("#branchInput").append($("<option></option>").attr("value", `${br.Id}`).text(branchText));
+    });
+
+    if (data.Branches.length == 1) {
+        $("#branchInput").val(data.Branches[0].Id);
+    }
+}
+
+app.submitNewListing = function (cat) {
+    var model = null;
+    switch (cat) {
+        case 'residential':
+            model = app.createResidentialListingModel();
+            app.postListingToApi(model, 'Residential');
+            break;
+        case 'commercial':
+            model = app.createCommercialListingModel();
+            app.postListingToApi(model, 'Commercial');
+            break;
+        case 'developments':
+            model = app.createDevelopmentsListingModel();
+            app.postListingToApi(model, 'Developments');
+            break;
+        case 'holiday':
+            model = app.createHolidayListingModel();
+            app.postListingToApi(model, 'Holiday');
+            break;
+    }
 }

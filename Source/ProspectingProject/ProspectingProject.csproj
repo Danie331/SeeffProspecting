@@ -121,6 +121,12 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
@@ -763,6 +769,7 @@
     <Content Include="Database scripts\seeff_prospecting_data_takeon.sql" />
     <Content Include="Database scripts\useful.sql" />
     <Content Include="Default.aspx" />
+    <Content Include="Global.asax" />
     <Content Include="LogOut.aspx" />
     <Content Include="ls_base.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -1146,7 +1153,11 @@
     <Content Include="Scripts\Core\ListingsManager\Content\Holiday.js" />
     <Content Include="Scripts\Core\ListingsManager\Content\Residential.js" />
     <Content Include="Scripts\Core\ListingsManager\Handler.js" />
-    <Content Include="Scripts\Core\ListingsManager\ListingModel.js" />
+    <Content Include="Scripts\Core\ListingsManager\Models\NewCommercialListingModel.js" />
+    <Content Include="Scripts\Core\ListingsManager\Models\NewDevelopmentsListingModel.js" />
+    <Content Include="Scripts\Core\ListingsManager\Models\NewHolidayListingModel.js" />
+    <Content Include="Scripts\Core\ListingsManager\Models\NewListingModelBase.js" />
+    <Content Include="Scripts\Core\ListingsManager\Models\NewResidentialListingModel.js" />
     <Content Include="Scripts\Core\PropertyInformation.js" />
     <Content Include="Scripts\StyleSheets\ComboSelect.css" />
     <Content Include="Scripts\StyleSheets\OpenTip.css" />
@@ -1292,6 +1303,7 @@
     <Compile Include="agency.cs">
       <DependentUpon>ls_base.tt</DependentUpon>
     </Compile>
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="base_data.cs">
       <DependentUpon>ls_base.tt</DependentUpon>
     </Compile>
@@ -1313,6 +1325,14 @@
     <Compile Include="client_list.cs">
       <DependentUpon>client.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\Models\DevelopmentPropertyType.cs" />
+    <Compile Include="Controllers\Models\IListingBaseModel.cs" />
+    <Compile Include="Controllers\Models\ListingBaseModel.cs" />
+    <Compile Include="Controllers\ListingsController.cs" />
+    <Compile Include="Controllers\Models\NewCommercialListingModel.cs" />
+    <Compile Include="Controllers\Models\NewDevelopmentsListingModel.cs" />
+    <Compile Include="Controllers\Models\NewResidentialListingModel.cs" />
+    <Compile Include="Controllers\Models\NewHolidayListingModel.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1322,6 +1342,9 @@
     </Compile>
     <Compile Include="Exceptions\DuplicatePropertyRecordException.cs" />
     <Compile Include="Exceptions\UserSessionExpiredException.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="list.cs">
       <DependentUpon>client.tt</DependentUpon>
     </Compile>
@@ -1407,6 +1430,18 @@
     <Compile Include="Services\EnquiryServiceManager.cs" />
     <Compile Include="Services\ICompanyEnquiryService.cs" />
     <Compile Include="Services\IPersonEnquiryService.cs" />
+    <Compile Include="Services\Propdata\ApiSessionContainer.cs" />
+    <Compile Include="Services\Propdata\Models\Agent.cs" />
+    <Compile Include="Services\Propdata\Models\ListingResult.cs" />
+    <Compile Include="Services\Propdata\Models\LocationResult.cs" />
+    <Compile Include="Services\Propdata\PropdataApiWrapper.cs" />
+    <Compile Include="Services\Propdata\Models\LoginAgent.cs" />
+    <Compile Include="Services\Propdata\Models\LoginResult.cs" />
+    <Compile Include="Services\Propdata\Models\Site.cs" />
+    <Compile Include="Services\PropertyListingService\Models\Listing.cs" />
+    <Compile Include="Services\PropertyListingService\Models\PropdataBranch.cs" />
+    <Compile Include="Services\PropertyListingService\Models\Suburb.cs" />
+    <Compile Include="Services\PropertyListingService\PropertyListingService.cs" />
     <Compile Include="Services\SeeffSpatial\SpatialPoint.cs" />
     <Compile Include="Services\SeeffSpatial\SpatialServiceReader.cs" />
     <Compile Include="Services\SeeffSpatial\SpatialSuburb.cs" />
@@ -1601,7 +1636,9 @@
     <WCFMetadataStorage Include="Service References\ProspectingUserAuthService\" />
     <WCFMetadataStorage Include="Service References\SearchWorksAPI\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

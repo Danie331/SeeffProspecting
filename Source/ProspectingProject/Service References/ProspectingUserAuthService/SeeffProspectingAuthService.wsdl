@@ -43,6 +43,12 @@
   <wsdl:message name="ISeeffProspectingAuthService_AuthenticateMSUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:AuthenticateMSUserResponse" />
   </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_GetUserGuidByEmail_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserGuidByEmail" />
+  </wsdl:message>
+  <wsdl:message name="ISeeffProspectingAuthService_GetUserGuidByEmail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserGuidByEmailResponse" />
+  </wsdl:message>
   <wsdl:portType name="ISeeffProspectingAuthService">
     <wsdl:operation name="AuthenticateAndGetUserInfo">
       <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateAndGetUserInfo" message="tns:ISeeffProspectingAuthService_AuthenticateAndGetUserInfo_InputMessage" />
@@ -67,6 +73,10 @@
     <wsdl:operation name="AuthenticateMSUser">
       <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateMSUser" message="tns:ISeeffProspectingAuthService_AuthenticateMSUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateMSUserResponse" message="tns:ISeeffProspectingAuthService_AuthenticateMSUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserGuidByEmail">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/GetUserGuidByEmail" message="tns:ISeeffProspectingAuthService_GetUserGuidByEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISeeffProspectingAuthService/GetUserGuidByEmailResponse" message="tns:ISeeffProspectingAuthService_GetUserGuidByEmail_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ISeeffProspectingAuthService" type="tns:ISeeffProspectingAuthService">
@@ -118,6 +128,15 @@
     </wsdl:operation>
     <wsdl:operation name="AuthenticateMSUser">
       <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/AuthenticateMSUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserGuidByEmail">
+      <soap:operation soapAction="http://tempuri.org/ISeeffProspectingAuthService/GetUserGuidByEmail" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

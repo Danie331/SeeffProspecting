@@ -111,6 +111,12 @@ app.addDevelopmentPropertyTypeRow = function () {
                     <p class='vertical-spacer' />\
                     <label for='developmentPropertyTypeNumber' class='fieldAlignmentShortWidth'>Number:</label>\
                     <input id='developmentPropertyTypeNumber' class='fieldAlignmentExtraShortWidth development-property-type-item-number' type='number' />\
+                        <p class='vertical-spacer' />\
+                        <label for='developmentPropertyTypeSizeFrom' class='fieldAlignmentShortWidth'>Size From:</label>\
+                    <input id='developmentPropertyTypeSizeFrom' class='fieldAlignmentExtraShortWidth development-property-type-item-size-from' type='number' />\
+                        <p class='vertical-spacer' />\
+                        <label for='developmentPropertyTypeSizeTo' class='fieldAlignmentShortWidth'>Size To:</label>\
+                    <input id='developmentPropertyTypeSizeTo' class='fieldAlignmentExtraShortWidth development-property-type-item-size-to' type='number' />\
                    </div>";
     container.append("<hr>").append(rowItem);
 }
@@ -121,8 +127,10 @@ app.getDevelopmentPropertyRows = function () {
         var propertyType = $(item).find('.development-property-type-item').first().find('option:selected').text();
         var price = $(item).find('.development-property-type-item-price').first().val();
         var number = $(item).find('.development-property-type-item-number').first().val();
+        var sizeFrom = $(item).find('.development-property-type-item-size-from').first().val();
+        var sizeTo = $(item).find('.development-property-type-item-size-to').first().val();
 
-        items.push({ PropertyType: propertyType, Price: price, Number: number });
+        items.push({ PropertyType: propertyType, Price: price, Number: number, SizeFrom: sizeFrom, SizeTo: sizeTo });
     });
 
     return items;
@@ -149,6 +157,10 @@ app.buildDevelopmentsSummary = function () {
         content += `<label class='fieldAlignmentShortWidth'>Priced From (R):</label><span class='centered-aligned red-text'>${item.Price}</span>`;
         content += "<p class='vertical-spacer' />";
         content += `<label class='fieldAlignmentShortWidth'>Number:</label><span class='centered-aligned red-text'>${item.Number}</span>`;
+        content += "<p class='vertical-spacer' />";
+        content += `<label class='fieldAlignmentShortWidth'>Size From:</label><span class='centered-aligned red-text'>${item.SizeFrom}</span>`;
+        content += "<p class='vertical-spacer' />";
+        content += `<label class='fieldAlignmentShortWidth'>Size To:</label><span class='centered-aligned red-text'>${item.SizeTo}</span>`;
     });
 
     return content;

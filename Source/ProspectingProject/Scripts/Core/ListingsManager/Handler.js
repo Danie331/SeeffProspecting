@@ -14,10 +14,10 @@ app.togglePropertyListingMenu = function (hide) {
 
     $('#listingDetailsTab').empty();
     var listingDetailsTab = buildContentExpanderItem('listingDetailsTab', 'Assets/prpdata.png', "Listing Details", app.buildListingDetailsTab());
-    $('#listingHistoryTab').empty();
-    var listingHistoryTab = buildContentExpanderItem('listingHistoryTab', 'Assets/valuations_history.png', "Listing History & Event Log", app.buildListingHistoryTab());
+    //$('#listingHistoryTab').empty();
+    //var listingHistoryTab = buildContentExpanderItem('listingHistoryTab', 'Assets/valuations_history.png', "Listing History & Event Log", app.buildListingHistoryTab());
 
-    var ce = new ContentExpanderWidget('#contentarea', [listingDetailsTab, listingHistoryTab], "listingExpander");
+    var ce = new ContentExpanderWidget('#contentarea', [listingDetailsTab], "listingExpander");
     container.append(ce.construct());
     ce.open('listingDetailsTab');
 
@@ -25,6 +25,21 @@ app.togglePropertyListingMenu = function (hide) {
 }
 
 app.handleNewListingClick = function () {
+    if (currentProperty.PropertyListingId) {
+        var dialog = $("<div title='Warning' style='font-family: Verdana;font-size: 12px;' />")
+            .append("<span>An existing listing is associated with this property. Creating a new listing will overwrite the existing listing on Prospecting. \
+                     You will still have access to the listing on the service provider's portal.</span>")
+            .append("<p />");
+        dialog.dialog({
+            modal: true,
+            closeOnEscape: false,
+            width: '600',
+            buttons: {
+                "OK": function () { $(this).dialog("close"); }
+            },
+            position: ['middle', 'middle']
+        });
+    }
     app.buildListingCategories();
 }
 
@@ -49,6 +64,22 @@ app.handleSelectListingCategory = function () {
     }
     app.parsleyInstance = $("#listingFieldsContent").parsley();
     app.attachEventHandlers();
+
+    if (selectedCat != '') {
+        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading...</p>' });
+        $.ajax({
+            type: "GET",
+            url: `api/Listings/GetLookupData?seeffAreaId=${currentSuburb.SuburbId}`,
+            dataType: "json"
+        }).done(function (result) {
+            app.populateLookupControls(result);
+        }).fail(function (error) {
+            app.handleApiError(error); // ..here..
+        })
+            .always(function () {
+                $.unblockUI();
+            });
+    }
 }
 
 app.attachEventHandlers = function () {
@@ -77,7 +108,7 @@ app.attachEventHandlers = function () {
         $(this).val(val);
     });
 
-    $("#createListingBtn").unbind('click').bind('click', function() {
+    $("#createListingBtn").unbind('click').bind('click', function () {
         if (app.parsleyInstance.validate()) {
             if (app.validateInputs()) {
                 app.showSummaryDialog();
@@ -86,6 +117,24 @@ app.attachEventHandlers = function () {
                 app.showInvalidInputs();
             }
         }
+    });
+
+    $("#agentInput").unbind('change').bind('change', function () {
+        var agentId = $(this).val();
+        if (!agentId) return; 
+        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Retrieving agent branches...</p>' });
+        $.ajax({
+            type: "GET",
+            url: `api/Listings/GetAgentBranches?agentId=${agentId}`,
+            dataType: "json"
+        }).done(function (result) {
+            app.populateAgentBranches(result);
+        }).fail(function (error) {
+            app.handleApiError(error);
+        })
+            .always(function () {
+                $.unblockUI();
+            });
     });
 }
 
@@ -101,7 +150,7 @@ app.validateInputs = function () {
 
     var isValid = true;
     rows.forEach(function (row) {
-        if (!row.PropertyType || !row.Price || !row.Number) {
+        if (!row.PropertyType || !row.Price || !row.Number || !row.SizeFrom || !row.SizeTo) {
             isValid = false;
         }
     });
@@ -122,7 +171,7 @@ app.showInvalidInputs = function () {
     var isValid = true;
     if (rows.length) {
         rows.forEach(function (row) {
-            if (!row.PropertyType || !row.Price || !row.Number) {
+            if (!row.PropertyType || !row.Price || !row.Number || !row.SizeFrom || !row.SizeTo) {
                 isValid = false;
             }
         });
@@ -140,4 +189,58 @@ app.showInvalidInputs = function () {
         },
         position: ['middle', 'middle']
     });
+}
+
+app.handleApiError = function (error) {
+    var dialog = $("<div title='Server Error' style='font-family: Verdana;font-size: 12px;' />")
+        .append("<span>The following error occurred, please contact support:</span>")
+        .append("<p />")
+        .append(`<span  style='color:red'>${error.responseJSON.ExceptionMessage}</span>`);
+
+    dialog.dialog({
+        modal: true,
+        closeOnEscape: false,
+        width: '450',
+        buttons: {
+            "Close": function () { $(this).dialog("close"); }
+        },
+        position: ['middle', 'middle']
+    });
+}
+
+app.getListingInfo = function (activeListingId, handler) {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Loading listing...</p>' });
+    $.ajax({
+        type: "GET",
+        url: `api/Listings/GetListing?listingId=${activeListingId}`,
+        dataType: "json",
+        contentType: "application/json"
+    }).done(function (result) {
+        handler(result);
+    }).fail(function (error) {
+        app.handleApiError(error);
+    })
+        .always(function () {
+            $.unblockUI();
+        });
+}
+
+app.postListingToApi = function (model, category) {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Posting listing...</p>' });
+    $.ajax({
+        type: "POST",
+        url: `api/Listings/Create${category}Listing`,
+        data: JSON.stringify(model),
+        dataType: "json",
+        contentType: "application/json"
+    }).done(function (result) {
+        currentProperty.PropertyListingId = result.ActiveListingId;
+        app.togglePropertyListingMenu(true);
+        app.togglePropertyListingMenu();
+    }).fail(function (error) {
+        app.handleApiError(error);
+    })
+        .always(function () {
+            $.unblockUI();
+        });
 }
