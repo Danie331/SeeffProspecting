@@ -53,7 +53,7 @@ namespace SeeffProspectingAuthService
                                       RegistrationId = Convert.ToInt32(user.registration_id),
                                       ExportPermission = exportPermission,
                                       PermissionLevelLists = permissionLevelLists,
-                                      CanCreateListing = userGuid.ToString().ToLower() == "a2c48f98-14fb-425e-bbd2-312cfb89980c"
+                                      CanCreateListing = userGuid.ToString().ToLower() == "a2c48f98-14fb-425e-bbd2-312cfb89980c" || userGuid.ToString().ToLower() == "9c7f73c5-1d6e-44c3-a0b2-40df2393002c"
                                   }).FirstOrDefault();
 
                 return userRecord;

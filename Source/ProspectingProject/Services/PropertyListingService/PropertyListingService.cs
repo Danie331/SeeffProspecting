@@ -130,7 +130,7 @@ namespace ProspectingProject.Services.PropertyListingService
                 var agents = await _propdataApi.GetAgentsAsync(branchRecords.Select(p => p.propdata_branch_id).Distinct().ToList());
                 if (agents.Count == 0)
                 {
-                    throw new Exception($"Unable to retrieve agents for Seeff branch(es) ${string.Join(",", branchRecords.Select(p => p.seeff_branch_id).Distinct())} from API - please contact Support.");
+                    throw new Exception($"Unable to retrieve agents for Seeff branch(es) {string.Join(",", branchRecords.Select(p => p.seeff_branch_id).Distinct())} from API - please contact Support.");
                 }
 
                 return agents.OrderBy(a => a.first_name).ThenBy(a => a.last_name).ToList();
@@ -164,15 +164,14 @@ namespace ProspectingProject.Services.PropertyListingService
                     targetAgentGuid = authService.GetUserGuidByEmail(targetAgentEmail);
                 }
 
-                var currentUser = RequestHandler.GetUserSessionObject();
                 var newListingActivity = new ProspectingActivity
                 {
                     IsForInsert = true,
-                    LightstonePropertyId = resultObject.lightstone_id,
+                    LightstonePropertyId = requestObject.LightstoneId,
                     FollowUpDate = DateTime.Now,
                     AllocatedTo = targetAgentGuid,
                     ActivityTypeId = activityType,
-                    Comment = $"A new listing has been created for {ProspectingCore.GetFormattedAddress(resultObject.lightstone_id)} and assigned to {targetAgentEmail}.<br />" +
+                    Comment = $"A new listing has been created for {ProspectingCore.GetFormattedAddress(requestObject.LightstoneId)} and assigned to {targetAgentEmail}.<br />" +
                               $"Listing URL: <a href='{resultObject.URL}' target='_blank'>{resultObject.URL}</a><br />",
                 };
                 var activityLogId = ProspectingCore.UpdateInsertActivity(newListingActivity);
@@ -181,9 +180,9 @@ namespace ProspectingProject.Services.PropertyListingService
                     var newListing = new prospecting_property_listing
                     {
                         request_payload = requestObject.ToJsonString(),
-                        lightstone_property_id = resultObject.lightstone_id,
+                        lightstone_property_id = requestObject.LightstoneId,
                         listed_as = listedAs,
-                        listing_status = resultObject.status,
+                        listing_status = resultObject.status ?? (resultObject.active ? "Active" : "active: False"),
                         propdata_listing_id = resultObject.id,
                         propdata_listing_url = resultObject.URL,
                         propdata_response_payload = resultObject.JsonPayload,
@@ -196,7 +195,7 @@ namespace ProspectingProject.Services.PropertyListingService
                     db.SubmitChanges();
 
                     var listingId = newListing.prospecting_property_listing_id;
-                    var targetProperty = db.prospecting_properties.Where(pp => pp.lightstone_property_id == resultObject.lightstone_id).First();
+                    var targetProperty = db.prospecting_properties.Where(pp => pp.lightstone_property_id == requestObject.LightstoneId).First();
                     targetProperty.active_listing_id = listingId;
                     db.SubmitChanges();
 

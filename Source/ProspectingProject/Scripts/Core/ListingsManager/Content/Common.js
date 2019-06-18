@@ -24,8 +24,14 @@ app.buildListingDetailsTab = function () {
         // Property has an active listing
         app.getListingInfo(currentProperty.PropertyListingId, function (listingDetails) {
             container.append(`<span style='display:block;'>Listing for ${app.formatAddress()}:</span>`);
-            container.append(`<p style='display:block;'>Listing status: <span style='color:red'>${listingDetails.Status}</span></p>`);
-            container.append(`<p style='display:block;'>Listing URL: <a href='${listingDetails.Url}' target='_blank' style='color:red'>${listingDetails.Url}</span></p>`);
+            container.append("<p />");
+            container.append(`<label class='fieldAlignmentShortWidth'>Listing status: </label><span class='red-text'>${listingDetails.Status}</span>`);
+            container.append("<p />");
+            //container.append(`<label class='fieldAlignmentShortWidth'>Created by: </label><span class='red-text'>${listingDetails.CreatedByUser}</span>`);
+            //container.append("<p />");
+            //container.append(`<label class='fieldAlignmentShortWidth'>Agent assigned: </label><span class='red-text'>${listingDetails.AssignedAgent}</span>`);
+            //container.append("<p />");
+            container.append(`<label class='fieldAlignmentShortWidth'>Listing URL: </label><a href='${listingDetails.Url}' target='_blank' class='red-text' style='cursor: pointer;text-decoration: underline;'>${listingDetails.Url}</a>`);
 
             if (listingDetails.Status != 'Active') {
                 container.append("<p />");
@@ -238,7 +244,7 @@ app.populateLookupControls = function (data) {
     });
 
     if (data.Locations.length == 1) {
-        $("#locationSelector").val(data.Locations[0].P24SuburbId);
+        $("#locationSelector").val(data.Locations[0].LocationId);
     }
 
     data.Agents.forEach(function (agent) {

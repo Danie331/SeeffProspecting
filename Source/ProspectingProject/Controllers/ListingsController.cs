@@ -14,6 +14,7 @@ namespace ProspectingProject.Controllers
     // 2. update endpoints to prod for go-live
     // 3. activity polling for updates to listings
     // 4. approach required to keep lookup tables in sync
+    // 5. purge db of staging data for go-live
     public class ListingsController : ApiController
     {
         private PropertyListingService _propertyListingService;

@@ -88,7 +88,7 @@
     <script src="Scripts/Core/ListingsManager/Models/NewResidentialListingModel.js"></script>
     <script src="Scripts/Core/ListingsManager/Models/NewCommercialListingModel.js"></script>
     <script src="Scripts/Core/ListingsManager/Models/NewDevelopmentsListingModel.js"></script>
-    <script src="Scripts/Core/ListingsManager/ListingModel.js"></script>
+    <script src="Scripts/Core/ListingsManager/Models/NewHolidayListingModel.js"></script>
      <%-- END_SECTION:CORE_SCRIPTS --%>
     <%-- END_SECTION:JAVASCRIPT --%>
 

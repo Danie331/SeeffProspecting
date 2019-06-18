@@ -234,6 +234,7 @@ app.postListingToApi = function (model, category) {
         dataType: "json",
         contentType: "application/json"
     }).done(function (result) {
+        showSavedSplashDialog('Listing successfully created');
         currentProperty.PropertyListingId = result.ActiveListingId;
         app.togglePropertyListingMenu(true);
         app.togglePropertyListingMenu();

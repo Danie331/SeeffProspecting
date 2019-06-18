@@ -5,6 +5,7 @@ using ProspectingProject.Services.Propdata.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -19,17 +20,21 @@ namespace ProspectingProject.Services.Propdata
         private static SemaphoreSlim _sessionSemaphore = null, _clientSemaphore = null;
         private static Dictionary<string, ApiSessionContainer> _clientSessions;
 
-        private const string _agentsBaseAddress = "http://eos-agents-staging.ms.propdata.net/";
-        private const string _listingsBaseAddress = "http://eos-listings-staging.ms.propdata.net/";
-        private const string _locationsBaseAddress = "http://eos-locations-staging.ms.propdata.net/";
-        private const string _branchesService = "http://eos-branches-staging.ms.propdata.net/";
+        private const string _agentsBaseAddress = "https://eos-agents-staging.herokuapp.com/";
+        private const string _listingsBaseAddress = "https://eos-listings-staging.herokuapp.com/";
+        private const string _locationsBaseAddress = "https://eos-locations-staging.herokuapp.com/";
+        private const string _branchesService = "https://eos-branches-staging.herokuapp.com/";
 
         private const string _residentialPortalURL = "https://staging.manage.propdata.net/secure/residential/{id}/edit";
         private const string _commercialPortalURL = "https://staging.manage.propdata.net/secure/commercial/{id}/edit";
         private const string _developmentsPortalURL = "https://staging.manage.propdata.net/secure/development/{id}/edit";
+        private const string _holidayPortalURL = "https://staging.manage.propdata.net/secure/holiday/{id}/edit";
 
         static PropdataApiWrapper()
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+
             _sessionSemaphore = new SemaphoreSlim(1, 1);
             _clientSemaphore = new SemaphoreSlim(1, 1);
             _clientSessions = new Dictionary<string, ApiSessionContainer>();
@@ -85,9 +90,7 @@ namespace ProspectingProject.Services.Propdata
                 using (var response = await agentsService.GetAsync("/api/v1/renew-token/"))
                 {
                     response.EnsureSuccessStatusCode();
-                    var payload = await response.Content.ReadAsStringAsync();
-                    var loginResult = JsonConvert.DeserializeObject<LoginResult>(payload);
-                    return loginResult.agents.FirstOrDefault(s => s.site.domain == "seeff.com")?.token;
+                    return response.Headers.GetValues("Token").FirstOrDefault();
                 }
             }
             catch (Exception ex)
@@ -109,7 +112,7 @@ namespace ProspectingProject.Services.Propdata
                     response.EnsureSuccessStatusCode();
                     var payload = await response.Content.ReadAsStringAsync();
                     var loginResult = JsonConvert.DeserializeObject<LoginResult>(payload);
-                    var token = loginResult.agents.FirstOrDefault(s => s.site.domain == "seeff.com")?.token;
+                    var token = loginResult.clients.FirstOrDefault(s => s.site.domain == "seeff.com")?.token;
                     return token;
                 }
             }
@@ -228,7 +231,7 @@ namespace ProspectingProject.Services.Propdata
                 var response = await listingService.PostAsJsonAsync("/api/v1/holiday/", listingModel);
                 var result = await response.Content.ReadAsStringAsync();
                 var listingObject = JsonConvert.DeserializeObject<ListingResult>(result);
-                listingObject.URL = _developmentsPortalURL.Replace("{id}", listingObject.id.ToString());
+                listingObject.URL = _holidayPortalURL.Replace("{id}", listingObject.id.ToString());
                 listingObject.JsonPayload = result;
 
                 return listingObject;

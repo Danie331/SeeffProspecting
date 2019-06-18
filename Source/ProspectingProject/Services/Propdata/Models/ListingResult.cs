@@ -8,6 +8,7 @@ namespace ProspectingProject.Services.Propdata.Models
         public int lightstone_id { get; set; }
         public string status { get; set; }
         public int agent { get; set; }
+        public bool active { get; set; }
 
         public string URL { get; set; }        
         public string JsonPayload { get; set; }

@@ -21,6 +21,8 @@ namespace ProspectingProject.Controllers.Models
         public decimal price { get; set; }
         public string listing_type { get; set; }
 
+        public int LightstoneId { get { return lightstone_id; } }
+
         public string ToJsonString()
         {
             return JsonConvert.SerializeObject(this);
