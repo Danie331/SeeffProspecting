@@ -15,6 +15,7 @@ namespace ProspectingProject.Controllers
     // 3. activity polling for updates to listings
     // 4. approach required to keep lookup tables in sync
     // 5. purge db of staging data for go-live
+    // 6. multi-user login???
     public class ListingsController : ApiController
     {
         private PropertyListingService _propertyListingService;

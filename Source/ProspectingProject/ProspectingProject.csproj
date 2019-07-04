@@ -1434,6 +1434,7 @@
     <Compile Include="Services\Propdata\Models\Agent.cs" />
     <Compile Include="Services\Propdata\Models\ListingResult.cs" />
     <Compile Include="Services\Propdata\Models\LocationResult.cs" />
+    <Compile Include="Services\Propdata\Models\LocationResultContainer.cs" />
     <Compile Include="Services\Propdata\Models\LoginAgent.cs" />
     <Compile Include="Services\Propdata\PropdataApiWrapper.cs" />
     <Compile Include="Services\Propdata\Models\LoginClient.cs" />

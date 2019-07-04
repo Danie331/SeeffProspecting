@@ -119,23 +119,6 @@ app.attachEventHandlers = function () {
         }
     });
 
-    $("#agentInput").unbind('change').bind('change', function () {
-        var agentId = $(this).val();
-        if (!agentId) return; 
-        $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Retrieving agent branches...</p>' });
-        $.ajax({
-            type: "GET",
-            url: `api/Listings/GetAgentBranches?agentId=${agentId}`,
-            dataType: "json"
-        }).done(function (result) {
-            app.populateAgentBranches(result);
-        }).fail(function (error) {
-            app.handleApiError(error);
-        })
-            .always(function () {
-                $.unblockUI();
-            });
-    });
 }
 
 app.validateInputs = function () {

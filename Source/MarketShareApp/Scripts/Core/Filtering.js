@@ -295,7 +295,7 @@ function filterYear(markersToFilter, filter, isChecked) {
                 yearPart = listing.RegDate.substring(0, 4);
             } else {
                 // purch date
-                if (listing.PurchDate != 0) {
+                if (listing.PurchDate && listing.PurchDate != 0) {
                     yearPart = listing.PurchDate.toString().substring(0, 4);
                 } else {
                     return false;
@@ -316,7 +316,7 @@ function filterYear(markersToFilter, filter, isChecked) {
                 yearPart = listing.RegDate.substring(0, 4);
             } else {
                 // purch date
-                if (listing.PurchDate != 0) {
+                if (listing.PurchDate && listing.PurchDate != 0) {
                     yearPart = listing.PurchDate.toString().substring(0, 4);
                 } else {
                     return false;
@@ -347,7 +347,7 @@ function filterByMonth(markersToFilter, filter, isChecked) {
                 yearPart = listing.RegDate.substring(0, 4);
             } else {
                 // purch date
-                if (listing.PurchDate == 0) return false;
+                if (!listing.PurchDate || listing.PurchDate == 0) return false;
                 monthPart = listing.PurchDate.toString().substring(4, 6);
                 yearPart = listing.PurchDate.toString().substring(0, 4);
             }
@@ -367,7 +367,7 @@ function filterByMonth(markersToFilter, filter, isChecked) {
                 yearPart = listing.RegDate.substring(0, 4);
             } else {
                 // purch date
-                if (listing.PurchDate == 0) return false;
+                if (!listing.PurchDate || listing.PurchDate == 0) return false;
                 monthPart = listing.PurchDate.toString().substring(4, 6);
                 yearPart = listing.PurchDate.toString().substring(0, 4);
             }

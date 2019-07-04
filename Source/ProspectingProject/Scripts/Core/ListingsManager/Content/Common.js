@@ -130,7 +130,7 @@ app.buildDescription = function () {
 
 app.buildAgentBranchSelector = function () {
     return "<label for='agentInput' class='fieldAlignmentShortWidth'>Agent:</label>\
-        <select id='agentInput' class='centered-aligned' data-parsley-required><option value=''></option></select>\
+        <input id='agentInput' class='fieldAlignmentLongWidth centered-aligned' type='text' data-parsley-required></input>\
                     <p class='vertical-spacer' />\
                     <label for='branchInput' class='fieldAlignmentShortWidth'>Branch:</label>\
         <select id='branchInput' class='centered-aligned' data-parsley-required></select>\
@@ -247,9 +247,52 @@ app.populateLookupControls = function (data) {
         $("#locationSelector").val(data.Locations[0].LocationId);
     }
 
+    app.selectedAgent = -1;
+    var agentsSource = [];
     data.Agents.forEach(function (agent) {
         var agentDescription = `${agent.first_name} ${agent.last_name} (${agent.email})`;
-        $("#agentInput").append($("<option></option>").attr("value", `${agent.id}`).text(agentDescription));
+        agentsSource.push({ label: agentDescription, value: agent.id });
+    });
+
+    $('#agentInput').autocomplete({
+        source: agentsSource,
+        select: function (event, ui) {
+            $('#agentInput').val(ui.item.label);
+            app.selectedAgent = ui.item.value;
+
+            var agentId = app.selectedAgent;
+            if (!agentId) return;
+            $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Retrieving agent branches...</p>' });
+            $.ajax({
+                type: "GET",
+                url: `api/Listings/GetAgentBranches?agentId=${agentId}`,
+                dataType: "json"
+            }).done(function (result) {
+                app.populateAgentBranches(result);
+            }).fail(function (error) {
+                app.handleApiError(error);
+            })
+                .always(function () {
+                    $.unblockUI();
+                });
+
+            return false; // Prevent the widget from inserting the value.
+        },
+        focus: function (event, ui) {
+            return false; // Prevent the widget from inserting the value.
+        },
+        close: function (event, ui) {
+            if (app.selectedAgent == -1) {
+                $('#agentInput').val('');
+            }
+        },
+        change: function (event, ui) {
+            if (ui.item) {
+               
+            } else {
+                $("#branchInput").find('option').remove();
+            }
+        }
     });
 }
 

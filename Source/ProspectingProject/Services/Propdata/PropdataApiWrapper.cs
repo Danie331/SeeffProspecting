@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using ProspectingProject.Controllers;
 using ProspectingProject.Controllers.Models;
 using ProspectingProject.Services.Propdata.Models;
 using System;
@@ -11,7 +10,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
+using System.Web.Http;
 
 namespace ProspectingProject.Services.Propdata
 {
@@ -95,7 +94,7 @@ namespace ProspectingProject.Services.Propdata
             }
             catch (Exception ex)
             {
-                throw new Exception("Unable to contact the service provider to complete the request", ex);
+                throw new Exception($"Error from service provider: {ex.Message}", ex);
             }
         }
 
@@ -118,7 +117,7 @@ namespace ProspectingProject.Services.Propdata
             }
             catch (Exception ex)
             {
-                throw new Exception("Unable to contact the service provider to complete the request", ex);
+                throw new Exception($"Error from service provider: {ex.Message}", ex);
             }
         }
 
@@ -129,20 +128,21 @@ namespace ProspectingProject.Services.Propdata
 
         public async Task<List<Agent>> GetAgentsAsync(List<int> branchIds)
         {
+            string requestString = "";
             try
             {
                 var sessionId = GetSessionIdentifier();
                 var agentsService = await CreateSession(sessionId, _agentsBaseAddress);
-                var response = await agentsService.GetStringAsync($"/api/v1/agents/?branches__contains={string.Join(",", branchIds)}&get_all=1");
+                requestString = BuildHttpRequestInfo(agentsService, $"/api/v1/agents/?branches__contains={string.Join(",", branchIds)}&get_all=1", "GET", null);
+                var response = await agentsService.GetStringAsync($"/api/v1/agents/?branches__contains={string.Join(",", branchIds)}&get_all=1");               
                 var agents = JsonConvert.DeserializeObject<List<Agent>>(response);
-                agents = agents.Where(a => a.group != 3).ToList();
                 GetSession(sessionId).Agents = agents;
 
                 return agents;
             }
             catch (Exception ex)
             {
-                throw new Exception("Unable to contact the service provider to complete the request", ex);
+                throw new Exception($"Error from service provider: {ex.Message} - Request: {requestString}", ex);
             }
         }
 
@@ -164,11 +164,16 @@ namespace ProspectingProject.Services.Propdata
 
         public async Task<ListingResult> CreateResidentialListing(NewResidentialListingModel listingModel)
         {
+            string requestString = "";
             try
             {
                 var sessionId = GetSessionIdentifier();
                 var listingService = await CreateSession(sessionId, _listingsBaseAddress);
                 var response = await listingService.PostAsJsonAsync("/api/v1/residential/", listingModel);
+                if (!response.IsSuccessStatusCode)
+                {
+                    requestString = BuildHttpRequestInfo(listingService, "/api/v1/residential/", "Post", JsonConvert.SerializeObject(listingModel));
+                }
                 var result = await response.Content.ReadAsStringAsync();
                 var listingObject = JsonConvert.DeserializeObject<ListingResult>(result);
                 listingObject.URL = _residentialPortalURL.Replace("{id}", listingObject.id.ToString());
@@ -178,17 +183,22 @@ namespace ProspectingProject.Services.Propdata
             }
             catch (Exception ex)
             {
-                throw new Exception("Unable to contact the service provider to complete the request", ex);
+                throw new Exception($"Error from service provider: {ex.Message} - Request: {requestString}", ex);
             }
         }
 
         public async Task<ListingResult> CreateCommercialListing(NewCommercialListingModel listingModel)
         {
+            string requestString = "";
             try
             {
                 var sessionId = GetSessionIdentifier();
                 var listingService = await CreateSession(sessionId, _listingsBaseAddress);
                 var response = await listingService.PostAsJsonAsync("/api/v1/commercial/", listingModel);
+                if (!response.IsSuccessStatusCode)
+                {
+                    requestString = BuildHttpRequestInfo(listingService, "/api/v1/commercial/", "Post", JsonConvert.SerializeObject(listingModel));
+                }
                 var result = await response.Content.ReadAsStringAsync();
                 var listingObject = JsonConvert.DeserializeObject<ListingResult>(result);
                 listingObject.URL = _commercialPortalURL.Replace("{id}", listingObject.id.ToString());
@@ -198,17 +208,22 @@ namespace ProspectingProject.Services.Propdata
             }
             catch (Exception ex)
             {
-                throw new Exception("Unable to contact the service provider to complete the request", ex);
+                throw new Exception($"Error from service provider: {ex.Message} - Request: {requestString}", ex);
             }
         }
 
         public async Task<ListingResult> CreateDevelopmentsListing(NewDevelopmentsListingModel listingModel)
         {
+            string requestString = "";
             try
             {
                 var sessionId = GetSessionIdentifier();
                 var listingService = await CreateSession(sessionId, _listingsBaseAddress);
                 var response = await listingService.PostAsJsonAsync("/api/v1/developments/", listingModel);
+                if (!response.IsSuccessStatusCode)
+                {
+                    requestString = BuildHttpRequestInfo(listingService, "/api/v1/developments/", "Post", JsonConvert.SerializeObject(listingModel));
+                }
                 var result = await response.Content.ReadAsStringAsync();
                 var listingObject = JsonConvert.DeserializeObject<ListingResult>(result);
                 listingObject.URL = _developmentsPortalURL.Replace("{id}", listingObject.id.ToString());
@@ -218,17 +233,22 @@ namespace ProspectingProject.Services.Propdata
             }
             catch (Exception ex)
             {
-                throw new Exception("Unable to contact the service provider to complete the request", ex);
+                throw new Exception($"Error from service provider: {ex.Message} - Request: {requestString}", ex);
             }
         }
 
         public async Task<ListingResult> CreateHolidayListing(NewHolidayListingModel listingModel)
         {
+            string requestString = "";
             try
             {
                 var sessionId = GetSessionIdentifier();
                 var listingService = await CreateSession(sessionId, _listingsBaseAddress);
                 var response = await listingService.PostAsJsonAsync("/api/v1/holiday/", listingModel);
+                if (!response.IsSuccessStatusCode)
+                {
+                    requestString = BuildHttpRequestInfo(listingService, "/api/v1/holiday/", "Post", JsonConvert.SerializeObject(listingModel));
+                }
                 var result = await response.Content.ReadAsStringAsync();
                 var listingObject = JsonConvert.DeserializeObject<ListingResult>(result);
                 listingObject.URL = _holidayPortalURL.Replace("{id}", listingObject.id.ToString());
@@ -238,12 +258,13 @@ namespace ProspectingProject.Services.Propdata
             }
             catch (Exception ex)
             {
-                throw new Exception("Unable to contact the service provider to complete the request", ex);
+                throw new Exception($"Error from service provider: {ex.Message} - Request: {requestString}", ex);
             }
         }
 
         public async Task<List<LocationResult>> GetLocationsFromP24IDs(List<int> p24SuburbIDs)
         {
+            string requestString = "";
             try
             {
                 var sessionId = GetSessionIdentifier();
@@ -251,17 +272,40 @@ namespace ProspectingProject.Services.Propdata
                 var results = new List<LocationResult>();
                 foreach (var item in p24SuburbIDs)
                 {
-                    var response = await locationsService.GetStringAsync($"/api/v1/locations/?property24_id__exact={item}&get_all=1");
-                    var result = JsonConvert.DeserializeObject<List<LocationResult>>(response);
-                    results.Add(result.First());
+                    try
+                    {
+                        var response = await locationsService.GetStringAsync($"/api/v1/locations/?property24_id__exact={item}");
+                        var resultHolder = JsonConvert.DeserializeObject<LocationResultContainer>(response);
+                        results.Add(resultHolder.results.First());
+                    }
+                    catch (Exception ex)
+                    {
+                        requestString = BuildHttpRequestInfo(locationsService, $"/api/v1/locations/?property24_id__exact={item}", "GET", null);
+                        throw;
+                    }
                 }
                
                 return results;
             }
             catch(Exception ex)
             {
-                throw new Exception("Unable to contact the service provider to complete the request", ex);
+                throw new Exception($"Error from service provider: {ex.Message} - Request: {requestString}", ex);
             }
+        }
+
+        private string BuildHttpRequestInfo(HttpClient client, string uri, string method, string body)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("URL: " + client.BaseAddress + uri);
+            sb.AppendLine("METHOD: " + method);
+            if (body != null)
+            {
+                sb.AppendLine("BODY: " + body);
+            }
+
+            sb.AppendLine("TOKEN: " + client.DefaultRequestHeaders.First(s => s.Key == "Authorization").Value.First());
+
+            return sb.ToString();
         }
     }
 }

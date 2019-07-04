@@ -58,7 +58,7 @@ namespace ProspectingProject.Services.PropertyListingService
                 var propdataBranches = branchRecords.Select(p => p.propdata_branch_id).Distinct();
                 if (!targetAgent.branches.All(i => propdataBranches.Contains(i)))
                 {
-                    throw new Exception($"Un-mapped branches found in Propdata/branch correlation table: {string.Join(",", targetAgent.branches)} - please contact Seeff Support");
+                    throw new Exception($"Unmapped branches found for this agent in Propdata/branch correlation table: {string.Join(",", targetAgent.branches)} - please contact Seeff Support");
                 }
 
                 foreach (var item in branchRecords)
