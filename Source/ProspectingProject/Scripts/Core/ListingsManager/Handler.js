@@ -175,7 +175,7 @@ app.showInvalidInputs = function () {
 }
 
 app.handleApiError = function (error) {
-    var dialog = $("<div title='Server Error' style='font-family: Verdana;font-size: 12px;' />")
+    var dialog = $("<div title='Server Error' style='font-family: Verdana;font-size: 12px; width:600px;height:400px' />")
         .append("<span>The following error occurred, please contact support:</span>")
         .append("<p />")
         .append(`<span  style='color:red'>${error.responseJSON.ExceptionMessage}</span>`);
@@ -183,7 +183,7 @@ app.handleApiError = function (error) {
     dialog.dialog({
         modal: true,
         closeOnEscape: false,
-        width: '450',
+        width: '700',
         buttons: {
             "Close": function () { $(this).dialog("close"); }
         },

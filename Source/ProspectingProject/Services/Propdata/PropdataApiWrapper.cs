@@ -296,11 +296,15 @@ namespace ProspectingProject.Services.Propdata
         private string BuildHttpRequestInfo(HttpClient client, string uri, string method, string body)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("URL: " + client.BaseAddress + uri);
+            sb.AppendLine("<br>");
+            sb.AppendLine("URL: " + client.BaseAddress + uri.TrimStart('/'));
+            sb.AppendLine("<br>");
             sb.AppendLine("METHOD: " + method);
+            sb.AppendLine("<br>");
             if (body != null)
             {
                 sb.AppendLine("BODY: " + body);
+                sb.AppendLine("<br>");
             }
 
             sb.AppendLine("TOKEN: " + client.DefaultRequestHeaders.First(s => s.Key == "Authorization").Value.First());

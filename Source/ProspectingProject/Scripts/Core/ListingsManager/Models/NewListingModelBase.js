@@ -45,7 +45,7 @@ NewListingModelBase.prototype.create = function () {
         $("#unitNoInput").val(),
         $("#locationSelector").val(),
         $("#descriptionInput").val(),
-        $("#agentInput").val(),
+        app.selectedAgent,
         $("#branchInput").val(),
         $("#statusInput option:selected").text(),
         $("#priceInput").val(),

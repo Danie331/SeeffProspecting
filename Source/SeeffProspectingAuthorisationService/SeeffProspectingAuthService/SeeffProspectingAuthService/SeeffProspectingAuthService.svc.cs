@@ -305,10 +305,17 @@ namespace SeeffProspectingAuthService
         {
             using (var boss = new BossDataContext())
             {
-                var targetUser = boss.user_registrations.FirstOrDefault(u => u.user_email_address.ToLower() == email.ToLower());
-                Guid result;
-                Guid.TryParse(targetUser?.user_guid, out result);
-                return result;
+                try
+                {
+                    var targetUser = boss.user_registrations.First(u => u.user_email_address.ToLower() == email.ToLower());
+                    Guid result = Guid.Empty;
+                    Guid.TryParse(targetUser.user_guid, out result);
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    return Guid.Empty;
+                }
             }
         }
     }
