@@ -68,7 +68,7 @@ namespace MarketShareApp
                 trans = trans.OrderBy(b => b.SeeffAreaName).ThenByDescending(c => c.PropertyId).ToList();
                 using (ExcelPackage package = new ExcelPackage())
                 {
-                    string exportName = "Marketshare-Export-" + Path.GetRandomFileName().Substring(0, 5) + "-" + DateTime.Now.ToShortDateString();
+                    string exportName = "MarketshareExport_" + Path.GetRandomFileName().Substring(0, 5) + "_" + DateTime.Today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(exportName);
                     //worksheet.Cells["A1"].LoadFromDataTable(new DataTable(), true);
 
