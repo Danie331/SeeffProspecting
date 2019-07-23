@@ -769,29 +769,31 @@ function handleExportSelectionClick() {
             $.each(suburb.VisibleMarkers, function (idx1, visibleMarker) {
                 if (visibleMarker.Listings) {
                     $.each(visibleMarker.Listings, function (idx2, listing) {
-                        listOfTransactions.push({
-                            PropertyId: listing.PropertyId,
-                            RegDate: listing.RegDate,
-                            PurchPrice: listing.PurchPrice,
-                            PurchDate: listing.PurchDate,
-                            LightstoneSuburb: listing.LightstoneSuburb,
-                            MunicipalityName: listing.MunicipalityName,
-                            Province: listing.Province,
-                            PropertyType: listing.PropertyType,
-                            ErfOrUnitSize: listing.ErfOrUnitSize,
-                            BuyerName: listing.BuyerName,
-                            SellerName: listing.SellerName,
-                            EstateName: listing.EstateName,
-                            SeeffAreaName: suburb.SuburbName,
-                            SeeffDeal: listing.SeeffDeal,
-                            Fated: listing.Fated,
-                            MarketShareType: listing.MarketShareType,
-                            AgencyName: getAgencyName(listing.Agency),
-                            StreetOrUnitNo: listing.StreetOrUnitNo,
-                            ErfNo: listing.ErfNo,
-                            PortionNo: listing.PortionNo,
-                            FatedDate: listing.FatedDate
-                        });
+                        if (!listing.IsCurrentSeeffListing) {
+                            listOfTransactions.push({
+                                PropertyId: listing.PropertyId,
+                                RegDate: listing.RegDate,
+                                PurchPrice: listing.PurchPrice,
+                                PurchDate: listing.PurchDate,
+                                LightstoneSuburb: listing.LightstoneSuburb,
+                                MunicipalityName: listing.MunicipalityName,
+                                Province: listing.Province,
+                                PropertyType: listing.PropertyType,
+                                ErfOrUnitSize: listing.ErfOrUnitSize,
+                                BuyerName: listing.BuyerName,
+                                SellerName: listing.SellerName,
+                                EstateName: listing.EstateName,
+                                SeeffAreaName: suburb.SuburbName,
+                                SeeffDeal: listing.SeeffDeal,
+                                Fated: listing.Fated,
+                                MarketShareType: listing.MarketShareType,
+                                AgencyName: getAgencyName(listing.Agency),
+                                StreetOrUnitNo: listing.StreetOrUnitNo,
+                                ErfNo: listing.ErfNo,
+                                PortionNo: listing.PortionNo,
+                                FatedDate: listing.FatedDate
+                            });
+                        }
                     });
                 }
             });
