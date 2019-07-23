@@ -136,6 +136,7 @@ function buildLicenseSummaryHtml() {
 }
 
 function generateStatisticsMenu(canShow) {
+    canShow = false;
     var licSummaryDiv = $('#licSummaryDiv');
     licSummaryDiv.css('display', canShow ? 'block' : 'none');
 
@@ -242,8 +243,10 @@ function buildFilterItemsAndSummaryInfo() {
     var monthFilter = buildContentExpanderItem('monthFilter', 'Assets/month_filter.png', "Filter by Month", buildMonthFilterHtml());
     $('#priceFilter').empty();
     var priceFilter = buildContentExpanderItem('priceFilter', 'Assets/price_filter.png', "Filter by Price", buildPriceFilterHtml());
+    $('#exportFilter').empty();
+    var exportFilter = buildContentExpanderItem('exportFilter', 'Assets/export_filter.png', "Export &amp; Download", buildExportFilterHtml());
 
-    expanderWidget = new ContentExpanderWidget('#contentarea', [generalFilter, yearFilter, monthFilter, priceFilter], "filterExpander");
+    expanderWidget = new ContentExpanderWidget('#contentarea', [generalFilter, yearFilter, monthFilter, priceFilter, exportFilter], "filterExpander");
     var filterDiv = $("<div class='contentdiv' id='filteroptionsdiv' />");
     filterDiv.empty();
     filterDiv.append(expanderWidget.construct());
@@ -318,6 +321,20 @@ function buildFilterItemsAndSummaryInfo() {
 
         $('#contentarea').on('click', "#filterPriceBtn", function () {
             handleFilterItemClick();
+        });
+
+        return div;
+    }
+
+    function buildExportFilterHtml() {
+        var div = $("<div />");
+        div.append($("<span />").text("Use the button below to download the data for the currently selected filter criteria and suburbs."));
+        div.append("<p />");
+        var btn = $("<input id='exportFilterSelectionBtn' type='button' value='Download Data' style='cursor:pointer' />");
+        div.append(btn);
+
+        $('#contentarea').on('click', "#exportFilterSelectionBtn", function () {
+            handleExportSelectionClick();
         });
 
         return div;

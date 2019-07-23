@@ -79,6 +79,11 @@ public class Domain
                 item.PropertyType = listing.property_type;
                 item.EstateName = listing.estate_name;
                 item.SeeffAreaId = listing.seeff_area_id;
+                item.LightstoneSuburb = listing.suburb;
+                item.MunicipalityName = listing.munic_name;
+                item.Province = listing.province;
+                item.FatedDate = listing.fated_date;
+
                 allListings.Add(item);
             }
         }  

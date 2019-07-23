@@ -24,55 +24,6 @@
       <Column Name="unfated" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.base_data" Member="base_datas">
-    <Type Name="base_data">
-      <Column Name="ls_area_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="seeff_lic_area" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
-      <Column Name="property_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="iregdate" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
-      <Column Name="ipurchdate" Type="System.Decimal" DbType="Decimal(11,0)" CanBeNull="true" />
-      <Column Name="title_deed_no" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="non_gar_props_on_title" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
-      <Column Name="purch_price" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
-      <Column Name="erf_key" Type="System.String" DbType="VarChar(60)" CanBeNull="true" />
-      <Column Name="ea_code" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="suburb" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
-      <Column Name="munic_name" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
-      <Column Name="province" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
-      <Column Name="property_type" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
-      <Column Name="ss_fh" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
-      <Column Name="property_currently_in_pvt_hands" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="private_registration" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="bonded_transfer" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="suburb_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="erf_size" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
-      <Column Name="buyer_name" Type="System.String" DbType="VarChar(70)" CanBeNull="true" />
-      <Column Name="seller_name" Type="System.String" DbType="VarChar(70)" CanBeNull="true" />
-      <Column Name="property_address" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="ls_resflg" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="estate_name" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
-      <Column Name="buyer_name_2" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
-      <Column Name="multibuyer" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="seeff_suburb" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
-      <Column Name="seeff_suburb_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="seeff_suburb_type" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="seeff_lic_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="x" Type="System.Decimal" DbType="Decimal(13,8)" CanBeNull="true" />
-      <Column Name="y" Type="System.Decimal" DbType="Decimal(13,8)" CanBeNull="true" />
-      <Column Name="seeff_area_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="unique_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="seeff_deal" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="fated" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="market_share_type" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
-      <Column Name="base_data_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="agency_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="street_or_unit_no" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="erf_no" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="portion_no" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="parent_property_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="sale_includes_others_flag" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.seeff_searches" Member="seeff_searches">
     <Type Name="seeff_search">
       <Column Name="searchId" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
@@ -179,6 +130,57 @@
       <Column Name="developer_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="fk_seller_name" Type="System.String" DbType="VarChar(70) NOT NULL" CanBeNull="false" />
       <Column Name="fk_registration_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.base_data" Member="base_datas">
+    <Type Name="base_data">
+      <Column Name="ls_area_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="seeff_lic_area" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="property_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="iregdate" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
+      <Column Name="ipurchdate" Type="System.Decimal" DbType="Decimal(11,0)" CanBeNull="true" />
+      <Column Name="title_deed_no" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="non_gar_props_on_title" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Column Name="purch_price" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Column Name="erf_key" Type="System.String" DbType="VarChar(60)" CanBeNull="true" />
+      <Column Name="ea_code" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="suburb" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Column Name="munic_name" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Column Name="province" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Column Name="property_type" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="ss_fh" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
+      <Column Name="property_currently_in_pvt_hands" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="private_registration" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="bonded_transfer" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="suburb_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="erf_size" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Column Name="buyer_name" Type="System.String" DbType="VarChar(70)" CanBeNull="true" />
+      <Column Name="seller_name" Type="System.String" DbType="VarChar(70)" CanBeNull="true" />
+      <Column Name="property_address" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="ls_resflg" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="estate_name" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="buyer_name_2" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="multibuyer" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="seeff_suburb" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="seeff_suburb_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="seeff_suburb_type" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="seeff_lic_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="x" Type="System.Decimal" DbType="Decimal(13,8)" CanBeNull="true" />
+      <Column Name="y" Type="System.Decimal" DbType="Decimal(13,8)" CanBeNull="true" />
+      <Column Name="seeff_area_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="unique_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="seeff_deal" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="fated" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="market_share_type" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="base_data_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="agency_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="street_or_unit_no" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="erf_no" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="portion_no" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="parent_property_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="sale_includes_others_flag" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="fk_territory_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="fated_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.point_inside_poly" Method="point_inside_poly" IsComposable="true">

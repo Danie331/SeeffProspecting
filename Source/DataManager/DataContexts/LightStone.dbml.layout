@@ -27,12 +27,6 @@
         <elementListCompartment Id="06e01b1a-1ab0-4db0-a0de-e7ccd18d7e57" absoluteBounds="1.7650000000000001, 3.335, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="8bf15a6c-aefc-411e-b7f1-4afdb52b74c3" absoluteBounds="5.375, 2.875, 2, 9.4629541015625">
-      <DataClassMoniker Name="/LightStoneDataContext/base_data" />
-      <nestedChildShapes>
-        <elementListCompartment Id="e76a1d80-3292-4269-8b27-a264e542119e" absoluteBounds="5.39, 3.335, 1.9700000000000002, 8.9029541015625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
     <classShape Id="71755069-e77c-4737-919e-817c63a9fa6e" absoluteBounds="8.75, 3.625, 2, 14.0781884765625">
       <DataClassMoniker Name="/LightStoneDataContext/seeff_search" />
       <nestedChildShapes>
@@ -55,6 +49,12 @@
       <DataClassMoniker Name="/LightStoneDataContext/developer" />
       <nestedChildShapes>
         <elementListCompartment Id="c65b2b0c-d6bb-4fa5-9c17-d645a141d3d3" absoluteBounds="12.515, 3.835, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6cb126be-7fc2-4b22-a5d8-d7449e093cb3" absoluteBounds="4.875, 2.875, 2, 9.8475569661458326">
+      <DataClassMoniker Name="/LightStoneDataContext/base_data" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c67eb3a3-4faf-419b-ad26-12cac6c783cd" absoluteBounds="4.89, 3.335, 1.9700000000000002, 9.2875569661458321" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

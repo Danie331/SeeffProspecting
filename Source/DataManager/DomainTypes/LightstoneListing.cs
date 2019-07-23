@@ -40,4 +40,10 @@ public class LightstoneListing : IListing
     public bool? IsCurrentSeeffListing { get; set; }
     public int? SeeffAreaId { get; set; }
     public decimal? PurchDate { get; set; }
+    public string LightstoneSuburb { get; set; }
+    public string MunicipalityName { get; set; }
+    public string Province { get; set; }
+    public string SeeffAreaName { get; set; }
+    public string AgencyName { get; set; }
+    public DateTime? FatedDate { get; set; }
 }

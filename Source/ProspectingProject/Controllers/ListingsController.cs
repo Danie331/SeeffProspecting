@@ -16,6 +16,7 @@ namespace ProspectingProject.Controllers
     // 4. approach required to keep lookup tables in sync
     // 5. purge db of staging data for go-live
     // 6. go live - give all user guids access
+    // 7. testing: log in as Adam - create multiple listings; on another browser log in as Barend - create listings simultaneously.
     public class ListingsController : ApiController
     {
         private PropertyListingService _propertyListingService;

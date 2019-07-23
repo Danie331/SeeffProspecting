@@ -760,6 +760,68 @@ function handleFilterItemClick() {
     generateStatisticsMenu(true);
 }
 
+function handleExportSelectionClick() {
+    $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Generating download package...</p>' });
+    var listOfTransactions = [];
+    $.each(suburbsInfo, function (index, value) {
+        var suburb = getSuburbById(value.SuburbId);
+        if (suburb.Visible) {
+            $.each(suburb.VisibleMarkers, function (idx1, visibleMarker) {
+                if (visibleMarker.Listings) {
+                    $.each(visibleMarker.Listings, function (idx2, listing) {
+                        listOfTransactions.push({
+                            PropertyId: listing.PropertyId,
+                            RegDate: listing.RegDate,
+                            PurchPrice: listing.PurchPrice,
+                            PurchDate: listing.PurchDate,
+                            LightstoneSuburb: listing.LightstoneSuburb,
+                            MunicipalityName: listing.MunicipalityName,
+                            Province: listing.Province,
+                            PropertyType: listing.PropertyType,
+                            ErfOrUnitSize: listing.ErfOrUnitSize,
+                            BuyerName: listing.BuyerName,
+                            SellerName: listing.SellerName,
+                            EstateName: listing.EstateName,
+                            SeeffAreaName: suburb.SuburbName,
+                            SeeffDeal: listing.SeeffDeal,
+                            Fated: listing.Fated,
+                            MarketShareType: listing.MarketShareType,
+                            AgencyName: getAgencyName(listing.Agency),
+                            StreetOrUnitNo: listing.StreetOrUnitNo,
+                            ErfNo: listing.ErfNo,
+                            PortionNo: listing.PortionNo,
+                            FatedDate: listing.FatedDate
+                        });
+                    });
+                }
+            });
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "RequestHandler.ashx",
+        data: JSON.stringify({ Instruction: "download_export", Transactions: listOfTransactions }),
+        success: function (data, textStatus, jqXHR) {
+            if (textStatus == "success" && data.Success) {
+                var downloadURL = data.Filepath;
+                var form = $('<form method="get" action="' + downloadURL + '"><input type="hidden" value="" /></form>');
+                $('body').append(form);
+                $(form).submit();
+                form.remove();
+            } else {
+                if (data && data.Error) {
+                    console.log(data.Error);
+                }
+                alert('Unable to complete the request - please contact Support.');
+            }
+        },
+        dataType: "json"
+    }).always(function () {
+        $.unblockUI();
+    });
+}
+
 function createMarkersForSuburb(suburb, typeOfFating, showSeeffCurrentListings) {
 
     var markersForListings = [];

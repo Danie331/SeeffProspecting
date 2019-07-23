@@ -29,7 +29,7 @@ public class ListingUpdater : IHttpHandler {
             case "update_property_address":
                 UpdatePropertyAddress(dataPacket);
                 context.Response.Write(new JavaScriptSerializer().Serialize("success"));
-                break;
+                break;    
         }
     }
 

@@ -1,7 +1,11 @@
 ﻿using MarketShareApp.DomainTypes;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
@@ -48,8 +52,125 @@ namespace MarketShareApp
                     var saveAgencyResult = AddNewAgency(agencyName);
                     context.Response.Write(new JavaScriptSerializer().Serialize(saveAgencyResult));
                     break;
+                case "download_export":
+                    var listContainer = Newtonsoft.Json.JsonConvert.DeserializeObject<TransactionExport>(json);
+                    var exportResult = GenerateExportPackage(listContainer.Transactions);
+                    context.Response.Write(new JavaScriptSerializer().Serialize(exportResult));
+                    break;
                 default: break;
             }
+        }
+
+        private ExportResult GenerateExportPackage(List<LightstoneListing> trans)
+        {
+            try
+            {
+                trans = trans.OrderBy(b => b.SeeffAreaName).ThenByDescending(c => c.PropertyId).ToList();
+                using (ExcelPackage package = new ExcelPackage())
+                {
+                    string exportName = "Marketshare-Export-" + Path.GetRandomFileName().Substring(0, 5) + "-" + DateTime.Now.ToShortDateString();
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(exportName);
+                    //worksheet.Cells["A1"].LoadFromDataTable(new DataTable(), true);
+
+                    worksheet.Row(1).Style.Font.Bold = true;
+                    worksheet.Row(1).Height = 20;
+                    worksheet.Row(2).Height = 18;
+
+                    var cols = new[] { "Lightstone Property ID", "Reg. Date", "Purch. Date", "Purch. Price",
+                                    "Seeff Suburb", "Munic. Name", "Province", "Property Type",
+                                    "ERF Size", "Buyer Name", "Seller Name", "Estate Name",
+                                    "Lightstone Suburb", "Seeff Deal", "Fated", "Fated Date", "Market Share Type",
+                                    "Selling Agent", "Street/Unit No.", "ERF no.", "Portion no." };
+                    for (int i = 1; i <= cols.Length; i++)
+                    {
+                        worksheet.Cells[1, i].Value = cols[i - 1];
+                    }
+
+                    int rowNumber = 2;
+                    foreach (var record in trans)
+                    {
+                        worksheet.Cells[rowNumber, 1].Value = record.PropertyId;
+                        worksheet.Cells[rowNumber, 2].Value = FormatDateString(record.RegDate);
+                        worksheet.Cells[rowNumber, 3].Value = record.PurchDate.HasValue ? FormatDateString(record.PurchDate.ToString()) : "";
+                        worksheet.Cells[rowNumber, 4].Value = record.PurchPrice.HasValue ? record.PurchPrice.Value.ToString() : "";
+                        worksheet.Cells[rowNumber, 5].Value = record.SeeffAreaName ?? "";
+                        worksheet.Cells[rowNumber, 6].Value = record.MunicipalityName ?? "";
+                        worksheet.Cells[rowNumber, 7].Value = record.Province ?? "";
+                        worksheet.Cells[rowNumber, 8].Value = record.PropertyType ?? "";
+                        worksheet.Cells[rowNumber, 9].Value = record.ErfOrUnitSize.HasValue ? record.ErfOrUnitSize.Value.ToString() : "";
+                        worksheet.Cells[rowNumber, 10].Value = record.BuyerName ?? "";
+                        worksheet.Cells[rowNumber, 11].Value = record.SellerName ?? "";
+                        worksheet.Cells[rowNumber, 12].Value = record.EstateName ?? "";
+                        worksheet.Cells[rowNumber, 13].Value = record.LightstoneSuburb ?? "";
+                        worksheet.Cells[rowNumber, 14].Value = record.SeeffDeal.HasValue ? (record.SeeffDeal.Value ? "Yes" : "") : "";
+                        worksheet.Cells[rowNumber, 15].Value = record.Fated.HasValue ? (record.Fated.Value ? "Yes" : "No") : "No";
+                        worksheet.Cells[rowNumber, 16].Value = record.FatedDate.HasValue ? record.FatedDate.Value.ToShortDateString() : "";
+                        worksheet.Cells[rowNumber, 17].Value = FormatMarketShareType(record.MarketShareType) ?? "";
+                        worksheet.Cells[rowNumber, 18].Value = record.AgencyName ?? "";
+                        worksheet.Cells[rowNumber, 19].Value = record.StreetOrUnitNo ?? "";
+                        worksheet.Cells[rowNumber, 20].Value = record.ErfNo.HasValue ? record.ErfNo.Value.ToString() : "";
+                        worksheet.Cells[rowNumber, 21].Value = record.PortionNo.HasValue ? record.PortionNo.Value.ToString() : "";
+
+                        rowNumber++;
+                    }
+
+                    for (int i = 1; i <= cols.Length; i++)
+                    {
+                        worksheet.Column(i).AutoFit();
+                    }
+
+                    string fileName = exportName + ".xlsx";
+                    return SaveFile(fileName, package);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ExportResult { Success = false, Error = ex.Message };
+            }
+        }
+
+        private string FormatMarketShareType(string marketShareType)
+        {
+            if (string.IsNullOrEmpty(marketShareType)) return null;
+
+            switch (marketShareType)
+            {
+                case "R":
+                    return "Residential";
+                case "C":
+                    return "Commercial";
+                case "A":
+                    return "Agri";
+                case "D":
+                    return "Development";
+                case "O":
+                    return "Other";
+                case "P":
+                    return "Pending";
+                default: return "anomolous";
+            }
+        }
+
+        private ExportResult SaveFile(string fileName, ExcelPackage package)
+        {
+            string exportPath = "/ExcelExtracts/" + fileName;
+
+            var path = HttpContext.Current.Server.MapPath("~" + exportPath);
+            FileInfo fs = new FileInfo(path);
+            fs.Directory.Create();
+            package.SaveAs(fs);
+
+            string appFolderPath = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
+            appFolderPath = Path.Combine(appFolderPath, exportPath);
+            return new ExportResult { Success = true, Filepath = appFolderPath };
+        }
+
+        private string FormatDateString(string date)
+        {
+            if (date == null) return "";
+            var isDate = DateTime.TryParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var result);
+
+            return isDate ? result.ToShortDateString() : "";
         }
 
         private Agency AddNewAgency(Agency agencyNameHolder)
@@ -390,5 +511,12 @@ namespace MarketShareApp
                 return false;
             }
         }
+    }
+
+    internal class ExportResult
+    {
+        public bool Success { get; set; }
+        public string Filepath { get; set; }
+        public string Error { get; internal set; }
     }
 }
