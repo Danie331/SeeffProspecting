@@ -92,7 +92,7 @@ namespace MarketShareApp
                         worksheet.Cells[rowNumber, 1].Value = record.PropertyId;
                         worksheet.Cells[rowNumber, 2].Value = FormatDateString(record.RegDate);
                         worksheet.Cells[rowNumber, 3].Value = record.PurchDate.HasValue ? FormatDateString(record.PurchDate.ToString()) : "";
-                        worksheet.Cells[rowNumber, 4].Value = record.PurchPrice.HasValue ? record.PurchPrice.Value.ToString() : "";
+                        worksheet.Cells[rowNumber, 4].Value = record.PurchPrice.HasValue ? record.PurchPrice.Value.ToString("N0", CultureInfo.GetCultureInfo("en-ZA")) : "";
                         worksheet.Cells[rowNumber, 5].Value = record.SeeffAreaName ?? "";
                         worksheet.Cells[rowNumber, 6].Value = record.MunicipalityName ?? "";
                         worksheet.Cells[rowNumber, 7].Value = record.Province ?? "";
@@ -170,7 +170,7 @@ namespace MarketShareApp
             if (date == null) return "";
             var isDate = DateTime.TryParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var result);
 
-            return isDate ? result.ToShortDateString() : "";
+            return isDate ? result.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : "";
         }
 
         private Agency AddNewAgency(Agency agencyNameHolder)
