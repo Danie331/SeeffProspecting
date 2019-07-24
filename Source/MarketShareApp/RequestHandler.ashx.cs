@@ -80,7 +80,7 @@ namespace MarketShareApp
                                     "Seeff Suburb", "Munic. Name", "Province", "Property Type",
                                     "ERF Size", "Buyer Name", "Seller Name", "Estate Name",
                                     "Lightstone Suburb", "Seeff Deal", "Fated", "Fated Date", "Market Share Type",
-                                    "Selling Agent", "Street/Unit No.", "ERF no.", "Portion no." };
+                                    "Selling Agent", "Street/Unit No.", "Property Address", "ERF no.", "Portion no." };
                     for (int i = 1; i <= cols.Length; i++)
                     {
                         worksheet.Cells[1, i].Value = cols[i - 1];
@@ -108,8 +108,9 @@ namespace MarketShareApp
                         worksheet.Cells[rowNumber, 17].Value = FormatMarketShareType(record.MarketShareType) ?? "";
                         worksheet.Cells[rowNumber, 18].Value = record.AgencyName ?? "";
                         worksheet.Cells[rowNumber, 19].Value = record.StreetOrUnitNo ?? "";
-                        worksheet.Cells[rowNumber, 20].Value = record.ErfNo.HasValue ? record.ErfNo.Value.ToString() : "";
-                        worksheet.Cells[rowNumber, 21].Value = record.PortionNo.HasValue ? record.PortionNo.Value.ToString() : "";
+                        worksheet.Cells[rowNumber, 20].Value = record.PropertyAddress ?? "";
+                        worksheet.Cells[rowNumber, 21].Value = record.ErfNo.HasValue ? record.ErfNo.Value.ToString() : "";
+                        worksheet.Cells[rowNumber, 22].Value = record.PortionNo.HasValue ? record.PortionNo.Value.ToString() : "";
 
                         rowNumber++;
                     }

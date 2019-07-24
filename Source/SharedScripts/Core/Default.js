@@ -791,7 +791,8 @@ function handleExportSelectionClick() {
                                 StreetOrUnitNo: listing.StreetOrUnitNo,
                                 ErfNo: listing.ErfNo,
                                 PortionNo: listing.PortionNo,
-                                FatedDate: listing.FatedDate
+                                FatedDate: listing.FatedDate,
+                                PropertyAddress: listing.PropertyAddress
                             });
                         }
                     });
