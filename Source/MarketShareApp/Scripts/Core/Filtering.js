@@ -23,14 +23,14 @@ function applyActiveFilters(suburb) {
     closeInfoWindow();
 
     var filteredResults = applyDefaultFilters(suburb.MarkersForListings);
-    var filteredCurrentListings = applyFiltersSeeffCurrentListings(suburb.MarkersForListings);
-    var finalSet = $.merge(filteredResults, filteredCurrentListings);
+    //var filteredCurrentListings = applyFiltersSeeffCurrentListings(suburb.MarkersForListings);
+    var finalSet = filteredResults;
 
     return removeDuplicates(finalSet);
 }
 
 function isDefaultFilterSet(filterSet) {
-    return $.inArray("forsale_filter", filterSet) == -1;
+    return true;//$.inArray("forsale_filter", filterSet) == -1;
 }
 
 function applyDefaultFilters(markersForListings) {

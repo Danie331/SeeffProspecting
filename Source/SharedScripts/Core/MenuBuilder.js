@@ -266,8 +266,8 @@ function buildFilterItemsAndSummaryInfo() {
         div.append(buildInputCheckbox("With agency assigned", "withagencyassigned_filter", "left", 2, 2, true, handleFilterItemClick));
         div.append(buildInputCheckbox("Without agency assigned", "withoutagencyassigned_filter", "left", 2, 2, true, handleFilterItemClick));
         div.append("<p />");
-        div.append(buildInputCheckbox("Seeff for sale", "forsale_filter", "left", 2, 2, false, handleFilterItemClick));
-        div.append(buildInputCheckbox("Seeff for rent", "forrent_filter", "left", 2, 2, false, handleFilterItemClick));
+        //div.append(buildInputCheckbox("Seeff for sale", "forsale_filter", "left", 2, 2, false, handleFilterItemClick));
+        //div.append(buildInputCheckbox("Seeff for rent", "forrent_filter", "left", 2, 2, false, handleFilterItemClick));
 
         return div;
     }
@@ -345,7 +345,7 @@ function buildFilterItemsAndSummaryInfo() {
     filterSets.push(["R_filter", "C_filter", "A_filter", "D_filter", "O_filter", "P_filter"]);
     filterSets.push(["2016_filter", "2017_filter", "2018_filter", "2019_filter"]);
     // The filter set below is handled differently to the rest. See filtering.js
-    filterSets.push(["forsale_filter", "forrent_filter"]);
+    //filterSets.push(["forsale_filter", "forrent_filter"]);
     filterSets.push(["withagencyassigned_filter", "withoutagencyassigned_filter"]);
     // NB the month filters MUST be added after the year filter - do not swop the order!
     filterSets.push(["jan_filter", "feb_filter", "mar_filter", "apr_filter", "may_filter", "jun_filter", "jul_filter", "aug_filter", "sep_filter", "oct_filter", "nov_filter", "dec_filter"]);
@@ -399,8 +399,8 @@ function buildSuburbsSelectionHtml() {
         $('#contentarea').on('click', '#' + suburbIdString, function (event) {
             event.preventDefault();
 
-            $('#forrent_filter').prop('checked', true);
-            $('#forsale_filter').prop('checked', true);
+            //$('#forrent_filter').prop('checked', true);
+            //$('#forsale_filter').prop('checked', true);
 
             // select both fated/unfated, and center the map
             var areaId = $(this).attr('id').replace('suburb', '');

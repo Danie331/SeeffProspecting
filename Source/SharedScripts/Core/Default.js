@@ -650,8 +650,8 @@ function handleSuburbItemSelect() {
     var areaId = checkbox.attr("id").replace('unfated', '').replace('fated', '').replace('seeffcurrentlistings', '');
 
     if (checkbox.attr("id").indexOf("seeffcurrentlistings") > -1) {
-        $('#forrent_filter').prop('checked', true);
-        $('#forsale_filter').prop('checked', true);
+        //$('#forrent_filter').prop('checked', true);
+        //$('#forsale_filter').prop('checked', true);
     }
 
     loadDataForSuburb(areaId, false, true, true, setZoomToTarget);
@@ -762,49 +762,78 @@ function handleFilterItemClick() {
 
 function handleExportSelectionClick() {
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Generating download package...</p>' });
-    var listOfTransactions = [];
+    var suburbs = [];
     $.each(suburbsInfo, function (index, value) {
         var suburb = getSuburbById(value.SuburbId);
         if (suburb.Visible) {
-            $.each(suburb.VisibleMarkers, function (idx1, visibleMarker) {
-                if (visibleMarker.Listings) {
-                    $.each(visibleMarker.Listings, function (idx2, listing) {
-                        if (!listing.IsCurrentSeeffListing) {
-                            listOfTransactions.push({
-                                PropertyId: listing.PropertyId,
-                                RegDate: listing.RegDate,
-                                PurchPrice: listing.PurchPrice,
-                                PurchDate: listing.PurchDate,
-                                LightstoneSuburb: listing.LightstoneSuburb,
-                                MunicipalityName: listing.MunicipalityName,
-                                Province: listing.Province,
-                                PropertyType: listing.PropertyType,
-                                ErfOrUnitSize: listing.ErfOrUnitSize,
-                                BuyerName: listing.BuyerName,
-                                SellerName: listing.SellerName,
-                                EstateName: listing.EstateName,
-                                SeeffAreaName: suburb.SuburbName,
-                                SeeffDeal: listing.SeeffDeal,
-                                Fated: listing.Fated,
-                                MarketShareType: listing.MarketShareType,
-                                AgencyName: getAgencyName(listing.Agency),
-                                StreetOrUnitNo: listing.StreetOrUnitNo,
-                                ErfNo: listing.ErfNo,
-                                PortionNo: listing.PortionNo,
-                                FatedDate: listing.FatedDate,
-                                PropertyAddress: listing.PropertyAddress
-                            });
-                        }
-                    });
-                }
-            });
+            suburbs.push({ SuburbId: suburb.SuburbId, SuburbName: suburb.SuburbName });
         }
     });
+
+    // Filter criteria
+    var propertyTypes = [];
+    var marketshareTypes = [];
+    var years = [];
+    var agencyAssigned = true, noAgencyAssigned = true;
+    var months = [];
+    var priceFrom = null, priceTo = null;
+    var filterByRegDate = $("input[name='regOrPurchDate']:checked").val() == 'RegDate';
+
+    if (menu.find('#FH_filter').is(':checked')) propertyTypes.push("FH");
+    if (menu.find('#SS_filter').is(':checked')) propertyTypes.push("SS");
+
+    if (menu.find('#R_filter').is(':checked')) marketshareTypes.push("R");
+    if (menu.find('#C_filter').is(':checked')) marketshareTypes.push("C");
+    if (menu.find('#A_filter').is(':checked')) marketshareTypes.push("A");
+    if (menu.find('#D_filter').is(':checked')) marketshareTypes.push("D");
+    if (menu.find('#O_filter').is(':checked')) marketshareTypes.push("O");
+    if (menu.find('#P_filter').is(':checked')) marketshareTypes.push("P");
+
+    if (menu.find('#2016_filter').is(':checked')) years.push("2016");
+    if (menu.find('#2017_filter').is(':checked')) years.push("2017");
+    if (menu.find('#2018_filter').is(':checked')) years.push("2018");
+    if (menu.find('#2019_filter').is(':checked')) years.push("2019");
+
+    if (!menu.find('#withagencyassigned_filter').is(':checked')) agencyAssigned = false;
+    if (!menu.find('#withoutagencyassigned_filter').is(':checked')) noAgencyAssigned = false;
+
+    if (menu.find('#jan_filter').is(':checked')) months.push("jan");
+    if (menu.find('#feb_filter').is(':checked')) months.push("feb");
+    if (menu.find('#mar_filter').is(':checked')) months.push("mar");
+    if (menu.find('#apr_filter').is(':checked')) months.push("apr");
+    if (menu.find('#may_filter').is(':checked')) months.push("may");
+    if (menu.find('#jun_filter').is(':checked')) months.push("jun");
+    if (menu.find('#jul_filter').is(':checked')) months.push("jul");
+    if (menu.find('#aug_filter').is(':checked')) months.push("aug");
+    if (menu.find('#sep_filter').is(':checked')) months.push("sep");
+    if (menu.find('#oct_filter').is(':checked')) months.push("oct");
+    if (menu.find('#nov_filter').is(':checked')) months.push("nov");
+    if (menu.find('#dec_filter').is(':checked')) months.push("dec");
+
+    priceFrom = $('#priceFrom_filter').val().replace(/\s/g, '');
+    priceTo = $('#priceTo_filter').val().replace(/\s/g, '');
+
+    if (isNaN(priceFrom)) priceFrom = null;
+    if (isNaN(priceTo)) priceTo = null;
+
+    var dto = {
+        Instruction: "download_export",
+        Suburbs: suburbs,
+        FilterByRegDate: filterByRegDate,
+        PropertyTypes: propertyTypes,
+        MarketshareTypes: marketshareTypes,
+        Years: years,
+        AgencyAssigned: agencyAssigned,
+        NoAgencyAssigned: noAgencyAssigned,
+        Months: months,
+        PriceFrom: priceFrom,
+        PriceTo: priceTo
+    };
 
     $.ajax({
         type: "POST",
         url: "RequestHandler.ashx",
-        data: JSON.stringify({ Instruction: "download_export", Transactions: listOfTransactions }),
+        data: JSON.stringify(dto),
         success: function (data, textStatus, jqXHR) {
             if (textStatus == "success" && data.Success) {
                 var downloadURL = data.Filepath;

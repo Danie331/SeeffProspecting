@@ -22,10 +22,10 @@ public class SuburbDataManager : IHttpHandler {
         suburb.PolyCoords = Domain.LoadPolyCoords(spatialSuburb.PolyWKT);
             suburb.UnderMaintenance = spatialSuburb.UnderMaintenance;
         List<LightstoneListing> lightstoneListings = Domain.LoadLightstoneListingsForSuburb(suburbId);
-        List<SeeffListing> currentSeeffListings = Domain.LoadCurrentSeeffListings(suburbId);
+        //List<SeeffListing> currentSeeffListings = Domain.LoadCurrentSeeffListings(suburbId);
 
         // The Listings property expects only a List<IListing> so we need to upcast both lists here
-        suburb.Listings = lightstoneListings.Cast<IListing>().Union(currentSeeffListings.Cast<IListing>()).ToList<IListing>();
+        suburb.Listings = lightstoneListings.Cast<IListing>().ToList();
         //suburb.Listings.AddRange(currentSeeffListings);
         //suburb.LocationName = spatialSuburb.AreaName;
 

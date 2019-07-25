@@ -53,75 +53,183 @@ namespace MarketShareApp
                     context.Response.Write(new JavaScriptSerializer().Serialize(saveAgencyResult));
                     break;
                 case "download_export":
-                    var listContainer = Newtonsoft.Json.JsonConvert.DeserializeObject<TransactionExport>(json);
-                    var exportResult = GenerateExportPackage(listContainer.Transactions);
+                    var exportCriteria = Newtonsoft.Json.JsonConvert.DeserializeObject<ExportCriteria>(json);
+                    var exportResult = GenerateExportPackage(exportCriteria);
                     context.Response.Write(new JavaScriptSerializer().Serialize(exportResult));
                     break;
                 default: break;
             }
         }
 
-        private ExportResult GenerateExportPackage(List<LightstoneListing> trans)
+        private ExportResult GenerateExportPackage(ExportCriteria criteria)
         {
             try
             {
-                trans = trans.OrderBy(b => b.SeeffAreaName).ThenByDescending(c => c.PropertyId).ToList();
-                using (ExcelPackage package = new ExcelPackage())
+                using (var lsBase = DataManager.DataContextRetriever.GetLSBaseDataContext())
                 {
-                    string exportName = "MarketshareExport_" + Path.GetRandomFileName().Substring(0, 5) + "_" + DateTime.Today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(exportName);
-                    //worksheet.Cells["A1"].LoadFromDataTable(new DataTable(), true);
+                    var suburbIds = criteria.Suburbs.Select(s => s.SuburbId).ToList();
+                    var baseQuery = from n in lsBase.base_datas.Where(b => b.seeff_area_id.HasValue && suburbIds.Contains(b.seeff_area_id.Value))
+                                    join q in lsBase.agencies on n.agency_id equals q.agency_id into nq
+                                    from q in nq.DefaultIfEmpty()
+                                    select new LightstoneListing
+                                    {
+                                        PropertyId = n.property_id,
+                                        RegDate = n.iregdate,
+                                        PurchDate = n.ipurchdate,
+                                        PurchPrice = n.purch_price,
+                                        SeeffAreaId = n.seeff_area_id,
+                                        SeeffAreaName = "",
+                                        MunicipalityName = n.munic_name,
+                                        Province = n.province,
+                                        PropertyType = n.property_type,
+                                        ErfOrUnitSize = n.erf_size,
+                                        BuyerName = n.buyer_name,
+                                        SellerName = n.seller_name,
+                                        EstateName = n.estate_name,
+                                        LightstoneSuburb = n.suburb,
+                                        SeeffDeal = n.seeff_deal,
+                                        Fated = n.fated,
+                                        FatedDate = n.fated_date,
+                                        MarketShareType = n.market_share_type,
+                                        AgencyName = q != null ? q.agency_name : "",
+                                        StreetOrUnitNo = n.street_or_unit_no,
+                                        PropertyAddress = n.property_address,
+                                        ErfNo = n.erf_no,
+                                        PortionNo = n.portion_no
+                                    };
 
-                    worksheet.Row(1).Style.Font.Bold = true;
-                    worksheet.Row(1).Height = 20;
-                    worksheet.Row(2).Height = 18;
+                    var trans = baseQuery.ToList();
+                    foreach (var item in trans)
+                    {
+                        if (!item.SeeffAreaId.HasValue) continue;
+                        item.SeeffAreaName = criteria.Suburbs.First(s => s.SuburbId == item.SeeffAreaId.Value).SuburbName;
+                    }
 
-                    var cols = new[] { "Lightstone Property ID", "Reg. Date", "Purch. Date", "Purch. Price",
+                    // Apply filters
+                    var filtered = trans.Where(t => criteria.PropertyTypes.Contains(t.PropertyType))
+                                        .Where(t => t.MarketShareType == null || criteria.MarketshareTypes.Contains(t.MarketShareType));
+
+                    var monthLookup = new Dictionary<string, string>();
+                    monthLookup["jan"] = "01";
+                    monthLookup["feb"] = "02";
+                    monthLookup["mar"] = "03";
+                    monthLookup["apr"] = "04";
+                    monthLookup["may"] = "05";
+                    monthLookup["jun"] = "06";
+                    monthLookup["jul"] = "07";
+                    monthLookup["aug"] = "08";
+                    monthLookup["sep"] = "09";
+                    monthLookup["oct"] = "10";
+                    monthLookup["nov"] = "11";
+                    monthLookup["dec"] = "12";
+                    var months = criteria.Months.Select(s => monthLookup[s]).ToList();
+                    if (criteria.FilterByRegDate)
+                    {
+                        filtered = filtered.Where(t => criteria.Years.Contains(t.RegDate.Substring(0,4)));
+                        filtered = filtered.Where(t => months.Contains(t.RegDate.Substring(4, 2)));
+                    }
+                    else
+                    {
+                        if (criteria.Years.Count > 0)
+                        {
+                            filtered = filtered.Where(t =>
+                            {
+                                if (!t.PurchDate.HasValue) return false;
+                                var result = DateTime.TryParseExact(t.PurchDate.Value.ToString(), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt);
+                                return result ? criteria.Years.Contains(dt.Year.ToString()) : false;
+                            });
+
+                            filtered = filtered.Where(t =>
+                            {
+                                if (!t.PurchDate.HasValue) return false;
+                                var result = DateTime.TryParseExact(t.PurchDate.Value.ToString(), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt);
+                                return result ? months.Contains(dt.ToString("yyyyMMdd").Substring(4, 2)) : false;
+                            });
+                        }
+                    }
+
+                    if (criteria.AgencyAssigned && criteria.NoAgencyAssigned) { }
+                    else
+                    {
+                        if (criteria.AgencyAssigned)
+                        {
+                            filtered = filtered.Where(t => !string.IsNullOrEmpty(t.AgencyName));
+                        }
+
+                        if (criteria.NoAgencyAssigned)
+                        {
+                            filtered = filtered.Where(t => string.IsNullOrEmpty(t.AgencyName));
+                        }
+                    }
+
+                    if (criteria.PriceFrom.HasValue)
+                    {
+                        filtered = filtered.Where(t => t.PurchPrice.HasValue && t.PurchPrice.Value >= criteria.PriceFrom);
+                    }
+
+                    if (criteria.PriceTo.HasValue)
+                    {
+                        filtered = filtered.Where(t => t.PurchPrice.HasValue && t.PurchPrice.Value <= criteria.PriceTo);
+                    }
+
+                    filtered = filtered.OrderBy(b => b.SeeffAreaName).ThenByDescending(c => c.PropertyId).ToList();
+                    using (ExcelPackage package = new ExcelPackage())
+                    {
+                        string exportName = "MarketshareExport_" + Path.GetRandomFileName().Substring(0, 5) + "_" + DateTime.Today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(exportName);
+                        //worksheet.Cells["A1"].LoadFromDataTable(new DataTable(), true);
+
+                        worksheet.Row(1).Style.Font.Bold = true;
+                        worksheet.Row(1).Height = 20;
+                        worksheet.Row(2).Height = 18;
+
+                        var cols = new[] { "Lightstone Property ID", "Reg. Date", "Purch. Date", "Purch. Price",
                                     "Seeff Suburb", "Munic. Name", "Province", "Property Type",
                                     "ERF Size", "Buyer Name", "Seller Name", "Estate Name",
                                     "Lightstone Suburb", "Seeff Deal", "Fated", "Fated Date", "Market Share Type",
                                     "Selling Agent", "Street/Unit No.", "Property Address", "ERF no.", "Portion no." };
-                    for (int i = 1; i <= cols.Length; i++)
-                    {
-                        worksheet.Cells[1, i].Value = cols[i - 1];
+                        for (int i = 1; i <= cols.Length; i++)
+                        {
+                            worksheet.Cells[1, i].Value = cols[i - 1];
+                        }
+
+                        int rowNumber = 2;
+                        foreach (var record in filtered)
+                        {
+                            worksheet.Cells[rowNumber, 1].Value = record.PropertyId;
+                            worksheet.Cells[rowNumber, 2].Value = FormatDateString(record.RegDate);
+                            worksheet.Cells[rowNumber, 3].Value = record.PurchDate.HasValue ? FormatDateString(record.PurchDate.ToString()) : "";
+                            worksheet.Cells[rowNumber, 4].Value = record.PurchPrice.HasValue ? record.PurchPrice.Value.ToString("N0", CultureInfo.GetCultureInfo("en-ZA")) : "";
+                            worksheet.Cells[rowNumber, 5].Value = record.SeeffAreaName ?? "";
+                            worksheet.Cells[rowNumber, 6].Value = record.MunicipalityName ?? "";
+                            worksheet.Cells[rowNumber, 7].Value = record.Province ?? "";
+                            worksheet.Cells[rowNumber, 8].Value = record.PropertyType ?? "";
+                            worksheet.Cells[rowNumber, 9].Value = record.ErfOrUnitSize.HasValue ? record.ErfOrUnitSize.Value.ToString() : "";
+                            worksheet.Cells[rowNumber, 10].Value = record.BuyerName ?? "";
+                            worksheet.Cells[rowNumber, 11].Value = record.SellerName ?? "";
+                            worksheet.Cells[rowNumber, 12].Value = record.EstateName ?? "";
+                            worksheet.Cells[rowNumber, 13].Value = record.LightstoneSuburb ?? "";
+                            worksheet.Cells[rowNumber, 14].Value = record.SeeffDeal.HasValue ? (record.SeeffDeal.Value ? "Yes" : "") : "";
+                            worksheet.Cells[rowNumber, 15].Value = record.Fated.HasValue ? (record.Fated.Value ? "Yes" : "No") : "No";
+                            worksheet.Cells[rowNumber, 16].Value = record.FatedDate.HasValue ? record.FatedDate.Value.ToShortDateString() : "";
+                            worksheet.Cells[rowNumber, 17].Value = FormatMarketShareType(record.MarketShareType) ?? "";
+                            worksheet.Cells[rowNumber, 18].Value = record.AgencyName ?? "";
+                            worksheet.Cells[rowNumber, 19].Value = record.StreetOrUnitNo ?? "";
+                            worksheet.Cells[rowNumber, 20].Value = record.PropertyAddress ?? "";
+                            worksheet.Cells[rowNumber, 21].Value = record.ErfNo.HasValue ? record.ErfNo.Value.ToString() : "";
+                            worksheet.Cells[rowNumber, 22].Value = record.PortionNo.HasValue ? record.PortionNo.Value.ToString() : "";
+
+                            rowNumber++;
+                        }
+
+                        for (int i = 1; i <= cols.Length; i++)
+                        {
+                            worksheet.Column(i).AutoFit();
+                        }
+
+                        string fileName = exportName + ".xlsx";
+                        return SaveFile(fileName, package);
                     }
-
-                    int rowNumber = 2;
-                    foreach (var record in trans)
-                    {
-                        worksheet.Cells[rowNumber, 1].Value = record.PropertyId;
-                        worksheet.Cells[rowNumber, 2].Value = FormatDateString(record.RegDate);
-                        worksheet.Cells[rowNumber, 3].Value = record.PurchDate.HasValue ? FormatDateString(record.PurchDate.ToString()) : "";
-                        worksheet.Cells[rowNumber, 4].Value = record.PurchPrice.HasValue ? record.PurchPrice.Value.ToString("N0", CultureInfo.GetCultureInfo("en-ZA")) : "";
-                        worksheet.Cells[rowNumber, 5].Value = record.SeeffAreaName ?? "";
-                        worksheet.Cells[rowNumber, 6].Value = record.MunicipalityName ?? "";
-                        worksheet.Cells[rowNumber, 7].Value = record.Province ?? "";
-                        worksheet.Cells[rowNumber, 8].Value = record.PropertyType ?? "";
-                        worksheet.Cells[rowNumber, 9].Value = record.ErfOrUnitSize.HasValue ? record.ErfOrUnitSize.Value.ToString() : "";
-                        worksheet.Cells[rowNumber, 10].Value = record.BuyerName ?? "";
-                        worksheet.Cells[rowNumber, 11].Value = record.SellerName ?? "";
-                        worksheet.Cells[rowNumber, 12].Value = record.EstateName ?? "";
-                        worksheet.Cells[rowNumber, 13].Value = record.LightstoneSuburb ?? "";
-                        worksheet.Cells[rowNumber, 14].Value = record.SeeffDeal.HasValue ? (record.SeeffDeal.Value ? "Yes" : "") : "";
-                        worksheet.Cells[rowNumber, 15].Value = record.Fated.HasValue ? (record.Fated.Value ? "Yes" : "No") : "No";
-                        worksheet.Cells[rowNumber, 16].Value = record.FatedDate.HasValue ? record.FatedDate.Value.ToShortDateString() : "";
-                        worksheet.Cells[rowNumber, 17].Value = FormatMarketShareType(record.MarketShareType) ?? "";
-                        worksheet.Cells[rowNumber, 18].Value = record.AgencyName ?? "";
-                        worksheet.Cells[rowNumber, 19].Value = record.StreetOrUnitNo ?? "";
-                        worksheet.Cells[rowNumber, 20].Value = record.PropertyAddress ?? "";
-                        worksheet.Cells[rowNumber, 21].Value = record.ErfNo.HasValue ? record.ErfNo.Value.ToString() : "";
-                        worksheet.Cells[rowNumber, 22].Value = record.PortionNo.HasValue ? record.PortionNo.Value.ToString() : "";
-
-                        rowNumber++;
-                    }
-
-                    for (int i = 1; i <= cols.Length; i++)
-                    {
-                        worksheet.Column(i).AutoFit();
-                    }
-
-                    string fileName = exportName + ".xlsx";
-                    return SaveFile(fileName, package);
                 }
             }
             catch (Exception ex)
