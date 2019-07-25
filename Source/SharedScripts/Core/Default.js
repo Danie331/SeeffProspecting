@@ -766,7 +766,8 @@ function handleExportSelectionClick() {
     $.each(suburbsInfo, function (index, value) {
         var suburb = getSuburbById(value.SuburbId);
         if (suburb.Visible) {
-            suburbs.push({ SuburbId: suburb.SuburbId, SuburbName: suburb.SuburbName });
+            var filterType = getTypeOfFatingToLoad(suburb.SuburbId);
+            suburbs.push({ SuburbId: suburb.SuburbId, SuburbName: suburb.SuburbName, FilterType: filterType });
         }
     });
 

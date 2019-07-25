@@ -98,11 +98,31 @@ namespace MarketShareApp
                                         PortionNo = n.portion_no
                                     };
 
-                    var trans = baseQuery.ToList();
-                    foreach (var item in trans)
+                    var trans = new List<LightstoneListing>();
+                    foreach (var item in baseQuery.ToList())
                     {
                         if (!item.SeeffAreaId.HasValue) continue;
-                        item.SeeffAreaName = criteria.Suburbs.First(s => s.SuburbId == item.SeeffAreaId.Value).SuburbName;
+                        var target = criteria.Suburbs.First(s => s.SuburbId == item.SeeffAreaId.Value);
+                        item.SeeffAreaName = target.SuburbName;
+
+                        switch (target.FilterType)
+                        {
+                            case "fated":
+                                if (item.Fated == true && item.MarketShareType != null)
+                                {
+                                    trans.Add(item);
+                                }
+                                break;
+                            case "unfated":
+                                if (!item.Fated.HasValue || item.Fated == false)
+                                {
+                                    trans.Add(item);
+                                }
+                                break;
+                            case "all":
+                                trans.Add(item);
+                                break;
+                        }
                     }
 
                     // Apply filters

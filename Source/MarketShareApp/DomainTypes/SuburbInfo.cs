@@ -12,4 +12,5 @@ public class SuburbInfo
     public int? FatedCount { get; set; }
     public int? UnfatedCount { get; set; }
     public int SeeffCurrentListingCount { get; set; }
+    public string FilterType { get; set; }
 }
