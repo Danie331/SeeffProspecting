@@ -35,18 +35,18 @@
     <link href="Scripts/StyleSheets/ContentExpanderWidgetStyles.css" rel="stylesheet" />
 
     <%-- Core functionality / engine --%>
-    <script src="Scripts/Core/Administration.js?v=2"></script>
-    <script src="Scripts/Core/Default.js?v=2"></script>
-    <script src="Scripts/Core/MenuBuilder.js?v=2"></script>
-    <script src="Scripts/Core/Admin/AdminGuiBuilder.js?v=2"></script>
-    <script src="Scripts/Core/Admin/AdminCore.js?v=2"></script>
-    <script src="Scripts/Core/Filtering.js?v=2"></script>
-    <script src="Scripts/Core/ObjectBuilder.js?v=2"></script>
-    <script src="Scripts/Core/StatisticsGenerator.js?v=2"></script>
-    <script src="Scripts/Core/Utils.js?v=2"></script>
-    <script src="Scripts/Core/MultiSelectWidget.js?v=2"></script>
-    <script src="Scripts/Core/Search.js?v=2"></script>
-    <script src="Scripts/Core/ContentExpanderWidget.js?v=2"></script>
+    <script src="Scripts/Core/Administration.js?v=3"></script>
+    <script src="Scripts/Core/Default.js?v=3"></script>
+    <script src="Scripts/Core/MenuBuilder.js?v=3"></script>
+    <script src="Scripts/Core/Admin/AdminGuiBuilder.js?v=3"></script>
+    <script src="Scripts/Core/Admin/AdminCore.js?v=3"></script>
+    <script src="Scripts/Core/Filtering.js?v=3"></script>
+    <script src="Scripts/Core/ObjectBuilder.js?v=3"></script>
+    <script src="Scripts/Core/StatisticsGenerator.js?v=3"></script>
+    <script src="Scripts/Core/Utils.js?v=3"></script>
+    <script src="Scripts/Core/MultiSelectWidget.js?v=3"></script>
+    <script src="Scripts/Core/Search.js?v=3"></script>
+    <script src="Scripts/Core/ContentExpanderWidget.js?v=3"></script>
 
     <script>
 

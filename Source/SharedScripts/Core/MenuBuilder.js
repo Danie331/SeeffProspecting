@@ -372,7 +372,7 @@ function buildSuburbsSelectionHtml() {
     for (var a = 0; a < suburbsInfo.length; a++) {
         var fatedCount = suburbsInfo[a].FatedCount;
         var unfatedCount = suburbsInfo[a].UnfatedCount;
-        var seeffCurrentCount = suburbsInfo[a].SeeffCurrentListingCount;
+        //var seeffCurrentCount = suburbsInfo[a].SeeffCurrentListingCount;
         var suburbName = suburbsInfo[a].SuburbName;
 
         if (fatedCount == null) {
@@ -391,8 +391,8 @@ function buildSuburbsSelectionHtml() {
         var unfatedElement = buildInputCheckbox('(' + unfatedCount + ')', "unfated" + suburbId, "left", 2, 2, false, handleSuburbItemSelect);
         var tdUnfated = "<td>" + unfatedElement[0].outerHTML + "</td>";
 
-        var seeffCurrentListingsElement = buildInputCheckbox('(' + seeffCurrentCount + ')', "seeffcurrentlistings" + suburbId, "left", 2, 2, false, handleSuburbItemSelect);
-        var tdSeeffCurrent = "<td>" + seeffCurrentListingsElement[0].outerHTML + "</td>";
+        //var seeffCurrentListingsElement = buildInputCheckbox('(' + seeffCurrentCount + ')', "seeffcurrentlistings" + suburbId, "left", 2, 2, false, handleSuburbItemSelect);
+        //var tdSeeffCurrent = "<td>" + seeffCurrentListingsElement[0].outerHTML + "</td>";
 
         var suburbIdString = "suburb" + suburbId;
         var suburbBtn = $("<a href='' id='" + suburbIdString + "'>" + suburbName + "</a>");
@@ -417,7 +417,7 @@ function buildSuburbsSelectionHtml() {
 
         tr.append(tdFated);
         tr.append(tdUnfated);
-        tr.append(tdSeeffCurrent);
+        //tr.append(tdSeeffCurrent);
         tr.append(tdSuburb);        
         suburbsTbl.append(tr);
     }
@@ -428,7 +428,7 @@ function buildSuburbsSelectionHtml() {
 function buildSuburbsSelectionHeaderHtml() {
 
     var tableHeader = $("<table class='suburbsHeaderTbl' />");
-    tableHeader.append("<tr><td id='th_fated'>Fated</td><td id='th_unfated'>Unfated</td> <td id='th_current_seeff_listings'>Seeff.com Listings</td> <td id='th_suburb'>Suburb</td></tr>");
+    tableHeader.append("<tr><td id='th_fated'>Fated</td><td id='th_unfated'>Unfated</td> <td id='th_suburb'>Suburb</td></tr>");
 
     return tableHeader[0].outerHTML;
 }

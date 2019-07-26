@@ -695,10 +695,11 @@ function getTypeOfFatingToLoad(areaId) {
 
 function mustLoadDataForSeeffCurrentListings(areaId) {
 
-    var seeffCurrentListingsCheckbox = $('#seeffcurrentlistings' + areaId);
-    var seeffCurrentListingsChecked = seeffCurrentListingsCheckbox.is(":checked");
+    return false;
+    //var seeffCurrentListingsCheckbox = $('#seeffcurrentlistings' + areaId);
+    //var seeffCurrentListingsChecked = seeffCurrentListingsCheckbox.is(":checked");
 
-    return seeffCurrentListingsChecked;
+    //return seeffCurrentListingsChecked;
 }
 
 function loadDataForSuburb(areaId, loadEverything, generateStats, showPopup, callbackHandler) {
@@ -709,24 +710,24 @@ function loadDataForSuburb(areaId, loadEverything, generateStats, showPopup, cal
 
     var fatedCheckbox = $('#fated' + areaId);
     var unfatedCheckbox = $('#unfated' + areaId);
-    var seeffCurrentListingsCheckbox = $('#seeffcurrentlistings' + areaId);
+    //var seeffCurrentListingsCheckbox = $('#seeffcurrentlistings' + areaId);
     if (loadEverything) {
         fatedCheckbox.off();
         unfatedCheckbox.off();
-        seeffCurrentListingsCheckbox.off();
+        //seeffCurrentListingsCheckbox.off();
 
         fatedCheckbox.prop('checked', true);
         unfatedCheckbox.prop('checked', true);
-        seeffCurrentListingsCheckbox.prop('checked', true);
+        //seeffCurrentListingsCheckbox.prop('checked', true);
 
         fatedCheckbox.on();
         unfatedCheckbox.on();
-        seeffCurrentListingsCheckbox.on();
+        //seeffCurrentListingsCheckbox.on();
     }
     else {
         fatedChecked = fatedCheckbox.is(":checked");
         unfatedChecked = unfatedCheckbox.is(":checked");
-        seeffCurrentListingsChecked = seeffCurrentListingsCheckbox.is(":checked");
+        seeffCurrentListingsChecked = false;//seeffCurrentListingsCheckbox.is(":checked");
     }
 
     // If a suburb that was previously checked is unchecked, unload it from the screen

@@ -81,6 +81,7 @@ namespace MarketShareApp
                                         SeeffAreaName = "",
                                         MunicipalityName = n.munic_name,
                                         Province = n.province,
+                                        SS_FH = n.ss_fh,
                                         PropertyType = n.property_type,
                                         ErfOrUnitSize = n.erf_size,
                                         BuyerName = n.buyer_name,
@@ -126,8 +127,12 @@ namespace MarketShareApp
                     }
 
                     // Apply filters
-                    var filtered = trans.Where(t => criteria.PropertyTypes.Contains(t.PropertyType))
-                                        .Where(t => t.MarketShareType == null || criteria.MarketshareTypes.Contains(t.MarketShareType));
+                    IEnumerable<LightstoneListing> filtered = trans;
+                    if (criteria.PropertyTypes.Count < 2)
+                    {
+                        filtered = filtered.Where(t => criteria.PropertyTypes.Contains(t.SS_FH));
+                    }
+                    filtered = filtered.Where(t => t.MarketShareType == null || criteria.MarketshareTypes.Contains(t.MarketShareType));
 
                     var monthLookup = new Dictionary<string, string>();
                     monthLookup["jan"] = "01";
