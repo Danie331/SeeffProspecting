@@ -1,7 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace ProspectingProject
@@ -636,11 +640,25 @@ namespace ProspectingProject
             };
         }
 
-        public static CommunicationBatchStatus SubmitSMSBatch(SmsBatch batch)
+        public static async Task<CommunicationBatchStatus> SubmitSMSBatch(SmsBatch batch)
         {
             try
             {
-                byte[] data = Convert.FromBase64String(batch.SmsBodyRaw);
+                //
+                using (HttpClient client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://api.panaceamobile.com/");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage response = await client.GetAsync("json?action=user_get_balance&username=seeffnational&password=dPBbboXWMgqz5GqZ2f1C");
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var accountBalance = JsonConvert.DeserializeObject<SmsAccountBalance>(responseContent);
+                    if (accountBalance.details < 500.0M)
+                    {
+                        throw new Exception("Insufficient credit at service provider - please contact support.");
+                    }
+                }
+
+                    byte[] data = Convert.FromBase64String(batch.SmsBodyRaw);
                 batch.SmsBodyRaw = Encoding.UTF8.GetString(data);
 
                 data = Convert.FromBase64String(batch.NameOfBatch);

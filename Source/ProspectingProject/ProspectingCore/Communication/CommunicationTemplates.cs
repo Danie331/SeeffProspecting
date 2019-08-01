@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace ProspectingProject
@@ -11,13 +12,13 @@ namespace ProspectingProject
     public sealed partial class ProspectingCore
     {
         // Retrieving, adding + updating, deleting templates. For which comm_type, user defined or system, for which activity type.
-        public static CommunicationTemplate GetTemplate(CommTemplateRequest input)
+        public static async Task<CommunicationTemplate> GetTemplate(CommTemplateRequest input)
         {
             CommunicationTemplate result = null;
             if (input.IsFromUrl.HasValue && input.IsFromUrl == true)
             {
                 string url = input.URL;
-                string content = new HttpClient().GetStringAsync(url).Result;
+                string content = await new HttpClient().GetStringAsync(url);
                 result = new CommunicationTemplate
                 {
                     TemplateContent = HttpContext.Current.Server.HtmlEncode(content),

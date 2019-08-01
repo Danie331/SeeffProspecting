@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using Hangfire;
+using Newtonsoft.Json;
 using ProspectingTaskScheduler.Core.Housekeeping;
 
 namespace ProspectingTaskScheduler.Core.Notifications
@@ -36,6 +40,31 @@ namespace ProspectingTaskScheduler.Core.Notifications
             {
                 // Suppress and return as the job will be retried during its next scheduled run.
                 return;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogException(ex);
+            }
+        }
+
+        [AutomaticRetry(Attempts = 2)]
+        public static async Task SendSmsLowCreditsWarning()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://api.panaceamobile.com/");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage response = await client.GetAsync("json?action=user_get_balance&username=seeffnational&password=dPBbboXWMgqz5GqZ2f1C");
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var accountBalance = JsonConvert.DeserializeObject<SmsAccountBalance>(responseContent);
+                    if (accountBalance.details < 1500.0M)
+                    {
+                        string body = $"Prospecting: SMS service provider available credit - R{accountBalance.details}";
+                        StatusNotifier.SendEmail("adam.roberts@learnit.co.za", "Prospecting", "reports@seeff.com", "danievdm85@gmail.com", "SMS Credits Warning", body);
+                    }
+                }
             }
             catch (Exception ex)
             {

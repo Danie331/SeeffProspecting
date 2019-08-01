@@ -382,7 +382,7 @@ namespace ProspectingProject
             return companies;
         }
 
-        public static string LoadSuburbInfoForUser(string suburbsWithPermissions)
+        public static async Task<string> LoadSuburbInfoForUser(string suburbsWithPermissions)
         {
             if (string.IsNullOrWhiteSpace(suburbsWithPermissions))
             {
@@ -408,7 +408,7 @@ namespace ProspectingProject
                     { areasClause += "," + prospectingAreas; };
                 };
 
-                var suburbsInfo = GetAreaData(areasClause);
+                var suburbsInfo = await GetAreaData(areasClause);
                 HttpContext.Current.Session["user_suburbs"] = suburbsInfo;
                 return new JavaScriptSerializer().Serialize(suburbsInfo);
             }
@@ -416,7 +416,7 @@ namespace ProspectingProject
             return string.Empty;
         }
 
-        public static List<UserSuburb> GetAreaData(string areaIdList)
+        public static async Task<List<UserSuburb>> GetAreaData(string areaIdList)
         {
             using (var prospecting = new ProspectingDataContext())
             {
@@ -429,7 +429,7 @@ namespace ProspectingProject
                 //                  select gr;
 
                 var spatialReader = new SpatialServiceReader();
-                var spatialList = spatialReader.SuburbsListOnly();
+                var spatialList = await spatialReader.SuburbsListOnly();
                 var suburbsList = (from sub in spatialList
                                    select new ProspectingSuburb
                                    {
@@ -586,12 +586,12 @@ namespace ProspectingProject
         /// <summary>
         /// Creates a new prospect for an entirely new prospected location
         /// </summary>
-        public static ProspectingProperty CreateNewProspectingRecord(NewProspectingEntity recordToCreate)
+        public static async Task<ProspectingProperty> CreateNewProspectingRecord(NewProspectingEntity recordToCreate)
         {
             var standaloneUnit = recordToCreate.PropertyMatches[0];
             if (!recordToCreate.SeeffAreaId.HasValue)
             {
-                if (!ProspectWithinOwnedSuburbs(standaloneUnit.LatLng))
+                if (!(await ProspectWithinOwnedSuburbs(standaloneUnit.LatLng)))
                 {
                     throw new Exception("Cannot create new prospect: The property falls outside of your available suburbs.");
                 }
@@ -608,7 +608,7 @@ namespace ProspectingProject
                 else
                 {
                     var spatial = new SpatialServiceReader();
-                    var spatialSuburb = spatial.GetSuburbFromID(standaloneUnit.LatLng.Lat, standaloneUnit.LatLng.Lng);
+                    var spatialSuburb = await spatial.GetSuburbFromID(standaloneUnit.LatLng.Lat, standaloneUnit.LatLng.Lng);
                     areaId = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
                     if (areaId == null)
                     {
@@ -762,11 +762,11 @@ namespace ProspectingProject
             }
         }
 
-        private static bool ProspectWithinOwnedSuburbs(GeoLocation geoLocation)
+        private static async Task<bool> ProspectWithinOwnedSuburbs(GeoLocation geoLocation)
         {
             var availableSuburbs = (List<UserSuburb>)HttpContext.Current.Session["user_suburbs"];
             var spatial = new SpatialServiceReader();
-            var spatialSuburb = spatial.GetSuburbFromID(geoLocation.Lat, geoLocation.Lng);
+            var spatialSuburb = await spatial.GetSuburbFromID(geoLocation.Lat, geoLocation.Lng);
             var suburbID = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
 
             return suburbID == null ? false : availableSuburbs.Any(sub => sub.SuburbId == suburbID);
@@ -867,7 +867,7 @@ namespace ProspectingProject
         /// *** Prospecting user authorisation web methods ***
         /// </summary>
 
-        public static UserDataResponsePacket LoadUser(Guid userGuid, Guid sessionKey, bool impersonate)
+        public static async Task<UserDataResponsePacket> LoadUser(Guid userGuid, Guid sessionKey, bool impersonate)
         {
             using (var authService = new ProspectingUserAuthService.SeeffProspectingAuthServiceClient())
             {
@@ -891,7 +891,7 @@ namespace ProspectingProject
                 var userPacket = new UserDataResponsePacket
                 {
                     UserGuid = userGuid,
-                    AvailableSuburbs = LoadSuburbInfoForUser(userAuthPacket.SuburbsList),
+                    AvailableSuburbs = await LoadSuburbInfoForUser(userAuthPacket.SuburbsList),
                     StaticProspectingData = SerialiseStaticProspectingData(),
                     AvailableCredit = userAuthPacket.AvailableCredit,
                     Authenticated = userAuthPacket.Authenticated,
@@ -1728,10 +1728,10 @@ namespace ProspectingProject
             return prospectables;
         }
 
-        public static ProspectingSuburb LoadProspectingSuburb(SuburbDataRequestPacket suburbDataRequest)
+        public static async Task<ProspectingSuburb> LoadProspectingSuburb(SuburbDataRequestPacket suburbDataRequest)
         {
             var spatialReader = new SpatialServiceReader();
-            var spatialSuburb = spatialReader.LoadSuburb(suburbDataRequest.SuburbId);
+            var spatialSuburb = await spatialReader.LoadSuburb(suburbDataRequest.SuburbId);
 
             ProspectingSuburb suburb = new ProspectingSuburb();
             suburb.LocationID = suburbDataRequest.SuburbId;
@@ -1757,7 +1757,7 @@ namespace ProspectingProject
             }
         }
 
-        public static List<NewProspectingEntity> GetMatchingAddresses(ProspectingInputData dataPacket)
+        public static async Task<List<NewProspectingEntity>> GetMatchingAddresses(ProspectingInputData dataPacket)
         {
             List<LightstonePropertyMatch> matches = new List<LightstonePropertyMatch>();
             using (lightstoneSeeffService.Seeff service = new lightstoneSeeffService.Seeff())
@@ -1786,7 +1786,7 @@ namespace ProspectingProject
                 }
             }
 
-            var matchesForSuburb = GetMatchesForCurrentSuburbOnly(matches, dataPacket.SeeffAreaId.Value);
+            var matchesForSuburb = await GetMatchesForCurrentSuburbOnly(matches, dataPacket.SeeffAreaId.Value);
             var responsePacket = GenerateOutputForProspectingEntity(matchesForSuburb, dataPacket.SeeffAreaId.Value);
             return responsePacket;
         }
@@ -2224,7 +2224,7 @@ namespace ProspectingProject
             return idNumber;
         }
 
-        private static List<LightstonePropertyMatch> GetMatchesForCurrentSuburbOnly(IEnumerable<LightstonePropertyMatch> distinctMatches, int suburbId)
+        private static async Task<List<LightstonePropertyMatch>> GetMatchesForCurrentSuburbOnly(IEnumerable<LightstonePropertyMatch> distinctMatches, int suburbId)
         {
             var spatial = new SpatialServiceReader();
             // Use the current province (from Google)
@@ -2233,7 +2233,7 @@ namespace ProspectingProject
                 List<LightstonePropertyMatch> results = new List<LightstonePropertyMatch>();
                 foreach (var match in distinctMatches)
                 {
-                    var spatialSuburb = spatial.GetSuburbFromID(match.LatLng.Lat, match.LatLng.Lng);
+                    var spatialSuburb = await spatial.GetSuburbFromID(match.LatLng.Lat, match.LatLng.Lng);
                     var suburbID = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
                     if (suburbID != null && suburbID == suburbId)
                     {
@@ -2307,14 +2307,14 @@ namespace ProspectingProject
             return "";
         }
 
-        public static List<ProspectingProperty> CreateSectionalTitle(NewProspectingEntity sectionalTitle)
+        public static async Task<List<ProspectingProperty>> CreateSectionalTitle(NewProspectingEntity sectionalTitle)
         {
             // First determine whether the sectional scheme falls within the user's available suburbs by examining the first record.
             // NB.: handle the null case!!
             var latLng = sectionalTitle.PropertyMatches[0].LatLng;
             if (!sectionalTitle.SeeffAreaId.HasValue)
             {
-                if (!ProspectWithinOwnedSuburbs(latLng))
+                if (!(await ProspectWithinOwnedSuburbs(latLng)))
                 {
                     throw new Exception("Cannot create sectional title: The building falls outside your available suburbs.");
                 }
@@ -2333,7 +2333,7 @@ namespace ProspectingProject
                 //else
                 //{
                 var spatial = new SpatialServiceReader();
-                var spatialSuburb = spatial.GetSuburbFromID(latLng.Lat, latLng.Lng);
+                var spatialSuburb = await spatial.GetSuburbFromID(latLng.Lat, latLng.Lng);
                 areaId = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
                 if (areaId == null)
                 {
@@ -2516,7 +2516,7 @@ namespace ProspectingProject
             }
         }
 
-        public static ProspectingEntityOutputBundle CreateNewProspectingEntities(ProspectingEntityInputBundle prospectingEntityBundle, List<NewProspectingEntity> searchResults)
+        public static async Task<ProspectingEntityOutputBundle> CreateNewProspectingEntities(ProspectingEntityInputBundle prospectingEntityBundle, List<NewProspectingEntity> searchResults)
         {
             ProspectingEntityOutputBundle outputBundle = new ProspectingEntityOutputBundle();
             var firstResult = searchResults.FirstOrDefault();
@@ -2528,7 +2528,7 @@ namespace ProspectingProject
                 var sectionaTitlesToCreate = searchResults.Where(s => s.IsSectionalScheme && prospectingEntityBundle.SectionalSchemes.Any(f => f.SS_UNIQUE_IDENTIFIER == s.SS_UNIQUE_IDENTIFIER)).ToList();
                 foreach (var ss in sectionaTitlesToCreate)
                 {
-                    var ssUnits = CreateSectionalTitle(ss);
+                    var ssUnits = await CreateSectionalTitle(ss);
                     string ssUniqueId = ssUnits.First(u => !String.IsNullOrEmpty(u.SS_UNIQUE_IDENTIFIER)).SS_UNIQUE_IDENTIFIER;
                     outputBundle.SectionalSchemes.Add(ssUniqueId, ssUnits);
                     outputBundle.TargetProspect = ssUnits.First(); // We don't need to set this in the loop each time, but saves me writing additional code checks.
@@ -2540,7 +2540,7 @@ namespace ProspectingProject
                 var targetUnitsToCreate = targetUnits.Where(fh => prospectingEntityBundle.FHProperties.Any(h => h.PropertyMatches[0].LightstonePropId == fh.PropertyMatches[0].LightstonePropId));
                 foreach (var unit in targetUnitsToCreate)
                 {
-                    var unitResult = CreateNewProspectingRecord(unit);
+                    var unitResult = await CreateNewProspectingRecord(unit);
                     outputBundle.FhProperties.Add(unitResult);
                     outputBundle.TargetProspect = unitResult;
                     outputBundle.SeeffAreaId = unit.SeeffAreaId;
@@ -2778,7 +2778,7 @@ namespace ProspectingProject
         }
 
         // NB. might need to remove occurrences of find_area_id that use the prospecting_area_layer tbl.
-        public static UserSuburb FindAreaId(GeoLocation location)
+        public static async Task<UserSuburb> FindAreaId(GeoLocation location)
         {
             //HttpClient client = new HttpClient();
             //client.BaseAddress = new Uri("http://spatial.seeff.com//"); // This is the web application's root server address
@@ -2804,7 +2804,7 @@ namespace ProspectingProject
             //}
 
             var spatial = new SpatialServiceReader();
-            var spatialSuburb = spatial.GetSuburbFromID(location.Lat, location.Lng);
+            var spatialSuburb = await spatial.GetSuburbFromID(location.Lat, location.Lng);
             var suburbID = (spatialSuburb != null && spatialSuburb.SeeffAreaID.HasValue) ? spatialSuburb.SeeffAreaID.Value : (int?)null;
 
             if (suburbID != null)
@@ -3929,7 +3929,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
             return items.OrderByDescending(f => f.DateSent).ToList();
         }
 
-        public static ReferralResponseObject GenerateReferralDetails(ReferralInputDetails inputDetails)
+        public static async Task<ReferralResponseObject> GenerateReferralDetails(ReferralInputDetails inputDetails)
         {
             ReferralResponseObject result = new ReferralResponseObject { InstanceValidationErrors = new List<string>() };
             try
@@ -3946,7 +3946,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                     int seeffAreaID = propertyRecord.seeff_area_id.Value;
 
                     SpatialServiceReader spatialReader = new SpatialServiceReader();
-                    var suburb = spatialReader.LoadSuburb(seeffAreaID);
+                    var suburb = await spatialReader.LoadSuburb(seeffAreaID);
 
                     if (suburb == null)
                     {
@@ -4058,9 +4058,9 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
             return result;
         }
 
-        public static ReferralResponseObject CreateReferral(ReferralInputDetails inputDetails)
+        public static async Task<ReferralResponseObject> CreateReferral(ReferralInputDetails inputDetails)
         {
-            ReferralResponseObject referralDetails = GenerateReferralDetails(inputDetails);
+            ReferralResponseObject referralDetails = await GenerateReferralDetails(inputDetails);
             if (referralDetails.InstanceValidationErrors.Count > 0)
             {
                 return referralDetails;
@@ -4079,10 +4079,10 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    HttpResponseMessage response = client.PostAsJsonAsync<ReferralResponseObject>("api/BOSS/CreatePropertyReferral", referralDetails).Result;
+                    HttpResponseMessage response = await client.PostAsJsonAsync<ReferralResponseObject>("api/BOSS/CreatePropertyReferral", referralDetails);
                     response.EnsureSuccessStatusCode();
                     ReferralResponseObject referralResponse = new ReferralResponseObject();
-                    referralResponse = response.Content.ReadAsAsync<ReferralResponseObject>().Result;
+                    referralResponse = await response.Content.ReadAsAsync<ReferralResponseObject>();
 
                     if (referralResponse.pErrorNo != -1)
                     {
@@ -4224,7 +4224,7 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
             }
         }
 
-        public static ReferralsHistory RetrieveReferralsHistoryForProperty(ProspectingPropertyId input)
+        public static async Task<ReferralsHistory> RetrieveReferralsHistoryForProperty(ProspectingPropertyId input)
         {
             using (var client = new HttpClient())
             {
@@ -4235,9 +4235,9 @@ WHERE        (pp.prospecting_property_id IN (" + params_ + @"))", new object[] {
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    HttpResponseMessage response = client.PostAsJsonAsync<int>("api/BOSS/GetReferralDetails", input.LightstonePropertyId).Result;
+                    HttpResponseMessage response = await client.PostAsJsonAsync<int>("api/BOSS/GetReferralDetails", input.LightstonePropertyId);
                     response.EnsureSuccessStatusCode();
-                    List<ReferralItem> referralResponse = response.Content.ReadAsAsync<List<ReferralItem>>().Result;
+                    List<ReferralItem> referralResponse = await response.Content.ReadAsAsync<List<ReferralItem>>();
 
                     referralsHistory.ListOfReferrals = referralResponse;
                     referralsHistory.ListOfReferrals = referralsHistory.ListOfReferrals.OrderByDescending(rf => rf.SmartPassId).ToList();

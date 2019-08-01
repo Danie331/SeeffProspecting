@@ -1396,6 +1396,7 @@
     <Compile Include="ProspectingCore\Communication\ContactPersonEmailComparer.cs" />
     <Compile Include="ProspectingCore\Communication\ContactPersonSmsComparer.cs" />
     <Compile Include="ProspectingCore\Communication\EmailRecipient.cs" />
+    <Compile Include="ProspectingCore\Communication\SmsAccountBalance.cs" />
     <Compile Include="ProspectingCore\Communication\SmsRecipient.cs" />
     <Compile Include="ProspectingCore\ContactsManager.cs" />
     <Compile Include="RequestHandler.ashx.cs">

@@ -98,6 +98,8 @@ namespace ProspectingTaskScheduler.App_Start
             //RecurringJob.AddOrUpdate("Purge Prospecting training database", () => TrainingDatabase.PurgeAndResetProspectingStaging(), Cron.Daily(), TimeZoneInfo.Local);
 
             RecurringJob.AddOrUpdate("Sending Lightstone call log", () => StatusNotifier.SendYesterdaysLightstoneCallLog(JobCancellationToken.Null), Cron.Daily(8), TimeZoneInfo.Local);
+
+            RecurringJob.AddOrUpdate("Send sms low credit warning", () => NotificationsGenerator.SendSmsLowCreditsWarning(), Cron.Daily(7), TimeZoneInfo.Local);
         }
     }
 }

@@ -383,6 +383,7 @@
     <Compile Include="Core\Notifications\NotificationsGenerator.cs" />
     <Compile Include="Core\Notifications\ProspectingFollowup.cs" />
     <Compile Include="Core\Notifications\ProspectingFollowupsForUser.cs" />
+    <Compile Include="Core\Notifications\SmsAccountBalance.cs" />
     <Compile Include="Core\ProspectingTrainingDB\TrainingDatabase.cs" />
     <Compile Include="Core\Spatial\SuburbMaintenance.cs" />
     <Compile Include="Core\Utils.cs" />
