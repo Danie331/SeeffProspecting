@@ -328,13 +328,17 @@ function buildFilterItemsAndSummaryInfo() {
 
     function buildExportFilterHtml() {
         var div = $("<div />");
-        div.append($("<span />").text("Use the button below to download the data for the currently selected filter criteria and suburbs."));
+        div.append($("<span />").text("Use this feature to download registrations within your area."));
+        div.append("<p />");
+        div.append("<input type='radio' name='typeOfExtract' value='currentSelection' checked>Use my currently selected suburbs and filters<br>\
+                    <input type='radio' name='typeOfExtract' value='all'>All 2019 registrations under my trading areas (incl. unfated transactions)<br>");
         div.append("<p />");
         var btn = $("<input id='exportFilterSelectionBtn' type='button' value='Download Data' style='cursor:pointer' />");
         div.append(btn);
 
         $('#contentarea').on('click', "#exportFilterSelectionBtn", function () {
-            handleExportSelectionClick();
+            var selectedOption = $("input[name='typeOfExtract']:checked").val();
+            handleExportSelectionClick(selectedOption);
         });
 
         return div;

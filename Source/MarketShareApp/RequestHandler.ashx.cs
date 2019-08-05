@@ -67,64 +67,82 @@ namespace MarketShareApp
             {
                 using (var lsBase = DataManager.DataContextRetriever.GetLSBaseDataContext())
                 {
-                    var suburbIds = criteria.Suburbs.Select(s => s.SuburbId).ToList();
-                    var baseQuery = from n in lsBase.base_datas.Where(b => b.seeff_area_id.HasValue && suburbIds.Contains(b.seeff_area_id.Value))
-                                    join q in lsBase.agencies on n.agency_id equals q.agency_id into nq
-                                    from q in nq.DefaultIfEmpty()
-                                    select new LightstoneListing
-                                    {
-                                        PropertyId = n.property_id,
-                                        RegDate = n.iregdate,
-                                        PurchDate = n.ipurchdate,
-                                        PurchPrice = n.purch_price,
-                                        SeeffAreaId = n.seeff_area_id,
-                                        SeeffAreaName = "",
-                                        MunicipalityName = n.munic_name,
-                                        Province = n.province,
-                                        SS_FH = n.ss_fh,
-                                        PropertyType = n.property_type,
-                                        ErfOrUnitSize = n.erf_size,
-                                        BuyerName = n.buyer_name,
-                                        SellerName = n.seller_name,
-                                        EstateName = n.estate_name,
-                                        LightstoneSuburb = n.suburb,
-                                        SeeffDeal = n.seeff_deal,
-                                        Fated = n.fated,
-                                        FatedDate = n.fated_date,
-                                        MarketShareType = n.market_share_type,
-                                        AgencyName = q != null ? q.agency_name : "",
-                                        StreetOrUnitNo = n.street_or_unit_no,
-                                        PropertyAddress = n.property_address,
-                                        ErfNo = n.erf_no,
-                                        PortionNo = n.portion_no
-                                    };
-
                     var trans = new List<LightstoneListing>();
-                    foreach (var item in baseQuery.ToList())
+                    IQueryable<LightstoneListing> baseQuery = null;
+                    var suburbIds = criteria.Suburbs.Select(s => s.SuburbId).ToList();
+                    baseQuery = from n in lsBase.base_datas.Where(b => b.seeff_area_id.HasValue && suburbIds.Contains(b.seeff_area_id.Value))
+                                join q in lsBase.agencies on n.agency_id equals q.agency_id into nq
+                                from q in nq.DefaultIfEmpty()
+                                select new LightstoneListing
+                                {
+                                    PropertyId = n.property_id,
+                                    RegDate = n.iregdate,
+                                    PurchDate = n.ipurchdate,
+                                    PurchPrice = n.purch_price,
+                                    SeeffAreaId = n.seeff_area_id,
+                                    SeeffAreaName = "",
+                                    MunicipalityName = n.munic_name,
+                                    Province = n.province,
+                                    SS_FH = n.ss_fh,
+                                    PropertyType = n.property_type,
+                                    ErfOrUnitSize = n.erf_size,
+                                    BuyerName = n.buyer_name,
+                                    SellerName = n.seller_name,
+                                    EstateName = n.estate_name,
+                                    LightstoneSuburb = n.suburb,
+                                    SeeffDeal = n.seeff_deal,
+                                    Fated = n.fated,
+                                    FatedDate = n.fated_date,
+                                    MarketShareType = n.market_share_type,
+                                    AgencyName = q != null ? q.agency_name : "",
+                                    StreetOrUnitNo = n.street_or_unit_no,
+                                    PropertyAddress = n.property_address,
+                                    ErfNo = n.erf_no,
+                                    PortionNo = n.portion_no
+                                };
+                    switch (criteria.SelectionType)
                     {
-                        if (!item.SeeffAreaId.HasValue) continue;
-                        var target = criteria.Suburbs.First(s => s.SuburbId == item.SeeffAreaId.Value);
-                        item.SeeffAreaName = target.SuburbName;
+                        case "currentSelection":
+                            foreach (var item in baseQuery.ToList())
+                            {
+                                if (!item.SeeffAreaId.HasValue) continue;
+                                var target = criteria.Suburbs.First(s => s.SuburbId == item.SeeffAreaId.Value);
+                                item.SeeffAreaName = target.SuburbName;
 
-                        switch (target.FilterType)
-                        {
-                            case "fated":
-                                if (item.Fated == true && item.MarketShareType != null)
+                                switch (target.FilterType)
                                 {
-                                    trans.Add(item);
+                                    case "fated":
+                                        if (item.Fated == true && item.MarketShareType != null)
+                                        {
+                                            trans.Add(item);
+                                        }
+                                        break;
+                                    case "unfated":
+                                        if (!item.Fated.HasValue || item.Fated == false)
+                                        {
+                                            trans.Add(item);
+                                        }
+                                        break;
+                                    case "all":
+                                        trans.Add(item);
+                                        break;
                                 }
-                                break;
-                            case "unfated":
-                                if (!item.Fated.HasValue || item.Fated == false)
-                                {
-                                    trans.Add(item);
-                                }
-                                break;
-                            case "all":
+                            }
+                            break;
+                        case "all":
+                            baseQuery = baseQuery.Where(r => r.RegDate.Substring(0, 4) == "2019");
+                            foreach (var item in baseQuery.ToList())
+                            {
+                                if (!item.SeeffAreaId.HasValue) continue;
+                                var target = criteria.Suburbs.FirstOrDefault(s => s.SuburbId == item.SeeffAreaId.Value);
+                                if (target == null) continue;
+                                item.SeeffAreaName = target.SuburbName;
+
                                 trans.Add(item);
-                                break;
-                        }
+                            }
+                            break;
                     }
+
 
                     // Apply filters
                     IEnumerable<LightstoneListing> filtered = trans;
@@ -150,7 +168,7 @@ namespace MarketShareApp
                     var months = criteria.Months.Select(s => monthLookup[s]).ToList();
                     if (criteria.FilterByRegDate)
                     {
-                        filtered = filtered.Where(t => criteria.Years.Contains(t.RegDate.Substring(0,4)));
+                        filtered = filtered.Where(t => criteria.Years.Contains(t.RegDate.Substring(0, 4)));
                         filtered = filtered.Where(t => months.Contains(t.RegDate.Substring(4, 2)));
                     }
                     else

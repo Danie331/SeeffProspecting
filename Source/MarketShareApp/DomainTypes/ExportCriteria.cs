@@ -7,6 +7,7 @@ namespace MarketShareApp.DomainTypes
 {
     public class ExportCriteria : BaseDataRequestPacket
     {
+        public string SelectionType { get; set; }
         public List<SuburbInfo> Suburbs { get; set; }
         public bool FilterByRegDate { get; set; }
         public List<string> PropertyTypes { get; set; }

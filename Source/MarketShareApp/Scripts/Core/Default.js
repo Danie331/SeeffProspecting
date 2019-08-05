@@ -761,14 +761,18 @@ function handleFilterItemClick() {
     generateStatisticsMenu(true);
 }
 
-function handleExportSelectionClick() {
+function handleExportSelectionClick(option) {
     $.blockUI({ message: '<p style="font-family:Verdana;font-size:15px;">Generating download package...</p>' });
     var suburbs = [];
     $.each(suburbsInfo, function (index, value) {
         var suburb = getSuburbById(value.SuburbId);
-        if (suburb.Visible) {
-            var filterType = getTypeOfFatingToLoad(suburb.SuburbId);
-            suburbs.push({ SuburbId: suburb.SuburbId, SuburbName: suburb.SuburbName, FilterType: filterType });
+        if (option == 'all') {
+            suburbs.push({ SuburbId: suburb.SuburbId, SuburbName: suburb.SuburbName });
+        } else {
+            if (suburb.Visible) {
+                var filterType = getTypeOfFatingToLoad(suburb.SuburbId);
+                suburbs.push({ SuburbId: suburb.SuburbId, SuburbName: suburb.SuburbName, FilterType: filterType });
+            }
         }
     });
 
@@ -820,6 +824,7 @@ function handleExportSelectionClick() {
 
     var dto = {
         Instruction: "download_export",
+        SelectionType: option,
         Suburbs: suburbs,
         FilterByRegDate: filterByRegDate,
         PropertyTypes: propertyTypes,
