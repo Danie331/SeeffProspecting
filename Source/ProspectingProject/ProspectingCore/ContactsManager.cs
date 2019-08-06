@@ -12,5 +12,6 @@ namespace ProspectingProject
     public class ContactsManager
     {
 
+
     }
 }
