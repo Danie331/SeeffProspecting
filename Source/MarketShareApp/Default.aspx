@@ -37,7 +37,7 @@
     <%-- Core functionality / engine --%>
     <script src="Scripts/Core/Administration.js?v=3"></script>
     <script src="Scripts/Core/Default.js?v=4"></script>
-    <script src="Scripts/Core/MenuBuilder.js?v=4"></script>
+    <script src="Scripts/Core/MenuBuilder.js?v=5"></script>
     <script src="Scripts/Core/Admin/AdminGuiBuilder.js?v=3"></script>
     <script src="Scripts/Core/Admin/AdminCore.js?v=3"></script>
     <script src="Scripts/Core/Filtering.js?v=3"></script>

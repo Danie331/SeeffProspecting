@@ -136,7 +136,7 @@ function buildLicenseSummaryHtml() {
 }
 
 function generateStatisticsMenu(canShow) {
-    canShow = false;
+    //canShow = false;
     var licSummaryDiv = $('#licSummaryDiv');
     licSummaryDiv.css('display', canShow ? 'block' : 'none');
 
